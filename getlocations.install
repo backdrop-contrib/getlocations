@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * getlocations module installation.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+  */
+function getlocations_uninstall() {
+//  db_query("DELETE FROM {variable} WHERE name LIKE 'getlocations_%'");
+  $query = db_delete('variable')
+    ->condition('name', 'getlocations_%', 'LIKE')
+    ->execute();
+}

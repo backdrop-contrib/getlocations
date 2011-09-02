@@ -1,0 +1,7 @@
+name = Get Locations
+description = "Show locations on a Google map."
+package = Other
+core = 7.x
+php = 5
+dependencies[] = location
+dependencies[] = libraries

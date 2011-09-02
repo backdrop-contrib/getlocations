@@ -254,6 +254,8 @@ function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='no
     'minzoom'         => $getlocations_defaults['minzoom'],
     'maxzoom'         => $getlocations_defaults['maxzoom'],
     'nodezoom'        => $getlocations_defaults['nodezoom'],
+    'useinfobubble'   => $getlocations_defaults['useinfobubble'],
+    'usemarkermanager' => $getlocations_defaults['usemarkermanager'],
     'datanum' => count($latlons),
     'latlons' => implode('|', $latlons),
   );
@@ -353,6 +355,8 @@ function getlocations_defaults() {
     'minzoom' => 6,
     'maxzoom' => 16,
     'nodezoom' => 12,
+    'useinfobubble' => 1,
+    'usemarkermanager' => 1,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());

@@ -17,6 +17,7 @@
   var latlons;
   var myIcon;
   var usemarkermanager = true;
+  var useinfobubble = true;
   var infoBubbles = [];
   var datanum = 0;
   var trafficInfo;
@@ -46,6 +47,8 @@
     maxzoom = parseInt(Drupal.settings.getlocations.maxzoom);
     nodezoom = parseInt(Drupal.settings.getlocations.nodezoom);
     datanum = Drupal.settings.getlocations.datanum;
+    useinfobubble = Drupal.settings.getlocations.useinfobubble;
+    usemarkermanager = Drupal.settings.getlocations.usemarkermanager;
 
     // in icons.js
     Drupal.getlocations.iconSetup();
@@ -155,25 +158,29 @@
       // fetch bubble content
       $.get("/getlocations/info", {lid: lid}, function(data) {
 
-        // close any previous instances
-        for (var i in infoBubbles) {
-          infoBubbles[i].close();
-        }
+          // close any previous instances
+          for (var i in infoBubbles) {
+            infoBubbles[i].close();
+          }
 
-        var infoBubble = new InfoBubble({
-          content: data,
-          //disableAnimation: true,
-          shadowStyle: 1,
-          minHeight: 120,
-          backgroundColor: '#FFFFEF',
-          borderRadius: 8,
-          borderColor: '#CFCFDF',
-          arrowSize: 10,
-          maxWidth: 340
-        });
-        infoBubble.open(map, m);
-        // add to the array
-        infoBubbles.push(infoBubble);
+        if (useinfobubble) {
+
+          var infoBubble = new InfoBubble({
+            content: data,
+            shadowStyle: 1,
+          });
+          infoBubble.open(map, m);
+          // add to the array
+          infoBubbles.push(infoBubble);
+        }
+        else {
+          var infowindow = new google.maps.InfoWindow({
+            content: data
+          });
+          infowindow.open(map, m);
+          // add to the array
+          infoBubbles.push(infowindow);
+        }
       });
     });
 

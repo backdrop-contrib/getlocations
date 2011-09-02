@@ -226,6 +226,20 @@ function getlocations_settings_form() {
     '#options' => drupal_map_assoc(range(0, 17)),
     '#description' => t('The Default zoom level for a single marker.'),
   );
+  $form['getlocations_default']['useinfobubble'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use Infobubble'),
+    '#default_value' =>  $getlocations_defaults['useinfobubble'],
+    '#description' => t('Use Infobubble library instead of default Google Infowindow.'),
+    '#return_value' => 1,
+  );
+  $form['getlocations_default']['usemarkermanager'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use Marker manager'),
+    '#default_value' =>  $getlocations_defaults['usemarkermanager'],
+    '#description' => t('Use Marker manager. Switching this off will use no manager'),
+    '#return_value' => 1,
+  );
 
   $form['rebuild'] = array(
     '#type' => 'fieldset',

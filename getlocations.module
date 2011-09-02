@@ -325,8 +325,12 @@ function getlocations_setup_map($defaults) {
   drupal_add_css($modulepath .'/getlocations.css');
   drupal_add_js($modulepath .'/js/icons.js');
   drupal_add_js( file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js/getlocations_markers.js');
-  drupal_add_js($modulepath .'/js/markermanager.js');
-  drupal_add_js($modulepath .'/js/infobubble.js');
+  if ($defaults['usemarkermanager']) {
+    drupal_add_js($modulepath .'/js/markermanager.js');
+  }
+  if ($defaults['useinfobubble']) {
+    drupal_add_js($modulepath .'/js/infobubble.js');
+  }
   drupal_add_js($modulepath .'/js/getlocations.js');
 }
 

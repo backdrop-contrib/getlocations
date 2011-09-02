@@ -1,0 +1,528 @@
+<?php
+
+/**
+ * @file
+ * Displays locations on a map.
+ * for Drupal 6
+ */
+
+
+/**
+ * Implementation of hook_help().
+ */
+function getlocations_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#getlocations':
+      $output = '<p>'. t('Displays locations on a map.') .'</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implementation of hook_init().
+ */
+function getlocations_init() {
+  module_load_include('inc', 'getlocations', 'getlocations.theme');
+
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function getlocations_perm() {
+  return array('access getlocations');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function getlocations_menu() {
+  $items = array();
+  $items['admin/settings/getlocations'] = array(
+    'title' => 'Get locations',
+    'description' => 'Configure Get locations',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('getlocations_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'getlocations.admin.inc',
+  );
+
+  // getlocations/node/$nid    # show all location on one node
+  $items['getlocations/node/%getlocations_id'] = array(
+    'title' => 'Get locations',
+    'access callback' => 'getlocations_access_location',
+    'page callback' => 'getlocations_node',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+
+  );
+  // getlocations/type/$type     # show all locations of nodes of content-type machine name
+  $items['getlocations/type/%getlocations_type'] = array(
+    'title' => 'Get locations',
+    'access callback' => 'getlocations_access_location',
+    'page callback' => 'getlocations_type',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+
+  );
+  // getlocations/info/lid    # ajax callback to fetch an address
+  $items['getlocations/info'] = array(
+    'page callback' => 'getlocations_info',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+
+  );
+
+  return $items;
+}
+
+/**
+ * menu placeholder functions
+ */
+function getlocations_id_load($arg) {
+  return (is_numeric($arg) && $arg > 0 ? $arg : FALSE);
+}
+
+/**
+ * Check that the node type exists
+ *
+ */
+function getlocations_type_load($arg) {
+  $result = db_query("SELECT name FROM node_type WHERE type='%s'", array($arg));
+  $row = db_fetch_array($result);
+  return ((isset($row['name']) && $row['name']) ? $arg : FALSE);
+}
+
+/**
+ * menu access functions
+ */
+function getlocations_access_location() {
+  if (module_exists('location') && user_access('access getlocations') && (module_exists('location_node') || module_exists('location_user') || module_exists('location_cck'))) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Menu callback
+ *
+ * @param int $nid
+ *
+ * @return
+ *   Returns an array of locations
+ *
+ */
+function getlocations_node($nid) {
+  $vid = getlocations_get_vid($nid);
+  $locations = location_load_locations($vid);
+
+  $node = node_load($nid);
+
+  $newlocations = array();
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $ct = 0;
+  // we should loop over them and dump bummers with no lat/lon
+  foreach ($locations AS $key => $location) {
+    if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+      // do minmaxes
+      if ($ct) {
+        // latitudes
+        if ($location['latitude'] > $minmaxes['maxlat']) {
+          $minmaxes['maxlat'] = $location['latitude'];
+        }
+        if ($location['latitude'] < $minmaxes['minlat']) {
+          $minmaxes['minlat'] = $location['latitude'];
+        }
+        // longitudes
+        if ($location['longitude'] > $minmaxes['maxlon']) {
+          $minmaxes['maxlon'] = $location['longitude'];
+        }
+        if ($location['longitude'] < $minmaxes['minlon']) {
+          $minmaxes['minlon'] = $location['longitude'];
+        }
+      }
+      else {
+        $minmaxes['minlat'] = $location['latitude'];
+        $minmaxes['maxlat'] = $location['latitude'];
+        $minmaxes['minlon'] = $location['longitude'];
+        $minmaxes['maxlon'] = $location['longitude'];
+      }
+      $ct++;
+      $newlocations[] = $location;
+      $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+    }
+  }
+  if (count($locations) < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
+
+  drupal_set_title(t('View @t locations', array('@t' => $node->title)));
+
+  // all in $newlocations
+  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'node', $node);
+
+}
+
+/**
+ * Menu callback
+ *
+ * @param string $type
+ * A location enabled content type
+ *
+ * @return
+ *   Returns an array of locations
+ *
+ */
+function getlocations_type($type) {
+  $newlocations = array();
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $result = db_query("SELECT nid FROM node WHERE type='%s'", array($type));
+  $ct = 0;
+  while ($row = db_fetch_array($result)) {
+    $nid = $row['nid'];
+    $vid = getlocations_get_vid($nid);
+    $locations = location_load_locations($vid);
+    // we should loop over them and dump bummers with no lat/lon
+    foreach ($locations AS $key => $location) {
+      if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+        // do minmaxes
+        if ($ct) {
+          // latitudes
+          if ($location['latitude'] > $minmaxes['maxlat']) {
+            $minmaxes['maxlat'] = $location['latitude'];
+          }
+          if ($location['latitude'] < $minmaxes['minlat']) {
+            $minmaxes['minlat'] = $location['latitude'];
+          }
+          // longitudes
+          if ($location['longitude'] > $minmaxes['maxlon']) {
+            $minmaxes['maxlon'] = $location['longitude'];
+          }
+          if ($location['longitude'] < $minmaxes['minlon']) {
+            $minmaxes['minlon'] = $location['longitude'];
+          }
+        }
+        else {
+          $minmaxes['minlat'] = $location['latitude'];
+          $minmaxes['maxlat'] = $location['latitude'];
+          $minmaxes['minlon'] = $location['longitude'];
+          $minmaxes['maxlon'] = $location['longitude'];
+        }
+        $ct++;
+        $newlocations[] = $location;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+      }
+    }
+  }
+  // all in $newlocations
+  return getlocations_setlocations($newlocations, $latlons, $minmaxes, $type);
+}
+
+function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
+  if (! getlocations_check()) {
+    return t('You need to !c first.', array('!c' => l('configure Getlocations', 'admin/settings/getlocations')));
+  }
+  global $language, $base_url;
+  $getlocations_defaults = getlocations_defaults();
+  getlocations_setup_map($getlocations_defaults);
+  $lla = explode(',', $getlocations_defaults['latlong']);
+  $getlocations_settings = array(
+    'lat' => $lla[0],
+    'lng' => $lla[1],
+    'mylocale' => $language->language,
+    'zoom'            => $getlocations_defaults['zoom'],
+    'maptype'         => $getlocations_defaults['maptype'],
+    'controltype'     => $getlocations_defaults['controltype'],
+    'mtc'             => $getlocations_defaults['mtc'],
+    'baselayers'      => $getlocations_defaults['baselayers'],
+    'scale'           => $getlocations_defaults['behavior']['scale'],
+    'overview'        => $getlocations_defaults['behavior']['overview'],
+    'overview_opened' => $getlocations_defaults['behavior']['overview_opened'],
+    'scrollwheel'     => $getlocations_defaults['behavior']['scrollwheel'],
+    'trafficinfo'     => $getlocations_defaults['trafficinfo'],
+    'bicycleinfo'     => $getlocations_defaults['bicycleinfo'],
+    'streetview_show' => $getlocations_defaults['streetview_show'],
+    'pancontrol'      => $getlocations_defaults['pancontrol'],
+    'panoramio_show'  => $getlocations_defaults['panoramio_show'],
+    'poi_show'        => $getlocations_defaults['poi_show'],
+    'transit_show'    => $getlocations_defaults['transit_show'],
+    'map_marker'      => $getlocations_defaults['map_marker'],
+    'minzoom'         => $getlocations_defaults['minzoom'],
+    'maxzoom'         => $getlocations_defaults['maxzoom'],
+    'nodezoom'        => $getlocations_defaults['nodezoom'],
+    'datanum' => count($latlons),
+    'latlons' => implode('|', $latlons),
+  );
+  if (! empty($minmaxes)) {
+    $getlocations_settings['minmaxes'] = implode(',', $minmaxes);
+  }
+  else {
+    $getlocations_settings['minmaxes'] = '';
+  }
+
+  drupal_add_js(array('getlocations' => $getlocations_settings), 'setting');
+
+  if (empty($width)) {
+    $width = $getlocations_defaults['width'];
+  }
+  if (empty($height)) {
+    $height = $getlocations_defaults['height'];
+  }
+
+  return theme('getlocations_show', $width, $height, $getlocations_defaults, $node);
+
+}
+
+
+/**
+ * Function to setup the map scripts
+ *
+ * @param $defaults
+ *   Required. the current settings.
+ * Sets up the call to googlemaps, css and the relevant getlocations js in html head
+ */
+function getlocations_setup_map($defaults) {
+  global $language;
+  // v3 googlemaps API
+  $query = array(
+    'sensor' => 'false',
+    'language' => $language->language,
+  );
+  $libraries = array();
+  if($defaults['panoramio_show']) {
+    $libraries[] = 'panoramio';
+  }
+  // more libraries here
+
+  // load libraries if any
+  if (count($libraries)) {
+    $query['libraries'] = implode(',', $libraries);
+  }
+  $gmaplink = '<script src="'. url('http://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+  drupal_set_html_head($gmaplink);
+  $modulepath = drupal_get_path('module', 'getlocations');
+  drupal_add_css($modulepath .'/getlocations.css');
+  drupal_add_js($modulepath .'/js/icons.js');
+  drupal_add_js(file_directory_path() . '/js/getlocations_markers.js');
+  drupal_add_js($modulepath .'/js/markermanager_packed.js');
+  drupal_add_js($modulepath .'/js/infobubble.js');
+  drupal_add_js($modulepath .'/js/getlocations.js');
+}
+
+/**
+ * Some defaults.
+ *
+ * @return
+ *   Returns the current settings
+ */
+function getlocations_defaults() {
+
+  $defaults = array(
+    'api_version' => 3,
+    'width' => '300px',
+    'height' => '200px',
+    'zoom' => 3,
+    'controltype' => 'small',
+    'pancontrol' => 1,
+    'latlong' => '40,0',
+    'maptype' => 'Map',
+    'mtc' => 'standard',
+    'baselayers' => array(
+      'Map' => 1,
+      'Satellite' => 1,
+      'Hybrid' => 1,
+      'Physical' => 1,
+    ),
+    'behavior' => array(
+      'scale' => 0,
+      'scrollwheel' => 0,
+      'overview' => 0,
+      'overview_opened' => 0,
+    ),
+    'streetview_show' => 0,
+    'trafficinfo' => 0,
+    'bicycleinfo' => 0,
+    'panoramio_show' => 0,
+    'poi_show' => 1,
+    'transit_show' => 1,
+    'map_marker' => 'drupal',
+    'minzoom' => 6,
+    'maxzoom' => 16,
+    'nodezoom' => 12,
+  );
+
+  $getlocations_defaults = variable_get('getlocations_default', array());
+  // array_merge deletes things in $defaults that are not in $getlocations_defaults ;-/
+  // roll my own
+  $newdefaults = array();
+  foreach ($defaults AS $k => $v) {
+    if (is_array($v)) {
+      foreach ($defaults[$k] AS $k1 => $v1) {
+        if (isset($getlocations_defaults[$k][$k1])) {
+          $newdefaults[$k][$k1] = $getlocations_defaults[$k][$k1];
+        }
+        else {
+          $newdefaults[$k][$k1] = $v1;
+        }
+      }
+    }
+    else {
+      if (isset($getlocations_defaults[$k])) {
+        $newdefaults[$k] = $getlocations_defaults[$k];
+      }
+      else {
+        $newdefaults[$k] = $v;
+      }
+    }
+  }
+  return $newdefaults;
+}
+
+/**
+ * Function to check if the configuration has been done yet
+ *
+ * @return
+ *   Returns true or false
+ */
+function getlocations_check() {
+  $check = variable_get('getlocations_default', 'xxx');
+  if ($check == 'xxx') {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Function to check a lat,lon string
+ *
+ * @param string $latlon
+ *
+ * @return
+ *   Returns true or false
+ */
+function getlocations_latlon_check($latlon) {
+  if (! empty($latlon) && preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
+    return $latlon;
+  }
+  return FALSE;
+}
+
+/**
+ * Function to get the vid from node table.
+ *
+ * @param int $nid
+ *
+ * @return
+ *   Returns vid.
+ */
+function getlocations_get_vid($nid) {
+  $result = db_query('SELECT vid FROM {node} WHERE nid=%d', array($nid));
+  $row = db_fetch_array($result);
+  return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
+}
+
+function getlocations_get_nid_from_lid($lid) {
+  if ($lid) {
+    $result = db_query('SELECT nid FROM location_instance WHERE lid=%d',  array($lid));
+    $row = db_fetch_array($result);
+    return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
+  }
+}
+
+// ajax callback to fill infobubble
+function getlocations_info() {
+  $lid = $_GET['lid'];
+
+  $location = location_load_location($lid);
+  $nid = getlocations_get_nid_from_lid($lid);
+  $location['nid'] = $nid;
+  $content = theme('getlocations_info', $location);
+
+  print $content;
+  exit();
+
+}
+
+
+/**
+ * Get the list of marker titles.
+ * adapted from gmap
+ */
+function getlocations_get_marker_titles($reset = FALSE) {
+  static $titles;
+
+  if (!$reset) {
+    if (is_array($titles)) {
+      return $titles;
+    }
+
+    $cached = cache_get('getlocations_marker_titles', 'cache');
+    if (!empty($cached)) {
+      $titles = $cached->data;
+      if (is_array($titles)) {
+        return $titles;
+      }
+    }
+  }
+
+  module_load_include('inc', 'getlocations', 'getlocations.markerinfo');
+  $titles = _getlocations_get_marker_titles();
+  cache_set('getlocations_marker_titles', $titles, 'cache');
+  return $titles;
+}
+
+/**
+ * Get the JSON icon data for all the default markers.
+ */
+function getlocations_get_icondata($reset = FALSE) {
+  static $icons;
+  if (is_array($icons) && !$reset) {
+    return $icons;
+  }
+
+  $icons = cache_get('getlocations_icondata');
+  if ($icons) {
+    $icons = $icons->data;
+  }
+
+  if ($reset || !$icons) {
+    module_load_include('inc', 'getlocations', 'getlocations.markerinfo');
+    $icons = _getlocations_get_icondata();
+  }
+  cache_set('getlocations_icondata', $icons, 'cache');
+  return $icons;
+}
+
+/**
+ * Regenerate the markerdata file.
+ */
+function getlocations_regenerate_markers() {
+  $contents = '';
+
+  // Create the js/ within the files folder.
+  $jspath = file_create_path('js');
+  file_check_directory($jspath, FILE_CREATE_DIRECTORY);
+
+  $markerdir = libraries_get_path('getlocations', TRUE) .'/markers';
+
+  $contents .= "// Getlocations marker image data.\n";
+  $contents .= "Drupal.getlocations.iconpath = " . drupal_to_js($markerdir) . ";\n";
+  $contents .= "Drupal.getlocations.icondata = " . drupal_to_js(getlocations_get_icondata(TRUE)) . ";\n";
+
+  file_save_data($contents, "$jspath/getlocations_markers.js", FILE_EXISTS_REPLACE);
+
+  // Also regenerate the cached marker titles array
+  getlocations_get_marker_titles(TRUE);
+}
+
+/**
+ * Implementation of hook_flush_caches().
+ */
+function getlocations_flush_caches() {
+  getlocations_regenerate_markers();
+}
+

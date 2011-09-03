@@ -29,7 +29,7 @@ function getlocations_init() {
 /**
  * Implements hook_permission().
  */
-function getdirections_permission() {
+function getlocations_permission() {
   return array(
     'access getlocations' => array(
       'title' => t('Access Getlocations'),

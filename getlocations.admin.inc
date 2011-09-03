@@ -240,6 +240,13 @@ function getlocations_settings_form() {
     '#description' => t('Use Marker manager. Switching this off will use no manager'),
     '#return_value' => 1,
   );
+  $form['getlocations_default']['pansetting'] = array(
+    '#type' => 'select',
+    '#title' => t('Automatic Panning'),
+    '#default_value' => $getlocations_defaults['pansetting'],
+    '#options' => array(0 => t('None'), 1 => t('Pan'), 2 => t('Pan and zoom'), 3 => t('Set Center')),
+    '#description' => t('"None" is No panning,<br />"Pan" keeps the markers in the Viewport,<br />"Pan and zoom" fits the markers to the Viewport,<br /> "Set Center" places the markers in the middle of the map.'),
+  );
 
   $form['rebuild'] = array(
     '#type' => 'fieldset',

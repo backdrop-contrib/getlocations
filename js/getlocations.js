@@ -49,6 +49,7 @@
     datanum = Drupal.settings.getlocations.datanum;
     useinfobubble = Drupal.settings.getlocations.useinfobubble;
     usemarkermanager = Drupal.settings.getlocations.usemarkermanager;
+    var pansetting = Drupal.settings.getlocations.pansetting;
 
     // in icons.js
     Drupal.getlocations.iconSetup();
@@ -62,6 +63,8 @@
     var minlon = '';
     var maxlat = '';
     var maxlon = '';
+    var cenlat = '';
+    var cenlon = '';
 
     if (minmaxes !== '') {
       mmarr = minmaxes.split(',');
@@ -69,6 +72,8 @@
       minlon = mmarr[1];
       maxlat = mmarr[2];
       maxlon = mmarr[3];
+      cenlat = (parseFloat(minlat) + parseFloat(maxlat))/2;
+      cenlon = (parseFloat(minlon) + parseFloat(maxlon))/2;
     }
 
     // menu type
@@ -138,9 +143,20 @@
 
     setTimeout(doAllMarkers, 1000);
 
-    doBounds(minlat, minlon, maxlat, maxlon, false);
+    if (pansetting == 1) {
+      doBounds(minlat, minlon, maxlat, maxlon, true);
+    }
+    else if (pansetting == 2) {
+      doBounds(minlat, minlon, maxlat, maxlon, false);
+    }
+    else if (pansetting == 3) {
+      if (cenlat && cenlon) {
+        c = new google.maps.LatLng(cenlat, cenlon);
+        map.setCenter(c);
+      }
+    }
 
-  }
+  } // end initialize
 
   function makeMarker(ico, lat, lon, lid, title) {
 
@@ -167,7 +183,7 @@
 
           var infoBubble = new InfoBubble({
             content: data,
-            shadowStyle: 1,
+            shadowStyle: 1
           });
           infoBubble.open(map, m);
           // add to the array

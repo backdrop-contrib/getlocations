@@ -161,7 +161,7 @@ function getlocations_node($nid) {
       $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
     }
   }
-  if (count($locations) < 2 ) {
+  if ($ct < 2 ) {
     unset($minmaxes);
     $minmaxes = '';
   }
@@ -231,6 +231,10 @@ function getlocations_type($type) {
       }
     }
   }
+  if ($ct < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
   // all in $newlocations
   return getlocations_setlocations($newlocations, $latlons, $minmaxes, $type);
 }
@@ -269,6 +273,7 @@ function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='no
     'nodezoom'        => $getlocations_defaults['nodezoom'],
     'useinfobubble'   => $getlocations_defaults['useinfobubble'],
     'usemarkermanager' => $getlocations_defaults['usemarkermanager'],
+    'pansetting'      => $getlocations_defaults['pansetting'],
     'datanum' => count($latlons),
     'latlons' => implode('|', $latlons),
   );
@@ -376,6 +381,7 @@ function getlocations_defaults() {
     'nodezoom' => 12,
     'useinfobubble' => 1,
     'usemarkermanager' => 1,
+    'pansetting' => 2,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());

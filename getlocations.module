@@ -540,3 +540,9 @@ function getlocations_flush_caches() {
   getlocations_regenerate_markers();
 }
 
+/**
+ * Implementation of hook_views_api().
+ */
+function getlocations_views_api() {
+  return array('api' => 2);
+}

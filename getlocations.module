@@ -35,6 +35,10 @@ function getlocations_permission() {
       'title' => t('Access Getlocations'),
       'description' => t('View and use the Getlocations module.')
     ),
+#    'access user getlocations' => array(
+#      'title' => t('Access User locations'),
+#      'description' => t('View User locations with Getlocation maps.')
+#    ),
   );
 }
 
@@ -57,20 +61,41 @@ function getlocations_menu() {
   $items['getlocations/node/%getlocations_id'] = array(
     'title' => 'Get locations',
     'access callback' => 'getlocations_access_location',
-    'page callback' => 'getlocations_node',
+    'page callback' => 'getlocations_nodemap',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
 
   );
+/*
+  // getlocations/user/$uid    # show all locations for a user
+  $items['getlocations/user/%getlocations_id'] = array(
+    'title' => 'Get locations',
+    'access callback' => 'getlocations_access_user_location',
+    'page callback' => 'getlocations_usermap',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+
+  );
+
+  // getlocations/users    # show all locations for all users
+  $items['getlocations/users'] = array(
+    'title' => 'View all user locations',
+    'access callback' => 'getlocations_access_user_location',
+    'page callback' => 'getlocations_usersmap',
+    'type' => MENU_CALLBACK,
+
+  );
+*/
   // getlocations/type/$type     # show all locations of nodes of content-type machine name
   $items['getlocations/type/%getlocations_type'] = array(
     'title' => 'Get locations',
     'access callback' => 'getlocations_access_location',
-    'page callback' => 'getlocations_type',
+    'page callback' => 'getlocations_typemap',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
 
   );
+
   // getlocations/info/lid    # ajax callback to fetch an address
   $items['getlocations/info'] = array(
     'page callback' => 'getlocations_info',
@@ -105,11 +130,21 @@ function getlocations_type_load($arg) {
  * menu access functions
  */
 function getlocations_access_location() {
-  if (module_exists('location') && user_access('access getlocations') && (module_exists('location_node') || module_exists('location_user') || module_exists('location_cck'))) {
+  if (module_exists('location') && user_access('access getlocations') && (module_exists('location_node') || module_exists('location_cck'))) {
     return TRUE;
   }
   return FALSE;
 }
+
+/*
+function getlocations_access_user_location() {
+return true;
+  if (module_exists('location') && user_access('access getlocations') && user_access('access user getlocations')) {
+    return TRUE;
+  }
+  return FALSE;
+}
+*/
 
 /**
  * Menu callback
@@ -117,10 +152,10 @@ function getlocations_access_location() {
  * @param int $nid
  *
  * @return
- *   Returns an array of locations
+ *   Returns a map of locations of a node
  *
  */
-function getlocations_node($nid) {
+function getlocations_nodemap($nid) {
   $vid = getlocations_get_vid($nid);
   $locations = location_load_locations($vid);
 
@@ -130,77 +165,9 @@ function getlocations_node($nid) {
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
-  // we should loop over them and dump bummers with no lat/lon
-  foreach ($locations AS $key => $location) {
-    if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-      // do minmaxes
-      if ($ct) {
-        // latitudes
-        if ($location['latitude'] > $minmaxes['maxlat']) {
-          $minmaxes['maxlat'] = $location['latitude'];
-        }
-        if ($location['latitude'] < $minmaxes['minlat']) {
-          $minmaxes['minlat'] = $location['latitude'];
-        }
-        // longitudes
-        if ($location['longitude'] > $minmaxes['maxlon']) {
-          $minmaxes['maxlon'] = $location['longitude'];
-        }
-        if ($location['longitude'] < $minmaxes['minlon']) {
-          $minmaxes['minlon'] = $location['longitude'];
-        }
-      }
-      else {
-        $minmaxes['minlat'] = $location['latitude'];
-        $minmaxes['maxlat'] = $location['latitude'];
-        $minmaxes['minlon'] = $location['longitude'];
-        $minmaxes['maxlon'] = $location['longitude'];
-      }
-      $ct++;
-      $newlocations[] = $location;
-      $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
-    }
-  }
-  if ($ct < 2 ) {
-    unset($minmaxes);
-    $minmaxes = '';
-  }
-
-  drupal_set_title(t('View @t locations', array('@t' => $node->title)));
-
-  // all in $newlocations
-  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'node', $node);
-
-}
-
-/**
- * Menu callback
- *
- * @param string $type
- * A location enabled content type
- *
- * @return
- *   Returns an array of locations
- *
- */
-function getlocations_type($type) {
-  $newlocations = array();
-  $latlons = array();
-  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-  $query = db_select('node', 'n');
-  $query->fields('n', array('nid'));
-  $query->condition('n.type', $type);
-  $rows = $query->execute();
-
-  $ct = 0;
-  foreach ($rows AS $row) {
-    $nid = $row->nid;
-    $vid = getlocations_get_vid($nid);
-    $locations = location_load_locations($vid);
-
+  if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
-
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         // do minmaxes
         if ($ct) {
@@ -235,10 +202,216 @@ function getlocations_type($type) {
     unset($minmaxes);
     $minmaxes = '';
   }
+
+  drupal_set_title(t('View @t locations', array('@t' => $node->title)));
+
+  // all in $newlocations
+  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'node', $node);
+
+}
+
+/**
+ * Menu callback
+ *
+ * @param int $uid
+ *
+ * @return
+ *   Returns a map of locations of a user
+ *
+ */
+/*
+function getlocations_usermap($uid) {
+  if (module_exists('location_user')) {
+    $locations = location_load_locations($uid, 'uid');
+    $account = user_load($uid);
+    $newlocations = array();
+    $latlons = array();
+    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+    $ct = 0;
+    if (count($locations)) {
+      // we should loop over them and dump bummers with no lat/lon
+      foreach ($locations AS $key => $location) {
+        if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+          // do minmaxes
+          if ($ct) {
+            // latitudes
+            if ($location['latitude'] > $minmaxes['maxlat']) {
+              $minmaxes['maxlat'] = $location['latitude'];
+            }
+            if ($location['latitude'] < $minmaxes['minlat']) {
+              $minmaxes['minlat'] = $location['latitude'];
+            }
+            // longitudes
+            if ($location['longitude'] > $minmaxes['maxlon']) {
+              $minmaxes['maxlon'] = $location['longitude'];
+            }
+            if ($location['longitude'] < $minmaxes['minlon']) {
+              $minmaxes['minlon'] = $location['longitude'];
+            }
+          }
+          else {
+            $minmaxes['minlat'] = $location['latitude'];
+            $minmaxes['maxlat'] = $location['latitude'];
+            $minmaxes['minlon'] = $location['longitude'];
+            $minmaxes['maxlon'] = $location['longitude'];
+          }
+          $ct++;
+          $newlocations[] = $location;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+        }
+      }
+    }
+    if ($ct < 2 ) {
+      unset($minmaxes);
+      $minmaxes = '';
+    }
+
+    drupal_set_title(t('View user @t locations', array('@t' => $account->name)));
+
+    // all in $newlocations
+    return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'user');
+  }
+}
+*/
+
+/**
+ * Menu callback
+ *
+ *
+ * @return
+ *   Returns a map of locations of all the users
+ *
+ */
+/*
+function getlocations_usersmap() {
+
+  if (module_exists('location_user')) {
+    $newlocations = array();
+    $latlons = array();
+    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+    $query = db_select('users', 'u');
+    $query->fields('u', array('uid'));
+    $query->condition('u.status', 1);
+    $rows = $query->execute();
+
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $uid = $row->uid;
+      $locations = location_load_locations($uid, 'uid');
+      if (count($locations)) {
+        // we should loop over them and dump bummers with no lat/lon
+        foreach ($locations AS $key => $location) {
+          if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+            // do minmaxes
+            if ($ct) {
+              // latitudes
+              if ($location['latitude'] > $minmaxes['maxlat']) {
+                $minmaxes['maxlat'] = $location['latitude'];
+              }
+              if ($location['latitude'] < $minmaxes['minlat']) {
+                $minmaxes['minlat'] = $location['latitude'];
+              }
+              // longitudes
+              if ($location['longitude'] > $minmaxes['maxlon']) {
+                $minmaxes['maxlon'] = $location['longitude'];
+              }
+              if ($location['longitude'] < $minmaxes['minlon']) {
+                $minmaxes['minlon'] = $location['longitude'];
+              }
+            }
+            else {
+              $minmaxes['minlat'] = $location['latitude'];
+              $minmaxes['maxlat'] = $location['latitude'];
+              $minmaxes['minlon'] = $location['longitude'];
+              $minmaxes['maxlon'] = $location['longitude'];
+            }
+            $ct++;
+            $newlocations[] = $location;
+            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+          }
+        }
+      }
+    }
+
+    if ($ct < 2 ) {
+      unset($minmaxes);
+      $minmaxes = '';
+    }
+   // all in $newlocations
+    return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'users');
+  }
+}
+*/
+
+/**
+ * Menu callback
+ *
+ * @param string $type
+ * A location enabled content type
+ *
+ * @return
+ *   Returns a map of locations of all nodes of content-type $type
+ *
+ */
+function getlocations_typemap($type) {
+  $newlocations = array();
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'));
+  $query->condition('n.type', $type);
+  $rows = $query->execute();
+
+  $ct = 0;
+  foreach ($rows AS $row) {
+    $nid = $row->nid;
+    $vid = getlocations_get_vid($nid);
+    $locations = location_load_locations($vid);
+    if (count($locations)) {
+      // we should loop over them and dump bummers with no lat/lon
+      foreach ($locations AS $key => $location) {
+        if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+          // do minmaxes
+          if ($ct) {
+            // latitudes
+            if ($location['latitude'] > $minmaxes['maxlat']) {
+              $minmaxes['maxlat'] = $location['latitude'];
+            }
+            if ($location['latitude'] < $minmaxes['minlat']) {
+              $minmaxes['minlat'] = $location['latitude'];
+            }
+            // longitudes
+            if ($location['longitude'] > $minmaxes['maxlon']) {
+              $minmaxes['maxlon'] = $location['longitude'];
+            }
+            if ($location['longitude'] < $minmaxes['minlon']) {
+              $minmaxes['minlon'] = $location['longitude'];
+            }
+          }
+          else {
+            $minmaxes['minlat'] = $location['latitude'];
+            $minmaxes['maxlat'] = $location['latitude'];
+            $minmaxes['minlon'] = $location['longitude'];
+            $minmaxes['maxlon'] = $location['longitude'];
+          }
+          $ct++;
+          $newlocations[] = $location;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+        }
+      }
+    }
+  }
+  if ($ct < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
   // all in $newlocations
   return getlocations_setlocations($newlocations, $latlons, $minmaxes, $type);
 }
 
+/**
+ * Set up javascript settings and map
+ */
 function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
   if (! getlocations_check()) {
     return t('You need to !c first.', array('!c' => l('configure Getlocations', 'admin/settings/getlocations')));
@@ -293,7 +466,7 @@ function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='no
     $height = $getlocations_defaults['height'];
   }
 
-  return theme('getlocations_show', array('width' => $width, 'height' => $height, 'defaults' => $getlocations_defaults, 'node' => $node));
+  return theme('getlocations_show', array('width' => $width, 'height' => $height, 'defaults' => $getlocations_defaults, 'type' => $type, 'node' => $node));
 
 }
 
@@ -322,10 +495,8 @@ function getlocations_setup_map($defaults) {
   if (count($libraries)) {
     $query['libraries'] = implode(',', $libraries);
   }
-
   $gmaplink = url('http://maps.google.com/maps/api/js', array('query' => $query));
   drupal_add_js($gmaplink, 'external');
-
   $modulepath = drupal_get_path('module', 'getlocations');
   drupal_add_css($modulepath .'/getlocations.css');
   drupal_add_js($modulepath .'/js/icons.js');
@@ -382,6 +553,10 @@ function getlocations_defaults() {
     'useinfobubble' => 1,
     'usemarkermanager' => 1,
     'pansetting' => 2,
+    'returnlink_page_enable' => 0,
+    'returnlink_page_link' => t('Return to Page'),
+#    'returnlink_user_enable' => 0,
+#    'returnlink_user_link' => t('Return to User'),
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());

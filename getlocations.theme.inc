@@ -19,6 +19,7 @@ function getlocations_theme() {
         'width' => '',
         'height' => '',
         'defaults' => '',
+        'type' => '',
         'node' => '',
       ),
     ),
@@ -34,17 +35,34 @@ function theme_getlocations_show($variables) {
   $width = $variables['width'];
   $height = $variables['height'];
   $defaults = $variables['defaults'];
+  $type = $variables['type'];
   $node = $variables['node'];
 
   $output = '';
-
-  if (is_object($node)) {
-    $l = l($node->title, 'node/' . $node->nid);
-    $output .= '<div class="getlocations_returnlink">' . t('Return to !l', array('!l' => $l)) . '</div>';
+  // return link
+  if ($type == 'node' && $defaults['returnlink_page_enable']) {
+    if (is_object($node)) {
+      $linktext = $defaults['returnlink_page_link'];
+      if ( preg_match("/%t/", $linktext)) {
+        $linktext = preg_replace("/%t/", $node->title, $linktext);
+      }
+      $l = l($linktext, 'node/' . $node->nid);
+      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+    }
   }
-
+#  elseif ($type == 'user' && $defaults['returnlink_user_enable']) {
+#    if (is_object($node)) {
+#      $linktext = $defaults['returnlink_user_link'];
+#      if ( preg_match("/%n/", $linktext)) {
+#        $linktext = preg_replace("/%n/", $node->name, $linktext);
+#      }
+#      $l = l($linktext, 'node/' . $node->nid);
+#      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+#    }
+#  }
+  // do map
   $output .= '<div id="getlocations_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>';
-
+  // buttons
   $form = array();
   if ($defaults['trafficinfo']) {
     $form['trafficinfo'] = array(
@@ -93,9 +111,6 @@ function theme_getlocations_info($variables) {
     $output .= '<h4>' . l($location['name'], 'node/'. $location['nid']) . '</h4>';
   }
   $output .= '<div class="adr">';
-#  if (! empty($location['name'])) {
-#    $output .= '<span class="fn">'. $location['name'] .'</span>';
-#  }
   if (! empty($location['street'])) {
     $output .= '<div class="street-address">' . $location['street'];
     if (! empty($location['additional'])) {

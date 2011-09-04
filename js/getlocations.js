@@ -1,7 +1,7 @@
 
 /**
  * @file
- * Javascript functions for getlocations module
+ * Javascript functions for getlocations module for Drupal 7
  *
  * @author Bob Hutchinson http://drupal.org/user/52366
  * this is for googlemaps API version 3
@@ -130,15 +130,12 @@
 
     if (Drupal.settings.getlocations.trafficinfo) {
       trafficInfo = new google.maps.TrafficLayer();
-      //trafficInfo.setMap(map);
     }
     if (Drupal.settings.getlocations.bicycleinfo) {
       bicycleInfo = new google.maps.BicyclingLayer();
-      //bicycleInfo.setMap(map);
     }
     if (Drupal.settings.getlocations.panoramio_show) {
       panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-      //panoramioLayer.setMap(map);
     }
 
     setTimeout(doAllMarkers, 1000);

@@ -1,10 +1,9 @@
 <?php
 
-// using version 3 googlemaps API
-
 /**
  * @file
  * getlocations module theming functions.
+ * using version 3 googlemaps API
  */
 
 /**
@@ -19,6 +18,7 @@ function getlocations_theme() {
         'width' => '',
         'height' => '',
         'defaults' => '',
+        'type' => '',
         'node' => '',
       ),
     ),
@@ -30,17 +30,36 @@ function getlocations_theme() {
   );
 }
 
-function theme_getlocations_show($width, $height, $defaults, $node = '') {
+/**
+ * All the map displays pass through here.
+ */
+function theme_getlocations_show($width, $height, $defaults, $type = '', $node = '') {
 
   $output = '';
-
-  if (is_object($node)) {
-    $l = l($node->title, 'node/' . $node->nid);
-    $output .= '<div class="getlocations_returnlink">' . t('Return to !l', array('!l' => $l)) . '</div>';
+  // return link
+  if ($type == 'node' && $defaults['returnlink_page_enable']) {
+    if (is_object($node)) {
+      $linktext = $defaults['returnlink_page_link'];
+      if ( preg_match("/%t/", $linktext)) {
+        $linktext = preg_replace("/%t/", $node->title, $linktext);
+      }
+      $l = l($linktext, 'node/' . $node->nid);
+      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+    }
   }
-
+  elseif ($type == 'user' && $defaults['returnlink_user_enable']) {
+    if (is_object($node)) {
+      $linktext = $defaults['returnlink_user_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $node->name, $linktext);
+      }
+      $l = l($linktext, 'node/' . $node->nid);
+      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+    }
+  }
+  // do map
   $output .= '<div id="getlocations_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>';
-
+  // buttons
   $form = array();
   if ($defaults['trafficinfo']) {
     $form['trafficinfo'] = array(

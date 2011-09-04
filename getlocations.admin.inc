@@ -1,10 +1,9 @@
 <?php
 
-// using version 3 googlemaps API
-
 /**
  * @file
  * getlocations module administration functions.
+ * using version 3 googlemaps API
  */
 
 /**
@@ -14,6 +13,7 @@
  */
 function getlocations_settings_form() {
   $getlocations_defaults = getlocations_defaults();
+  drupal_add_js(drupal_get_path('module', 'getlocations') .'/js/getlocations_admin.js');
 
   $form = array();
   $form['getlocations_default'] = array(
@@ -248,6 +248,39 @@ function getlocations_settings_form() {
     '#description' => t('"None" is No panning,<br />"Pan" keeps the markers in the Viewport,<br />"Pan and zoom" fits the markers to the Viewport,<br /> "Set Center" places the markers in the middle of the map.'),
   );
 
+  $form['getlocations_default']['returnlink_page_enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show link back to page'),
+    '#default_value' =>  $getlocations_defaults['returnlink_page_enable'],
+    '#return_value' => 1,
+  );
+  $form['getlocations_default']['returnlink_page_link'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Text of page return link'),
+    '#default_value' => $getlocations_defaults['returnlink_page_link'],
+    '#size' => 30,
+    '#description' => t('Use %t to insert the page title'),
+    '#prefix' => '<div id="wrap-page-link">',
+    '#suffix' => '</div>',
+  );
+  if (module_exists('location_user')) {
+    $form['getlocations_default']['returnlink_user_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show link back to user'),
+      '#default_value' =>  $getlocations_defaults['returnlink_user_enable'],
+      '#return_value' => 1,
+    );
+    $form['getlocations_default']['returnlink_user_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text of user return link'),
+      '#default_value' => $getlocations_defaults['returnlink_user_link'],
+      '#size' => 30,
+      '#description' => t('Use %n to insert the user name'),
+      '#prefix' => '<div id="wrap-user-link">',
+      '#suffix' => '</div>',
+    );
+  }
+
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
@@ -275,7 +308,7 @@ function getlocations_settings_form() {
 
 function getlocations_settings_validate($form, &$form_state) {
 
-  if (! getlocations_latlon_check(  $form_state['values']['getlocations_default']['latlong']  )   ) {
+  if (! getlocations_latlon_check($form_state['values']['getlocations_default']['latlong'])) {
     form_set_error('getlocations_default][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
   }
   $found = FALSE;
@@ -292,6 +325,15 @@ function getlocations_settings_validate($form, &$form_state) {
   // Check that the default map type is sane.
   if (!$form_state['values']['getlocations_default']['baselayers'][$form_state['values']['getlocations_default']['maptype']]) {
     form_error($form['getlocations_default']['baselayers']['maptype'], t('The default map type must be an enabled baselayer!'));
+  }
+
+  if ( $form_state['values']['getlocations_default']['returnlink_page_enable'] && empty($form_state['values']['getlocations_default']['returnlink_page_link'])) {
+    form_set_error('getlocations_default][returnlink_page_link', t('Page return link must be filled in'));
+  }
+  if (module_exists('location_user')) {
+    if ( $form_state['values']['getlocations_default']['returnlink_user_enable'] && empty($form_state['values']['getlocations_default']['returnlink_user_link'])) {
+      form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
+    }
   }
 }
 

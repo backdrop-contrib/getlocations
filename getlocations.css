@@ -1,12 +1,33 @@
 /* getlocations css */
 
+/**
+ * the map, see theme_getlocations_show().
+ */
 #getlocations_map_canvas {
-
 }
 
 #getlocations_map_buttons {
-
 }
 .getlocations_returnlink {
   margin-bottom: 8px;
+}
+
+/**
+ * the infobubble, see function theme_getlocations_info().
+ */
+.vcard {
+}
+.vcard h4 {
+}
+.adr {
+}
+.street-address {
+}
+.locality {
+}
+.region {
+}
+.postal-code {
+}
+.country-name {
 }

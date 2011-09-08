@@ -96,7 +96,26 @@ function getlocations_menu() {
 
   );
 
-  // getlocations/info/lid    # ajax callback to fetch an address
+  // getlocations/lids/1,2,3,4    # show lids
+  $items['getlocations/lids/%getlocations_cdints'] = array(
+    'title' => 'Get locations',
+    'access callback' => 'getlocations_access_location',
+    'page callback' => 'getlocations_lids',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+
+  );
+  // getlocations/nids/1,2,3,4    # show nids locations
+  $items['getlocations/nids/%getlocations_cdints'] = array(
+    'title' => 'Get locations',
+    'access callback' => 'getlocations_access_location',
+    'page callback' => 'getlocations_nids',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+
+  );
+
+  // getlocations/info    # ajax callback to fetch an address
   $items['getlocations/info'] = array(
     'page callback' => 'getlocations_info',
     'access arguments' => array('access content'),
@@ -124,6 +143,16 @@ function getlocations_type_load($arg) {
   $query->condition('n.type', $arg);
   $row = $query->execute()->fetchAssoc();
   return ((isset($row['type']) && $row['type']) ? $arg : FALSE);
+}
+
+function getlocations_cdints_load($arg) {
+  $arr = explode(',', $arg);
+  foreach ($arr AS $a) {
+    if (! is_numeric($a) || $a < 1 ) {
+      return FALSE;
+    }
+  }
+  return $arg;
 }
 
 /**
@@ -169,29 +198,7 @@ function getlocations_nodemap($nid) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-        // do minmaxes
-        if ($ct) {
-          // latitudes
-          if ($location['latitude'] > $minmaxes['maxlat']) {
-            $minmaxes['maxlat'] = $location['latitude'];
-          }
-          if ($location['latitude'] < $minmaxes['minlat']) {
-            $minmaxes['minlat'] = $location['latitude'];
-          }
-          // longitudes
-          if ($location['longitude'] > $minmaxes['maxlon']) {
-            $minmaxes['maxlon'] = $location['longitude'];
-          }
-          if ($location['longitude'] < $minmaxes['minlon']) {
-            $minmaxes['minlon'] = $location['longitude'];
-          }
-        }
-        else {
-          $minmaxes['minlat'] = $location['latitude'];
-          $minmaxes['maxlat'] = $location['latitude'];
-          $minmaxes['minlon'] = $location['longitude'];
-          $minmaxes['maxlon'] = $location['longitude'];
-        }
+        $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
         $newlocations[] = $location;
         $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
@@ -232,29 +239,7 @@ function getlocations_usermap($uid) {
       // we should loop over them and dump bummers with no lat/lon
       foreach ($locations AS $key => $location) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-          // do minmaxes
-          if ($ct) {
-            // latitudes
-            if ($location['latitude'] > $minmaxes['maxlat']) {
-              $minmaxes['maxlat'] = $location['latitude'];
-            }
-            if ($location['latitude'] < $minmaxes['minlat']) {
-              $minmaxes['minlat'] = $location['latitude'];
-            }
-            // longitudes
-            if ($location['longitude'] > $minmaxes['maxlon']) {
-              $minmaxes['maxlon'] = $location['longitude'];
-            }
-            if ($location['longitude'] < $minmaxes['minlon']) {
-              $minmaxes['minlon'] = $location['longitude'];
-            }
-          }
-          else {
-            $minmaxes['minlat'] = $location['latitude'];
-            $minmaxes['maxlat'] = $location['latitude'];
-            $minmaxes['minlon'] = $location['longitude'];
-            $minmaxes['maxlon'] = $location['longitude'];
-          }
+          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
           $newlocations[] = $location;
           $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
@@ -302,29 +287,7 @@ function getlocations_usersmap() {
         // we should loop over them and dump bummers with no lat/lon
         foreach ($locations AS $key => $location) {
           if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-            // do minmaxes
-            if ($ct) {
-              // latitudes
-              if ($location['latitude'] > $minmaxes['maxlat']) {
-                $minmaxes['maxlat'] = $location['latitude'];
-              }
-              if ($location['latitude'] < $minmaxes['minlat']) {
-                $minmaxes['minlat'] = $location['latitude'];
-              }
-              // longitudes
-              if ($location['longitude'] > $minmaxes['maxlon']) {
-                $minmaxes['maxlon'] = $location['longitude'];
-              }
-              if ($location['longitude'] < $minmaxes['minlon']) {
-                $minmaxes['minlon'] = $location['longitude'];
-              }
-            }
-            else {
-              $minmaxes['minlat'] = $location['latitude'];
-              $minmaxes['maxlat'] = $location['latitude'];
-              $minmaxes['minlon'] = $location['longitude'];
-              $minmaxes['maxlon'] = $location['longitude'];
-            }
+            $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $ct++;
             $newlocations[] = $location;
             $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
@@ -354,6 +317,13 @@ function getlocations_usersmap() {
  *
  */
 function getlocations_typemap($type) {
+  // add key/value to the end
+  $loc_key = '';
+  $loc_val = '';
+  if (arg(3) && arg(4)) {
+    $loc_key = arg(3);
+    $loc_val = arg(4);
+  }
   $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
@@ -371,29 +341,12 @@ function getlocations_typemap($type) {
       // we should loop over them and dump bummers with no lat/lon
       foreach ($locations AS $key => $location) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-          // do minmaxes
-          if ($ct) {
-            // latitudes
-            if ($location['latitude'] > $minmaxes['maxlat']) {
-              $minmaxes['maxlat'] = $location['latitude'];
-            }
-            if ($location['latitude'] < $minmaxes['minlat']) {
-              $minmaxes['minlat'] = $location['latitude'];
-            }
-            // longitudes
-            if ($location['longitude'] > $minmaxes['maxlon']) {
-              $minmaxes['maxlon'] = $location['longitude'];
-            }
-            if ($location['longitude'] < $minmaxes['minlon']) {
-              $minmaxes['minlon'] = $location['longitude'];
+          if ($loc_key && isset($location[$loc_key])) {
+            if (strtolower($location[$loc_key]) != strtolower($loc_val)) {
+              continue;
             }
           }
-          else {
-            $minmaxes['minlat'] = $location['latitude'];
-            $minmaxes['maxlat'] = $location['latitude'];
-            $minmaxes['minlon'] = $location['longitude'];
-            $minmaxes['maxlon'] = $location['longitude'];
-          }
+          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
           $newlocations[] = $location;
           $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
@@ -407,6 +360,74 @@ function getlocations_typemap($type) {
   }
   // all in $newlocations
   return getlocations_setlocations($newlocations, $latlons, $minmaxes, $type);
+}
+
+function getlocations_lids($lidlist) {
+  $lidarr = explode(',', $lidlist);
+  $locations = array();
+  $newlocations = array();
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $ct = 0;
+
+  foreach ($lidarr AS $lid) {
+    $locations[] = location_load_location($lid);
+  }
+  if (count($locations)) {
+    // we should loop over them and dump bummers with no lat/lon
+    foreach ($locations AS $key => $location) {
+      if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+          $ct++;
+          $newlocations[] = $location;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+
+      }
+    }
+  }
+  if ($ct < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
+  // all in $newlocations
+  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'lids');
+
+}
+
+function getlocations_nids($nidlist) {
+  $nidarr = explode(',', $nidlist);
+  $locations = array();
+  $newlocations = array();
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $ct = 0;
+
+  foreach ($nidarr AS $nid) {
+    $vid = getlocations_get_vid($nid);
+    $locs = location_load_locations($vid);
+    if (count($locs)) {
+      foreach ($locs AS $key => $loc) {
+        $locations[] = $loc;
+      }
+    }
+  }
+  if (count($locations)) {
+    // we should loop over them and dump bummers with no lat/lon
+    foreach ($locations AS $key => $location) {
+      if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+        $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+        $ct++;
+        $newlocations[] = $location;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+      }
+    }
+  }
+  if ($ct < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
+  // all in $newlocations
+  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'nids');
 }
 
 /**
@@ -739,5 +760,34 @@ function getlocations_flush_caches() {
  */
 function getlocations_views_api() {
   return array('api' => 3);
+}
+
+
+function getlocations_do_minmaxes($ct, $location, $minmaxes) {
+  // do minmaxes
+  if ($ct) {
+    // latitudes
+    if ($location['latitude'] > $minmaxes['maxlat']) {
+      $minmaxes['maxlat'] = $location['latitude'];
+    }
+    if ($location['latitude'] < $minmaxes['minlat']) {
+      $minmaxes['minlat'] = $location['latitude'];
+    }
+    // longitudes
+    if ($location['longitude'] > $minmaxes['maxlon']) {
+      $minmaxes['maxlon'] = $location['longitude'];
+    }
+    if ($location['longitude'] < $minmaxes['minlon']) {
+      $minmaxes['minlon'] = $location['longitude'];
+    }
+  }
+  else {
+    $minmaxes['minlat'] = $location['latitude'];
+    $minmaxes['maxlat'] = $location['latitude'];
+    $minmaxes['minlon'] = $location['longitude'];
+    $minmaxes['maxlon'] = $location['longitude'];
+  }
+  return $minmaxes;
+
 }
 

@@ -3,9 +3,9 @@
 /**
  * @file
  * Displays locations on a map.
+ * for Drupal 7
+ * using version 3 googlemaps API
  */
-
-// for D7
 
 /**
  * Implements hook_help().
@@ -64,7 +64,6 @@ function getlocations_menu() {
     'page callback' => 'getlocations_nodemap',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
-
   );
 /*
   // getlocations/user/$uid    # show all locations for a user
@@ -74,7 +73,6 @@ function getlocations_menu() {
     'page callback' => 'getlocations_usermap',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
-
   );
 
   // getlocations/users    # show all locations for all users
@@ -83,7 +81,6 @@ function getlocations_menu() {
     'access callback' => 'getlocations_access_user_location',
     'page callback' => 'getlocations_usersmap',
     'type' => MENU_CALLBACK,
-
   );
 */
   // getlocations/type/$type     # show all locations of nodes of content-type machine name
@@ -93,7 +90,6 @@ function getlocations_menu() {
     'page callback' => 'getlocations_typemap',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
-
   );
 
   // getlocations/lids/1,2,3,4    # show lids
@@ -103,8 +99,8 @@ function getlocations_menu() {
     'page callback' => 'getlocations_lids',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
-
   );
+
   // getlocations/nids/1,2,3,4    # show nids locations
   $items['getlocations/nids/%getlocations_cdints'] = array(
     'title' => 'Get locations',
@@ -112,7 +108,6 @@ function getlocations_menu() {
     'page callback' => 'getlocations_nids',
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
-
   );
 
   // getlocations/info    # ajax callback to fetch an address
@@ -120,7 +115,6 @@ function getlocations_menu() {
     'page callback' => 'getlocations_info',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
-
   );
 
   return $items;
@@ -138,9 +132,7 @@ function getlocations_id_load($arg) {
  *
  */
 function getlocations_type_load($arg) {
-  $query = db_select('node_type', 'n');
-  $query->fields('n', array('type'));
-  $query->condition('n.type', $arg);
+  $query = db_select('node_type', 'n')->fields('n', array('type'))->condition('n.type', $arg);
   $row = $query->execute()->fetchAssoc();
   return ((isset($row['type']) && $row['type']) ? $arg : FALSE);
 }
@@ -187,9 +179,7 @@ return true;
 function getlocations_nodemap($nid) {
   $vid = getlocations_get_vid($nid);
   $locations = location_load_locations($vid);
-
   $node = node_load($nid);
-
   $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
@@ -274,9 +264,7 @@ function getlocations_usersmap() {
     $newlocations = array();
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-    $query = db_select('users', 'u');
-    $query->fields('u', array('uid'));
-    $query->condition('u.status', 1);
+    $query = db_select('users', 'u')->fields('u', array('uid'))->condition('u.status', 1);
     $rows = $query->execute();
 
     $ct = 0;
@@ -327,9 +315,7 @@ function getlocations_typemap($type) {
   $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-  $query = db_select('node', 'n');
-  $query->fields('n', array('nid'));
-  $query->condition('n.type', $type);
+  $query = db_select('node', 'n')->fields('n', array('nid'))->condition('n.type', $type);
   $rows = $query->execute();
 
   $ct = 0;
@@ -362,6 +348,16 @@ function getlocations_typemap($type) {
   return getlocations_setlocations($newlocations, $latlons, $minmaxes, $type);
 }
 
+/**
+ * Menu callback
+ *
+ * @param string $lidlist
+ * A comma-delimited list of location ids
+ *
+ * @return
+ *   Returns a map of locations.
+ *
+ */
 function getlocations_lids($lidlist) {
   $lidarr = explode(',', $lidlist);
   $locations = array();
@@ -394,6 +390,16 @@ function getlocations_lids($lidlist) {
 
 }
 
+/**
+ * Menu callback
+ *
+ * @param string $nidlist
+ * A comma-delimited list of node ids
+ *
+ * @return
+ *   Returns a map of locations.
+ *
+ */
 function getlocations_nids($nidlist) {
   $nidarr = explode(',', $nidlist);
   $locations = array();
@@ -490,7 +496,6 @@ function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='no
   return theme('getlocations_show', array('width' => $width, 'height' => $height, 'defaults' => $getlocations_defaults, 'type' => $type, 'node' => $node));
 
 }
-
 
 /**
  * Function to setup the map scripts
@@ -645,9 +650,7 @@ function getlocations_latlon_check($latlon) {
  *   Returns vid.
  */
 function getlocations_get_vid($nid) {
-  $query = db_select('node', 'n');
-  $query->fields('n', array('vid'));
-  $query->condition('n.nid', $nid);
+  $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
   $row = $query->execute()->fetchAssoc();
   return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
 }
@@ -655,9 +658,7 @@ function getlocations_get_vid($nid) {
 
 function getlocations_get_nid_from_lid($lid) {
   if ($lid) {
-    $query = db_select('location_instance', 'i');
-    $query->fields('i', array('nid'));
-    $query->condition('i.lid', $lid);
+    $query = db_select('location_instance', 'i')->fields('i', array('nid'))->condition('i.lid', $lid);
     $row = $query->execute()->fetchAssoc();
     return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
   }
@@ -763,8 +764,14 @@ function getlocations_views_api() {
 }
 
 
+/**
+ * @param int $ct $location $minmaxes
+ *
+ * @return
+ *   Returns $minmaxes
+ *
+ */
 function getlocations_do_minmaxes($ct, $location, $minmaxes) {
-  // do minmaxes
   if ($ct) {
     // latitudes
     if ($location['latitude'] > $minmaxes['maxlat']) {

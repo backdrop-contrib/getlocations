@@ -47,6 +47,7 @@ function getlocations_permission() {
  */
 function getlocations_menu() {
   $items = array();
+
   $items['admin/config/services/getlocations'] = array(
     'title' => 'Get locations',
     'description' => 'Configure Get locations',
@@ -317,7 +318,6 @@ function getlocations_typemap($type) {
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $query = db_select('node', 'n')->fields('n', array('nid'))->condition('n.type', $type);
   $rows = $query->execute();
-
   $ct = 0;
   foreach ($rows AS $row) {
     $nid = $row->nid;
@@ -377,7 +377,6 @@ function getlocations_lids($lidlist) {
           $ct++;
           $newlocations[] = $location;
           $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
-
       }
     }
   }
@@ -636,7 +635,10 @@ function getlocations_check() {
  */
 function getlocations_latlon_check($latlon) {
   if (! empty($latlon) && preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
-    return $latlon;
+    $ll = explode(',', $latlon);
+    if (isset($ll[0]) && is_numeric($ll[0]) && $ll[0] <> 0 && isset($ll[1]) && is_numeric($ll[1]) && $ll[1] <> 0) {
+      return $latlon;
+    }
   }
   return FALSE;
 }
@@ -654,7 +656,6 @@ function getlocations_get_vid($nid) {
   $row = $query->execute()->fetchAssoc();
   return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
 }
-
 
 function getlocations_get_nid_from_lid($lid) {
   if ($lid) {
@@ -763,7 +764,6 @@ function getlocations_views_api() {
   return array('api' => 3);
 }
 
-
 /**
  * @param int $ct $location $minmaxes
  *
@@ -795,6 +795,5 @@ function getlocations_do_minmaxes($ct, $location, $minmaxes) {
     $minmaxes['maxlon'] = $location['longitude'];
   }
   return $minmaxes;
-
 }
 

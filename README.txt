@@ -56,3 +56,38 @@ and a list of nodes with
 There are some Views, disabled by default.
 The getlocations View will provide a block that will appear when a location
 enabled node is being shown. The block contains a link to a map.
+
+
+Automatic Panning
+This setting has 4 possibilities:
+"None" is No panning.
+This uses the default zoom and map center.
+
+"Pan" keeps the markers in the Viewport.
+This will try to fit the markers in by panning to them but uses
+the default zoom.
+
+"Pan and zoom" fits the markers to the Viewport.
+This zooms in as far as it can and will fit all the markers onto the map.
+This setting should only be used if you have less than 30 - 50 markers.
+
+"Set Center" places the markers in the middle of the map.
+This is similar to "Pan" but uses averaging to define the map center.
+
+
+Which of these settings is best for your usecase depends on how many markers
+you have and their 'spread', eg are they all in one region or spread out all
+over the world.
+
+Showing more than 30 -50 markers could lead to browser crash, remember that
+it is the client browser not the server that is doing the work so you need to
+test on slow machines and basic handheld devices to determine the best
+settings for your site.
+
+If you have hundreds of markers make sure that the markermanager is enabled and
+that the markers are not all in the viewport at once, at least not on the map
+as it is initially set up.
+This applies especially to the
+"/getlocations/type/zzz"
+map which shows all the markers (of a given content-type)
+

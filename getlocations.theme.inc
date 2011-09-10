@@ -1,10 +1,9 @@
 <?php
 
-// using version 3 googlemaps API
-
 /**
  * @file
  * getlocations module theming functions.
+ * using version 3 googlemaps API
  */
 
 /**
@@ -31,6 +30,9 @@ function getlocations_theme() {
   );
 }
 
+/**
+ * All the map displays pass through here.
+ */
 function theme_getlocations_show($variables) {
   $width = $variables['width'];
   $height = $variables['height'];

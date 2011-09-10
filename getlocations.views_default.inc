@@ -439,6 +439,7 @@ function getlocations_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('title', 'View user location');
+  $handler->override_option('items_per_page', 1);
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->override_option('block_description', '');
   $handler->override_option('block_caching', -1);

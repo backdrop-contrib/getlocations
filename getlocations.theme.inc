@@ -53,7 +53,7 @@ function theme_getlocations_show($width, $height, $defaults, $type = '', $node =
       if ( preg_match("/%n/", $linktext)) {
         $linktext = preg_replace("/%n/", $node->name, $linktext);
       }
-      $l = l($linktext, 'node/' . $node->nid);
+      $l = l($linktext, 'user/' . $node->uid);
       $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
     }
   }

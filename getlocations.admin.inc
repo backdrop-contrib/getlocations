@@ -13,7 +13,7 @@
  */
 function getlocations_settings_form() {
   $getlocations_defaults = getlocations_defaults();
-  drupal_add_js(drupal_get_path('module', 'getlocations') .'/js/getlocations_admin.js');
+  drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_admin.js');
 
   $form = array();
   $form['getlocations_default'] = array(
@@ -281,6 +281,47 @@ function getlocations_settings_form() {
     );
   }
 
+  if (module_exists('colorbox')) {
+    $form['getlocations_colorbox'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Colorbox settings'),
+      // This will store all the defaults in one variable.
+      '#tree' => TRUE,
+    );
+    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
+      'enable' => 0,
+      'width' => 600,
+      'height' => 600,
+    ));
+    $form['getlocations_colorbox']['enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Colorbox'),
+      '#default_value' =>  $getlocations_colorbox['enable'],
+      '#return_value' => 1,
+      '#description' => t('Show Getlocations in a Colorbox.'),
+    );
+    $form['getlocations_colorbox']['width'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Colorbox width'),
+      '#default_value' => $getlocations_colorbox['width'],
+      '#size' => 5,
+      '#required' => TRUE,
+      // need this to get validation to work
+      '#parents' => array('getlocations_colorbox', 'width'),
+      '#prefix' => '<div id="wrap-getlocations-colorbox">',
+    );
+    $form['getlocations_colorbox']['height'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Colorbox height'),
+      '#default_value' => $getlocations_colorbox['height'],
+      '#size' => 5,
+      '#required' => TRUE,
+      // need this to get validation to work
+      '#parents' => array('getlocations_colorbox', 'height'),
+      '#suffix' => '</div>',
+    );
+  }
+
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
@@ -333,6 +374,14 @@ function getlocations_settings_validate($form, &$form_state) {
   if (module_exists('location_user')) {
     if ( $form_state['values']['getlocations_default']['returnlink_user_enable'] && empty($form_state['values']['getlocations_default']['returnlink_user_link'])) {
       form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
+    }
+  }
+  if (module_exists('colorbox')) {
+    if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {
+      form_set_error('getlocations_colorbox][width', t('Colorbox width must be a number'));
+    }
+    if (empty($form_state['values']['getlocations_colorbox']['height']) || ! is_numeric($form_state['values']['getlocations_colorbox']['height']) || $form_state['values']['getlocations_colorbox']['height'] < 1 ) {
+      form_set_error('getlocations_colorbox][height', t('Colorbox height must be a number'));
     }
   }
 }

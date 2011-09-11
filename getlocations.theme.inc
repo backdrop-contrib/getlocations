@@ -27,6 +27,12 @@ function getlocations_theme() {
         'location' => null,
       ),
     ),
+    'getlocations_box' => array(
+      'arguments' => array(
+        'content' => null,
+      ),
+      'template' => 'getlocations_box',
+    ),
   );
 }
 
@@ -105,7 +111,8 @@ function theme_getlocations_info($location) {
   $output .= '<div class="location vcard">';
   $output .= '<br />';
   if (! empty($location['name'])) {
-    $output .= '<h4>' . l($location['name'], 'node/'. $location['nid']) . '</h4>';
+    // if you are using a colorbox to display getlocations you might want to make this a plain heading
+    $output .= '<h4>' . l($location['name'], 'node/'. $location['nid'], array('attributes' => array('class' => 'getlocations_infolink'))) . '</h4>';
   }
   $output .= '<div class="adr">';
   if (! empty($location['street'])) {
@@ -135,3 +142,49 @@ function theme_getlocations_info($location) {
 
   return $output;
 }
+
+function template_preprocess_getlocations_box(&$variables) {
+
+  if(module_exists('admin_menu')) {
+    admin_menu_suppress();
+  }
+  drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_box.js');
+
+  // Construct page title
+  if (drupal_get_title()) {
+    $head_title = array(strip_tags(drupal_get_title()), variable_get('site_name', 'Drupal'));
+  }
+  else {
+    $head_title = array(variable_get('site_name', 'Drupal'));
+    if (variable_get('site_slogan', '')) {
+      $head_title[] = variable_get('site_slogan', '');
+    }
+  }
+  $variables['head_title']        = implode(' | ', $head_title);
+  $variables['base_path']         = base_path();
+  $variables['head']              = drupal_get_html_head();
+  $variables['language']          = $GLOBALS['language'];
+  $variables['language']->dir     = $GLOBALS['language']->direction ? 'rtl' : 'ltr';
+  $variables['css']               = drupal_add_css();
+  $variables['styles']            = drupal_get_css();
+  $variables['scripts']           = drupal_get_js();
+  if (module_exists('jquery_update')) {
+    jquery_update_preprocess_page($variables);
+  }
+  $variables['title'] = drupal_get_title();
+  // Closure should be filled last.
+  $variables['closure'] = theme('closure');
+  // Compile a list of classes that are going to be applied to the body element.
+  // This allows advanced theming based on context (home page, node of certain type, etc.).
+  $body_classes = array();
+  // Add a class that tells us whether we're on the front page or not.
+  $body_classes[] = $variables['is_front'] ? 'front' : 'not-front';
+  // Add a class that tells us whether the page is viewed by an authenticated user or not.
+  $body_classes[] = $variables['logged_in'] ? 'logged-in' : 'not-logged-in';
+  $body_classes[] = 'no-sidebars';
+  // Implode with spaces.
+  $variables['body_classes'] = implode(' ', $body_classes);
+
+}
+
+

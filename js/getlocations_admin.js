@@ -40,6 +40,22 @@
           $("#wrap-user-link").hide();
         }
       });
+
+      if ($("#edit-getlocations-colorbox-enable").attr('checked')) {
+        $("#wrap-getlocations-colorbox").show();
+      }
+      else {
+        $("#wrap-getlocations-colorbox").hide();
+      }
+      $("#edit-getlocations-colorbox-enable").change(function() {
+        if ($("#edit-getlocations-colorbox-enable").attr('checked')) {
+          $("#wrap-getlocations-colorbox").show();
+        }
+        else {
+          $("#wrap-getlocations-colorbox").hide();
+        }
+      });
+
     }
   }
 

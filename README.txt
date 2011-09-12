@@ -91,3 +91,20 @@ This applies especially to the
 "/getlocations/type/zzz"
 map which shows all the markers (of a given content-type)
 
+If you have the Colorbox module installed and enabled in Get Locations
+you can place any of the above paths in a colorbox iframe by replacing
+'getlocations' with 'getlocations_box'.
+To enable this for a link you can use the 'colorbox-load' method,
+make sure that this feature has been enabled in colorbox
+and use a url like this:
+<a href="/getlocations_box/node/xxx?width=700&height=600&iframe=true" class="colorbox-load">See map</a>
+
+or (advanced use) by adding rel="getlocationsbox" to the url, eg
+<a href="/getlocations_box/node/xxx" rel="getlocationsbox">See map</a>
+
+The last method uses the settings in admin/config/services/getlocations for colorbox
+and uses its own colorbox event handler, see getlocations_colorbox.js. You can define your own
+event handlers in your theme's javascript.
+'getlocations_box' has it's own template, getlocations_box.tpl.php which can be
+copied over to your theme's folder and tweaked there.
+

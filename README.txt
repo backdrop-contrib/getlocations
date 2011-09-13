@@ -6,14 +6,21 @@ INSTALL
 Before installing getlocations please ensure that you have location and
 libraries modules installed
 
-The getlocations folder contains a folder 'library' which contains
-getlocation-markers.tar.gz
-This tarball needs to be unpacked into your libraries folder, so
-you have a path something like this:
+You can fetch markers from dropbox:
+As tarballs:
+http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.tar.gz
+http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.tar.gz
+
+As zipfles:
+http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.zip
+http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.zip
+
+Download the file(s) and place them into your libraries folder so you have
+a path something like this:
 sites/all/libraries/getlocations/markers
 
-There is also getlocations-markers-extra.tar.gz which contains
-numbered and letter markers. You can optionally add these if you need them.
+The 'extra' files contain numbered and letter markers.
+You can optionally add these if you need them.
 
 CONFIGURE
 You should configure Getlocations by visiting admin/settings/getlocations.

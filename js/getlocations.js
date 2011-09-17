@@ -17,7 +17,10 @@
   var latlons;
   var myIcon;
   var usemarkermanager = true;
-  var useinfobubble = true;
+  var useInfoBubble = false;
+  var useInfoWindow = false;
+  var useLink = false;
+  var markeraction = 0;
   var infoBubbles = [];
   var datanum = 0;
   var trafficInfo;
@@ -43,13 +46,22 @@
     var map_marker = Drupal.settings.getlocations.map_marker;
     var poi_show = Drupal.settings.getlocations.poi_show;
     var transit_show = Drupal.settings.getlocations.transit_show;
+    var pansetting = Drupal.settings.getlocations.pansetting;
+    var draggable = Drupal.settings.getlocations.draggable;
     minzoom = parseInt(Drupal.settings.getlocations.minzoom);
     maxzoom = parseInt(Drupal.settings.getlocations.maxzoom);
     nodezoom = parseInt(Drupal.settings.getlocations.nodezoom);
     datanum = Drupal.settings.getlocations.datanum;
-    useinfobubble = Drupal.settings.getlocations.useinfobubble;
     usemarkermanager = Drupal.settings.getlocations.usemarkermanager;
-    var pansetting = Drupal.settings.getlocations.pansetting;
+
+    markeraction = Drupal.settings.getlocations.markeraction;
+
+    if (markeraction == 2) {
+      useInfoBubble = true;
+    }
+    else if (markeraction == 3) {
+      useLink = true;
+    }
 
     // in icons.js
     Drupal.getlocations.iconSetup();
@@ -107,6 +119,7 @@
       panControl: (pancontrol ? true : false),
       mapTypeId: maptype,
       scrollwheel: (scrollw ? true : false),
+      draggable: (draggable ? true : false),
       styles: [
         { featureType: "poi", elementType: "labels", stylers: [{ visibility: (poi_show ? 'on' : 'off') }] },
         { featureType: "transit", elementType: "labels", stylers: [{ visibility: (transit_show ? 'on' : 'off') }] }
@@ -167,35 +180,45 @@
       title: title
     });
 
-    google.maps.event.addListener(m, 'click', function() {
-      // fetch bubble content
-      $.get("/getlocations/info", {lid: lid}, function(data) {
-
-        // close any previous instances
-        for (var i in infoBubbles) {
-          infoBubbles[i].close();
-        }
-
-        if (useinfobubble) {
-
-          var infoBubble = new InfoBubble({
-            content: data,
-            shadowStyle: 1
+    if (markeraction > 0) {
+      google.maps.event.addListener(m, 'click', function() {
+        if (useLink) {
+          // fetch link and relocate
+          $.get("/getlocations/lidinfo", {lid: lid}, function(data) {
+            if (data) {
+              window.location = data;
+            }
           });
-          infoBubble.open(map, m);
-          // add to the array
-          infoBubbles.push(infoBubble);
         }
         else {
-          var infowindow = new google.maps.InfoWindow({
-            content: data
+          // fetch bubble content
+          $.get("/getlocations/info", {lid: lid}, function(data) {
+
+            // close any previous instances
+            for (var i in infoBubbles) {
+              infoBubbles[i].close();
+            }
+            if (useInfoBubble) {
+              var infoBubble = new InfoBubble({
+                content: data,
+                shadowStyle: 1
+              });
+              infoBubble.open(map, m);
+              // add to the array
+              infoBubbles.push(infoBubble);
+            }
+            else {
+              var infowindow = new google.maps.InfoWindow({
+                content: data
+              });
+              infowindow.open(map, m);
+              // add to the array
+              infoBubbles.push(infowindow);
+            }
           });
-          infowindow.open(map, m);
-          // add to the array
-          infoBubbles.push(infowindow);
         }
       });
-    });
+    }
 
     // we only have one marker
     if (datanum == 1) {

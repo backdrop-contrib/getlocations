@@ -58,7 +58,44 @@ function getlocations_permission() {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_flush_caches().
+ */
+function getlocations_flush_caches() {
+  getlocations_regenerate_markers();
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function getlocations_views_api() {
+  return array('api' => 3);
+}
+
+
+/**
+ * Implementation of hook_views_plugins().
+ */
+function getlocations_views_plugins() {
+
+  return array(
+    'module' => 'getlocations',
+    'style' => array(
+      'getlocations' => array(
+        'title' => t('GetLocations'),
+        'help' => t('Displays rows as a map.'),
+        'handler' => 'getlocations_plugin_style_map',
+        'theme' => 'getlocations_view_map',
+        'uses row plugin' => TRUE,
+        'uses grouping' => TRUE,
+        'uses options' => TRUE,
+        'type' => 'normal',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
  */
 function getlocations_menu() {
   $items = array();
@@ -126,9 +163,15 @@ function getlocations_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  // getlocations/info    # ajax callback to fetch an address
+  // getlocations/info?lid     # ajax callback to fetch an address
   $items['getlocations/info'] = array(
     'page callback' => 'getlocations_info',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  // getlocations/lidinfo?lid    # ajax callback to fetch a link to the 'owner'
+  $items['getlocations/lidinfo'] = array(
+    'page callback' => 'getlocations_lidinfo',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -203,7 +246,6 @@ function getlocations_nodemap($nid) {
   $vid = getlocations_get_vid($nid);
   $locations = location_load_locations($vid);
   $node = node_load($nid);
-  $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -213,7 +255,6 @@ function getlocations_nodemap($nid) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $newlocations[] = $location;
         $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
       }
     }
@@ -226,7 +267,7 @@ function getlocations_nodemap($nid) {
   drupal_set_title(t('View @t locations', array('@t' => $node->title)));
 
   // all in $newlocations
-  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'node', $node);
+  return getlocations_setlocations($latlons, $minmaxes, 'node', $node);
 
 }
 
@@ -244,7 +285,6 @@ function getlocations_usermap($uid) {
   if (module_exists('location_user')) {
     $locations = location_load_locations($uid, 'uid');
     $account = user_load($uid);
-    $newlocations = array();
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $ct = 0;
@@ -254,7 +294,6 @@ function getlocations_usermap($uid) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $newlocations[] = $location;
           $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
         }
       }
@@ -266,8 +305,7 @@ function getlocations_usermap($uid) {
 
     drupal_set_title(t('View user @t locations', array('@t' => $account->name)));
 
-    // all in $newlocations
-    return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'user');
+    return getlocations_setlocations($latlons, $minmaxes, 'user');
   }
 }
 */
@@ -284,7 +322,6 @@ function getlocations_usermap($uid) {
 function getlocations_usersmap() {
 
   if (module_exists('location_user')) {
-    $newlocations = array();
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $query = db_select('users', 'u')->fields('u', array('uid'))->condition('u.status', 1);
@@ -300,7 +337,6 @@ function getlocations_usersmap() {
           if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $ct++;
-            $newlocations[] = $location;
             $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
           }
         }
@@ -311,8 +347,7 @@ function getlocations_usersmap() {
       unset($minmaxes);
       $minmaxes = '';
     }
-   // all in $newlocations
-    return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'users');
+    return getlocations_setlocations($latlons, $minmaxes, 'users');
   }
 }
 */
@@ -328,7 +363,6 @@ function getlocations_usersmap() {
  *
  */
 function getlocations_typemap($type, $loc_key='', $loc_val = '') {
-  $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $query = db_select('node', 'n')->fields('n', array('nid'))->condition('n.type', $type);
@@ -349,7 +383,6 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
           }
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $newlocations[] = $location;
           $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
         }
       }
@@ -359,8 +392,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
     unset($minmaxes);
     $minmaxes = '';
   }
-  // all in $newlocations
-  return getlocations_setlocations($newlocations, $latlons, $minmaxes, $type);
+  return getlocations_setlocations($latlons, $minmaxes, $type);
 }
 
 /**
@@ -376,7 +408,6 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
 function getlocations_lids($lidlist) {
   $lidarr = explode(',', $lidlist);
   $locations = array();
-  $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -390,7 +421,6 @@ function getlocations_lids($lidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $newlocations[] = $location;
           $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
       }
     }
@@ -399,8 +429,7 @@ function getlocations_lids($lidlist) {
     unset($minmaxes);
     $minmaxes = '';
   }
-  // all in $newlocations
-  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'lids');
+  return getlocations_setlocations($latlons, $minmaxes, 'lids');
 
 }
 
@@ -417,7 +446,6 @@ function getlocations_lids($lidlist) {
 function getlocations_nids($nidlist) {
   $nidarr = explode(',', $nidlist);
   $locations = array();
-  $newlocations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -437,7 +465,6 @@ function getlocations_nids($nidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $newlocations[] = $location;
         $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
       }
     }
@@ -446,59 +473,20 @@ function getlocations_nids($nidlist) {
     unset($minmaxes);
     $minmaxes = '';
   }
-  // all in $newlocations
-  return getlocations_setlocations($newlocations, $latlons, $minmaxes, 'nids');
+  return getlocations_setlocations($latlons, $minmaxes, 'nids');
 }
 
 /**
  * Set up javascript settings and map
  */
-function getlocations_setlocations($locations, $latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
+function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
   if (! getlocations_check()) {
     return t('You need to !c first.', array('!c' => l('configure Getlocations', 'admin/settings/getlocations')));
   }
-  global $language, $base_url;
+  global $language;
   $getlocations_defaults = getlocations_defaults();
   getlocations_setup_map($getlocations_defaults);
-  $lla = explode(',', $getlocations_defaults['latlong']);
-  $getlocations_settings = array(
-    'lat' => $lla[0],
-    'lng' => $lla[1],
-    'mylocale' => $language->language,
-    'zoom'            => $getlocations_defaults['zoom'],
-    'maptype'         => $getlocations_defaults['maptype'],
-    'controltype'     => $getlocations_defaults['controltype'],
-    'mtc'             => $getlocations_defaults['mtc'],
-    'baselayers'      => $getlocations_defaults['baselayers'],
-    'scale'           => $getlocations_defaults['behavior']['scale'],
-    'overview'        => $getlocations_defaults['behavior']['overview'],
-    'overview_opened' => $getlocations_defaults['behavior']['overview_opened'],
-    'scrollwheel'     => $getlocations_defaults['behavior']['scrollwheel'],
-    'trafficinfo'     => $getlocations_defaults['trafficinfo'],
-    'bicycleinfo'     => $getlocations_defaults['bicycleinfo'],
-    'streetview_show' => $getlocations_defaults['streetview_show'],
-    'pancontrol'      => $getlocations_defaults['pancontrol'],
-    'panoramio_show'  => $getlocations_defaults['panoramio_show'],
-    'poi_show'        => $getlocations_defaults['poi_show'],
-    'transit_show'    => $getlocations_defaults['transit_show'],
-    'map_marker'      => $getlocations_defaults['map_marker'],
-    'minzoom'         => $getlocations_defaults['minzoom'],
-    'maxzoom'         => $getlocations_defaults['maxzoom'],
-    'nodezoom'        => $getlocations_defaults['nodezoom'],
-    'useinfobubble'   => $getlocations_defaults['useinfobubble'],
-    'usemarkermanager' => $getlocations_defaults['usemarkermanager'],
-    'pansetting'      => $getlocations_defaults['pansetting'],
-    'datanum' => count($latlons),
-    'latlons' => implode('|', $latlons),
-  );
-  if (! empty($minmaxes)) {
-    $getlocations_settings['minmaxes'] = implode(',', $minmaxes);
-  }
-  else {
-    $getlocations_settings['minmaxes'] = '';
-  }
-
-  drupal_add_js(array('getlocations' => $getlocations_settings), 'setting');
+  getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes);
 
   if (empty($width)) {
     $width = $getlocations_defaults['width'];
@@ -543,7 +531,7 @@ function getlocations_setup_map($defaults) {
   if ($defaults['usemarkermanager']) {
     drupal_add_js(GETLOCATIONS_PATH .'/js/markermanager.js');
   }
-  if ($defaults['useinfobubble']) {
+  if ($defaults['markeraction']) {
     drupal_add_js(GETLOCATIONS_PATH .'/js/infobubble.js');
   }
   drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations.js');
@@ -586,12 +574,13 @@ function getlocations_defaults() {
     'poi_show' => 1,
     'transit_show' => 1,
     'map_marker' => 'drupal',
+    'markeraction' => 0,
     'minzoom' => 6,
     'maxzoom' => 16,
     'nodezoom' => 12,
-    'useinfobubble' => 1,
     'usemarkermanager' => 1,
     'pansetting' => 2,
+    'draggable' => 1,
     'returnlink_page_enable' => 0,
     'returnlink_page_link' => t('Return to Page'),
 #    'returnlink_user_enable' => 0,
@@ -678,21 +667,45 @@ function getlocations_get_nid_from_lid($lid) {
     return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
   }
 }
+function getlocations_get_uid_from_lid($lid) {
+  if ($lid) {
+    $query = db_select('location_instance', 'i')->fields('i', array('uid'))->condition('i.lid', $lid);
+    $row = $query->execute()->fetchAssoc();
+    return (isset($row['uid']) && $row['uid'] ? $row['uid'] : FALSE);
+  }
+}
 
 // ajax callback to fill infobubble
 function getlocations_info() {
   $lid = $_GET['lid'];
-
   $location = location_load_location($lid);
-  $nid = getlocations_get_nid_from_lid($lid);
-  $location['nid'] = $nid;
-  $content = theme('getlocations_info', array('location' => $location));
+  $location['nid'] = 0;
+  $location['uid'] = 0;
 
+  if ($nid = getlocations_get_nid_from_lid($lid)) {
+    $location['nid'] = $nid;
+  }
+  elseif ($uid = getlocations_get_uid_from_lid($lid)) {
+    $location['uid'] = $uid;
+  }
+  $content = theme('getlocations_info', array('location' => $location));
   print $content;
   exit();
-
 }
 
+// ajax callback to provide a link
+function getlocations_lidinfo() {
+  $lid = $_GET['lid'];
+  $content = FALSE;
+  if ($nid = getlocations_get_nid_from_lid($lid)) {
+    $content = '/node/' . $nid;
+  }
+  elseif ($uid = getlocations_get_uid_from_lid($lid)) {
+    $content = '/user/' . $uid;
+  }
+  print $content;
+  exit();
+}
 
 /**
  * Get the list of marker titles.
@@ -762,20 +775,6 @@ function getlocations_regenerate_markers() {
 
   // Also regenerate the cached marker titles array
   getlocations_get_marker_titles(TRUE);
-}
-
-/**
- * Implementation of hook_flush_caches().
- */
-function getlocations_flush_caches() {
-  getlocations_regenerate_markers();
-}
-
-/**
- * Implements hook_views_api().
- */
-function getlocations_views_api() {
-  return array('api' => 3);
 }
 
 /**
@@ -859,4 +858,305 @@ function getlocations_box() {
   print $output;
   exit;
 }
+
+/*
+function getlocations_get_types() {
+  $options = array();
+  foreach (node_type_get_types() as $type => $object) {
+#    if ($object->module == 'node') {
+      $options[$type] = $object->name;
+#    }
+  }
+  return $options;
+}
+
+function getlocations_get_vocabularies() {
+
+  $vocabularies = taxonomy_get_vocabularies();
+  if (count($vocabularies)) {
+    foreach ($vocabularies as $vid => $vocabulary) {
+      $options[$vid] = $vocabulary->name;
+    }
+    return $options;
+  }
+  return FALSE;
+
+}
+
+function getlocations_get_markertypes($type) {
+
+  $getlocations_defaults = getlocations_defaults();
+  $default_marker = $getlocations_defaults['map_marker'];
+  $markertypes = array();
+  if ($type == 'node') {
+    $content_types = getlocations_get_types();
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    foreach ($content_types AS $content_type => $name ) {
+      if ($getlocations_node_marker['enable'] && isset($getlocations_node_marker['content_type'][$content_type]['map_marker'])) {
+        $markertypes[$content_type] = $getlocations_node_marker['content_type'][$content_type]['map_marker'];
+      }
+      else {
+        $markertypes[$content_type] = $default_marker;
+      }
+    }
+    return $markertypes;
+  }
+  elseif ($type == 'vocabulary') {
+    $vocabularies = getlocations_get_vocabularies();
+    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+    foreach ($vocabularies AS $vid => $vocabulary) {
+      if ($getlocations_vocabulary_marker['enable'] && isset($getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'])) {
+        $markertypes[$vid] = $getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'];
+      }
+      else {
+        $markertypes[$vid] = $default_marker;
+      }
+    }
+    return $markertypes;
+  }
+  elseif ($type == 'roles') {
+    $roles = user_roles(TRUE);
+    $getlocations_roles_marker = variable_get('getlocations_roles_marker', array('enable' => 0));
+    foreach ($roles AS $rid => $role) {
+      if ($getlocations_roles_marker['enable'] && isset($getlocations_roles_marker['roles'][$rid]['map_marker'])) {
+        $markertypes[$rid] = $getlocations_roles_marker['roles'][$rid]['map_marker'];
+      }
+      else {
+        $markertypes[$rid] = $default_marker;
+      }
+    }
+    return $markertypes;
+  }
+  else {
+    return FALSE;
+  }
+
+}
+*/
+
+function getlocations_js_settings_do($defaults, $latlons, $minmaxes) {
+  global $language;
+  $lla = explode(',', $defaults['latlong']);
+  $settings = array(
+    'lat'              => $lla[0],
+    'lng'              => $lla[1],
+    'mylocale'         => $language->language,
+    'zoom'             => $defaults['zoom'],
+    'maptype'          => $defaults['maptype'],
+    'controltype'      => $defaults['controltype'],
+    'mtc'              => $defaults['mtc'],
+    'baselayers'       => $defaults['baselayers'],
+    'scale'            => $defaults['behavior']['scale'],
+    'overview'         => $defaults['behavior']['overview'],
+    'overview_opened'  => $defaults['behavior']['overview_opened'],
+    'scrollwheel'      => $defaults['behavior']['scrollwheel'],
+    'trafficinfo'      => $defaults['trafficinfo'],
+    'bicycleinfo'      => $defaults['bicycleinfo'],
+    'streetview_show'  => $defaults['streetview_show'],
+    'pancontrol'       => $defaults['pancontrol'],
+    'panoramio_show'   => $defaults['panoramio_show'],
+    'poi_show'         => $defaults['poi_show'],
+    'transit_show'     => $defaults['transit_show'],
+    'map_marker'       => $defaults['map_marker'],
+    'markeraction'     => $defaults['markeraction'],
+    'minzoom'          => $defaults['minzoom'],
+    'maxzoom'          => $defaults['maxzoom'],
+    'nodezoom'         => $defaults['nodezoom'],
+    'usemarkermanager' => $defaults['usemarkermanager'],
+    'pansetting'       => $defaults['pansetting'],
+    'draggable'        => $defaults['draggable'],
+    'datanum'          => count($latlons),
+    'latlons'          => implode('|', $latlons),
+  );
+  if (! empty($minmaxes)) {
+    $settings['minmaxes'] = implode(',', $minmaxes);
+  }
+  else {
+    $settings['minmaxes'] = '';
+  }
+
+  drupal_add_js(array('getlocations' => $settings), 'setting');
+
+}
+
+/**
+ * Some form helper functions
+ * for admin and views plugin style
+ */
+function getlocations_element_map_marker($title, $options, $default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#options' => $options,
+    '#default_value' => $default,
+  );
+  return $element;
+}
+
+function getlocations_element_map_tf($title, $default, $size, $maxlength, $description) {
+
+  $element = array(
+    '#type' => 'textfield',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#size' => $size,
+    '#maxlength' => $maxlength,
+    '#description' => $description,
+    '#required' => TRUE,
+  );
+  return $element;
+}
+
+function getlocations_element_map_zoom($title, $default, $description='') {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#options' => drupal_map_assoc(range(0, 20)),
+  );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
+  return $element;
+}
+
+function getlocations_element_map_zoom_controltype($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Zoom Control type'),
+    '#options' => array(
+      'none' => t('None'),
+      'default' => t('Default'),
+      'small' => t('Small'),
+      'large' => t('Large'),
+    ),
+    '#default_value' => $default,
+  );
+  return $element;
+}
+
+function getlocations_element_map_checkbox($title, $default, $description='') {
+
+  $element = array(
+    '#type' => 'checkbox',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#return_value' => 1,
+  );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
+  return $element;
+}
+
+function getlocations_element_map_mtc($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Map Control Type'),
+    '#options' => array(
+      'none' => t('None'),
+      'standard' => t('Horizontal bar'),
+      'menu' => t('Dropdown'),
+    ),
+    '#default_value' => $default,
+  );
+  return $element;
+}
+
+function getlocations_element_map_maptype($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Default map type'),
+    '#options' => array(
+      'Map' => t('Standard street map'),
+      'Satellite' => t('Standard satellite map'),
+      'Hybrid' => t('Hybrid satellite map'),
+      'Physical' => t('Terrain map'),
+    ),
+    '#default_value' => $default,
+  );
+  return $element;
+}
+
+
+function getlocations_element_map_baselayers_map($default) {
+
+  $element = array(
+    '#type' => 'checkbox',
+    '#title' => t('Standard street map'),
+    '#description' => t('The standard default street map.'),
+    '#default_value' => $default,
+    '#return_value' => 1,
+    '#prefix' => '<fieldset><legend>' . t('Enable map types') . '</legend>',
+  );
+  return $element;
+}
+function getlocations_element_map_baselayers_satellite($default) {
+
+  $element = array(
+    '#type' => 'checkbox',
+    '#title' => t('Standard satellite map'),
+    '#description' => t('Satellite view without street overlay.'),
+    '#default_value' => $default,
+    '#return_value' => 1,
+  );
+  return $element;
+}
+function getlocations_element_map_baselayers_hybrid($default) {
+
+  $element = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hybrid satellite map'),
+    '#description' => t('Satellite view with street overlay.'),
+    '#default_value' => $default,
+    '#return_value' => 1,
+  );
+  return $element;
+}
+function getlocations_element_map_baselayers_physical($default) {
+
+  $element = array(
+    '#type' => 'checkbox',
+    '#title' => t('Terrain map'),
+    '#description' => t('Map with physical data (terrain, vegetation.)'),
+    '#default_value' => $default,
+    '#return_value' => 1,
+    '#suffix' => '</fieldset>',
+  );
+  return $element;
+}
+
+function getlocations_element_map_pansetting($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Automatic Panning'),
+    '#default_value' => $default,
+    '#options' => array(0 => t('None'), 1 => t('Pan'), 2 => t('Pan and zoom'), 3 => t('Set Center')),
+    '#description' => t('"None" is No panning,<br />"Pan" keeps the markers in the Viewport,<br />"Pan and zoom" fits the markers to the Viewport,<br /> "Set Center" places the markers in the middle of the map.'),
+  );
+  return $element;
+}
+
+function getlocations_element_map_markeraction($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Marker click action'),
+    '#default_value' => $default,
+    '#options' => array(
+      0 => t('None'),
+      1 => t('InfoWindow'),
+      2 => t('InfoBubble'),
+      3 => t('Link')),
+    '#description' => t('"None" is No action,<br />"InfoWindow" show information in a Google InfoWindow,<br />"InfoBubble" use InfoBubble instead,<br /> "Link" go to a page.'),
+  );
+  return $element;
+}
+
 

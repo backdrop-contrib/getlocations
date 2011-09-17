@@ -13,7 +13,7 @@
  */
 function getlocations_settings_form() {
   $getlocations_defaults = getlocations_defaults();
-  drupal_add_js(drupal_get_path('module', 'getlocations') .'/js/getlocations_admin.js');
+  drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_admin.js');
 
   $form = array();
   $form['getlocations_default'] = array(
@@ -22,231 +22,149 @@ function getlocations_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $form['getlocations_default']['width'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Default width'),
-    '#default_value' => $getlocations_defaults['width'],
-    '#size' => 25,
-    '#maxlength' => 25,
-    '#description' => t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
-    '#required' => TRUE,
+  $form['getlocations_default']['width'] = getlocations_element_map_tf(
+    t('Default width'),
+    $getlocations_defaults['width'],
+    10,
+    10,
+    t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
   );
-  $form['getlocations_default']['height'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Default height'),
-    '#default_value' => $getlocations_defaults['height'],
-    '#size' => 25,
-    '#maxlength' => 25,
-    '#description' => t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
-    '#required' => TRUE,
-  );
-  $form['getlocations_default']['latlong'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Map center'),
-    '#default_value' => $getlocations_defaults['latlong'],
-    '#size' => 50,
-    '#maxlength' => 255,
-    '#description' => t('The default center coordinates of Google map, expressed as a decimal latitude and longitude, separated by a comma.'),
-    '#required' => TRUE,
-  );
-  $form['getlocations_default']['zoom'] = array(
-    '#type' => 'select',
-    '#title' => t('Zoom'),
-    '#default_value' => $getlocations_defaults['zoom'],
-    '#options' => drupal_map_assoc(range(0, 17)),
-    '#description' => t('The default zoom level of a Google map.'),
-  );
-  $form['getlocations_default']['controltype'] = array(
-    '#type' => 'select',
-    '#title' => t('Zoom Control type'),
-    '#options' => array(
-      'none' => t('None'),
-      'default' => t('Default'),
-      'small' => t('Small'),
-      'large' => t('Large'),
-    ),
-    '#default_value' => $getlocations_defaults['controltype'],
-  );
-  $form['getlocations_default']['pancontrol'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Pan control'),
-    '#default_value' => $getlocations_defaults['pancontrol'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['mtc'] = array(
-    '#type' => 'select',
-    '#title' => t('Map Control Type'),
-    '#options' => array(
-      'none' => t('None'),
-      'standard' => t('Horizontal bar'),
-      'menu' => t('Dropdown'),
-    ),
-    '#default_value' => $getlocations_defaults['mtc'],
+  $form['getlocations_default']['height'] = getlocations_element_map_tf(
+    t('Default height'),
+    $getlocations_defaults['height'],
+    10,
+    10,
+    t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
   );
 
-  $form['getlocations_default']['maptype'] = array(
-    '#type' => 'select',
-    '#title' => t('Default map type'),
-    '#default_value' => $getlocations_defaults['maptype'],
-    '#options' => array(
-      'Map' => t('Standard street map'),
-      'Satellite' => t('Standard satellite map'),
-      'Hybrid' => t('Hybrid satellite map'),
-      'Physical' => t('Terrain map'),
-    ),
-  );
-  $form['getlocations_default']['baselayers']['Map'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Standard street map'),
-    '#description' => t('The standard default street map.'),
-    '#default_value' => $getlocations_defaults['baselayers']['Map'],
-    '#return_value' => 1,
-    '#prefix' => '<fieldset><legend>' . t('Enable map types') . '</legend>',
-  );
-  $form['getlocations_default']['baselayers']['Satellite'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Standard satellite map'),
-    '#description' => t('Satellite view without street overlay.'),
-    '#default_value' => $getlocations_defaults['baselayers']['Satellite'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['baselayers']['Hybrid'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Hybrid satellite map'),
-    '#description' => t('Satellite view with street overlay.'),
-    '#default_value' => $getlocations_defaults['baselayers']['Hybrid'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['baselayers']['Physical'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Terrain map'),
-    '#description' => t('Map with physical data (terrain, vegetation.)'),
-    '#default_value' => $getlocations_defaults['baselayers']['Physical'],
-    '#return_value' => 1,
-    '#suffix' => '</fieldset>',
-  );
-  $form['getlocations_default']['behavior']['scale'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Scale'),
-    '#description' => t('Show scale'),
-    '#default_value' =>  $getlocations_defaults['behavior']['scale'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['behavior']['overview'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Overview map'),
-    '#description' => t('Show overview map'),
-    '#default_value' =>  $getlocations_defaults['behavior']['overview'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['behavior']['overview_opened'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Overview map state'),
-    '#description' => t('Show overview map as open by default'),
-    '#default_value' =>  $getlocations_defaults['behavior']['overview_opened'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['behavior']['scrollwheel'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Scrollwheel'),
-    '#description' => t('Enable scrollwheel zooming'),
-    '#default_value' =>  $getlocations_defaults['behavior']['scrollwheel'],
-    '#return_value' => 1,
-  );
-  $form['getlocations_default']['streetview_show'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show streetview button'),
-    '#default_value' =>  $getlocations_defaults['streetview_show'],
-    '#return_value' => 1,
+  $form['getlocations_default']['latlong'] = getlocations_element_map_tf(
+    t('Map center'),
+    $getlocations_defaults['latlong'],
+    30,
+    30,
+    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma.')
   );
 
-  $form['getlocations_default']['trafficinfo'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Traffic information'),
-    '#default_value' =>  $getlocations_defaults['trafficinfo'],
-    '#description' => t('Google trafficinfo layer, limited availability.'),
-    '#return_value' => 1,
+  $form['getlocations_default']['zoom'] = getlocations_element_map_zoom(
+    t('Zoom'),
+    $getlocations_defaults['zoom'],
+    t('The default zoom level of a Google map.')
   );
-  $form['getlocations_default']['bicycleinfo'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Bicycling information'),
-    '#default_value' =>  $getlocations_defaults['bicycleinfo'],
-    '#description' => t('Google bicycling layer, limited availability.'),
-    '#return_value' => 1,
+
+  $form['getlocations_default']['controltype'] = getlocations_element_map_zoom_controltype($getlocations_defaults['controltype']);
+  $form['getlocations_default']['pancontrol'] = getlocations_element_map_checkbox(
+    t('Show Pan control'),
+    $getlocations_defaults['pancontrol']
   );
-  $form['getlocations_default']['panoramio_show'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Panoramio'),
-    '#default_value' =>  $getlocations_defaults['panoramio_show'],
-    '#description' => t('Google panoramio picture links.'),
-    '#return_value' => 1,
+
+  $form['getlocations_default']['mtc'] = getlocations_element_map_mtc($getlocations_defaults['mtc']);
+  $form['getlocations_default']['maptype'] = getlocations_element_map_maptype($getlocations_defaults['maptype']);
+
+  $form['getlocations_default']['baselayers']['Map'] = getlocations_element_map_baselayers_map($getlocations_defaults['baselayers']['Map']);
+  $form['getlocations_default']['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($getlocations_defaults['baselayers']['Satellite']);
+  $form['getlocations_default']['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($getlocations_defaults['baselayers']['Hybrid']);
+  $form['getlocations_default']['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($getlocations_defaults['baselayers']['Physical']);
+
+  $form['getlocations_default']['behavior']['scale'] = getlocations_element_map_checkbox(
+     t('Scale'),
+     $getlocations_defaults['behavior']['scale'],
+     t('Show scale')
   );
-  $form['getlocations_default']['poi_show'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Points of Interest'),
-    '#default_value' =>  $getlocations_defaults['poi_show'],
-    '#description' => t('Show Google points of interest icons.'),
-    '#return_value' => 1,
+
+  $form['getlocations_default']['behavior']['overview'] = getlocations_element_map_checkbox(
+    t('Overview map'),
+    $getlocations_defaults['behavior']['overview'],
+    t('Show overview map')
   );
-  $form['getlocations_default']['transit_show'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Transit Points'),
-    '#default_value' =>  $getlocations_defaults['transit_show'],
-    '#description' => t('Show Google transit points icons.'),
-    '#return_value' => 1,
+
+  $form['getlocations_default']['behavior']['overview_opened'] = getlocations_element_map_checkbox(
+    t('Overview map state'),
+    $getlocations_defaults['behavior']['overview_opened'],
+    t('Show overview map as open by default')
+  );
+
+  $form['getlocations_default']['behavior']['scrollwheel'] = getlocations_element_map_checkbox(
+    t('Scrollwheel'),
+    $getlocations_defaults['behavior']['scrollwheel'],
+    t('Enable scrollwheel zooming')
+  );
+
+  $form['getlocations_default']['draggable'] = getlocations_element_map_checkbox(
+    t('Draggable'),
+    $getlocations_defaults['draggable'],
+    t('Enable dragging the map.')
+  );
+
+  $form['getlocations_default']['streetview_show'] = getlocations_element_map_checkbox(
+    t('Show streetview button'),
+    $getlocations_defaults['streetview_show']
+  );
+
+  $form['getlocations_default']['trafficinfo'] = getlocations_element_map_checkbox(
+    t('Enable Traffic information'),
+    $getlocations_defaults['trafficinfo'],
+    t('Google trafficinfo layer, limited availability.')
+  );
+
+  $form['getlocations_default']['bicycleinfo'] = getlocations_element_map_checkbox(
+    t('Enable Bicycling information'),
+    $getlocations_defaults['bicycleinfo'],
+    t('Google bicycling layer, limited availability.')
+  );
+
+  $form['getlocations_default']['panoramio_show'] = getlocations_element_map_checkbox(
+    t('Enable Panoramio'),
+    $getlocations_defaults['panoramio_show'],
+    t('Google panoramio picture links.')
+  );
+
+  $form['getlocations_default']['poi_show'] = getlocations_element_map_checkbox(
+    t('Show Points of Interest'),
+    $getlocations_defaults['poi_show'],
+    t('Show Google points of interest icons.')
+  );
+
+  $form['getlocations_default']['transit_show'] = getlocations_element_map_checkbox(
+    t('Show Transit Points'),
+    $getlocations_defaults['transit_show'],
+    t('Show Google transit points icons.')
   );
 
   // default marker
-  $options = getlocations_get_marker_titles();
-  $form['getlocations_default']['map_marker'] = array(
-    '#type' => 'select',
-    '#title' => t('Map marker'),
-    '#options' => $options,
-    '#default_value' => $getlocations_defaults['map_marker'],
+  $markers = getlocations_get_marker_titles();
+  $form['getlocations_default']['map_marker'] = getlocations_element_map_marker(
+    t('Default Map marker'),
+    $markers,
+    $getlocations_defaults['map_marker']
   );
 
-  $form['getlocations_default']['minzoom'] = array(
-    '#type' => 'select',
-    '#title' => t('Minimum Zoom'),
-    '#default_value' => $getlocations_defaults['minzoom'],
-    '#options' => drupal_map_assoc(range(0, 17)),
-    '#description' => t('The Minimum zoom level at which markers will be visible.'),
+  $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction(
+    $getlocations_defaults['markeraction']
   );
-  $form['getlocations_default']['maxzoom'] = array(
-    '#type' => 'select',
-    '#title' => t('Maximum Zoom'),
-    '#default_value' => $getlocations_defaults['maxzoom'],
-    '#options' => drupal_map_assoc(range(0, 17)),
-    '#description' => t('The Maximum zoom level at which markers will be visible.'),
+
+  $form['getlocations_default']['minzoom'] = getlocations_element_map_zoom(
+    t('Minimum Zoom'),
+    $getlocations_defaults['minzoom'],
+    t('The Minimum zoom level at which markers will be visible.')
   );
-  $form['getlocations_default']['nodezoom'] = array(
-    '#type' => 'select',
-    '#title' => t('Default Zoom for Single location'),
-    '#default_value' => $getlocations_defaults['nodezoom'],
-    '#options' => drupal_map_assoc(range(0, 17)),
-    '#description' => t('The Default zoom level for a single marker.'),
+  $form['getlocations_default']['maxzoom'] = getlocations_element_map_zoom(
+    t('Maximum Zoom'),
+    $getlocations_defaults['maxzoom'],
+    t('The Maximum zoom level at which markers will be visible.')
   );
-  $form['getlocations_default']['useinfobubble'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use Infobubble'),
-    '#default_value' =>  $getlocations_defaults['useinfobubble'],
-    '#description' => t('Use Infobubble library instead of default Google Infowindow.'),
-    '#return_value' => 1,
+  $form['getlocations_default']['nodezoom'] = getlocations_element_map_zoom(
+    t('Default Zoom for Single location'),
+    $getlocations_defaults['nodezoom'],
+    t('The Default zoom level for a single marker.')
   );
-  $form['getlocations_default']['usemarkermanager'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use Marker manager'),
-    '#default_value' =>  $getlocations_defaults['usemarkermanager'],
-    '#description' => t('Use Marker manager. Switching this off will use no manager'),
-    '#return_value' => 1,
+
+  $form['getlocations_default']['usemarkermanager'] = getlocations_element_map_checkbox(
+    t('Use Marker manager'),
+    $getlocations_defaults['usemarkermanager'],
+    t('Use Marker manager. Switching this off will use no manager')
   );
-  $form['getlocations_default']['pansetting'] = array(
-    '#type' => 'select',
-    '#title' => t('Automatic Panning'),
-    '#default_value' => $getlocations_defaults['pansetting'],
-    '#options' => array(0 => t('None'), 1 => t('Pan'), 2 => t('Pan and zoom'), 3 => t('Set Center')),
-    '#description' => t('"None" is No panning,<br />"Pan" keeps the markers in the Viewport,<br />"Pan and zoom" fits the markers to the Viewport,<br /> "Set Center" places the markers in the middle of the map.'),
-  );
+
+  $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
 
   $form['getlocations_default']['returnlink_page_enable'] = array(
     '#type' => 'checkbox',
@@ -263,24 +181,115 @@ function getlocations_settings_form() {
     '#prefix' => '<div id="wrap-page-link">',
     '#suffix' => '</div>',
   );
-#  if (module_exists('location_user')) {
-#    $form['getlocations_default']['returnlink_user_enable'] = array(
-#      '#type' => 'checkbox',
-#      '#title' => t('Show link back to user'),
-#      '#default_value' =>  $getlocations_defaults['returnlink_user_enable'],
-#      '#return_value' => 1,
-#    );
-#    $form['getlocations_default']['returnlink_user_link'] = array(
-#      '#type' => 'textfield',
-#      '#title' => t('Text of user return link'),
-#      '#default_value' => $getlocations_defaults['returnlink_user_link'],
-#      '#size' => 30,
-#      '#description' => t('Use %n to insert the user name'),
-#      '#prefix' => '<div id="wrap-user-link">',
-#      '#suffix' => '</div>',
-#    );
-#  }
+  if (module_exists('location_user')) {
+    $form['getlocations_default']['returnlink_user_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show link back to user'),
+      '#default_value' =>  $getlocations_defaults['returnlink_user_enable'],
+      '#return_value' => 1,
+    );
+    $form['getlocations_default']['returnlink_user_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text of user return link'),
+      '#default_value' => $getlocations_defaults['returnlink_user_link'],
+      '#size' => 30,
+      '#description' => t('Use %n to insert the user name'),
+      '#prefix' => '<div id="wrap-user-link">',
+      '#suffix' => '</div>',
+    );
+  }
+/*
+  // node markers
+  $form['getlocations_node_marker'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Content type markers'),
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+  $form['getlocations_node_marker']['enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Markers for Content types'),
+    '#default_value' =>  $getlocations_node_marker['enable'],
+    '#return_value' => 1,
+  );
+  $types = getlocations_get_types();
+  $typect = 0;
+  foreach ($types AS $type => $name) {
+    $form['getlocations_node_marker']['content_type'][$type]['map_marker'] = getlocations_element_map_marker(
+      t('%name Map marker', array('%name' => $name)),
+      $markers,
+      (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+    );
 
+    if (! $typect) {
+      $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-node-markers">';
+    }
+    $typect++;
+  }
+  $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
+
+  // vocabulary markers
+  $types = getlocations_get_vocabularies();
+  if ($types) {
+    $form['getlocations_vocabulary_marker'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Taxonomy Vocabulary markers'),
+      // This will store all the defaults in one variable.
+      '#tree' => TRUE,
+    );
+    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+    $form['getlocations_vocabulary_marker']['enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Markers for Vocabularies'),
+      '#default_value' =>  $getlocations_vocabulary_marker['enable'],
+      '#return_value' => 1,
+    );
+    $typect = 0;
+    foreach ($types AS $type => $name) {
+
+      $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker'] = getlocations_element_map_marker(
+        t('%name Map marker', array('%name' => $name)),
+        $markers,
+        (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+      );
+      if (! $typect) {
+        $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-vocabulary-markers">';
+      }
+      $typect++;
+    }
+    $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#suffix'] = '</div>';
+  }
+  // roles markers
+  $form['getlocations_roles_marker'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Role markers'),
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getlocations_roles_marker = variable_get('getlocations_roles_marker', array('enable' => 0));
+  $form['getlocations_roles_marker']['enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Markers for Roles'),
+    '#default_value' =>  $getlocations_roles_marker['enable'],
+    '#return_value' => 1,
+  );
+  $types = user_roles(TRUE);
+  $typect = 0;
+  foreach ($types AS $type => $name) {
+
+    $form['getlocations_roles_marker']['roles'][$type]['map_marker'] = getlocations_element_map_marker(
+      t('%name Map marker', array('%name' => $name)),
+      $markers,
+      (isset($getlocations_roles_marker['roles'][$type]['map_marker']) ? $getlocations_roles_marker['roles'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+    );
+    if (! $typect) {
+      $form['getlocations_roles_marker']['roles'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-roles-markers">';
+    }
+    $typect++;
+  }
+  $form['getlocations_roles_marker']['roles'][$type]['map_marker']['#suffix'] = '</div>';
+*/
   if (module_exists('colorbox')) {
     $form['getlocations_colorbox'] = array(
       '#type' => 'fieldset',

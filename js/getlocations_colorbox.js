@@ -7,7 +7,7 @@
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations = function() {
+  Drupal.behaviors.getlocations_colorbox = function() {
     // check that colorbox is loaded
     if ((typeof($("a[rel='getlocationsbox']").colorbox) == 'function') && Drupal.settings.getlocations_colorbox.enable == 1) {
       $("a[rel='getlocationsbox']").colorbox({

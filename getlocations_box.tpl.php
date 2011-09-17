@@ -15,14 +15,16 @@
   <?php print $styles; ?>
   <?php print $scripts; ?>
 <style>
+/* adjust these to match your colorbox and map size */
   body {
-    width: 490px;
+    width: 500px;
     margin: 0;
   }
   #page {
-    min-width: 490px;
-    width: 490px;
-    margin-left: 8px;
+    min-width: 500px;
+    width: 500px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
   }
   #content-area {
   }

@@ -13,4 +13,5 @@
     $(".getlocations_returnlink").hide();
   }
 
+
 })(jQuery);

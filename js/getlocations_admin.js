@@ -54,7 +54,52 @@
         $("#wrap-getlocations-colorbox").hide();
       }
     });
+/*
+    if ($("#edit-getlocations-node-marker-enable").attr('checked')) {
+      $("#wrap-getlocations-node-markers").show();
+    }
+    else {
+      $("#wrap-getlocations-node-markers").hide();
+    }
+    $("#edit-getlocations-node-marker-enable").change(function() {
+      if ($("#edit-getlocations-node-marker-enable").attr('checked')) {
+        $("#wrap-getlocations-node-markers").show();
+      }
+      else {
+        $("#wrap-getlocations-node-markers").hide();
+      }
+    });
 
+    if ($("#edit-getlocations-vocabulary-marker-enable").attr('checked')) {
+      $("#wrap-getlocations-vocabulary-markers").show();
+    }
+    else {
+      $("#wrap-getlocations-vocabulary-markers").hide();
+    }
+    $("#edit-getlocations-vocabulary-marker-enable").change(function() {
+      if ($("#edit-getlocations-vocabulary-marker-enable").attr('checked')) {
+        $("#wrap-getlocations-vocabulary-markers").show();
+      }
+      else {
+        $("#wrap-getlocations-vocabulary-markers").hide();
+      }
+    });
+
+    if ($("#edit-getlocations-roles-marker-enable").attr('checked')) {
+      $("#wrap-getlocations-roles-markers").show();
+    }
+    else {
+      $("#wrap-getlocations-roles-markers").hide();
+    }
+    $("#edit-getlocations-roles-marker-enable").change(function() {
+      if ($("#edit-getlocations-roles-marker-enable").attr('checked')) {
+        $("#wrap-getlocations-roles-markers").show();
+      }
+      else {
+        $("#wrap-getlocations-roles-markers").hide();
+      }
+    });
+*/
   }
 
 })(jQuery);

@@ -42,7 +42,7 @@ function getlocations_settings_form() {
     $getlocations_defaults['latlong'],
     30,
     30,
-    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma.')
+    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0')
   );
 
   $form['getlocations_default']['zoom'] = getlocations_element_map_zoom(

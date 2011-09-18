@@ -639,7 +639,7 @@ function getlocations_check() {
 function getlocations_latlon_check($latlon) {
   if (! empty($latlon) && preg_match("/[0-9.\-],[0-9.\-]/", $latlon)) {
     $ll = explode(',', $latlon);
-    if (isset($ll[0]) && is_numeric($ll[0]) && $ll[0] <> 0 && isset($ll[1]) && is_numeric($ll[1]) && $ll[1] <> 0) {
+    if (! ($ll[0] == 0 && $ll[1] == 0) && isset($ll[0]) && is_numeric($ll[0]) && isset($ll[1]) && is_numeric($ll[1])) {
       return $latlon;
     }
   }

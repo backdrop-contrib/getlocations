@@ -214,8 +214,12 @@ function getlocations_access_location() {
 }
 
 function getlocations_access_user_location() {
-return true;
-  if (module_exists('location') && user_access('access getlocations') && user_access('access user getlocations') && module_exists('location_user')) {
+
+  if (module_exists('location')
+    && user_access('access getlocations')
+    && user_access('access user profiles')
+    && user_access('access user getlocations')
+    && module_exists('location_user')) {
     return TRUE;
   }
   return FALSE;
@@ -232,8 +236,10 @@ return true;
  */
 function getlocations_nodemap($nid) {
   $vid = getlocations_get_vid($nid);
-  $locations = location_load_locations($vid);
+  $locations = getlocations_load_locations($vid);
   $node = node_load($nid);
+  $typemarkers = getlocations_get_markertypes('node');
+  $marker = $typemarkers[$node->type];
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -243,7 +249,7 @@ function getlocations_nodemap($nid) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
       }
     }
   }
@@ -269,7 +275,9 @@ function getlocations_nodemap($nid) {
  */
 function getlocations_usermap($uid) {
   if (module_exists('location_user')) {
-    $locations = location_load_locations($uid, 'uid');
+    $getlocations_defaults = getlocations_defaults();
+    $marker = $getlocations_defaults['user_map_marker'];
+    $locations = getlocations_load_locations($uid, 'uid');
     $account = user_load(array('uid' => $uid));
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
@@ -280,7 +288,7 @@ function getlocations_usermap($uid) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
         }
       }
     }
@@ -306,20 +314,22 @@ function getlocations_usermap($uid) {
 function getlocations_usersmap() {
 
   if (module_exists('location_user')) {
+    $getlocations_defaults = getlocations_defaults();
+    $marker = $getlocations_defaults['user_map_marker'];
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $result = db_query("SELECT uid FROM users WHERE status=1");
     $ct = 0;
     while ($row = db_fetch_array($result)) {
       $uid = $row['uid'];
-      $locations = location_load_locations($uid, 'uid');
+      $locations = getlocations_load_locations($uid, 'uid');
       if (count($locations)) {
         // we should loop over them and dump bummers with no lat/lon
         foreach ($locations AS $key => $location) {
           if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $ct++;
-            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
           }
         }
       }
@@ -344,6 +354,8 @@ function getlocations_usersmap() {
  *
  */
 function getlocations_typemap($type, $loc_key='', $loc_val = '') {
+  $typemarkers = getlocations_get_markertypes('node');
+  $marker = $typemarkers[$type];
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $result = db_query("SELECT nid FROM node WHERE type='%s'", array($type));
@@ -351,7 +363,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
   while ($row = db_fetch_array($result)) {
     $nid = $row['nid'];
     $vid = getlocations_get_vid($nid);
-    $locations = location_load_locations($vid);
+    $locations = getlocations_load_locations($vid);
     if (count($locations)) {
       // we should loop over them and dump bummers with no lat/lon
       foreach ($locations AS $key => $location) {
@@ -363,7 +375,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
           }
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
         }
       }
     }
@@ -390,10 +402,11 @@ function getlocations_lids($lidlist) {
   $locations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $marker = '';
   $ct = 0;
 
   foreach ($lidarr AS $lid) {
-    $locations[] = location_load_location($lid);
+    $locations[] = getlocations_load_location($lid);
   }
   if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
@@ -401,7 +414,7 @@ function getlocations_lids($lidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
       }
     }
   }
@@ -428,11 +441,12 @@ function getlocations_nids($nidlist) {
   $locations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $marker = '';
   $ct = 0;
 
   foreach ($nidarr AS $nid) {
     $vid = getlocations_get_vid($nid);
-    $locs = location_load_locations($vid);
+    $locs = getlocations_load_locations($vid);
     if (count($locs)) {
       foreach ($locs AS $key => $loc) {
         $locations[] = $loc;
@@ -445,7 +459,7 @@ function getlocations_nids($nidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
       }
     }
   }
@@ -515,6 +529,7 @@ function getlocations_setup_map($defaults) {
     drupal_add_js(GETLOCATIONS_PATH .'/js/infobubble.js');
   }
   drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations.js');
+
 }
 
 /**
@@ -554,6 +569,7 @@ function getlocations_defaults() {
     'poi_show' => 1,
     'transit_show' => 1,
     'map_marker' => 'drupal',
+    'user_map_marker' => 'drupal',
     'markeraction' => 0,
     'minzoom' => 6,
     'maxzoom' => 16,
@@ -658,7 +674,7 @@ function getlocations_get_uid_from_lid($lid) {
 // ajax callback to fill infobubble
 function getlocations_info() {
   $lid = $_GET['lid'];
-  $location = location_load_location($lid);
+  $location = getlocations_load_location($lid);
   $location['nid'] = 0;
   $location['uid'] = 0;
 
@@ -837,17 +853,15 @@ function getlocations_box() {
   print $output;
   exit;
 }
-/*
+
 function getlocations_get_types() {
   $options = array();
   foreach (node_get_types() as $type => $object) {
-#    if ($object->module == 'node') {
-      $options[$type] = $object->name;
-#    }
+    $options[$type] = $object->name;
   }
   return $options;
 }
-
+/*
 function getlocations_get_vocabularies() {
 
   $vocabularies = taxonomy_get_vocabularies();
@@ -860,7 +874,7 @@ function getlocations_get_vocabularies() {
   return FALSE;
 
 }
-
+*/
 function getlocations_get_markertypes($type) {
 
   $getlocations_defaults = getlocations_defaults();
@@ -879,6 +893,7 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
+/*
   elseif ($type == 'vocabulary') {
     $vocabularies = getlocations_get_vocabularies();
     $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
@@ -905,12 +920,13 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
+*/
   else {
     return FALSE;
   }
 
 }
-*/
+
 function getlocations_js_settings_do($defaults, $latlons, $minmaxes) {
   global $language;
   $lla = explode(',', $defaults['latlong']);
@@ -954,6 +970,16 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes) {
 
   drupal_add_js(array('getlocations' => $settings), 'setting');
 
+}
+
+function getlocations_load_locations($id, $key = 'vid') {
+  $locations = location_load_locations($id, $key);
+  return $locations;
+}
+
+function getlocations_load_location($lid) {
+  $location = location_load_location($lid);
+  return $location;
 }
 
 /**
@@ -1136,4 +1162,190 @@ function getlocations_element_map_markeraction($default) {
   return $element;
 }
 
+/**
+ * Geocode an address
+ * Input can be a string or an array
+ * Output is an array if successful, string if failed
+ *
+ */
+function getlocations_geocode($address) {
+  if (empty($address)) {
+    return;
+  }
+  if (is_array($address)) {
+    if (count($address)) {
+      $address = implode('+', $address);
+    }
+    else {
+      return;
+    }
+  }
+
+  $query = array(
+    'address' => $address,
+    'sensor' => 'false'
+  );
+  $msg = '';
+  $url = url("http://maps.googleapis.com/maps/api/geocode/json", array('query' => $query));
+  $result = drupal_http_request($url);
+  $data = json_decode($result->data);
+  $status = $data->status;
+  if ($status == 'OK') {
+    return array(
+      'latitude' => $data->results[0]->geometry->location->lat,
+      'longitude' => $data->results[0]->geometry->location->lng,
+      'location_type' => $data->results[0]->geometry->location_type
+    );
+  }
+  elseif ($status == 'ZERO_RESULTS') {
+    $msg = t("No result");
+  }
+  elseif ($status == 'OVER_QUERY_LIMIT') {
+    $msg = t("Over query limit");
+  }
+  elseif ($status == 'REQUEST_DENIED') {
+    $msg = t("Request denied");
+  }
+  elseif ($status == 'INVALID_REQUEST') {
+    $msg = t("Request invalid");
+  }
+  return $msg;
+/**
+ * "OK" indicates that no errors occurred; the address was successfully parsed and at least one geocode was returned.
+ * "ZERO_RESULTS" indicates that the geocode was successful but returned no results. This may occur if the geocode was passed a non-existent address or a latlng in a remote location.
+ * "OVER_QUERY_LIMIT" indicates that you are over your quota.
+ * "REQUEST_DENIED" indicates that your request was denied, generally because of lack of a sensor parameter.
+ * "INVALID_REQUEST" generally indicates that the query (address or latlng) is missing.
+ */
+
+}
+
+
+/**
+ * Reverse Geocode an address
+ * Input can be a string or an array
+ * Output is an array if successful, string if failed
+ *
+ */
+function getlocations_reverse_geocode($latlng) {
+  if (empty($latlng)) {
+    return;
+  }
+  if (is_array($latlng)) {
+    if (count($latlng)) {
+      $latlng = implode(',', $latlng);
+    }
+    else {
+      return;
+    }
+  }
+  $query = array(
+    'latlng' => $latlng,
+    'sensor' => 'false'
+  );
+  $msg = '';
+  $url = url("http://maps.googleapis.com/maps/api/geocode/json", array('query' => $query));
+  $result = drupal_http_request($url);
+  $data = json_decode($result->data);
+  $status = $data->status;
+  if ($status == 'OK') {
+    $address_components = $data->results[0]->address_components;
+    $out = array();
+    foreach ($address_components AS $component) {
+      $type = $component->types[0];
+      if ($type == 'street_address') {
+        $out['street_address'] = $component->long_name;
+      }
+      if ($type == 'street_number') {
+        $out['street_number'] = $component->long_name;
+      }
+      elseif ($type == 'route') {
+        $out['route'] = $component->short_name;
+        $out['address1'] = $component->long_name;
+      }
+      elseif ($type == 'locality') {
+        $out['locality'] = $component->long_name;
+      }
+      elseif ($type == 'administrative_area_level_3') {
+        $out['administrative_area_level_3'] = $component->long_name;
+      }
+      elseif ($type == 'administrative_area_level_2') {
+        $out['administrative_area_level_2'] = $component->long_name;
+      }
+      elseif ($type == 'administrative_area_level_1') {
+        $out['administrative_area_level_1'] = $component->long_name;
+      }
+      elseif ($type == 'country') {
+        $out['country'] = $component->long_name;
+        $out['country_short'] = $component->short_name;
+      }
+      elseif ($type == 'postal_code_prefix') {
+        $out['postal_code'] = $component->long_name;
+      }
+      elseif ($type == 'intersection') {
+        $out['intersection'] = $component->long_name;
+      }
+      elseif ($type == 'colloquial_area') {
+        $out['colloquial_area'] = $component->long_name;
+      }
+      elseif ($type == 'sublocality') {
+        $out['sublocality'] = $component->long_name;
+      }
+      elseif ($type == 'neighborhood') {
+        $out['neighborhood'] = $component->long_name;
+      }
+      elseif ($type == 'premise') {
+        $out['premise'] = $component->long_name;
+      }
+      elseif ($type == 'subpremise') {
+        $out['subpremise'] = $component->long_name;
+      }
+      elseif ($type == 'natural_feature') {
+        $out['natural_feature'] = $component->long_name;
+      }
+      elseif ($type == 'airport') {
+        $out['airport'] = $component->long_name;
+      }
+       elseif ($type == 'park') {
+        $out['park'] = $component->long_name;
+      }
+      elseif ($type == 'point_of_interest') {
+        $out['point_of_interest'] = $component->long_name;
+      }
+       elseif ($type == 'post_box') {
+        $out['post_box'] = $component->long_name;
+      }
+      elseif ($type == 'floor') {
+        $out['floor'] = $component->long_name;
+      }
+      elseif ($type == 'room') {
+        $out['room'] = $component->long_name;
+      }
+    }
+    $out['formatted_address'] = $data->results[0]->formatted_address;
+    $out['location_type'] = $data->results[0]->geometry->location_type;
+    return $out;
+  }
+  elseif ($status == 'ZERO_RESULTS') {
+    $msg = t("No result");
+  }
+  elseif ($status == 'OVER_QUERY_LIMIT') {
+    $msg = t("Over query limit");
+  }
+  elseif ($status == 'REQUEST_DENIED') {
+    $msg = t("Request denied");
+  }
+  elseif ($status == 'INVALID_REQUEST') {
+    $msg = t("Request invalid");
+  }
+  return $msg;
+/**
+ * "OK" indicates that no errors occurred; the address was successfully parsed and at least one geocode was returned.
+ * "ZERO_RESULTS" indicates that the geocode was successful but returned no results. This may occur if the geocode was passed a non-existent address or a latlng in a remote location.
+ * "OVER_QUERY_LIMIT" indicates that you are over your quota.
+ * "REQUEST_DENIED" indicates that your request was denied, generally because of lack of a sensor parameter.
+ * "INVALID_REQUEST" generally indicates that the query (address or latlng) is missing.
+ */
+
+}
 

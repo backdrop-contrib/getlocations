@@ -15,7 +15,7 @@
   var nodezoom = 12;
   var mgr;
   var latlons;
-  var myIcon;
+  var defaultIcon;
   var usemarkermanager = true;
   var useInfoBubble = false;
   var useInfoWindow = false;
@@ -66,7 +66,7 @@
     // in icons.js
     Drupal.getlocations.iconSetup();
 
-    myIcon = Drupal.getlocations.getIcon(map_marker);
+    defaultIcon = Drupal.getlocations.getIcon(map_marker);
 
     // pipe delim
     latlons = (Drupal.settings.getlocations.latlons ? Drupal.settings.getlocations.latlons : '');
@@ -137,7 +137,7 @@
       mgr = new MarkerManager(map, {
         borderPadding: 50,
         maxZoom: maxzoom,
-        trackMarkers: true
+        trackMarkers: false
       });
     }
 
@@ -242,7 +242,14 @@
       lon = arr2[1];
       lid = arr2[2];
       name = arr2[3];
-      m = makeMarker(myIcon, lat, lon, lid, name);
+      mark = arr2[4];
+      if (mark === '') {
+        markdone = defaultIcon;
+      }
+      else {
+        markdone = Drupal.getlocations.getIcon(mark);
+      }
+      m = makeMarker(markdone, lat, lon, lid, name);
       if (usemarkermanager) {
         batchr.push(m);
       }

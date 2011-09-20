@@ -33,10 +33,11 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['mtc']         = array('default' => $getlocations_defaults['mtc']);
     $options['maptype']     = array('default' => $getlocations_defaults['maptype']);
 
-    $options['baselayers']['Map']       = array('default' => $getlocations_defaults['baselayers']['Map']);
-    $options['baselayers']['Satellite'] = array('default' => $getlocations_defaults['baselayers']['Satellite']);
-    $options['baselayers']['Hybrid']    = array('default' => $getlocations_defaults['baselayers']['Hybrid']);
-    $options['baselayers']['Physical']  = array('default' => $getlocations_defaults['baselayers']['Physical']);
+    #$options['baselayers']['Map']       = array('default' => $getlocations_defaults['baselayers']['Map']);
+    #$options['baselayers']['Satellite'] = array('default' => $getlocations_defaults['baselayers']['Satellite']);
+    #$options['baselayers']['Hybrid']    = array('default' => $getlocations_defaults['baselayers']['Hybrid']);
+    #$options['baselayers']['Physical']  = array('default' => $getlocations_defaults['baselayers']['Physical']);
+    $options['baselayers']  = array('default' => $getlocations_defaults['baselayers']);
 
     $options['behavior']['scale']           = array('default' => $getlocations_defaults['behavior']['scale']);
     $options['behavior']['overview']        = array('default' => $getlocations_defaults['behavior']['overview']);
@@ -193,11 +194,16 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['nodezoom'],
       t('The Default zoom level for a single marker.')
     );
-    $form['usemarkermanager'] = getlocations_element_map_checkbox(
-      t('Use Marker manager'),
-      $this->options['usemarkermanager'],
-      t('Use Marker manager. Switching this off will use no manager')
+    $getlocations_defaults = getlocations_defaults();
+    $form['usemarkermanager'] = array(
+      '#type' => 'hidden',
+      '#value' => $getlocations_defaults['usemarkermanager']
     );
+#    $form['usemarkermanager'] = getlocations_element_map_checkbox(
+#      t('Use Marker manager'),
+#      $this->options['usemarkermanager'],
+#      t('Use Marker manager. Switching this off will use no manager')
+#    );
     $form['pansetting'] = getlocations_element_map_pansetting(
       $this->options['pansetting']
     );

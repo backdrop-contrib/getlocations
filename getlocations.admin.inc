@@ -137,6 +137,13 @@ function getlocations_settings_form() {
     $markers,
     $getlocations_defaults['map_marker']
   );
+  if (module_exists('location_user')) {
+    $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
+      t('Default User Map marker'),
+      $markers,
+      $getlocations_defaults['user_map_marker']
+    );
+  }
 
   $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction(
     $getlocations_defaults['markeraction']
@@ -198,7 +205,7 @@ function getlocations_settings_form() {
       '#suffix' => '</div>',
     );
   }
-/*
+
   // node markers
   $form['getlocations_node_marker'] = array(
     '#type' => 'fieldset',
@@ -228,6 +235,8 @@ function getlocations_settings_form() {
     $typect++;
   }
   $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
+
+/*
 
   // vocabulary markers
   $types = getlocations_get_vocabularies();

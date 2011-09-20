@@ -14,6 +14,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
 
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
+  $getlocations_defaults = getlocations_defaults();
+
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -23,7 +25,11 @@ function template_preprocess_getlocations_view_map(&$variables) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'];
+        $marker = '';
+        if (isset($location['uid'])) {
+          $marker = $getlocations_defaults['user_map_marker'];
+        }
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
       }
     }
   }
@@ -33,7 +39,6 @@ function template_preprocess_getlocations_view_map(&$variables) {
   }
 
   // get the defaults and override with the style plugin options
-  $getlocations_defaults = getlocations_defaults();
   $newdefaults = array();
   foreach ($getlocations_defaults AS $k => $v) {
     if (isset($options[$k])) {

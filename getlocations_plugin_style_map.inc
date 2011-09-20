@@ -193,19 +193,20 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['nodezoom'],
       t('The Default zoom level for a single marker.')
     );
-    $form['usemarkermanager'] = getlocations_element_map_checkbox(
-      t('Use Marker manager'),
-      $this->options['usemarkermanager'],
-      t('Use Marker manager. Switching this off will use no manager')
+    $getlocations_defaults = getlocations_defaults();
+    $form['usemarkermanager'] = array(
+      '#type' => 'hidden',
+      '#value' => $getlocations_defaults['usemarkermanager']
     );
+#    $form['usemarkermanager'] = getlocations_element_map_checkbox(
+#      t('Use Marker manager'),
+#      $this->options['usemarkermanager'],
+#      t('Use Marker manager. Switching this off will use no manager')
+#    );
     $form['pansetting'] = getlocations_element_map_pansetting(
       $this->options['pansetting']
     );
 
-
-
   } // end options_form
-
-
 
 }

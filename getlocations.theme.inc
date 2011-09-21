@@ -123,6 +123,7 @@ function theme_getlocations_info($location) {
       $l = l($location['name'], 'node/'. $location['nid'], array('attributes' => array('class' => 'getlocations_infolink')));
     }
     elseif ($location['uid'] > 0) {
+      // Use $l = $location['name'] if you don't want links to user
       $l = l($location['name'], 'user/'. $location['uid'], array('attributes' => array('class' => 'getlocations_infolink')));
     }
 

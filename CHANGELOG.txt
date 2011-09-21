@@ -1,3 +1,20 @@
+commit 58779eb
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 21 18:07:28 2011 +0100
+
+    improved marker detection
+
+getlocations.module
+getlocations.theme.inc
+
+commit 03a27fa
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 21 14:52:08 2011 +0100
+
+    added changelog
+
+CHANGELOG.txt
+
 commit c695f42
 Author: hutch <hutch@midwales.net>
 Date:   Tue Sep 20 18:01:14 2011 +0100

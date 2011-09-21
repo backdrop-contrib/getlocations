@@ -226,7 +226,11 @@ function getlocations_access_location() {
 /*
 function getlocations_access_user_location() {
 return true;
-  if (module_exists('location') && user_access('access getlocations') && user_access('access user getlocations')) {
+  if (module_exists('location')
+    && user_access('access getlocations')
+    && user_access('access user profiles')
+    && user_access('access user getlocations')
+    && module_exists('location_user')) {
     return TRUE;
   }
   return FALSE;
@@ -429,7 +433,7 @@ function getlocations_lids($lidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $location['marker'];
       }
     }
   }
@@ -456,7 +460,7 @@ function getlocations_nids($nidlist) {
   $locations = array();
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-  $marker = '';
+  $typemarkers = getlocations_get_markertypes('node');
   $ct = 0;
 
   foreach ($nidarr AS $nid) {
@@ -464,6 +468,8 @@ function getlocations_nids($nidlist) {
     $locs = getlocations_load_locations($vid);
     if (count($locs)) {
       foreach ($locs AS $key => $loc) {
+        $type = getlocations_get_nodetype($nid);
+        $loc['marker'] = $typemarkers[$type];
         $locations[] = $loc;
       }
     }
@@ -474,7 +480,7 @@ function getlocations_nids($nidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $location['marker'];
       }
     }
   }
@@ -942,6 +948,12 @@ function getlocations_get_markertypes($type) {
 
 }
 
+function getlocations_get_nodetype($nid) {
+  $query = db_select('node', 'n')->fields('n', array('type'))->condition('n.nid', $nid);
+  $row = $query->execute()->fetchAssoc();
+  return (isset($row['type']) && $row['type'] ? $row['type'] : FALSE);
+}
+
 function getlocations_js_settings_do($defaults, $latlons, $minmaxes) {
   global $language;
   $lla = explode(',', $defaults['latlong']);
@@ -994,6 +1006,17 @@ function getlocations_load_locations($id, $key = 'vid') {
 
 function getlocations_load_location($lid) {
   $location = location_load_location($lid);
+  if ($location) {
+    if ($nid = getlocations_get_nid_from_lid($lid)) {
+      $typemarkers = getlocations_get_markertypes('node');
+      $type = getlocations_get_nodetype($nid);
+      $location['marker'] = $typemarkers[$type];
+    }
+    elseif ($uid = getlocations_get_uid_from_lid($lid)) {
+      $getlocations_defaults = getlocations_defaults();
+      $location['marker'] = $getlocations_defaults['user_map_marker'];
+    }
+  }
   return $location;
 }
 

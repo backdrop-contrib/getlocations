@@ -1,0 +1,223 @@
+commit c695f42
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 20 18:01:14 2011 +0100
+
+    added per location marker code
+
+getlocations.admin.inc
+getlocations.module
+getlocations.views.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+
+commit e4029a5
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 18 11:51:45 2011 +0100
+
+    improved latlon help message
+
+getlocations.admin.inc
+
+commit 216c4cc
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 18 11:34:02 2011 +0100
+
+    fixed latlon check bug
+
+getlocations.module
+
+commit 3cca0f9
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 17 23:35:08 2011 +0100
+
+    added views style plugin to display a map and more default views.
+
+getlocations-view-map.tpl.php
+getlocations.admin.inc
+getlocations.css
+getlocations.info
+getlocations.module
+getlocations.theme.inc
+getlocations.views.inc
+getlocations.views_default.inc
+getlocations_box.tpl.php
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_colorbox.js
+
+commit f972911
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 13 10:32:12 2011 +0100
+
+    updated README
+
+README.txt
+
+commit 0c9dc0f
+Author: hutch <hutch@midwales.net>
+Date:   Tue Sep 13 10:25:00 2011 +0100
+
+    removed library folder, now on dropbox
+
+library/README.txt
+library/getlocations-markers-extra.tar.gz
+library/getlocations-markers.tar.gz
+
+commit fa0ca43
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 12 18:09:17 2011 +0100
+
+    added colobox support
+
+README.txt
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+getlocations_box.tpl.php
+js/getlocations_admin.js
+js/getlocations_box.js
+js/getlocations_colorbox.js
+
+commit d8558fc
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 10 18:40:14 2011 +0100
+
+    improved latlons check
+
+README.txt
+getlocations.module
+getlocations.theme.inc
+
+commit 78eabba
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 9 07:38:04 2011 +0100
+
+    cleanup
+
+getlocations.module
+
+commit a532e68
+Author: hutch <hutch@midwales.net>
+Date:   Thu Sep 8 21:05:37 2011 +0100
+
+    added lids and nids paths
+
+README.txt
+getlocations.module
+
+commit fc46c43
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 7 11:58:36 2011 +0100
+
+    fixed pathing in library tarballs
+
+library/getlocations-markers-extra.tar.gz
+library/getlocations-markers.tar.gz
+
+commit 58a21e2
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 4 23:06:42 2011 +0100
+
+    improved return link, renamed some functions to avoid hook clashes
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+
+commit 089a4ba
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 3 12:49:13 2011 +0100
+
+    added views 3 block
+
+getlocations.module
+getlocations.views_default.inc
+
+commit b53abcc
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 3 11:24:32 2011 +0100
+
+    fixed perms function typo
+
+getlocations.module
+
+commit 8a00e77
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 3 10:30:25 2011 +0100
+
+    added pansetting, fixed typo
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+
+commit edda511
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 2 22:11:20 2011 +0100
+
+    removed unwanted js
+
+getlocations.module
+js/infobubble-compiled.js
+js/markermanager_packed.js
+
+commit 06a7385
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 2 22:01:24 2011 +0100
+
+    added switches for infobubble and markermanger
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+
+commit 198139f
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 2 15:14:32 2011 +0100
+
+    added files for D7
+
+README.txt
+getlocations.admin.inc
+getlocations.css
+getlocations.info
+getlocations.install
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/icons.js
+js/infobubble-compiled.js
+js/infobubble.js
+js/markermanager.js
+js/markermanager_packed.js
+library/README.txt
+library/getlocations-markers-extra.tar.gz
+library/getlocations-markers.tar.gz
+
+commit b9baf4d
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 2 12:09:58 2011 +0100
+
+    created branch 7.x-1.x
+
+README.txt
+
+commit 238aaeb
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 2 12:08:21 2011 +0100
+
+    created branch 6.x-1.x
+
+README.txt
+
+commit 8526505
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 2 12:06:34 2011 +0100
+
+    first commit to project getlocations
+
+README.txt

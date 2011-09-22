@@ -1,9 +1,18 @@
-commit 58779eb
+commit d6760d0
+Author: hutch <hutch@midwales.net>
+Date:   Thu Sep 22 13:29:54 2011 +0100
+
+    fixed colorbox validation bug
+
+getlocations.admin.inc
+
+commit efd349e
 Author: hutch <hutch@midwales.net>
 Date:   Wed Sep 21 18:07:28 2011 +0100
 
     improved marker detection
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 

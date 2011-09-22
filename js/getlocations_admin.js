@@ -55,7 +55,7 @@
           $("#wrap-getlocations-colorbox").hide();
         }
       });
-/*
+
       if ($("#edit-getlocations-node-marker-enable").attr('checked')) {
         $("#wrap-getlocations-node-markers").show();
       }
@@ -70,6 +70,7 @@
           $("#wrap-getlocations-node-markers").hide();
         }
       });
+/*
 
       if ($("#edit-getlocations-vocabulary-marker-enable").attr('checked')) {
         $("#wrap-getlocations-vocabulary-markers").show();

@@ -396,7 +396,7 @@ function getlocations_settings_validate($form, &$form_state) {
       form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
     }
   }
-  if (module_exists('colorbox')) {
+  if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {
     if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {
       form_set_error('getlocations_colorbox][width', t('Colorbox width must be a number'));
     }

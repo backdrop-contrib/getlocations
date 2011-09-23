@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides Views integration for getlocations.
+ * Provides Views 3 integration for getlocations.
  */
 
 /**
@@ -11,1790 +11,541 @@
 function getlocations_views_default_views() {
   $views = array();
 
-  // getlocations node
+  /**
+   * getlocations node
+   */
+
   $view = new view;
   $view->name = 'getlocations';
-  $view->description = 'Provide a link to a map of a location enabled node.';
+  $view->description = 'A link and block view for getlocations.';
   $view->tag = 'getlocations view';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Getlocations';
+  $view->core = 7;
+  $view->api_version = '3';
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Defaults */
   $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'title' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'exclude' => 1,
-      'id' => 'title',
-      'table' => 'node',
-      'field' => 'title',
-      'relationship' => 'none',
-    ),
-    'nid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '<a href="/getlocations/node/[nid]">See [title] on a map</a> ',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'exclude' => 0,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
-      'relationship' => 'none',
-      'override' => array(
-        'button' => 'Override',
-      ),
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'nid' => array(
-      'default_action' => 'default',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'node',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-        '4' => 0,
-        '5' => 0,
-        '3' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'blog' => 0,
-        'product' => 0,
-        'usernews' => 0,
-        'forum' => 0,
-        'classified' => 0,
-        'event' => 0,
-        'freelisting' => 0,
-        'group' => 0,
-        'listing' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '6' => 0,
-        '1' => 0,
-        '8' => 0,
-        '7' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
-      ),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_node_flag_name' => '*relationship*',
-      'validate_argument_node_flag_test' => 'flaggable',
-      'validate_argument_node_flag_id_type' => 'id',
-      'validate_argument_user_flag_name' => '*relationship*',
-      'validate_argument_user_flag_test' => 'flaggable',
-      'validate_argument_user_flag_id_type' => 'id',
-      'validate_argument_is_member' => 0,
-      'validate_argument_signup_status' => 'any',
-      'validate_argument_signup_node_access' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'lid' => array(
-      'operator' => 'not empty',
-      'value' => array(
-        'value' => '',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access content',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'View locations');
-  $handler->override_option('items_per_page', 1);
+  $handler->display->display_options['title'] = 'View locations';
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Field: Node: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 0;
+  /* Field: Node: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = '';
+  $handler->display->display_options['fields']['nid']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['text'] = '<a href="/getlocations/node/[nid]">See [title] on a map</a> ';
+  $handler->display->display_options['fields']['nid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['nid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['nid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
+  /* Argument: Node: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['style_plugin'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['nid']['not'] = 0;
+  /* Filter: Node: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter: Location: Lid */
+  $handler->display->display_options['filters']['lid']['id'] = 'lid';
+  $handler->display->display_options['filters']['lid']['table'] = 'location';
+  $handler->display->display_options['filters']['lid']['field'] = 'lid';
+  $handler->display->display_options['filters']['lid']['operator'] = 'not empty';
+  $handler->display->display_options['filters']['lid']['expose']['operator'] = FALSE;
+  /* Filter: Location: Latitude */
+  $handler->display->display_options['filters']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['table'] = 'location';
+  $handler->display->display_options['filters']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['latitude']['value']['value'] = '0';
+  $handler->display->display_options['filters']['latitude']['allow_null'] = 1;
+  /* Filter: Location: Longitude */
+  $handler->display->display_options['filters']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['table'] = 'location';
+  $handler->display->display_options['filters']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['longitude']['value']['value'] = '0';
+  $handler->display->display_options['filters']['longitude']['allow_null'] = 1;
+
+  /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
 
-  // getlocations map
+
+  /**
+   * getlocations map
+   */
   $view = new view;
   $view->name = 'getlocations_map';
   $view->description = 'Provide a map of a location enabled node.';
   $view->tag = 'getlocations view';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Getlocations map';
+  $view->core = 7;
+  $view->api_version = '3';
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Defaults */
   $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'title' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'exclude' => 0,
-      'id' => 'title',
-      'table' => 'node',
-      'field' => 'title',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'label' => 'Latitude',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'label' => 'Longitude',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'name' => array(
-      'label' => 'Name',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'name',
-      'table' => 'location',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-    'lid' => array(
-      'label' => 'Lid',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'nid' => array(
-      'default_action' => 'default',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'node',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-        '4' => 0,
-        '5' => 0,
-        '3' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'blog' => 0,
-        'product' => 0,
-        'usernews' => 0,
-        'forum' => 0,
-        'classified' => 0,
-        'event' => 0,
-        'freelisting' => 0,
-        'group' => 0,
-        'listing' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '6' => 0,
-        '1' => 0,
-        '8' => 0,
-        '7' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
-      ),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_node_flag_name' => '*relationship*',
-      'validate_argument_node_flag_test' => 'flaggable',
-      'validate_argument_node_flag_id_type' => 'id',
-      'validate_argument_user_flag_name' => '*relationship*',
-      'validate_argument_user_flag_test' => 'flaggable',
-      'validate_argument_user_flag_id_type' => 'id',
-      'validate_argument_is_member' => 0,
-      'validate_argument_signup_status' => 'any',
-      'validate_argument_signup_node_access' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'lid' => array(
-      'operator' => 'not empty',
-      'value' => array(
-        'value' => '',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access content',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'View locations');
-  $handler->override_option('items_per_page', 0);
-  $handler->override_option('style_plugin', 'getlocations');
-  $handler->override_option('style_options', array(
-    'grouping' => 'title',
-    'width' => '300px',
-    'height' => '200x',
-    'latlong' => '40,0',
-    'zoom' => '3',
-    'controltype' => 'small',
-    'pancontrol' => 1,
-    'mtc' => 'standard',
-    'maptype' => 'Map',
-    'baselayers' => array(
-      'Map' => 1,
-      'Satellite' => 1,
-      'Hybrid' => 1,
-      'Physical' => 1,
-    ),
-    'behavior' => array(
-      'scale' => 0,
-      'overview' => 0,
-      'overview_opened' => 0,
-      'scrollwheel' => 0,
-    ),
-    'draggable' => 1,
-    'streetview_show' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'panoramio_show' => 0,
-    'poi_show' => 0,
-    'transit_show' => 0,
-    'map_marker' => 'drupal',
-    'markeraction' => '0',
-    'minzoom' => '6',
-    'maxzoom' => '16',
-    'nodezoom' => '12',
-    'usemarkermanager' => 1,
-    'pansetting' => '2',
-  ));
+  $handler->display->display_options['title'] = 'View locations';
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+
+  $handler->display->display_options['style_plugin'] = 'getlocations';
+  $handler->display->display_options['style_options']['grouping'] = 'title';
+  $handler->display->display_options['style_options']['width'] = '300px';
+  $handler->display->display_options['style_options']['height'] = '200px';
+  $handler->display->display_options['style_options']['latlong'] = '40,0';
+  $handler->display->display_options['style_options']['zoom'] = '3';
+  $handler->display->display_options['style_options']['controltype'] = 'small';
+  $handler->display->display_options['style_options']['pancontrol'] = 1;
+  $handler->display->display_options['style_options']['mtc'] = 'standard';
+  $handler->display->display_options['style_options']['maptype'] = 'Map';
+  $handler->display->display_options['style_options']['baselayers'] = array(
+    'Map' => 1,
+    'Satellite' => 1,
+    'Hybrid' => 1,
+    'Physical' => 1,
+  );
+  $handler->display->display_options['style_options']['behavior'] = array(
+    'scale' => 0,
+    'overview' => 0,
+    'overview_opened' => 0,
+    'scrollwheel' => 0,
+  );
+  $handler->display->display_options['style_options']['draggable'] = 1;
+  $handler->display->display_options['style_options']['streetview_show'] =  0;
+  $handler->display->display_options['style_options']['trafficinfo'] = 0;
+  $handler->display->display_options['style_options']['bicycleinfo'] = 0;
+  $handler->display->display_options['style_options']['panoramio_show'] = 0;
+  $handler->display->display_options['style_options']['poi_show'] = 0;
+  $handler->display->display_options['style_options']['transit_show'] = 0;
+  $handler->display->display_options['style_options']['map_marker'] = 'drupal';
+  $handler->display->display_options['style_options']['markeraction'] = '0';
+  $handler->display->display_options['style_options']['minzoom'] = '6';
+  $handler->display->display_options['style_options']['maxzoom'] = '16';
+  $handler->display->display_options['style_options']['nodezoom'] = '12';
+  $handler->display->display_options['style_options']['usemarkermanager'] = 1;
+  $handler->display->display_options['style_options']['pansetting'] = '2';
+
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = 0;
+  $handler->display->display_options['row_options']['default_field_elements'] = 1;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 0;
+  /* Field: Location: Lid */
+  $handler->display->display_options['fields']['lid']['id'] = 'lid';
+  $handler->display->display_options['fields']['lid']['table'] = 'location';
+  $handler->display->display_options['fields']['lid']['field'] = 'lid';
+  $handler->display->display_options['fields']['lid']['label'] = '';
+  $handler->display->display_options['fields']['lid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['lid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['lid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['lid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['lid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['lid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['lid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['lid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['lid']['hide_alter_empty'] = 0;
+  /* Field: Location: Latitude */
+  $handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['fields']['latitude']['table'] = 'location';
+  $handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['fields']['latitude']['label'] = '';
+  $handler->display->display_options['fields']['latitude']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['latitude']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['latitude']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['latitude']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['latitude']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['latitude']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['latitude']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['latitude']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['latitude']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['latitude']['style'] = 'dd';
+  /* Field: Location: Longitude */
+  $handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['fields']['longitude']['table'] = 'location';
+  $handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['fields']['longitude']['label'] = '';
+  $handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['longitude']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['longitude']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['longitude']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['longitude']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['longitude']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['longitude']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['longitude']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['longitude']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['longitude']['style'] = 'dd';
+  /* Field: Location: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'location';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['name']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['name']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['name']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['name']['hide_alter_empty'] = 0;
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['exception']['title_enable'] = 1;
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['nid']['specify_validation'] = 1;
+  $handler->display->display_options['arguments']['nid']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['nid']['not'] = 0;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Location: Lid */
+  $handler->display->display_options['filters']['lid']['id'] = 'lid';
+  $handler->display->display_options['filters']['lid']['table'] = 'location';
+  $handler->display->display_options['filters']['lid']['field'] = 'lid';
+  $handler->display->display_options['filters']['lid']['operator'] = 'not empty';
+  $handler->display->display_options['filters']['lid']['expose']['operator'] = FALSE;
+  /* Filter criterion: Location: Latitude */
+  $handler->display->display_options['filters']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['table'] = 'location';
+  $handler->display->display_options['filters']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['latitude']['value']['value'] = '0';
+  /* Filter criterion: Location: Longitude */
+  $handler->display->display_options['filters']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['table'] = 'location';
+  $handler->display->display_options['filters']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['longitude']['value']['value'] = '0';
+
+  /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
-
-  $views[$view->name] = $view;
-
-  // getlocations user
-  $view = new view;
-  $view->name = 'getlocations_user';
-  $view->description = 'Provide a link to a map of a location enabled user';
-  $view->tag = 'getlocations view';
-  $view->view_php = '';
-  $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
-  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'name' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 0,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
-      'exclude' => 1,
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-    'uid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '<a href="/getlocations/user/[uid]">See user [name] on a map</a> ',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 0,
-      'exclude' => 0,
-      'id' => 'uid',
-      'table' => 'users',
-      'field' => 'uid',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'uid' => array(
-      'default_action' => 'default',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'user',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'uid',
-      'table' => 'users',
-      'field' => 'uid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_fixed' => '',
-      'default_argument_user' => 0,
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'panel' => 0,
-        'business' => 0,
-        'page' => 0,
-        'story' => 0,
-        'webform' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '1' => 0,
-        '2' => 0,
-        '4' => 0,
-        '3' => 0,
-      ),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'lid' => array(
-      'operator' => 'not empty',
-      'value' => array(
-        'value' => '',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'users',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access user profiles',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'View user location');
-  $handler->override_option('items_per_page', 1);
-  $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
-
-  $views[$view->name] = $view;
-
-  // getlocations user map
-  $view = new view;
-  $view->name = 'getlocations_user_map';
-  $view->description = 'Provide a map of a location enabled user';
-  $view->tag = 'getlocations view';
-  $view->view_php = '';
-  $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
-  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'name' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 0,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
-      'exclude' => 0,
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-    'uid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 0,
-      'exclude' => 1,
-      'id' => 'uid',
-      'table' => 'users',
-      'field' => 'uid',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'lid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'name_1' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'name_1',
-      'table' => 'location',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'uid' => array(
-      'default_action' => 'default',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'user',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'uid',
-      'table' => 'users',
-      'field' => 'uid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_fixed' => '',
-      'default_argument_user' => 0,
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'panel' => 0,
-        'business' => 0,
-        'page' => 0,
-        'story' => 0,
-        'webform' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '1' => 0,
-        '2' => 0,
-        '4' => 0,
-        '3' => 0,
-      ),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'lid' => array(
-      'operator' => 'not empty',
-      'value' => array(
-        'value' => '',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'users',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access user profiles',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'View user location');
-  $handler->override_option('items_per_page', 0);
-  $handler->override_option('style_plugin', 'getlocations');
-  $handler->override_option('style_options', array(
-    'grouping' => 'name',
-    'width' => '300px',
-    'height' => '200px',
-    'latlong' => '40,0',
-    'zoom' => '3',
-    'controltype' => 'small',
-    'pancontrol' => 1,
-    'mtc' => 'standard',
-    'maptype' => 'Map',
-    'baselayers' => array(
-      'Map' => 1,
-      'Satellite' => 1,
-      'Hybrid' => 1,
-      'Physical' => 1,
-    ),
-    'behavior' => array(
-      'scale' => 0,
-      'overview' => 0,
-      'overview_opened' => 0,
-      'scrollwheel' => 0,
-    ),
-    'draggable' => 1,
-    'streetview_show' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'panoramio_show' => 0,
-    'poi_show' => 0,
-    'transit_show' => 0,
-    'map_marker' => 'drupal',
-    'markeraction' => '0',
-    'minzoom' => '6',
-    'maxzoom' => '16',
-    'nodezoom' => '12',
-    'usemarkermanager' => 1,
-    'pansetting' => '2',
-  ));
-  $handler = $view->new_display('block', 'User Map Block', 'block_1');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
 
   $views[$view->name] = $view;
 
 
-  // getlocations map allnodes
+  // getlocations all nodes
   $view = new view;
   $view->name = 'getlocations_map_allnodes';
-  $view->description = 'Provides a map showing all locations of location enabled nodes.';
+  $view->description = 'Provide a map of all location enabled nodes.';
   $view->tag = 'getlocations view';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'latitude' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'name' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'name',
-      'table' => 'location',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-    'lid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'nothing' => array(
-      'label' => '',
-      'alter' => array(
-        'text' => 'All locations',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 0,
-      'id' => 'nothing',
-      'table' => 'views',
-      'field' => 'nothing',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'lid' => array(
-      'operator' => 'not empty',
-      'value' => array(
-        'value' => '',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access content',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'View All locations');
-  $handler->override_option('items_per_page', 0);
-  $handler->override_option('style_plugin', 'getlocations');
-  $handler->override_option('style_options', array(
-    'grouping' => '',
-    'width' => '300px',
-    'height' => '200px',
-    'latlong' => '40,0',
-    'zoom' => '3',
-    'controltype' => 'small',
-    'pancontrol' => 1,
-    'mtc' => 'standard',
-    'maptype' => 'Map',
-    'baselayers' => array(
-      'Map' => 1,
-      'Satellite' => 1,
-      'Hybrid' => 1,
-      'Physical' => 1,
-    ),
-    'behavior' => array(
-      'scale' => 0,
-      'overview' => 0,
-      'overview_opened' => 0,
-      'scrollwheel' => 0,
-    ),
-    'draggable' => 1,
-    'streetview_show' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'panoramio_show' => 0,
-    'poi_show' => 0,
-    'transit_show' => 0,
-    'map_marker' => 'drupal',
-    'markeraction' => '0',
-    'minzoom' => '6',
-    'maxzoom' => '16',
-    'nodezoom' => '12',
-    'usemarkermanager' => 1,
-    'pansetting' => '2',
-  ));
-  $handler = $view->new_display('block', 'Map Block', 'block_1');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
-
-  $views[$view->name] = $view;
-
-  // getlocations map allusers
-  $view = new view;
-  $view->name = 'getlocations_allusers_map';
-  $view->description = 'Provide a lmap of all location enabled users.';
-  $view->tag = 'getlocations view';
-  $view->view_php = '';
-  $view->base_table = 'users';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Getlocations map allnodes';
+  $view->core = 7;
+  $view->api_version = '3';
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Defaults */
   $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'name' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 0,
-      'overwrite_anonymous' => 0,
-      'anonymous_text' => '',
-      'exclude' => 1,
-      'id' => 'name',
-      'table' => 'users',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-    'uid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_user' => 0,
-      'exclude' => 1,
-      'id' => 'uid',
-      'table' => 'users',
-      'field' => 'uid',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'lid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'style' => 'dd',
-      'exclude' => 1,
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'name_1' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 1,
-      'id' => 'name_1',
-      'table' => 'location',
-      'field' => 'name',
-      'relationship' => 'none',
-    ),
-    'nothing' => array(
-      'label' => '',
-      'alter' => array(
-        'text' => 'All users',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 0,
-      'id' => 'nothing',
-      'table' => 'views',
-      'field' => 'nothing',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'lid' => array(
-      'operator' => 'not empty',
-      'value' => array(
-        'value' => '',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'lid',
-      'table' => 'location',
-      'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'longitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'longitude',
-      'table' => 'location',
-      'field' => 'longitude',
-      'relationship' => 'none',
-    ),
-    'latitude' => array(
-      'operator' => '!=',
-      'value' => array(
-        'value' => '0',
-        'min' => '',
-        'max' => '',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'latitude',
-      'table' => 'location',
-      'field' => 'latitude',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'users',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'perm',
-    'perm' => 'access user profiles',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'View All user locations');
-  $handler->override_option('items_per_page', 0);
-  $handler->override_option('style_plugin', 'getlocations');
-  $handler->override_option('style_options', array(
-    'grouping' => '',
-    'width' => '300px',
-    'height' => '200px',
-    'latlong' => '40,0',
-    'zoom' => '3',
-    'controltype' => 'small',
-    'pancontrol' => 1,
-    'mtc' => 'standard',
-    'maptype' => 'Map',
-    'baselayers' => array(
-      'Map' => 1,
-      'Satellite' => 1,
-      'Hybrid' => 1,
-      'Physical' => 1,
-    ),
-    'behavior' => array(
-      'scale' => 0,
-      'overview' => 0,
-      'overview_opened' => 0,
-      'scrollwheel' => 1,
-    ),
-    'draggable' => 1,
-    'streetview_show' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'panoramio_show' => 0,
-    'poi_show' => 0,
-    'transit_show' => 0,
-    'map_marker' => 'drupal',
-    'markeraction' => '0',
-    'minzoom' => '6',
-    'maxzoom' => '16',
-    'nodezoom' => '12',
-    'usemarkermanager' => 1,
-    'pansetting' => '2',
-  ));
-  $handler = $view->new_display('block', 'User Map Block', 'block_1');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
+  $handler->display->display_options['title'] = 'View locations';
+  $handler->display->display_options['access']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+
+  $handler->display->display_options['style_plugin'] = 'getlocations';
+  $handler->display->display_options['style_options']['width'] = '300px';
+  $handler->display->display_options['style_options']['height'] = '200px';
+  $handler->display->display_options['style_options']['latlong'] = '40,0';
+  $handler->display->display_options['style_options']['zoom'] = '3';
+  $handler->display->display_options['style_options']['controltype'] = 'small';
+  $handler->display->display_options['style_options']['pancontrol'] = 1;
+  $handler->display->display_options['style_options']['mtc'] = 'standard';
+  $handler->display->display_options['style_options']['maptype'] = 'Map';
+  $handler->display->display_options['style_options']['baselayers'] = array(
+    'Map' => 1,
+    'Satellite' => 1,
+    'Hybrid' => 1,
+    'Physical' => 1,
+  );
+  $handler->display->display_options['style_options']['behavior'] = array(
+    'scale' => 0,
+    'overview' => 0,
+    'overview_opened' => 0,
+    'scrollwheel' => 0,
+  );
+  $handler->display->display_options['style_options']['draggable'] = 1;
+  $handler->display->display_options['style_options']['streetview_show'] =  0;
+  $handler->display->display_options['style_options']['trafficinfo'] = 0;
+  $handler->display->display_options['style_options']['bicycleinfo'] = 0;
+  $handler->display->display_options['style_options']['panoramio_show'] = 0;
+  $handler->display->display_options['style_options']['poi_show'] = 0;
+  $handler->display->display_options['style_options']['transit_show'] = 0;
+  $handler->display->display_options['style_options']['map_marker'] = 'drupal';
+  $handler->display->display_options['style_options']['markeraction'] = '0';
+  $handler->display->display_options['style_options']['minzoom'] = '6';
+  $handler->display->display_options['style_options']['maxzoom'] = '16';
+  $handler->display->display_options['style_options']['nodezoom'] = '12';
+  $handler->display->display_options['style_options']['usemarkermanager'] = 1;
+  $handler->display->display_options['style_options']['pansetting'] = '2';
+
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = 0;
+  $handler->display->display_options['row_options']['default_field_elements'] = 1;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 0;
+  /* Field: Location: Lid */
+  $handler->display->display_options['fields']['lid']['id'] = 'lid';
+  $handler->display->display_options['fields']['lid']['table'] = 'location';
+  $handler->display->display_options['fields']['lid']['field'] = 'lid';
+  $handler->display->display_options['fields']['lid']['label'] = '';
+  $handler->display->display_options['fields']['lid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['lid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['lid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['lid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['lid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['lid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['lid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['lid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['lid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['lid']['hide_alter_empty'] = 0;
+  /* Field: Location: Latitude */
+  $handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['fields']['latitude']['table'] = 'location';
+  $handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['fields']['latitude']['label'] = '';
+  $handler->display->display_options['fields']['latitude']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['latitude']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['latitude']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['latitude']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['latitude']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['latitude']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['latitude']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['latitude']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['latitude']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['latitude']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['latitude']['style'] = 'dd';
+  /* Field: Location: Longitude */
+  $handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['fields']['longitude']['table'] = 'location';
+  $handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['fields']['longitude']['label'] = '';
+  $handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['longitude']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['longitude']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['longitude']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['longitude']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['longitude']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['longitude']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['longitude']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['longitude']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['longitude']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['longitude']['style'] = 'dd';
+  /* Field: Location: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'location';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['label'] = '';
+  $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['name']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['name']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['name']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['name']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['name']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['name']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['name']['hide_alter_empty'] = 0;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Location: Lid */
+  $handler->display->display_options['filters']['lid']['id'] = 'lid';
+  $handler->display->display_options['filters']['lid']['table'] = 'location';
+  $handler->display->display_options['filters']['lid']['field'] = 'lid';
+  $handler->display->display_options['filters']['lid']['operator'] = 'not empty';
+  $handler->display->display_options['filters']['lid']['expose']['operator'] = FALSE;
+  /* Filter criterion: Location: Latitude */
+  $handler->display->display_options['filters']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['table'] = 'location';
+  $handler->display->display_options['filters']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['latitude']['value']['value'] = '0';
+  /* Filter criterion: Location: Longitude */
+  $handler->display->display_options['filters']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['table'] = 'location';
+  $handler->display->display_options['filters']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['longitude']['value']['value'] = '0';
+
+  /* Display: Block */
+  $handler = $view->new_display('block', 'Block', 'block_1');
 
   $views[$view->name] = $view;
 
   return $views;
-
 }

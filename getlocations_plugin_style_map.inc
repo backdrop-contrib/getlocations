@@ -33,15 +33,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['mtc']         = array('default' => $getlocations_defaults['mtc']);
     $options['maptype']     = array('default' => $getlocations_defaults['maptype']);
 
-    $options['baselayers']['Map']       = array('default' => $getlocations_defaults['baselayers']['Map']);
-    $options['baselayers']['Satellite'] = array('default' => $getlocations_defaults['baselayers']['Satellite']);
-    $options['baselayers']['Hybrid']    = array('default' => $getlocations_defaults['baselayers']['Hybrid']);
-    $options['baselayers']['Physical']  = array('default' => $getlocations_defaults['baselayers']['Physical']);
-
-    $options['behavior']['scale']           = array('default' => $getlocations_defaults['behavior']['scale']);
-    $options['behavior']['overview']        = array('default' => $getlocations_defaults['behavior']['overview']);
-    $options['behavior']['overview_opened'] = array('default' => $getlocations_defaults['behavior']['overview_opened']);
-    $options['behavior']['scrollwheel']     = array('default' => $getlocations_defaults['behavior']['scrollwheel']);
+    $options['baselayers']  = array('default' => $getlocations_defaults['baselayers']);
+    $options['behavior']     = array('default' => $getlocations_defaults['behavior']);
 
     $options['streetview_show']  = array('default' => $getlocations_defaults['streetview_show']);
     $options['trafficinfo']      = array('default' => $getlocations_defaults['trafficinfo']);

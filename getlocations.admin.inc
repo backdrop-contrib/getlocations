@@ -16,6 +16,26 @@ function getlocations_settings_form() {
   drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_admin.js');
 
   $form = array();
+
+  $form['rebuild'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Regenerate Getlocations marker cache'),
+    '#description' => t('If you are having problems with markers, or have modified the .ini files in the markers folder, click here to rebuild the marker cache file.'),
+  );
+  if ( file_default_scheme() != 'public') {
+    $form['rebuild']['getlocations_private_markerfile'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Path to getlocations_markers.js'),
+      '#description' => t('You are using the <em>Private</em> download method. For markers to work properly. you must press the <em>Regenerate</em> button, manually copy js/getlocations_markers.js from the files directory to a location accessible by the webserver, and enter the file path relative to the Drupal root (including the filename) in this field. Example: <em>sites/default/misc/getlocations_markers.js</em>'),
+      '#default_value' => variable_get('getlocations_private_markerfile', ''),
+    );
+  }
+  $form['rebuild']['rebuild_marker_js'] = array(
+    '#type' => 'submit',
+    '#value' => t('Regenerate'),
+    '#submit' => array('_getlocations_rebuild_marker_js_submit'),
+  );
+
   $form['getlocations_default'] = array(
     '#type' => 'fieldset',
     '#title' => t('Get locations map settings'),
@@ -339,25 +359,6 @@ function getlocations_settings_form() {
       '#suffix' => '</div>',
     );
   }
-
-  $form['rebuild'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Regenerate Getlocations marker cache'),
-    '#description' => t('If you are having problems with markers, or have modified the .ini files in the markers folder, click here to rebuild the marker cache file.'),
-  );
-  if ( file_default_scheme() != 'public') {
-    $form['rebuild']['getlocations_private_markerfile'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Path to getlocations_markers.js'),
-      '#description' => t('You are using the <em>Private</em> download method. For markers to work properly. you must press the <em>Regenerate</em> button, manually copy js/getlocations_markers.js from the files directory to a location accessible by the webserver, and enter the file path relative to the Drupal root (including the filename) in this field. Example: <em>sites/default/misc/getlocations_markers.js</em>'),
-      '#default_value' => variable_get('getlocations_private_markerfile', ''),
-    );
-  }
-  $form['rebuild']['rebuild_marker_js'] = array(
-    '#type' => 'submit',
-    '#value' => t('Regenerate'),
-    '#submit' => array('_getlocations_rebuild_marker_js_submit'),
-  );
 
   $form['#validate'][] = 'getlocations_settings_validate';
 

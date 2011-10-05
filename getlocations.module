@@ -524,13 +524,18 @@ function getlocations_setup_map($defaults) {
   drupal_add_css(GETLOCATIONS_PATH .'/getlocations.css');
   drupal_add_js(GETLOCATIONS_PATH .'/js/icons.js');
   drupal_add_js(file_directory_path() . '/js/getlocations_markers.js');
+  $getlocations_paths = variable_get('getlocations_paths', array(
+    'infobubble_path' => GETLOCATIONS_PATH .'/js/infobubble.js',
+    'infobubble_options_path' => GETLOCATIONS_PATH .'/js/infobubble_options.js',
+    'markermanager_path' => GETLOCATIONS_PATH .'/js/markermanager.js')
+  );
   if ($defaults['usemarkermanager']) {
-    drupal_add_js(GETLOCATIONS_PATH .'/js/markermanager.js');
+    drupal_add_js($getlocations_paths['markermanager_path']);
   }
   if ($defaults['markeraction'] == 2) {
-    drupal_add_js(GETLOCATIONS_PATH .'/js/infobubble.js');
-    if (file_exists(GETLOCATIONS_PATH .'/js/infobubble_options.js')) {
-      drupal_add_js(GETLOCATIONS_PATH .'/js/infobubble_options.js');
+    drupal_add_js($getlocations_paths['infobubble_path']);
+    if (file_exists($getlocations_paths['infobubble_options_path'])) {
+      drupal_add_js($getlocations_paths['infobubble_options_path']);
     }
   }
   drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations.js');
@@ -1180,6 +1185,20 @@ function getlocations_element_map_markeraction($default) {
       2 => t('InfoBubble'),
       3 => t('Link')),
     '#description' => t('"None" is No action,<br />"InfoWindow" show information in a Google InfoWindow,<br />"InfoBubble" use InfoBubble instead,<br /> "Link" go to a page.'),
+  );
+  return $element;
+}
+
+function getlocations_element_path($title, $default, $size, $maxlength, $description) {
+
+  $element = array(
+    '#type' => 'textfield',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#size' => $size,
+    '#maxlength' => $maxlength,
+    '#description' => $description,
+    '#required' => TRUE,
   );
   return $element;
 }

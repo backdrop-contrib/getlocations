@@ -1,9 +1,19 @@
-commit cabc55f
+commit 34fa369
+Author: hutch <hutch@midwales.net>
+Date:   Thu Oct 6 00:11:40 2011 +0100
+
+    added configurable javascript paths
+
+getlocations.admin.inc
+getlocations.module
+
+commit 5229278
 Author: hutch <hutch@midwales.net>
 Date:   Wed Oct 5 14:10:51 2011 +0100
 
     added configurable infobubble
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 js/infobubble_options.txt

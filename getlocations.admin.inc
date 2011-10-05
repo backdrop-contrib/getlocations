@@ -362,6 +362,43 @@ function getlocations_settings_form() {
     );
   }
 
+  $form['getlocations_paths'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Javascript paths'),
+    '#description' => t('For advanced users who want to supply their own javascript.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getlocations_paths = variable_get('getlocations_paths', array(
+    'infobubble_path' => GETLOCATIONS_PATH .'/js/infobubble.js',
+    'infobubble_options_path' => GETLOCATIONS_PATH .'/js/infobubble_options.js',
+    'markermanager_path' => GETLOCATIONS_PATH .'/js/markermanager.js')
+  );
+  $form['getlocations_paths']['infobubble_path'] = getlocations_element_path(
+    t('Path to InfoBubble javascript file'),
+    $getlocations_paths['infobubble_path'],
+    60,
+    128,
+    t('Where the InfoBubble javascript file is located.')
+  );
+  $form['getlocations_paths']['infobubble_options_path'] = getlocations_element_path(
+    t('Path to InfoBubble options javascript file'),
+    $getlocations_paths['infobubble_options_path'],
+    60,
+    128,
+    t('Where the InfoBubble options javascript file is located. If this file does not exist the default settings will be used.')
+  );
+
+  $form['getlocations_paths']['markermanager_path'] = getlocations_element_path(
+    t('Path to markermanager javascript file'),
+    $getlocations_paths['markermanager_path'],
+    60,
+    128,
+    t('Where the markermanager javascript file is located.')
+  );
+
   $form['#validate'][] = 'getlocations_settings_validate';
 
   return system_settings_form($form);

@@ -22,6 +22,7 @@ sites/all/libraries/getlocations/markers
 The 'extra' files contain numbered and letter markers.
 You can optionally add these if you need them.
 
+
 CONFIGURE
 You should configure Getlocations by visiting admin/settings/getlocations.
 
@@ -121,3 +122,5 @@ event handlers in your theme's javascript.
 'getlocations_box' has it's own template, getlocations_box.tpl.php which can be
 copied over to your theme's folder and tweaked there.
 
+The InfoBubble javascript library is included and can be configured by copying
+js/infobubble_options.txt to js/infobubble_options.js and editing that.

@@ -199,10 +199,14 @@
               infoBubbles[i].close();
             }
             if (useInfoBubble) {
-              var infoBubble = new InfoBubble({
-                content: data,
-                shadowStyle: 1
-              });
+              if (typeof(infoBubbleOptions) == 'object') {
+                var infoBubbleOpts = infoBubbleOptions;
+              }
+              else {
+                var infoBubbleOpts = {};
+              }
+              infoBubbleOpts.content = data;
+              var infoBubble = new InfoBubble(infoBubbleOpts);
               infoBubble.open(map, m);
               // add to the array
               infoBubbles.push(infoBubble);

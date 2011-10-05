@@ -529,6 +529,9 @@ function getlocations_setup_map($defaults) {
   }
   if ($defaults['markeraction'] == 2) {
     drupal_add_js(GETLOCATIONS_PATH .'/js/infobubble.js');
+    if (file_exists(GETLOCATIONS_PATH .'/js/infobubble_options.js')) {
+      drupal_add_js(GETLOCATIONS_PATH .'/js/infobubble_options.js');
+    }
   }
   drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations.js');
 

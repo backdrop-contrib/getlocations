@@ -1,9 +1,55 @@
-commit 55fcbf4
+commit cabc55f
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 5 14:10:51 2011 +0100
+
+    added configurable infobubble
+
+getlocations.module
+js/getlocations.js
+js/infobubble_options.txt
+
+commit 77c4ffa
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 26 13:14:44 2011 +0100
+
+    moved regenerate markers to the top of the form in admin
+
+getlocations.admin.inc
+
+commit 99742b3
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 23 10:41:27 2011 +0100
+
+    applied changes for Views 3 compatibility
+
+getlocations.module
+getlocations.theme.inc
+getlocations.views.inc
+getlocations.views_default.inc
+
+commit 0c345f7
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 23 10:34:40 2011 +0100
+
+    cleaned up some comments
+
+getlocations_plugin_style_map.inc
+
+commit 49e9746
+Author: hutch <hutch@midwales.net>
+Date:   Thu Sep 22 14:17:00 2011 +0100
+
+    enabled hide/show for node-markers
+
+js/getlocations_admin.js
+
+commit 74e832f
 Author: hutch <hutch@midwales.net>
 Date:   Thu Sep 22 13:29:20 2011 +0100
 
     fixed colorbox validation bug
 
+CHANGELOG.txt
 getlocations.admin.inc
 
 commit 6ec9996

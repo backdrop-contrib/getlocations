@@ -1,9 +1,38 @@
-commit d6760d0
+commit 5b8347e
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 5 14:12:46 2011 +0100
+
+    added configurable infobubble
+
+README.txt
+getlocations.module
+js/getlocations.js
+js/infobubble_options.txt
+
+commit 850adf1
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 26 13:15:51 2011 +0100
+
+    moved regenerate markers to the top of the form in admin
+
+getlocations.admin.inc
+getlocations_plugin_style_map.inc
+
+commit 7c60897
+Author: hutch <hutch@midwales.net>
+Date:   Thu Sep 22 14:16:34 2011 +0100
+
+    enabled hide/show for node-markers
+
+js/getlocations_admin.js
+
+commit 1dac647
 Author: hutch <hutch@midwales.net>
 Date:   Thu Sep 22 13:29:54 2011 +0100
 
     fixed colorbox validation bug
 
+CHANGELOG.txt
 getlocations.admin.inc
 
 commit efd349e

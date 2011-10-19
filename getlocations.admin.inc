@@ -57,6 +57,13 @@ function getlocations_settings_form() {
     t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
   );
 
+  $form['getlocations_default']['styles'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Default styles'),
+    '#default_value' => $getlocations_defaults['styles'],
+    '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l('http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', array('external' => TRUE)))),
+  );
+
   $form['getlocations_default']['latlong'] = getlocations_element_map_tf(
     t('Map center'),
     $getlocations_defaults['latlong'],

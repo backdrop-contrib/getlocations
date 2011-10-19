@@ -6,29 +6,31 @@
  * @author Bob Hutchinson http://drupal.org/user/52366
  * this is for googlemaps API version 3
 */
-(function ($) {
 
-  // global vars
-  var map;
-  var maxzoom = 16;
-  var minzoom = 7;
-  var nodezoom = 12;
-  var mgr;
-  var latlons;
-  var defaultIcon;
-  var usemarkermanager = true;
-  var useInfoBubble = false;
-  var useInfoWindow = false;
-  var useLink = false;
-  var markeraction = 0;
-  var infoBubbles = [];
-  var datanum = 0;
-  var trafficInfo;
-  var bicycleInfo;
-  var traffictoggleState = 0;
-  var bicycletoggleState = 0;
-  var panoramioLayer;
-  var panoramiotoggleState = 0;
+// global vars
+var map;
+var maxzoom = 16;
+var minzoom = 7;
+var nodezoom = 12;
+var mgr;
+var latlons;
+var defaultIcon;
+var usemarkermanager = true;
+var useInfoBubble = false;
+var useInfoWindow = false;
+var useLink = false;
+var markeraction = 0;
+var infoBubbles = [];
+var datanum = 0;
+var trafficInfo;
+var bicycleInfo;
+var traffictoggleState = 0;
+var bicycletoggleState = 0;
+var panoramioLayer;
+var panoramiotoggleState = 0;
+var map_marker = 'drupal';
+
+(function ($) {
 
   function initialize() {
     var lat = parseFloat(Drupal.settings.getlocations.lat);
@@ -43,11 +45,12 @@
     var scrollw = Drupal.settings.getlocations.scrollwheel;
     var maptype = (Drupal.settings.getlocations.maptype ? Drupal.settings.getlocations.maptype : '');
     var baselayers = (Drupal.settings.getlocations.baselayers ? Drupal.settings.getlocations.baselayers : '');
-    var map_marker = Drupal.settings.getlocations.map_marker;
+    map_marker = Drupal.settings.getlocations.map_marker;
     var poi_show = Drupal.settings.getlocations.poi_show;
     var transit_show = Drupal.settings.getlocations.transit_show;
     var pansetting = Drupal.settings.getlocations.pansetting;
     var draggable = Drupal.settings.getlocations.draggable;
+    var map_styles = Drupal.settings.getlocations.styles;
     minzoom = parseInt(Drupal.settings.getlocations.minzoom);
     maxzoom = parseInt(Drupal.settings.getlocations.maxzoom);
     nodezoom = parseInt(Drupal.settings.getlocations.nodezoom);
@@ -109,6 +112,27 @@
     }
     else { maptype = google.maps.MapTypeId.ROADMAP; }
 
+    // map styling
+    var styles_array = [];
+
+    if (map_styles) {
+      try {
+        styles_array = eval(map_styles);
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          console.log(e.message);
+          // Error on parsing string. Using default.
+          styles_array = [];
+        }
+      }
+    }
+
+    // Merge styles with our settings.
+    var styles = styles_array.concat([
+        { featureType: "poi", elementType: "labels", stylers: [{ visibility: (poi_show ? 'on' : 'off') }] },
+        { featureType: "transit", elementType: "labels", stylers: [{ visibility: (transit_show ? 'on' : 'off') }] }
+      ]);
+
     var mapOpts = {
       zoom: selzoom,
       center: new google.maps.LatLng(lat, lng),
@@ -120,10 +144,7 @@
       mapTypeId: maptype,
       scrollwheel: (scrollw ? true : false),
       draggable: (draggable ? true : false),
-      styles: [
-        { featureType: "poi", elementType: "labels", stylers: [{ visibility: (poi_show ? 'on' : 'off') }] },
-        { featureType: "transit", elementType: "labels", stylers: [{ visibility: (transit_show ? 'on' : 'off') }] }
-      ],
+      styles: styles,
       overviewMapControl: (overview ? true : false),
       overviewMapControlOptions: {opened: (overview_opened ? true : false)},
       streetViewControl: (streetview_show ? true : false),
@@ -151,7 +172,9 @@
       panoramioLayer = new google.maps.panoramio.PanoramioLayer();
     }
 
-    setTimeout(doAllMarkers, 1000);
+    if (datanum) {
+      setTimeout(doAllMarkers, 1000);
+    }
 
     if (pansetting == 1) {
       doBounds(minlat, minlon, maxlat, maxlon, true);

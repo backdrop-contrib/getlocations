@@ -144,6 +144,7 @@ function getlocations_views_default_views() {
   $handler->display->display_options['style_options']['grouping'] = 'title';
   $handler->display->display_options['style_options']['width'] = '300px';
   $handler->display->display_options['style_options']['height'] = '200px';
+  $handler->display->display_options['style_options']['styles'] = '';
   $handler->display->display_options['style_options']['latlong'] = '40,0';
   $handler->display->display_options['style_options']['zoom'] = '3';
   $handler->display->display_options['style_options']['controltype'] = 'small';
@@ -364,6 +365,7 @@ function getlocations_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'getlocations';
   $handler->display->display_options['style_options']['width'] = '300px';
   $handler->display->display_options['style_options']['height'] = '200px';
+  $handler->display->display_options['style_options']['styles'] = '';
   $handler->display->display_options['style_options']['latlong'] = '40,0';
   $handler->display->display_options['style_options']['zoom'] = '3';
   $handler->display->display_options['style_options']['controltype'] = 'small';

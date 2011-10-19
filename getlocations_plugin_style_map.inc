@@ -23,23 +23,22 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     $getlocations_defaults = getlocations_defaults();
 
-    $options['width']       = array('default' => $getlocations_defaults['width']);
-    $options['height']      = array('default' => $getlocations_defaults['height']);
-    $options['map_marker']  = array('default' => $getlocations_defaults['map_marker']);
-    $options['latlong']     = array('default' => $getlocations_defaults['latlong']);
-    $options['zoom']        = array('default' => $getlocations_defaults['zoom']);
-    $options['controltype'] = array('default' => $getlocations_defaults['controltype']);
-    $options['pancontrol']  = array('default' => $getlocations_defaults['pancontrol']);
-    $options['mtc']         = array('default' => $getlocations_defaults['mtc']);
-    $options['maptype']     = array('default' => $getlocations_defaults['maptype']);
-
-    $options['baselayers']  = array('default' => $getlocations_defaults['baselayers']);
+    $options['width']            = array('default' => $getlocations_defaults['width']);
+    $options['height']           = array('default' => $getlocations_defaults['height']);
+    $options['map_marker']       = array('default' => $getlocations_defaults['map_marker']);
+    $options['latlong']          = array('default' => $getlocations_defaults['latlong']);
+    $options['zoom']             = array('default' => $getlocations_defaults['zoom']);
+    $options['controltype']      = array('default' => $getlocations_defaults['controltype']);
+    $options['pancontrol']       = array('default' => $getlocations_defaults['pancontrol']);
+    $options['mtc']              = array('default' => $getlocations_defaults['mtc']);
+    $options['maptype']          = array('default' => $getlocations_defaults['maptype']);
+    $options['baselayers']       = array('default' => $getlocations_defaults['baselayers']);
     $options['behavior']         = array('default' => $getlocations_defaults['behavior']);
-
     $options['streetview_show']  = array('default' => $getlocations_defaults['streetview_show']);
     $options['trafficinfo']      = array('default' => $getlocations_defaults['trafficinfo']);
     $options['bicycleinfo']      = array('default' => $getlocations_defaults['bicycleinfo']);
     $options['panoramio_show']   = array('default' => $getlocations_defaults['panoramio_show']);
+    $options['places']           = array('default' => $getlocations_defaults['places']);
     $options['poi_show']         = array('default' => $getlocations_defaults['poi_show']);
     $options['transit_show']     = array('default' => $getlocations_defaults['transit_show']);
     $options['minzoom']          = array('default' => $getlocations_defaults['minzoom']);
@@ -49,6 +48,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['usemarkermanager'] = array('default' => $getlocations_defaults['usemarkermanager']);
     $options['pansetting']       = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']        = array('default' => $getlocations_defaults['draggable']);
+    $options['styles']           = array('default' => $getlocations_defaults['styles']);
 
     return $options;
 
@@ -71,6 +71,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
       10,
       10,
       t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    );
+
+    $form['styles'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Default styles'),
+      '#default_value' => $this->options['styles'],
+      '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l('http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', array('external' => TRUE)))),
     );
 
     $form['latlong'] = getlocations_element_map_tf(

@@ -513,6 +513,9 @@ function getlocations_setup_map($defaults) {
   if($defaults['panoramio_show']) {
     $libraries[] = 'panoramio';
   }
+  if($defaults['places']) {
+    $libraries[] = 'places';
+  }
   // more libraries here
 
   // load libraries if any
@@ -576,6 +579,7 @@ function getlocations_defaults() {
     'trafficinfo' => 0,
     'bicycleinfo' => 0,
     'panoramio_show' => 0,
+    'places' => 0,
     'poi_show' => 1,
     'transit_show' => 1,
     'map_marker' => 'drupal',
@@ -587,6 +591,7 @@ function getlocations_defaults() {
     'usemarkermanager' => 1,
     'pansetting' => 2,
     'draggable' => 1,
+    'styles' => '',
     'returnlink_page_enable' => 0,
     'returnlink_page_link' => t('Return to Page'),
     'returnlink_user_enable' => 0,
@@ -974,6 +979,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes) {
     'usemarkermanager' => $defaults['usemarkermanager'],
     'pansetting'       => $defaults['pansetting'],
     'draggable'        => $defaults['draggable'],
+    'styles'           => $defaults['styles'],
     'datanum'          => count($latlons),
     'latlons'          => implode('|', $latlons),
   );

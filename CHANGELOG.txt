@@ -1,9 +1,23 @@
-commit fec95ac
+commit 5b8c920
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 19 23:01:10 2011 +0100
+
+    added styles, places
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+getlocations.views_default.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+
+commit 09be383
 Author: hutch <hutch@midwales.net>
 Date:   Thu Oct 6 00:09:56 2011 +0100
 
     added configurable javascript paths
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 

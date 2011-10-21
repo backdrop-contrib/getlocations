@@ -572,7 +572,7 @@ function getlocations_views_default_views() {
       'scrollwheel' => 0,
     ),
     'draggable' => 1,
-    'styles' = '',
+    'styles' => '',
     'streetview_show' => 0,
     'trafficinfo' => 0,
     'bicycleinfo' => 0,

@@ -1,9 +1,18 @@
-commit 5b8c920
+commit 78d013e
+Author: hutch <hutch@midwales.net>
+Date:   Fri Oct 21 11:04:00 2011 +0100
+
+    fixed typo
+
+getlocations.views_default.inc
+
+commit e8af4f4
 Author: hutch <hutch@midwales.net>
 Date:   Wed Oct 19 23:01:10 2011 +0100
 
     added styles, places
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations.theme.inc

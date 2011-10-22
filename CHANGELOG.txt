@@ -1,9 +1,18 @@
-commit 101c158
+commit dd8d6c9
+Author: hutch <hutch@midwales.net>
+Date:   Sat Oct 22 19:40:57 2011 +0100
+
+    added places library loading
+
+getlocations.module
+
+commit 1e8abfb
 Author: hutch <hutch@midwales.net>
 Date:   Wed Oct 19 23:08:47 2011 +0100
 
     added styles, places
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations.views_default.inc

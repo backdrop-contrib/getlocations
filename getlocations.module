@@ -532,6 +532,9 @@ function getlocations_setup_map($defaults) {
   if($defaults['panoramio_show']) {
     $libraries[] = 'panoramio';
   }
+  if($defaults['places']) {
+    $libraries[] = 'places';
+  }
   // more libraries here
 
   // load libraries if any

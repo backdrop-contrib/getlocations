@@ -458,15 +458,15 @@ function getlocations_settings_validate($form, &$form_state) {
   $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
   $found = FALSE;
   foreach ($list AS $maptype) {
-    if ($form_state['values']['getdirections_default']['maptype'] == $maptype && $form_state['values']['getdirections_default']['baselayers'][$maptype] ) {
+    if ($form_state['values']['getlocations_default']['maptype'] == $maptype && $form_state['values']['getlocations_default']['baselayers'][$maptype] ) {
       $found = TRUE;
       break;
     }
   }
   if (! $found) {
     // force a setting
-    $form_state['values']['getdirections_default']['maptype'] = 'Map';
-    $form_state['values']['getdirections_default']['baselayers']['Map'] = 1;
+    $form_state['values']['getlocations_default']['maptype'] = 'Map';
+    $form_state['values']['getlocations_default']['baselayers']['Map'] = 1;
   }
 
 }

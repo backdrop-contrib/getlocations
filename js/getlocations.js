@@ -104,13 +104,24 @@ var map_marker = 'drupal';
     else { controltype = false; }
 
     // map type
+    maptypes = [];
     if (maptype) {
       if (maptype == 'Map' && baselayers.Map) { maptype = google.maps.MapTypeId.ROADMAP; }
       if (maptype == 'Satellite' && baselayers.Satellite) { maptype = google.maps.MapTypeId.SATELLITE; }
       if (maptype == 'Hybrid' && baselayers.Hybrid) { maptype = google.maps.MapTypeId.HYBRID; }
       if (maptype == 'Physical' && baselayers.Physical) { maptype = google.maps.MapTypeId.TERRAIN; }
+      if (baselayers.Map) { maptypes.push(google.maps.MapTypeId.ROADMAP); }
+      if (baselayers.Satellite) { maptypes.push(google.maps.MapTypeId.SATELLITE); }
+      if (baselayers.Hybrid) { maptypes.push(google.maps.MapTypeId.HYBRID); }
+      if (baselayers.Physical) { maptypes.push(google.maps.MapTypeId.TERRAIN); }
     }
-    else { maptype = google.maps.MapTypeId.ROADMAP; }
+    else {
+      maptype = google.maps.MapTypeId.ROADMAP;
+      maptypes.push(google.maps.MapTypeId.ROADMAP);
+      maptypes.push(google.maps.MapTypeId.SATELLITE);
+      maptypes.push(google.maps.MapTypeId.HYBRID);
+      maptypes.push(google.maps.MapTypeId.TERRAIN);
+    }
 
     // map styling
     var styles_array = [];
@@ -135,7 +146,7 @@ var map_marker = 'drupal';
       zoom: selzoom,
       center: new google.maps.LatLng(lat, lng),
       mapTypeControl: (mtc ? true : false),
-      mapTypeControlOptions: {style: mtc},
+      mapTypeControlOptions: {style: mtc,  mapTypeIds: maptypes},
       zoomControl: (controltype ? true : false),
       zoomControlOptions: {style: controltype},
       panControl: (pancontrol ? true : false),

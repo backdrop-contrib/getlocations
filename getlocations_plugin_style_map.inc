@@ -104,7 +104,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
     );
 
     $form['mtc'] = getlocations_element_map_mtc($this->options['mtc']);
-    $form['maptype'] = getlocations_element_map_maptype($this->options['maptype']);
+
+    $baselayers = array();
+    foreach ($this->options['baselayers'] AS $key => $value) {
+      $baselayers[$key] = $value;
+    }
+    $form['maptype'] = getlocations_element_map_maptype($this->options['maptype'], $baselayers);
+
     $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($this->options['baselayers']['Map']);
     $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($this->options['baselayers']['Satellite']);
     $form['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($this->options['baselayers']['Hybrid']);
@@ -203,5 +209,24 @@ class getlocations_plugin_style_map extends views_plugin_style {
     );
 
   } // end options_form
+
+  /**
+   * Validate the options form.
+   */
+  function options_validate(&$form, &$form_state) {
+    $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
+    $found = FALSE;
+    foreach ($list AS $maptype) {
+      if ($form_state['values']['maptype'] == $maptype && $form_state['values']['baselayers'][$maptype] ) {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (! $found) {
+      // force a setting
+      $form_state['values']['maptype'] = 'Map';
+      $form_state['values']['baselayers']['Map'] = 1;
+    }
+  }
 
 }

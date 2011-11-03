@@ -8,7 +8,7 @@
 */
 (function ($) {
 
-  Drupal.behaviors.getdirections_admin = {
+  Drupal.behaviors.getlocations_admin = {
     attach: function() {
 
       if ($("#edit-getlocations-default-returnlink-page-enable").attr('checked')) {

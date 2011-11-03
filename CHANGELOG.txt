@@ -1,9 +1,21 @@
-commit dd8d6c9
+commit 5c8cc9f
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 3 21:11:16 2011 +0000
+
+    fixed maptype
+
+getlocations.admin.inc
+getlocations.module
+getlocations_plugin_style_map.inc
+js/getlocations.js
+
+commit 048047e
 Author: hutch <hutch@midwales.net>
 Date:   Sat Oct 22 19:40:57 2011 +0100
 
     added places library loading
 
+CHANGELOG.txt
 getlocations.module
 
 commit 1e8abfb

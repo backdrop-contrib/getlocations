@@ -85,7 +85,12 @@ function getlocations_settings_form() {
   );
 
   $form['getlocations_default']['mtc'] = getlocations_element_map_mtc($getlocations_defaults['mtc']);
-  $form['getlocations_default']['maptype'] = getlocations_element_map_maptype($getlocations_defaults['maptype']);
+
+  $baselayers = array();
+  foreach ($getlocations_defaults['baselayers'] AS $key => $value) {
+    $baselayers[$key] = $value;
+  }
+  $form['getlocations_default']['maptype'] = getlocations_element_map_maptype($getlocations_defaults['maptype'], $baselayers);
 
   $form['getlocations_default']['baselayers']['Map'] = getlocations_element_map_baselayers_map($getlocations_defaults['baselayers']['Map']);
   $form['getlocations_default']['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($getlocations_defaults['baselayers']['Satellite']);
@@ -424,14 +429,14 @@ function getlocations_settings_validate($form, &$form_state) {
       break;
     }
   }
-  if (!$found) {
+  if (! $found) {
     form_set_error('getlocations_default][baselayers', t('You must select at least one baselayer!'));
   }
 
   // Check that the default map type is sane.
-  if (!$form_state['values']['getlocations_default']['baselayers'][$form_state['values']['getlocations_default']['maptype']]) {
-    form_error($form['getlocations_default']['baselayers']['maptype'], t('The default map type must be an enabled baselayer!'));
-  }
+#  if (!$form_state['values']['getlocations_default']['baselayers'][$form_state['values']['getlocations_default']['maptype']]) {
+#    form_set_error($form['getlocations_default']['baselayers']['maptype'], t('The default map type must be an enabled baselayer!'));
+#  }
 
   if ( $form_state['values']['getlocations_default']['returnlink_page_enable'] && empty($form_state['values']['getlocations_default']['returnlink_page_link'])) {
     form_set_error('getlocations_default][returnlink_page_link', t('Page return link must be filled in'));
@@ -449,6 +454,21 @@ function getlocations_settings_validate($form, &$form_state) {
       form_set_error('getlocations_colorbox][height', t('Colorbox height must be a number'));
     }
   }
+
+  $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
+  $found = FALSE;
+  foreach ($list AS $maptype) {
+    if ($form_state['values']['getdirections_default']['maptype'] == $maptype && $form_state['values']['getdirections_default']['baselayers'][$maptype] ) {
+      $found = TRUE;
+      break;
+    }
+  }
+  if (! $found) {
+    // force a setting
+    $form_state['values']['getdirections_default']['maptype'] = 'Map';
+    $form_state['values']['getdirections_default']['baselayers']['Map'] = 1;
+  }
+
 }
 
 /**

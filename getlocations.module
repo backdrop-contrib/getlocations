@@ -1103,17 +1103,23 @@ function getlocations_element_map_mtc($default) {
   return $element;
 }
 
-function getlocations_element_map_maptype($default) {
-
+function getlocations_element_map_maptype($default, $baselayers) {
+  $options = array();
+  $layers = array(
+    'Map' => t('Standard street map'),
+    'Satellite' => t('Standard satellite map'),
+    'Hybrid' => t('Hybrid satellite map'),
+    'Physical' => t('Terrain map'),
+  );
+  foreach ($layers AS $key => $layer) {
+    if ($baselayers[$key]) {
+      $options[$key] = $layer;
+    }
+  }
   $element = array(
     '#type' => 'select',
     '#title' => t('Default map type'),
-    '#options' => array(
-      'Map' => t('Standard street map'),
-      'Satellite' => t('Standard satellite map'),
-      'Hybrid' => t('Hybrid satellite map'),
-      'Physical' => t('Terrain map'),
-    ),
+    '#options' => $options,
     '#default_value' => $default,
   );
   return $element;

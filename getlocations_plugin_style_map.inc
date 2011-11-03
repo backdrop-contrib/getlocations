@@ -109,7 +109,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     foreach ($this->options['baselayers'] AS $key => $value) {
       $baselayers[$key] = $value;
     }
-    $form['maptype'] = getlocations_element_map_maptype($getlocations_defaults['maptype'], $baselayers);
+    $form['maptype'] = getlocations_element_map_maptype($this->options['maptype'], $baselayers);
 
     $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($this->options['baselayers']['Map']);
     $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($this->options['baselayers']['Satellite']);

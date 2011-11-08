@@ -773,19 +773,22 @@ function getlocations_get_icondata($reset = FALSE) {
 function getlocations_regenerate_markers() {
   $contents = '';
 
-  // Create the js/ within the files folder.
-  $jspath = file_create_path('js');
-  file_check_directory($jspath, FILE_CREATE_DIRECTORY);
-
   $markerdir = libraries_get_path('getlocations', TRUE) .'/markers';
   $contents .= "// Getlocations marker image data.\n";
   $contents .= "Drupal.getlocations.iconpath = " . drupal_to_js($markerdir) . ";\n";
   $contents .= "Drupal.getlocations.icondata = " . drupal_to_js(getlocations_get_icondata(TRUE)) . ";\n";
 
-  file_save_data($contents, "$jspath/getlocations_markers.js", FILE_EXISTS_REPLACE);
-
-  // Also regenerate the cached marker titles array
-  getlocations_get_marker_titles(TRUE);
+  // Create the js/ within the files folder.
+  $jspath = file_create_path('js');
+  if (file_check_directory($jspath, FILE_CREATE_DIRECTORY) && file_save_data($contents, "$jspath/getlocations_markers.js", FILE_EXISTS_REPLACE)) {
+    // Also regenerate the cached marker titles array
+    getlocations_get_marker_titles(TRUE);
+  }
+  else {
+    // failed
+    drupal_set_message(t('Getlocations is unable to save the marker bundle, so the markers will not work. Please check file system permissions of %filepath!', array('%filepath' => "$jspath/getlocations_markers.js")), 'error');
+    watchdog('getlocations', 'Getlocations write error when saving the marker bundle to %filepath.', array('%filepath' => "$jspath/getlocations_markers.js"), WATCHDOG_ERROR);
+  }
 }
 
 /**

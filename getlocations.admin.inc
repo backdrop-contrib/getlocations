@@ -149,6 +149,11 @@ function getlocations_settings_form() {
     t('Google bicycling layer, limited availability.')
   );
 
+  $form['getlocations_default']['panoramio_use'] = getlocations_element_map_checkbox(
+    t('Load Panoramio Library'),
+    $getlocations_defaults['panoramio_use'],
+    t('Provide Google panoramio library to all maps.')
+  );
   $form['getlocations_default']['panoramio_show'] = getlocations_element_map_checkbox(
     t('Enable Panoramio'),
     $getlocations_defaults['panoramio_show'],

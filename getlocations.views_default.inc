@@ -1252,9 +1252,11 @@ function getlocations_views_default_views() {
         'text' => '',
         'make_link' => 0,
         'path' => '',
+        'absolute' => 0,
         'link_class' => '',
         'alt' => '',
         'prefix' => '',
+        'rel' => '',
         'suffix' => '',
         'target' => '',
         'help' => '',
@@ -1301,34 +1303,6 @@ function getlocations_views_default_views() {
       'id' => 'lid',
       'table' => 'location',
       'field' => 'lid',
-      'relationship' => 'none',
-    ),
-    'nothing' => array(
-      'label' => '',
-      'alter' => array(
-        'text' => 'All locations',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'exclude' => 0,
-      'id' => 'nothing',
-      'table' => 'views',
-      'field' => 'nothing',
       'relationship' => 'none',
     ),
   ));
@@ -1411,49 +1385,34 @@ function getlocations_views_default_views() {
   ));
   $handler->override_option('title', 'View All locations');
   $handler->override_option('items_per_page', 0);
+  $handler = $view->new_display('block', 'Map Block', 'block_1');
   $handler->override_option('style_plugin', 'getlocations');
   $handler->override_option('style_options', array(
     'grouping' => '',
-    'width' => '300px',
-    'height' => '200px',
-    'latlong' => '40,0',
-    'zoom' => '3',
-    'controltype' => 'small',
-    'pancontrol' => 1,
-    'mtc' => 'standard',
-    'maptype' => 'Map',
-    'baselayers' => array(
-      'Map' => 1,
-      'Satellite' => 1,
-      'Hybrid' => 1,
-      'Physical' => 1,
-    ),
-    'behavior' => array(
-      'scale' => 0,
-      'overview' => 0,
-      'overview_opened' => 0,
-      'scrollwheel' => 0,
-    ),
-    'draggable' => 1,
-    'styles' => '',
-    'streetview_show' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'panoramio_show' => 0,
-    'places' => 0,
-    'poi_show' => 0,
-    'transit_show' => 0,
-    'map_marker' => 'drupal',
-    'markeraction' => '0',
-    'minzoom' => '6',
-    'maxzoom' => '16',
-    'nodezoom' => '12',
-    'usemarkermanager' => 1,
-    'pansetting' => '2',
   ));
-  $handler = $view->new_display('block', 'Map Block', 'block_1');
   $handler->override_option('block_description', '');
   $handler->override_option('block_caching', -1);
+
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->override_option('style_plugin', 'getlocations');
+  $handler->override_option('style_options', array(
+    'grouping' => '',
+  ));
+  $handler->override_option('path', 'getlocations_all');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
 
   $views[$view->name] = $view;
 

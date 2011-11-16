@@ -18,6 +18,7 @@ function getlocations_theme() {
         'width' => '',
         'height' => '',
         'defaults' => '',
+        'mapid' => '',
         'type' => '',
         'node' => '',
       ),
@@ -46,7 +47,7 @@ function getlocations_theme() {
 /**
  * All the map displays pass through here.
  */
-function theme_getlocations_show($width, $height, $defaults, $type = '', $node = '') {
+function theme_getlocations_show($width, $height, $defaults, $mapid, $type = '', $node = '') {
 
   $output = '';
   // return link
@@ -71,36 +72,21 @@ function theme_getlocations_show($width, $height, $defaults, $type = '', $node =
     }
   }
   // do map
-  $output .= '<div id="getlocations_map_canvas" style="width: '. $width .'; height: '. $height .'" ></div>';
+  $output .= '<div class="getlocationsMap" id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
   // buttons
-  $form = array();
+  $buttons = array();
   if ($defaults['trafficinfo']) {
-    $form['trafficinfo'] = array(
-      '#type' => 'button',
-      '#value' => t('Toggle traffic info'),
-      '#weight' => 10,
-      '#attributes' => array( 'onClick' => 'Drupal.getlocations.toggleTraffic(); return false;', 'title' => t('Limited Availability')),
-    );
+    $buttons[] = '<input type="submit" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic" class="form-submit" />';
   }
   if ($defaults['bicycleinfo']) {
-    $form['bicycleinfo'] = array(
-      '#type' => 'button',
-      '#value' => t('Toggle bicycling info'),
-      '#weight' => 12,
-      '#attributes' => array( 'onClick' => 'Drupal.getlocations.toggleBicycle(); return false;', 'title' => t('Limited Availability')),
-    );
+    $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle" class="form-submit" />';
   }
-  if ($defaults['panoramio_show']) {
-    $form['panoramio'] = array(
-      '#type' => 'button',
-      '#value' => t('Toggle Panoramio'),
-      '#weight' => 14,
-      '#attributes' => array( 'onClick' => 'Drupal.getlocations.togglePanoramio(); return false;'),
-    );
+  if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
+    $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio" class="form-submit" />';
   }
-  if (count($form)) {
+  if (count($buttons)) {
     $output .= '<div id="getlocations_map_buttons" class="container-inline">';
-    $output .= drupal_render($form);
+    $output .= implode('&nbsp;', $buttons);
     $output .= '</div>';
   }
 
@@ -227,6 +213,12 @@ function template_preprocess_getlocations_view_map(&$variables) {
         if (isset($location['uid'])) {
           $marker = $getlocations_defaults['user_map_marker'];
         }
+        elseif (isset($options['map_marker']) && ! empty($options['map_marker'])) {
+          $marker = $options['map_marker'];
+        }
+        else {
+          $marker = $getlocations_defaults['map_marker'];
+        }
         $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
       }
     }
@@ -247,10 +239,9 @@ function template_preprocess_getlocations_view_map(&$variables) {
     }
   }
 
-  getlocations_setup_map($newdefaults);
-  getlocations_js_settings_do($newdefaults, $latlons, $minmaxes);
-
-  $variables['map']  = theme('getlocations_show', $newdefaults['width'], $newdefaults['height'], $newdefaults, '', '');
+  $mapid = getlocations_setup_map($newdefaults);
+  getlocations_js_settings_do($newdefaults, $latlons, $minmaxes, $mapid);
+  $variables['map']  = theme('getlocations_show', $newdefaults['width'], $newdefaults['height'], $newdefaults, $mapid, '', '');
 
 }
 

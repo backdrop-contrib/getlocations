@@ -1,9 +1,49 @@
-commit 5c8cc9f
+commit 2b71bcd
+Author: hutch <hutch@midwales.net>
+Date:   Wed Nov 16 09:22:38 2011 +0000
+
+    multiple maps on a page
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+getlocations.views.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/getlocations_admin.js
+
+commit 3fcc8a5
+Author: hutch <hutch@midwales.net>
+Date:   Tue Nov 8 10:03:24 2011 +0000
+
+    added regenerate_markers error catching
+
+getlocations.module
+
+commit f38bc10
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 3 23:27:45 2011 +0000
+
+    fixed bug in admin
+
+getlocations.admin.inc
+js/getlocations_admin.js
+
+commit 690b419
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 3 21:20:20 2011 +0000
+
+    fixed typo in plugin_style
+
+getlocations_plugin_style_map.inc
+
+commit 94405af
 Author: hutch <hutch@midwales.net>
 Date:   Thu Nov 3 21:11:16 2011 +0000
 
     fixed maptype
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations_plugin_style_map.inc

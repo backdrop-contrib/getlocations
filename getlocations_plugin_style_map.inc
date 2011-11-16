@@ -37,6 +37,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['streetview_show']  = array('default' => $getlocations_defaults['streetview_show']);
     $options['trafficinfo']      = array('default' => $getlocations_defaults['trafficinfo']);
     $options['bicycleinfo']      = array('default' => $getlocations_defaults['bicycleinfo']);
+    $options['panoramio_use']    = array('default' => $getlocations_defaults['panoramio_use']);
     $options['panoramio_show']   = array('default' => $getlocations_defaults['panoramio_show']);
     $options['places']           = array('default' => $getlocations_defaults['places']);
     $options['poi_show']         = array('default' => $getlocations_defaults['poi_show']);
@@ -157,11 +158,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['bicycleinfo'],
       t('Google bicycling layer, limited availability.')
     );
-    $form['panoramio_show'] = getlocations_element_map_checkbox(
-      t('Enable Panoramio'),
-      $this->options['panoramio_show'],
-      t('Google panoramio picture links.')
-    );
+    if ($this->options['panoramio_use']) {
+      $form['panoramio_show'] = getlocations_element_map_checkbox(
+        t('Enable Panoramio'),
+        $this->options['panoramio_show'],
+        t('Google panoramio picture links.')
+      );
+    }
     $form['poi_show'] = getlocations_element_map_checkbox(
       t('Show Points of Interest'),
       $this->options['poi_show'],

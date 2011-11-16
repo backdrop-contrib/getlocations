@@ -18,7 +18,7 @@
         $("#wrap-page-link").hide();
       }
       $("#edit-getlocations-default-returnlink-page-enable").change(function() {
-        if ($("#edit-getlocations-default-returnlink-page-enable").attr('checked')) {
+        if ($(this).attr('checked')) {
           $("#wrap-page-link").show();
         }
         else {
@@ -33,7 +33,7 @@
         $("#wrap-user-link").hide();
       }
       $("#edit-getlocations-default-returnlink-user-enable").change(function() {
-        if ($("#edit-getlocations-default-returnlink-user-enable").attr('checked')) {
+        if ($(this).attr('checked')) {
           $("#wrap-user-link").show();
         }
         else {
@@ -48,7 +48,7 @@
         $("#wrap-getlocations-colorbox").hide();
       }
       $("#edit-getlocations-colorbox-enable").change(function() {
-        if ($("#edit-getlocations-colorbox-enable").attr('checked')) {
+        if ($(this).attr('checked')) {
           $("#wrap-getlocations-colorbox").show();
         }
         else {
@@ -63,7 +63,7 @@
         $("#wrap-getlocations-node-markers").hide();
       }
       $("#edit-getlocations-node-marker-enable").change(function() {
-        if ($("#edit-getlocations-node-marker-enable").attr('checked')) {
+        if ($(this).attr('checked')) {
           $("#wrap-getlocations-node-markers").show();
         }
         else {
@@ -79,7 +79,7 @@
         $("#wrap-getlocations-vocabulary-markers").hide();
       }
       $("#edit-getlocations-vocabulary-marker-enable").change(function() {
-        if ($("#edit-getlocations-vocabulary-marker-enable").attr('checked')) {
+        if ($(this).attr('checked')) {
           $("#wrap-getlocations-vocabulary-markers").show();
         }
         else {
@@ -94,7 +94,7 @@
         $("#wrap-getlocations-roles-markers").hide();
       }
       $("#edit-getlocations-roles-marker-enable").change(function() {
-        if ($("#edit-getlocations-roles-marker-enable").attr('checked')) {
+        if ($(this).attr('checked')) {
           $("#wrap-getlocations-roles-markers").show();
         }
         else {

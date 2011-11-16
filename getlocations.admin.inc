@@ -30,6 +30,11 @@ function getlocations_settings_form() {
       '#default_value' => variable_get('getlocations_private_markerfile', ''),
     );
   }
+  if (! file_exists(file_directory_path() . '/js/getlocations_markers.js') ) {
+    $form['rebuild']['errmsg'] = array(
+      '#value' => '<p class="messages error">' . t('You need to regenerate the markers, file not found.') . '</p>'
+    );
+  }
   $form['rebuild']['rebuild_marker_js'] = array(
     '#type' => 'submit',
     '#value' => t('Regenerate'),
@@ -144,6 +149,11 @@ function getlocations_settings_form() {
     t('Google bicycling layer, limited availability.')
   );
 
+  $form['getlocations_default']['panoramio_use'] = getlocations_element_map_checkbox(
+    t('Load Panoramio Library'),
+    $getlocations_defaults['panoramio_use'],
+    t('Provide Google panoramio library to all maps.')
+  );
   $form['getlocations_default']['panoramio_show'] = getlocations_element_map_checkbox(
     t('Enable Panoramio'),
     $getlocations_defaults['panoramio_show'],

@@ -49,9 +49,9 @@ function template_preprocess_getlocations_view_map(&$variables) {
     }
   }
 
-  getlocations_setup_map($newdefaults);
-  getlocations_js_settings_do($newdefaults, $latlons, $minmaxes);
+  $mapid = getlocations_setup_map($newdefaults);
+  getlocations_js_settings_do($newdefaults, $latlons, $minmaxes, $mapid);
 
-  $variables['map']  = theme('getlocations_show', $newdefaults['width'], $newdefaults['height'], $newdefaults, '', '');
+  $variables['map']  = theme('getlocations_show', $newdefaults['width'], $newdefaults['height'], $newdefaults, $mapid, '', '');
 
 }

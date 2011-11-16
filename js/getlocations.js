@@ -1,238 +1,287 @@
-
 /**
  * @file
- * Javascript functions for getlocations module for Drupal 6
+ * Javascript functions for getlocations module for Drupal 7
  *
  * @author Bob Hutchinson http://drupal.org/user/52366
  * this is for googlemaps API version 3
-*/
-
-// global vars
-var map;
-var maxzoom = 16;
-var minzoom = 7;
-var nodezoom = 12;
-var mgr;
-var latlons;
-var defaultIcon;
-var usemarkermanager = true;
-var useInfoBubble = false;
-var useInfoWindow = false;
-var useLink = false;
-var markeraction = 0;
-var infoBubbles = [];
-var datanum = 0;
-var trafficInfo;
-var bicycleInfo;
-var traffictoggleState = 0;
-var bicycletoggleState = 0;
-var panoramioLayer;
-var panoramiotoggleState = 0;
-var map_marker = 'drupal';
-
+ */
 (function ($) {
+  // global vars
+  var map = [];
+  var settings = [];
 
   function initialize() {
-    var lat = parseFloat(Drupal.settings.getlocations.lat);
-    var lng = parseFloat(Drupal.settings.getlocations.lng);
-    var selzoom = parseInt(Drupal.settings.getlocations.zoom);
-    var controltype = Drupal.settings.getlocations.controltype;
-    var pancontrol = Drupal.settings.getlocations.pancontrol;
-    var scale = Drupal.settings.getlocations.scale;
-    var overview = Drupal.settings.getlocations.overview;
-    var overview_opened = Drupal.settings.getlocations.overview_opened;
-    var streetview_show = Drupal.settings.getlocations.streetview_show;
-    var scrollw = Drupal.settings.getlocations.scrollwheel;
-    var maptype = (Drupal.settings.getlocations.maptype ? Drupal.settings.getlocations.maptype : '');
-    var baselayers = (Drupal.settings.getlocations.baselayers ? Drupal.settings.getlocations.baselayers : '');
-    map_marker = Drupal.settings.getlocations.map_marker;
-    var poi_show = Drupal.settings.getlocations.poi_show;
-    var transit_show = Drupal.settings.getlocations.transit_show;
-    var pansetting = Drupal.settings.getlocations.pansetting;
-    var draggable = Drupal.settings.getlocations.draggable;
-    var map_styles = Drupal.settings.getlocations.styles;
-    minzoom = parseInt(Drupal.settings.getlocations.minzoom);
-    maxzoom = parseInt(Drupal.settings.getlocations.maxzoom);
-    nodezoom = parseInt(Drupal.settings.getlocations.nodezoom);
-    datanum = Drupal.settings.getlocations.datanum;
-    usemarkermanager = Drupal.settings.getlocations.usemarkermanager;
 
-    markeraction = Drupal.settings.getlocations.markeraction;
+      // in icons.js
+      Drupal.getlocations.iconSetup();
 
-    if (markeraction == 2) {
-      useInfoBubble = true;
-    }
-    else if (markeraction == 3) {
-      useLink = true;
-    }
+    settings = Drupal.settings.getlocations;
 
-    // in icons.js
-    Drupal.getlocations.iconSetup();
+    // each map has its own settings
+    jQuery.each(settings, function(key, settings) {
 
-    defaultIcon = Drupal.getlocations.getIcon(map_marker);
+      var global_settings = {
+        maxzoom: 16,
+        minzoom: 7,
+        nodezoom: 12,
+        mgr: '',
+        defaultIcon: '',
+        usemarkermanager: true,
+        useInfoBubble: false,
+        useInfoWindow: false,
+        useLink: false,
+        markeraction: 0,
+        infoBubbles: [],
+        datanum: 0,
+        trafficInfo: {},
+        bicycleInfo: {},
+        traffictoggleState: [],
+        bicycletoggleState: [],
+        panoramioLayer: {},
+        panoramiotoggleState: []
+      };
 
-    // pipe delim
-    latlons = (Drupal.settings.getlocations.latlons ? Drupal.settings.getlocations.latlons : '');
-    var minmaxes = (Drupal.settings.getlocations.minmaxes ? Drupal.settings.getlocations.minmaxes : '');
-    var minlat = '';
-    var minlon = '';
-    var maxlat = '';
-    var maxlon = '';
-    var cenlat = '';
-    var cenlon = '';
+      var lat = parseFloat(settings.lat);
+      var lng = parseFloat(settings.lng);
+      var selzoom = parseInt(settings.zoom);
+      var controltype = settings.controltype;
+      var pancontrol = settings.pancontrol;
+      var scale = settings.scale;
+      var overview = settings.overview;
+      var overview_opened = settings.overview_opened;
+      var streetview_show = settings.streetview_show;
+      var scrollw = settings.scrollwheel;
+      var maptype = (settings.maptype ? settings.maptype : '');
+      var baselayers = (settings.baselayers ? settings.baselayers : '');
+      var map_marker = settings.map_marker;
+      var poi_show = settings.poi_show;
+      var transit_show = settings.transit_show;
+      var pansetting = settings.pansetting;
+      var draggable = settings.draggable;
+      var map_styles = settings.styles;
+      global_settings.minzoom = parseInt(settings.minzoom);
+      global_settings.maxzoom = parseInt(settings.maxzoom);
+      global_settings.nodezoom = parseInt(settings.nodezoom);
+      global_settings.datanum = settings.datanum;
+      global_settings.usemarkermanager = settings.usemarkermanager;
+      global_settings.markeraction = settings.markeraction;
 
-    if (minmaxes !== '') {
-      mmarr = minmaxes.split(',');
-      minlat = mmarr[0];
-      minlon = mmarr[1];
-      maxlat = mmarr[2];
-      maxlon = mmarr[3];
-      cenlat = (parseFloat(minlat) + parseFloat(maxlat))/2;
-      cenlon = (parseFloat(minlon) + parseFloat(maxlon))/2;
-    }
+      if (global_settings.markeraction == 2) {
+        global_settings.useInfoBubble = true;
+      }
+      else if (global_settings.markeraction == 3) {
+        global_settings.useLink = true;
+      }
 
-    // menu type
-    var mtc = Drupal.settings.getlocations.mtc;
-    if (mtc == 'standard') { mtc = google.maps.MapTypeControlStyle.HORIZONTAL_BAR; }
-    else if (mtc == 'menu' ) { mtc = google.maps.MapTypeControlStyle.DROPDOWN_MENU; }
-    else { mtc = false; }
+      global_settings.defaultIcon = Drupal.getlocations.getIcon(map_marker);
 
-    // nav control type
-    if (controltype == 'default') { controltype = google.maps.ZoomControlStyle.DEFAULT; }
-    else if (controltype == 'small') { controltype = google.maps.ZoomControlStyle.SMALL; }
-    else if (controltype == 'large') { controltype = google.maps.ZoomControlStyle.LARGE; }
-    else { controltype = false; }
+      // pipe delim
+      global_settings.latlons = (settings.latlons ? settings.latlons : '');
+      var minmaxes = (settings.minmaxes ? settings.minmaxes : '');
+      var minlat = '';
+      var minlon = '';
+      var maxlat = '';
+      var maxlon = '';
+      var cenlat = '';
+      var cenlon = '';
 
-    // map type
-    maptypes = [];
-    if (maptype) {
-      if (maptype == 'Map' && baselayers.Map) { maptype = google.maps.MapTypeId.ROADMAP; }
-      if (maptype == 'Satellite' && baselayers.Satellite) { maptype = google.maps.MapTypeId.SATELLITE; }
-      if (maptype == 'Hybrid' && baselayers.Hybrid) { maptype = google.maps.MapTypeId.HYBRID; }
-      if (maptype == 'Physical' && baselayers.Physical) { maptype = google.maps.MapTypeId.TERRAIN; }
-      if (baselayers.Map) { maptypes.push(google.maps.MapTypeId.ROADMAP); }
-      if (baselayers.Satellite) { maptypes.push(google.maps.MapTypeId.SATELLITE); }
-      if (baselayers.Hybrid) { maptypes.push(google.maps.MapTypeId.HYBRID); }
-      if (baselayers.Physical) { maptypes.push(google.maps.MapTypeId.TERRAIN); }
-    }
-    else {
-      maptype = google.maps.MapTypeId.ROADMAP;
-      maptypes.push(google.maps.MapTypeId.ROADMAP);
-      maptypes.push(google.maps.MapTypeId.SATELLITE);
-      maptypes.push(google.maps.MapTypeId.HYBRID);
-      maptypes.push(google.maps.MapTypeId.TERRAIN);
-    }
+      if (minmaxes) {
+        mmarr = minmaxes.split(',');
+        minlat = mmarr[0];
+        minlon = mmarr[1];
+        maxlat = mmarr[2];
+        maxlon = mmarr[3];
+        cenlat = (parseFloat(minlat) + parseFloat(maxlat))/2;
+        cenlon = (parseFloat(minlon) + parseFloat(maxlon))/2;
+      }
 
-    // map styling
-    var styles_array = [];
-    if (map_styles) {
-      try {
-        styles_array = eval(map_styles);
-      } catch (e) {
-        if (e instanceof SyntaxError) {
-          console.log(e.message);
-          // Error on parsing string. Using default.
-          styles_array = [];
+      // menu type
+      var mtc = settings.mtc;
+      if (mtc == 'standard') { mtc = google.maps.MapTypeControlStyle.HORIZONTAL_BAR; }
+      else if (mtc == 'menu' ) { mtc = google.maps.MapTypeControlStyle.DROPDOWN_MENU; }
+      else { mtc = false; }
+
+      // nav control type
+      if (controltype == 'default') { controltype = google.maps.ZoomControlStyle.DEFAULT; }
+      else if (controltype == 'small') { controltype = google.maps.ZoomControlStyle.SMALL; }
+      else if (controltype == 'large') { controltype = google.maps.ZoomControlStyle.LARGE; }
+      else { controltype = false; }
+
+      // map type
+      maptypes = [];
+      if (maptype) {
+        if (maptype == 'Map' && baselayers.Map) { maptype = google.maps.MapTypeId.ROADMAP; }
+          if (maptype == 'Satellite' && baselayers.Satellite) { maptype = google.maps.MapTypeId.SATELLITE; }
+          if (maptype == 'Hybrid' && baselayers.Hybrid) { maptype = google.maps.MapTypeId.HYBRID; }
+          if (maptype == 'Physical' && baselayers.Physical) { maptype = google.maps.MapTypeId.TERRAIN; }
+          if (baselayers.Map) { maptypes.push(google.maps.MapTypeId.ROADMAP); }
+          if (baselayers.Satellite) { maptypes.push(google.maps.MapTypeId.SATELLITE); }
+          if (baselayers.Hybrid) { maptypes.push(google.maps.MapTypeId.HYBRID); }
+          if (baselayers.Physical) { maptypes.push(google.maps.MapTypeId.TERRAIN); }
+      }
+      else {
+        maptype = google.maps.MapTypeId.ROADMAP;
+        maptypes.push(google.maps.MapTypeId.ROADMAP);
+        maptypes.push(google.maps.MapTypeId.SATELLITE);
+        maptypes.push(google.maps.MapTypeId.HYBRID);
+        maptypes.push(google.maps.MapTypeId.TERRAIN);
+      }
+
+      // map styling
+      var styles_array = [];
+      if (map_styles) {
+        try {
+          styles_array = eval(map_styles);
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            console.log(e.message);
+            // Error on parsing string. Using default.
+            styles_array = [];
+          }
         }
       }
-    }
-    // Merge styles with our settings.
-    var styles = styles_array.concat([
+
+      // Merge styles with our settings.
+      var styles = styles_array.concat([
         { featureType: "poi", elementType: "labels", stylers: [{ visibility: (poi_show ? 'on' : 'off') }] },
         { featureType: "transit", elementType: "labels", stylers: [{ visibility: (transit_show ? 'on' : 'off') }] }
       ]);
 
-    var mapOpts = {
-      zoom: selzoom,
-      center: new google.maps.LatLng(lat, lng),
-      mapTypeControl: (mtc ? true : false),
-      mapTypeControlOptions: {style: mtc,  mapTypeIds: maptypes},
-      zoomControl: (controltype ? true : false),
-      zoomControlOptions: {style: controltype},
-      panControl: (pancontrol ? true : false),
-      mapTypeId: maptype,
-      scrollwheel: (scrollw ? true : false),
-      draggable: (draggable ? true : false),
-      styles: styles,
-      overviewMapControl: (overview ? true : false),
-      overviewMapControlOptions: {opened: (overview_opened ? true : false)},
-      streetViewControl: (streetview_show ? true : false),
-      scaleControl: (scale ? true : false),
-      scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT}
-    };
-    map = new google.maps.Map(document.getElementById("getlocations_map_canvas"), mapOpts);
+      var mapOpts = {
+        zoom: selzoom,
+        center: new google.maps.LatLng(lat, lng),
+        mapTypeControl: (mtc ? true : false),
+        mapTypeControlOptions: {style: mtc,  mapTypeIds: maptypes},
+        zoomControl: (controltype ? true : false),
+        zoomControlOptions: {style: controltype},
+        panControl: (pancontrol ? true : false),
+        mapTypeId: maptype,
+        scrollwheel: (scrollw ? true : false),
+        draggable: (draggable ? true : false),
+        styles: styles,
+        overviewMapControl: (overview ? true : false),
+        overviewMapControlOptions: {opened: (overview_opened ? true : false)},
+        streetViewControl: (streetview_show ? true : false),
+        scaleControl: (scale ? true : false),
+        scaleControlOptions: {style: google.maps.ScaleControlStyle.DEFAULT}
+      };
 
-    // set up markermanager
-    if (usemarkermanager) {
-      mgr = new MarkerManager(map, {
-        borderPadding: 50,
-        maxZoom: maxzoom,
-        trackMarkers: false
-      });
-    }
+      map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
 
-    if (Drupal.settings.getlocations.trafficinfo) {
-      trafficInfo = new google.maps.TrafficLayer();
-    }
-    if (Drupal.settings.getlocations.bicycleinfo) {
-      bicycleInfo = new google.maps.BicyclingLayer();
-    }
-    if (Drupal.settings.getlocations.panoramio_show) {
-      panoramioLayer = new google.maps.panoramio.PanoramioLayer();
-    }
-
-    if (datanum) {
-      setTimeout(doAllMarkers, 1000);
-    }
-
-    if (pansetting == 1) {
-      doBounds(minlat, minlon, maxlat, maxlon, true);
-    }
-    else if (pansetting == 2) {
-      doBounds(minlat, minlon, maxlat, maxlon, false);
-    }
-    else if (pansetting == 3) {
-      if (cenlat && cenlon) {
-        c = new google.maps.LatLng(cenlat, cenlon);
-        map.setCenter(c);
+      // set up markermanager
+      if (global_settings.usemarkermanager) {
+        global_settings.mgr = new MarkerManager(map[key], {
+          borderPadding: 50,
+          maxZoom: global_settings.maxzoom,
+          trackMarkers: false
+        });
       }
-    }
+
+      if (settings.trafficinfo) {
+        global_settings.trafficInfo[key] = new google.maps.TrafficLayer();
+        global_settings.trafficInfo[key].setMap(map[key]);
+        global_settings.traffictoggleState[key] = 1;
+        $("#getlocations_toggleTraffic").click( function() { manageTrafficButton(map[key], global_settings.trafficInfo[key], key) });
+      }
+      if (settings.bicycleinfo) {
+        global_settings.bicycleInfo[key] = new google.maps.BicyclingLayer();
+        global_settings.bicycleInfo[key].setMap(map[key]);
+        global_settings.bicycletoggleState[key] = 1;
+        $("#getlocations_toggleBicycle").click( function() { manageBicycleButton(map[key], global_settings.bicycleInfo[key], key) });
+
+      }
+      if (settings.panoramio_use && settings.panoramio_show) {
+        global_settings.panoramioLayer[key] = new google.maps.panoramio.PanoramioLayer();
+        global_settings.panoramioLayer[key].setMap(map[key]);
+        global_settings.panoramiotoggleState[key] = 1;
+        $("#getlocations_togglePanoramio").click( function() { managePanoramioButton(map[key], global_settings.panoramioLayer[key], key) });
+      }
+
+      setTimeout(function() { doAllMarkers(map[key], global_settings) }, 1000);
+
+      if (pansetting == 1) {
+        doBounds(map[key], minlat, minlon, maxlat, maxlon, true);
+      }
+      else if (pansetting == 2) {
+        doBounds(map[key], minlat, minlon, maxlat, maxlon, false);
+      }
+      else if (pansetting == 3) {
+        if (cenlat && cenlon) {
+          c = new google.maps.LatLng(cenlat, cenlon);
+          map[key].setCenter(c);
+        }
+      }
+
+      function manageTrafficButton(map, trafficInfo, key) {
+        if ( global_settings.traffictoggleState[key] == 1) {
+          trafficInfo.setMap();
+          global_settings.traffictoggleState[key] = 0;
+        }
+        else {
+          trafficInfo.setMap(map);
+          global_settings.traffictoggleState[key] = 1;
+        }
+      }
+
+      function manageBicycleButton(map, bicycleInfo, key) {
+        if ( global_settings.bicycletoggleState[key] == 1) {
+          bicycleInfo.setMap();
+          global_settings.bicycletoggleState[key] = 0;
+        }
+        else {
+          bicycleInfo.setMap(map);
+          global_settings.bicycletoggleState[key] = 1;
+        }
+      }
+
+      function managePanoramioButton(map, panoramioLayer, key) {
+        if ( global_settings.panoramiotoggleState[key] == 1) {
+          panoramioLayer.setMap();
+          global_settings.panoramiotoggleState[key] = 0;
+        }
+        else {
+          panoramioLayer.setMap(map);
+          global_settings.panoramiotoggleState[key] = 1;
+        }
+      }
+
+    }); // end each setting loop
 
   } // end initialize
 
-  function makeMarker(ico, lat, lon, lid, title) {
+  function makeMarker(map, global_settings, lat, lon, lid, title) {
 
     var p = new google.maps.LatLng(lat, lon);
     var m = new google.maps.Marker({
-      icon: ico.image,
-      shadow: ico.shadow,
-      shape: ico.shape,
+      icon: global_settings.markdone.image,
+      shadow: global_settings.markdone.shadow,
+      shape: global_settings.markdone.shape,
       map: map,
       position: p,
       title: title
     });
 
-    if (markeraction > 0) {
+    if (global_settings.markeraction > 0) {
       google.maps.event.addListener(m, 'click', function() {
-        if (useLink) {
+        if (global_settings.useLink) {
           // fetch link and relocate
           $.get("/getlocations/lidinfo", {lid: lid}, function(data) {
             if (data) {
               window.location = data;
             }
           });
+
         }
         else {
           // fetch bubble content
           $.get("/getlocations/info", {lid: lid}, function(data) {
-
             // close any previous instances
-            for (var i in infoBubbles) {
-              infoBubbles[i].close();
+            for (var i in global_settings.infoBubbles) {
+              global_settings.infoBubbles[i].close();
             }
-            if (useInfoBubble) {
+            if (global_settings.useInfoBubble) {
               if (typeof(infoBubbleOptions) == 'object') {
-                var infoBubbleOpts = infoBubbleOptions;
+                var infoBubbleOpts = global_settings.infoBubbleOptions;
               }
               else {
                 var infoBubbleOpts = {};
@@ -241,7 +290,7 @@ var map_marker = 'drupal';
               var infoBubble = new InfoBubble(infoBubbleOpts);
               infoBubble.open(map, m);
               // add to the array
-              infoBubbles.push(infoBubble);
+              global_settings.infoBubbles.push(infoBubble);
             }
             else {
               var infowindow = new google.maps.InfoWindow({
@@ -249,29 +298,29 @@ var map_marker = 'drupal';
               });
               infowindow.open(map, m);
               // add to the array
-              infoBubbles.push(infowindow);
+              global_settings.infoBubbles.push(infowindow);
             }
           });
         }
       });
-    }
 
+    }
     // we only have one marker
-    if (datanum == 1) {
+    if (global_settings.datanum == 1) {
       map.setCenter(p);
-      map.setZoom(nodezoom);
+      map.setZoom(global_settings.nodezoom);
     }
     return m;
   }
 
-  function doAllMarkers () {
+  function doAllMarkers (map, global_settings) {
 
     // using markermanager
-    if (usemarkermanager) {
+    if (global_settings.usemarkermanager) {
       var batchr = [];
     }
 
-    var arr = latlons.split('|');
+    var arr = global_settings.latlons.split('|');
     for (var i = 0; i < arr.length; i++) {
       arr2 = arr[i].split(',');
       lat = arr2[0];
@@ -280,24 +329,24 @@ var map_marker = 'drupal';
       name = arr2[3];
       mark = arr2[4];
       if (mark === '') {
-        markdone = defaultIcon;
+        global_settings.markdone = global_settings.defaultIcon;
       }
       else {
-        markdone = Drupal.getlocations.getIcon(mark);
+        global_settings.markdone = Drupal.getlocations.getIcon(mark);
       }
-      m = makeMarker(markdone, lat, lon, lid, name);
-      if (usemarkermanager) {
+      m = makeMarker(map, global_settings, lat, lon, lid, name);
+      if (global_settings.usemarkermanager) {
         batchr.push(m);
       }
     }
     // add batchr
-    if (usemarkermanager) {
-      mgr.addMarkers(batchr, minzoom, maxzoom);
-      mgr.refresh();
+    if (global_settings.usemarkermanager) {
+     global_settings. mgr.addMarkers(batchr, global_settings.minzoom, global_settings.maxzoom);
+      global_settings.mgr.refresh();
     }
   }
 
-  function doBounds(minlat, minlon, maxlat, maxlon, dopan) {
+  function doBounds(map, minlat, minlon, maxlat, maxlon, dopan) {
     if (minlat !== '' && minlon !== '' && maxlat !== '' && maxlon !== '') {
       // Bounding
       var minpoint = new google.maps.LatLng(parseFloat(minlat), parseFloat(minlon));
@@ -312,43 +361,9 @@ var map_marker = 'drupal';
     }
   }
 
-  Drupal.getlocations.toggleTraffic = function() {
-    if (traffictoggleState == 1) {
-      trafficInfo.setMap();
-      traffictoggleState = 0;
-    }
-    else {
-      trafficInfo.setMap(map);
-      traffictoggleState = 1;
-    }
-  }
-
-  Drupal.getlocations.toggleBicycle = function() {
-    if (bicycletoggleState == 1) {
-      bicycleInfo.setMap();
-      bicycletoggleState = 0;
-    }
-    else {
-      bicycleInfo.setMap(map);
-      bicycletoggleState = 1;
-    }
-  }
-
-  Drupal.getlocations.togglePanoramio = function() {
-    if (panoramiotoggleState == 1) {
-      panoramioLayer.setMap();
-      panoramiotoggleState = 0;
-    }
-    else {
-      panoramioLayer.setMap(map);
-      panoramiotoggleState = 1;
-    }
-  }
-
   // gogogo
   Drupal.behaviors.getlocations = function() {
     initialize();
   };
-
 
 })(jQuery);

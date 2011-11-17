@@ -14,9 +14,10 @@ class getlocations_plugin_style_map extends views_plugin_style {
   /**
    * Set default options
    */
-#  function options(&$options) {
-#    parent::options($options);
-#  }
+  function options(&$options) {
+    parent::options($options);
+    $options['empty_result'] = FALSE;
+  }
 
   function option_definition() {
     $options = parent::option_definition();
@@ -202,6 +203,14 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['nodezoom'],
       t('The Default zoom level for a single marker.')
     );
+    $form['pansetting'] = getlocations_element_map_pansetting(
+      $this->options['pansetting']
+    );
+
+    $form['empty_result'] = getlocations_element_map_checkbox(
+      t('Show map even if view has no results'),
+      $this->options['empty_result']
+    );
     $getlocations_defaults = getlocations_defaults();
     $form['usemarkermanager'] = array(
       '#type' => 'hidden',
@@ -212,15 +221,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
 #      $this->options['usemarkermanager'],
 #      t('Use Marker manager. Switching this off will use no manager')
 #    );
-    $form['pansetting'] = getlocations_element_map_pansetting(
-      $this->options['pansetting']
-    );
 
   } // end options_form
 
   /**
    * Validate the options form.
    */
+
   function options_validate(&$form, &$form_state) {
     $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
     $found = FALSE;
@@ -235,6 +242,17 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $form_state['values']['maptype'] = 'Map';
       $form_state['values']['baselayers']['Map'] = 1;
     }
+  }
+
+  function even_empty() {
+    return parent::even_empty() || !empty($this->options['empty_result']);
+  }
+
+  function render() {
+    if (isset($this->view->live_preview) && $this->view->live_preview) {
+      return t('Getlocations Map views are not compatible with live preview.');
+    }
+    return parent::render();
   }
 
 }

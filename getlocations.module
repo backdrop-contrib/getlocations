@@ -496,7 +496,7 @@ function getlocations_nids($nidlist) {
  */
 function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
   if (! getlocations_check()) {
-    return t('You need to !c first.', array('!c' => l('configure Getlocations', 'admin/settings/getlocations')));
+    return t('You need to !c first.', array('!c' => l('configure Getlocations', 'admin/config/services/getlocations')));
   }
   global $language;
   $getlocations_defaults = getlocations_defaults();

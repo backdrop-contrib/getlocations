@@ -6,6 +6,29 @@
  */
 
 /**
+ * Implementation of hook_views_plugins().
+ */
+function getlocations_views_plugins() {
+
+  return array(
+    'module' => 'getlocations',
+    'style' => array(
+      'getlocations' => array(
+        'title' => t('GetLocations'),
+        'help' => t('Displays rows as a map.'),
+        'handler' => 'getlocations_plugin_style_map',
+        'theme' => 'getlocations_view_map',
+        'theme path' => GETLOCATIONS_PATH . '/views',
+        'uses row plugin' => TRUE,
+        'uses grouping' => TRUE,
+        'uses options' => TRUE,
+        'type' => 'normal',
+      ),
+    ),
+  );
+}
+
+/**
  * Preprocess function for theme_getlocations_view_map().
  */
 

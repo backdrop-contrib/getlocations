@@ -1,9 +1,25 @@
-commit c72730f
+commit 47409f6
+Author: hutch <hutch@midwales.net>
+Date:   Fri Nov 18 12:01:05 2011 +0000
+
+    moved views to its own folder, improved default views
+
+getlocations-view-map.tpl.php
+getlocations.views.inc
+getlocations.views_default.inc
+getlocations_plugin_style_map.inc
+views/getlocations-view-map.tpl.php
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit a9f9b3c
 Author: hutch <hutch@midwales.net>
 Date:   Thu Nov 17 18:09:53 2011 +0000
 
     fixed path to config
 
+CHANGELOG.txt
 getlocations.module
 
 commit 57be37a

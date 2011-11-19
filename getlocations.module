@@ -68,31 +68,11 @@ function getlocations_flush_caches() {
  * Implements hook_views_api().
  */
 function getlocations_views_api() {
-  return array('api' => 3);
-}
-
-
-/**
- * Implementation of hook_views_plugins().
- */
-function getlocations_views_plugins() {
-
-  return array(
-    'module' => 'getlocations',
-    'style' => array(
-      'getlocations' => array(
-        'title' => t('GetLocations'),
-        'help' => t('Displays rows as a map.'),
-        'handler' => 'getlocations_plugin_style_map',
-        'theme' => 'getlocations_view_map',
-        'uses row plugin' => TRUE,
-        'uses grouping' => TRUE,
-        'uses options' => TRUE,
-        'type' => 'normal',
-      ),
-    ),
+  return array('api' => 3,
+    'path' => GETLOCATIONS_PATH . '/views',
   );
 }
+
 
 /**
  * Implements hook_menu().

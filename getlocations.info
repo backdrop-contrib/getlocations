@@ -6,4 +6,4 @@ php = 5
 dependencies[] = location
 dependencies[] = libraries
 
-files[] = getlocations_plugin_style_map.inc
+files[] = views/getlocations_plugin_style_map.inc

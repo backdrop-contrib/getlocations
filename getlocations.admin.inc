@@ -20,9 +20,9 @@ function getlocations_settings_form() {
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
-    '#description' => t('If you are having problems with markers, or have modified the .ini files in the markers folder, click here to rebuild the marker cache file.'),
+    '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click here to rebuild the marker cache file.'),
   );
-  if ( file_default_scheme() != 'public') {
+  if (file_default_scheme() != 'public') {
     $form['rebuild']['getlocations_private_markerfile'] = array(
       '#type' => 'textfield',
       '#title' => t('Path to getlocations_markers.js'),
@@ -30,7 +30,7 @@ function getlocations_settings_form() {
       '#default_value' => variable_get('getlocations_private_markerfile', ''),
     );
   }
-  if (! file_exists(file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js/getlocations_markers.js')) {
+  if (! getlocations_get_markerfile()) {
     $form['rebuild']['errmsg'] = array(
       '#value' => '<p class="messages error">' . t('You need to regenerate the markers, file not found.') . '</p>'
     );
@@ -43,7 +43,7 @@ function getlocations_settings_form() {
 
   $form['getlocations_default'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Get locations map settings'),
+    '#title' => t('Getlocations Default map settings'),
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
@@ -175,10 +175,12 @@ function getlocations_settings_form() {
   // default marker
   $markers = getlocations_get_marker_titles();
   $form['getlocations_default']['map_marker'] = getlocations_element_map_marker(
-    t('Default Map marker'),
+    t('Default Content Map marker'),
     $markers,
     $getlocations_defaults['map_marker']
   );
+
+  // TODO does this work?
   if (module_exists('location_user')) {
     $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
       t('Default User Map marker'),
@@ -196,11 +198,13 @@ function getlocations_settings_form() {
     $getlocations_defaults['minzoom'],
     t('The Minimum zoom level at which markers will be visible.')
   );
+
   $form['getlocations_default']['maxzoom'] = getlocations_element_map_zoom(
     t('Maximum Zoom'),
     $getlocations_defaults['maxzoom'],
     t('The Maximum zoom level at which markers will be visible.')
   );
+
   $form['getlocations_default']['nodezoom'] = getlocations_element_map_zoom(
     t('Default Zoom for Single location'),
     $getlocations_defaults['nodezoom'],
@@ -248,99 +252,37 @@ function getlocations_settings_form() {
     );
   }
 
-  // node markers
-  $form['getlocations_node_marker'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Content type markers'),
-    // This will store all the defaults in one variable.
-    '#tree' => TRUE,
-  );
-  $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-  $form['getlocations_node_marker']['enable'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Markers for Content types'),
-    '#default_value' =>  $getlocations_node_marker['enable'],
-    '#return_value' => 1,
-  );
-  $types = getlocations_get_types();
-  $typect = 0;
-  foreach ($types AS $type => $name) {
-    $form['getlocations_node_marker']['content_type'][$type]['map_marker'] = getlocations_element_map_marker(
-      t('%name Map marker', array('%name' => $name)),
-      $markers,
-      (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
-    );
-
-    if (! $typect) {
-      $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-node-markers">';
-    }
-    $typect++;
-  }
-  $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
-
-/*
-
-  // vocabulary markers
-  $types = getlocations_get_vocabularies();
-  if ($types) {
-    $form['getlocations_vocabulary_marker'] = array(
+  // node type markers
+  if ($types = getlocations_get_types()) {
+    $form['getlocations_node_marker'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Taxonomy Vocabulary markers'),
+      '#title' => t('Content type markers'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
     );
-    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-    $form['getlocations_vocabulary_marker']['enable'] = array(
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    $form['getlocations_node_marker']['enable'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Enable Markers for Vocabularies'),
-      '#default_value' =>  $getlocations_vocabulary_marker['enable'],
+      '#title' => t('Enable Markers for Content types'),
+      '#default_value' =>  $getlocations_node_marker['enable'],
       '#return_value' => 1,
     );
     $typect = 0;
     foreach ($types AS $type => $name) {
-
-      $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker'] = getlocations_element_map_marker(
+      $form['getlocations_node_marker']['content_type'][$type]['map_marker'] = getlocations_element_map_marker(
         t('%name Map marker', array('%name' => $name)),
         $markers,
-        (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+        (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
       );
+
       if (! $typect) {
-        $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-vocabulary-markers">';
+        $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-node-markers">';
       }
       $typect++;
     }
-    $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#suffix'] = '</div>';
+    $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
   }
-  // roles markers
-  $form['getlocations_roles_marker'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Role markers'),
-    // This will store all the defaults in one variable.
-    '#tree' => TRUE,
-  );
-  $getlocations_roles_marker = variable_get('getlocations_roles_marker', array('enable' => 0));
-  $form['getlocations_roles_marker']['enable'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Markers for Roles'),
-    '#default_value' =>  $getlocations_roles_marker['enable'],
-    '#return_value' => 1,
-  );
-  $types = user_roles(TRUE);
-  $typect = 0;
-  foreach ($types AS $type => $name) {
 
-    $form['getlocations_roles_marker']['roles'][$type]['map_marker'] = getlocations_element_map_marker(
-      t('%name Map marker', array('%name' => $name)),
-      $markers,
-      (isset($getlocations_roles_marker['roles'][$type]['map_marker']) ? $getlocations_roles_marker['roles'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
-    );
-    if (! $typect) {
-      $form['getlocations_roles_marker']['roles'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-roles-markers">';
-    }
-    $typect++;
-  }
-  $form['getlocations_roles_marker']['roles'][$type]['map_marker']['#suffix'] = '</div>';
-*/
   if (module_exists('colorbox')) {
     $form['getlocations_colorbox'] = array(
       '#type' => 'fieldset',

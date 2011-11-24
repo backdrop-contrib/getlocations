@@ -538,8 +538,8 @@ function getlocations_setup_map($defaults) {
     drupal_add_js(GETLOCATIONS_PATH .'/js/icons.js');
   }
 
-  $markerfile = file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js/getlocations_markers.js';
-  if (!stristr($current_js, $markerfile)) {
+  $markerfile = getlocations_get_markerfile();
+  if ($markerfile && !stristr($current_js, $markerfile)) {
     drupal_add_js($markerfile);
   }
 
@@ -802,16 +802,54 @@ function getlocations_regenerate_markers() {
   $contents .= "Drupal.getlocations.icondata = " . drupal_json_encode(getlocations_get_icondata(TRUE)) . ";\n";
 
   // Create the js/ within the files folder.
-  $jspath = file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js';
-  if (file_prepare_directory($jspath, FILE_CREATE_DIRECTORY) && file_unmanaged_save_data($contents, "$jspath/getlocations_markers.js", FILE_EXISTS_REPLACE)) {
+  $jspath = getlocations_get_markerfile(TRUE, FALSE);
+  $jsfile = getlocations_get_markerfile(FALSE, FALSE);
+  if ($jspath && $jsfile && file_prepare_directory($jspath, FILE_CREATE_DIRECTORY) && file_unmanaged_save_data($contents, $jsfile, FILE_EXISTS_REPLACE)) {
     // Also regenerate the cached marker titles array
     getlocations_get_marker_titles(TRUE);
   }
   else {
     // failed
-    drupal_set_message(t('Getlocations is unable to save the marker bundle, so the markers will not work. Please check file system permissions of %filepath!', array('%filepath' => "$jspath/getlocations_markers.js")), 'error');
-    watchdog('getlocations', 'Getlocations write error when saving the marker bundle to %filepath.', array('%filepath' => "$jspath/getlocations_markers.js"), WATCHDOG_ERROR);
+    drupal_set_message(t('Getlocations is unable to save the marker bundle, so the markers will not work. Please check file system permissions of %filepath!', array('%filepath' => $jsfile)), 'error');
+    watchdog('getlocations', 'Getlocations write error when saving the marker bundle to %filepath.', array('%filepath' => $jsfile), WATCHDOG_ERROR);
   }
+}
+
+function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
+
+  if (file_default_scheme() != 'public') {
+    // private
+    $markerpath = '';
+    $markerfile = variable_get('getlocations_private_markerfile', '');
+    if ($markerfile && preg_match("~^(.*)/getlocations_markers.js~", $markerfile, $matches)) {
+      $markerpath = $matches[1];
+    }
+  }
+  else {
+    $markerpath = file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js';
+    $markerfile = $markerpath . '/getlocations_markers.js';
+  }
+  if ($dir && $markerpath) {
+    if ($check) {
+      if (file_exists($markerpath)) {
+        return $markerpath;
+      }
+    }
+    else {
+      return $markerpath;
+    }
+  }
+  elseif ($markerfile) {
+    if ($check) {
+      if (file_exists($markerfile)) {
+        return $markerfile;
+      }
+    }
+    else {
+      return $markerfile;
+    }
+  }
+  return FALSE;
 }
 
 /**
@@ -899,26 +937,39 @@ function getlocations_box() {
 function getlocations_get_types() {
   $options = array();
   foreach (node_type_get_types() as $type => $object) {
+    if (getlocations_check_node($type)) {
       $options[$type] = $object->name;
+    }
   }
   return $options;
 }
-/*
-function getlocations_get_vocabularies() {
 
-  $vocabularies = taxonomy_get_vocabularies();
-  if (count($vocabularies)) {
-    foreach ($vocabularies as $vid => $vocabulary) {
-      $options[$vid] = $vocabulary->name;
+function getlocations_check_node($bundle) {
+
+  $module = FALSE;
+  if (module_exists('location_cck')) {
+    $module = 'location_cck';
+  }
+  if ($module) {
+    $query = db_select('field_config', 'f');
+    $query->fields('f', array('id'));
+    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+    $query->condition('i.bundle', $bundle);
+    $query->condition('f.module', $module);
+    $query->condition('i.entity_type', 'node');
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $ct++;
     }
-    return $options;
+    if ($ct) {
+      return TRUE;
+    }
   }
   return FALSE;
-
 }
-*/
-function getlocations_get_markertypes($type) {
 
+function getlocations_get_markertypes($type) {
   $getlocations_defaults = getlocations_defaults();
   $default_marker = $getlocations_defaults['map_marker'];
   $markertypes = array();
@@ -935,38 +986,9 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
-/*
-  elseif ($type == 'vocabulary') {
-    $vocabularies = getlocations_get_vocabularies();
-    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-    foreach ($vocabularies AS $vid => $vocabulary) {
-      if ($getlocations_vocabulary_marker['enable'] && isset($getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'])) {
-        $markertypes[$vid] = $getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'];
-      }
-      else {
-        $markertypes[$vid] = $default_marker;
-      }
-    }
-    return $markertypes;
-  }
-  elseif ($type == 'roles') {
-    $roles = user_roles(TRUE);
-    $getlocations_roles_marker = variable_get('getlocations_roles_marker', array('enable' => 0));
-    foreach ($roles AS $rid => $role) {
-      if ($getlocations_roles_marker['enable'] && isset($getlocations_roles_marker['roles'][$rid]['map_marker'])) {
-        $markertypes[$rid] = $getlocations_roles_marker['roles'][$rid]['map_marker'];
-      }
-      else {
-        $markertypes[$rid] = $default_marker;
-      }
-    }
-    return $markertypes;
-  }
-*/
   else {
     return FALSE;
   }
-
 }
 
 function getlocations_get_nodetype($nid) {

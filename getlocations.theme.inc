@@ -77,7 +77,7 @@ function theme_getlocations_show($variables) {
 #    }
 #  }
   // do map
-  $output .= '<div id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
+  $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
   // buttons
   $buttons = array();
   if ($defaults['trafficinfo']) {
@@ -90,7 +90,7 @@ function theme_getlocations_show($variables) {
     $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio" class="form-submit" />';
   }
   if (count($buttons)) {
-    $output .= '<div id="getlocations_map_buttons" class="container-inline">';
+    $output .= '<div class="getlocations_map_buttons" class="container-inline">';
     $output .= implode('&nbsp;', $buttons);
     $output .= '</div>';
   }

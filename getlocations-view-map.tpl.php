@@ -12,7 +12,7 @@
 <?php if (!empty($title)): ?>
   <h3><?php print $title; ?></h3>
 <?php endif; ?>
-<div id="getlocations_map_wrapper">
+<div class="getlocations_map_wrapper">
 <?php print $map; ?>
 </div>
 <!-- /getlocations-view-map.tpl -->

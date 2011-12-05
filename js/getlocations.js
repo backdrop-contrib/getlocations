@@ -274,7 +274,8 @@ var inputmap = '';
       google.maps.event.addListener(m, 'click', function() {
         if (global_settings.useLink) {
           // fetch link and relocate
-          $.get("/getlocations/lidinfo", {lid: lid}, function(data) {
+          var path = Drupal.settings.basePath + "getlocations/lidinfo";
+          $.get(path, {lid: lid}, function(data) {
             if (data) {
               window.location = data;
             }
@@ -283,7 +284,8 @@ var inputmap = '';
         }
         else {
           // fetch bubble content
-          $.get("/getlocations/info", {lid: lid}, function(data) {
+          var path = Drupal.settings.basePath + "getlocations/info";
+          $.get(path, {lid: lid}, function(data) {
             // close any previous instances
             for (var i in global_settings.infoBubbles) {
               global_settings.infoBubbles[i].close();

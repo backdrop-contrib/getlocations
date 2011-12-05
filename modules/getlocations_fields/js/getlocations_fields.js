@@ -134,7 +134,8 @@
               else if ($("#" + countryfield).is("select")) {
                 // country list is keyed on two letter codes so we need to get
                 // the code from the server in order to set the selectbox correctly
-                $.get("/getlocations_fields/countryinfo", {'country': countryfield_value}, function(data) {
+                var path = Drupal.settings.basePath + "getlocations_fields/countryinfo";
+                $.get(path, {'country': countryfield_value}, function(data) {
                   if (data) {
                     $("#" + countryfield).val(data).attr('selected', 'selected');
                   }

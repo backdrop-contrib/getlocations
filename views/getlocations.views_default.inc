@@ -948,7 +948,7 @@ function getlocations_views_default_views() {
 
     /* Display: Defaults */
     $handler = $view->new_display('default', 'Defaults', 'default');
-    $handler->display->display_options['title'] = 'View locations';
+    $handler->display->display_options['title'] = 'View all locations';
     $handler->display->display_options['access']['type'] = 'perm';
     $handler->display->display_options['cache']['type'] = 'none';
     $handler->display->display_options['query']['type'] = 'views_query';

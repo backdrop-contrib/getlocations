@@ -6,11 +6,13 @@
  */
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
   */
 function getlocations_uninstall() {
-//  db_query("DELETE FROM {variable} WHERE name LIKE 'getlocations_%'");
-  $query = db_delete('variable')
-    ->condition('name', 'getlocations_%', 'LIKE')
-    ->execute();
+  // getlocations_default getlocations_paths getlocations_node_marker getlocations_vocabulary_marker getlocations_colorbox
+  variable_del('getlocations_default');
+  variable_del('getlocations_paths');
+  variable_del('getlocations_node_marker');
+  variable_del('getlocations_vocabulary_marker');
+  variable_del('getlocations_colorbox');
 }

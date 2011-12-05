@@ -37,7 +37,6 @@ function template_preprocess_getlocations_view_map(&$variables) {
 
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
-  $getlocations_defaults = getlocations_defaults();
 
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
@@ -45,14 +44,24 @@ function template_preprocess_getlocations_view_map(&$variables) {
   if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
+      $lid = 0;
+      if (module_exists('getlocations_fields')) {
+        $lid = $location['glid'];
+      }
+      elseif (module_exists('location')) {
+        $lid = $location['lid'];
+      }
+      // marker
+      if ($type = getlocations_get_type_from_lid($lid)) {
+        $marker = $options[$type . '_map_marker'];
+      }
+      else {
+        $marker = $options['node_map_marker'];
+      }
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $marker = '';
-        if (isset($location['uid'])) {
-          $marker = $getlocations_defaults['user_map_marker'];
-        }
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . $location['name'] . ',' . $marker;
       }
     }
   }
@@ -63,6 +72,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
 
   // get the defaults and override with the style plugin options
   $newdefaults = array();
+  $getlocations_defaults = getlocations_defaults();
   foreach ($getlocations_defaults AS $k => $v) {
     if (isset($options[$k])) {
       $newdefaults[$k] = $options[$k];

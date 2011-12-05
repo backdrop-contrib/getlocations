@@ -1,0 +1,1896 @@
+<?php
+
+/**
+ * @file
+ * Defines getlocations fields type.
+ */
+
+define('GETLOCATIONS_FIELDS_PATH', drupal_get_path('module', 'getlocations_fields'));
+
+/**
+ * Implements hook_help().
+ */
+function getlocations_fields_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#getlocations':
+      $output = '<p>' . t('Provides a getlocations geocoder field type.') . '</p>';
+      return $output;
+  }
+}
+
+
+/**
+ * Implements hook_init().
+ */
+function getlocations_fields_init() {
+  module_load_include('inc', 'getlocations_fields', 'getlocations_fields.theme');
+  module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function getlocations_fields_menu() {
+  $items = array();
+
+  $items['admin/config/services/getlocations_fields'] = array(
+    'title' => 'Getlocations fields',
+    'description' => 'Configure Getlocations fields',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('getlocations_fields_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'getlocations_fields.admin.inc',
+  );
+
+  // ajax callback to fetch country code from full name
+  $items['getlocations_fields/countryinfo'] = array(
+    'page callback' => 'getlocations_fields_countryinfo',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function getlocations_fields_views_api() {
+  return array(
+    'api' => 3,
+    'path' => GETLOCATIONS_FIELDS_PATH . '/views',
+  );
+}
+
+/**
+ * Implements hook_field_info().
+ * Define Field API field types.
+ *
+ * @return
+ *   An array whose keys are field type names and whose values are arrays
+ *   describing the field type.
+ */
+function getlocations_fields_field_info() {
+
+  $info = getlocations_fields_field_info_defaults();
+  return $info;
+
+}
+
+/**
+ * Implements hook_field_validate().
+ * Validate this module's field data.
+ *
+ * This hook gives us a chance to validate content that's in our
+ * field. We're really only interested in the $items parameter, since
+ * it holds arrays representing content in the field we've defined.
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entity
+ *   The entity for the operation.
+ * @param $field
+ *   The field structure for the operation.
+ * @param $instance
+ *   The instance structure for $field on $entity's bundle.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   $entity->{$field['field_name']}[$langcode], or an empty array if unset.
+ * @param $errors
+ *   The array of errors (keyed by field name, language code, and delta) that
+ *   have already been reported for the entity.
+ */
+function getlocations_fields_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  if ($entity_type == 'node') {
+    //
+  }
+  elseif ($entity_type == 'user') {
+    //
+  }
+  elseif ($entity_type == 'comment') {
+    //
+  }
+  elseif ($entity_type == 'taxonomy_term') {
+    //
+  }
+
+}
+
+/**
+ * Implements hook_field_insert().
+ * Define custom insert behavior for this module's field types.
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entity
+ *   The entity for the operation.
+ * @param $field
+ *   The field structure for the operation.
+ * @param $instance
+ *   The instance structure for $field on $entity's bundle.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   $entity->{$field['field_name']}[$langcode], or an empty array if unset.
+ */
+function getlocations_fields_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
+
+  if (!empty($items)) {
+    if ($entity_type == 'node') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'vid' => $entity->vid,
+        'nid' => $entity->nid,
+      );
+    }
+    elseif ($entity_type == 'user') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'uid' => $entity->uid,
+      );
+    }
+    elseif ($entity_type == 'comment') {
+      //
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'cid' => $entity->cid,
+      );
+    }
+    elseif ($entity_type == 'taxonomy_term') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'tid' => $entity->tid,
+      );
+    }
+    $result = getlocations_fields_save_locations($items, $criteria, 'insert');
+    $items = $result;
+  }
+}
+
+/**
+ * Implements hook_field_update().
+ * Define custom update behavior for this module's field types.
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entity
+ *   The entity for the operation.
+ * @param $field
+ *   The field structure for the operation.
+ * @param $instance
+ *   The instance structure for $field on $entity's bundle.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   $entity->{$field['field_name']}[$langcode], or an empty array if unset.
+ */
+function getlocations_fields_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
+
+  if (!empty($items)) {
+    if ($entity_type == 'node') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'vid' => $entity->vid,
+        'nid' => $entity->nid,
+      );
+    }
+    elseif ($entity_type == 'user') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'uid' => $entity->uid,
+      );
+    }
+    elseif ($entity_type == 'comment') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'cid' => $entity->cid,
+      );
+    }
+    elseif ($entity_type == 'taxonomy_term') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'tid' => $entity->tid,
+      );
+    }
+    $result = getlocations_fields_save_locations($items, $criteria, 'update');
+    if ($result) {
+      $items = $result;
+    }
+  }
+
+}
+
+/**
+ * Implements hook_field_delete().
+ * Define custom delete behavior for this module's field types.
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entity
+ *   The entity for the operation.
+ * @param $field
+ *   The field structure for the operation.
+ * @param $instance
+ *   The instance structure for $field on $entity's bundle.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   $entity->{$field['field_name']}[$langcode], or an empty array if unset.
+ */
+function getlocations_fields_field_delete($entity_type, $entity, $field, $instance, $langcode, &$items) {
+
+  if (!empty($items)) {
+    if ($entity_type == 'node') {
+      $result = db_query('SELECT vid FROM {node_revision} WHERE nid = :nid', array(':nid' => $entity->nid));
+      foreach ($result as $row) {
+        $criteria = array(
+          'field_name' => $field['field_name'],
+          'vid' => $row->vid,
+          'nid' => $entity->nid,
+        );
+        getlocations_fields_save_locations($items, $criteria, 'delete');
+      }
+      return;
+    }
+    elseif ($entity_type == 'user') {
+      //
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'uid' => $entity->uid,
+      );
+    }
+    elseif ($entity_type == 'comment') {
+      //
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'cid' => $entity->cid,
+      );
+    }
+    elseif ($entity_type == 'taxonomy_term') {
+      //
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'tid' => $entity->tid,
+      );
+    }
+    getlocations_fields_save_locations($items, $criteria, 'delete');
+    $items = array();
+  }
+}
+
+/**
+ * Implements hook_field_delete_revision().
+ * Define custom revision delete behavior for this module's field types.
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entity
+ *   The entity for the operation.
+ * @param $field
+ *   The field structure for the operation.
+ * @param $instance
+ *   The instance structure for $field on $entity's bundle.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   $entity->{$field['field_name']}[$langcode], or an empty array if unset.
+ */
+function getlocations_fields_field_delete_revision($entity_type, $entity, $field, $instance, $langcode, &$items) {
+
+  if (!empty($items)) {
+    if ($entity_type == 'node') {
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'vid' => $entity->vid,
+      );
+    }
+    getlocations_fields_save_locations($items, $criteria, 'delete_revision');
+  }
+
+}
+
+/**
+ * Implements hook_field_load().
+ * Define custom load behavior for this module's field types.
+ * http://api.drupal.org/api/drupal/modules--field--field.api.php/function/hook_field_load/7
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entities
+ *   Array of entities being loaded, keyed by entity ID.
+ * @param $field
+ *   The field structure for the operation.
+ * @param $instances
+ *   Array of instance structures for $field for each entity, keyed by entity ID.
+ * @param $langcode
+ *   The language code associated with $items.
+ * @param $items
+ *   Array of field values already loaded for the entities, keyed by entity ID.
+ *   Store your changes in this parameter (passed by reference).
+ * @param $age
+ *   FIELD_LOAD_CURRENT to load the most recent revision for all fields, or
+ *   FIELD_LOAD_REVISION to load the version indicated by each entity.
+ */
+function getlocations_fields_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
+
+  foreach ($entities as $id => $entity) {
+    foreach ($items[$id] as $delta => $item) {
+      $location = array();
+      // Load the location if it exists.
+      // If we are previewing a new node it will not.
+      if (!empty($item['glid'])) {
+        $location = getlocations_fields_load_location($item['glid']);
+      }
+      // Combine the item with the location loaded from the database.
+      // This will allow $item to display in the case of previewing a node.
+      $items[$id][$delta] = array_merge($location, $item);
+    }
+  }
+
+}
+
+/**
+ * Implements hook_field_settings_form().
+ * Add settings to a field settings form.
+ *
+ * Invoked from field_ui_field_settings_form() to allow the module defining the
+ * field to add global settings (i.e. settings that do not depend on the bundle
+ * or instance) to the field settings form. If the field already has data, only
+ * include settings that are safe to change.
+ *
+ * @todo: Only the field type module knows which settings will affect the
+ * field's schema, but only the field storage module knows what schema
+ * changes are permitted once a field already has data. Probably we need an
+ * easy way for a field type module to ask whether an update to a new schema
+ * will be allowed without having to build up a fake $prior_field structure
+ * for hook_field_update_forbid().
+ *
+ * @param $field
+ *   The field structure being configured.
+ * @param $instance
+ *   The instance structure being configured.
+ * @param $has_data
+ *   TRUE if the field already has data, FALSE if not.
+ *
+ * @return
+ *   The form definition for the field settings.
+ */
+function getlocations_fields_field_settings_form($field, $instance, $has_data) {
+  $settings = $field['settings'];
+  if (empty($settings)) {
+    $settings = getlocations_fields_field_info_defaults();
+  }
+  $getlocations_defaults = getlocations_defaults();
+
+  $form = array();
+
+
+  $form += getlocations_fields_input_settings_form($settings);
+
+  $form['mapwidth'] = getlocations_element_map_tf(
+    t('Input form Map width'),
+    $settings['mapwidth'],
+    10,
+    10,
+    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+  );
+  $form['mapheight'] = getlocations_element_map_tf(
+    t('Input form Map height'),
+    $settings['mapheight'],
+    10,
+    10,
+    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+  );
+  $form['latlong'] = getlocations_element_map_tf(
+    t('Input form Map center'),
+    $settings['latlong'],
+    30,
+    30,
+    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0')
+  );
+  $form['zoom'] = getlocations_element_map_zoom(
+    t('Zoom'),
+    $settings['zoom'],
+    t('The default zoom level of a Google map.')
+  );
+  $form['controltype'] = getlocations_element_map_zoom_controltype(
+    $settings['controltype']
+  );
+  $form['pancontrol'] = getlocations_element_map_checkbox(
+    t('Show Pan control'),
+    $settings['pancontrol']
+  );
+  $form['mtc'] = getlocations_element_map_mtc(
+    $settings['mtc']
+  );
+
+  $baselayers = array();
+  foreach ($getlocations_defaults['baselayers'] AS $key => $value) {
+    $baselayers[$key] = $value;
+  }
+
+  $form['maptype'] = getlocations_element_map_maptype(
+    $settings['maptype'],
+    $baselayers
+  );
+
+  $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($settings['baselayers']['Map']);
+  $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($settings['baselayers']['Satellite']);
+  $form['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($settings['baselayers']['Hybrid']);
+  $form['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($settings['baselayers']['Physical']);
+  $form['scale'] = getlocations_element_map_checkbox(
+    t('Scale'),
+    $settings['scale'],
+    t('Show scale')
+  );
+  $form['overview'] = getlocations_element_map_checkbox(
+    t('Overview map'),
+    $settings['overview'],
+    t('Show overview map')
+  );
+  $form['overview_opened'] = getlocations_element_map_checkbox(
+    t('Overview map state'),
+    $settings['overview_opened'],
+    t('Show overview map as open by default')
+  );
+  $form['scrollwheel'] = getlocations_element_map_checkbox(
+    t('Scrollwheel'),
+    $settings['scrollwheel'],
+    t('Enable scrollwheel zooming')
+  );
+  $form['draggable'] = getlocations_element_map_checkbox(
+    t('Draggable'),
+    $settings['draggable'],
+    t('Enable dragging the map.')
+  );
+  // input form marker
+  $markers = getlocations_get_marker_titles();
+  $form['map_marker'] = getlocations_element_map_marker(
+    t('Default Map marker'),
+    $markers,
+    $settings['map_marker']
+  );
+
+
+  unset($form['#theme']);
+  $form['#theme'] = 'getlocations_fields_field_settings_form';
+
+  return $form;
+
+# where to put it?
+#      if ( empty($field['width']) || is_int($field['width']) || $field['width'] < 1 ) {
+#        form_set_error($field['width'], t('Must be a positive number.'));
+#      }
+
+}
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ */
+/**
+ * Implements hook_field_is_empty().
+ * Define what constitutes an empty item for a field type.
+ * hook_field_is_emtpy() is where Drupal asks us if this field is empty.
+ * Return TRUE if it does not contain data, FALSE if it does. This lets
+ * the form API flag an error when required fields are empty.
+ *
+ * @param $item
+ *   An item that may or may not be empty.
+ * @param $field
+ *   The field to which $item belongs.
+ * @return
+ *   TRUE if $field's type considers $item not to contain any data;
+ *   FALSE otherwise.
+ */
+function getlocations_fields_field_is_empty($item, $field) {
+#  if (empty($item['value'])) {
+#    return TRUE;
+#  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Declare information about a formatter.
+ *
+ * @return
+ *   An array keyed by formatter name. Each element of the array is an associative
+ *   array with these keys and values:
+ *   - "label": The human-readable label for the formatter.
+ *   - "field types": An array of field type names that can be displayed using
+ *     this formatter.
+ *
+ * @see getlocations_fields_field_formatter_view()
+ */
+function getlocations_fields_field_formatter_info() {
+  $formatters = array(
+    'getlocations_fields_default' => array(
+      'label' => t('Getlocations Field'),
+      'field types' => array('getlocations_fields'),
+      'settings' => getlocations_fields_field_formatter_info_defaults(),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ * Build a renderable array for a field value.
+ *
+ * @param $entity_type
+ *   The type of $entity.
+ * @param $entity
+ *   The entity being displayed.
+ * @param $field
+ *   The field structure.
+ * @param $instance
+ *   The field instance.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   Array of values for this field.
+ * @param $display
+ *   The display settings to use, as found in the 'display' entry of instance definitions.
+ * @return
+ *   A renderable array for the $items, as an array of child elements keyed
+ *   by numeric indexes starting from 0.
+ *
+ * @see getlocations_fields_field_formatter_info()
+ */
+function getlocations_fields_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+
+
+  $settings = $display['settings'];
+  if (empty($settings)) {
+    $settings = getlocations_fields_field_formatter_info_defaults();
+  }
+
+  if ($entity_type == 'node') {
+    $locations = getlocations_fields_load_locations($entity->vid, 'vid');
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    if ($getlocations_node_marker['enable']) {
+      if ($types = getlocations_get_types()) {
+        foreach ($types AS $type => $name) {
+          $mkey = 'node_marker_' . $type;
+          $settings['map_marker'] = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $settings['node_map_marker']);
+        }
+      }
+    }
+  }
+  elseif ($entity_type == 'user') {
+    $locations = getlocations_fields_load_locations($entity->uid, 'uid');
+    $settings['map_marker'] = $settings['user_map_marker'];
+  }
+  elseif ($entity_type == 'taxonomy_term') {
+    $locations = getlocations_fields_load_locations($entity->tid, 'tid');
+    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+    if ($getlocations_vocabulary_marker['enable']) {
+      if ($types = getlocations_get_vocabularies()) {
+        foreach ($types AS $type => $name) {
+          $mkey = 'vocabulary_marker_' . $type;
+          $settings['map_marker'] = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $settings['vocabulary_map_marker']);
+        }
+      }
+    }
+  }
+  elseif ($entity_type == 'comment') {
+    $locations = getlocations_fields_load_locations($entity->cid, 'cid');
+    $settings['map_marker'] = $settings['comment_map_marker'];
+  }
+
+  $element = array();
+  switch ($display['type']) {
+    case 'getlocations_fields_default':
+    if (count($locations)) {
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'getlocations_fields_show',
+          '#locations' => $locations,
+          '#settings' => $settings,
+        );
+      }
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ * Returns form elements for a formatter's settings.
+ *
+ * @param $field
+ *   The field structure being configured.
+ * @param $instance
+ *   The instance structure being configured.
+ * @param $view_mode
+ *   The view mode being configured.
+ * @param $form
+ *   The (entire) configuration form array, which will usually have no use here.
+ * @param $form_state
+ *   The form state of the (entire) configuration form.
+ *
+ * @return
+ *   The form elements for the formatter settings.
+ */
+function getlocations_fields_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $getlocations_defaults = getlocations_defaults();
+  $getlocations_fields_defaults = getlocations_fields_defaults();
+
+  $element = array();
+
+  // address display options
+  $element += getlocations_fields_display_settings_form($getlocations_fields_defaults);
+
+  $element += getlocations_map_display_options_form($settings, FALSE);
+
+  // default marker
+  $markers = getlocations_get_marker_titles();
+  $element['node_map_marker'] = getlocations_element_map_marker(
+    t('Default Content Map marker'),
+    $markers,
+    $settings['node_map_marker']
+  );
+  $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+  if ($getlocations_node_marker['enable']) {
+    if ($types = getlocations_get_types()) {
+      foreach ($types AS $type => $name) {
+        $mkey = 'node_marker_' . $type;
+        $element[$mkey] = getlocations_element_map_marker(
+          t('%name Node Marker', array('%name' => $name)),
+          $markers,
+          (isset($settings[$mkey]) ? $settings[$mkey] : $getlocations_defaults['node_map_marker'])
+        );
+      }
+    }
+  }
+  // user markers
+  if (getlocations_check_user()) {
+    $element['user_map_marker'] = getlocations_element_map_marker(
+      t('Default User Map Marker'),
+      $markers,
+      $settings['user_map_marker']
+    );
+  }
+  // vocabulary markers
+  if (getlocations_get_vocabularies()) {
+    $element['vocabulary_map_marker'] = getlocations_element_map_marker(
+      t('Default Vocabulary Map Marker'),
+      $markers,
+      $settings['vocabulary_map_marker']
+    );
+    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+    if ($getlocations_vocabulary_marker['enable']) {
+      if ($types = getlocations_get_vocabularies()) {
+        foreach ($types AS $type => $name) {
+          $mkey = 'vocabulary_marker_' . $type;
+          $element[$mkey] = getlocations_element_map_marker(
+            t('%name Vocabulary Marker', array('%name' => $name)),
+            $markers,
+            (isset($settings[$mkey]) ? $settings[$mkey] : $getlocations_defaults['vocabulary_map_marker'])
+          );
+        }
+      }
+    }
+  }
+  if ( getlocations_check_comment()) {
+    $element['comment_map_marker'] = getlocations_element_map_marker(
+      t('Default Comment Map Marker'),
+      $markers,
+      $settings['comment_map_marker']
+    );
+  }
+
+  unset($element['#theme']);
+  $element['#theme'] = 'getlocations_fields_field_formatter_settings_form';
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ * Returns a short summary for the current formatter settings of an instance.
+ *
+ *
+ * If an empty result is returned, the formatter is assumed to have no
+ * configurable settings, and no UI will be provided to display a settings
+ * form.
+ *
+ *   The field structure.
+ * @param $instance
+ *   The instance structure.
+ * @param $view_mode
+ *   The view mode for which a settings summary is requested.
+ *
+ * @return
+ *   A string containing a short summary of the formatter settings.
+ */
+function getlocations_fields_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = array();
+  // map summary
+  if ($settings['display_showmap']) {
+    $summary[] = t('Show map: Yes');
+    if ($settings['display_mapwidth'] && $settings['display_mapheight']) {
+      $summary[] = t('Width: @w | Height: @h', array('@w' => $settings['display_mapwidth'], '@h' => $settings['display_mapheight']));
+    }
+    if ($settings['display_latlong']) {
+      $summary[] = t('Show Latitude/Longitude: Yes');
+    }
+    if ($settings['display_dms']) {
+      $summary[] = t('Show Latitude/Longitude in Degrees, minutes, seconds');
+    }
+    if ($settings['controltype']) {
+      $summary[] = t('Zoom control type: @c', array('@c' => $settings['controltype']));
+    }
+    if ($settings['pancontrol']) {
+      $summary[] = t('Show Pan control: Yes');
+    }
+    if ($settings['mtc']) {
+      $summary[] = t('Map control type: @c', array('@c' => $settings['mtc']));
+    }
+    if ($settings['maptype']) {
+      $summary[] = t('Default map type: @c', array('@c' => $settings['maptype']));
+    }
+    $maptypes = array();
+    if ($settings['baselayers']['Map']) {
+      $maptypes[] = t('Map');
+    }
+    if ($settings['baselayers']['Satellite']) {
+      $maptypes[] = t('Satellite');
+    }
+    if ($settings['baselayers']['Hybrid']) {
+      $maptypes[] = t('Hybrid');
+    }
+    if ($settings['baselayers']['Physical']) {
+      $maptypes[] = t('Physical');
+    }
+    if (count($maptypes)) {
+      $m = implode(', ', $maptypes);
+      $summary[] = t('Enabled map types: @m', array('@m' => $m));
+    }
+    if ($settings['scale']) {
+      $summary[] = t('Show scale: Yes');
+    }
+    if ($settings['overview']) {
+      $summary[] = t('Show overview map: Yes');
+    }
+    if ($settings['scrollwheel']) {
+      $summary[] = t('Enable scrollwheel zooming: Yes');
+    }
+    if ($settings['draggable']) {
+      $summary[] = t('Enable dragging the map: Yes');
+    }
+    if ($settings['streetview_show']) {
+      $summary[] = t('Show streetview button: Yes');
+    }
+    $info_display = array();
+    if ($settings['trafficinfo']) {
+      $info_display[] = t('Traffic');
+    }
+    if ($settings['bicycleinfo']) {
+      $info_display[] = t('Bicycling');
+    }
+    if ($settings['panoramio_show']) {
+      $info_display[] = t('Panoramio');
+    }
+    if ($settings['poi_show']) {
+      $info_display[] = t('Points of Interest');
+    }
+    if ($settings['transit_show']) {
+      $info_display[] = t('Transit Points');
+    }
+    if (count($info_display)) {
+      $summary[] = t("Enabled information layers:") . '<br />' . implode(', ', $info_display);
+    }
+    if ($settings['node_map_marker']) {
+      $summary[] = t('Default map marker: @c', array('@c' => $settings['node_map_marker']));
+    }
+  }
+  else {
+    $summary[] = t('Show map: No');
+  }
+  // address summary
+  $address_display = array();
+  if ($settings['display_name']) {
+    $address_display[] = t("Name");
+  }
+  if ($settings['display_street']) {
+    $address_display[] = t("Street");
+  }
+  if ($settings['display_additional']) {
+    $address_display[] = t("Additional");
+  }
+  if ($settings['display_city']) {
+    $address_display[] = t("City");
+  }
+  if ($settings['display_province']) {
+    $address_display[] = t("Province");
+  }
+  if ($settings['display_postal_code']) {
+    $address_display[] = t("Postcode");
+  }
+  if ($settings['display_country']) {
+    $address_display[] = t("Country");
+  }
+  if (count($address_display)) {
+    $summary[] = t("Show in Address:") . '<br />' . implode(', ', $address_display);
+  }
+  if ($settings['country_full']) {
+    $summary[] = t('Display full country name: Yes');
+  }
+
+  return implode('<br />', $summary);
+
+}
+
+/**
+ * Implements hook_field_widget_info().
+ * Expose Field API widget types.
+ *
+ * @return
+ *   An array describing the widget types implemented by the module.
+ */
+function getlocations_fields_field_widget_info() {
+
+  $getlocations_fields_defaults = getlocations_fields_defaults();
+
+  return array(
+    'getlocations_fields' => array(
+      'label' => t('Geocoder'),
+      'field types' => array('getlocations_fields'),
+      'settings' => array(
+        'country' => $getlocations_fields_defaults['country'],
+        'use_country_dropdown'    => $getlocations_fields_defaults['use_country_dropdown'],
+        'input_address_width'     => $getlocations_fields_defaults['input_address_width'],
+        'use_address'             => $getlocations_fields_defaults['use_address'],
+        'input_name_width'        => $getlocations_fields_defaults['input_name_width'],
+        'input_street_width'      => $getlocations_fields_defaults['input_street_width'],
+        'input_additional_width'  => $getlocations_fields_defaults['input_additional_width'],
+        'input_city_width'        => $getlocations_fields_defaults['input_city_width'],
+        'input_province_width'    => $getlocations_fields_defaults['input_province_width'],
+        'input_postal_code_width' => $getlocations_fields_defaults['input_postal_code_width'],
+        'input_country_width'     => $getlocations_fields_defaults['input_country_width'],
+        'input_latitude_width'    => $getlocations_fields_defaults['input_latitude_width'],
+        'input_longitude_width'   => $getlocations_fields_defaults['input_longitude_width'],
+    ),
+#      'multiple values' => CONTENT_HANDLE_CORE,
+#      'callbacks' => array(
+#        'default value' => CONTENT_CALLBACK_DEFAULT,
+#      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ * Return the form for a single field widget.
+ *
+ * @param $form
+ *   The form structure where widgets are being attached to. This might be a
+ *   full form structure, or a sub-element of a larger form.
+ * @param $form_state
+ *   An associative array containing the current state of the form.
+ * @param $field
+ *   The field structure.
+ * @param $instance
+ *   The field instance.
+ * @param $langcode
+ *   The language associated with $items.
+ * @param $items
+ *   Array of default values for this field.
+ * @param $delta
+ *   The order of this item in the array of subelements (0, 1, 2, etc).
+ * @param $element
+ *   A form element array containing basic properties for the widget.
+ * @return
+ *   The form elements for a single widget for this field.
+ */
+function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+
+  // is this real or a demo in settings
+#  if (isset($form['#node_edit_form']) && $form['#node_edit_form'] ) {
+#    $active = TRUE;
+#  }
+#  else {
+#    $active = FALSE;
+#  }
+  if (isset($form['#title']) && $form['#title'] == 'Default value') {
+    $active = FALSE;
+  }
+  else {
+    $active = TRUE;
+  }
+
+  // not in demo mode
+  if ($active) {
+    if (isset($form_state['node']->vid) && $form_state['node']->vid) {
+      $items = getlocations_fields_load_locations($form_state['node']->vid, 'vid');
+    }
+    elseif (isset($form_state['user']->uid) && $form_state['user']->uid) {
+      $items = getlocations_fields_load_locations($form_state['user']->uid, 'uid');
+    }
+    elseif (isset($form_state['term']->tid) && $form_state['term']->tid) {
+      $items = getlocations_fields_load_locations($form_state['term']->tid, 'tid');
+    }
+    elseif (isset($form_state['comment']->cid) && $form_state['comment']->cid) {
+      $items = getlocations_fields_load_locations($form_state['comment']->cid, 'cid');
+    }
+    // TODO test comment and terms
+  }
+
+  $settings = $field['settings'];
+  $map = getlocations_fields_getmap($settings, $active);
+
+  // vertical tabs works but map does not render
+  $widget = $element + array(
+    '#type' => 'fieldset',
+    '#title' => t('Location'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+#      '#group' => 'additional_settings',
+  );
+
+  if (isset($items[$delta]['glid'])) {
+    $widget['glid'] = array(
+      '#type' => 'value',
+      '#value' => $items[$delta]['glid'],
+    );
+    $widget['delete_location'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Delete'),
+      '#default_value' => FALSE,
+      '#description' => t('Check this box to delete this location.'),
+    );
+  }
+
+  if ($settings['use_address']) {
+    $widget['address'] = array(
+      '#type' => 'textfield',
+      '#default_value' => isset($items[$delta]['address']) ? $items[$delta]['address'] : '',
+      '#autocomplete_path' => '',
+      '#size' => $settings['input_address_width'],
+      '#attributes' => array('id' => ($active ? 'getlocations_address' : 'getlocations_default_address'), 'placeholder' => t('Enter an address')),
+      '#title' => t('Search'),
+      '#description' => t('Start typing an address and select from the dropdown.'),
+      '#required' => $instance['required'],
+      '#field_name' => $instance['field_name'],
+      '#maxlength' => 255,
+    );
+  }
+
+  $widget['name'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['name']) ? $items[$delta]['name'] : '',
+    '#size' => $settings['input_name_width'],
+    '#attributes' => array('id' => 'getlocations_name'),
+    '#title' => t('Name'),
+    '#maxlength' => 255,
+  );
+  $widget['street'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['street']) ? $items[$delta]['street'] : '',
+    '#size' => $settings['input_street_width'],
+    '#attributes' => array('id' => 'getlocations_street'),
+    '#title' => t('Street'),
+    '#maxlength' => 255,
+  );
+  $widget['additional'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['additional']) ? $items[$delta]['additional'] : '',
+    '#size' => $settings['input_additional_width'],
+    '#attributes' => array('id' => 'getlocations_additional'),
+    '#title' => t('Additional'),
+    '#maxlength' => 255,
+  );
+  $widget['city'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['city']) ? $items[$delta]['city'] : '',
+    '#size' => $settings['input_city_width'],
+    '#attributes' => array('id' => 'getlocations_city'),
+    '#title' => t('City/Town'),
+    '#maxlength' => 255,
+  );
+  $widget['province'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['province']) ? $items[$delta]['province'] : '',
+    '#size' => $settings['input_province_width'],
+    '#attributes' => array('id' => 'getlocations_province'),
+    '#title' => t('Province/State/County'),
+    '#maxlength' => 255,
+  );
+  $widget['postal_code'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['postal_code']) ? $items[$delta]['postal_code'] : '',
+    '#size' => $settings['input_postal_code_width'],
+    '#attributes' => array('id' => 'getlocations_postal_code'),
+    '#title' => t('Post code/Zip code'),
+    '#maxlength' => 255,
+  );
+
+  if ($settings['use_country_dropdown']) {
+    $countries = getlocations_fields_get_countries_list();
+    $countries = array_merge(array('' => t('---Please select a country---')), $countries);
+    $widget['country'] = array(
+      '#type' => 'select',
+      '#default_value' => (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']),
+      '#options' => $countries,
+      '#title' => t('Country'),
+      '#attributes' => array('id' => 'getlocations_country'),
+    );
+  }
+  else {
+    $widget['country'] = array(
+      '#type' => 'textfield',
+      '#default_value' => isset($items[$delta]['country']) ? $items[$delta]['country'] : '',
+      '#autocomplete_path' => '',
+      '#size' => $settings['input_country_width'],
+      '#attributes' => array('id' => 'getlocations_country'),
+      '#title' => t('Country'),
+      '#maxlength' => 255,
+    );
+
+  }
+
+  if (! $settings['use_address']) {
+    $widget['geobutton'] = array(
+      '#markup' => '',
+    );
+  }
+
+  $widget['map'] = array(
+    '#markup' => $map,
+  );
+
+  $widget['latitude'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['latitude']) ? $items[$delta]['latitude'] : '',
+    '#autocomplete_path' => '',
+    '#size' => $settings['input_latitude_width'],
+    '#attributes' => array('id' => 'getlocations_latitude'),
+    '#title' => 'Latitude',
+    '#maxlength' => 20,
+  );
+  $widget['longitude'] = array(
+    '#type' => 'textfield',
+    '#default_value' => isset($items[$delta]['longitude']) ? $items[$delta]['longitude'] : NULL,
+    '#autocomplete_path' => '',
+    '#size' => $settings['input_longitude_width'],
+    '#attributes' => array('id' => 'getlocations_longitude'),
+    '#title' => 'Longitude',
+    '#maxlength' => 20,
+  );
+
+  unset($widget['#theme']);
+  $widget['#theme'] = 'getlocations_fields_field_widget_form';
+
+  return $widget;
+
+}
+
+
+
+/**
+ * Implements hook_field_widget_error().
+ * Flag a field-level validation error.
+ *
+ * @param $element
+ *   An array containing the form element for the widget. The error needs to be
+ *   flagged on the right sub-element, according to the widget's internal structure.
+ * @param $error
+ *   An associative array, as returned by hook_field_validate().
+ * @param $form
+ *   The form structure where field elements are attached to. This might be a
+ *   full form structure, or a sub-element of a larger form.
+ * @param $form_state
+ *   An associative array containing the current state of the form.
+ */
+function getlocations_fields_field_widget_error($element, $error, $form, &$form_state) {
+  switch ($error['error']) {
+    case 'getlocations_fields_invalid':
+      form_error($element, $error['message']);
+      break;
+  }
+}
+
+/**
+ * input map
+ * @param $settings
+ *    The map settings
+ *
+ * @param $active
+ *    Determine wether this is from the edit form or just a demo on the settings
+ */
+function getlocations_fields_getmap($settings, $active) {
+
+  $getlocations_defaults = getlocations_defaults();
+
+  // we do not want these on an input map
+  $getlocations_defaults['panoramio_use']   = 0;
+  $getlocations_defaults['panoramio_show']  = 0;
+  $getlocations_defaults['trafficinfo']     = 0;
+  $getlocations_defaults['bicycleinfo']     = 0;
+  $getlocations_defaults['markeraction']    = 0;
+  $getlocations_defaults['streetview_show'] = 0;
+  if ($active) {
+    $getlocations_defaults['places'] = 1;
+  }
+
+  $getlocations_defaults['latlong']                     = $settings['latlong'];
+  $getlocations_defaults['zoom']                        = $settings['zoom'];
+  $getlocations_defaults['controltype']                 = $settings['controltype'];
+  $getlocations_defaults['pancontrol']                  = $settings['pancontrol'];
+  $getlocations_defaults['mtc']                         = $settings['mtc'];
+  $getlocations_defaults['maptype']                     = $settings['maptype'];
+  $getlocations_defaults['baselayers']['Map']           = $settings['baselayers']['Map'];
+  $getlocations_defaults['baselayers']['Satellite']     = $settings['baselayers']['Satellite'];
+  $getlocations_defaults['baselayers']['Hybrid']        = $settings['baselayers']['Hybrid'];
+  $getlocations_defaults['baselayers']['Physical']      = $settings['baselayers']['Physical'];
+  $getlocations_defaults['behavior']['scale']           = $settings['scale'];
+  $getlocations_defaults['behavior']['overview']        = $settings['overview'];
+  $getlocations_defaults['behavior']['overview_opened'] = $settings['overview_opened'];
+  $getlocations_defaults['behavior']['scrollwheel']     = $settings['scrollwheel'];
+  $getlocations_defaults['draggable']                   = $settings['draggable'];
+  $getlocations_defaults['node_map_marker']             = $settings['map_marker'];
+  $getlocations_defaults['use_address']                 = $settings['use_address'];
+
+  $getlocations_defaults['map_instructions']            = t('To use the map to find a location, click on the map and drag the marker.');
+  $mapid = getlocations_setup_map($getlocations_defaults);
+  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
+
+  if ($active) {
+    drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js');
+    getlocations_fields_js_settings_do($getlocations_defaults);
+    $latlons = array();
+  }
+  else {
+    // demo mode
+    $ll = $settings['latlong'] . ',,,';
+    $latlons = array($ll);
+    $getlocations_defaults['nodezoom'] = $getlocations_defaults['zoom'];
+  }
+
+  $minmaxes = '';
+  getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid, $active);
+  return theme('getlocations_show', array('width' => $settings['mapwidth'] , 'height' => $settings['mapheight'] , 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'type' => '', 'node' => ''));
+}
+
+/**
+ * Used by theme for display output.
+ */
+function getlocations_fields_getmap_show($settings, $lls = '') {
+
+  $getlocations_defaults = getlocations_defaults();
+  $getlocations_defaults['controltype']                 = $settings['controltype'];
+  $getlocations_defaults['pancontrol']                  = $settings['pancontrol'];
+  $getlocations_defaults['mtc']                         = $settings['mtc'];
+  $getlocations_defaults['maptype']                     = $settings['maptype'];
+  $getlocations_defaults['baselayers']['Map']           = $settings['baselayers']['Map'];
+  $getlocations_defaults['baselayers']['Satellite']     = $settings['baselayers']['Satellite'];
+  $getlocations_defaults['baselayers']['Hybrid']        = $settings['baselayers']['Hybrid'];
+  $getlocations_defaults['baselayers']['Physical']      = $settings['baselayers']['Physical'];
+  $getlocations_defaults['behavior']['scale']           = $settings['scale'];
+  $getlocations_defaults['behavior']['overview']        = $settings['overview'];
+  $getlocations_defaults['behavior']['overview_opened'] = $settings['overview_opened'];
+  $getlocations_defaults['behavior']['scrollwheel']     = $settings['scrollwheel'];
+  $getlocations_defaults['draggable']                   = $settings['draggable'];
+  $getlocations_defaults['streetview_show']             = $settings['streetview_show'];
+  $getlocations_defaults['trafficinfo']                 = $settings['trafficinfo'];
+  $getlocations_defaults['bicycleinfo']                 = $settings['bicycleinfo'];
+  $getlocations_defaults['panoramio_show']              = $settings['panoramio_show'];
+  $getlocations_defaults['poi_show']                    = $settings['poi_show'];
+  $getlocations_defaults['transit_show']                = $settings['transit_show'];
+  $getlocations_defaults['node_map_marker']             = $settings['node_map_marker'];
+  $getlocations_defaults['user_map_marker']             = $settings['user_map_marker'];
+  $getlocations_defaults['vocabulary_map_marker']       = $settings['vocabulary_map_marker'];
+  $getlocations_defaults['comment_map_marker']          = $settings['comment_map_marker'];
+  $getlocations_defaults['markeraction'] = 0;
+
+  $latlons[] = $lls;
+
+  $mapid = getlocations_setup_map($getlocations_defaults);
+  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
+
+  $minmaxes = '';
+  getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid);
+  return theme('getlocations_show', array('width' => $settings['display_mapwidth'], 'height' => $settings['display_mapheight'], 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'type' => '', 'node' => ''));
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_save_locations($locations, $criteria, $mode) {
+
+  if (isset($locations) && is_array($locations) && !empty($criteria) && is_array($criteria)) {
+    foreach (array_keys($locations) as $key) {
+      if ($mode == 'insert') {
+        $result = getlocations_fields_insert_record($locations[$key], $criteria);
+        $locations[$key]['glid'] = $result;
+      }
+      elseif ($mode == 'update') {
+        // delete_location checkbox
+        if (isset($locations[$key]['delete_location']) && $locations[$key]['delete_location']) {
+          getlocations_fields_delete_record($locations[$key], $criteria);
+          #$locations[$key]['glid'] = FALSE;
+          $locations[$key]= FALSE;
+        }
+        else {
+          $result = getlocations_fields_update_record($locations[$key], $criteria);
+          if ($result && ! isset($locations[$key]['glid'])) {
+            $locations[$key]['glid'] = $result;
+          }
+        }
+      }
+      elseif ($mode == 'delete') {
+        getlocations_fields_delete_record($locations[$key], $criteria);
+        $locations[$key] = FALSE;
+      }
+      elseif ($mode == 'delete_revision') {
+        getlocations_fields_delete_revision_record($locations[$key], $criteria);
+        $locations[$key] = FALSE;
+      }
+    }
+    return $locations;
+  }
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_insert_record($location, $relations) {
+
+  $noaddress = t('Enter an address');
+  if (! isset($location['address']) || $location['address'] == $noaddress) {
+    $location['address'] = '';
+  }
+  $query = db_insert('getlocations_fields');
+  $query->fields(array(
+    'name' => $location['name'],
+    'street' => $location['street'],
+    'additional' => $location['additional'],
+    'city' => $location['city'],
+    'province' => $location['province'],
+    'postal_code' => $location['postal_code'],
+    'country' => $location['country'],
+    'address' => $location['address'],
+    'latitude' => (float) $location['latitude'],
+    'longitude' => (float) $location['longitude']
+  ));
+  $result = $query->execute();
+  // $result should contain glid
+  // new insert id
+  $relations['glid'] = $result;
+  getlocations_fields_insert_record_relations($relations);
+  return $result;
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_insert_record_relations($relations) {
+
+  db_insert('getlocations_fields_entities')->fields($relations)->execute();
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_update_record($location, $relations) {
+
+
+  if (! isset($location['glid'])) {
+    // this record does not exist yet
+    $result = getlocations_fields_insert_record($location, $relations);
+    return $result;
+  }
+
+  $noaddress = t('Enter an address');
+  if (! isset($location['address']) || $location['address'] == $noaddress) {
+    $location['address'] = '';
+  }
+  $num_updated = db_update('getlocations_fields')
+    ->fields(array(
+      'name' => $location['name'],
+      'street' => $location['street'],
+      'additional' => $location['additional'],
+      'city' => $location['city'],
+      'province' => $location['province'],
+      'postal_code' => $location['postal_code'],
+      'country' => $location['country'],
+      'address' => $location['address'],
+      'latitude' => (float) $location['latitude'],
+      'longitude' => (float) $location['longitude']
+    ))
+    ->condition('glid', $location['glid'])
+    ->execute();
+
+  getlocations_fields_update_record_relations($relations, $location['glid']);
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_update_record_relations($relations, $glid) {
+
+  $num_updated = db_update('getlocations_fields_entities')
+    ->fields($relations)
+    ->condition('glid', $glid)
+    ->execute();
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_delete_record($location, $relations) {
+
+  db_delete('getlocations_fields')
+    ->condition('glid', $location['glid'])
+    ->execute();
+
+  getlocations_fields_delete_record_relations($relations, $location['glid']);
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_delete_record_relations($relations, $glid) {
+
+  db_delete('getlocations_fields_entities')
+    ->condition('glid', $glid)
+    ->execute();
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_delete_revision_record($location, $relations) {
+
+  if (isset($location['glid']) && $location['glid'] ) {
+    $glid = $location['glid'];
+    getlocations_fields_delete_revision_record_relations($relations, $glid);
+
+    // now see if there are any left for glid
+    $query = db_select('getlocations_fields', 'f');
+    $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid'));
+    $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
+    $query->condition('e.glid', $glid);
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      if ($row->nid || $row->vid || $row->uid || $row->tid || $row->cid ) {
+        $ct++;
+      }
+    }
+    if (! $ct) {
+      db_delete('getlocations_fields')
+        ->condition('glid', $glid)
+        ->execute();
+    }
+  }
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_delete_revision_record_relations($relations, $glid) {
+
+    $query = db_delete('getlocations_fields_entities')
+    ->condition('glid', $glid);
+    foreach ($relations AS $key => $value) {
+      $query->condition($key, $value);
+    }
+    $query->execute();
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_load_locations($id, $key = 'vid') {
+  // $key can be vid, nid, uid, tid, cid
+  $locations = array();
+  if ($id) {
+    $query = db_select('getlocations_fields', 'f');
+    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
+    $query->fields('e', array('nid', 'uid', 'tid', 'cid'));
+    $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
+    $query->condition('e.' . $key, $id);
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $locations[$ct]['glid'] = $row->glid;
+      $locations[$ct]['lid'] = $row->glid;
+      $locations[$ct]['name'] = $row->name;
+      $locations[$ct]['street'] = $row->street;
+      $locations[$ct]['additional'] = $row->additional;
+      $locations[$ct]['city'] = $row->city;
+      $locations[$ct]['province'] = $row->province;
+      $locations[$ct]['postal_code'] = $row->postal_code;
+      $locations[$ct]['country'] = $row->country;
+      $locations[$ct]['address'] = $row->address;
+      $locations[$ct]['latitude'] = $row->latitude;
+      $locations[$ct]['longitude'] = $row->longitude;
+      $locations[$ct]['nid'] = $row->nid;
+      $locations[$ct]['uid'] = $row->uid;
+      $locations[$ct]['tid'] = $row->tid;
+      $locations[$ct]['cid'] = $row->cid;
+      if ($row->nid) {
+        $locations[$ct]['type'] = 'node';
+      }
+      elseif ($row->uid) {
+        $locations[$ct]['type'] = 'user';
+      }
+      elseif ($row->tid) {
+        $locations[$ct]['type'] = 'vocabulary';
+      }
+      elseif ($row->cid) {
+        $locations[$ct]['type'] = 'comment';
+      }
+      $ct++;
+    }
+  }
+  return $locations;
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_load_location($glid) {
+  $location = array();
+  if ($glid) {
+
+    $query = db_select('getlocations_fields', 'f');
+    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
+    $query->fields('e', array('nid', 'uid', 'tid', 'cid'));
+    $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
+    $query->condition('f.glid', $glid);
+    $row = $query->execute()->fetchObject();
+    if ($row) {
+      $location['glid'] = $row->glid ;
+      $location['lid'] = $row->glid ;
+      $location['name'] = $row->name ;
+      $location['street'] = $row->street ;
+      $location['additional'] = $row->additional ;
+      $location['city'] = $row->city ;
+      $location['province'] = $row->province ;
+      $location['postal_code'] = $row->postal_code ;
+      $location['country'] = $row->country ;
+      $location['address'] = $row->address ;
+      $location['latitude'] = $row->latitude ;
+      $location['longitude'] = $row->longitude ;
+      $location['nid'] = $row->nid;
+      $location['uid'] = $row->uid;
+      $location['tid'] = $row->tid;
+      $location['cid'] = $row->cid;
+      if ($row->nid) {
+        $location['type'] = 'node';
+      }
+      elseif ($row->uid) {
+        $location['type'] = 'user';
+      }
+      elseif ($row->tid) {
+        $location['type'] = 'vocabulary';
+      }
+      elseif ($row->cid) {
+        $location['type'] = 'comment';
+      }
+    }
+  }
+  return $location;
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_js_settings_do($defaults) {
+
+  $settings = array(
+    'nodezoom' => $defaults['nodezoom'],
+    'map_marker' => $defaults['node_map_marker'],
+    'use_address' => $defaults['use_address'],
+  );
+  drupal_add_js(array('getlocations_fields' => $settings), 'setting');
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_defaults() {
+  $getlocations_defaults = getlocations_defaults();
+  $defaults = array(
+    'country' => variable_get('site_default_country', ''),
+    'display_mapwidth' => $getlocations_defaults['width'],
+    'display_mapheight' => $getlocations_defaults['height'],
+    'display_showmap' => 1,
+    'display_latlong' => 1,
+    'display_dms' => 0,
+    'display_name' => 1,
+    'display_street' => 1,
+    'display_additional' => 1,
+    'display_city' => 1,
+    'display_province' => 1,
+    'display_postal_code' => 1,
+    'display_country' => 1,
+    'country_full' => 1,
+    'use_address' => 1,
+    'input_address_width' => 40,
+    'input_name_width' => 40,
+    'input_street_width' => 40,
+    'input_additional_width' => 40,
+    'input_city_width' => 40,
+    'input_province_width' => 40,
+    'input_postal_code_width' => 40,
+    'input_country_width' => 40,
+    'input_latitude_width' => 20,
+    'input_longitude_width' => 20,
+    'use_country_dropdown' => 0,
+  );
+
+  $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', array());
+  // array_merge deletes things in $defaults that are not in $getlocations_fields_defaults ;-/
+  // roll my own
+  $newdefaults = array();
+  foreach ($defaults AS $k => $v) {
+    if (is_array($v)) {
+      foreach ($defaults[$k] AS $k1 => $v1) {
+        if (isset($getlocations_fields_defaults[$k][$k1])) {
+          $newdefaults[$k][$k1] = $getlocations_fields_defaults[$k][$k1];
+        }
+        else {
+          $newdefaults[$k][$k1] = $v1;
+        }
+      }
+    }
+    else {
+      if (isset($getlocations_fields_defaults[$k])) {
+        $newdefaults[$k] = $getlocations_fields_defaults[$k];
+      }
+      else {
+        $newdefaults[$k] = $v;
+      }
+    }
+  }
+  return $newdefaults;
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_field_info_defaults() {
+  $getlocations_defaults = getlocations_defaults();
+  $getlocations_fields_defaults = getlocations_fields_defaults();
+  $defaults = array(
+    'getlocations_fields' => array(
+      'label' => t('Getlocations Fields'),
+      'description' => t('Provide Getlocations Fields.'),
+      'default_formatter' => 'getlocations_fields_default',
+      'default_widget' => 'getlocations_fields',
+      'settings' => array(
+        'mapwidth'                => $getlocations_defaults['width'],
+        'mapheight'               => $getlocations_defaults['height'],
+        'latlong'                 => $getlocations_defaults['latlong'],
+        'zoom'                    => $getlocations_defaults['zoom'],
+        'controltype'             => $getlocations_defaults['controltype'],
+        'pancontrol'              => $getlocations_defaults['pancontrol'],
+        'mtc'                     => $getlocations_defaults['mtc'],
+        'maptype'                 => $getlocations_defaults['maptype'],
+        'baselayers'              => $getlocations_defaults['baselayers'],
+        'scale'                   => $getlocations_defaults['behavior']['scale'],
+        'overview'                => $getlocations_defaults['behavior']['overview'],
+        'overview_opened'         => $getlocations_defaults['behavior']['overview_opened'],
+        'scrollwheel'             => $getlocations_defaults['behavior']['scrollwheel'],
+        'draggable'               => $getlocations_defaults['draggable'],
+        'map_marker'              => $getlocations_defaults['node_map_marker'],
+        'node_map_marker'         => $getlocations_defaults['node_map_marker'],
+        'user_map_marker'         => $getlocations_defaults['user_map_marker'],
+        'vocabulary_map_marker'   => $getlocations_defaults['vocabulary_map_marker'],
+        'comment_map_marker'      => $getlocations_defaults['comment_map_marker'],
+        'use_address'             => $getlocations_fields_defaults['use_address'],
+        'input_address_width'     => $getlocations_fields_defaults['input_address_width'],
+        'input_name_width'        => $getlocations_fields_defaults['input_name_width'],
+        'input_street_width'      => $getlocations_fields_defaults['input_street_width'],
+        'input_additional_width'  => $getlocations_fields_defaults['input_additional_width'],
+        'input_city_width'        => $getlocations_fields_defaults['input_city_width'],
+        'input_province_width'    => $getlocations_fields_defaults['input_province_width'],
+        'input_postal_code_width' => $getlocations_fields_defaults['input_postal_code_width'],
+        'input_country_width'     => $getlocations_fields_defaults['input_country_width'],
+        'input_latitude_width'    => $getlocations_fields_defaults['input_latitude_width'],
+        'input_longitude_width'   => $getlocations_fields_defaults['input_longitude_width'],
+        'use_country_dropdown'    => $getlocations_fields_defaults['use_country_dropdown'],
+        'country'                 => $getlocations_fields_defaults['country'],
+      ),
+    ),
+  );
+
+  $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+  if ($getlocations_node_marker['enable']) {
+    if ($types = getlocations_get_types()) {
+      foreach ($types AS $type => $name) {
+        $mkey = 'node_marker_' . $type;
+        $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker']);
+        $defaults['getlocations_fields']['settings'][$mkey] = $mmarker;
+      }
+    }
+  }
+  // vocabulary markers
+  $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+  if ($getlocations_vocabulary_marker['enable']) {
+    if ($types = getlocations_get_vocabularies()) {
+      foreach ($types AS $type => $name) {
+        $mkey = 'vocabulary_marker_' . $type;
+        $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
+        $defaults['getlocations_fields']['settings'][$mkey] = $mmarker;
+      }
+    }
+  }
+
+  return $defaults;
+
+}
+
+/**
+ * docs
+ */
+function getlocations_fields_field_formatter_info_defaults() {
+  $getlocations_defaults = getlocations_defaults();
+  $getlocations_fields_defaults = getlocations_fields_defaults();
+
+  $defaults = array(
+    'display_mapwidth'      => $getlocations_defaults['width'],
+    'display_mapheight'     => $getlocations_defaults['height'],
+    'display_showmap'       => $getlocations_fields_defaults['display_showmap'],
+    'display_latlong'       => $getlocations_fields_defaults['display_latlong'],
+    'display_dms'           => $getlocations_fields_defaults['display_dms'],
+    'controltype'           => $getlocations_defaults['controltype'],
+    'pancontrol'            => $getlocations_defaults['pancontrol'],
+    'mtc'                   => $getlocations_defaults['mtc'],
+    'maptype'               => $getlocations_defaults['maptype'],
+    'baselayers'            => $getlocations_defaults['baselayers'],
+    'scale'                 => $getlocations_defaults['behavior']['scale'],
+    'overview'              => $getlocations_defaults['behavior']['overview'],
+    'overview_opened'       => $getlocations_defaults['behavior']['overview_opened'],
+    'scrollwheel'           => $getlocations_defaults['behavior']['scrollwheel'],
+    'draggable'             => $getlocations_defaults['draggable'],
+    'streetview_show'       => $getlocations_defaults['streetview_show'],
+    'trafficinfo'           => $getlocations_defaults['trafficinfo'],
+    'bicycleinfo'           => $getlocations_defaults['bicycleinfo'],
+    'panoramio_show'        => $getlocations_defaults['panoramio_show'],
+    'poi_show'              => $getlocations_defaults['poi_show'],
+    'transit_show'          => $getlocations_defaults['transit_show'],
+    'map_marker'            => $getlocations_defaults['node_map_marker'],
+    'node_map_marker'       => $getlocations_defaults['node_map_marker'],
+    'user_map_marker'       => $getlocations_defaults['user_map_marker'],
+    'vocabulary_map_marker' => $getlocations_defaults['vocabulary_map_marker'],
+    'comment_map_marker'    => $getlocations_defaults['comment_map_marker'],
+    'display_name'          => $getlocations_fields_defaults['display_name'],
+    'display_street'        => $getlocations_fields_defaults['display_street'],
+    'display_additional'    => $getlocations_fields_defaults['display_additional'],
+    'display_city'          => $getlocations_fields_defaults['display_city'],
+    'display_province'      => $getlocations_fields_defaults['display_province'],
+    'display_postal_code'   => $getlocations_fields_defaults['display_postal_code'],
+    'display_country'       => $getlocations_fields_defaults['display_country'],
+    'country_full'          => $getlocations_fields_defaults['country_full'],
+  );
+  return $defaults;
+
+}
+
+// input form settings for sharing
+/**
+ * docs
+ */
+function getlocations_fields_input_settings_form($defaults) {
+  drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_admin.js');
+
+  $form = array();
+  // input form defaults
+
+  $form['use_address'] = getlocations_element_map_checkbox(
+    t('Use searchbox in input form'),
+    $defaults['use_address'],
+    t('Use Google Autocomplete to search for an address')
+  );
+
+  $form['input_address_width'] = getlocations_element_map_tf(
+    t('Search box width'),
+    $defaults['input_address_width'],
+    10,
+    10,
+    t('The width of the Google Autocomplete search textbox. Must be a positive number.')
+  );
+  $form['input_address_width']['#prefix'] = '<div id="wrap-input_address_width">';
+  $form['input_address_width']['#suffix'] = '</div>';
+
+  $form['input_name_width'] = getlocations_element_map_tf(
+    t('Name box width'),
+    $defaults['input_name_width'],
+    10,
+    10,
+    t('The width of the name textbox. Must be a positive number.')
+  );
+  $form['input_street_width'] = getlocations_element_map_tf(
+    t('Street box width'),
+    $defaults['input_street_width'],
+    10,
+    10,
+    t('The width of the street textbox. Must be a positive number.')
+  );
+  $form['input_additional_width'] = getlocations_element_map_tf(
+    t('Additional box width'),
+    $defaults['input_additional_width'],
+    10,
+    10,
+    t('The width of the additional textbox. Must be a positive number.')
+  );
+  $form['input_city_width'] = getlocations_element_map_tf(
+    t('City box width'),
+    $defaults['input_city_width'],
+    10,
+    10,
+    t('The width of the city textbox. Must be a positive number.')
+  );
+  $form['input_province_width'] = getlocations_element_map_tf(
+    t('Province box width'),
+    $defaults['input_province_width'],
+    10,
+    10,
+    t('The width of the province/county/state textbox. Must be a positive number.')
+  );
+  $form['input_postal_code_width'] = getlocations_element_map_tf(
+    t('Postal code box width'),
+    $defaults['input_postal_code_width'],
+    10,
+    10,
+    t('The width of the post code textbox. Must be a positive number.')
+  );
+  $form['input_latitude_width'] = getlocations_element_map_tf(
+    t('Latitude box width'),
+    $defaults['input_latitude_width'],
+    10,
+    10,
+    t('The width of the latitude textbox. Must be a positive number.')
+  );
+  $form['input_longitude_width'] = getlocations_element_map_tf(
+    t('Longitude box width'),
+    $defaults['input_longitude_width'],
+    10,
+    10,
+    t('The width of the longitude textbox. Must be a positive number.')
+  );
+  $form['input_country_width'] = getlocations_element_map_tf(
+    t('Country box width'),
+    $defaults['input_country_width'],
+    10,
+    10,
+    t('The width of the country textbox. Must be a positive number.')
+  );
+
+  $form['country'] = getlocations_fields_element_country($defaults['country'], t('Default country'), FALSE);
+
+  // country dropdown
+  $form['use_country_dropdown'] = getlocations_element_map_checkbox(
+    t('Use dropdown list for country'),
+    $defaults['use_country_dropdown'],
+    t('Use a dropdown select list instead of a text box.')
+  );
+
+  return $form;
+
+}
+
+// display form settings for sharing
+/**
+ * docs
+ */
+function getlocations_fields_display_settings_form($defaults) {
+
+  $form = array();
+  // display defaults
+  $form['display_showmap'] = getlocations_element_map_checkbox(
+    t('Show map in display'),
+    $defaults['display_showmap'],
+    ''
+  );
+  $form['display_mapwidth'] = getlocations_element_map_tf(
+    t('Map width'),
+    $defaults['display_mapwidth'],
+    10,
+    10,
+    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+  );
+  $form['display_mapheight'] = getlocations_element_map_tf(
+    t('Map height'),
+    $defaults['display_mapheight'],
+    10,
+    10,
+    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+  );
+  $form['display_latlong'] = getlocations_element_map_checkbox(
+    t('Show Latitude/Longitude in display'),
+    $defaults['display_latlong'],
+    ''
+  );
+  $form['display_dms'] = getlocations_element_map_checkbox(
+    t('Show Latitude/Longitude in Degrees, minutes, seconds'),
+    $defaults['display_dms'],
+    ''
+  );
+  $form['display_name'] = getlocations_element_map_checkbox(
+    t('Show Name in display'),
+    $defaults['display_name'],
+    ''
+  );
+  $form['display_street'] = getlocations_element_map_checkbox(
+    t('Show Street in display'),
+    $defaults['display_street'],
+    ''
+  );
+  $form['display_additional'] = getlocations_element_map_checkbox(
+    t('Show Additional in display'),
+    $defaults['display_additional'],
+    ''
+  );
+  $form['display_city'] = getlocations_element_map_checkbox(
+    t('Show City in display'),
+    $defaults['display_city'],
+    ''
+  );
+  $form['display_province'] = getlocations_element_map_checkbox(
+    t('Show Province/state/county in display'),
+    $defaults['display_province'],
+    ''
+  );
+  $form['display_postal_code'] = getlocations_element_map_checkbox(
+    t('Show Postal code in display'),
+    $defaults['display_postal_code'],
+    ''
+  );
+  $form['display_country'] = getlocations_element_map_checkbox(
+    t('Show Country in display'),
+    $defaults['display_country'],
+    ''
+  );
+  $form['country_full'] = getlocations_element_map_checkbox(
+    t('Display full country name'),
+    $defaults['country_full'],
+    ''
+  );
+
+  return $form;
+
+}

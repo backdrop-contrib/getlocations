@@ -5,6 +5,9 @@
  * @author Bob Hutchinson http://drupal.org/user/52366
  * this is for googlemaps API version 3
 */
+
+var inputmap = '';
+
 (function ($) {
   // global vars
   var map = [];
@@ -91,8 +94,8 @@
         minlon = mmarr[1];
         maxlat = mmarr[2];
         maxlon = mmarr[3];
-        cenlat = (parseFloat(minlat) + parseFloat(maxlat))/2;
-        cenlon = (parseFloat(minlon) + parseFloat(maxlon))/2;
+        cenlat = parseFloat((minlat + maxlat)/2);
+        cenlon = parseFloat((minlon + maxlon)/2);
       }
 
       // menu type
@@ -168,6 +171,10 @@
 
       map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
 
+      if (settings.inputmap) {
+        inputmap = map[key];
+      }
+
       // set up markermanager
       if (global_settings.usemarkermanager) {
         global_settings.mgr = new MarkerManager(map[key], {
@@ -197,18 +204,20 @@
         $("#getlocations_togglePanoramio").click( function() { managePanoramioButton(map[key], global_settings.panoramioLayer[key], key) });
       }
 
-      setTimeout(function() { doAllMarkers(map[key], global_settings) }, 1000);
+      if (! settings.inputmap) {
+        setTimeout(function() { doAllMarkers(map[key], global_settings) }, 1000);
 
-      if (pansetting == 1) {
-        doBounds(map[key], minlat, minlon, maxlat, maxlon, true);
-      }
-      else if (pansetting == 2) {
-        doBounds(map[key], minlat, minlon, maxlat, maxlon, false);
-      }
-      else if (pansetting == 3) {
-        if (cenlat && cenlon) {
-          c = new google.maps.LatLng(cenlat, cenlon);
-          map[key].setCenter(c);
+        if (pansetting == 1) {
+          doBounds(map[key], minlat, minlon, maxlat, maxlon, true);
+        }
+        else if (pansetting == 2) {
+          doBounds(map[key], minlat, minlon, maxlat, maxlon, false);
+        }
+        else if (pansetting == 3) {
+          if (cenlat && cenlon) {
+            c = new google.maps.LatLng(cenlat, cenlon);
+            map[key].setCenter(c);
+          }
         }
       }
 

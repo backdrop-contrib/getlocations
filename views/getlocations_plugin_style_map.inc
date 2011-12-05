@@ -24,33 +24,61 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     $getlocations_defaults = getlocations_defaults();
 
-    $options['width']            = array('default' => $getlocations_defaults['width']);
-    $options['height']           = array('default' => $getlocations_defaults['height']);
-    $options['map_marker']       = array('default' => $getlocations_defaults['map_marker']);
-    $options['latlong']          = array('default' => $getlocations_defaults['latlong']);
-    $options['zoom']             = array('default' => $getlocations_defaults['zoom']);
-    $options['controltype']      = array('default' => $getlocations_defaults['controltype']);
-    $options['pancontrol']       = array('default' => $getlocations_defaults['pancontrol']);
-    $options['mtc']              = array('default' => $getlocations_defaults['mtc']);
-    $options['maptype']          = array('default' => $getlocations_defaults['maptype']);
-    $options['baselayers']       = array('default' => $getlocations_defaults['baselayers']);
-    $options['behavior']         = array('default' => $getlocations_defaults['behavior']);
-    $options['streetview_show']  = array('default' => $getlocations_defaults['streetview_show']);
-    $options['trafficinfo']      = array('default' => $getlocations_defaults['trafficinfo']);
-    $options['bicycleinfo']      = array('default' => $getlocations_defaults['bicycleinfo']);
-    $options['panoramio_use']    = array('default' => $getlocations_defaults['panoramio_use']);
-    $options['panoramio_show']   = array('default' => $getlocations_defaults['panoramio_show']);
-    $options['places']           = array('default' => $getlocations_defaults['places']);
-    $options['poi_show']         = array('default' => $getlocations_defaults['poi_show']);
-    $options['transit_show']     = array('default' => $getlocations_defaults['transit_show']);
-    $options['minzoom']          = array('default' => $getlocations_defaults['minzoom']);
-    $options['maxzoom']          = array('default' => $getlocations_defaults['maxzoom']);
-    $options['nodezoom']         = array('default' => $getlocations_defaults['nodezoom']);
-    $options['markeraction']     = array('default' => $getlocations_defaults['markeraction']);
-    $options['usemarkermanager'] = array('default' => $getlocations_defaults['usemarkermanager']);
-    $options['pansetting']       = array('default' => $getlocations_defaults['pansetting']);
-    $options['draggable']        = array('default' => $getlocations_defaults['draggable']);
-    $options['styles']           = array('default' => $getlocations_defaults['styles']);
+    $options['width']                 = array('default' => $getlocations_defaults['width']);
+    $options['height']                = array('default' => $getlocations_defaults['height']);
+    $options['node_map_marker']       = array('default' => $getlocations_defaults['node_map_marker']);
+    $options['user_map_marker']       = array('default' => $getlocations_defaults['user_map_marker']);
+    $options['vocabulary_map_marker'] = array('default' => $getlocations_defaults['vocabulary_map_marker']);
+    $options['comment_map_marker']    = array('default' => $getlocations_defaults['comment_map_marker']);
+    $options['latlong']               = array('default' => $getlocations_defaults['latlong']);
+    $options['zoom']                  = array('default' => $getlocations_defaults['zoom']);
+    $options['controltype']           = array('default' => $getlocations_defaults['controltype']);
+    $options['pancontrol']            = array('default' => $getlocations_defaults['pancontrol']);
+    $options['mtc']                   = array('default' => $getlocations_defaults['mtc']);
+    $options['maptype']               = array('default' => $getlocations_defaults['maptype']);
+    $options['baselayers']            = array('default' => $getlocations_defaults['baselayers']);
+    $options['behavior']              = array('default' => $getlocations_defaults['behavior']);
+    $options['streetview_show']       = array('default' => $getlocations_defaults['streetview_show']);
+    $options['trafficinfo']           = array('default' => $getlocations_defaults['trafficinfo']);
+    $options['bicycleinfo']           = array('default' => $getlocations_defaults['bicycleinfo']);
+    $options['panoramio_use']         = array('default' => $getlocations_defaults['panoramio_use']);
+    $options['panoramio_show']        = array('default' => $getlocations_defaults['panoramio_show']);
+    $options['places']                = array('default' => $getlocations_defaults['places']);
+    $options['poi_show']              = array('default' => $getlocations_defaults['poi_show']);
+    $options['transit_show']          = array('default' => $getlocations_defaults['transit_show']);
+    $options['minzoom']               = array('default' => $getlocations_defaults['minzoom']);
+    $options['maxzoom']               = array('default' => $getlocations_defaults['maxzoom']);
+    $options['nodezoom']              = array('default' => $getlocations_defaults['nodezoom']);
+    $options['markeraction']          = array('default' => $getlocations_defaults['markeraction']);
+    $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
+    $options['pansetting']            = array('default' => $getlocations_defaults['pansetting']);
+    $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
+    $options['styles']                = array('default' => $getlocations_defaults['styles']);
+
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    if ($getlocations_node_marker['enable']) {
+      if ($types = getlocations_get_types()) {
+        foreach ($types AS $type => $name) {
+          $mkey = 'node_marker_' . $type;
+          $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker']);
+          $options[$mkey] = array('default' => $mmarker);
+        }
+      }
+    }
+
+    if (module_exists('getlocations_fields')) {
+      // vocabulary markers
+      $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+      if ($getlocations_vocabulary_marker['enable']) {
+        if ($types = getlocations_get_vocabularies()) {
+          foreach ($types AS $type => $name) {
+            $mkey = 'vocabulary_marker_' . $type;
+            $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
+            $options[$mkey] = array('default' => $mmarker);
+          }
+        }
+      }
+    }
 
     return $options;
 
@@ -177,12 +205,60 @@ class getlocations_plugin_style_map extends views_plugin_style {
       t('Show Google transit points icons.')
     );
 
+    // markers
     $markers = getlocations_get_marker_titles();
-    $form['map_marker'] = getlocations_element_map_marker(
-      t('Marker / fallback marker to use'),
+    $form['node_map_marker'] = getlocations_element_map_marker(
+      t('Default Content Map marker'),
       $markers,
-      $this->options['map_marker']
+      $this->options['node_map_marker']
     );
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    if ($getlocations_node_marker['enable']) {
+      $types = getlocations_get_types();
+      foreach ($types AS $type => $name) {
+        $mkey = 'node_marker_' . $type;
+        $form[$mkey] = getlocations_element_map_marker(
+          t('%name Node Marker', array('%name' => $name)),
+          $markers,
+          $this->options[$mkey]
+        );
+      }
+    }
+    // user markers
+    if (getlocations_check_user()) {
+      $form['user_map_marker'] = getlocations_element_map_marker(
+        t('Default User Map Marker'),
+        $markers,
+        $this->options['user_map_marker']
+      );
+    }
+    // vocabulary markers
+    if ($types = getlocations_get_vocabularies()) {
+      $form['vocabulary_map_marker'] = getlocations_element_map_marker(
+        t('Default Vocabulary Map Marker'),
+        $markers,
+        $this->options['vocabulary_map_marker']
+      );
+      $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+      if ($getlocations_vocabulary_marker['enable']) {
+        foreach ($types AS $type => $name) {
+          $mkey = 'vocabulary_marker_' . $type;
+          $form[$mkey] = getlocations_element_map_marker(
+            t('%name Vocabulary Marker', array('%name' => $name)),
+            $markers,
+            $this->options[$mkey]
+          );
+        }
+      }
+    }
+    if (getlocations_check_comment()) {
+      // default comment marker
+      $form['comment_map_marker'] = getlocations_element_map_marker(
+        t('Default Comment Map marker'),
+        $markers,
+        $this->options['comment_map_marker']
+      );
+    }
 
     $form['markeraction'] = getlocations_element_map_markeraction(
       $this->options['markeraction']

@@ -83,110 +83,41 @@ function getlocations_settings_form() {
     t('The default zoom level of a Google map.')
   );
 
-  $form['getlocations_default']['controltype'] = getlocations_element_map_zoom_controltype($getlocations_defaults['controltype']);
-  $form['getlocations_default']['pancontrol'] = getlocations_element_map_checkbox(
-    t('Show Pan control'),
-    $getlocations_defaults['pancontrol']
-  );
+  $form['getlocations_default'] += getlocations_map_display_options_form($getlocations_defaults);
 
-  $form['getlocations_default']['mtc'] = getlocations_element_map_mtc($getlocations_defaults['mtc']);
-
-  $baselayers = array();
-  foreach ($getlocations_defaults['baselayers'] AS $key => $value) {
-    $baselayers[$key] = $value;
-  }
-  $form['getlocations_default']['maptype'] = getlocations_element_map_maptype($getlocations_defaults['maptype'], $baselayers);
-
-  $form['getlocations_default']['baselayers']['Map'] = getlocations_element_map_baselayers_map($getlocations_defaults['baselayers']['Map']);
-  $form['getlocations_default']['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($getlocations_defaults['baselayers']['Satellite']);
-  $form['getlocations_default']['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($getlocations_defaults['baselayers']['Hybrid']);
-  $form['getlocations_default']['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($getlocations_defaults['baselayers']['Physical']);
-
-  $form['getlocations_default']['behavior']['scale'] = getlocations_element_map_checkbox(
-     t('Scale'),
-     $getlocations_defaults['behavior']['scale'],
-     t('Show scale')
-  );
-
-  $form['getlocations_default']['behavior']['overview'] = getlocations_element_map_checkbox(
-    t('Overview map'),
-    $getlocations_defaults['behavior']['overview'],
-    t('Show overview map')
-  );
-
-  $form['getlocations_default']['behavior']['overview_opened'] = getlocations_element_map_checkbox(
-    t('Overview map state'),
-    $getlocations_defaults['behavior']['overview_opened'],
-    t('Show overview map as open by default')
-  );
-
-  $form['getlocations_default']['behavior']['scrollwheel'] = getlocations_element_map_checkbox(
-    t('Scrollwheel'),
-    $getlocations_defaults['behavior']['scrollwheel'],
-    t('Enable scrollwheel zooming')
-  );
-
-  $form['getlocations_default']['draggable'] = getlocations_element_map_checkbox(
-    t('Draggable'),
-    $getlocations_defaults['draggable'],
-    t('Enable dragging the map.')
-  );
-
-  $form['getlocations_default']['streetview_show'] = getlocations_element_map_checkbox(
-    t('Show streetview button'),
-    $getlocations_defaults['streetview_show']
-  );
-
-  $form['getlocations_default']['trafficinfo'] = getlocations_element_map_checkbox(
-    t('Enable Traffic information'),
-    $getlocations_defaults['trafficinfo'],
-    t('Google trafficinfo layer, limited availability.')
-  );
-
-  $form['getlocations_default']['bicycleinfo'] = getlocations_element_map_checkbox(
-    t('Enable Bicycling information'),
-    $getlocations_defaults['bicycleinfo'],
-    t('Google bicycling layer, limited availability.')
-  );
-
-  $form['getlocations_default']['panoramio_use'] = getlocations_element_map_checkbox(
-    t('Load Panoramio Library'),
-    $getlocations_defaults['panoramio_use'],
-    t('Provide Google panoramio library to all maps.')
-  );
-  $form['getlocations_default']['panoramio_show'] = getlocations_element_map_checkbox(
-    t('Enable Panoramio'),
-    $getlocations_defaults['panoramio_show'],
-    t('Google panoramio picture links.')
-  );
-
-  $form['getlocations_default']['poi_show'] = getlocations_element_map_checkbox(
-    t('Show Points of Interest'),
-    $getlocations_defaults['poi_show'],
-    t('Show Google points of interest icons.')
-  );
-
-  $form['getlocations_default']['transit_show'] = getlocations_element_map_checkbox(
-    t('Show Transit Points'),
-    $getlocations_defaults['transit_show'],
-    t('Show Google transit points icons.')
-  );
-
-  // default marker
+  // default node marker
   $markers = getlocations_get_marker_titles();
-  $form['getlocations_default']['map_marker'] = getlocations_element_map_marker(
+  $form['getlocations_default']['node_map_marker'] = getlocations_element_map_marker(
     t('Default Content Map marker'),
     $markers,
-    $getlocations_defaults['map_marker']
+    $getlocations_defaults['node_map_marker']
   );
 
-  // TODO does this work?
-  if (module_exists('location_user')) {
-    $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
-      t('Default User Map marker'),
-      $markers,
-      $getlocations_defaults['user_map_marker']
-    );
+  // default user marker
+  if (module_exists('getlocations_fields')) {
+    if (getlocations_check_user()) {
+      $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
+        t('Default User Map marker'),
+        $markers,
+        $getlocations_defaults['user_map_marker']
+      );
+    }
+    if (getlocations_get_vocabularies()) {
+      // default vocabulary marker
+      $form['getlocations_default']['vocabulary_map_marker'] = getlocations_element_map_marker(
+        t('Default Vocabulary Map marker'),
+        $markers,
+        $getlocations_defaults['vocabulary_map_marker']
+      );
+    }
+    if ( getlocations_check_comment()) {
+      // default comment marker
+      $form['getlocations_default']['comment_map_marker'] = getlocations_element_map_marker(
+        t('Default Comment Map marker'),
+        $markers,
+        $getlocations_defaults['comment_map_marker']
+      );
+    }
   }
 
   $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction(
@@ -234,7 +165,8 @@ function getlocations_settings_form() {
     '#prefix' => '<div id="wrap-page-link">',
     '#suffix' => '</div>',
   );
-  if (module_exists('location_user')) {
+
+  if (module_exists('getlocations_fields') && getlocations_check_user()) {
     $form['getlocations_default']['returnlink_user_enable'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show link back to user'),
@@ -272,9 +204,9 @@ function getlocations_settings_form() {
       $form['getlocations_node_marker']['content_type'][$type]['map_marker'] = getlocations_element_map_marker(
         t('%name Map marker', array('%name' => $name)),
         $markers,
-        (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+        (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker'])
       );
-
+      // for jquery
       if (! $typect) {
         $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-node-markers">';
       }
@@ -283,6 +215,38 @@ function getlocations_settings_form() {
     $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
   }
 
+  // vocabulary markers
+  if (module_exists('getlocations_fields') && $types = getlocations_get_vocabularies()) {
+    $form['getlocations_vocabulary_marker'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Taxonomy Vocabulary markers'),
+      // This will store all the defaults in one variable.
+      '#tree' => TRUE,
+    );
+    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+    $form['getlocations_vocabulary_marker']['enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Markers for Vocabularies'),
+      '#default_value' =>  $getlocations_vocabulary_marker['enable'],
+      '#return_value' => 1,
+    );
+    $typect = 0;
+    foreach ($types AS $type => $name) {
+      $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker'] = getlocations_element_map_marker(
+        t('%name Map marker', array('%name' => $name)),
+        $markers,
+        (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker'])
+      );
+      // for jquery
+      if (! $typect) {
+        $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-vocabulary-markers">';
+      }
+      $typect++;
+    }
+    $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#suffix'] = '</div>';
+  }
+
+  // colorbox
   if (module_exists('colorbox')) {
     $form['getlocations_colorbox'] = array(
       '#type' => 'fieldset',
@@ -361,6 +325,8 @@ function getlocations_settings_form() {
     t('Where the markermanager javascript file is located.')
   );
 
+  unset($form['#theme']);
+  $form['#theme'] = 'getlocations_settings_form';
   $form['#validate'][] = 'getlocations_settings_validate';
 
   return system_settings_form($form);
@@ -383,19 +349,14 @@ function getlocations_settings_validate($form, &$form_state) {
     form_set_error('getlocations_default][baselayers', t('You must select at least one baselayer!'));
   }
 
-  // Check that the default map type is sane.
-#  if (!$form_state['values']['getlocations_default']['baselayers'][$form_state['values']['getlocations_default']['maptype']]) {
-#    form_error($form['getlocations_default']['baselayers']['maptype'], t('The default map type must be an enabled baselayer!'));
-#  }
-
-  if ( $form_state['values']['getlocations_default']['returnlink_page_enable'] && empty($form_state['values']['getlocations_default']['returnlink_page_link'])) {
+  if (isset($form_state['values']['getlocations_default']['returnlink_page_enable']) && $form_state['values']['getlocations_default']['returnlink_page_enable'] && empty($form_state['values']['getlocations_default']['returnlink_page_link'])) {
     form_set_error('getlocations_default][returnlink_page_link', t('Page return link must be filled in'));
   }
-#  if (module_exists('location_user')) {
-#    if ( $form_state['values']['getlocations_default']['returnlink_user_enable'] && empty($form_state['values']['getlocations_default']['returnlink_user_link'])) {
-#      form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
-#    }
-#  }
+  if (module_exists('getlocations_fields')) {
+    if (isset($form_state['values']['getlocations_default']['returnlink_user_enable']) && $form_state['values']['getlocations_default']['returnlink_user_enable'] && empty($form_state['values']['getlocations_default']['returnlink_user_link'])) {
+      form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
+    }
+  }
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {
     if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {
       form_set_error('getlocations_colorbox][width', t('Colorbox width must be a number'));
@@ -419,6 +380,14 @@ function getlocations_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_default']['baselayers']['Map'] = 1;
   }
 
+  // markers
+  if (isset($form_state['values']['getlocations_node_marker']) && ! $form_state['values']['getlocations_node_marker']['enable']) {
+    unset($form_state['values']['getlocations_node_marker']);
+  }
+  if (isset($form_state['values']['getlocations_vocabulary_marker']) && ! $form_state['values']['getlocations_vocabulary_marker']['enable']) {
+    unset($form_state['values']['getlocations_vocabulary_marker']);
+  }
+
 }
 
 /**
@@ -428,4 +397,3 @@ function _getlocations_rebuild_marker_js_submit($form, &$form_state) {
   getlocations_regenerate_markers();
   drupal_set_message(t('Marker cache regenerated.'));
 }
-

@@ -7,7 +7,7 @@
  */
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  *
  * This lets us tell Drupal about our theme functions and their arguments.
  */
@@ -34,6 +34,9 @@ function getlocations_theme() {
       ),
       'template' => 'getlocations_box',
     ),
+    'getlocations_settings_form' => array(
+      'render element' => 'form',
+    ),
 #    'getlocations_view_map' => array(
 #      'variables' => array(
 #        'content' => null,
@@ -45,6 +48,12 @@ function getlocations_theme() {
 
 /**
  * All the map displays pass through here.
+ *
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
  */
 function theme_getlocations_show($variables) {
   $width = $variables['width'];
@@ -66,17 +75,20 @@ function theme_getlocations_show($variables) {
       $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
     }
   }
-#  elseif ($type == 'user' && $defaults['returnlink_user_enable']) {
-#    if (is_object($node)) {
-#      $linktext = $defaults['returnlink_user_link'];
-#      if ( preg_match("/%n/", $linktext)) {
-#        $linktext = preg_replace("/%n/", $node->name, $linktext);
-#      }
-#      $l = l($linktext, 'node/' . $node->nid);
-#      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
-#    }
-#  }
+  elseif ($type == 'user' && $defaults['returnlink_user_enable']) {
+    if (is_object($node)) {
+      $linktext = $defaults['returnlink_user_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $node->name, $linktext);
+      }
+      $l = l($linktext, 'user/' . $node->uid);
+      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+    }
+  }
   // do map
+  if (isset($defaults['map_instructions'])) {
+    $output .= '<p>' . $defaults['map_instructions'] . '</p>';
+  }
   $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
   // buttons
   $buttons = array();
@@ -101,6 +113,11 @@ function theme_getlocations_show($variables) {
 /**
  * returns a location's vcard, requested by ajax
  *
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
  */
 function theme_getlocations_info($variables) {
   $location = $variables['location'];
@@ -110,12 +127,18 @@ function theme_getlocations_info($variables) {
   $output .= '<br />';
   if (! empty($location['name'])) {
     $l = $location['name'];
-    if ($location['nid'] > 0) {
+    if (isset($location['nid']) && $location['nid'] > 0) {
       $l = l($location['name'], 'node/'. $location['nid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
     }
-    elseif ($location['uid'] > 0) {
+    elseif (isset($location['uid']) && $location['uid'] > 0) {
       // Use $l = $location['name'] if you don't want links to user
-      $l = l($location['name'], 'user/'. $location['uid'], array('attributes' => array('class' => 'getlocations_infolink')));
+      $l = l($location['name'], 'user/'. $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+    }
+    elseif (isset($location['tid']) && $location['tid'] > 0) {
+      $l = l($location['name'], 'taxonomy/term/'. $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+    }
+    elseif (isset($location['cid']) && $location['cid'] > 0) {
+      $l = l($location['name'], 'comment/'. $location['cid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
     }
 
     // if you are using a colorbox to display getlocations you might want to make this a plain heading
@@ -150,6 +173,13 @@ function theme_getlocations_info($variables) {
   return $output;
 }
 
+/**
+ * @param array $variables
+ *
+ * @return
+ *   Modifies $variables in situ
+ *
+ */
 function template_preprocess_getlocations_box(&$variables) {
 
   if(module_exists('admin_menu')) {
@@ -175,9 +205,6 @@ function template_preprocess_getlocations_box(&$variables) {
   $variables['css']               = drupal_add_css();
   $variables['styles']            = drupal_get_css();
   $variables['scripts']           = drupal_get_js();
-#  if (module_exists('jquery_update')) {
-#    jquery_update_preprocess_page($variables);
-#  }
   $variables['title'] = drupal_get_title();
   // Closure should be filled last.
   $variables['closure'] = theme('closure');
@@ -192,5 +219,21 @@ function template_preprocess_getlocations_box(&$variables) {
   // Implode with spaces.
   $variables['body_classes'] = implode(' ', $body_classes);
 
+}
+
+function theme_getlocations_settings_form($variables) {
+
+  $form = $variables['form'];
+
+  $output = '';
+  $prefix = '<fieldset class="form-wrapper">';
+  $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
+  $prefix .= '<div class="fieldset-wrapper">';
+  $prefix .= '<div class="fieldset-description">Select which maps you want to be available.</div>';
+  $form['getlocations_default']['baselayers']['Map']['#prefix'] = $prefix;
+  $form['getlocations_default']['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
+
+  $output .= drupal_render_children($form);
+  return $output;
 }
 

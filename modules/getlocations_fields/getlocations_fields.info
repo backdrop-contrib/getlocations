@@ -1,0 +1,24 @@
+name = Getlocations Fields
+description = Defines a Getlocations Geocoding Field type.
+core = 7.x
+package = Field
+dependencies[] = getlocations
+
+;files[] = handlers/getlocations_fields_handler_argument_country.inc
+;files[] = handlers/getlocations_fields_handler_argument_province.inc
+files[] = handlers/getlocations_fields_handler_argument_proximity.inc
+files[] = handlers/getlocations_fields_handler_field_address.inc
+;files[] = handlers/getlocations_fields_handler_field_country.inc
+files[] = handlers/getlocations_fields_handler_field_distance.inc
+;files[] = handlers/getlocations_fields_handler_field_province.inc
+files[] = handlers/getlocations_fields_handler_field_street.inc
+;files[] = handlers/getlocations_fields_handler_filter_country.inc
+;files[] = handlers/getlocations_fields_handler_filter_province.inc
+files[] = handlers/getlocations_fields_handler_sort_distance.inc
+files[] = handlers/getlocations_fields_views_handler_field_coordinates.inc
+files[] = handlers/getlocations_fields_views_handler_field_latitude.inc
+files[] = handlers/getlocations_fields_views_handler_field_longitude.inc
+files[] = handlers/getlocations_fields_views_handler_filter_distance.inc
+
+;files[] = handlers/getlocations_fields_handler_field_nearby.inc
+

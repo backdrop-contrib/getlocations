@@ -109,11 +109,27 @@ and use a url like this:
 or (advanced use) by adding rel="getlocationsbox" to the url, eg
 <a href="/getlocations_box/node/xxx" rel="getlocationsbox">See map</a>
 
-The last method uses the settings in admin/config/services/getlocations for colorbox
-and uses its own colorbox event handler, see getlocations_colorbox.js. You can define your own
-event handlers in your theme's javascript.
+The last method uses the settings in admin/config/services/getlocations for
+colorbox and uses its own colorbox event handler, see getlocations_colorbox.js.
+You can define your own event handlers in your theme's javascript.
 'getlocations_box' has it's own template, getlocations_box.tpl.php which can be
 copied over to your theme's folder and tweaked there.
 
 The InfoBubble javascript library is included and can be configured by copying
 js/infobubble_options.txt to js/infobubble_options.js and editing that.
+
+Getlocations now has hook_getlocations_markerdir()
+from jhm http://drupal.org/user/15946
+This hook allows other modules to add their own marker collections.
+example:
+
+function mymodule_getlocations_markerdir() {
+  $markers = drupal_get_path('module', 'mymodule') . '/mymarkers';
+  return $markers;
+}
+
+The above example requires the module mymodule to have a folder
+mymodule/mymarkers which contains the bespoke markersets.
+These will be added to the available markers when the
+Marker Cache is regenerated.
+

@@ -15,7 +15,7 @@ define('GETLOCATIONS_PATH', drupal_get_path('module', 'getlocations'));
 function getlocations_help($path, $arg) {
   switch ($path) {
     case 'admin/help#getlocations':
-      $output = '<p>'. t('Displays locations on a map.') .'</p>';
+      $output = '<p>' . t('Displays locations on a map.') . '</p>';
       return $output;
   }
 }
@@ -32,7 +32,7 @@ function getlocations_init() {
       'height' => 600,
     ));
     $settings = array('getlocations_colorbox' => $getlocations_colorbox);
-    drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_colorbox.js');
+    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_colorbox.js');
   }
   else {
     $settings = array('getlocations_colorbox' => array('enable' => 0));
@@ -45,16 +45,18 @@ function getlocations_init() {
  * Implements hook_permission().
  */
 function getlocations_permission() {
-  return array(
-    'access getlocations' => array(
-      'title' => t('Access Getlocations'),
-      'description' => t('View and use the Getlocations module.')
-    ),
-#    'access user getlocations' => array(
-#      'title' => t('Access User locations'),
-#      'description' => t('View User locations with Getlocation maps.')
-#    ),
+  $perms = array();
+  $perms['access getlocations'] = array(
+    'title' => t('Access Getlocations'),
+    'description' => t('View and use the Getlocations module.')
   );
+  if (module_exists('getlocations_fields')) {
+    $perms['access user getlocations'] = array(
+      'title' => t('Access User locations'),
+      'description' => t('View User locations with Getlocation maps.')
+    );
+  }
+  return $perms;
 }
 
 /**
@@ -68,11 +70,11 @@ function getlocations_flush_caches() {
  * Implements hook_views_api().
  */
 function getlocations_views_api() {
-  return array('api' => 3,
+  return array(
+    'api' => 3,
     'path' => GETLOCATIONS_PATH . '/views',
   );
 }
-
 
 /**
  * Implements hook_menu().
@@ -98,24 +100,23 @@ function getlocations_menu() {
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
   );
-/*
-  // getlocations/user/$uid    # show all locations for a user
-  $items['getlocations/user/%getlocations_id'] = array(
-    'title' => 'Get locations',
-    'access callback' => 'getlocations_access_user_location',
-    'page callback' => 'getlocations_usermap',
-    'page arguments' => array(2),
-    'type' => MENU_CALLBACK,
-  );
-
-  // getlocations/users    # show all locations for all users
-  $items['getlocations/users'] = array(
-    'title' => 'View all user locations',
-    'access callback' => 'getlocations_access_user_location',
-    'page callback' => 'getlocations_usersmap',
-    'type' => MENU_CALLBACK,
-  );
-*/
+  if (module_exists('getlocations_fields')) {
+    // getlocations/user/$uid    # show all locations for a user
+    $items['getlocations/user/%getlocations_id'] = array(
+      'title' => 'Get user locations',
+      'access callback' => 'getlocations_access_user_location',
+      'page callback' => 'getlocations_usermap',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+    );
+    // getlocations/users    # show all locations for all users
+    $items['getlocations/users'] = array(
+      'title' => 'View all user locations',
+      'access callback' => 'getlocations_access_user_location',
+      'page callback' => 'getlocations_usersmap',
+      'type' => MENU_CALLBACK,
+    );
+  }
   // getlocations/type/$type     # show all locations of nodes of content-type machine name
   $items['getlocations/type/%getlocations_type'] = array(
     'title' => 'Get locations',
@@ -197,25 +198,25 @@ function getlocations_cdints_load($arg) {
  * menu access functions
  */
 function getlocations_access_location() {
-  if (module_exists('location') && user_access('access getlocations') && (module_exists('location_node') || module_exists('location_cck'))) {
-    return TRUE;
+  if (user_access('access getlocations')) {
+    if (module_exists('getlocations_fields')) {
+      return TRUE;
+    }
+    elseif (module_exists('location') && (module_exists('location_node') || module_exists('location_cck'))) {
+      return TRUE;
+    }
   }
   return FALSE;
 }
 
-/*
 function getlocations_access_user_location() {
-return true;
-  if (module_exists('location')
-    && user_access('access getlocations')
-    && user_access('access user profiles')
-    && user_access('access user getlocations')
-    && module_exists('location_user')) {
-    return TRUE;
+  if (user_access('access user getlocations') && user_access('access user profiles')) {
+    if (module_exists('getlocations_fields')) {
+      return TRUE;
+    }
   }
   return FALSE;
 }
-*/
 
 /**
  * Menu callback
@@ -227,6 +228,7 @@ return true;
  *
  */
 function getlocations_nodemap($nid) {
+
   $vid = getlocations_get_vid($nid);
   $locations = getlocations_load_locations($vid);
   $node = node_load($nid);
@@ -266,10 +268,10 @@ function getlocations_nodemap($nid) {
  *   Returns a map of locations of a user
  *
  */
-/*
 function getlocations_usermap($uid) {
-  if (module_exists('location_user')) {
+  if (module_exists('getlocations_fields')) {
     $getlocations_defaults = getlocations_defaults();
+
     $marker = $getlocations_defaults['user_map_marker'];
     $locations = getlocations_load_locations($uid, 'uid');
     $account = user_load($uid);
@@ -293,10 +295,9 @@ function getlocations_usermap($uid) {
 
     drupal_set_title(t('View user @t locations', array('@t' => $account->name)));
 
-    return getlocations_setlocations($latlons, $minmaxes, 'user');
+    return getlocations_setlocations($latlons, $minmaxes, 'user', $account);
   }
 }
-*/
 
 /**
  * Menu callback
@@ -306,10 +307,9 @@ function getlocations_usermap($uid) {
  *   Returns a map of locations of all the users
  *
  */
-/*
 function getlocations_usersmap() {
 
-  if (module_exists('location_user')) {
+  if (module_exists('getlocations_fields')) {
     $getlocations_defaults = getlocations_defaults();
     $marker = $getlocations_defaults['user_map_marker'];
     $latlons = array();
@@ -339,7 +339,6 @@ function getlocations_usersmap() {
     return getlocations_setlocations($latlons, $minmaxes, 'users');
   }
 }
-*/
 
 /**
  * Menu callback
@@ -513,10 +512,10 @@ function getlocations_setup_map($defaults) {
     'language' => $language->language,
   );
   $libraries = array();
-  if($defaults['panoramio_use']) {
+  if ($defaults['panoramio_use']) {
     $libraries[] = 'panoramio';
   }
-  if($defaults['places']) {
+  if ($defaults['places']) {
     $libraries[] = 'places';
   }
   // more libraries here
@@ -530,12 +529,12 @@ function getlocations_setup_map($defaults) {
     drupal_add_js($gmaplink, 'external');
   }
 
-  if (!stristr($current_css, GETLOCATIONS_PATH .'/getlocations.css')) {
-    drupal_add_css(GETLOCATIONS_PATH .'/getlocations.css');
+  if (!stristr($current_css, GETLOCATIONS_PATH . '/getlocations.css')) {
+    drupal_add_css(GETLOCATIONS_PATH . '/getlocations.css');
   }
 
-  if (!stristr($current_js, GETLOCATIONS_PATH .'/js/icons.js')) {
-    drupal_add_js(GETLOCATIONS_PATH .'/js/icons.js');
+  if (!stristr($current_js, GETLOCATIONS_PATH . '/js/icons.js')) {
+    drupal_add_js(GETLOCATIONS_PATH . '/js/icons.js');
   }
 
   $markerfile = getlocations_get_markerfile();
@@ -544,9 +543,9 @@ function getlocations_setup_map($defaults) {
   }
 
   $getlocations_paths = variable_get('getlocations_paths', array(
-    'infobubble_path' => GETLOCATIONS_PATH .'/js/infobubble.js',
-    'infobubble_options_path' => GETLOCATIONS_PATH .'/js/infobubble_options.js',
-    'markermanager_path' => GETLOCATIONS_PATH .'/js/markermanager.js')
+    'infobubble_path' => GETLOCATIONS_PATH . '/js/infobubble.js',
+    'infobubble_options_path' => GETLOCATIONS_PATH . '/js/infobubble_options.js',
+    'markermanager_path' => GETLOCATIONS_PATH . '/js/markermanager.js')
   );
 
   if ($defaults['usemarkermanager'] && !stristr($current_js, $getlocations_paths['markermanager_path'])) {
@@ -559,8 +558,8 @@ function getlocations_setup_map($defaults) {
       drupal_add_js($getlocations_paths['infobubble_options_path']);
     }
   }
-  if (!stristr($current_js, GETLOCATIONS_PATH .'/js/getlocations.js')) {
-    drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations.js');
+  if (!stristr($current_js, GETLOCATIONS_PATH . '/js/getlocations.js')) {
+    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js');
   }
   // Generate unique Map ID.
   $mapid = uniqid();
@@ -605,8 +604,10 @@ function getlocations_defaults() {
     'places' => 0,
     'poi_show' => 1,
     'transit_show' => 1,
-    'map_marker' => 'drupal',
+    'node_map_marker' => 'drupal',
     'user_map_marker' => 'drupal',
+    'vocabulary_map_marker' => 'drupal',
+    'comment_map_marker' => 'drupal',
     'markeraction' => 0,
     'minzoom' => 6,
     'maxzoom' => 16,
@@ -617,8 +618,8 @@ function getlocations_defaults() {
     'styles' => '',
     'returnlink_page_enable' => 0,
     'returnlink_page_link' => t('Return to Page'),
-#    'returnlink_user_enable' => 0,
-#    'returnlink_user_link' => t('Return to User'),
+    'returnlink_user_enable' => 0,
+    'returnlink_user_link' => t('Return to User'),
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());
@@ -689,40 +690,172 @@ function getlocations_latlon_check($latlon) {
  *   Returns vid.
  */
 function getlocations_get_vid($nid) {
-  $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
-  $row = $query->execute()->fetchAssoc();
-  return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
+  if (is_numeric($nid) && $nid ) {
+    $query = db_select('node', 'n')->fields('n', array('vid'))->condition('n.nid', $nid);
+    $row = $query->execute()->fetchAssoc();
+    return (isset($row['vid']) && $row['vid'] ? $row['vid'] : FALSE);
+  }
+  return FALSE;
 }
 
 function getlocations_get_nid_from_lid($lid) {
-  if ($lid) {
-    $query = db_select('location_instance', 'i')->fields('i', array('nid'))->condition('i.lid', $lid);
-    $row = $query->execute()->fetchAssoc();
-    return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
+  if (is_numeric($lid) && $lid) {
+    $query = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('nid'))->condition('i.glid', $lid);
+    }
+    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node') || module_exists('location_user'))) {
+      $query = db_select('location_instance', 'i')->fields('i', array('nid'))->condition('i.lid', $lid);
+    }
+    if ($query) {
+      $row = $query->execute()->fetchAssoc();
+      return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
+    }
   }
+  return FALSE;
 }
+
 function getlocations_get_uid_from_lid($lid) {
-  if ($lid) {
-    $query = db_select('location_instance', 'i')->fields('i', array('uid'))->condition('i.lid', $lid);
-    $row = $query->execute()->fetchAssoc();
-    return (isset($row['uid']) && $row['uid'] ? $row['uid'] : FALSE);
+  if (is_numeric($lid) && $lid) {
+    $query = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('uid'))->condition('i.glid', $lid);
+    }
+    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node') || module_exists('location_user'))) {
+      $query = db_select('location_instance', 'i')->fields('i', array('uid'))->condition('i.lid', $lid);
+    }
+    if ($query) {
+      $row = $query->execute()->fetchAssoc();
+      return (isset($row['uid']) && $row['uid'] ? $row['uid'] : FALSE);
+    }
   }
+  return FALSE;
+}
+
+function getlocations_get_tid_from_lid($lid) {
+  if (is_numeric($lid) && $lid) {
+    $query = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('tid'))->condition('i.glid', $lid);
+    }
+    if ($query) {
+      $row = $query->execute()->fetchAssoc();
+      return (isset($row['tid']) && $row['tid'] ? $row['tid'] : FALSE);
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_get_cid_from_lid($lid) {
+  if (is_numeric($lid) && $lid) {
+    $query = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('cid'))->condition('i.glid', $lid);
+    }
+    if ($query) {
+      $row = $query->execute()->fetchAssoc();
+      return (isset($row['cid']) && $row['cid'] ? $row['cid'] : FALSE);
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_get_type_from_lid($lid) {
+  if (is_numeric($lid) && $lid) {
+    $query = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('nid', 'uid', 'tid', 'cid'))->condition('i.glid', $lid);
+    }
+    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node') || module_exists('location_user'))) {
+      $query = db_select('location_instance', 'i')->fields('i', array('nid', 'uid'))->condition('i.lid', $lid);
+    }
+    if ($query) {
+      $row = $query->execute()->fetchAssoc();
+      $type = '';
+      if (isset($row['nid']) && $row['nid'] > 0) {
+        $type = 'node';
+      }
+      elseif (isset($row['uid']) && $row['uid'] > 0) {
+        $type = 'user';
+      }
+      elseif (isset($row['tid']) && $row['tid'] > 0) {
+        $type = 'vocabulary';
+      }
+      elseif (isset($row['cid']) && $row['cid'] > 0) {
+        $type = 'comment';
+      }
+      return $type;
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_get_path_from_lid($lid) {
+  if (is_numeric($lid) && $lid) {
+    $query = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('nid', 'uid', 'tid', 'cid'))->condition('i.glid', $lid);
+    }
+    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node') || module_exists('location_user'))) {
+      $query = db_select('location_instance', 'i')->fields('i', array('nid', 'uid'))->condition('i.lid', $lid);
+    }
+    if ($query) {
+      $row = $query->execute()->fetchAssoc();
+      $path = '';
+      $base_path = base_path();
+      if (isset($row['nid']) && $row['nid'] > 0) {
+        $path = $base_path . 'node/' . $row['nid'];
+      }
+      elseif (isset($row['uid']) && $row['uid'] > 0) {
+        $path = $base_path . 'user/' . $row['uid'];
+      }
+      elseif (isset($row['tid']) && $row['tid'] > 0) {
+        $path = $base_path . 'taxonomy/term/' . $row['tid'];
+      }
+      elseif (isset($row['cid']) && $row['cid'] > 0) {
+        $path = $base_path . 'comment/' . $row['cid'];
+      }
+      return $path;
+    }
+  }
+  return FALSE;
 }
 
 // ajax callback to fill infobubble
 function getlocations_info() {
-  $lid = $_GET['lid'];
-  $location = location_load_location($lid);
-  $location['nid'] = 0;
-  $location['uid'] = 0;
 
-  if ($nid = getlocations_get_nid_from_lid($lid)) {
-    $location['nid'] = $nid;
+  $lid = $_GET['lid'];
+  $content = FALSE;
+  if ($lid > 0) {
+    $location = getlocations_load_location($lid);
+    $location['nid'] = 0;
+    $location['uid'] = 0;
+    $location['tid'] = 0;
+    $location['cid'] = 0;
+
+    $type = getlocations_get_type_from_lid($lid);
+    if ($type == 'node') {
+      if ($nid = getlocations_get_nid_from_lid($lid)) {
+        $location['nid'] = $nid;
+      }
+    }
+    elseif ($type == 'user') {
+      if ($uid = getlocations_get_uid_from_lid($lid)) {
+        $location['uid'] = $uid;
+      }
+    }
+    elseif ($type == 'vocabulary') {
+      if ($tid = getlocations_get_tid_from_lid($lid)) {
+        $location['tid'] = $tid;
+      }
+    }
+    elseif ($type == 'comment') {
+      if ($cid = getlocations_get_cid_from_lid($lid)) {
+        $location['cid'] = $cid;
+      }
+    }
+    $content = theme('getlocations_info', array('location' => $location));
   }
-  elseif ($uid = getlocations_get_uid_from_lid($lid)) {
-    $location['uid'] = $uid;
-  }
-  $content = theme('getlocations_info', array('location' => $location));
   print $content;
   exit();
 }
@@ -731,12 +864,14 @@ function getlocations_info() {
 function getlocations_lidinfo() {
   $lid = $_GET['lid'];
   $content = FALSE;
-  if ($nid = getlocations_get_nid_from_lid($lid)) {
-    $content = '/node/' . $nid;
+
+  if ($lid > 0) {
+    $path = getlocations_get_path_from_lid($lid);
+    if ($path) {
+      $content = $path;
+    }
   }
-  elseif ($uid = getlocations_get_uid_from_lid($lid)) {
-    $content = '/user/' . $uid;
-  }
+
   print $content;
   exit();
 }
@@ -796,9 +931,8 @@ function getlocations_get_icondata($reset = FALSE) {
 function getlocations_regenerate_markers() {
   $contents = '';
 
-  $markerdir = libraries_get_path('getlocations', TRUE) .'/markers';
   $contents .= "// Getlocations marker image data.\n";
-  $contents .= "Drupal.getlocations.iconpath = " . drupal_json_encode($markerdir) . ";\n";
+  $contents .= "Drupal.getlocations.iconpath = " . drupal_json_encode(base_path()) . ";\n";
   $contents .= "Drupal.getlocations.icondata = " . drupal_json_encode(getlocations_get_icondata(TRUE)) . ";\n";
 
   // Create the js/ within the files folder.
@@ -810,8 +944,8 @@ function getlocations_regenerate_markers() {
   }
   else {
     // failed
-    drupal_set_message(t('Getlocations is unable to save the marker bundle, so the markers will not work. Please check file system permissions of %filepath!', array('%filepath' => $jsfile)), 'error');
-    watchdog('getlocations', 'Getlocations write error when saving the marker bundle to %filepath.', array('%filepath' => $jsfile), WATCHDOG_ERROR);
+    drupal_set_message(t('Getlocations is unable to save the marker configuration, so the markers will not work. Please check file system permissions of %filepath!', array('%filepath' => $jsfile)), 'error');
+    watchdog('getlocations', 'Getlocations write error when saving the marker configuration to %filepath.', array('%filepath' => $jsfile), WATCHDOG_ERROR);
   }
 }
 
@@ -827,7 +961,10 @@ function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
   }
   else {
     $markerpath = file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js';
-    $markerfile = $markerpath . '/getlocations_markers.js';
+    $markerfile = '';
+    if ($markerpath) {
+      $markerfile = $markerpath . '/getlocations_markers.js';
+    }
   }
   if ($dir && $markerpath) {
     if ($check) {
@@ -850,6 +987,15 @@ function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
     }
   }
   return FALSE;
+}
+
+/**
+ * hook_getlocations_markerdir
+ * from jhm http://drupal.org/user/15946
+ */
+function getlocations_getlocations_markerdir() {
+  $markerdir = libraries_get_path('getlocations') .'/markers';
+  return $markerdir;
 }
 
 /**
@@ -947,7 +1093,10 @@ function getlocations_get_types() {
 function getlocations_check_node($bundle) {
 
   $module = FALSE;
-  if (module_exists('location_cck')) {
+  if (module_exists('getlocations_fields')) {
+    $module = 'getlocations_fields';
+  }
+  elseif (module_exists('location_cck')) {
     $module = 'location_cck';
   }
   if ($module) {
@@ -969,11 +1118,98 @@ function getlocations_check_node($bundle) {
   return FALSE;
 }
 
+// is user location enabled?
+function getlocations_check_user() {
+  if (module_exists('getlocations_fields')) {
+    $query = db_select('field_config', 'f');
+    $query->fields('f', array('id'));
+    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+    $query->condition('i.bundle', 'user');
+    $query->condition('f.module', 'getlocations_fields');
+    $query->condition('i.entity_type', 'user');
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $ct++;
+    }
+    if ($ct) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+// is comment location enabled?
+function getlocations_check_comment() {
+  if (module_exists('getlocations_fields')) {
+    $query = db_select('field_config', 'f');
+    $query->fields('f', array('id'));
+    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+    $query->condition('f.module', 'getlocations_fields');
+    $query->condition('i.entity_type', 'comment');
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $ct++;
+    }
+    if ($ct) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_get_vocabularies() {
+  if (module_exists('getlocations_fields')) {
+    $vocabularies = taxonomy_get_vocabularies();
+    $options = array();
+    if (count($vocabularies)) {
+      foreach ($vocabularies as $vid => $vocabulary) {
+        if (getlocations_check_vocabulary($vocabulary->name)) {
+          $options[$vid] = $vocabulary->name;
+        }
+      }
+      return $options;
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_check_vocabulary($vocab_name) {
+  if (module_exists('getlocations_fields')) {
+    // first we need to get the machine name of the vocab.
+    $query = db_select('taxonomy_vocabulary', 'v');
+    $query->fields('v', array('machine_name'));
+    $query->condition('v.name', $vocab_name);
+    $row = $query->execute()->fetchObject();
+    if ($row) {
+      $machine_name = $row->machine_name;
+      $query = db_select('field_config', 'f');
+      $query->fields('f', array('id'));
+      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+      $query->condition('i.bundle', $machine_name)
+        ->condition('f.module', 'getlocations_fields')
+        ->condition('i.entity_type', 'taxonomy_term');
+      $rows = $query->execute();
+      $ct = 0;
+      foreach ($rows AS $row) {
+        $ct++;
+      }
+      if ($ct) {
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
+}
+
 function getlocations_get_markertypes($type) {
+
   $getlocations_defaults = getlocations_defaults();
-  $default_marker = $getlocations_defaults['map_marker'];
+
   $markertypes = array();
   if ($type == 'node') {
+    $default_marker = $getlocations_defaults['node_map_marker'];
     $content_types = getlocations_get_types();
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     foreach ($content_types AS $content_type => $name ) {
@@ -986,9 +1222,24 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
+  elseif ($type == 'vocabulary') {
+    $default_marker = $getlocations_defaults['vocabulary_map_marker'];
+    $vocabularies = getlocations_get_vocabularies();
+    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+    foreach ($vocabularies AS $vid => $vocabulary) {
+      if ($getlocations_vocabulary_marker['enable'] && isset($getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'])) {
+        $markertypes[$vid] = $getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'];
+      }
+      else {
+        $markertypes[$vid] = $default_marker;
+      }
+    }
+    return $markertypes;
+  }
   else {
     return FALSE;
   }
+
 }
 
 function getlocations_get_nodetype($nid) {
@@ -997,65 +1248,73 @@ function getlocations_get_nodetype($nid) {
   return (isset($row['type']) && $row['type'] ? $row['type'] : FALSE);
 }
 
-function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid) {
+function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $inputmap = FALSE) {
   global $language;
   $lla = explode(',', $defaults['latlong']);
   $settings = array(
     $mapid => array(
-      'lat'              => $lla[0],
-      'lng'              => $lla[1],
-      'mylocale'         => $language->language,
-      'zoom'             => $defaults['zoom'],
-      'maptype'          => $defaults['maptype'],
-      'controltype'      => $defaults['controltype'],
-      'mtc'              => $defaults['mtc'],
-      'baselayers'       => $defaults['baselayers'],
-      'scale'            => $defaults['behavior']['scale'],
-      'overview'         => $defaults['behavior']['overview'],
-      'overview_opened'  => $defaults['behavior']['overview_opened'],
-      'scrollwheel'      => $defaults['behavior']['scrollwheel'],
-      'trafficinfo'      => $defaults['trafficinfo'],
-      'bicycleinfo'      => $defaults['bicycleinfo'],
-      'streetview_show'  => $defaults['streetview_show'],
-      'pancontrol'       => $defaults['pancontrol'],
-      'panoramio_use'    => $defaults['panoramio_use'],
-      'panoramio_show'   => $defaults['panoramio_show'],
-      'poi_show'         => $defaults['poi_show'],
-      'transit_show'     => $defaults['transit_show'],
-      'map_marker'       => $defaults['map_marker'],
-      'markeraction'     => $defaults['markeraction'],
-      'minzoom'          => $defaults['minzoom'],
-      'maxzoom'          => $defaults['maxzoom'],
-      'nodezoom'         => $defaults['nodezoom'],
-      'usemarkermanager' => $defaults['usemarkermanager'],
-      'pansetting'       => $defaults['pansetting'],
-      'draggable'        => $defaults['draggable'],
-      'styles'           => $defaults['styles'],
-      'datanum'          => count($latlons),
-      'latlons'          => implode('|', $latlons),
-      'minmaxes'        => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
+      'lat'                   => $lla[0],
+      'lng'                   => $lla[1],
+      'mylocale'              => $language->language,
+      'zoom'                  => $defaults['zoom'],
+      'maptype'               => $defaults['maptype'],
+      'controltype'           => $defaults['controltype'],
+      'mtc'                   => $defaults['mtc'],
+      'baselayers'            => $defaults['baselayers'],
+      'scale'                 => $defaults['behavior']['scale'],
+      'overview'              => $defaults['behavior']['overview'],
+      'overview_opened'       => $defaults['behavior']['overview_opened'],
+      'scrollwheel'           => $defaults['behavior']['scrollwheel'],
+      'trafficinfo'           => $defaults['trafficinfo'],
+      'bicycleinfo'           => $defaults['bicycleinfo'],
+      'streetview_show'       => $defaults['streetview_show'],
+      'pancontrol'            => $defaults['pancontrol'],
+      'panoramio_use'         => $defaults['panoramio_use'],
+      'panoramio_show'        => $defaults['panoramio_show'],
+      'poi_show'              => $defaults['poi_show'],
+      'transit_show'          => $defaults['transit_show'],
+      'map_marker'            => $defaults['node_map_marker'],
+      'markeraction'          => $defaults['markeraction'],
+      'minzoom'               => $defaults['minzoom'],
+      'maxzoom'               => $defaults['maxzoom'],
+      'nodezoom'              => $defaults['nodezoom'],
+      'usemarkermanager'      => $defaults['usemarkermanager'],
+      'pansetting'            => $defaults['pansetting'],
+      'draggable'             => $defaults['draggable'],
+      'styles'                => $defaults['styles'],
+      'datanum'               => count($latlons),
+      'latlons'               => implode('|', $latlons),
+      'minmaxes'              => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
+      'inputmap'              => ($inputmap ? 1 : 0),
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');
 }
 
 function getlocations_load_locations($id, $key = 'vid') {
-  $locations = location_load_locations($id, $key);
+  $locations = '';
+  if (module_exists('getlocations_fields')) {
+    $locations = getlocations_fields_load_locations($id, $key);
+  }
+  elseif (module_exists('location')) {
+    $locations = location_load_locations($id, $key);
+  }
   return $locations;
 }
 
 function getlocations_load_location($lid) {
-  $location = location_load_location($lid);
-  if ($location) {
-    if ($nid = getlocations_get_nid_from_lid($lid)) {
-      $typemarkers = getlocations_get_markertypes('node');
-      $type = getlocations_get_nodetype($nid);
-      $location['marker'] = $typemarkers[$type];
-    }
-    elseif ($uid = getlocations_get_uid_from_lid($lid)) {
-      $getlocations_defaults = getlocations_defaults();
-      $location['marker'] = $getlocations_defaults['user_map_marker'];
-    }
+
+  $getlocations_defaults = getlocations_defaults();
+  $location = '';
+  if (module_exists('getlocations_fields')) {
+    $location = getlocations_fields_load_location($lid);
+    $type = getlocations_get_type_from_lid($lid);
+    $location['marker'] = $getlocations_defaults[$type . '_map_marker'];
+  }
+  elseif (module_exists('location')) {
+    $location = location_load_location($lid);
+    // TODO
+    $location['marker'] = $getlocations_defaults['node_map_marker'];
   }
   return $location;
 }
@@ -1178,10 +1437,10 @@ function getlocations_element_map_baselayers_map($default) {
     '#description' => t('The standard default street map.'),
     '#default_value' => $default,
     '#return_value' => 1,
-    '#prefix' => '<fieldset><legend>' . t('Enable map types') . '</legend>',
   );
   return $element;
 }
+
 function getlocations_element_map_baselayers_satellite($default) {
 
   $element = array(
@@ -1193,6 +1452,7 @@ function getlocations_element_map_baselayers_satellite($default) {
   );
   return $element;
 }
+
 function getlocations_element_map_baselayers_hybrid($default) {
 
   $element = array(
@@ -1212,7 +1472,6 @@ function getlocations_element_map_baselayers_physical($default) {
     '#description' => t('Map with physical data (terrain, vegetation.)'),
     '#default_value' => $default,
     '#return_value' => 1,
-    '#suffix' => '</fieldset>',
   );
   return $element;
 }
@@ -1257,6 +1516,98 @@ function getlocations_element_path($title, $default, $size, $maxlength, $descrip
     '#required' => TRUE,
   );
   return $element;
+}
+
+function getlocations_map_display_options_form($defaults, $config = TRUE) {
+  $form = array();
+  $form['controltype'] = getlocations_element_map_zoom_controltype($defaults['controltype']);
+  $form['pancontrol'] = getlocations_element_map_checkbox(t('Show Pan control'), $defaults['pancontrol']);
+  $form['mtc'] = getlocations_element_map_mtc($defaults['mtc']);
+  $baselayers = array();
+  foreach ($defaults['baselayers'] AS $key => $value) {
+    $baselayers[$key] = $value;
+  }
+  $form['maptype'] = getlocations_element_map_maptype($defaults['maptype'], $baselayers);
+  $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($defaults['baselayers']['Map']);
+  $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($defaults['baselayers']['Satellite']);
+  $form['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($defaults['baselayers']['Hybrid']);
+  $form['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($defaults['baselayers']['Physical']);
+
+
+
+  $form['behavior']['scale'] = getlocations_element_map_checkbox(
+     t('Scale'),
+     $defaults['behavior']['scale'],
+     t('Show scale')
+  );
+  $form['behavior']['overview'] = getlocations_element_map_checkbox(
+    t('Overview map'),
+    $defaults['behavior']['overview'],
+    t('Show overview map')
+  );
+  $form['behavior']['overview_opened'] = getlocations_element_map_checkbox(
+    t('Overview map state'),
+    $defaults['behavior']['overview_opened'],
+    t('Show overview map as open by default')
+  );
+  $form['behavior']['scrollwheel'] = getlocations_element_map_checkbox(
+    t('Scrollwheel'),
+    $defaults['behavior']['scrollwheel'],
+    t('Enable scrollwheel zooming')
+  );
+  $form['draggable'] = getlocations_element_map_checkbox(
+    t('Draggable'),
+    $defaults['draggable'],
+    t('Enable dragging the map.')
+  );
+  $form['streetview_show'] = getlocations_element_map_checkbox(
+    t('Show streetview button'),
+    $defaults['streetview_show']
+  );
+  $form['trafficinfo'] = getlocations_element_map_checkbox(
+    t('Enable Traffic information'),
+    $defaults['trafficinfo'],
+    t('Google trafficinfo layer, limited availability.')
+  );
+  $form['bicycleinfo'] = getlocations_element_map_checkbox(
+    t('Enable Bicycling information'),
+    $defaults['bicycleinfo'],
+    t('Google bicycling layer, limited availability.')
+  );
+
+  if ($config) {
+    $form['panoramio_use'] = getlocations_element_map_checkbox(
+      t('Load Panoramio Library'),
+      $defaults['panoramio_use'],
+      t('Provide Google panoramio library to all maps.')
+    );
+    $form['panoramio_show'] = getlocations_element_map_checkbox(
+      t('Enable Panoramio'),
+      $defaults['panoramio_show'],
+      t('Google panoramio picture links.')
+    );
+  }
+  elseif ($defaults['panoramio_use']) {
+    $form['panoramio_show'] = getlocations_element_map_checkbox(
+      t('Enable Panoramio'),
+      $defaults['panoramio_show'],
+      t('Google panoramio picture links.')
+    );
+  }
+
+  $form['poi_show'] = getlocations_element_map_checkbox(
+    t('Show Points of Interest'),
+    $defaults['poi_show'],
+    t('Show Google points of interest icons.')
+  );
+  $form['transit_show'] = getlocations_element_map_checkbox(
+    t('Show Transit Points'),
+    $defaults['transit_show'],
+    t('Show Google transit points icons.')
+  );
+
+  return $form;
+
 }
 
 /**
@@ -1444,4 +1795,3 @@ function getlocations_reverse_geocode($latlng) {
  */
 
 }
-

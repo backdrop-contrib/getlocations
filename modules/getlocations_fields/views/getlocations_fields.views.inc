@@ -153,7 +153,6 @@ function getlocations_fields_views_data() {
     ),
   );
 
-/*
   // name
   $data['getlocations_fields']['name'] = array(
     'title' => t('Name'),
@@ -168,6 +167,7 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
+/*
   // street
   $data['getlocations_fields']['street'] = array(
     'title' => t('Street'),

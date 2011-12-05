@@ -44,6 +44,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
   if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
+
       $lid = 0;
       if (module_exists('getlocations_fields')) {
         $lid = $location['glid'];
@@ -61,7 +62,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . $location['name'] . ',' . $marker;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . ($location['name'] ? $location['name'] : $location['title']) . ',' . $marker;
       }
     }
   }

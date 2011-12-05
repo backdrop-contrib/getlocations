@@ -243,7 +243,7 @@ function getlocations_nodemap($nid) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $node->title) . ',' . $marker;
       }
     }
   }
@@ -284,7 +284,7 @@ function getlocations_usermap($uid) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $account->name) . ',' . $marker;
         }
       }
     }
@@ -314,7 +314,7 @@ function getlocations_usersmap() {
     $marker = $getlocations_defaults['user_map_marker'];
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-    $query = db_select('users', 'u')->fields('u', array('uid'))->condition('u.status', 1);
+    $query = db_select('users', 'u')->fields('u', array('uid', 'name'))->condition('u.status', 1);
     $rows = $query->execute();
     $ct = 0;
     foreach ($rows AS $row) {
@@ -326,7 +326,7 @@ function getlocations_usersmap() {
           if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $ct++;
-            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $row->name) . ',' . $marker;
           }
         }
       }
@@ -355,7 +355,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
   $marker = $typemarkers[$type];
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-  $query = db_select('node', 'n')->fields('n', array('nid'))->condition('n.type', $type);
+  $query = db_select('node', 'n')->fields('n', array('nid', 'title'))->condition('n.type', $type);
   $rows = $query->execute();
   $ct = 0;
   foreach ($rows AS $row) {
@@ -373,7 +373,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
           }
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $row->title) . ',' . $marker;
         }
       }
     }

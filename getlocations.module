@@ -1334,7 +1334,7 @@ function getlocations_element_map_marker($title, $options, $default) {
   return $element;
 }
 
-function getlocations_element_map_tf($title, $default, $size, $maxlength, $description) {
+function getlocations_element_map_tf($title, $default, $size, $maxlength, $description='', $required=TRUE) {
 
   $element = array(
     '#type' => 'textfield',
@@ -1342,9 +1342,12 @@ function getlocations_element_map_tf($title, $default, $size, $maxlength, $descr
     '#default_value' => $default,
     '#size' => $size,
     '#maxlength' => $maxlength,
-    '#description' => $description,
-    '#required' => TRUE,
+    '#required' => $required,
   );
+  if ($description) {
+    $element['#description'] = $description;
+  }
+
   return $element;
 }
 

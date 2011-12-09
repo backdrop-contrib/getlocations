@@ -59,10 +59,13 @@ function template_preprocess_getlocations_view_map(&$variables) {
       else {
         $marker = $options['node_map_marker'];
       }
+      if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
+        $marker = $options['node_marker_' . $location['field_name']];
+      }
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . ($location['name'] ? $location['name'] : $location['title']) . ',' . $marker;
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . (isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ?  : '')    ) . ',' . $marker;
       }
     }
   }

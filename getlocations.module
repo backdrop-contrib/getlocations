@@ -704,7 +704,7 @@ function getlocations_get_nid_from_lid($lid) {
     if (module_exists('getlocations_fields')) {
       $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('nid'))->condition('i.glid', $lid);
     }
-    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node') || module_exists('location_user'))) {
+    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node'))) {
       $query = db_select('location_instance', 'i')->fields('i', array('nid'))->condition('i.lid', $lid);
     }
     if ($query) {
@@ -721,7 +721,7 @@ function getlocations_get_uid_from_lid($lid) {
     if (module_exists('getlocations_fields')) {
       $query = db_select('getlocations_fields_entities', 'i')->fields('i', array('uid'))->condition('i.glid', $lid);
     }
-    elseif (module_exists('location') && (module_exists('location_cck') || module_exists('location_node') || module_exists('location_user'))) {
+    elseif (module_exists('location') && module_exists('location_user')) {
       $query = db_select('location_instance', 'i')->fields('i', array('uid'))->condition('i.lid', $lid);
     }
     if ($query) {
@@ -1113,6 +1113,35 @@ function getlocations_check_node($bundle) {
     }
     if ($ct) {
       return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_get_fieldname($bundle, $entity_type='node') {
+
+  $module = FALSE;
+  if (module_exists('getlocations_fields')) {
+    $module = 'getlocations_fields';
+  }
+  elseif (module_exists('location_cck')) {
+    $module = 'location_cck';
+  }
+  if ($module) {
+    $query = db_select('field_config', 'f');
+    $query->fields('f', array('field_name'));
+    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+    $query->condition('i.bundle', $bundle);
+    $query->condition('f.module', $module);
+    $query->condition('i.entity_type', $entity_type);
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $ct++;
+      $data = $row->field_name;
+    }
+    if ($ct) {
+      return $data;
     }
   }
   return FALSE;

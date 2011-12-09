@@ -211,7 +211,7 @@ function theme_getlocations_fields_field_settings_form($variables) {
   $prefix .= '<div class="fieldset-wrapper">';
   $prefix .= '<div class="fieldset-description">' . t('Configure the input map.') . '</div>';
   $form['mapwidth']['#prefix'] = $prefix;
-  $form['map_marker']['#suffix'] = '</div></fieldset>';
+  $form['draggable']['#suffix'] = '</div></fieldset>';
 
   $output .= drupal_render_children($form);
   return $output;
@@ -275,6 +275,15 @@ function theme_getlocations_fields_field_widget_form($variables) {
 }
 
 
+/**
+ * The settings form
+ *
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
+ */
 function theme_getlocations_fields_settings_form($variables) {
   $form = $variables['form'];
 

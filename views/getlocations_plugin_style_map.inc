@@ -55,11 +55,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                = array('default' => $getlocations_defaults['styles']);
 
+
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
-          $mkey = 'node_marker_' . $type;
+          $field_name = getlocations_get_fieldname($type);
+          $mkey = 'node_marker_' . $field_name;
           $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker']);
           $options[$mkey] = array('default' => $mmarker);
         }
@@ -208,26 +210,28 @@ class getlocations_plugin_style_map extends views_plugin_style {
     // markers
     $markers = getlocations_get_marker_titles();
     $form['node_map_marker'] = getlocations_element_map_marker(
-      t('Default Content Map marker'),
+      t('Content Map marker'),
       $markers,
       $this->options['node_map_marker']
     );
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
-      $types = getlocations_get_types();
-      foreach ($types AS $type => $name) {
-        $mkey = 'node_marker_' . $type;
-        $form[$mkey] = getlocations_element_map_marker(
-          t('%name Node Marker', array('%name' => $name)),
-          $markers,
-          $this->options[$mkey]
-        );
+      if ($types = getlocations_get_types()) {
+        foreach ($types AS $type => $name) {
+          $field_name = getlocations_get_fieldname($type);
+          $mkey = 'node_marker_' . $field_name;
+          $form[$mkey] = getlocations_element_map_marker(
+            t('%name Content Map Marker', array('%name' => $name)),
+            $markers,
+            $this->options[$mkey]
+          );
+        }
       }
     }
     // user markers
     if (getlocations_check_user()) {
       $form['user_map_marker'] = getlocations_element_map_marker(
-        t('Default User Map Marker'),
+        t('User Map Marker'),
         $markers,
         $this->options['user_map_marker']
       );
@@ -235,14 +239,15 @@ class getlocations_plugin_style_map extends views_plugin_style {
     // vocabulary markers
     if ($types = getlocations_get_vocabularies()) {
       $form['vocabulary_map_marker'] = getlocations_element_map_marker(
-        t('Default Vocabulary Map Marker'),
+        t('Vocabulary Map Marker'),
         $markers,
         $this->options['vocabulary_map_marker']
       );
       $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
       if ($getlocations_vocabulary_marker['enable']) {
         foreach ($types AS $type => $name) {
-          $mkey = 'vocabulary_marker_' . $type;
+          $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+          $mkey = 'vocabulary_marker_' . $field_name;
           $form[$mkey] = getlocations_element_map_marker(
             t('%name Vocabulary Marker', array('%name' => $name)),
             $markers,
@@ -254,7 +259,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     if (getlocations_check_comment()) {
       // default comment marker
       $form['comment_map_marker'] = getlocations_element_map_marker(
-        t('Default Comment Map marker'),
+        t('Comment Map marker'),
         $markers,
         $this->options['comment_map_marker']
       );
@@ -292,11 +297,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
       '#type' => 'hidden',
       '#value' => $getlocations_defaults['usemarkermanager']
     );
-#    $form['usemarkermanager'] = getlocations_element_map_checkbox(
-#      t('Use Marker manager'),
-#      $this->options['usemarkermanager'],
-#      t('Use Marker manager. Switching this off will use no manager')
-#    );
 
   } // end options_form
 
@@ -305,6 +305,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
    */
 
   function options_validate(&$form, &$form_state) {
+
     $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
     $found = FALSE;
     foreach ($list AS $maptype) {

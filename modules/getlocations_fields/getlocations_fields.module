@@ -938,10 +938,10 @@ function getlocations_fields_field_widget_info() {
         'input_country_width'     => $getlocations_fields_defaults['input_country_width'],
         'input_latitude_width'    => $getlocations_fields_defaults['input_latitude_width'],
         'input_longitude_width'   => $getlocations_fields_defaults['input_longitude_width'],
-    ),
-#      'multiple values' => CONTENT_HANDLE_CORE,
-#      'callbacks' => array(
-#        'default value' => CONTENT_CALLBACK_DEFAULT,
+      ),
+#      'behaviour' => array(
+#        'multiple values' => FIELD_BEHAVIOR_DEFAULT
+#        #'multiple values' => FIELD_BEHAVIOR_CUSTOM
 #      ),
     ),
   );
@@ -1005,7 +1005,9 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   }
 
   $settings = $field['settings'];
-  $map = getlocations_fields_getmap($settings, $active);
+  $m = getlocations_fields_getmap($settings, $active);
+  $map = $m[0];
+  $mapid = $m[1];
 
   // vertical tabs works but map does not render
   $widget = $element + array(
@@ -1035,7 +1037,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       '#default_value' => isset($items[$delta]['address']) ? $items[$delta]['address'] : '',
       '#autocomplete_path' => '',
       '#size' => $settings['input_address_width'],
-      '#attributes' => array('id' => ($active ? 'getlocations_address' : 'getlocations_default_address'), 'placeholder' => t('Enter an address')),
+      '#attributes' => array('id' => ($active ? 'getlocations_address_' . $mapid : 'getlocations_default_address'), 'placeholder' => t('Enter an address')),
       '#title' => t('Search'),
       '#description' => t('Start typing an address and select from the dropdown.'),
       '#required' => $instance['required'],
@@ -1048,7 +1050,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['name']) ? $items[$delta]['name'] : '',
     '#size' => $settings['input_name_width'],
-    '#attributes' => array('id' => 'getlocations_name'),
+    '#attributes' => array('id' => 'getlocations_name_' . $mapid),
     '#title' => t('Name'),
     '#maxlength' => 255,
   );
@@ -1056,7 +1058,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['street']) ? $items[$delta]['street'] : '',
     '#size' => $settings['input_street_width'],
-    '#attributes' => array('id' => 'getlocations_street'),
+    '#attributes' => array('id' => 'getlocations_street_' . $mapid),
     '#title' => t('Street'),
     '#maxlength' => 255,
   );
@@ -1064,7 +1066,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['additional']) ? $items[$delta]['additional'] : '',
     '#size' => $settings['input_additional_width'],
-    '#attributes' => array('id' => 'getlocations_additional'),
+    '#attributes' => array('id' => 'getlocations_additional_' . $mapid),
     '#title' => t('Additional'),
     '#maxlength' => 255,
   );
@@ -1072,7 +1074,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['city']) ? $items[$delta]['city'] : '',
     '#size' => $settings['input_city_width'],
-    '#attributes' => array('id' => 'getlocations_city'),
+    '#attributes' => array('id' => 'getlocations_city_' . $mapid),
     '#title' => t('City/Town'),
     '#maxlength' => 255,
   );
@@ -1080,7 +1082,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['province']) ? $items[$delta]['province'] : '',
     '#size' => $settings['input_province_width'],
-    '#attributes' => array('id' => 'getlocations_province'),
+    '#attributes' => array('id' => 'getlocations_province_' . $mapid),
     '#title' => t('Province/State/County'),
     '#maxlength' => 255,
   );
@@ -1088,7 +1090,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['postal_code']) ? $items[$delta]['postal_code'] : '',
     '#size' => $settings['input_postal_code_width'],
-    '#attributes' => array('id' => 'getlocations_postal_code'),
+    '#attributes' => array('id' => 'getlocations_postal_code_' . $mapid),
     '#title' => t('Post code/Zip code'),
     '#maxlength' => 255,
   );
@@ -1101,7 +1103,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       '#default_value' => (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']),
       '#options' => $countries,
       '#title' => t('Country'),
-      '#attributes' => array('id' => 'getlocations_country'),
+      '#attributes' => array('id' => 'getlocations_country_' . $mapid),
     );
   }
   else {
@@ -1110,7 +1112,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       '#default_value' => isset($items[$delta]['country']) ? $items[$delta]['country'] : '',
       '#autocomplete_path' => '',
       '#size' => $settings['input_country_width'],
-      '#attributes' => array('id' => 'getlocations_country'),
+      '#attributes' => array('id' => 'getlocations_country_' . $mapid),
       '#title' => t('Country'),
       '#maxlength' => 255,
     );
@@ -1120,6 +1122,10 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   if (! $settings['use_address']) {
     $widget['geobutton'] = array(
       '#markup' => '',
+    );
+    $widget['mapid'] = array(
+      '#type' => 'value',
+      '#value' => $mapid,
     );
   }
 
@@ -1132,7 +1138,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#default_value' => isset($items[$delta]['latitude']) ? $items[$delta]['latitude'] : '',
     '#autocomplete_path' => '',
     '#size' => $settings['input_latitude_width'],
-    '#attributes' => array('id' => 'getlocations_latitude'),
+    '#attributes' => array('id' => 'getlocations_latitude_' . $mapid),
     '#title' => 'Latitude',
     '#maxlength' => 20,
   );
@@ -1141,7 +1147,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#default_value' => isset($items[$delta]['longitude']) ? $items[$delta]['longitude'] : NULL,
     '#autocomplete_path' => '',
     '#size' => $settings['input_longitude_width'],
-    '#attributes' => array('id' => 'getlocations_longitude'),
+    '#attributes' => array('id' => 'getlocations_longitude_' . $mapid),
     '#title' => 'Longitude',
     '#maxlength' => 20,
   );
@@ -1225,7 +1231,7 @@ function getlocations_fields_getmap($settings, $active) {
 
   if ($active) {
     drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js');
-    getlocations_fields_js_settings_do($getlocations_defaults);
+    getlocations_fields_js_settings_do($getlocations_defaults, $mapid);
     $latlons = array();
   }
   else {
@@ -1237,7 +1243,10 @@ function getlocations_fields_getmap($settings, $active) {
 
   $minmaxes = '';
   getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid, $active);
-  return theme('getlocations_show', array('width' => $settings['mapwidth'] , 'height' => $settings['mapheight'] , 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'type' => '', 'node' => ''));
+
+  $map = theme('getlocations_show', array('width' => $settings['mapwidth'] , 'height' => $settings['mapheight'] , 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'type' => '', 'node' => ''));
+
+  return array($map, $mapid);
 }
 
 /**
@@ -1572,12 +1581,15 @@ function getlocations_fields_load_location($glid) {
 /**
  * docs
  */
-function getlocations_fields_js_settings_do($defaults) {
+function getlocations_fields_js_settings_do($defaults, $mapid) {
 
   $settings = array(
-    'nodezoom' => $defaults['nodezoom'],
-    'map_marker' => $defaults['node_map_marker'],
-    'use_address' => $defaults['use_address'],
+    $mapid => array(
+      'nodezoom' => $defaults['nodezoom'],
+      'map_marker' => $defaults['node_map_marker'],
+      'use_address' => $defaults['use_address'],
+      'mapid' => $mapid,
+    )
   );
   drupal_add_js(array('getlocations_fields' => $settings), 'setting');
 

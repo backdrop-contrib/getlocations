@@ -262,11 +262,13 @@ function theme_getlocations_fields_field_widget_form($variables) {
 
   $output = '';
   if (isset($form['geobutton']) ) {
-    $form['geobutton']['#markup'] = '<p><input type="submit" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton" class="form-submit" /></p>';
+    $mapid = $form['mapid']['#value'];
+    unset($form['mapid']);
+    $form['geobutton']['#markup'] = '<p><input type="submit" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton_' . $mapid . '" class="form-submit" /></p>';
   }
-  $form['latitude']['#prefix'] = '<div id="getlocations_fields_latlon_wrapper"><div id="getlocations_fields_lat_wrapper">';
+  $form['latitude']['#prefix'] = '<div class="getlocations_fields_latlon_wrapper"><div class="getlocations_fields_lat_wrapper">';
   $form['latitude']['#suffix'] = '</div>';
-  $form['longitude']['#prefix'] = '<div id="getlocations_fields_lon_wrapper">';
+  $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';
 
   $output .= drupal_render_children($form);

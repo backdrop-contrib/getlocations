@@ -6,7 +6,7 @@
  * this is for googlemaps API version 3
 */
 
-var inputmap = '';
+var inputmap = [];
 
 (function ($) {
   // global vars
@@ -15,13 +15,13 @@ var inputmap = '';
 
   function initialize() {
 
-      // in icons.js
-      Drupal.getlocations.iconSetup();
+    // in icons.js
+    Drupal.getlocations.iconSetup();
 
     settings = Drupal.settings.getlocations;
 
     // each map has its own settings
-    jQuery.each(settings, function(key, settings) {
+    jQuery.each(settings, function (key, settings) {
 
       var global_settings = {
         maxzoom: 16,
@@ -172,7 +172,7 @@ var inputmap = '';
       map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
 
       if (settings.inputmap) {
-        inputmap = map[key];
+        inputmap[key] = map[key];
       }
 
       // set up markermanager

@@ -55,7 +55,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                = array('default' => $getlocations_defaults['styles']);
 
-
+    // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
       if ($types = getlocations_get_types()) {

@@ -1,9 +1,18 @@
-commit 91bf9d1
+commit cb01754
+Author: hutch <hutch@midwales.net>
+Date:   Tue Dec 13 22:12:15 2011 +0000
+
+    fixed too many addresses in display
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 4120cd1
 Author: hutch <hutch@midwales.net>
 Date:   Tue Dec 13 16:49:55 2011 +0000
 
     added reverse geocoding
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/getlocations_fields.theme.inc
 modules/getlocations_fields/js/getlocations_fields.js

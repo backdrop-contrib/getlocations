@@ -630,13 +630,18 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   switch ($display['type']) {
     case 'getlocations_fields_default':
     if (count($locations)) {
-      foreach ($items as $delta => $item) {
-        $element[$delta] = array(
-          '#theme' => 'getlocations_fields_show',
-          '#locations' => $locations,
-          '#settings' => $settings,
-        );
-      }
+#      foreach ($items as $delta => $item) {
+#        $element[$delta] = array(
+#          '#theme' => 'getlocations_fields_show',
+#          '#locations' => $locations,
+#          '#settings' => $settings,
+#        );
+#      }
+      $element[0]  = array(
+        '#theme' => 'getlocations_fields_show',
+        '#locations' => $locations,
+        '#settings' => $settings,
+      );
     }
   }
 
@@ -1528,6 +1533,7 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
       $ct++;
     }
   }
+
   return $locations;
 }
 

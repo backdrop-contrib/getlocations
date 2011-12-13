@@ -1588,7 +1588,6 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
       'nodezoom' => $defaults['nodezoom'],
       'map_marker' => $defaults['node_map_marker'],
       'use_address' => $defaults['use_address'],
-      'mapid' => $mapid,
     )
   );
   drupal_add_js(array('getlocations_fields' => $settings), 'setting');

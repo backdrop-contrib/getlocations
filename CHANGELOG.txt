@@ -1,9 +1,147 @@
-commit 47409f6
+commit 91bf9d1
+Author: hutch <hutch@midwales.net>
+Date:   Tue Dec 13 16:49:55 2011 +0000
+
+    added reverse geocoding
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 6d7c47f
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 12 20:31:25 2011 +0000
+
+    Fixed multiple input maps
+
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+views/getlocations_plugin_style_map.inc
+
+commit 0a9a3a5
+Author: hutch <hutch@midwales.net>
+Date:   Fri Dec 9 09:16:58 2011 +0000
+
+    fixed markers
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit 4ec9c2f
+Author: hutch <hutch@midwales.net>
+Date:   Tue Dec 6 09:39:44 2011 +0000
+
+    added required switch to getlocations_element_map_tf()
+
+getlocations.module
+
+commit c9141ab
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 5 18:24:12 2011 +0000
+
+    fixed views bug, better tooltips in maps
+
+getlocations.module
+modules/getlocations_fields/views/getlocations_fields.views.inc
+views/getlocations.views.inc
+
+commit e9c7832
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 5 17:19:55 2011 +0000
+
+    fixed path bug in js
+
+js/getlocations.js
+modules/getlocations_fields/js/getlocations_fields.js
+views/getlocations.views_default.inc
+
+commit ae0e6da
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 5 14:29:34 2011 +0000
+
+    added getlocations_fields module
+
+README.txt
+getlocations.admin.inc
+getlocations.info
+getlocations.install
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+modules/getlocations_fields/README.txt
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_sort_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_views_handler_field_coordinates.inc
+modules/getlocations_fields/handlers/getlocations_fields_views_handler_field_latitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_views_handler_field_longitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_views_handler_filter_distance.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields_admin.js
+modules/getlocations_fields/views/getlocations_fields.views.inc
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit eebdbc0
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 24 22:14:26 2011 +0000
+
+    fixed map css
+
+getlocations.css
+getlocations.theme.inc
+views/getlocations-view-map.tpl.php
+
+commit 05196a3
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 24 13:08:24 2011 +0000
+
+    improved markerfile detection, improved node type markers
+
+getlocations.admin.inc
+getlocations.module
+views/getlocations.views_default.inc
+
+commit 2400184
+Author: hutch <hutch@midwales.net>
+Date:   Sat Nov 19 10:23:37 2011 +0000
+
+    more views fixes
+
+getlocations.info
+
+commit b5fc6f1
+Author: hutch <hutch@midwales.net>
+Date:   Sat Nov 19 02:01:03 2011 +0000
+
+    fixed duplicate function getlocations_views_plugins
+
+getlocations.module
+
+commit 1047046
 Author: hutch <hutch@midwales.net>
 Date:   Fri Nov 18 12:01:05 2011 +0000
 
     moved views to its own folder, improved default views
 
+CHANGELOG.txt
 getlocations-view-map.tpl.php
 getlocations.views.inc
 getlocations.views_default.inc

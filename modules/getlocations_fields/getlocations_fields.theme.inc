@@ -264,7 +264,9 @@ function theme_getlocations_fields_field_widget_form($variables) {
   if (isset($form['geobutton']) ) {
     $mapid = $form['mapid']['#value'];
     unset($form['mapid']);
-    $form['geobutton']['#markup'] = '<p><input type="submit" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton_' . $mapid . '" class="form-submit" /></p>';
+    $geobutton = '<p><input type="submit" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton_' . $mapid . '" class="form-submit" /></p>';
+    $geobutton .= '<p>If you leave the address empty you can Geocode by moving the marker on the map</p>';
+    $form['geobutton']['#markup'] = $geobutton;
   }
   $form['latitude']['#prefix'] = '<div class="getlocations_fields_latlon_wrapper"><div class="getlocations_fields_lat_wrapper">';
   $form['latitude']['#suffix'] = '</div>';

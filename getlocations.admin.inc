@@ -387,7 +387,6 @@ function getlocations_settings_validate($form, &$form_state) {
   if (isset($form_state['values']['getlocations_vocabulary_marker']) && ! $form_state['values']['getlocations_vocabulary_marker']['enable']) {
     unset($form_state['values']['getlocations_vocabulary_marker']);
   }
-
 }
 
 /**

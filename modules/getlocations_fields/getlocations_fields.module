@@ -569,6 +569,7 @@ function getlocations_fields_field_formatter_info() {
  * @see getlocations_fields_field_formatter_info()
  */
 function getlocations_fields_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   $settings = $display['settings'];
   if (empty($settings)) {
@@ -1288,7 +1289,6 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
   $latlons[] = $lls;
 
   $mapid = getlocations_setup_map($getlocations_defaults);
-  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   $minmaxes = '';
   getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid);

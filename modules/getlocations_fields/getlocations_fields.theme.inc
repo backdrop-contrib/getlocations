@@ -107,13 +107,24 @@ function theme_getlocations_fields_show($variables) {
         $lat = theme('getlocations_fields_latitude_dms', array('latitude' => $lat));
         $lng = theme('getlocations_fields_longitude_dms', array('longitude' => $lng));
       }
-      $output .= '<div id="getlocations_fields_latlon_wrapper_themed">';
-      $output .= '<div id="getlocations_fields_lat_wrapper_themed">';
+      if ($settings['display_showmap']) {
+        $output .= '<div class="getlocations_fields_latlon_wrapper_themed">';
+        $output .= '<div class="getlocations_fields_lat_wrapper_themed">';
+        $output .= t('Latitude') . ': ' . $lat . '</div>';
+        $output .= '<div class="getlocations_fields_lon_wrapper_themed">';
+        $output .= t('Longitude') . ': ' . $lng . '</div>';
+        $output .= '</div>';
+        $output .= '<br />';
+      }
+      else {
+      $output .= '<div class="getlocations_fields_latlon_wrapper_themed_nomap">';
+      $output .= '<div class="getlocations_fields_lat_wrapper_themed_nomap">';
       $output .= t('Latitude') . ': ' . $lat . '</div>';
-      $output .= '<div id="getlocations_fields_lon_wrapper_themed">';
+      $output .= '<div class="getlocations_fields_lon_wrapper_themed_nomap">';
       $output .= t('Longitude') . ': ' . $lng . '</div>';
       $output .= '</div>';
       $output .= '<br />';
+      }
     }
 
     if ($settings['display_showmap'] && $location['longitude'] && $location['latitude']) {
@@ -122,11 +133,17 @@ function theme_getlocations_fields_show($variables) {
       $output .= $map;
     }
     else {
-      if ($location['nid']) {
-        $output .= '<p>' . l(t('Show on a map'), 'getlocations/node/' . $location['nid']) . '</p>';
+      if (count($locations) > 1 ) {
+        $output .= '<p>' . l(t('Show on a map'), 'getlocations/lids/' . $location['glid']) . '</p>';
       }
-      elseif ($location['uid']) {
-        $output .= '<p>' . l(t('Show on a map'), 'getlocations/user/' . $location['uid']) . '</p>';
+      else {
+        if ($location['nid']) {
+          $output .= '<p>' . l(t('Show on a map'), 'getlocations/node/' . $location['nid']) . '</p>';
+        }
+        elseif ($location['uid']) {
+          $output .= '<p>' . l(t('Show on a map'), 'getlocations/user/' . $location['uid']) . '</p>';
+        }
+
       }
     }
   }

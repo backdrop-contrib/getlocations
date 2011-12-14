@@ -9,7 +9,6 @@
  * Implements hook_uninstall().
   */
 function getlocations_uninstall() {
-  // getlocations_default getlocations_paths getlocations_node_marker getlocations_vocabulary_marker getlocations_colorbox
   variable_del('getlocations_default');
   variable_del('getlocations_paths');
   variable_del('getlocations_node_marker');

@@ -1,9 +1,30 @@
-commit cb01754
+commit 7a2469d
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 17 10:19:05 2011 +0000
+
+    fixed parse error, reported issue 1373764
+
+views/getlocations.views.inc
+
+commit 73cafbd
+Author: hutch <hutch@midwales.net>
+Date:   Wed Dec 14 13:22:41 2011 +0000
+
+    cleanup, reorganised css
+
+getlocations.admin.inc
+getlocations.install
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit c1c2012
 Author: hutch <hutch@midwales.net>
 Date:   Tue Dec 13 22:12:15 2011 +0000
 
     fixed too many addresses in display
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 4120cd1

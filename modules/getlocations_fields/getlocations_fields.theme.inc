@@ -209,6 +209,111 @@ function theme_getlocations_fields_field_settings_form($variables) {
   $form = $variables['form'];
 
   $output = '';
+
+  // try table
+  $header = array();
+  $no_striping = TRUE;
+  $rows = array(
+    array('data' =>
+      array(
+        array('data' => $form['input_name_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_name_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_name_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_street_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_street_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_street_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_city_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_city_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_city_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_province_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_province_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_province_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_postal_code_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_postal_code_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_postal_code_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_country_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_country_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_country_required'], 'class' => 'getlocations_fields_input_cell3'),
+     ),
+      'no_striping' => $no_striping,
+    ),
+
+    array('data' =>
+      array(
+        array('data' => $form['input_latitude_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_latitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
+     ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_longitude_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_longitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
+     ),
+      'no_striping' => $no_striping,
+    ),
+
+  );
+  $attributes = array('class' => array('getlocations_fields_input_table'));
+  $table = theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => $attributes,
+    )
+  );
+  $form['input_name_width'] = array('#markup' => $table);
+  unset($form['input_name_required']);
+  unset($form['input_name_weight']);
+  unset($form['input_street_width']);
+  unset($form['input_street_required']);
+  unset($form['input_street_weight']);
+  unset($form['input_additional_width']);
+  unset($form['input_additional_required']);
+  unset($form['input_additional_weight']);
+  unset($form['input_city_width']);
+  unset($form['input_city_required']);
+  unset($form['input_city_weight']);
+  unset($form['input_province_width']);
+  unset($form['input_province_required']);
+  unset($form['input_province_weight']);
+  unset($form['input_postal_code_width']);
+  unset($form['input_postal_code_required']);
+  unset($form['input_postal_code_weight']);
+  unset($form['input_country_width']);
+  unset($form['input_country_required']);
+  unset($form['input_country_weight']);
+  unset($form['input_latitude_width']);
+  unset($form['input_latitude_weight']);
+  unset($form['input_longitude_width']);
+  unset($form['input_longitude_weight']);
+
   $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
   $prefix .= '<div class="fieldset-wrapper">';
@@ -275,8 +380,8 @@ function theme_getlocations_fields_field_formatter_settings_form($variables) {
  *
  */
 function theme_getlocations_fields_field_widget_form($variables) {
-  $form = $variables['form'];
 
+  $form = $variables['form'];
   $output = '';
   if (isset($form['geobutton']) ) {
     $mapid = $form['mapid']['#value'];
@@ -289,6 +394,10 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['latitude']['#suffix'] = '</div>';
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';
+
+  $msg = t('To use the map to find a location, click on the map and drag the marker.');
+  $map = $form['map']['#markup'];
+  $form['map']['#markup'] = '<p>' . $msg . '</p>' . $map;
 
   $output .= drupal_render_children($form);
   return $output;
@@ -309,6 +418,110 @@ function theme_getlocations_fields_settings_form($variables) {
   $form = $variables['form'];
 
   $output = '';
+
+  // try table
+  $header = array();
+  $no_striping = TRUE;
+  $rows = array(
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_name_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_name_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_name_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_street_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_street_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_street_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_city_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_city_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_city_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_province_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_province_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_province_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_postal_code_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_postal_code_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_postal_code_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_country_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_country_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_country_required'], 'class' => 'getlocations_fields_input_cell3'),
+     ),
+      'no_striping' => $no_striping,
+    ),
+
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_latitude_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_latitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
+     ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_longitude_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_longitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
+     ),
+      'no_striping' => $no_striping,
+    ),
+
+  );
+  $attributes = array('class' => array('getlocations_fields_input_table'));
+  $table = theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => $attributes,
+    )
+  );
+  $form['getlocations_fields_defaults']['input_name_width'] = array('#markup' => $table);
+  unset($form['getlocations_fields_defaults']['input_name_required']);
+  unset($form['getlocations_fields_defaults']['input_name_weight']);
+  unset($form['getlocations_fields_defaults']['input_street_width']);
+  unset($form['getlocations_fields_defaults']['input_street_required']);
+  unset($form['getlocations_fields_defaults']['input_street_weight']);
+  unset($form['getlocations_fields_defaults']['input_additional_width']);
+  unset($form['getlocations_fields_defaults']['input_additional_required']);
+  unset($form['getlocations_fields_defaults']['input_additional_weight']);
+  unset($form['getlocations_fields_defaults']['input_city_width']);
+  unset($form['getlocations_fields_defaults']['input_city_required']);
+  unset($form['getlocations_fields_defaults']['input_city_weight']);
+  unset($form['getlocations_fields_defaults']['input_province_width']);
+  unset($form['getlocations_fields_defaults']['input_province_required']);
+  unset($form['getlocations_fields_defaults']['input_province_weight']);
+  unset($form['getlocations_fields_defaults']['input_postal_code_width']);
+  unset($form['getlocations_fields_defaults']['input_postal_code_required']);
+  unset($form['getlocations_fields_defaults']['input_postal_code_weight']);
+  unset($form['getlocations_fields_defaults']['input_country_width']);
+  unset($form['getlocations_fields_defaults']['input_country_required']);
+  unset($form['getlocations_fields_defaults']['input_country_weight']);
+  unset($form['getlocations_fields_defaults']['input_latitude_width']);
+  unset($form['getlocations_fields_defaults']['input_latitude_weight']);
+  unset($form['getlocations_fields_defaults']['input_longitude_width']);
+  unset($form['getlocations_fields_defaults']['input_longitude_weight']);
 
   $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Default Input form settings') . '</span></legend>';

@@ -86,9 +86,6 @@ function theme_getlocations_show($variables) {
     }
   }
   // do map
-  if (isset($defaults['map_instructions'])) {
-    $output .= '<p>' . $defaults['map_instructions'] . '</p>';
-  }
   $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
   // buttons
   $buttons = array();
@@ -236,4 +233,3 @@ function theme_getlocations_settings_form($variables) {
   $output .= drupal_render_children($form);
   return $output;
 }
-

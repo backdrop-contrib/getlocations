@@ -13,7 +13,6 @@
   width: 500px;
   padding-top: 8px;
   margin-bottom: 8px;
-
 }
 .getlocations_fields_lat_wrapper_themed {
   float: left;
@@ -22,3 +21,30 @@
   float: right;
 }
 
+.getlocations_fields_latlon_wrapper_themed_nomap {
+  width: 380px;
+  padding-top: 8px;
+  margin-bottom: 8px;
+}
+.getlocations_fields_lat_wrapper_themed_nomap {
+  float: left;
+}
+.getlocations_fields_lon_wrapper_themed_nomap {
+  float: right;
+}
+
+
+.getlocations_fields_input_table {
+/*  width: 550px;*/
+}
+.getlocations_fields_input_cell1 {
+
+}
+.getlocations_fields_input_cell2 {
+
+
+}
+.getlocations_fields_input_cell3 {
+
+
+}

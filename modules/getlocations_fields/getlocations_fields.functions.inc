@@ -551,6 +551,40 @@ function getlocations_fields_element_uid_loc_field($default, $options, $ctools=T
   return $element;
 }
 
+function getlocations_fields_element_weight($title, $default, $description='') {
+  $options = array('' => '');
+  $options += drupal_map_assoc(range(-50, 50));
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#options' => $options,
+  );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
+  return $element;
+}
+
+function getlocations_fields_element_opts($title, $default, $description='') {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#options' => array(
+      '1' => t('Normal'),
+      '2' => t('Required'),
+      '3' => t('Read only'),
+      '4' => t('Hidden'),
+    ),
+  );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
+  return $element;
+}
+
 // ajax callback
 function getlocations_fields_countryinfo() {
   $country = $_GET['country'];

@@ -1,9 +1,41 @@
-commit 7a2469d
+commit a641fcb
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 17 20:42:06 2011 +0000
+
+    tidyup
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+
+commit 184acbd
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 17 20:15:54 2011 +0000
+
+    reworked baselayers and behavior, applied getlocations_map_display_options_form
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations_plugin_style_map.inc
+
+commit db869e6
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 17 12:24:30 2011 +0000
+
+    more work on the input form
+
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 28287ea
 Author: hutch <hutch@midwales.net>
 Date:   Sat Dec 17 10:19:05 2011 +0000
 
     fixed parse error, reported issue 1373764
 
+CHANGELOG.txt
 views/getlocations.views.inc
 
 commit 73cafbd

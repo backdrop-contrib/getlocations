@@ -389,10 +389,8 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   if (empty($settings)) {
     $settings = getlocations_fields_field_info_defaults();
   }
-  $getlocations_defaults = getlocations_defaults();
 
   $form = array();
-
 
   $form += getlocations_fields_input_settings_form($settings);
 
@@ -431,56 +429,8 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     $settings['zoom'],
     t('The default zoom level of a Google map.')
   );
-  $form['controltype'] = getlocations_element_map_zoom_controltype(
-    $settings['controltype']
-  );
-  $form['pancontrol'] = getlocations_element_map_checkbox(
-    t('Show Pan control'),
-    $settings['pancontrol']
-  );
-  $form['mtc'] = getlocations_element_map_mtc(
-    $settings['mtc']
-  );
 
-  $baselayers = array();
-  foreach ($getlocations_defaults['baselayers'] AS $key => $value) {
-    $baselayers[$key] = $value;
-  }
-
-  $form['maptype'] = getlocations_element_map_maptype(
-    $settings['maptype'],
-    $baselayers
-  );
-
-  $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($settings['baselayers']['Map']);
-  $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($settings['baselayers']['Satellite']);
-  $form['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($settings['baselayers']['Hybrid']);
-  $form['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($settings['baselayers']['Physical']);
-  $form['scale'] = getlocations_element_map_checkbox(
-    t('Scale'),
-    $settings['scale'],
-    t('Show scale')
-  );
-  $form['overview'] = getlocations_element_map_checkbox(
-    t('Overview map'),
-    $settings['overview'],
-    t('Show overview map')
-  );
-  $form['overview_opened'] = getlocations_element_map_checkbox(
-    t('Overview map state'),
-    $settings['overview_opened'],
-    t('Show overview map as open by default')
-  );
-  $form['scrollwheel'] = getlocations_element_map_checkbox(
-    t('Scrollwheel'),
-    $settings['scrollwheel'],
-    t('Enable scrollwheel zooming')
-  );
-  $form['draggable'] = getlocations_element_map_checkbox(
-    t('Draggable'),
-    $settings['draggable'],
-    t('Enable dragging the map.')
-  );
+  $form += getlocations_map_display_options_form($settings, FALSE, FALSE);
 
   unset($form['#theme']);
   $form['#theme'] = 'getlocations_fields_field_settings_form';
@@ -494,10 +444,6 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
 
 }
 
-/**
- * Implements hook_field_is_empty().
- *
- */
 /**
  * Implements hook_field_is_empty().
  * Define what constitutes an empty item for a field type.
@@ -807,38 +753,44 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if ($settings['maptype']) {
       $summary[] = t('Default map type: @c', array('@c' => $settings['maptype']));
     }
-    $maptypes = array();
-    if ($settings['baselayers']['Map']) {
-      $maptypes[] = t('Map');
+    $types = array();
+    foreach ($settings['baselayers'] AS $key => $value) {
+      if ($value) {
+        $types[] = $key;
+      }
     }
-    if ($settings['baselayers']['Satellite']) {
-      $maptypes[] = t('Satellite');
-    }
-    if ($settings['baselayers']['Hybrid']) {
-      $maptypes[] = t('Hybrid');
-    }
-    if ($settings['baselayers']['Physical']) {
-      $maptypes[] = t('Physical');
-    }
-    if (count($maptypes)) {
-      $m = implode(', ', $maptypes);
+    if (count($types)) {
+      $m = implode(', ', $types);
       $summary[] = t('Enabled map types: @m', array('@m' => $m));
     }
-    if ($settings['scale']) {
-      $summary[] = t('Show scale: Yes');
+
+    $types = array();
+    foreach ($settings['behavior'] AS $key => $value) {
+      if ($value) {
+        $types[] = $key;
+      }
     }
-    if ($settings['overview']) {
-      $summary[] = t('Show overview map: Yes');
+    if (count($types)) {
+      foreach ($types AS $type) {
+        if ($type == 'scale') {
+          $summary[] = t('Show scale: Yes');
+        }
+        elseif ($type == 'overview') {
+          $summary[] = t('Show overview map: Yes');
+        }
+        elseif ($type == 'scrollwheel') {
+          $summary[] = t('Enable scrollwheel zooming: Yes');
+        }
+      }
     }
-    if ($settings['scrollwheel']) {
-      $summary[] = t('Enable scrollwheel zooming: Yes');
-    }
+
     if ($settings['draggable']) {
       $summary[] = t('Enable dragging the map: Yes');
     }
     if ($settings['streetview_show']) {
       $summary[] = t('Show streetview button: Yes');
     }
+
     $info_display = array();
     if ($settings['trafficinfo']) {
       $info_display[] = t('Traffic');
@@ -1361,14 +1313,8 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['pancontrol']                  = $settings['pancontrol'];
   $getlocations_defaults['mtc']                         = $settings['mtc'];
   $getlocations_defaults['maptype']                     = $settings['maptype'];
-  $getlocations_defaults['baselayers']['Map']           = $settings['baselayers']['Map'];
-  $getlocations_defaults['baselayers']['Satellite']     = $settings['baselayers']['Satellite'];
-  $getlocations_defaults['baselayers']['Hybrid']        = $settings['baselayers']['Hybrid'];
-  $getlocations_defaults['baselayers']['Physical']      = $settings['baselayers']['Physical'];
-  $getlocations_defaults['behavior']['scale']           = $settings['scale'];
-  $getlocations_defaults['behavior']['overview']        = $settings['overview'];
-  $getlocations_defaults['behavior']['overview_opened'] = $settings['overview_opened'];
-  $getlocations_defaults['behavior']['scrollwheel']     = $settings['scrollwheel'];
+  $getlocations_defaults['baselayers']                  = $settings['baselayers'];
+  $getlocations_defaults['behavior']                    = $settings['behavior'];
   $getlocations_defaults['draggable']                   = $settings['draggable'];
   $getlocations_defaults['node_map_marker']             = $settings['map_marker'];
   $getlocations_defaults['use_address']                 = $settings['use_address'];
@@ -1406,14 +1352,8 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
   $getlocations_defaults['pancontrol']                  = $settings['pancontrol'];
   $getlocations_defaults['mtc']                         = $settings['mtc'];
   $getlocations_defaults['maptype']                     = $settings['maptype'];
-  $getlocations_defaults['baselayers']['Map']           = $settings['baselayers']['Map'];
-  $getlocations_defaults['baselayers']['Satellite']     = $settings['baselayers']['Satellite'];
-  $getlocations_defaults['baselayers']['Hybrid']        = $settings['baselayers']['Hybrid'];
-  $getlocations_defaults['baselayers']['Physical']      = $settings['baselayers']['Physical'];
-  $getlocations_defaults['behavior']['scale']           = $settings['scale'];
-  $getlocations_defaults['behavior']['overview']        = $settings['overview'];
-  $getlocations_defaults['behavior']['overview_opened'] = $settings['overview_opened'];
-  $getlocations_defaults['behavior']['scrollwheel']     = $settings['scrollwheel'];
+  $getlocations_defaults['baselayers']                  = $settings['baselayers'];
+  $getlocations_defaults['behavior']                    = $settings['behavior'];
   $getlocations_defaults['draggable']                   = $settings['draggable'];
   $getlocations_defaults['streetview_show']             = $settings['streetview_show'];
   $getlocations_defaults['trafficinfo']                 = $settings['trafficinfo'];
@@ -1855,10 +1795,7 @@ function getlocations_fields_field_info_defaults() {
         'mtc'                        => $getlocations_defaults['mtc'],
         'maptype'                    => $getlocations_defaults['maptype'],
         'baselayers'                 => $getlocations_defaults['baselayers'],
-        'scale'                      => $getlocations_defaults['behavior']['scale'],
-        'overview'                   => $getlocations_defaults['behavior']['overview'],
-        'overview_opened'            => $getlocations_defaults['behavior']['overview_opened'],
-        'scrollwheel'                => $getlocations_defaults['behavior']['scrollwheel'],
+        'behavior'                   => $getlocations_defaults['behavior'],
         'draggable'                  => $getlocations_defaults['draggable'],
         'map_marker'                 => $getlocations_defaults['node_map_marker'],
         'node_map_marker'            => $getlocations_defaults['node_map_marker'],
@@ -1946,10 +1883,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'mtc'                   => $getlocations_defaults['mtc'],
     'maptype'               => $getlocations_defaults['maptype'],
     'baselayers'            => $getlocations_defaults['baselayers'],
-    'scale'                 => $getlocations_defaults['behavior']['scale'],
-    'overview'              => $getlocations_defaults['behavior']['overview'],
-    'overview_opened'       => $getlocations_defaults['behavior']['overview_opened'],
-    'scrollwheel'           => $getlocations_defaults['behavior']['scrollwheel'],
+    'behavior'              => $getlocations_defaults['behavior'],
     'draggable'             => $getlocations_defaults['draggable'],
     'streetview_show'       => $getlocations_defaults['streetview_show'],
     'trafficinfo'           => $getlocations_defaults['trafficinfo'],

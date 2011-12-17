@@ -1508,6 +1508,31 @@ function getlocations_element_map_baselayers_physical($default) {
   return $element;
 }
 
+function getlocations_element_map_baselayers($view, $default) {
+  // Map Satellite Hybrid Physical
+  if ($view == 'Map') {
+    $title = t('Standard street map');
+    $description = t('The standard default street map.');
+  }
+  elseif ($view == 'Satellite') {
+    $title = t('Standard satellite map');
+    $description = t('Satellite view without street overlay.');
+  }
+  elseif ($view == 'Hybrid') {
+    $title = t('Hybrid satellite map');
+    $description = t('Satellite view with street overlay.');
+  }
+  elseif ($view == 'Physical') {
+    $title = t('Terrain map');
+    $description = t('Map with physical data (terrain, vegetation.)');
+  }
+  if ($title) {
+    $element = getlocations_element_map_checkbox($title, $default, $description);
+    return $element;
+  }
+  return FALSE;
+}
+
 function getlocations_element_map_pansetting($default) {
 
   $element = array(
@@ -1550,93 +1575,107 @@ function getlocations_element_path($title, $default, $size, $maxlength, $descrip
   return $element;
 }
 
-function getlocations_map_display_options_form($defaults, $config = TRUE) {
+function getlocations_element_map_behavior($type, $default) {
+  // scale  overview overview_opened scrollwheel
+  if ($type == 'scale') {
+    $title = t('Scale');
+    $description = t('Show scale');
+  }
+  elseif ($type == 'overview') {
+    $title = t('Overview map');
+    $description = t('Show overview map');
+  }
+  elseif ($type == 'overview_opened') {
+    $title = t('Overview map state');
+    $description = t('Show overview map as open by default.');
+  }
+  elseif ($type == 'scrollwheel') {
+    $title = t('Scrollwheel');
+    $description = t('Enable scrollwheel zooming');
+  }
+  if ($title) {
+    $element = getlocations_element_map_checkbox($title, $default, $description);
+    return $element;
+  }
+  return FALSE;
+}
+
+function getlocations_map_display_options_form($defaults, $config = TRUE, $extras = TRUE) {
   $form = array();
   $form['controltype'] = getlocations_element_map_zoom_controltype($defaults['controltype']);
   $form['pancontrol'] = getlocations_element_map_checkbox(t('Show Pan control'), $defaults['pancontrol']);
   $form['mtc'] = getlocations_element_map_mtc($defaults['mtc']);
-  $baselayers = array();
+
+  $form['maptype'] = getlocations_element_map_maptype($defaults['maptype'], $defaults['baselayers']);
+
   foreach ($defaults['baselayers'] AS $key => $value) {
-    $baselayers[$key] = $value;
+    $layer = getlocations_element_map_baselayers($key, $value);
+    if ($layer) {
+      $form['baselayers'][$key] = $layer;
+    }
   }
-  $form['maptype'] = getlocations_element_map_maptype($defaults['maptype'], $baselayers);
-  $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($defaults['baselayers']['Map']);
-  $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($defaults['baselayers']['Satellite']);
-  $form['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($defaults['baselayers']['Hybrid']);
-  $form['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($defaults['baselayers']['Physical']);
 
+  foreach ($defaults['behavior'] AS $key => $value) {
+    $layer = getlocations_element_map_behavior($key, $value);
+    if ($layer) {
+      $form['behavior'][$key] = $layer;
+    }
+  }
 
-
-  $form['behavior']['scale'] = getlocations_element_map_checkbox(
-     t('Scale'),
-     $defaults['behavior']['scale'],
-     t('Show scale')
-  );
-  $form['behavior']['overview'] = getlocations_element_map_checkbox(
-    t('Overview map'),
-    $defaults['behavior']['overview'],
-    t('Show overview map')
-  );
-  $form['behavior']['overview_opened'] = getlocations_element_map_checkbox(
-    t('Overview map state'),
-    $defaults['behavior']['overview_opened'],
-    t('Show overview map as open by default')
-  );
-  $form['behavior']['scrollwheel'] = getlocations_element_map_checkbox(
-    t('Scrollwheel'),
-    $defaults['behavior']['scrollwheel'],
-    t('Enable scrollwheel zooming')
-  );
   $form['draggable'] = getlocations_element_map_checkbox(
     t('Draggable'),
     $defaults['draggable'],
     t('Enable dragging the map.')
   );
-  $form['streetview_show'] = getlocations_element_map_checkbox(
-    t('Show streetview button'),
-    $defaults['streetview_show']
-  );
-  $form['trafficinfo'] = getlocations_element_map_checkbox(
-    t('Enable Traffic information'),
-    $defaults['trafficinfo'],
-    t('Google trafficinfo layer, limited availability.')
-  );
-  $form['bicycleinfo'] = getlocations_element_map_checkbox(
-    t('Enable Bicycling information'),
-    $defaults['bicycleinfo'],
-    t('Google bicycling layer, limited availability.')
-  );
 
-  if ($config) {
-    $form['panoramio_use'] = getlocations_element_map_checkbox(
-      t('Load Panoramio Library'),
-      $defaults['panoramio_use'],
-      t('Provide Google panoramio library to all maps.')
+  if ($extras) {
+    $form['streetview_show'] = getlocations_element_map_checkbox(
+      t('Show streetview button'),
+      $defaults['streetview_show']
     );
-    $form['panoramio_show'] = getlocations_element_map_checkbox(
-      t('Enable Panoramio'),
-      $defaults['panoramio_show'],
-      t('Google panoramio picture links.')
+    $form['trafficinfo'] = getlocations_element_map_checkbox(
+      t('Enable Traffic information'),
+      $defaults['trafficinfo'],
+      t('Google trafficinfo layer, limited availability.')
     );
-  }
-  elseif ($defaults['panoramio_use']) {
-    $form['panoramio_show'] = getlocations_element_map_checkbox(
-      t('Enable Panoramio'),
-      $defaults['panoramio_show'],
-      t('Google panoramio picture links.')
+    $form['bicycleinfo'] = getlocations_element_map_checkbox(
+      t('Enable Bicycling information'),
+      $defaults['bicycleinfo'],
+      t('Google bicycling layer, limited availability.')
     );
-  }
 
-  $form['poi_show'] = getlocations_element_map_checkbox(
-    t('Show Points of Interest'),
-    $defaults['poi_show'],
-    t('Show Google points of interest icons.')
-  );
-  $form['transit_show'] = getlocations_element_map_checkbox(
-    t('Show Transit Points'),
-    $defaults['transit_show'],
-    t('Show Google transit points icons.')
-  );
+    if ($config) {
+      $form['panoramio_use'] = getlocations_element_map_checkbox(
+        t('Load Panoramio Library'),
+        $defaults['panoramio_use'],
+        t('Provide Google panoramio library to all maps.')
+      );
+      $form['panoramio_show'] = getlocations_element_map_checkbox(
+        t('Enable Panoramio'),
+        $defaults['panoramio_show'],
+        t('Google panoramio picture links.')
+      );
+    }
+    elseif ($defaults['panoramio_use']) {
+      $form['panoramio_show'] = getlocations_element_map_checkbox(
+        t('Enable Panoramio'),
+        $defaults['panoramio_show'],
+        t('Google panoramio picture links.')
+      );
+    }
+
+    $form['poi_show'] = getlocations_element_map_checkbox(
+      t('Show Points of Interest'),
+      $defaults['poi_show'],
+      t('Show Google points of interest icons.')
+    );
+    $form['transit_show'] = getlocations_element_map_checkbox(
+      t('Show Transit Points'),
+      $defaults['transit_show'],
+      t('Show Google transit points icons.')
+    );
+
+  }
 
   return $form;
 

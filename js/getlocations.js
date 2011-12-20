@@ -188,20 +188,20 @@ var inputmap = [];
         global_settings.trafficInfo[key] = new google.maps.TrafficLayer();
         global_settings.trafficInfo[key].setMap(map[key]);
         global_settings.traffictoggleState[key] = 1;
-        $("#getlocations_toggleTraffic").click( function() { manageTrafficButton(map[key], global_settings.trafficInfo[key], key) });
+        $("#getlocations_toggleTraffic_" + key).click( function() { manageTrafficButton(map[key], global_settings.trafficInfo[key], key) });
       }
       if (settings.bicycleinfo) {
         global_settings.bicycleInfo[key] = new google.maps.BicyclingLayer();
         global_settings.bicycleInfo[key].setMap(map[key]);
         global_settings.bicycletoggleState[key] = 1;
-        $("#getlocations_toggleBicycle").click( function() { manageBicycleButton(map[key], global_settings.bicycleInfo[key], key) });
+        $("#getlocations_toggleBicycle_" + key).click( function() { manageBicycleButton(map[key], global_settings.bicycleInfo[key], key) });
 
       }
       if (settings.panoramio_use && settings.panoramio_show) {
         global_settings.panoramioLayer[key] = new google.maps.panoramio.PanoramioLayer();
         global_settings.panoramioLayer[key].setMap(map[key]);
         global_settings.panoramiotoggleState[key] = 1;
-        $("#getlocations_togglePanoramio").click( function() { managePanoramioButton(map[key], global_settings.panoramioLayer[key], key) });
+        $("#getlocations_togglePanoramio_" + key).click( function() { managePanoramioButton(map[key], global_settings.panoramioLayer[key], key) });
       }
 
       if (! settings.inputmap) {

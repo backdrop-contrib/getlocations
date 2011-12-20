@@ -1,9 +1,22 @@
-commit a641fcb
+commit 9a98901
+Author: hutch <hutch@midwales.net>
+Date:   Tue Dec 20 17:06:37 2011 +0000
+
+    fixed multiple trafficinfo etc, added settings to required
+
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit cd6fabf
 Author: hutch <hutch@midwales.net>
 Date:   Sat Dec 17 20:42:06 2011 +0000
 
     tidyup
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 

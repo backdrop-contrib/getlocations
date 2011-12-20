@@ -573,9 +573,10 @@ function getlocations_fields_element_opts($title, $default, $description='') {
     '#title' => $title,
     '#default_value' => $default,
     '#options' => array(
-      '1' => t('Normal'),
-      '2' => t('Required'),
-      '3' => t('Read only'),
+      '0' => t('Normal'),
+      '1' => t('Required'),
+      '2' => t('Read only'),
+      '3' => t('Display only'),
       '4' => t('Hidden'),
     ),
   );

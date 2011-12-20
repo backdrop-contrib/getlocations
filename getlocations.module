@@ -501,6 +501,20 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
  * Sets up the call to googlemaps, css and the relevant getlocations js in html head
  */
 function getlocations_setup_map($defaults) {
+  getlocations_setup_js($defaults);
+  // Generate unique Map ID.
+  $mapid = uniqid();
+  return $mapid;
+}
+
+/**
+ * Function to setup the map scripts
+ *
+ * @param $defaults
+ *   Required. the current settings.
+ * Sets up the call to googlemaps, css and the relevant getlocations js in html head
+ */
+function getlocations_setup_js($defaults) {
   global $language;
 
   $current_js = drupal_get_js();
@@ -561,10 +575,8 @@ function getlocations_setup_map($defaults) {
   if (!stristr($current_js, GETLOCATIONS_PATH . '/js/getlocations.js')) {
     drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js');
   }
-  // Generate unique Map ID.
-  $mapid = uniqid();
-  return $mapid;
 }
+
 
 /**
  * Some defaults.
@@ -1457,53 +1469,6 @@ function getlocations_element_map_maptype($default, $baselayers) {
     '#title' => t('Default map type'),
     '#options' => $options,
     '#default_value' => $default,
-  );
-  return $element;
-}
-
-function getlocations_element_map_baselayers_map($default) {
-
-  $element = array(
-    '#type' => 'checkbox',
-    '#title' => t('Standard street map'),
-    '#description' => t('The standard default street map.'),
-    '#default_value' => $default,
-    '#return_value' => 1,
-  );
-  return $element;
-}
-
-function getlocations_element_map_baselayers_satellite($default) {
-
-  $element = array(
-    '#type' => 'checkbox',
-    '#title' => t('Standard satellite map'),
-    '#description' => t('Satellite view without street overlay.'),
-    '#default_value' => $default,
-    '#return_value' => 1,
-  );
-  return $element;
-}
-
-function getlocations_element_map_baselayers_hybrid($default) {
-
-  $element = array(
-    '#type' => 'checkbox',
-    '#title' => t('Hybrid satellite map'),
-    '#description' => t('Satellite view with street overlay.'),
-    '#default_value' => $default,
-    '#return_value' => 1,
-  );
-  return $element;
-}
-function getlocations_element_map_baselayers_physical($default) {
-
-  $element = array(
-    '#type' => 'checkbox',
-    '#title' => t('Terrain map'),
-    '#description' => t('Map with physical data (terrain, vegetation.)'),
-    '#default_value' => $default,
-    '#return_value' => 1,
   );
   return $element;
 }

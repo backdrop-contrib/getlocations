@@ -90,13 +90,13 @@ function theme_getlocations_show($variables) {
   // buttons
   $buttons = array();
   if ($defaults['trafficinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic" class="form-submit" />';
+    $buttons[] = '<input type="submit" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['bicycleinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle" class="form-submit" />';
+    $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio" class="form-submit" />';
+    $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio_' . $mapid . '" class="form-submit" />';
   }
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons" class="container-inline">';

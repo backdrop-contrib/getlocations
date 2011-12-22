@@ -64,6 +64,7 @@ function theme_getlocations_show($variables) {
   $node = $variables['node'];
 
   $output = '';
+  $returnlink = FALSE;
   // return link
   if ($type == 'node' && $defaults['returnlink_page_enable']) {
     if (is_object($node)) {
@@ -72,7 +73,7 @@ function theme_getlocations_show($variables) {
         $linktext = preg_replace("/%t/", $node->title, $linktext);
       }
       $l = l($linktext, 'node/' . $node->nid);
-      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+      $returnlink = '<div class="getlocations_returnlink">' . $l . '</div>';
     }
   }
   elseif ($type == 'user' && $defaults['returnlink_user_enable']) {
@@ -82,9 +83,33 @@ function theme_getlocations_show($variables) {
         $linktext = preg_replace("/%n/", $node->name, $linktext);
       }
       $l = l($linktext, 'user/' . $node->uid);
-      $output .= '<div class="getlocations_returnlink">' . $l . '</div>';
+      $returnlink = '<div class="getlocations_returnlink">' . $l . '</div>';
     }
   }
+  elseif ($type == 'term' && $defaults['returnlink_term_enable']) {
+    if (is_object($node)) {
+      $linktext = $defaults['returnlink_term_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $node->name, $linktext);
+      }
+      $l = l($linktext, 'taxonomy/term/' . $node->tid);
+      $returnlink = '<div class="getlocations_returnlink">' . $l . '</div>';
+    }
+  }
+  elseif ($type == 'comment' && $defaults['returnlink_comment_enable']) {
+    if (is_object($node)) {
+      $linktext = $defaults['returnlink_comment_link'];
+      if ( preg_match("/%n/", $linktext)) {
+        $linktext = preg_replace("/%n/", $node->subject, $linktext);
+      }
+      $l = l($linktext, 'comment/' . $node->cid);
+      $returnlink = '<div class="getlocations_returnlink">' . $l . '</div>';
+    }
+  }
+  if ($returnlink) {
+    $output .= $returnlink;
+  }
+
   // do map
   $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
   // buttons

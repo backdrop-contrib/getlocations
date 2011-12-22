@@ -421,7 +421,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['map_marker'] = getlocations_element_map_marker(
     t('Input form Map marker'),
     $markers,
-    $settings['map_marker']
+    $settings['input_map_marker']
   );
 
   $form['zoom'] = getlocations_element_map_zoom(
@@ -519,6 +519,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   $settings = $display['settings'];
+
   if (empty($settings)) {
     $settings = getlocations_fields_field_formatter_info_defaults();
   }
@@ -1736,6 +1737,7 @@ function getlocations_fields_field_info_defaults() {
         'user_map_marker'            => $getlocations_defaults['user_map_marker'],
         'vocabulary_map_marker'      => $getlocations_defaults['vocabulary_map_marker'],
         'comment_map_marker'         => $getlocations_defaults['comment_map_marker'],
+        'input_map_marker'           => $getlocations_defaults['input_map_marker'],
         'use_address'                => $getlocations_fields_defaults['use_address'],
         'input_address_width'        => $getlocations_fields_defaults['input_address_width'],
         'input_name_width'           => $getlocations_fields_defaults['input_name_width'],

@@ -118,6 +118,11 @@ function getlocations_settings_form() {
         $getlocations_defaults['comment_map_marker']
       );
     }
+    $form['getlocations_default']['input_map_marker'] = getlocations_element_map_marker(
+      t('Default Input Map marker'),
+      $markers,
+      $getlocations_defaults['input_map_marker']
+    );
   }
 
   $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction(
@@ -180,6 +185,42 @@ function getlocations_settings_form() {
       '#size' => 30,
       '#description' => t('Use %n to insert the user name'),
       '#prefix' => '<div id="wrap-user-link">',
+      '#suffix' => '</div>',
+    );
+  }
+
+  if (module_exists('getlocations_fields') && getlocations_get_vocabularies()) {
+    $form['getlocations_default']['returnlink_term_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show link back to term'),
+      '#default_value' =>  $getlocations_defaults['returnlink_term_enable'],
+      '#return_value' => 1,
+    );
+    $form['getlocations_default']['returnlink_term_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text of term return link'),
+      '#default_value' => $getlocations_defaults['returnlink_term_link'],
+      '#size' => 30,
+      '#description' => t('Use %n to insert the term name'),
+      '#prefix' => '<div id="wrap-term-link">',
+      '#suffix' => '</div>',
+    );
+  }
+
+  if (module_exists('getlocations_fields') && getlocations_check_comment()) {
+    $form['getlocations_default']['returnlink_comment_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show link back to comment'),
+      '#default_value' =>  $getlocations_defaults['returnlink_comment_enable'],
+      '#return_value' => 1,
+    );
+    $form['getlocations_default']['returnlink_comment_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text of comment return link'),
+      '#default_value' => $getlocations_defaults['returnlink_comment_link'],
+      '#size' => 30,
+      '#description' => t('Use %n to insert the comment subject'),
+      '#prefix' => '<div id="wrap-comment-link">',
       '#suffix' => '</div>',
     );
   }
@@ -355,6 +396,12 @@ function getlocations_settings_validate($form, &$form_state) {
   if (module_exists('getlocations_fields')) {
     if (isset($form_state['values']['getlocations_default']['returnlink_user_enable']) && $form_state['values']['getlocations_default']['returnlink_user_enable'] && empty($form_state['values']['getlocations_default']['returnlink_user_link'])) {
       form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
+    }
+    if (isset($form_state['values']['getlocations_default']['returnlink_term_enable']) && $form_state['values']['getlocations_default']['returnlink_term_enable'] && empty($form_state['values']['getlocations_default']['returnlink_term_link'])) {
+      form_set_error('getlocations_default][returnlink_term_link', t('Term return link must be filled in'));
+    }
+    if (isset($form_state['values']['getlocations_default']['returnlink_comment_enable']) && $form_state['values']['getlocations_default']['returnlink_comment_enable'] && empty($form_state['values']['getlocations_default']['returnlink_comment_link'])) {
+      form_set_error('getlocations_default][returnlink_comment_link', t('Comment return link must be filled in'));
     }
   }
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {

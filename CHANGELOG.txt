@@ -1,9 +1,23 @@
-commit 9a98901
+commit 0150abe
+Author: hutch <hutch@midwales.net>
+Date:   Thu Dec 22 14:17:04 2011 +0000
+
+    added term and comment maps, added default input marker
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations_admin.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 6cbd2f1
 Author: hutch <hutch@midwales.net>
 Date:   Tue Dec 20 17:06:37 2011 +0000
 
     fixed multiple trafficinfo etc, added settings to required
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 js/getlocations.js

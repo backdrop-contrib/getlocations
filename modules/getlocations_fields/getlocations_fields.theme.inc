@@ -57,6 +57,7 @@ function getlocations_fields_theme() {
 function theme_getlocations_fields_show($variables) {
   $locations = $variables['locations'];
   $settings = $variables['settings'];
+
   $output = '';
   foreach ($locations AS $location) {
     $output .= '<div class="location vcard">';
@@ -143,7 +144,12 @@ function theme_getlocations_fields_show($variables) {
         elseif ($location['uid']) {
           $output .= '<p>' . l(t('Show on a map'), 'getlocations/user/' . $location['uid']) . '</p>';
         }
-
+        elseif ($location['tid']) {
+          $output .= '<p>' . l(t('Show on a map'), 'getlocations/term/' . $location['tid']) . '</p>';
+        }
+        elseif ($location['cid']) {
+          $output .= '<p>' . l(t('Show on a map'), 'getlocations/comment/' . $location['cid']) . '</p>';
+        }
       }
     }
   }

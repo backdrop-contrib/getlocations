@@ -116,6 +116,25 @@ function getlocations_menu() {
       'page callback' => 'getlocations_usersmap',
       'type' => MENU_CALLBACK,
     );
+
+    // getlocations/term/$tid    # show all locations for a term
+    $items['getlocations/term/%getlocations_id'] = array(
+      'title' => 'Get term locations',
+      'access callback' => 'getlocations_access_location',
+      'page callback' => 'getlocations_termmap',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+    );
+
+    // getlocations/comment/$cid    # show all locations for a comment
+    $items['getlocations/comment/%getlocations_id'] = array(
+      'title' => 'Get comment locations',
+      'access callback' => 'getlocations_access_location',
+      'page callback' => 'getlocations_commentmap',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+    );
+
   }
   // getlocations/type/$type     # show all locations of nodes of content-type machine name
   $items['getlocations/type/%getlocations_type'] = array(
@@ -339,6 +358,80 @@ function getlocations_usersmap() {
     return getlocations_setlocations($latlons, $minmaxes, 'users');
   }
 }
+
+/**
+ * Menu callback
+ *
+ * @param int $tid
+ *
+ * @return
+ *   Returns a map of locations of a term
+ *
+ */
+function getlocations_termmap($tid) {
+  if (module_exists('getlocations_fields')) {
+    $locations = getlocations_load_locations($tid, 'tid');
+    $term = taxonomy_term_load($tid);
+    #$getlocations_defaults = getlocations_defaults();
+    #$marker = $getlocations_defaults['vocabulary_map_marker'];
+    $typemarkers = getlocations_get_markertypes('vocabulary');
+    $marker = $typemarkers[$term->vid];
+    $latlons = array();
+    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+    $ct = 0;
+    if (count($locations)) {
+      // we should loop over them and dump bummers with no lat/lon
+      foreach ($locations AS $key => $location) {
+        if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+          $ct++;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $term->name) . ',' . $marker;
+        }
+      }
+    }
+    if ($ct < 2 ) {
+      unset($minmaxes);
+      $minmaxes = '';
+    }
+
+    drupal_set_title(t('View term @t locations', array('@t' => $term->name)));
+
+    return getlocations_setlocations($latlons, $minmaxes, 'term', $term);
+
+  }
+}
+
+function getlocations_commentmap($cid) {
+  if (module_exists('getlocations_fields')) {
+    $locations = getlocations_load_locations($cid, 'cid');
+    $comment = comment_load($cid);
+    $getlocations_defaults = getlocations_defaults();
+    $marker = $getlocations_defaults['comment_map_marker'];
+    $latlons = array();
+    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+    $ct = 0;
+    if (count($locations)) {
+      // we should loop over them and dump bummers with no lat/lon
+      foreach ($locations AS $key => $location) {
+        if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+          $ct++;
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $comment->subject) . ',' . $marker;
+        }
+      }
+    }
+    if ($ct < 2 ) {
+      unset($minmaxes);
+      $minmaxes = '';
+    }
+
+    drupal_set_title(t('View comment @t locations', array('@t' => $comment->subject)));
+
+    return getlocations_setlocations($latlons, $minmaxes, 'comment', $comment);
+
+  }
+}
+
 
 /**
  * Menu callback
@@ -620,6 +713,7 @@ function getlocations_defaults() {
     'user_map_marker'        => 'drupal',
     'vocabulary_map_marker'  => 'drupal',
     'comment_map_marker'     => 'drupal',
+    'input_map_marker'       => 'drupal',
     'markeraction'           => 0,
     'minzoom'                => 6,
     'maxzoom'                => 16,
@@ -632,6 +726,10 @@ function getlocations_defaults() {
     'returnlink_page_link'   => t('Return to Page'),
     'returnlink_user_enable' => 0,
     'returnlink_user_link'   => t('Return to User'),
+    'returnlink_term_enable' => 0,
+    'returnlink_term_link'   => t('Return to Term'),
+    'returnlink_comment_enable' => 0,
+    'returnlink_comment_link'   => t('Return to Comment'),
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());
@@ -1073,6 +1171,13 @@ function getlocations_box() {
   }
   elseif ($a1 == 'user' && $a2) {
     $content .= getlocations_usermap($a2);
+  }
+
+  elseif ($a1 == 'term' && $a2) {
+    $content .= getlocations_termmap($a2);
+  }
+  elseif ($a1 == 'comment' && $a2) {
+    $content .= getlocations_commentmap($a2);
   }
   elseif ($a1 == 'users') {
     $content .= getlocations_usersmap();

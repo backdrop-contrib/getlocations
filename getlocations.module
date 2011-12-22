@@ -117,24 +117,26 @@ function getlocations_menu() {
       'type' => MENU_CALLBACK,
     );
 
-    // getlocations/term/$tid    # show all locations for a term
-    $items['getlocations/term/%getlocations_id'] = array(
-      'title' => 'Get term locations',
-      'access callback' => 'getlocations_access_location',
-      'page callback' => 'getlocations_termmap',
-      'page arguments' => array(2),
-      'type' => MENU_CALLBACK,
-    );
-
-    // getlocations/comment/$cid    # show all locations for a comment
-    $items['getlocations/comment/%getlocations_id'] = array(
-      'title' => 'Get comment locations',
-      'access callback' => 'getlocations_access_location',
-      'page callback' => 'getlocations_commentmap',
-      'page arguments' => array(2),
-      'type' => MENU_CALLBACK,
-    );
-
+    if (getlocations_get_vocabularies()) {
+      // getlocations/term/$tid    # show all locations for a term
+      $items['getlocations/term/%getlocations_id'] = array(
+        'title' => 'Get term locations',
+        'access callback' => 'getlocations_access_location',
+        'page callback' => 'getlocations_termmap',
+        'page arguments' => array(2),
+        'type' => MENU_CALLBACK,
+      );
+    }
+    if (getlocations_check_comment()) {
+      // getlocations/comment/$cid    # show all locations for a comment
+      $items['getlocations/comment/%getlocations_id'] = array(
+        'title' => 'Get comment locations',
+        'access callback' => 'getlocations_access_location',
+        'page callback' => 'getlocations_commentmap',
+        'page arguments' => array(2),
+        'type' => MENU_CALLBACK,
+      );
+    }
   }
   // getlocations/type/$type     # show all locations of nodes of content-type machine name
   $items['getlocations/type/%getlocations_type'] = array(

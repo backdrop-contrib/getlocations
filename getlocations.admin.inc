@@ -171,58 +171,60 @@ function getlocations_settings_form() {
     '#suffix' => '</div>',
   );
 
-  if (module_exists('getlocations_fields') && getlocations_check_user()) {
-    $form['getlocations_default']['returnlink_user_enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Show link back to user'),
-      '#default_value' =>  $getlocations_defaults['returnlink_user_enable'],
-      '#return_value' => 1,
-    );
-    $form['getlocations_default']['returnlink_user_link'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Text of user return link'),
-      '#default_value' => $getlocations_defaults['returnlink_user_link'],
-      '#size' => 30,
-      '#description' => t('Use %n to insert the user name'),
-      '#prefix' => '<div id="wrap-user-link">',
-      '#suffix' => '</div>',
-    );
-  }
+  if (module_exists('getlocations_fields')) {
+    if (getlocations_check_user()) {
+      $form['getlocations_default']['returnlink_user_enable'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show link back to user'),
+        '#default_value' =>  $getlocations_defaults['returnlink_user_enable'],
+        '#return_value' => 1,
+      );
+      $form['getlocations_default']['returnlink_user_link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Text of user return link'),
+        '#default_value' => $getlocations_defaults['returnlink_user_link'],
+        '#size' => 30,
+        '#description' => t('Use %n to insert the user name'),
+        '#prefix' => '<div id="wrap-user-link">',
+        '#suffix' => '</div>',
+      );
+    }
 
-  if (module_exists('getlocations_fields') && getlocations_get_vocabularies()) {
-    $form['getlocations_default']['returnlink_term_enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Show link back to term'),
-      '#default_value' =>  $getlocations_defaults['returnlink_term_enable'],
-      '#return_value' => 1,
-    );
-    $form['getlocations_default']['returnlink_term_link'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Text of term return link'),
-      '#default_value' => $getlocations_defaults['returnlink_term_link'],
-      '#size' => 30,
-      '#description' => t('Use %n to insert the term name'),
-      '#prefix' => '<div id="wrap-term-link">',
-      '#suffix' => '</div>',
-    );
-  }
+    if (getlocations_get_vocabularies()) {
+      $form['getlocations_default']['returnlink_term_enable'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show link back to term'),
+        '#default_value' =>  $getlocations_defaults['returnlink_term_enable'],
+        '#return_value' => 1,
+      );
+      $form['getlocations_default']['returnlink_term_link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Text of term return link'),
+        '#default_value' => $getlocations_defaults['returnlink_term_link'],
+        '#size' => 30,
+        '#description' => t('Use %n to insert the term name'),
+        '#prefix' => '<div id="wrap-term-link">',
+        '#suffix' => '</div>',
+      );
+    }
 
-  if (module_exists('getlocations_fields') && getlocations_check_comment()) {
-    $form['getlocations_default']['returnlink_comment_enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Show link back to comment'),
-      '#default_value' =>  $getlocations_defaults['returnlink_comment_enable'],
-      '#return_value' => 1,
-    );
-    $form['getlocations_default']['returnlink_comment_link'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Text of comment return link'),
-      '#default_value' => $getlocations_defaults['returnlink_comment_link'],
-      '#size' => 30,
-      '#description' => t('Use %n to insert the comment subject'),
-      '#prefix' => '<div id="wrap-comment-link">',
-      '#suffix' => '</div>',
-    );
+    if (getlocations_check_comment()) {
+      $form['getlocations_default']['returnlink_comment_enable'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show link back to comment'),
+        '#default_value' =>  $getlocations_defaults['returnlink_comment_enable'],
+        '#return_value' => 1,
+      );
+      $form['getlocations_default']['returnlink_comment_link'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Text of comment return link'),
+        '#default_value' => $getlocations_defaults['returnlink_comment_link'],
+        '#size' => 30,
+        '#description' => t('Use %n to insert the comment subject'),
+        '#prefix' => '<div id="wrap-comment-link">',
+        '#suffix' => '</div>',
+      );
+    }
   }
 
   // node type markers

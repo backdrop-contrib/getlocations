@@ -65,7 +65,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . (isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : '')) . ',' . $marker;
+        $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . $name . ',' . $marker;
       }
     }
   }

@@ -264,7 +264,8 @@ function getlocations_nodemap($nid) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $node->title) . ',' . $marker;
+        $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $node->title, ENT_QUOTES);
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
       }
     }
   }
@@ -273,7 +274,7 @@ function getlocations_nodemap($nid) {
     $minmaxes = '';
   }
 
-  drupal_set_title(t('View @t locations', array('@t' => $node->title)));
+  drupal_set_title(t('View !t locations', array('!t' => $node->title)));
 
   // all in $newlocations
   return getlocations_setlocations($latlons, $minmaxes, 'node', $node);
@@ -305,7 +306,8 @@ function getlocations_usermap($uid) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $account->name) . ',' . $marker;
+          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $account->name, ENT_QUOTES);
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
         }
       }
     }
@@ -314,7 +316,7 @@ function getlocations_usermap($uid) {
       $minmaxes = '';
     }
 
-    drupal_set_title(t('View user @t locations', array('@t' => $account->name)));
+    drupal_set_title(t('View user !t locations', array('!t' => $account->name)));
 
     return getlocations_setlocations($latlons, $minmaxes, 'user', $account);
   }
@@ -347,7 +349,8 @@ function getlocations_usersmap() {
           if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $ct++;
-            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $row->name) . ',' . $marker;
+            $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row->name, ENT_QUOTES);
+            $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
           }
         }
       }
@@ -387,7 +390,8 @@ function getlocations_termmap($tid) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $term->name) . ',' . $marker;
+          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $term->name, ENT_QUOTES);
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
         }
       }
     }
@@ -396,7 +400,7 @@ function getlocations_termmap($tid) {
       $minmaxes = '';
     }
 
-    drupal_set_title(t('View term @t locations', array('@t' => $term->name)));
+    drupal_set_title(t('View term !t locations', array('!t' => $term->name)));
 
     return getlocations_setlocations($latlons, $minmaxes, 'term', $term);
 
@@ -418,7 +422,8 @@ function getlocations_commentmap($cid) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $comment->subject) . ',' . $marker;
+          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $comment->subject, ENT_QUOTES);
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
         }
       }
     }
@@ -427,7 +432,7 @@ function getlocations_commentmap($cid) {
       $minmaxes = '';
     }
 
-    drupal_set_title(t('View comment @t locations', array('@t' => $comment->subject)));
+    drupal_set_title(t('View comment !t locations', array('!t' => $comment->subject)));
 
     return getlocations_setlocations($latlons, $minmaxes, 'comment', $comment);
 
@@ -468,7 +473,8 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
           }
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . ($location['name'] ? $location['name'] : $row->title) . ',' . $marker;
+          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row->title, ENT_QUOTES);
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
         }
       }
     }
@@ -507,7 +513,8 @@ function getlocations_lids($lidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;
-          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $location['marker'];
+          $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
+          $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $location['marker'];
       }
     }
   }
@@ -554,7 +561,8 @@ function getlocations_nids($nidlist) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $location['marker'];
+        $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $location['marker'];
       }
     }
   }

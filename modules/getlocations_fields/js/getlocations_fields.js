@@ -11,28 +11,26 @@
   Drupal.behaviors.getlocations_fields = {
     attach: function () {
 
-      var point = '';
-      var adrsfield = 'getlocations_address_';
-      var namefield = 'getlocations_name_';
-      var streetfield = 'getlocations_street_';
-      var additionalfield = 'getlocations_additional_';
-      var cityfield = 'getlocations_city_';
-      var provincefield = 'getlocations_province_';
-      var postal_codefield = 'getlocations_postal_code_';
-      var countryfield = 'getlocations_country_';
-      var latfield = 'getlocations_latitude_';
-      var lonfield = 'getlocations_longitude_';
-      var nodezoom = '';
-      var use_address = '';
-      var gkey = '';
-      var map_marker = 'drupal';
-      var mark = [];
-
       var settings = Drupal.settings.getlocations_fields;
 
       // each map has its own settings
       jQuery.each(settings, function (key, sett) {
 
+        var point = [];
+        var adrsfield = 'getlocations_address_';
+        var namefield = 'getlocations_name_';
+        var streetfield = 'getlocations_street_';
+        var additionalfield = 'getlocations_additional_';
+        var cityfield = 'getlocations_city_';
+        var provincefield = 'getlocations_province_';
+        var postal_codefield = 'getlocations_postal_code_';
+        var countryfield = 'getlocations_country_';
+        var latfield = 'getlocations_latitude_';
+        var lonfield = 'getlocations_longitude_';
+        var nodezoom = '';
+        var use_address = '';
+        var map_marker = 'drupal';
+        var mark = [];
         var gkey = key;
         nodezoom = parseInt(sett.nodezoom);
         use_address = sett.use_address;
@@ -42,8 +40,8 @@
         lat = $("#" + latfield + key).val();
         lng = $("#" + lonfield + key).val();
         if (lat && lng) {
-          point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-          updateMap(inputmap[key], point, key);
+          point[key] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+          updateMap(inputmap[key], point[key], key);
         }
 
         if (use_address) {
@@ -57,13 +55,13 @@
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode(fm_adrs, function (results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
-                point = results[0].geometry.location;
+                point[gkey] = results[0].geometry.location;
                 lat = results[0].geometry.location.lat();
                 lng = results[0].geometry.location.lng();
                 $("#" + latfield + gkey).val(lat);
                 $("#" + lonfield + gkey).val(lng);
                 $("#" + adrsfield + gkey).val(place_adrs.formatted_address);
-                updateMap(inputmap[gkey], point, gkey);
+                updateMap(inputmap[gkey], point[gkey], gkey);
                 set_address_components(gkey, place_adrs.address_components);
               }
               else {
@@ -120,12 +118,12 @@
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode(input_adrs, function (results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
-                point = results[0].geometry.location;
+                point[kk] = results[0].geometry.location;
                 lat = results[0].geometry.location.lat();
                 lng = results[0].geometry.location.lng();
                 $("#" + latfield + kk).val(lat);
                 $("#" + lonfield + kk).val(lng);
-                updateMap(mmap, point, kk);
+                updateMap(mmap, point[kk], kk);
               }
               else {
                 var prm = {'!a': input_adrstmp, '!b': getGeoErrCode(status) };
@@ -137,8 +135,8 @@
           else if ( ($("#" + latfield + k).val() !== '') && ($("#" + lonfield + k).val() !== '')  ) {
             lat = $("#" + latfield + k).val();
             lng = $("#" + lonfield + k).val();
-            point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-            var input_ll = {'latLng': point};
+            point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+            var input_ll = {'latLng': point[k]};
             // Create a Client Geocoder
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode(input_ll, function (results, status) {
@@ -254,12 +252,11 @@
         google.maps.event.addListener(inputmap[gkey], 'click', function (event) {
           if (! mark[gkey]) {
             // make an icon
-            if (! point) {
-              //point = inputmap[gkey].getCenter();
-              point = event.latLng;
-              inputmap[gkey].setCenter(point);
+            if (! point[gkey]) {
+              point[gkey] = event.latLng;
+              inputmap[gkey].setCenter(point[gkey]);
             }
-            makeMoveMarker(inputmap[gkey], point, gkey);
+            makeMoveMarker(inputmap[gkey], point[gkey], gkey);
           }
         });
 
@@ -321,6 +318,14 @@
         return errstr;
       }
 
+      // do a 'fake' required field
+      label = $("div.getlocations_required label").html();
+      label += ' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>';
+      $("div.getlocations_required label").html(label);
+      // wipes out 'error' class so not in use
+      //rclass = $("div.getlocations_required input").attr('class');
+      //rclass += ' required';
+      //$("div.getlocations_required input").attr('class', rclass);
 
     }
   };

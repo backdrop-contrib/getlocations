@@ -405,11 +405,20 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $map = $form['map']['#markup'];
   $form['map']['#markup'] = '<p>' . $msg . '</p>' . $map;
 
+  // wrap 'fake' required in a div
+  if (isset($form['getlocations_required'])) {
+    $requireds = explode(',', $form['getlocations_required']['#value']);
+    foreach ($requireds AS $id) {
+      $form[$id]['#prefix'] = '<div class="getlocations_required">';
+      $form[$id]['#suffix'] = '</div>';
+    }
+    unset($form['getlocations_required']);
+  }
+
   $output .= drupal_render_children($form);
   return $output;
 
 }
-
 
 /**
  * The settings form

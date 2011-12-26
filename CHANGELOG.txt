@@ -1,9 +1,38 @@
-commit 0150abe
+commit 27131e4
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 26 22:39:39 2011 +0000
+
+    fixed input map bugs required, points and mapid
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 1ab45a3
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 26 22:32:38 2011 +0000
+
+    fixed apostrophe bug in name field and tooltips
+
+getlocations.module
+views/getlocations.views.inc
+
+commit 7a7d967
+Author: hutch <hutch@midwales.net>
+Date:   Thu Dec 22 17:46:15 2011 +0000
+
+    improved checks
+
+getlocations.admin.inc
+getlocations.module
+
+commit 4dce249
 Author: hutch <hutch@midwales.net>
 Date:   Thu Dec 22 14:17:04 2011 +0000
 
     added term and comment maps, added default input marker
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations.theme.inc

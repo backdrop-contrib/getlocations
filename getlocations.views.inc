@@ -29,7 +29,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
         if (isset($location['uid'])) {
           $marker = $getlocations_defaults['user_map_marker'];
         }
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+        $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
       }
     }
   }

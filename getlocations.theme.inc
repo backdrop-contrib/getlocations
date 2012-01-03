@@ -219,7 +219,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
         else {
           $marker = $getlocations_defaults['map_marker'];
         }
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $location['name'] . ',' . $marker;
+        $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
+        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
       }
     }
   }

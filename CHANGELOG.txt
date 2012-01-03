@@ -1,9 +1,31 @@
-commit a27431f
+commit 937d154
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 3 21:45:17 2012 +0000
+
+    fixed tooltips apostrophe bug
+
+getlocations.module
+getlocations.theme.inc
+
+commit 8671eeb
+Author: hutch <hutch@midwales.net>
+Date:   Fri Nov 25 14:14:32 2011 +0000
+
+    improved marker file detection, improved node types detection
+
+getlocations-view-map.tpl.php
+getlocations.admin.inc
+getlocations.css
+getlocations.module
+getlocations.theme.inc
+
+commit 0befc20
 Author: hutch <hutch@midwales.net>
 Date:   Wed Nov 16 09:15:34 2011 +0000
 
     multiple maps on a page
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations.theme.inc

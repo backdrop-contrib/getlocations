@@ -230,7 +230,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
     $found = FALSE;
     foreach ($list AS $maptype) {
-      if ($form_state['values']['maptype'] == $maptype && $form_state['values']['baselayers'][$maptype] ) {
+      if (isset($form_state['values']['maptype']) && $form_state['values']['maptype'] == $maptype && $form_state['values']['baselayers'][$maptype] ) {
         $found = TRUE;
         break;
       }

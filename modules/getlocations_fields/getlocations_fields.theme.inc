@@ -238,6 +238,14 @@ function theme_getlocations_fields_field_settings_form($variables) {
     ),
     array('data' =>
       array(
+        array('data' => $form['input_additional_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['input_additional_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['input_additional_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
         array('data' => $form['input_city_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['input_city_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => $form['input_city_required'], 'class' => 'getlocations_fields_input_cell3'),
@@ -451,6 +459,14 @@ function theme_getlocations_fields_settings_form($variables) {
         array('data' => $form['getlocations_fields_defaults']['input_street_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['getlocations_fields_defaults']['input_street_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => $form['getlocations_fields_defaults']['input_street_required'], 'class' => 'getlocations_fields_input_cell3'),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_additional_width'], 'class' => 'getlocations_fields_input_cell1'),
+        array('data' => $form['getlocations_fields_defaults']['input_additional_weight'], 'class' => 'getlocations_fields_input_cell2'),
+        array('data' => $form['getlocations_fields_defaults']['input_additional_required'], 'class' => 'getlocations_fields_input_cell3'),
       ),
       'no_striping' => $no_striping,
     ),

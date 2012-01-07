@@ -15,51 +15,38 @@ function getlocations_fields_views_handlers() {
       'path' => drupal_get_path('module', 'getlocations_fields') . '/handlers',
     ),
     'handlers' => array(
-      'getlocations_fields_handler_sort_distance' => array(
-        'parent' => 'views_handler_sort',
+
+#      'getlocations_fields_handler_argument_distance' => array(
+#        'parent' => 'views_handler_argument',
+#      ),
+
+      'getlocations_fields_handler_field_coordinates' => array(
+        'parent' => 'getlocations_fields_handler_field_latitude',
       ),
-      'getlocations_fields_views_handler_filter_distance' => array(
-        'parent' => 'views_handler_filter',
+      'getlocations_fields_handler_field_country' => array(
+        'parent' => 'views_handler_field',
       ),
 
-#      'getlocations_fields_handler_argument_country' => array(
-#        'parent' => 'views_handler_argument',
-#      ),
-#      'getlocations_fields_handler_argument_province' => array(
-#        'parent' => 'views_handler_argument',
-#      ),
-#      'getlocations_fields_handler_argument_proximity' => array(
-#        'parent' => 'views_handler_argument',
-#      ),
-#      'getlocations_fields_handler_field_address' => array(
-#        'parent' => 'views_handler_field',
-#      ),
-#      'getlocations_fields_handler_field_country' => array(
-#        'parent' => 'views_handler_field',
-#      ),
 #      'getlocations_fields_handler_field_distance' => array(
 #        'parent' => 'views_handler_field',
 #      ),
-#      'getlocations_fields_handler_field_province' => array(
-#        'parent' => 'views_handler_field',
-#      ),
-      'getlocations_fields_handler_field_street' => array(
+
+      'getlocations_fields_handler_field_latitude' => array(
         'parent' => 'views_handler_field',
       ),
-#      'getlocations_fields_handler_filter_country' => array(
-#        'parent' => 'views_handler_filter_in_operator',
-#      ),
-#      'getlocations_fields_handler_filter_province' => array(
-#        'parent' => 'views_handler_filter',
-#      ),
-      'getlocations_fields_views_handler_field_coordinates' => array(
-        'parent' => 'getlocations_fields_views_handler_field_latitude',
+      'getlocations_fields_handler_field_longitude' => array(
+        'parent' => 'getlocations_fields_handler_field_latitude',
       ),
-      'getlocations_fields_views_handler_field_latitude' => array(
-        'parent' => 'views_handler_field',
+
+      'getlocations_fields_handler_filter_country' => array(
+        'parent' => 'views_handler_filter_in_operator',
       ),
-      'getlocations_fields_views_handler_field_longitude' => array(
-        'parent' => 'getlocations_fields_views_handler_field_latitude',
+      'getlocations_fields_handler_filter_distance' => array(
+        'parent' => 'views_handler_filter',
+      ),
+
+      'getlocations_fields_handler_sort_distance' => array(
+        'parent' => 'views_handler_sort',
       ),
     ),
   );
@@ -130,7 +117,7 @@ function getlocations_fields_views_data() {
     'help' => t('The getlocations ID of the location.'), // The help that appears on the UI,
     // Information for displaying the glid
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     // Information for accepting a lid as an argument
@@ -158,6 +145,7 @@ function getlocations_fields_views_data() {
     'title' => t('Name'),
     'help' => t('The name of the selected location.'),
     'field' => array(
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -167,13 +155,13 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
-/*
+
   // street
   $data['getlocations_fields']['street'] = array(
     'title' => t('Street'),
     'help' => t('The street address of the selected location.'),
     'field' => array(
-      'handler' => 'getlocations_fields_handler_field_street',
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -189,7 +177,7 @@ function getlocations_fields_views_data() {
     'title' => t('City'),
     'help' => t('The city of the selected location.'),
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'argument' => array(
@@ -203,12 +191,13 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
-  // TODO these handlers province code scrapped, useless outside US
+
+  // province
   $data['getlocations_fields']['province'] = array(
     'title' => t('Province'),
     'help' => t('The province of the selected location.'),
     'field' => array(
-#      'handler' => 'getlocations_fields_handler_field_province',
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
 #    'argument' => array(
@@ -216,19 +205,19 @@ function getlocations_fields_views_data() {
 #      //'name field' => 'name',
 #    ),
     'filter' => array(
-      #'handler' => 'getlocations_fields_handler_filter_province',
       'handler' => 'views_handler_filter_string',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
-      // TODO: needs handler to sort by name, not code
     ),
   );
+
   // postal_code
   $data['getlocations_fields']['postal_code'] = array(
     'title' => t('Postal Code'),
     'help' => t('The postal code of the selected location.'),
     'field' => array(
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -238,13 +227,13 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
+
   // country
-  // TODO handlers
   $data['getlocations_fields']['country'] = array(
     'title' => t('Country'),
     'help' => t('The country of the selected location.'),
     'field' => array(
-      #'handler' => 'getlocations_fields_handler_field_country',
+      'handler' => 'getlocations_fields_handler_field_country',
       'click sortable' => TRUE,
     ),
 #    'argument' => array(
@@ -252,22 +241,20 @@ function getlocations_fields_views_data() {
 #      //'name field' => 'name',
 #    ),
     'filter' => array(
-      #'handler' => 'getlocations_fields_handler_filter_country',
-      'handler' => 'views_handler_filter_string',
+      'handler' => 'getlocations_fields_handler_filter_country',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
       // TODO: needs handler to sort by name, not code
     ),
   );
-*/
 
   // latitude
   $data['getlocations_fields']['latitude'] = array(
     'title' => t('Latitude'),
     'help' => t('The latitude of the selected location.'),
     'field' => array(
-      'handler' => 'getlocations_fields_views_handler_field_latitude',
+      'handler' => 'getlocations_fields_handler_field_latitude',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -282,7 +269,7 @@ function getlocations_fields_views_data() {
     'title' => t('Longitude'),
     'help' => t('The longitude of the selected location.'),
     'field' => array(
-      'handler' => 'getlocations_fields_views_handler_field_longitude',
+      'handler' => 'getlocations_fields_handler_field_longitude',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -295,10 +282,10 @@ function getlocations_fields_views_data() {
   // coordinates
   $data['getlocations_fields']['coordinates'] = array(
     'title' => t('Coordinates'),
-    'help' => t("The coordinates of the selected location in 'lat, long' format."),
+    'help' => t("The coordinates of the selected location in 'lat,long' format."),
     'field' => array(
       'field' => 'latitude', // The handler adds the longitude.
-      'handler' => 'getlocations_fields_views_handler_field_coordinates',
+      'handler' => 'getlocations_fields_handler_field_coordinates',
       'click sortable' => FALSE,
     ),
   );
@@ -308,18 +295,18 @@ function getlocations_fields_views_data() {
     'title' => t('Distance'),
     'help' => t("The distance from the selected location and either the current user or a specific location."),
     'field' => array(
-#      'handler' => 'getlocations_fields_handler_field_distance',
-      'handler' => 'views_handler_field', // @@@
+#      'handler' => 'getlocations_fields_handler_field_distance',  // not working yet
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'sort' => array(
       'handler' => 'getlocations_fields_handler_sort_distance',
     ),
 #    'argument' => array(
-#      'handler' => 'getlocations_fields_handler_argument_distance',
+#      'handler' => 'getlocations_fields_handler_argument_distance',  // not working yet
 #    ),
     'filter' => array(
-      'handler' => 'getlocations_fields_views_handler_filter_distance',
+      'handler' => 'getlocations_fields_handler_filter_distance',
     ),
 //    'relationship' => array(
 //      'handler' => 'getlocations_fields_handler_relationship_distance',
@@ -391,7 +378,7 @@ function getlocations_fields_views_data() {
       'click sortable' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_string',
+      'handler' => 'views_handler_filter_numeric',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -405,7 +392,7 @@ function getlocations_fields_views_data() {
       'click sortable' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_string',
+      'handler' => 'views_handler_filter_numeric',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -419,7 +406,7 @@ function getlocations_fields_views_data() {
       'click sortable' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_string',
+      'handler' => 'views_handler_filter_numeric',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -433,7 +420,7 @@ function getlocations_fields_views_data() {
       'click sortable' => TRUE,
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_string',
+      'handler' => 'views_handler_filter_numeric',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',

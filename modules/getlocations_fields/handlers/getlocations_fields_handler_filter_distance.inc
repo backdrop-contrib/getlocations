@@ -9,7 +9,7 @@
 /**
  * General proximity filter for location latitude/longitude.
  */
-class getlocations_fields_views_handler_filter_distance extends views_handler_filter {
+class getlocations_fields_handler_filter_distance extends views_handler_filter {
   // This is always multiple, because we can have distance, units etc.
   var $always_multiple = TRUE;
 

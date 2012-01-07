@@ -5,7 +5,7 @@
  * Coordinates field handler.
  */
 
-class getlocations_fields_views_handler_field_coordinates extends getlocations_fields_views_handler_field_latitude {
+class getlocations_fields_handler_field_coordinates extends getlocations_fields_handler_field_latitude {
 
   function construct() {
     parent::construct();

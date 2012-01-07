@@ -5,7 +5,7 @@
  * Latitude field handler.
  */
 
-class getlocations_fields_views_handler_field_latitude extends views_handler_field {
+class getlocations_fields_handler_field_latitude extends views_handler_field {
 
   function option_definition() {
     $options = parent::option_definition();

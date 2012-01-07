@@ -5,7 +5,7 @@
  * Longitude field handler.
  */
 
-class getlocations_fields_views_handler_field_longitude extends getlocations_fields_views_handler_field_latitude {
+class getlocations_fields_handler_field_longitude extends getlocations_fields_handler_field_latitude {
 
   function render($values) {
     if ($this->options['style'] == 'dms') {

@@ -48,3 +48,7 @@
 
 
 }
+/* autocomplete correction, ff only */
+.getlocations_fields_country_wrapper .form-item {
+  position: relative;
+}

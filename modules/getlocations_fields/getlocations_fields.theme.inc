@@ -408,6 +408,8 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['latitude']['#suffix'] = '</div>';
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';
+  $form['country']['#prefix'] = '<div class="getlocations_fields_country_wrapper">';
+  $form['country']['#suffix'] = '</div>';
 
   $msg = t('To use the map to find a location, click on the map and drag the marker.');
   $map = $form['map']['#markup'];

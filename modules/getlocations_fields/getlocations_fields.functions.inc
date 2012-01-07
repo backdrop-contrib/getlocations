@@ -26,6 +26,11 @@ function getlocations_fields_get_countries_list($upper = TRUE) {
   return $countries;
 }
 
+function getlocations_fields_get_country_name($id) {
+  $countries = getlocations_fields_get_countries_list();
+  return $countries[$id];
+}
+
 /**
  * Convert decimal degrees to degrees,minutes,seconds.
  * from location module
@@ -435,6 +440,28 @@ function getlocations_fields_element_country($default, $title="", $ctools=TRUE) 
 /**
  * @param string $default
  *
+ * @return
+ *   Returns form element
+ *
+ */
+function getlocations_fields_element_countrysetting($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Country selection method'),
+    '#default_value' => $default,
+    '#options' => array(
+      0 => t('Normal textfield'),
+      1 => t('Dropdown'),
+      2 => t('Autocomplete'),
+    ),
+  );
+  return $element;
+}
+
+/**
+ * @param string $default
+ *
  * @param bool $ctools
  *
  * @return
@@ -607,6 +634,22 @@ function getlocations_fields_countryinfo() {
 
 }
 
+// autocomplete for country
+function getlocations_fields_country_autocomplete($string = '') {
+    $matches = array();
+  if ($string) {
+    $countries = getlocations_fields_get_countries_list();
+    foreach ($countries AS $country) {
+      $s = strtolower($string);
+      $c = strtolower($country);
+      preg_match_all("/^$s/", $c, $m);
+      if (count( $m[0])) {
+        $matches[$country] = $country;
+      }
+    }
+  }
+  drupal_json_output($matches);
+}
 
 /***********************************************************/
 // these functions currently not in use

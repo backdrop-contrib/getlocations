@@ -50,6 +50,12 @@ function getlocations_fields_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  // autocomplete path
+  $items['getlocations_fields/country_autocomplete'] = array(
+    'page callback' => 'getlocations_fields_country_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
   return $items;
 
 }
@@ -1088,7 +1094,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   }
 
   // country
-  if ($settings['use_country_dropdown']) {
+  if ($settings['use_country_dropdown'] == 1) {
     $countries = getlocations_fields_get_countries_list();
     $countries = array_merge(array('' => t('---Please select a country---')), $countries);
     $widget['country'] = array(
@@ -1103,7 +1109,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     $widget['country'] = array(
       '#type' => 'textfield',
       '#default_value' => isset($items[$delta]['country']) ? $items[$delta]['country'] : '',
-      '#autocomplete_path' => '',
+      '#autocomplete_path' => ($settings['use_country_dropdown'] == 2 ? 'getlocations_fields/country_autocomplete' : ''),
       '#size' => $settings['input_country_width'],
       '#attributes' => array('id' => 'getlocations_country_' . $mapid),
       '#title' => t('Country'),
@@ -1147,7 +1153,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   $widget['latitude'] = array(
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['latitude']) ? $items[$delta]['latitude'] : '',
-    '#autocomplete_path' => '',
     '#size' => $settings['input_latitude_width'],
     '#attributes' => array('id' => 'getlocations_latitude_' . $mapid),
     '#title' => 'Latitude',
@@ -1160,7 +1165,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   $widget['longitude'] = array(
     '#type' => 'textfield',
     '#default_value' => isset($items[$delta]['longitude']) ? $items[$delta]['longitude'] : NULL,
-    '#autocomplete_path' => '',
     '#size' => $settings['input_longitude_width'],
     '#attributes' => array('id' => 'getlocations_longitude_' . $mapid),
     '#title' => 'Longitude',
@@ -2059,11 +2063,7 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['country'] = getlocations_fields_element_country($defaults['country'], t('Default country'), FALSE);
 
   // country dropdown
-  $form['use_country_dropdown'] = getlocations_element_map_checkbox(
-    t('Use dropdown list for country'),
-    $defaults['use_country_dropdown'],
-    t('Use a dropdown select list instead of a text box.')
-  );
+  $form['use_country_dropdown'] = getlocations_fields_element_countrysetting($defaults['use_country_dropdown']);
 
   return $form;
 

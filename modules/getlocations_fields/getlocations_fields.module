@@ -50,9 +50,19 @@ function getlocations_fields_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  // autocomplete path
+  // autocomplete paths
   $items['getlocations_fields/country_autocomplete'] = array(
     'page callback' => 'getlocations_fields_country_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getlocations_fields/province_autocomplete'] = array(
+    'page callback' => 'getlocations_fields_province_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['getlocations_fields/city_autocomplete'] = array(
+    'page callback' => 'getlocations_fields_city_autocomplete',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -893,6 +903,8 @@ function getlocations_fields_field_widget_info() {
       'settings' => array(
         'country'                    => $getlocations_fields_defaults['country'],
         'use_country_dropdown'       => $getlocations_fields_defaults['use_country_dropdown'],
+        'province_autocomplete'      => $getlocations_fields_defaults['province_autocomplete'],
+        'city_autocomplete'          => $getlocations_fields_defaults['city_autocomplete'],
         'use_address'                => $getlocations_fields_defaults['use_address'],
         'input_address_width'        => $getlocations_fields_defaults['input_address_width'],
         'input_name_width'           => $getlocations_fields_defaults['input_name_width'],
@@ -1074,6 +1086,14 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         '#title' => $title,
         '#maxlength' => 255,
       );
+      // autocomplete for province
+      if ($id == 'province' && $settings['province_autocomplete'] ) {
+        $widget[$id]['#autocomplete_path'] = 'getlocations_fields/province_autocomplete';
+      }
+      // autocomplete for city
+      elseif ($id == 'city' && $settings['city_autocomplete'] ) {
+        $widget[$id]['#autocomplete_path'] = 'getlocations_fields/city_autocomplete';
+      }
     }
     if ($settings['input_' . $id . '_required'] == 2) {
       $widget[$id]['#disabled'] = TRUE;
@@ -1092,7 +1112,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       $widget[$id]['#weight'] = $settings['input_' . $id . '_weight'];
     }
   }
-
+dd($items, '$items');
   // country
   if ($settings['use_country_dropdown'] == 1) {
     $countries = getlocations_fields_get_countries_list();
@@ -1106,9 +1126,13 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     );
   }
   else {
+    $default_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
+    if ($default_value && strlen($default_value) == 2) {
+      $default_value = getlocations_fields_get_country_name($default_value);
+    }
     $widget['country'] = array(
       '#type' => 'textfield',
-      '#default_value' => isset($items[$delta]['country']) ? $items[$delta]['country'] : '',
+      '#default_value' => $default_value,
       '#autocomplete_path' => ($settings['use_country_dropdown'] == 2 ? 'getlocations_fields/country_autocomplete' : ''),
       '#size' => $settings['input_country_width'],
       '#attributes' => array('id' => 'getlocations_country_' . $mapid),
@@ -1705,6 +1729,8 @@ function getlocations_fields_defaults() {
     'input_map_weight'           => 0,
     'input_geobutton_weight'     => 0,
     'use_country_dropdown'       => 0,
+    'province_autocomplete'      => 0,
+    'city_autocomplete'          => 0,
   );
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', array());
@@ -1795,6 +1821,8 @@ function getlocations_fields_field_info_defaults() {
         'input_longitude_weight'     => $getlocations_fields_defaults['input_longitude_weight'],
         'input_geobutton_weight'     => $getlocations_fields_defaults['input_geobutton_weight'],
         'use_country_dropdown'       => $getlocations_fields_defaults['use_country_dropdown'],
+        'province_autocomplete'      => $getlocations_fields_defaults['province_autocomplete'],
+        'city_autocomplete'          => $getlocations_fields_defaults['city_autocomplete'],
         'country'                    => $getlocations_fields_defaults['country'],
       ),
     ),
@@ -2060,10 +2088,38 @@ function getlocations_fields_input_settings_form($defaults) {
     ''
   );
 
+  // city_autocomplete
+  $form['city_autocomplete'] = getlocations_fields_element_dd(
+    $defaults['city_autocomplete'],
+    t('City input method'),
+    array(
+      0 => t('Normal textfield'),
+      1 => t('Autocomplete'),
+    )
+  );
+
+  // province_autocomplete
+  $form['province_autocomplete'] = getlocations_fields_element_dd(
+    $defaults['province_autocomplete'],
+    t('Province/State/County input method'),
+    array(
+      0 => t('Normal textfield'),
+      1 => t('Autocomplete'),
+    )
+  );
+
   $form['country'] = getlocations_fields_element_country($defaults['country'], t('Default country'), FALSE);
 
   // country dropdown
-  $form['use_country_dropdown'] = getlocations_fields_element_countrysetting($defaults['use_country_dropdown']);
+  $form['use_country_dropdown'] = getlocations_fields_element_dd(
+    $defaults['use_country_dropdown'],
+    t('Country input method'),
+    array(
+      0 => t('Normal textfield'),
+      1 => t('Dropdown'),
+      2 => t('Autocomplete'),
+    )
+  );
 
   return $form;
 

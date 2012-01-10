@@ -234,7 +234,7 @@
 
           // input or select box
           if ($("#" + countryfield + k).is("input")) {
-            $("#" + countryfield).val(countryfield_value);
+            $("#" + countryfield + k).val(countryfield_value);
           }
           else if ($("#" + countryfield + k).is("select")) {
             // country list is keyed on two letter codes so we need to get

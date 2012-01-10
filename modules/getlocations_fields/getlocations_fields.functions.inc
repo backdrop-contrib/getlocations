@@ -440,24 +440,30 @@ function getlocations_fields_element_country($default, $title="", $ctools=TRUE) 
 /**
  * @param string $default
  *
+ * @param string $title
+ *
+ * @param array $options
+ *
+ * @param string $description
+ *
  * @return
  *   Returns form element
  *
  */
-function getlocations_fields_element_countrysetting($default) {
+function getlocations_fields_element_dd($default, $title, $options, $description = '') {
 
   $element = array(
     '#type' => 'select',
-    '#title' => t('Country selection method'),
+    '#title' => $title,
     '#default_value' => $default,
-    '#options' => array(
-      0 => t('Normal textfield'),
-      1 => t('Dropdown'),
-      2 => t('Autocomplete'),
-    ),
+    '#options' => $options,
   );
+  if ($description) {
+    $element['#description'] = $description;
+  }
   return $element;
 }
+
 
 /**
  * @param string $default
@@ -646,6 +652,40 @@ function getlocations_fields_country_autocomplete($string = '') {
       if (count( $m[0])) {
         $matches[$country] = $country;
       }
+    }
+  }
+  drupal_json_output($matches);
+}
+
+// autocomplete for province
+function getlocations_fields_province_autocomplete($string = '') {
+  $matches = array();
+  if ($string) {
+    //
+    $query = db_select('getlocations_fields', 'f');
+    $query->fields('f', array('province'));
+    $query->where("LOWER(province) LIKE LOWER(:st)", array(':st' => $string . '%'));
+    $query->range(0, 15);
+    $result = $query->execute();
+    foreach ($result AS $row) {
+      $matches[$row->province] = check_plain($row->province);
+    }
+  }
+  drupal_json_output($matches);
+}
+
+// autocomplete for city
+function getlocations_fields_city_autocomplete($string = '') {
+  $matches = array();
+  if ($string) {
+    //
+    $query = db_select('getlocations_fields', 'f');
+    $query->fields('f', array('city'));
+    $query->where("LOWER(city) LIKE LOWER(:st)", array(':st' => $string . '%'));
+    $query->range(0, 15);
+    $result = $query->execute();
+    foreach ($result AS $row) {
+      $matches[$row->city] = check_plain($row->city);
     }
   }
   drupal_json_output($matches);

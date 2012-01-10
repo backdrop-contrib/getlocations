@@ -236,6 +236,7 @@ function theme_getlocations_fields_field_settings_form($variables) {
       ),
       'no_striping' => $no_striping,
     ),
+
     array('data' =>
       array(
         array('data' => $form['input_additional_width'], 'class' => 'getlocations_fields_input_cell1'),
@@ -244,6 +245,7 @@ function theme_getlocations_fields_field_settings_form($variables) {
       ),
       'no_striping' => $no_striping,
     ),
+
     array('data' =>
       array(
         array('data' => $form['input_city_width'], 'class' => 'getlocations_fields_input_cell1'),
@@ -408,6 +410,11 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['latitude']['#suffix'] = '</div>';
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';
+
+  $form['city']['#prefix'] = '<div class="getlocations_fields_city_wrapper">';
+  $form['city']['#suffix'] = '</div>';
+  $form['province']['#prefix'] = '<div class="getlocations_fields_province_wrapper">';
+  $form['province']['#suffix'] = '</div>';
   $form['country']['#prefix'] = '<div class="getlocations_fields_country_wrapper">';
   $form['country']['#suffix'] = '</div>';
 

@@ -42,13 +42,20 @@
 }
 .getlocations_fields_input_cell2 {
 
-
 }
 .getlocations_fields_input_cell3 {
 
-
 }
+
 /* autocomplete correction, ff only */
+.getlocations_fields_city_wrapper .form-item {
+  position: relative;
+}
+
+.getlocations_fields_province_wrapper .form-item {
+  position: relative;
+}
 .getlocations_fields_country_wrapper .form-item {
   position: relative;
 }
+

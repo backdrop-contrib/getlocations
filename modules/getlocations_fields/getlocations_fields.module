@@ -1112,7 +1112,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       $widget[$id]['#weight'] = $settings['input_' . $id . '_weight'];
     }
   }
-dd($items, '$items');
+
   // country
   if ($settings['use_country_dropdown'] == 1) {
     $countries = getlocations_fields_get_countries_list();

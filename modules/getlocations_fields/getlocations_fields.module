@@ -1731,6 +1731,18 @@ function getlocations_fields_defaults() {
     'use_country_dropdown'       => 0,
     'province_autocomplete'      => 0,
     'city_autocomplete'          => 0,
+    'columns'                    => array(
+      'glid'        => t('Glid'),
+      'name'        => t('Name'),
+      'street'      => t('Street'),
+      'additional'  => t('Additional'),
+      'city'        => t('City'),
+      'province'    => t('Province'),
+      'postal_code' => t('Post code'),
+      'country'     => t('Country'),
+      'latitude'    => t('Latitude'),
+      'longitude'   => t('Longitude'),
+    ),
   );
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', array());

@@ -254,7 +254,12 @@ function getlocations_nodemap($nid) {
   $locations = getlocations_load_locations($vid);
   $node = node_load($nid);
   $typemarkers = getlocations_get_markertypes('node');
-  $marker = $typemarkers[$node->type];
+  if (isset($typemarkers[$node->type])) {
+    $marker = $typemarkers[$node->type];
+  }
+  else {
+    $marker = 'drupal';
+  }
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -377,10 +382,13 @@ function getlocations_termmap($tid) {
   if (module_exists('getlocations_fields')) {
     $locations = getlocations_load_locations($tid, 'tid');
     $term = taxonomy_term_load($tid);
-    #$getlocations_defaults = getlocations_defaults();
-    #$marker = $getlocations_defaults['vocabulary_map_marker'];
     $typemarkers = getlocations_get_markertypes('vocabulary');
-    $marker = $typemarkers[$term->vid];
+    if (isset($typemarkers[$term->vid])) {
+      $marker = $typemarkers[$term->vid];
+    }
+    else {
+      $marker = 'drupal';
+    }
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $ct = 0;

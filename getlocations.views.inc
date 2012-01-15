@@ -30,7 +30,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
           $marker = $getlocations_defaults['user_map_marker'];
         }
         $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $location['lid'] . ',' . $name . ',' . $marker;
+        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker);
       }
     }
   }

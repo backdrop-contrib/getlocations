@@ -66,7 +66,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
         $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
-        $latlons[] = $location['latitude'] . ',' . $location['longitude'] . ',' . $lid . ',' . $name . ',' . $marker;
+        $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker);
       }
     }
   }

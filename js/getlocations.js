@@ -331,9 +331,9 @@ var inputmap = [];
       var batchr = [];
     }
 
-    var arr = global_settings.latlons.split('|');
+    var arr = global_settings.latlons;
     for (var i = 0; i < arr.length; i++) {
-      arr2 = arr[i].split(',');
+      arr2 = arr[i];
       lat = arr2[0];
       lon = arr2[1];
       lid = arr2[2];

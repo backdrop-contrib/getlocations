@@ -1,9 +1,72 @@
-commit 0e614b2
+commit d743d92
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 15 21:36:55 2012 +0000
+
+    fixed latlons in getlocation_fields
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit f6fd12a
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 15 15:30:56 2012 +0000
+
+    fixed latlons, #1405534
+
+getlocations.module
+js/getlocations.js
+views/getlocations.views.inc
+
+commit 5ea416e
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 13 21:21:36 2012 +0000
+
+    added columns definition to getlocations_fields_defaults
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit c3d2052
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 13 17:07:13 2012 +0000
+
+    notice avoidance
+
+getlocations.module
+
+commit e7fd032
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jan 11 11:42:21 2012 +0000
+
+    removed dd
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 6a7ae64
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 10 10:35:58 2012 +0000
+
+    added more autocomplete, bugfixes
+
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit fb9679d
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jan 7 21:32:35 2012 +0000
+
+    fixed .info file
+
+modules/getlocations_fields/getlocations_fields.info
+
+commit ad0a013
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 7 21:23:02 2012 +0000
 
     Views country handlers improved
 
+CHANGELOG.txt
 modules/getlocations_fields/handlers/getlocations_fields_handler_field_coordinates.inc
 modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
 modules/getlocations_fields/handlers/getlocations_fields_handler_field_latitude.inc

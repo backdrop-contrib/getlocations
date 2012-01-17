@@ -129,7 +129,7 @@ function theme_getlocations_fields_show($variables) {
     }
 
     if ($settings['display_showmap'] && $location['longitude'] && $location['latitude']) {
-      $a = $location['latitude'] . "," . $location['longitude'] . "," . $location['glid'] . "," . $location['name'] . ',' . $settings['map_marker'];
+      $a = array($location['latitude'], $location['longitude'], $location['glid'], $location['name'], $settings['map_marker']);
       $map = getlocations_fields_getmap_show($settings, $a);
       $output .= $map;
     }

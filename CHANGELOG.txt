@@ -1,9 +1,18 @@
-commit d743d92
+commit 81be837
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 17 12:21:23 2012 +0000
+
+    fixed map settings
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit ef0814c
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jan 15 21:36:55 2012 +0000
 
     fixed latlons in getlocation_fields
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit f6fd12a

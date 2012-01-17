@@ -850,6 +850,9 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
   }
   else {
     $summary[] = t('Show map: No');
+    if ($settings['display_maplink']) {
+      $summary[] = t('Show map link: Yes');
+    }
   }
   // address summary
   $address_display = array();
@@ -1689,6 +1692,7 @@ function getlocations_fields_defaults() {
     'display_mapwidth'           => $getlocations_defaults['width'],
     'display_mapheight'          => $getlocations_defaults['height'],
     'display_showmap'            => 1,
+    'display_maplink'            => 1,
     'display_latlong'            => 1,
     'display_dms'                => 0,
     'display_name'               => 1,
@@ -1879,6 +1883,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'display_mapwidth'      => $getlocations_defaults['width'],
     'display_mapheight'     => $getlocations_defaults['height'],
     'display_showmap'       => $getlocations_fields_defaults['display_showmap'],
+    'display_maplink'       => $getlocations_fields_defaults['display_maplink'],
     'display_latlong'       => $getlocations_fields_defaults['display_latlong'],
     'display_dms'           => $getlocations_fields_defaults['display_dms'],
     'controltype'           => $getlocations_defaults['controltype'],
@@ -2149,6 +2154,11 @@ function getlocations_fields_display_settings_form($defaults) {
     t('Show map in display'),
     $defaults['display_showmap'],
     ''
+  );
+  $form['display_maplink'] = getlocations_element_map_checkbox(
+    t('Show link to map in display'),
+    $defaults['display_maplink'],
+    t('Only applicable when the map is not being displayed.')
   );
   $form['display_mapwidth'] = getlocations_element_map_tf(
     t('Map width'),

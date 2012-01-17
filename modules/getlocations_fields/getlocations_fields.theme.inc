@@ -128,27 +128,32 @@ function theme_getlocations_fields_show($variables) {
       }
     }
 
-    if ($settings['display_showmap'] && $location['longitude'] && $location['latitude']) {
-      $a = array($location['latitude'], $location['longitude'], $location['glid'], $location['name'], $settings['map_marker']);
-      $map = getlocations_fields_getmap_show($settings, $a);
-      $output .= $map;
-    }
-    else {
-      if (count($locations) > 1 ) {
-        $output .= '<p>' . l(t('Show on a map'), 'getlocations/lids/' . $location['glid']) . '</p>';
+    if ($location['longitude'] && $location['latitude']) {
+      if ($settings['display_showmap']) {
+        $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
+        $a = array($location['latitude'], $location['longitude'], $location['glid'], $name, $settings['map_marker']);
+        $map = getlocations_fields_getmap_show($settings, $a);
+        $output .= $map;
       }
       else {
-        if ($location['nid']) {
-          $output .= '<p>' . l(t('Show on a map'), 'getlocations/node/' . $location['nid']) . '</p>';
-        }
-        elseif ($location['uid']) {
-          $output .= '<p>' . l(t('Show on a map'), 'getlocations/user/' . $location['uid']) . '</p>';
-        }
-        elseif ($location['tid']) {
-          $output .= '<p>' . l(t('Show on a map'), 'getlocations/term/' . $location['tid']) . '</p>';
-        }
-        elseif ($location['cid']) {
-          $output .= '<p>' . l(t('Show on a map'), 'getlocations/comment/' . $location['cid']) . '</p>';
+        if ($settings['display_maplink']) {
+          if (count($locations) > 1 ) {
+            $output .= '<p>' . l(t('Show on a map'), 'getlocations/lids/' . $location['glid']) . '</p>';
+          }
+          else {
+            if ($location['nid']) {
+              $output .= '<p>' . l(t('Show on a map'), 'getlocations/node/' . $location['nid']) . '</p>';
+            }
+            elseif ($location['uid']) {
+              $output .= '<p>' . l(t('Show on a map'), 'getlocations/user/' . $location['uid']) . '</p>';
+            }
+            elseif ($location['tid']) {
+              $output .= '<p>' . l(t('Show on a map'), 'getlocations/term/' . $location['tid']) . '</p>';
+            }
+            elseif ($location['cid']) {
+              $output .= '<p>' . l(t('Show on a map'), 'getlocations/comment/' . $location['cid']) . '</p>';
+            }
+          }
         }
       }
     }

@@ -179,15 +179,24 @@ function theme_getlocations_info($variables) {
     if (! empty($location['province_name'])) {
       $output .= ",&nbsp;";
     }
+    elseif (! empty($location['province'])) {
+      $output .= ",&nbsp;";
+    }
   }
-  if (! empty($location['province_name'])) {
+  if (isset($location['province_name']) && ! empty($location['province_name'])) {
     $output .= '<span class="region">' . $location['province_name'] . ' </span>';
+  }
+  elseif (isset($location['province']) && ! empty($location['province'])) {
+    $output .= '<span class="region">' . $location['province'] . ' </span>';
   }
   if (! empty($location['postal_code'])) {
     $output .= '<span class="postal-code">' . strtoupper($location['postal_code']) . ' </span>';
   }
-  if (! empty($location['country_name'])) {
+  if (isset($location['country_name']) && ! empty($location['country_name'])) {
     $output .= '<div class="country-name">' . $location['country_name'] . '</div>';
+  }
+  elseif (isset($location['country']) && ! empty($location['country'])) {
+    $output .= '<div class="country-name">' . $location['country'] . '</div>';
   }
   $output .= '</div>';
   $output .= '</div>';

@@ -23,8 +23,8 @@ function getlocations_fields_help($path, $arg) {
  * Implements hook_init().
  */
 function getlocations_fields_init() {
-  module_load_include('inc', 'getlocations_fields', 'getlocations_fields.theme');
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
+  module_load_include('inc', 'getlocations_fields', 'getlocations_fields.theme');
 }
 
 /**
@@ -1575,6 +1575,8 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
   // $key can be vid, nid, uid, tid, cid
   $locations = array();
   if ($id) {
+    module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
+    $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
     $query->fields('e', array('nid', 'uid', 'tid', 'cid', 'field_name'));
@@ -1590,7 +1592,14 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
       $locations[$ct]['additional'] = $row->additional;
       $locations[$ct]['city'] = $row->city;
       $locations[$ct]['province'] = $row->province;
+      $locations[$ct]['province_name'] = $row->province;
       $locations[$ct]['postal_code'] = $row->postal_code;
+      if ($getlocations_fields_defaults['country_full'] && strlen($row->country) == 2) {
+        $location[$ct]['country_name'] = getlocations_fields_get_country_name($row->country);
+      }
+      else {
+        $location[$ct]['country_name'] = $row->country;
+      }
       $locations[$ct]['country'] = $row->country;
       $locations[$ct]['address'] = $row->address;
       $locations[$ct]['latitude'] = $row->latitude;
@@ -1625,7 +1634,8 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
 function getlocations_fields_load_location($glid) {
   $location = array();
   if ($glid) {
-
+    module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
+    $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
     $query->fields('e', array('nid', 'uid', 'tid', 'cid'));
@@ -1633,18 +1643,25 @@ function getlocations_fields_load_location($glid) {
     $query->condition('f.glid', $glid);
     $row = $query->execute()->fetchObject();
     if ($row) {
-      $location['glid'] = $row->glid ;
-      $location['lid'] = $row->glid ;
-      $location['name'] = $row->name ;
-      $location['street'] = $row->street ;
-      $location['additional'] = $row->additional ;
-      $location['city'] = $row->city ;
-      $location['province'] = $row->province ;
-      $location['postal_code'] = $row->postal_code ;
-      $location['country'] = $row->country ;
-      $location['address'] = $row->address ;
-      $location['latitude'] = $row->latitude ;
-      $location['longitude'] = $row->longitude ;
+      $location['glid'] = $row->glid;
+      $location['lid'] = $row->glid;
+      $location['name'] = $row->name;
+      $location['street'] = $row->street;
+      $location['additional'] = $row->additional;
+      $location['city'] = $row->city;
+      $location['province'] = $row->province;
+      $location['province_name'] = $row->province;
+      $location['postal_code'] = $row->postal_code;
+      if ($getlocations_fields_defaults['country_full'] && strlen($row->country) == 2) {
+        $location['country_name'] = getlocations_fields_get_country_name($row->country);
+      }
+      else {
+        $location['country_name'] = $row->country;
+      }
+      $location['country'] = $row->country;
+      $location['address'] = $row->address;
+      $location['latitude'] = $row->latitude;
+      $location['longitude'] = $row->longitude;
       $location['nid'] = $row->nid;
       $location['uid'] = $row->uid;
       $location['tid'] = $row->tid;

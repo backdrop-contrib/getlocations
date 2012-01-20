@@ -1,9 +1,29 @@
-commit 937d154
+commit eeaeb8f
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 20 12:05:34 2012 +0000
+
+    added https support
+
+getlocations.admin.inc
+getlocations.module
+
+commit 458f7f8
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 15 16:28:38 2012 +0000
+
+    fixed latlons, #1405534
+
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+
+commit 62edbf4
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jan 3 21:45:17 2012 +0000
 
     fixed tooltips apostrophe bug
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 

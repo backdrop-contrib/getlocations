@@ -530,8 +530,12 @@ function getlocations_setup_map($defaults) {
   if (count($libraries)) {
     $query['libraries'] = implode(',', $libraries);
   }
+  $scheme = 'http';
+  if ($defaults['use_https']) {
+    $scheme = 'https';
+  }
   if (empty($getlocations_setmap)) {
-    $gmaplink = '<script src="'. url('http://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+    $gmaplink = '<script src="'. url($scheme . '://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
     drupal_set_html_head($gmaplink);
   }
   $getlocations_setmap = 1;
@@ -625,6 +629,7 @@ function getlocations_defaults() {
     'returnlink_page_link' => t('Return to Page'),
     'returnlink_user_enable' => 0,
     'returnlink_user_link' => t('Return to User'),
+    'use_https' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0),
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());
@@ -1458,4 +1463,3 @@ function getlocations_reverse_geocode($latlng) {
  */
 
 }
-

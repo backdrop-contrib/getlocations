@@ -248,6 +248,11 @@ function getlocations_settings_form() {
     );
   }
 
+  $form['getlocations_default']['use_https'] = array(
+    '#type' => 'value',
+    '#value' =>  $getlocations_defaults['use_https'],
+  );
+
   // node type markers
   if ($types = getlocations_get_types()) {
     $form['getlocations_node_marker'] = array(
@@ -424,4 +429,3 @@ function _getlocations_rebuild_marker_js_submit($form, &$form_state) {
   getlocations_regenerate_markers();
   drupal_set_message(t('Marker cache regenerated.'));
 }
-

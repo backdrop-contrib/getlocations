@@ -629,12 +629,17 @@ function getlocations_fields_countryinfo() {
   else {
     $countries = getlocations_fields_get_countries_list();
     foreach ($countries AS $k => $v) {
-      if ( drupal_strtolower($country) == drupal_strtolower($v) ) {
+      if (drupal_strtoupper($country) == drupal_strtoupper($v)) {
         $content = drupal_strtoupper($k);
         break;
       }
     }
   }
+  // fix 'The Netherlands' which is what google returns
+  if ($country == 'The Netherlands') {
+    $content = 'NL';
+  }
+
   print $content;
   exit();
 

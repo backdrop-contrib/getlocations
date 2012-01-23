@@ -162,7 +162,7 @@ function getlocations_feeds_set_country($source, $entity, $target, $value) {
       $entity->{$field_name}['und'][$i]['settings'] = getlocations_feeds_get_field_info($field_name);
     }
     $val = trim($val);
-    if (strlen($val) == 2) {
+    if (drupal_strlen($val) == 2) {
       // we have a code
       $val = drupal_strtoupper($val);
       if (array_key_exists($val, $countries)) {

@@ -1,9 +1,18 @@
-commit 5d29dc0
+commit 1691a7e
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 14:41:25 2012 +0000
+
+    fixed terms in wrong order issue
+
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+
+commit 27340b7
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jan 23 10:53:14 2012 +0000
 
     added location_taxonomize support
 
+CHANGELOG.txt
 modules/getlocations_location_taxonomize/README.txt
 modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
 modules/getlocations_location_taxonomize/getlocations_location_taxonomize.info

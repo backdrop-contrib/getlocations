@@ -65,7 +65,7 @@ function getlocations_location_taxonomize_get_fields($assoc = TRUE, $labels = FA
       $return[] = $field;
     }
   }
-  return $return;
+  return array_reverse($return);
 }
 
 

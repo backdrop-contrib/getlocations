@@ -1,9 +1,29 @@
-commit e101b3d
+commit 68b9255
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 09:34:54 2012 +0000
+
+    better info message
+
+modules/getlocations_feeds/getlocations_feeds.info
+
+commit f3082ae
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 09:30:49 2012 +0000
+
+    added getlocations_feeds module
+
+modules/getlocations_feeds/README.txt
+modules/getlocations_feeds/getlocations_feeds.info
+modules/getlocations_feeds/getlocations_feeds.install
+modules/getlocations_feeds/getlocations_feeds.module
+
+commit 878a6cb
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jan 20 11:54:27 2012 +0000
 
     added https support
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 

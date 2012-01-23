@@ -1,5 +1,5 @@
 name = Getlocations Feeds
-description = Provides getlocations mappers for feed importers
+description = Provides getlocations_fields mappers for feed importers
 core = 7.x
 dependencies[] = feeds
 dependencies[] = getlocations_fields

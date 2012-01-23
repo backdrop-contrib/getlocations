@@ -1,0 +1,11 @@
+name = Getlocations - Location taxonomize
+description = Enables Location Taxonomize to use Getlocation_fields module as a source.
+core = 7.x
+
+dependencies[] = location_taxonomize
+dependencies[] = getlocations
+dependencies[] = getlocations_fields
+
+
+package = "Location"
+

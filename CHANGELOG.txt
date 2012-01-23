@@ -1,9 +1,30 @@
-commit 68b9255
+commit 5d29dc0
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 10:53:14 2012 +0000
+
+    added location_taxonomize support
+
+modules/getlocations_location_taxonomize/README.txt
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.info
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.install
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.module
+
+commit 2bc21fc
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 10:52:37 2012 +0000
+
+    added drupal_strlen()
+
+modules/getlocations_feeds/getlocations_feeds.module
+
+commit f76cca1
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jan 23 09:34:54 2012 +0000
 
     better info message
 
+CHANGELOG.txt
 modules/getlocations_feeds/getlocations_feeds.info
 
 commit f3082ae

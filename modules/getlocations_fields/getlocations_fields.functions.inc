@@ -8,6 +8,10 @@
 /**
  * Fetch a list of the core Drupal list of countries.
  * from location module
+ *
+ * @param bool $upper Default uppercase
+ *
+ * @return array The countries array
  */
 function getlocations_fields_get_countries_list($upper = TRUE) {
   include_once DRUPAL_ROOT . '/includes/locale.inc';
@@ -26,14 +30,50 @@ function getlocations_fields_get_countries_list($upper = TRUE) {
   return $countries;
 }
 
+/**
+ * Get the full country name
+ *
+ * @param string $id The two letter iso code of a country
+ *
+ * @return string Full country name.
+ *
+ */
 function getlocations_fields_get_country_name($id) {
   $countries = getlocations_fields_get_countries_list();
-  return $countries[$id];
+  $id = drupal_strtoupper($id);
+  $country = FALSE;
+  if (isset($countries[$id])) {
+    $country = $countries[$id];
+  }
+  return $country;
+}
+
+/**
+ * Get the two letter code for a country
+ *
+ * @param string $country Full country name.
+ *
+ * @return string The two letter iso code of a country
+ */
+function getlocations_fields_get_country_id($country) {
+  $id = FALSE;
+  $countries = getlocations_fields_get_countries_list();
+  foreach ($countries AS $k => $v) {
+    if (drupal_strtoupper($country) == drupal_strtoupper($v)) {
+      $id = drupal_strtoupper($k);
+      break;
+    }
+  }
+  return $id;
 }
 
 /**
  * Convert decimal degrees to degrees,minutes,seconds.
  * from location module
+ *
+ * @param float Decimal degrees
+ *
+ * @return array degrees,minutes,seconds,sign
  */
 function getlocations_fields_dd_to_dms($coord) {
   $negative = ($coord < 0) ? TRUE : FALSE;
@@ -627,19 +667,12 @@ function getlocations_fields_countryinfo() {
     $content = drupal_strtoupper($country);
   }
   else {
-    $countries = getlocations_fields_get_countries_list();
-    foreach ($countries AS $k => $v) {
-      if (drupal_strtoupper($country) == drupal_strtoupper($v)) {
-        $content = drupal_strtoupper($k);
-        break;
-      }
-    }
+    $content = getlocations_fields_get_country_id($country);
   }
   // fix 'The Netherlands' which is what google returns
   if ($country == 'The Netherlands') {
     $content = 'NL';
   }
-
   print $content;
   exit();
 

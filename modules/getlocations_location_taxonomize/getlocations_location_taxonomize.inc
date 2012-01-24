@@ -102,13 +102,7 @@ function getlocations_location_taxonomize_fixup($location) {
     else {
       // got full name, get code if possible
       $location['country_name'] = $location['country'];
-      $countries = getlocations_fields_get_countries_list();
-      foreach ($countries AS $k => $v) {
-        if (drupal_strtoupper($location['country']) == drupal_strtoupper($v)) {
-          $location['country'] = drupal_strtoupper($k);
-          break;
-        }
-      }
+      $location['country'] = getlocations_fields_get_country_id($location['country_name']);
     }
   }
   else {

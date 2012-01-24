@@ -135,7 +135,7 @@ function getlocations_feeds_set_target($source, $entity, $target, $value) {
  * Set the country and attempt to support non-iso country imports
  *
  * @param $source
- *  Field mapper source settings.
+ *   Field mapper source settings.
  * @param $entity
  *   Either a user or node object dpending on where this is called
  * @param $target
@@ -145,41 +145,32 @@ function getlocations_feeds_set_target($source, $entity, $target, $value) {
  * @return object
  */
 function getlocations_feeds_set_country($source, $entity, $target, $value) {
-  $getlocations_fields_defaults = getlocations_fields_defaults();
-  $default_country = $getlocations_fields_defaults['country'];
-
   if (empty($value)) {
-    $value = $default_country;
+    $getlocations_fields_defaults = getlocations_fields_defaults();
+    $value = $getlocations_fields_defaults['country'];
   }
   if (! is_array($value)) {
     $value = array($value);
   }
   list($field_name, $sub_field) = explode(':', $target);
 
-  $countries = getlocations_fields_get_countries_list();
   foreach ($value as $i => $val) {
     if (! isset($entity->{$field_name}['und'][$i]['settings'])) {
       $entity->{$field_name}['und'][$i]['settings'] = getlocations_feeds_get_field_info($field_name);
     }
+    // set default
+    $entity->{$field_name}['und'][$i][$sub_field] = $entity->{$field_name}['und'][$i]['settings']['country'];
     $val = trim($val);
     if (drupal_strlen($val) == 2) {
       // we have a code
-      $val = drupal_strtoupper($val);
-      if (array_key_exists($val, $countries)) {
-        $entity->{$field_name}['und'][$i][$sub_field] = $val;
-      }
-      else {
-        $entity->{$field_name}['und'][$i][$sub_field] = $entity->{$field_name}['und'][$i]['settings']['country'];
+      if (getlocations_fields_get_country_name($val)) {
+        $entity->{$field_name}['und'][$i][$sub_field] = drupal_strtoupper($val);
       }
     }
     else {
       // full country name
-      $entity->{$field_name}['und'][$i][$sub_field] = $entity->{$field_name}['und'][$i]['settings']['country'];
-      foreach ($countries AS $k => $v) {
-        if (drupal_strtoupper($val) == drupal_strtoupper($v)) {
-          $entity->{$field_name}['und'][$i][$sub_field] = drupal_strtoupper($k);
-          break;
-        }
+      if ($id = getlocations_fields_get_country_id($val)) {
+        $entity->{$field_name}['und'][$i][$sub_field] = $id;
       }
     }
   }
@@ -191,12 +182,10 @@ function getlocations_feeds_set_country($source, $entity, $target, $value) {
  *
  * @param $field_name
  *  The field name to return info for.
- * @retrun
+ * @return
  *  The field info array.
  */
 function getlocations_feeds_get_field_info($field_name) {
   $field_settings = field_info_field($field_name);
-  #return $field_settings;
   return $field_settings['settings'];
 }
-

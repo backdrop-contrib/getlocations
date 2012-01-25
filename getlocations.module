@@ -630,11 +630,16 @@ function getlocations_setup_js($defaults) {
   $current_js = drupal_get_js();
   $current_css = drupal_get_css();
 
+  $key = variable_get('getlocations_api3_key', '');
+
   // v3 googlemaps API
-  $query = array(
-    'sensor' => 'false',
-    'language' => $language->language,
-  );
+  $query = array();
+  if (! empty($key)) {
+    $query['key'] = $key;
+  }
+  $query['sensor'] = 'false';
+  $query['language'] = $language->language;
+
   $libraries = array();
   if ($defaults['panoramio_use']) {
     $libraries[] = 'panoramio';
@@ -652,8 +657,13 @@ function getlocations_setup_js($defaults) {
   if ($defaults['use_https']) {
     $scheme = 'https';
   }
-  $gmaplink = url($scheme . '://maps.google.com/maps/api/js', array('query' => $query));
-  if (!stristr($current_js, $scheme . '://maps.google.com/maps/api/js')) {
+
+  $gmapdomain = "maps.google.com/maps/api/js";
+  if (! empty($key)) {
+    $gmapdomain = "maps.googleapis.com/maps/api/js";
+  }
+  $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
+  if (!stristr($current_js, $scheme . '://' . $gmapdomain)) {
     drupal_add_js($gmaplink, 'external');
   }
 

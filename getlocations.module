@@ -513,10 +513,14 @@ function getlocations_setup_map($defaults) {
   $current_css = drupal_get_css();
 
   // v3 googlemaps API
-  $query = array(
-    'sensor' => 'false',
-    'language' => $language->language,
-  );
+  $key = variable_get('getlocations_api3_key', '');
+  $query = array();
+  if (! empty($key)) {
+    $query['key'] = $key;
+  }
+  $query['sensor'] = 'false';
+  $query['language'] = $language->language;
+
   $libraries = array();
   if($defaults['panoramio_use']) {
     $libraries[] = 'panoramio';
@@ -535,7 +539,11 @@ function getlocations_setup_map($defaults) {
     $scheme = 'https';
   }
   if (empty($getlocations_setmap)) {
-    $gmaplink = '<script src="'. url($scheme . '://maps.google.com/maps/api/js', array('query' => $query)) .'" type="text/javascript"></script>';
+    $gmapdomain = "maps.google.com/maps/api/js";
+    if (! empty($key)) {
+      $gmapdomain = "maps.googleapis.com/maps/api/js";
+    }
+    $gmaplink = '<script src="'. url($scheme .'://'. $gmapdomain, array('query' => $query)) .'" type="text/javascript"></script>';
     drupal_set_html_head($gmaplink);
   }
   $getlocations_setmap = 1;
@@ -961,6 +969,9 @@ function getlocations_get_types() {
 function getlocations_check_node($type) {
 
   $module = FALSE;
+  if (module_exists('location_node')) {
+    return TRUE;
+  }
   if (module_exists('location_cck')) {
     $module = 'location_cck';
   }

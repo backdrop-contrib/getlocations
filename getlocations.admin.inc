@@ -206,6 +206,9 @@ function getlocations_settings_form() {
     );
   }
 
+  $form['getlocations_default']['markeractiontype'] = getlocations_element_map_markeractiontype(
+    $getlocations_defaults['markeractiontype']
+  );
   $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction(
     $getlocations_defaults['markeraction']
   );

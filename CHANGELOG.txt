@@ -1,9 +1,30 @@
-commit eeaeb8f
+commit e250c82
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jan 28 00:05:37 2012 +0000
+
+    added mouseover to marker actions types
+
+getlocations.admin.inc
+getlocations.module
+getlocations_plugin_style_map.inc
+js/getlocations.js
+
+commit 3ba15f7
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jan 25 14:19:14 2012 +0000
+
+    added api3 key option, fixed location_node bug
+
+getlocations.admin.inc
+getlocations.module
+
+commit b14905a
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jan 20 12:05:34 2012 +0000
 
     added https support
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 

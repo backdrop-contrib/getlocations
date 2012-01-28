@@ -746,6 +746,7 @@ function getlocations_defaults() {
     'comment_map_marker'     => 'drupal',
     'input_map_marker'       => 'drupal',
     'markeraction'           => 0,
+    'markeractiontype'       => 1,
     'minzoom'                => 6,
     'maxzoom'                => 16,
     'nodezoom'               => 12,
@@ -1453,6 +1454,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'transit_show'     => $defaults['transit_show'],
       'map_marker'       => $defaults['node_map_marker'],
       'markeraction'     => $defaults['markeraction'],
+      'markeractiontype' => $defaults['markeractiontype'],
       'minzoom'          => $defaults['minzoom'],
       'maxzoom'          => $defaults['maxzoom'],
       'nodezoom'         => $defaults['nodezoom'],
@@ -1651,7 +1653,7 @@ function getlocations_element_map_markeraction($default) {
 
   $element = array(
     '#type' => 'select',
-    '#title' => t('Marker click action'),
+    '#title' => t('Marker action'),
     '#default_value' => $default,
     '#options' => array(
       0 => t('None'),
@@ -1659,6 +1661,20 @@ function getlocations_element_map_markeraction($default) {
       2 => t('InfoBubble'),
       3 => t('Link')),
     '#description' => t('"None" is No action,<br />"InfoWindow" show information in a Google InfoWindow,<br />"InfoBubble" use InfoBubble instead,<br /> "Link" go to a page.'),
+  );
+  return $element;
+}
+
+function getlocations_element_map_markeractiontype($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Marker action type'),
+    '#default_value' => $default,
+    '#options' => array(
+      1 => t('Click'),
+      2 => t('Mouse over')),
+    '#description' => t('"Click" is clicking on the marker,<br />"Mouse over" is holding the mouse over a marker.'),
   );
   return $element;
 }

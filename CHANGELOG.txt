@@ -1,9 +1,48 @@
-commit 1691a7e
+commit 0b5e762
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jan 28 00:06:55 2012 +0000
+
+    added mouseover to marker actions types
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+views/getlocations_plugin_style_map.inc
+
+commit f48e96b
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jan 25 14:17:08 2012 +0000
+
+    added api3 key option
+
+getlocations.admin.inc
+getlocations.module
+
+commit e61a6bf
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 24 23:31:09 2012 +0000
+
+    improved country coding
+
+modules/getlocations_feeds/getlocations_feeds.module
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+
+commit c406e98
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jan 23 22:24:45 2012 +0000
+
+    fixed google 'The Netherlands' bug
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+
+commit c70e8b7
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jan 23 14:41:25 2012 +0000
 
     fixed terms in wrong order issue
 
+CHANGELOG.txt
 modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
 
 commit 27340b7

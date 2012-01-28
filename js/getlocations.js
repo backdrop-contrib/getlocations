@@ -34,6 +34,7 @@ var inputmap = [];
         useInfoWindow: false,
         useLink: false,
         markeraction: 0,
+        markeractiontype: 1,
         infoBubbles: [],
         datanum: 0,
         trafficInfo: {},
@@ -68,6 +69,10 @@ var inputmap = [];
       global_settings.datanum = settings.datanum;
       global_settings.usemarkermanager = settings.usemarkermanager;
       global_settings.markeraction = settings.markeraction;
+      global_settings.markeractiontype = 'click';
+      if (settings.markeractiontype == 2) {
+        global_settings.markeractiontype = 'mouseover';
+      }
 
       if (global_settings.markeraction == 2) {
         global_settings.useInfoBubble = true;
@@ -271,7 +276,7 @@ var inputmap = [];
     });
 
     if (global_settings.markeraction > 0) {
-      google.maps.event.addListener(m, 'click', function() {
+      google.maps.event.addListener(m, global_settings.markeractiontype, function() {
         if (global_settings.useLink) {
           // fetch link and relocate
           var path = Drupal.settings.basePath + "getlocations/lidinfo";

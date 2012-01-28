@@ -46,6 +46,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['maxzoom']          = array('default' => $getlocations_defaults['maxzoom']);
     $options['nodezoom']         = array('default' => $getlocations_defaults['nodezoom']);
     $options['markeraction']     = array('default' => $getlocations_defaults['markeraction']);
+    $options['markeractiontype'] = array('default' => $getlocations_defaults['markeractiontype']);
     $options['usemarkermanager'] = array('default' => $getlocations_defaults['usemarkermanager']);
     $options['pansetting']       = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']        = array('default' => $getlocations_defaults['draggable']);
@@ -183,6 +184,9 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['map_marker']
     );
 
+    $form['markeractiontype'] = getlocations_element_map_markeractiontype(
+      $this->options['markeractiontype']
+    );
     $form['markeraction'] = getlocations_element_map_markeraction(
       $this->options['markeraction']
     );

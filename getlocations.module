@@ -1243,6 +1243,9 @@ function getlocations_get_types() {
 function getlocations_check_node($bundle) {
 
   $module = FALSE;
+  if (module_exists('location_node')) {
+    return TRUE;
+  }
   if (module_exists('getlocations_fields')) {
     $module = 'getlocations_fields';
   }

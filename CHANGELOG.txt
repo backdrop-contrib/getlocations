@@ -1,9 +1,18 @@
-commit 0b5e762
+commit 5d0a029
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jan 28 11:15:52 2012 +0000
+
+    fixed location_node bug in getlocations_check_node
+
+getlocations.module
+
+commit a3b9b90
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 28 00:06:55 2012 +0000
 
     added mouseover to marker actions types
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 js/getlocations.js

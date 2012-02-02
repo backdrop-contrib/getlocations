@@ -62,9 +62,11 @@ class getlocations_plugin_style_map extends views_plugin_style {
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
           $field_name = getlocations_get_fieldname($type);
-          $mkey = 'node_marker_' . $field_name;
-          $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker']);
-          $options[$mkey] = array('default' => $mmarker);
+          if ($field_name) {
+            $mkey = 'node_marker_' . $field_name;
+            $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker']);
+            $options[$mkey] = array('default' => $mmarker);
+          }
         }
       }
     }

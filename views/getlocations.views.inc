@@ -31,20 +31,20 @@ function getlocations_views_plugins() {
 /**
  * Preprocess function for theme_getlocations_view_map().
  */
-
 function template_preprocess_getlocations_view_map(&$variables) {
   global $language;
 
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
+  $base_field = $variables['view']->style_plugin->view->base_field;
 
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
   if (count($locations)) {
+
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
-
       $lid = 0;
       if (module_exists('getlocations_fields')) {
         $lid = $location['glid'];
@@ -52,12 +52,18 @@ function template_preprocess_getlocations_view_map(&$variables) {
       elseif (module_exists('location')) {
         $lid = $location['lid'];
       }
-      // marker
-      if ($type = getlocations_get_type_from_lid($lid)) {
-        $marker = $options[$type . '_map_marker'];
+      elseif (module_exists('geofield')) {
+        $lid = $location[$base_field];
+        $location['field_name'] = getlocations_get_fieldname($location['type']);
+        $location['latitude'] = $location[$location['field_name']];
+        $location['longitude'] = $location[$location['field_name'] . '_1'];
       }
-      else {
-        $marker = $options['node_map_marker'];
+      // marker
+      $marker = $options['node_map_marker'];
+      if ($type = getlocations_get_type_from_lid($lid)) {
+        if (isset($options[$type . '_map_marker'])) {
+          $marker = $options[$type . '_map_marker'];
+        }
       }
       if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
         $marker = $options['node_marker_' . $location['field_name']];
@@ -66,7 +72,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
         $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
-        $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker);
+        $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker, $base_field);
       }
     }
   }

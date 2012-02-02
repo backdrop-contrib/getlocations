@@ -131,8 +131,21 @@ function theme_getlocations_fields_show($variables) {
     if ($location['longitude'] && $location['latitude']) {
       if ($settings['display_showmap']) {
         $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
-        $a = array($location['latitude'], $location['longitude'], $location['glid'], $name, $settings['map_marker']);
-        $map = getlocations_fields_getmap_show($settings, $a);
+        $base = '';
+        if ($location['nid']) {
+          $base = 'nid';
+        }
+        elseif ($location['uid']) {
+          $base = 'uid';
+        }
+        elseif ($location['tid']) {
+          $base = 'tid';
+        }
+        elseif ($location['cid']) {
+          $base = 'cid';
+        }
+        $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $settings['map_marker'], $base);
+        $map = getlocations_fields_getmap_show($settings, $latlons);
         $output .= $map;
       }
       else {

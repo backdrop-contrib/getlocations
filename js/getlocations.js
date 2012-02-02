@@ -263,7 +263,7 @@ var inputmap = [];
 
   } // end initialize
 
-  function makeMarker(map, global_settings, lat, lon, lid, title) {
+  function makeMarker(map, global_settings, lat, lon, lid, title, lidkey) {
 
     var p = new google.maps.LatLng(lat, lon);
     var m = new google.maps.Marker({
@@ -280,7 +280,7 @@ var inputmap = [];
         if (global_settings.useLink) {
           // fetch link and relocate
           var path = Drupal.settings.basePath + "getlocations/lidinfo";
-          $.get(path, {lid: lid}, function(data) {
+          $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
             if (data) {
               window.location = data;
             }
@@ -290,7 +290,7 @@ var inputmap = [];
         else {
           // fetch bubble content
           var path = Drupal.settings.basePath + "getlocations/info";
-          $.get(path, {lid: lid}, function(data) {
+          $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
             // close any previous instances
             for (var i in global_settings.infoBubbles) {
               global_settings.infoBubbles[i].close();
@@ -344,13 +344,14 @@ var inputmap = [];
       lid = arr2[2];
       name = arr2[3];
       mark = arr2[4];
+      lidkey = arr2[5];
       if (mark === '') {
         global_settings.markdone = global_settings.defaultIcon;
       }
       else {
         global_settings.markdone = Drupal.getlocations.getIcon(mark);
       }
-      m = makeMarker(map, global_settings, lat, lon, lid, name);
+      m = makeMarker(map, global_settings, lat, lon, lid, name, lidkey);
       if (global_settings.usemarkermanager) {
         batchr.push(m);
       }

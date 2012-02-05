@@ -51,7 +51,11 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['nodezoom']              = array('default' => $getlocations_defaults['nodezoom']);
     $options['markeraction']          = array('default' => $getlocations_defaults['markeraction']);
     $options['markeractiontype']      = array('default' => $getlocations_defaults['markeractiontype']);
+    $options['loadmarkermanager']     = array('default' => $getlocations_defaults['loadmarkermanager']);
     $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
+    if (! $getlocations_defaults['loadmarkermanager']) {
+      $options['usemarkermanager'] = 0;
+    }
     $options['pansetting']            = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                = array('default' => $getlocations_defaults['styles']);
@@ -196,6 +200,20 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['markeraction']
     );
 
+    // markermanager option
+    if ($this->options['loadmarkermanager']) {
+      $form['usemarkermanager'] = getlocations_element_map_checkbox(
+        t('Use Marker manager for this map'),
+        $this->options['usemarkermanager']
+      );
+    }
+    else {
+      $form['usemarkermanager'] = array(
+        '#type' => 'hidden',
+        '#value' => 0
+      );
+    }
+
     $form['minzoom'] = getlocations_element_map_zoom(
       t('Minimum Zoom'),
       $this->options['minzoom'],
@@ -214,15 +232,9 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $form['pansetting'] = getlocations_element_map_pansetting(
       $this->options['pansetting']
     );
-
     $form['empty_result'] = getlocations_element_map_checkbox(
       t('Show map even if view has no results'),
       $this->options['empty_result']
-    );
-    $getlocations_defaults = getlocations_defaults();
-    $form['usemarkermanager'] = array(
-      '#type' => 'hidden',
-      '#value' => $getlocations_defaults['usemarkermanager']
     );
 
   } // end options_form

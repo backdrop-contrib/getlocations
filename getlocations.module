@@ -755,7 +755,7 @@ function getlocations_setup_js($defaults) {
     'markermanager_path' => GETLOCATIONS_PATH . '/js/markermanager.js')
   );
 
-  if ($defaults['usemarkermanager'] && !stristr($current_js, $getlocations_paths['markermanager_path'])) {
+  if ($defaults['loadmarkermanager'] && !stristr($current_js, $getlocations_paths['markermanager_path'])) {
     drupal_add_js($getlocations_paths['markermanager_path']);
   }
 
@@ -819,6 +819,7 @@ function getlocations_defaults() {
     'minzoom'                => 6,
     'maxzoom'                => 16,
     'nodezoom'               => 12,
+    'loadmarkermanager'      => 1,
     'usemarkermanager'       => 1,
     'pansetting'             => 2,
     'draggable'              => 1,

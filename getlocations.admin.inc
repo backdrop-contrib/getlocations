@@ -169,10 +169,15 @@ function getlocations_settings_form() {
     t('The Default zoom level for a single marker.')
   );
 
+  $form['getlocations_default']['loadmarkermanager'] = getlocations_element_map_checkbox(
+    t('Load Marker manager'),
+    $getlocations_defaults['loadmarkermanager'],
+    t('Load Marker manager software. Switching this off will disable Marker manager in all maps.')
+  );
   $form['getlocations_default']['usemarkermanager'] = getlocations_element_map_checkbox(
     t('Use Marker manager'),
     $getlocations_defaults['usemarkermanager'],
-    t('Use Marker manager. Switching this off will use no manager')
+    t('Use Marker manager. Switching this off will use no manager.')
   );
 
   $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
@@ -432,6 +437,9 @@ function getlocations_settings_validate($form, &$form_state) {
     if (isset($form_state['values']['getlocations_default']['returnlink_comment_enable']) && $form_state['values']['getlocations_default']['returnlink_comment_enable'] && empty($form_state['values']['getlocations_default']['returnlink_comment_link'])) {
       form_set_error('getlocations_default][returnlink_comment_link', t('Comment return link must be filled in'));
     }
+  }
+  if (! $form_state['values']['getlocations_default']['loadmarkermanager']) {
+    $form_state['values']['getlocations_default']['usemarkermanager'] = 0;
   }
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {
     if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {

@@ -17,7 +17,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $options = parent::option_definition();
     $options['operator'] = array('default' => 'mbr');
 
-    $options['identifier'] = array('default' => 'dist');
+    $options['identifier'] = array('default' => 'distance');
 
     $options['origin'] = array('default' => 'nid_arg');
 
@@ -86,26 +86,12 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
   }
 
   function value_form(&$form, &$form_state) {
+
     $form['origin'] = getlocations_fields_element_origin($this->options['origin']);
 
-
-#    if (module_exists('gmap')) {
-#      $form['origin']['#options']['latlon_gmap'] = t('Latitude / Longitude input (use map)');
-#    }
-
-    // [11:44] <merlinofchaos> If you load the page from scratch, $input for your identifier will be empty.
-    // [11:44] <merlinofchaos> So what's going on here is that for $_GET forms, there's no form id, no op button or anything, so they always appear to submit.
-    // [11:45] <merlinofchaos> FAPI doesn't quite get along with that; sometimes it handles the input being empty right and sometimes it doesn't.
-    // [11:45] <Bdragon> But if I set #default_value to a static string, it doesn't work either
-    // [11:45] <merlinofchaos> Right, fapi thinks the empty input is actually input, thus it overrides the default value.
-    // [11:45] <Bdragon> Ahh, hmm...
-    // [11:46] <Bdragon> So where would I go to clean it up?
-    // [11:55] <merlinofchaos> Bdragon: See views_handler_filter_string.inc line 174
-    // [11:55] <merlinofchaos> Bdragon: That's how i address this problem.
-    // [11:58] <Bdragon> Hmm, OK
     if (!empty($form_state['exposed'])) {
       $identifier = $this->options['expose']['identifier'];
-      if (!isset($form_state['input'][$identifier])) {
+      if (! isset($form_state['input'][$identifier])) {
         // We need to pretend the user already inputted the defaults, because
         // fapi will malfunction otherwise.
         $form_state['input'][$identifier] = $this->value;
@@ -117,18 +103,20 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     );
     $form['value']['latitude'] = getlocations_fields_element_latitude($this->value['latitude']);
     $form['value']['longitude'] = getlocations_fields_element_longitude($this->value['longitude']);
-#    $form['value']['postal_code'] = getlocations_fields_element_postal_code($this->value['postal_code']);
-#    $form['value']['country'] = getlocations_fields_element_country($this->value['country']);
+    #$form['value']['postal_code'] = getlocations_fields_element_postal_code($this->value['postal_code']);
+    #$form['value']['country'] = getlocations_fields_element_country($this->value['country']);
     $form['value']['php_code'] = getlocations_fields_element_php_code($this->value['php_code']);
 
     list($nid_argument_options, $uid_argument_options, $tid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
     $loc_field_options = getlocations_fields_views_proximity_get_location_field_options();
-
-    $form['value']['nid_arg'] = getlocations_fields_element_nid_arg($this->value['nid_arg'], $nid_argument_options);
-    $form['value']['nid_loc_field'] = getlocations_fields_element_nid_loc_field($this->value['nid_loc_field'], $loc_field_options);
-
-    $form['value']['uid_arg'] = getlocations_fields_element_uid_arg($this->value['uid_arg'], $uid_argument_options);
-    $form['value']['uid_loc_field'] = getlocations_fields_element_uid_loc_field($this->value['uid_loc_field'], $loc_field_options);
+    if ($nid_argument_options) {
+      $form['value']['nid_arg'] = getlocations_fields_element_nid_arg($this->value['nid_arg'], $nid_argument_options);
+      $form['value']['nid_loc_field'] = getlocations_fields_element_nid_loc_field($this->value['nid_loc_field'], $loc_field_options);
+    }
+    if ($uid_argument_options) {
+      $form['value']['uid_arg'] = getlocations_fields_element_uid_arg($this->value['uid_arg'], $uid_argument_options);
+      $form['value']['uid_loc_field'] = getlocations_fields_element_uid_loc_field($this->value['uid_loc_field'], $loc_field_options);
+    }
 
     $form['value']['search_units'] = getlocations_fields_element_distance_unit($this->value['search_units']);
     $form['value']['search_distance'] = getlocations_fields_element_search_distance($this->value['search_distance']);
@@ -146,69 +134,69 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
         $form[$key][$el]['#dependency'] = array();
       }
     }
+      #    if ($origin == 'latlon_gmap' && module_exists('gmap')) {
+      #      // Bad things happen if we try to show a gmap in the views live preview.
+      #      if (!empty($form_state['view']->live_preview)) {
+      #        $form[$key]['proximity_map'] = array(
+      #          '#markup' => t('Gmap location selection is not available during live preview.'),
+      #          '#weight' => 0,
+      #        );
+      #      }
+      #      else {
+      #        $form[$key]['proximity_map'] = array(
+      #          '#markup' => gmap_set_location($this->options['expose']['gmap_macro'], $form[$key], array('latitude' => 'latitude', 'longitude' => 'longitude')),
+      #          '#weight' => 0,
+      #        );
+      #      }
+      #    }
+      #    elseif (($origin == 'user' || $origin == 'hybrid') && $this->options['expose']['user_location_choose']) {
+      #      global $user;
+      #      $user_locations = isset($user->locations) ? $user->locations : getlocations_load_locations($user->uid, 'uid');
+      #      $location_options = array();
+      #      if (!empty($user_locations)) {
+      #        foreach ($user_locations as $i => $location) {
+      #          if (isset($location['latitude']) && isset($location['longitude'])) {
+      #            if (!empty($location['name'])) {
+      #              $location_options[$i] = t(check_plain($location['name']));
+      #            }
+      #            else {
+      #              $location_options[$i] = t('Location #@num', array('@num' => $i + 1));
+      #            }
+      #          }
+      #        }
+      #      }
 
-#    if ($origin == 'latlon_gmap' && module_exists('gmap')) {
-#      // Bad things happen if we try to show a gmap in the views live preview.
-#      if (!empty($form_state['view']->live_preview)) {
-#        $form[$key]['proximity_map'] = array(
-#          '#markup' => t('Gmap location selection is not available during live preview.'),
-#          '#weight' => 0,
-#        );
-#      }
-#      else {
-#        $form[$key]['proximity_map'] = array(
-#          '#markup' => gmap_set_location($this->options['expose']['gmap_macro'], $form[$key], array('latitude' => 'latitude', 'longitude' => 'longitude')),
-#          '#weight' => 0,
-#        );
-#      }
-#    }
-#    elseif (($origin == 'user' || $origin == 'hybrid') && $this->options['expose']['user_location_choose']) {
-#      global $user;
-#      $user_locations = isset($user->locations) ? $user->locations : getlocations_load_locations($user->uid, 'uid');
-#      $location_options = array();
-#      if (!empty($user_locations)) {
-#        foreach ($user_locations as $i => $location) {
-#          if (isset($location['latitude']) && isset($location['longitude'])) {
-#            if (!empty($location['name'])) {
-#              $location_options[$i] = t(check_plain($location['name']));
-#            }
-#            else {
-#              $location_options[$i] = t('Location #@num', array('@num' => $i + 1));
-#            }
-#          }
-#        }
-#      }
+      #      $form[$key]['user_location_delta'] = array(
+      #        '#type' => 'select',
+      #        '#title' => t('Location'),
+      #        '#options' => $location_options,
+      #        '#description' => t('Select which of your locations to use.'),
+      #        '#weight' => 0,
+      #      );
+      #    }
+      #
+      #    // Remove unneeded fields when exposing the form.
+      #    // It's shorter than redefining value_form.
+      #    if ($origin != 'static' && $origin != 'latlon_gmap') {
+    unset($form[$key]['latitude']);
+    unset($form[$key]['longitude']);
+      #    }
+      #    if ($origin != 'postal' && $origin != 'postal_default') {
+      #      unset($form[$key]['postal_code']);
+      #    }
+      #    if ($origin != 'postal') {
+      #      unset($form[$key]['country']);
+      #    }
+      #
 
-#      $form[$key]['user_location_delta'] = array(
-#        '#type' => 'select',
-#        '#title' => t('Location'),
-#        '#options' => $location_options,
-#        '#description' => t('Select which of your locations to use.'),
-#        '#weight' => 0,
-#      );
-#    }
-#
-#    // Remove unneeded fields when exposing the form.
-#    // It's shorter than redefining value_form.
-#    if ($origin != 'static' && $origin != 'latlon_gmap') {
-#      unset($form[$key]['latitude']);
-#      unset($form[$key]['longitude']);
-#    }
-#    if ($origin != 'postal' && $origin != 'postal_default') {
-#      unset($form[$key]['postal_code']);
-#    }
-#    if ($origin != 'postal') {
-#      unset($form[$key]['country']);
-#    }
-#
-#    // And we definitely do not want to expose the php code option when exposing the filter
-#    unset($form[$key]['php_code']);
-#    // The nid/uid arg options are not useful on an exposed form.
-#    unset($form[$key]['nid_arg']);
-#    unset($form[$key]['nid_loc_field']);
-#    unset($form[$key]['uid_arg']);
-#
-#    unset($form['origin']);
+    // And we definitely do not want to expose the php code option when exposing the filter
+    unset($form[$key]['php_code']);
+    // The nid/uid arg options are not useful on an exposed form.
+    unset($form[$key]['nid_arg']);
+    unset($form[$key]['nid_loc_field']);
+    unset($form[$key]['uid_arg']);
+    unset($form[$key]['uid_loc_field']);
+    unset($form['origin']);
   }
 
   function query() {
@@ -255,7 +243,6 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       AND " . $this->table_alias . ".longitude < :maxlon";
     }
     $this->query->add_where_expression($this->options['group'], $where, array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]));
-
     if ($this->operator == 'dist') {
       // Add radius check.
       $this->query->add_where_expression($this->options['group'], getlocations_fields_earth_distance_sql($lat, $lon, $this->table_alias) . ' < :distance', array(':distance' => $distance_meters));

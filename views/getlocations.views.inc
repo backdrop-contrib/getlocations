@@ -20,7 +20,7 @@ function getlocations_views_plugins() {
         'theme' => 'getlocations_view_map',
         'theme path' => GETLOCATIONS_PATH . '/views',
         'uses row plugin' => TRUE,
-        'uses grouping' => TRUE,
+        'uses grouping' => FALSE,
         'uses options' => TRUE,
         'type' => 'normal',
       ),

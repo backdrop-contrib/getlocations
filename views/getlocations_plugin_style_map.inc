@@ -51,11 +51,16 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['nodezoom']              = array('default' => $getlocations_defaults['nodezoom']);
     $options['markeraction']          = array('default' => $getlocations_defaults['markeraction']);
     $options['markeractiontype']      = array('default' => $getlocations_defaults['markeractiontype']);
-    $options['loadmarkermanager']     = array('default' => $getlocations_defaults['loadmarkermanager']);
+    $options['markermanagertype']     = array('default' => $getlocations_defaults['markermanagertype']);
     $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
-    if (! $getlocations_defaults['loadmarkermanager']) {
+    $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
+    if (! $getlocations_defaults['markermanagertype']) {
       $options['usemarkermanager'] = 0;
+      $options['useclustermanager'] = 0;
     }
+    $options['markerclusterer_style'] = array('default' => $getlocations_defaults['markerclusterer_style']);
+    $options['markerclusterer_zoom']  = array('default' => $getlocations_defaults['markerclusterer_zoom']);
+    $options['markerclusterer_size']  = array('default' => $getlocations_defaults['markerclusterer_size']);
     $options['pansetting']            = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                = array('default' => $getlocations_defaults['styles']);
@@ -201,17 +206,32 @@ class getlocations_plugin_style_map extends views_plugin_style {
     );
 
     // markermanager option
-    if ($this->options['loadmarkermanager']) {
+    if ($this->options['markermanagertype'] == 1) {
       $form['usemarkermanager'] = getlocations_element_map_checkbox(
         t('Use Marker manager for this map'),
         $this->options['usemarkermanager']
       );
+      $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
+    }
+    elseif ($this->options['markermanagertype'] == 2)  {
+      $form['useclustermanager'] = getlocations_element_map_checkbox(
+        t('Use Cluster manager for this map'),
+        $this->options['useclustermanager']
+      );
+      $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
+      if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
+        module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
+      }
+      else {
+        module_load_include('inc', 'getlocations', 'getlocations.markercluster');
+      }
+      $form['markerclusterer_style'] = getlocations_element_markerclusterer_style($this->options['markerclusterer_style']);
+      $form['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($this->options['markerclusterer_zoom']);
+      $form['markerclusterer_size'] = getlocations_element_markerclusterer_size($this->options['markerclusterer_size']);
     }
     else {
-      $form['usemarkermanager'] = array(
-        '#type' => 'hidden',
-        '#value' => 0
-      );
+      $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
+      $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
     }
 
     $form['minzoom'] = getlocations_element_map_zoom(

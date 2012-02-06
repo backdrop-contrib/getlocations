@@ -169,16 +169,28 @@ function getlocations_settings_form() {
     t('The Default zoom level for a single marker.')
   );
 
-  $form['getlocations_default']['loadmarkermanager'] = getlocations_element_map_checkbox(
-    t('Load Marker manager'),
-    $getlocations_defaults['loadmarkermanager'],
-    t('Load Marker manager software. Switching this off will disable Marker manager in all maps.')
-  );
+  // marker manager
+  $form['getlocations_default']['markermanagertype'] = getlocations_element_markermanagertype($getlocations_defaults['markermanagertype']);
   $form['getlocations_default']['usemarkermanager'] = getlocations_element_map_checkbox(
     t('Use Marker manager'),
     $getlocations_defaults['usemarkermanager'],
     t('Use Marker manager. Switching this off will use no manager.')
   );
+  $form['getlocations_default']['useclustermanager'] = getlocations_element_map_checkbox(
+    t('Use Cluster manager'),
+    $getlocations_defaults['useclustermanager'],
+    t('Use Cluster manager. Switching this off will use no manager.')
+  );
+
+  if (file_exists(GETLOCATIONS_PATH . '/getlocations.markerclusterer_override.inc')) {
+    module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
+  }
+  else {
+    module_load_include('inc', 'getlocations', 'getlocations.markercluster');
+  }
+  $form['getlocations_default']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_defaults['markerclusterer_style']);
+  $form['getlocations_default']['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($getlocations_defaults['markerclusterer_zoom']);
+  $form['getlocations_default']['markerclusterer_size'] = getlocations_element_markerclusterer_size($getlocations_defaults['markerclusterer_size']);
 
   $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
 
@@ -372,11 +384,8 @@ function getlocations_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getlocations_paths = variable_get('getlocations_paths', array(
-    'infobubble_path' => GETLOCATIONS_PATH .'/js/infobubble.js',
-    'infobubble_options_path' => GETLOCATIONS_PATH .'/js/infobubble_options.js',
-    'markermanager_path' => GETLOCATIONS_PATH .'/js/markermanager.js')
-  );
+
+  $getlocations_paths = getlocations_paths_get();
   $form['getlocations_paths']['infobubble_path'] = getlocations_element_path(
     t('Path to InfoBubble javascript file'),
     $getlocations_paths['infobubble_path'],
@@ -398,6 +407,14 @@ function getlocations_settings_form() {
     60,
     128,
     t('Where the markermanager javascript file is located.')
+  );
+
+  $form['getlocations_paths']['markerclusterer_path'] = getlocations_element_path(
+    t('Path to markerclusterer javascript file'),
+    $getlocations_paths['markerclusterer_path'],
+    60,
+    128,
+    t('Where the markerclusterer javascript file is located.')
   );
 
   unset($form['#theme']);
@@ -438,9 +455,17 @@ function getlocations_settings_validate($form, &$form_state) {
       form_set_error('getlocations_default][returnlink_comment_link', t('Comment return link must be filled in'));
     }
   }
-  if (! $form_state['values']['getlocations_default']['loadmarkermanager']) {
+  if (! $form_state['values']['getlocations_default']['markermanagertype']) {
+    $form_state['values']['getlocations_default']['usemarkermanager'] = 0;
+    $form_state['values']['getlocations_default']['useclustermanager'] = 0;
+  }
+  elseif ($form_state['values']['getlocations_default']['markermanagertype'] == 1) {
+    $form_state['values']['getlocations_default']['useclustermanager'] = 0;
+  }
+  elseif ($form_state['values']['getlocations_default']['markermanagertype'] == 2) {
     $form_state['values']['getlocations_default']['usemarkermanager'] = 0;
   }
+
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {
     if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {
       form_set_error('getlocations_colorbox][width', t('Colorbox width must be a number'));

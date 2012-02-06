@@ -28,6 +28,11 @@ var inputmap = [];
         minzoom: 7,
         nodezoom: 12,
         mgr: '',
+        cmgr: '',
+        cmgr_gridSize: null,
+        cmgr_maxZoom: null,
+        cmgr_styles: '',
+        cmgr_style: null,
         defaultIcon: '',
         usemarkermanager: true,
         useInfoBubble: false,
@@ -67,7 +72,23 @@ var inputmap = [];
       global_settings.maxzoom = parseInt(settings.maxzoom);
       global_settings.nodezoom = parseInt(settings.nodezoom);
       global_settings.datanum = settings.datanum;
-      global_settings.usemarkermanager = settings.usemarkermanager;
+      global_settings.markermanagertype = settings.markermanagertype;
+      if (settings.markermanagertype == 1 && settings.usemarkermanager) {
+        global_settings.usemarkermanager = true;
+        global_settings.useclustermanager = false;
+      }
+      else if (settings.markermanagertype == 2 && settings.useclustermanager) {
+        global_settings.js_path = settings.js_path;
+        global_settings.useclustermanager = true;
+        global_settings.usemarkermanager = false;
+        global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;
+        global_settings.cmgr_style = settings.markerclusterer_style;
+      }
+      else {
+        global_settings.usemarkermanager = false;
+        global_settings.useclustermanager = false;
+      }
+
       global_settings.markeraction = settings.markeraction;
       global_settings.markeractiontype = 'click';
       if (settings.markeractiontype == 2) {
@@ -181,12 +202,18 @@ var inputmap = [];
       }
 
       // set up markermanager
-      if (global_settings.usemarkermanager) {
+      if (global_settings.usemarkermanager == 1) {
         global_settings.mgr = new MarkerManager(map[key], {
           borderPadding: 50,
           maxZoom: global_settings.maxzoom,
           trackMarkers: false
         });
+      }
+      else if (global_settings.useclustermanager == 1) {
+        global_settings.cmgr = new MarkerClusterer(
+         map[key],
+         [],
+         {gridSize: global_settings.cmgr_gridSize, maxZoom: global_settings.cmgr_maxZoom, styles: global_settings.cmgr_styles[global_settings.cmgr_style]});
       }
 
       if (settings.trafficinfo) {
@@ -297,7 +324,7 @@ var inputmap = [];
             }
             if (global_settings.useInfoBubble) {
               if (typeof(infoBubbleOptions) == 'object') {
-                var infoBubbleOpts = global_settings.infoBubbleOptions;
+                var infoBubbleOpts = infoBubbleOptions;
               }
               else {
                 var infoBubbleOpts = {};
@@ -332,7 +359,7 @@ var inputmap = [];
   function doAllMarkers (map, global_settings) {
 
     // using markermanager
-    if (global_settings.usemarkermanager) {
+    if (global_settings.usemarkermanager || global_settings.useclustermanager) {
       var batchr = [];
     }
 
@@ -352,14 +379,17 @@ var inputmap = [];
         global_settings.markdone = Drupal.getlocations.getIcon(mark);
       }
       m = makeMarker(map, global_settings, lat, lon, lid, name, lidkey);
-      if (global_settings.usemarkermanager) {
+      if (global_settings.usemarkermanager || global_settings.useclustermanager) {
         batchr.push(m);
       }
     }
     // add batchr
     if (global_settings.usemarkermanager) {
-     global_settings. mgr.addMarkers(batchr, global_settings.minzoom, global_settings.maxzoom);
+     global_settings.mgr.addMarkers(batchr, global_settings.minzoom, global_settings.maxzoom);
       global_settings.mgr.refresh();
+    }
+    else if (global_settings.useclustermanager) {
+      global_settings.cmgr.addMarkers(batchr, 0);
     }
   }
 

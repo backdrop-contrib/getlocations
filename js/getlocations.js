@@ -290,21 +290,21 @@ var inputmap = [];
 
   } // end initialize
 
-  function makeMarker(map, global_settings, lat, lon, lid, title, lidkey) {
+  function makeMarker(map, gs, lat, lon, lid, title, lidkey) {
 
     var p = new google.maps.LatLng(lat, lon);
     var m = new google.maps.Marker({
-      icon: global_settings.markdone.image,
-      shadow: global_settings.markdone.shadow,
-      shape: global_settings.markdone.shape,
+      icon: gs.markdone.image,
+      shadow: gs.markdone.shadow,
+      shape: gs.markdone.shape,
       map: map,
       position: p,
       title: title
     });
 
-    if (global_settings.markeraction > 0) {
-      google.maps.event.addListener(m, global_settings.markeractiontype, function() {
-        if (global_settings.useLink) {
+    if (gs.markeraction > 0) {
+      google.maps.event.addListener(m, gs.markeractiontype, function() {
+        if (gs.useLink) {
           // fetch link and relocate
           var path = Drupal.settings.basePath + "getlocations/lidinfo";
           $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
@@ -319,10 +319,10 @@ var inputmap = [];
           var path = Drupal.settings.basePath + "getlocations/info";
           $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
             // close any previous instances
-            for (var i in global_settings.infoBubbles) {
-              global_settings.infoBubbles[i].close();
+            for (var i in gs.infoBubbles) {
+              gs.infoBubbles[i].close();
             }
-            if (global_settings.useInfoBubble) {
+            if (gs.useInfoBubble) {
               if (typeof(infoBubbleOptions) == 'object') {
                 var infoBubbleOpts = infoBubbleOptions;
               }
@@ -333,7 +333,7 @@ var inputmap = [];
               var infoBubble = new InfoBubble(infoBubbleOpts);
               infoBubble.open(map, m);
               // add to the array
-              global_settings.infoBubbles.push(infoBubble);
+              gs.infoBubbles.push(infoBubble);
             }
             else {
               var infowindow = new google.maps.InfoWindow({
@@ -341,7 +341,7 @@ var inputmap = [];
               });
               infowindow.open(map, m);
               // add to the array
-              global_settings.infoBubbles.push(infowindow);
+              gs.infoBubbles.push(infowindow);
             }
           });
         }
@@ -349,21 +349,21 @@ var inputmap = [];
 
     }
     // we only have one marker
-    if (global_settings.datanum == 1) {
+    if (gs.datanum == 1) {
       map.setCenter(p);
-      map.setZoom(global_settings.nodezoom);
+      map.setZoom(gs.nodezoom);
     }
     return m;
   }
 
-  function doAllMarkers (map, global_settings) {
+  function doAllMarkers (map, gs) {
 
     // using markermanager
-    if (global_settings.usemarkermanager || global_settings.useclustermanager) {
+    if (gs.usemarkermanager || gs.useclustermanager) {
       var batchr = [];
     }
 
-    var arr = global_settings.latlons;
+    var arr = gs.latlons;
     for (var i = 0; i < arr.length; i++) {
       arr2 = arr[i];
       lat = arr2[0];
@@ -373,23 +373,23 @@ var inputmap = [];
       mark = arr2[4];
       lidkey = arr2[5];
       if (mark === '') {
-        global_settings.markdone = global_settings.defaultIcon;
+        gs.markdone = gs.defaultIcon;
       }
       else {
-        global_settings.markdone = Drupal.getlocations.getIcon(mark);
+        gs.markdone = Drupal.getlocations.getIcon(mark);
       }
-      m = makeMarker(map, global_settings, lat, lon, lid, name, lidkey);
-      if (global_settings.usemarkermanager || global_settings.useclustermanager) {
+      m = makeMarker(map, gs, lat, lon, lid, name, lidkey);
+      if (gs.usemarkermanager || gs.useclustermanager) {
         batchr.push(m);
       }
     }
     // add batchr
-    if (global_settings.usemarkermanager) {
-     global_settings.mgr.addMarkers(batchr, global_settings.minzoom, global_settings.maxzoom);
-      global_settings.mgr.refresh();
+    if (gs.usemarkermanager) {
+     gs.mgr.addMarkers(batchr, gs.minzoom, gs.maxzoom);
+      gs.mgr.refresh();
     }
-    else if (global_settings.useclustermanager) {
-      global_settings.cmgr.addMarkers(batchr, 0);
+    else if (gs.useclustermanager) {
+      gs.cmgr.addMarkers(batchr, 0);
     }
   }
 

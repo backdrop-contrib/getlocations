@@ -15,10 +15,10 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
 
   function option_definition() {
     $options = parent::option_definition();
+
     $options['operator'] = array('default' => 'mbr');
-
     $options['identifier'] = array('default' => 'distance');
-
+    $options['group'] = array('default' => '0');
     $options['origin'] = array('default' => 'nid_arg');
 
     $options['value'] = array(
@@ -37,13 +37,17 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       ),
     );
 
-#    $options['expose']['contains']['gmap_macro'] = array('default' => '[gmap ]');
-#    $options['expose']['contains']['user_location_choose'] = array('default' => FALSE);
+    $options['expose']['contains']['operator_id'] = array('default' => 'mbr');
+    $options['expose']['contains']['search_units'] = array('default' => 'km');
+    $options['expose']['contains']['search_distance'] = array('default' => 10);
 
     return $options;
   }
 
   function admin_summary() {
+    if (!empty($this->options['exposed'])) {
+      return t('Exposed');
+    }
     return '';
   }
 
@@ -56,40 +60,16 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
   // TODO
   function expose_options() {
     parent::expose_options();
-#    $this->options['expose']['gmap_macro'] = array('default' => '[gmap ]');
-#    $this->options['expose']['user_location_choose'] = array('default' => FALSE);
+
     $this->options['expose']['search_units'] = array('default' => 'km');
     $this->options['expose']['search_distance'] = array('default' => 10);
   }
 
-  function expose_form_left(&$form, &$form_state) {
-    parent::expose_form_left($form, $form_state);
-    // @@@ Todo: autohide this.
-#    $form['expose']['gmap_macro'] = array(
-#      '#parents' => array('options', 'gmap_macro'),
-#      '#type' => 'textfield',
-#      '#title' => t('GMap macro'),
-#      '#description' => t('The macro to use for the Latitude / Longitude map, if applicable.'),
-#      '#default_value' => $this->options['expose']['gmap_macro'],
-#    );
-#
-#    $form['expose']['user_location_choose'] = array(
-#      '#type' => 'checkbox',
-#      '#title' => t("Allow choice of user location"),
-#      '#default_value' => $this->options['expose']['user_location_choose'],
-#      '#description' => t("If checked and using a user location origin, the user will be able to choose which of their locations to use.  Otherwise their first location will be used."),
-#    );
-
-    $form['expose']['search_units'] = getlocations_fields_element_distance_unit($this->options['expose']['search_units']);
-    $form['expose']['search_distance'] = getlocations_fields_element_search_distance($this->options['expose']['search_distance']);
-
-  }
-
   function value_form(&$form, &$form_state) {
-
+    parent::value_form($form, $form_state);
     $form['origin'] = getlocations_fields_element_origin($this->options['origin']);
 
-    if (!empty($form_state['exposed'])) {
+    if (! empty($form_state['exposed'])) {
       $identifier = $this->options['expose']['identifier'];
       if (! isset($form_state['input'][$identifier])) {
         // We need to pretend the user already inputted the defaults, because
@@ -134,60 +114,8 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
         $form[$key][$el]['#dependency'] = array();
       }
     }
-      #    if ($origin == 'latlon_gmap' && module_exists('gmap')) {
-      #      // Bad things happen if we try to show a gmap in the views live preview.
-      #      if (!empty($form_state['view']->live_preview)) {
-      #        $form[$key]['proximity_map'] = array(
-      #          '#markup' => t('Gmap location selection is not available during live preview.'),
-      #          '#weight' => 0,
-      #        );
-      #      }
-      #      else {
-      #        $form[$key]['proximity_map'] = array(
-      #          '#markup' => gmap_set_location($this->options['expose']['gmap_macro'], $form[$key], array('latitude' => 'latitude', 'longitude' => 'longitude')),
-      #          '#weight' => 0,
-      #        );
-      #      }
-      #    }
-      #    elseif (($origin == 'user' || $origin == 'hybrid') && $this->options['expose']['user_location_choose']) {
-      #      global $user;
-      #      $user_locations = isset($user->locations) ? $user->locations : getlocations_load_locations($user->uid, 'uid');
-      #      $location_options = array();
-      #      if (!empty($user_locations)) {
-      #        foreach ($user_locations as $i => $location) {
-      #          if (isset($location['latitude']) && isset($location['longitude'])) {
-      #            if (!empty($location['name'])) {
-      #              $location_options[$i] = t(check_plain($location['name']));
-      #            }
-      #            else {
-      #              $location_options[$i] = t('Location #@num', array('@num' => $i + 1));
-      #            }
-      #          }
-      #        }
-      #      }
-
-      #      $form[$key]['user_location_delta'] = array(
-      #        '#type' => 'select',
-      #        '#title' => t('Location'),
-      #        '#options' => $location_options,
-      #        '#description' => t('Select which of your locations to use.'),
-      #        '#weight' => 0,
-      #      );
-      #    }
-      #
-      #    // Remove unneeded fields when exposing the form.
-      #    // It's shorter than redefining value_form.
-      #    if ($origin != 'static' && $origin != 'latlon_gmap') {
     unset($form[$key]['latitude']);
     unset($form[$key]['longitude']);
-      #    }
-      #    if ($origin != 'postal' && $origin != 'postal_default') {
-      #      unset($form[$key]['postal_code']);
-      #    }
-      #    if ($origin != 'postal') {
-      #      unset($form[$key]['country']);
-      #    }
-      #
 
     // And we definitely do not want to expose the php code option when exposing the filter
     unset($form[$key]['php_code']);

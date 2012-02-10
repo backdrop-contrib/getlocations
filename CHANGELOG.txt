@@ -1,9 +1,83 @@
-commit 5d0a029
+commit 63fa448
+Author: hutch <hutch@midwales.net>
+Date:   Fri Feb 10 11:35:57 2012 +0000
+
+    improved views defaults
+
+README.txt
+js/getlocations.js
+modules/getlocations_fields/README.txt
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+views/getlocations.views_default.inc
+
+commit f2cdc20
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 6 13:10:28 2012 +0000
+
+    added support for marker clusterer
+
+getlocations.admin.inc
+getlocations.markercluster.inc
+getlocations.module
+js/getlocations.js
+js/images/conv30.png
+js/images/conv40.png
+js/images/conv50.png
+js/images/heart30.png
+js/images/heart40.png
+js/images/heart50.png
+js/images/m1.png
+js/images/m2.png
+js/images/m3.png
+js/images/m4.png
+js/images/m5.png
+js/images/people35.png
+js/images/people45.png
+js/images/people55.png
+js/markerclusterer.js
+views/getlocations_plugin_style_map.inc
+
+commit bb8e381
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 6 13:09:43 2012 +0000
+
+    improved views
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+
+commit 3eb6aef
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 5 12:28:13 2012 +0000
+
+    markermanager per map fixed
+
+getlocations.admin.inc
+getlocations.module
+views/getlocations_plugin_style_map.inc
+
+commit 4c1055b
+Author: hutch <hutch@midwales.net>
+Date:   Thu Feb 2 19:46:52 2012 +0000
+
+    added geofield support
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.theme.inc
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit db64fb0
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 28 11:15:52 2012 +0000
 
     fixed location_node bug in getlocations_check_node
 
+CHANGELOG.txt
 getlocations.module
 
 commit a3b9b90

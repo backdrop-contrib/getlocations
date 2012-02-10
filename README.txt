@@ -8,11 +8,11 @@ libraries modules installed
 
 You can fetch markers from dropbox:
 As tarballs:
-http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.tar.gz
+http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.tar.gz (required)
 http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.tar.gz
 
 As zipfles:
-http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.zip
+http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers.zip (required)
 http://dl.dropbox.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.zip
 
 Download the file(s) and place them into your libraries folder so you have

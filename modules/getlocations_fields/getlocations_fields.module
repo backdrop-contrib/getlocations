@@ -66,6 +66,15 @@ function getlocations_fields_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+
+  if (module_exists('smart_ip')) {
+    $items['getlocations_fields/smart_ip'] = array(
+      'page callback' => 'getlocations_fields_smart_ip',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+    );
+  }
+
   return $items;
 
 }
@@ -1053,6 +1062,20 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     }
   } // TODO add a message, required form or not
 
+  // smart_ip
+  if ($active && module_exists('smart_ip') && $settings['use_smart_ip_button']) {
+    $widget['smart_ip_button'] = array(
+      '#markup' => '',
+    );
+    if (! empty($settings['input_smart_ip_button_weight'])) {
+      $widget['smart_ip_button']['#weight'] = $settings['input_smart_ip_button_weight'];
+    }
+    $widget['smart_ip_mapid'] = array(
+      '#type' => 'value',
+      '#value' => $mapid,
+    );
+  }
+
   // loop over these as they are all the same
   $required = array();
   $inputarr = array(
@@ -1705,54 +1728,56 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
 function getlocations_fields_defaults() {
   $getlocations_defaults = getlocations_defaults();
   $defaults = array(
-    'country'                    => variable_get('site_default_country', ''),
-    'display_mapwidth'           => $getlocations_defaults['width'],
-    'display_mapheight'          => $getlocations_defaults['height'],
-    'display_showmap'            => 1,
-    'display_maplink'            => 1,
-    'display_latlong'            => 1,
-    'display_dms'                => 0,
-    'display_name'               => 1,
-    'display_street'             => 1,
-    'display_additional'         => 1,
-    'display_city'               => 1,
-    'display_province'           => 1,
-    'display_postal_code'        => 1,
-    'display_country'            => 1,
-    'country_full'               => 1,
-    'use_address'                => 1,
-    'input_address_width'        => 40,
-    'input_name_width'           => 40,
-    'input_street_width'         => 40,
-    'input_additional_width'     => 40,
-    'input_city_width'           => 40,
-    'input_province_width'       => 40,
-    'input_postal_code_width'    => 40,
-    'input_country_width'        => 40,
-    'input_latitude_width'       => 20,
-    'input_longitude_width'      => 20,
-    'input_name_required'        => 0,
-    'input_street_required'      => 0,
-    'input_additional_required'  => 0,
-    'input_city_required'        => 0,
-    'input_province_required'    => 0,
-    'input_postal_code_required' => 0,
-    'input_country_required'     => 0,
-    'input_name_weight'          => 0,
-    'input_street_weight'        => 0,
-    'input_additional_weight'    => 0,
-    'input_city_weight'          => 0,
-    'input_province_weight'      => 0,
-    'input_postal_code_weight'   => 0,
-    'input_country_weight'       => 0,
-    'input_latitude_weight'      => 0,
-    'input_longitude_weight'     => 0,
-    'input_map_weight'           => 0,
-    'input_geobutton_weight'     => 0,
-    'use_country_dropdown'       => 0,
-    'province_autocomplete'      => 0,
-    'city_autocomplete'          => 0,
-    'columns'                    => array(
+    'country'                      => variable_get('site_default_country', ''),
+    'display_mapwidth'             => $getlocations_defaults['width'],
+    'display_mapheight'            => $getlocations_defaults['height'],
+    'display_showmap'              => 1,
+    'display_maplink'              => 1,
+    'display_latlong'              => 1,
+    'display_dms'                  => 0,
+    'display_name'                 => 1,
+    'display_street'               => 1,
+    'display_additional'           => 1,
+    'display_city'                 => 1,
+    'display_province'             => 1,
+    'display_postal_code'          => 1,
+    'display_country'              => 1,
+    'country_full'                 => 1,
+    'use_address'                  => 1,
+    'input_address_width'          => 40,
+    'input_name_width'             => 40,
+    'input_street_width'           => 40,
+    'input_additional_width'       => 40,
+    'input_city_width'             => 40,
+    'input_province_width'         => 40,
+    'input_postal_code_width'      => 40,
+    'input_country_width'          => 40,
+    'input_latitude_width'         => 20,
+    'input_longitude_width'        => 20,
+    'input_name_required'          => 0,
+    'input_street_required'        => 0,
+    'input_additional_required'    => 0,
+    'input_city_required'          => 0,
+    'input_province_required'      => 0,
+    'input_postal_code_required'   => 0,
+    'input_country_required'       => 0,
+    'input_name_weight'            => 0,
+    'input_street_weight'          => 0,
+    'input_additional_weight'      => 0,
+    'input_city_weight'            => 0,
+    'input_province_weight'        => 0,
+    'input_postal_code_weight'     => 0,
+    'input_country_weight'         => 0,
+    'input_latitude_weight'        => 0,
+    'input_longitude_weight'       => 0,
+    'input_map_weight'             => 0,
+    'input_geobutton_weight'       => 0,
+    'use_smart_ip_button'          => 0,
+    'input_smart_ip_button_weight' => 0,
+    'use_country_dropdown'         => 0,
+    'province_autocomplete'        => 0,
+    'city_autocomplete'            => 0,
+    'columns'                      => array(
       'glid'        => t('Glid'),
       'name'        => t('Name'),
       'street'      => t('Street'),
@@ -1807,56 +1832,58 @@ function getlocations_fields_field_info_defaults() {
       'default_formatter' => 'getlocations_fields_default',
       'default_widget' => 'getlocations_fields',
       'settings' => array(
-        'mapwidth'                   => $getlocations_defaults['width'],
-        'mapheight'                  => $getlocations_defaults['height'],
-        'latlong'                    => $getlocations_defaults['latlong'],
-        'zoom'                       => $getlocations_defaults['zoom'],
-        'controltype'                => $getlocations_defaults['controltype'],
-        'pancontrol'                 => $getlocations_defaults['pancontrol'],
-        'mtc'                        => $getlocations_defaults['mtc'],
-        'maptype'                    => $getlocations_defaults['maptype'],
-        'baselayers'                 => $getlocations_defaults['baselayers'],
-        'behavior'                   => $getlocations_defaults['behavior'],
-        'draggable'                  => $getlocations_defaults['draggable'],
-        'map_marker'                 => $getlocations_defaults['node_map_marker'],
-        'node_map_marker'            => $getlocations_defaults['node_map_marker'],
-        'user_map_marker'            => $getlocations_defaults['user_map_marker'],
-        'vocabulary_map_marker'      => $getlocations_defaults['vocabulary_map_marker'],
-        'comment_map_marker'         => $getlocations_defaults['comment_map_marker'],
-        'input_map_marker'           => $getlocations_defaults['input_map_marker'],
-        'use_address'                => $getlocations_fields_defaults['use_address'],
-        'input_address_width'        => $getlocations_fields_defaults['input_address_width'],
-        'input_name_width'           => $getlocations_fields_defaults['input_name_width'],
-        'input_street_width'         => $getlocations_fields_defaults['input_street_width'],
-        'input_additional_width'     => $getlocations_fields_defaults['input_additional_width'],
-        'input_city_width'           => $getlocations_fields_defaults['input_city_width'],
-        'input_province_width'       => $getlocations_fields_defaults['input_province_width'],
-        'input_postal_code_width'    => $getlocations_fields_defaults['input_postal_code_width'],
-        'input_country_width'        => $getlocations_fields_defaults['input_country_width'],
-        'input_latitude_width'       => $getlocations_fields_defaults['input_latitude_width'],
-        'input_longitude_width'      => $getlocations_fields_defaults['input_longitude_width'],
-        'input_name_required'        => $getlocations_fields_defaults['input_name_required'],
-        'input_street_required'      => $getlocations_fields_defaults['input_street_required'],
-        'input_additional_required'  => $getlocations_fields_defaults['input_additional_required'],
-        'input_city_required'        => $getlocations_fields_defaults['input_city_required'],
-        'input_province_required'    => $getlocations_fields_defaults['input_province_required'],
-        'input_postal_code_required' => $getlocations_fields_defaults['input_postal_code_required'],
-        'input_country_required'     => $getlocations_fields_defaults['input_country_required'],
-        'input_name_weight'          => $getlocations_fields_defaults['input_name_weight'],
-        'input_street_weight'        => $getlocations_fields_defaults['input_street_weight'],
-        'input_additional_weight'    => $getlocations_fields_defaults['input_additional_weight'],
-        'input_city_weight'          => $getlocations_fields_defaults['input_city_weight'],
-        'input_province_weight'      => $getlocations_fields_defaults['input_province_weight'],
-        'input_postal_code_weight'   => $getlocations_fields_defaults['input_postal_code_weight'],
-        'input_country_weight'       => $getlocations_fields_defaults['input_country_weight'],
-        'input_map_weight'           => $getlocations_fields_defaults['input_map_weight'],
-        'input_latitude_weight'      => $getlocations_fields_defaults['input_latitude_weight'],
-        'input_longitude_weight'     => $getlocations_fields_defaults['input_longitude_weight'],
-        'input_geobutton_weight'     => $getlocations_fields_defaults['input_geobutton_weight'],
-        'use_country_dropdown'       => $getlocations_fields_defaults['use_country_dropdown'],
-        'province_autocomplete'      => $getlocations_fields_defaults['province_autocomplete'],
-        'city_autocomplete'          => $getlocations_fields_defaults['city_autocomplete'],
-        'country'                    => $getlocations_fields_defaults['country'],
+        'mapwidth'                     => $getlocations_defaults['width'],
+        'mapheight'                    => $getlocations_defaults['height'],
+        'latlong'                      => $getlocations_defaults['latlong'],
+        'zoom'                         => $getlocations_defaults['zoom'],
+        'controltype'                  => $getlocations_defaults['controltype'],
+        'pancontrol'                   => $getlocations_defaults['pancontrol'],
+        'mtc'                          => $getlocations_defaults['mtc'],
+        'maptype'                      => $getlocations_defaults['maptype'],
+        'baselayers'                   => $getlocations_defaults['baselayers'],
+        'behavior'                     => $getlocations_defaults['behavior'],
+        'draggable'                    => $getlocations_defaults['draggable'],
+        'map_marker'                   => $getlocations_defaults['node_map_marker'],
+        'node_map_marker'              => $getlocations_defaults['node_map_marker'],
+        'user_map_marker'              => $getlocations_defaults['user_map_marker'],
+        'vocabulary_map_marker'        => $getlocations_defaults['vocabulary_map_marker'],
+        'comment_map_marker'           => $getlocations_defaults['comment_map_marker'],
+        'input_map_marker'             => $getlocations_defaults['input_map_marker'],
+        'use_address'                  => $getlocations_fields_defaults['use_address'],
+        'input_address_width'          => $getlocations_fields_defaults['input_address_width'],
+        'input_name_width'             => $getlocations_fields_defaults['input_name_width'],
+        'input_street_width'           => $getlocations_fields_defaults['input_street_width'],
+        'input_additional_width'       => $getlocations_fields_defaults['input_additional_width'],
+        'input_city_width'             => $getlocations_fields_defaults['input_city_width'],
+        'input_province_width'         => $getlocations_fields_defaults['input_province_width'],
+        'input_postal_code_width'      => $getlocations_fields_defaults['input_postal_code_width'],
+        'input_country_width'          => $getlocations_fields_defaults['input_country_width'],
+        'input_latitude_width'         => $getlocations_fields_defaults['input_latitude_width'],
+        'input_longitude_width'        => $getlocations_fields_defaults['input_longitude_width'],
+        'input_name_required'          => $getlocations_fields_defaults['input_name_required'],
+        'input_street_required'        => $getlocations_fields_defaults['input_street_required'],
+        'input_additional_required'    => $getlocations_fields_defaults['input_additional_required'],
+        'input_city_required'          => $getlocations_fields_defaults['input_city_required'],
+        'input_province_required'      => $getlocations_fields_defaults['input_province_required'],
+        'input_postal_code_required'   => $getlocations_fields_defaults['input_postal_code_required'],
+        'input_country_required'       => $getlocations_fields_defaults['input_country_required'],
+        'input_name_weight'            => $getlocations_fields_defaults['input_name_weight'],
+        'input_street_weight'          => $getlocations_fields_defaults['input_street_weight'],
+        'input_additional_weight'      => $getlocations_fields_defaults['input_additional_weight'],
+        'input_city_weight'            => $getlocations_fields_defaults['input_city_weight'],
+        'input_province_weight'        => $getlocations_fields_defaults['input_province_weight'],
+        'input_postal_code_weight'     => $getlocations_fields_defaults['input_postal_code_weight'],
+        'input_country_weight'         => $getlocations_fields_defaults['input_country_weight'],
+        'input_map_weight'             => $getlocations_fields_defaults['input_map_weight'],
+        'input_latitude_weight'        => $getlocations_fields_defaults['input_latitude_weight'],
+        'input_longitude_weight'       => $getlocations_fields_defaults['input_longitude_weight'],
+        'input_geobutton_weight'       => $getlocations_fields_defaults['input_geobutton_weight'],
+        'use_smart_ip_button'          => $getlocations_fields_defaults['use_smart_ip_button'],
+        'input_smart_ip_button_weight' => $getlocations_fields_defaults['input_smart_ip_button_weight'],
+        'use_country_dropdown'         => $getlocations_fields_defaults['use_country_dropdown'],
+        'province_autocomplete'        => $getlocations_fields_defaults['province_autocomplete'],
+        'city_autocomplete'            => $getlocations_fields_defaults['city_autocomplete'],
+        'country'                      => $getlocations_fields_defaults['country'],
       ),
     ),
   );
@@ -1960,6 +1987,14 @@ function getlocations_fields_input_settings_form($defaults) {
   );
   $form['input_address_width']['#prefix'] = '<div id="wrap-input_address_width">';
   $form['input_address_width']['#suffix'] = '</div>';
+
+  if(module_exists('smart_ip')) {
+    $form['use_smart_ip_button'] = getlocations_element_map_checkbox(
+      t('Provide IP based geocoding option'),
+      $defaults['use_smart_ip_button'],
+      t('Use Smart IP module to provide a location.')
+    );
+  }
 
   $form['input_name_width'] = getlocations_element_map_tf(
     t('Name box width'),
@@ -2104,6 +2139,14 @@ function getlocations_fields_input_settings_form($defaults) {
     ''
   );
 
+  if (module_exists('smart_ip')) {
+    $form['input_smart_ip_button_weight'] = getlocations_fields_element_weight(
+      t('Smart IP button position'),
+      $defaults['input_smart_ip_button_weight'],
+      ''
+    );
+  }
+
   $form['input_country_width'] = getlocations_element_map_tf(
     t('Country box width'),
     $defaults['input_country_width'],
@@ -2244,4 +2287,19 @@ function getlocations_fields_display_settings_form($defaults) {
 
   return $form;
 
+}
+
+function getlocations_fields_smart_ip() {
+  if (module_exists('smart_ip')) {
+    global $user;
+    $location = FALSE;
+    if ($user->uid > 0 && isset($user->data['geoip_location'])) {
+      $location = $user->data['geoip_location'];
+    }
+    elseif (isset($_SESSION['smart_ip']['location'])) {
+      $location = $_SESSION['smart_ip']['location'];
+    }
+    drupal_json_output($location);
+  }
+  exit;
 }

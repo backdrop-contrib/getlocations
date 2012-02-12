@@ -293,6 +293,67 @@
           makeMoveMarker(umap, pt, ukey);
         }
 
+        $("#" + 'getlocations_smart_ip_button_' + key).click( function () {
+          manageSmartIpbutton(key);
+          return false;
+        });
+
+        function manageSmartIpbutton(k) {
+          var kk = k;
+          $.get(Drupal.settings.basePath + "getlocations_fields/smart_ip", {}, function (loc) {
+            if (loc) {
+              lat = loc.latitude;
+              lng = loc.longitude;
+              if (lat && lng) {
+                $("#" + latfield + kk).val(lat);
+                $("#" + lonfield + kk).val(lng);
+                if (loc.city) {
+                  $("#" + cityfield + kk).val(loc.city);
+                }
+                if (loc.region) {
+                  $("#" + provincefield + kk).val(loc.region);
+                }
+                if (loc.zip && loc.zip != '-') {
+                  $("#" + postal_codefield + kk).val(loc.zip);
+                }
+
+                if ($("#" + countryfield + kk).is("input")) {
+                  if (loc.country) {
+                    $("#" + countryfield + kk).val(loc.country);
+                  }
+                }
+                else if ($("#" + countryfield + kk).is("select")) {
+                  // do we already have countrycode?
+                  cc = '';
+                  if (loc.country_code) {
+                    if (loc.country_code == 'UK') {
+                      cc = 'GB';
+                    }
+                    else {
+                      cc = loc.country_code;
+                    }
+                  }
+                  if (cc) {
+                    $("#" + countryfield + kk).val(cc).attr('selected', 'selected');
+                  }
+                  else if (loc.country) {
+                    // country list is keyed on two letter codes so we need to get
+                    // the code from the server in order to set the selectbox correctly
+                    var kkk = kk;
+                    $.get(Drupal.settings.basePath + "getlocations_fields/countryinfo", {'country': loc.country}, function (data) {
+                      if (data) {
+                        $("#" + countryfield + kkk).val(data).attr('selected', 'selected');
+                      }
+                    });
+                  }
+                }
+                point[kk] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+                updateMap(inputmap[kk], point[kk], kk);
+              }
+            }
+          });
+        }
+
       }); // end each setting loop
 
       function getGeoErrCode(errcode) {

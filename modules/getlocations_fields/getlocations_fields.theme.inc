@@ -424,6 +424,14 @@ function theme_getlocations_fields_field_widget_form($variables) {
     $geobutton .= '<p>If you leave the address empty you can Geocode by moving the marker on the map</p>';
     $form['geobutton']['#markup'] = $geobutton;
   }
+
+  if (isset($form['smart_ip_button']) && module_exists('smart_ip')) {
+    $smart_ip_mapid = $form['smart_ip_mapid']['#value'];
+    unset($form['smart_ip_mapid']);
+    $smart_ip_button = '<p><input type="submit" value="' . t('Use current user position') . '" title="' . t('Get the latitude and longitude for this address from the user IP') . '" id="getlocations_smart_ip_button_' . $smart_ip_mapid . '" class="form-submit" /></p>';
+    $form['smart_ip_button']['#markup'] = $smart_ip_button;
+  }
+
   $form['latitude']['#prefix'] = '<div class="getlocations_fields_latlon_wrapper"><div class="getlocations_fields_lat_wrapper">';
   $form['latitude']['#suffix'] = '</div>';
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';

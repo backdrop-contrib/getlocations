@@ -1,9 +1,20 @@
-commit 63fa448
+commit 9be0b7a
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 12 09:51:46 2012 +0000
+
+    added smart_ip support
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 91f83b3
 Author: hutch <hutch@midwales.net>
 Date:   Fri Feb 10 11:35:57 2012 +0000
 
     improved views defaults
 
+CHANGELOG.txt
 README.txt
 js/getlocations.js
 modules/getlocations_fields/README.txt

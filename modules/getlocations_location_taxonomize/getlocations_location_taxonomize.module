@@ -2,12 +2,28 @@
 
 /**
  * @file
- * This is a 'source module' that adds a data source for the Location Taoxnomize
+ * This is a 'source module' that adds a data source for the Location Taxonomize
  * module. It implements the Location Taxonomize functionality for the
  * Getlocations_fields module.
  */
 
-require_once('getlocations_location_taxonomize.inc');
+/**
+ * Implements hook_init().
+ */
+function getlocations_location_taxonomize_init() {
+  module_load_include('inc', 'getlocations_location_taxonomize', 'getlocations_location_taxonomize');
+}
+
+/**
+ * Implements hook_help().
+ */
+function getlocations_location_taxonomize_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#getlocations_location_taxonomize':
+      $output = '<p>' . t('Provides getlocations_fields as a data source to the location_taxonomize module.') . '</p>';
+      return $output;
+  }
+}
 
 /**
  * Register this module as a source module for Location Taxonomize

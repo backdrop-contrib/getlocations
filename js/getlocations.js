@@ -25,6 +25,11 @@
         minzoom: 7,
         nodezoom: 12,
         mgr: '',
+        cmgr: '',
+        cmgr_gridSize: null,
+        cmgr_maxZoom: null,
+        cmgr_styles: '',
+        cmgr_style: null,
         defaultIcon: '',
         usemarkermanager: true,
         useInfoBubble: false,
@@ -64,7 +69,23 @@
       global_settings.maxzoom = parseInt(settings.maxzoom);
       global_settings.nodezoom = parseInt(settings.nodezoom);
       global_settings.datanum = settings.datanum;
-      global_settings.usemarkermanager = settings.usemarkermanager;
+      global_settings.markermanagertype = settings.markermanagertype;
+      if (settings.markermanagertype == 1 && settings.usemarkermanager) {
+        global_settings.usemarkermanager = true;
+        global_settings.useclustermanager = false;
+      }
+      else if (settings.markermanagertype == 2 && settings.useclustermanager) {
+        //global_settings.js_path = settings.js_path;
+        global_settings.useclustermanager = true;
+        global_settings.usemarkermanager = false;
+        global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;
+        global_settings.cmgr_style = settings.markerclusterer_style;
+      }
+      else {
+        global_settings.usemarkermanager = false;
+        global_settings.useclustermanager = false;
+      }
+
       global_settings.markeraction = settings.markeraction;
       global_settings.markeractiontype = 'click';
       if (settings.markeractiontype == 2) {
@@ -181,6 +202,12 @@
           trackMarkers: false
         });
       }
+      else if (global_settings.useclustermanager) {
+        global_settings.cmgr = new MarkerClusterer(
+         map[key],
+         [],
+         {gridSize: global_settings.cmgr_gridSize, maxZoom: global_settings.cmgr_maxZoom, styles: global_settings.cmgr_styles[global_settings.cmgr_style]});
+      }
 
       if (settings.trafficinfo) {
         global_settings.trafficInfo[key] = new google.maps.TrafficLayer();
@@ -254,23 +281,23 @@
 
   } // end initialize
 
-  function makeMarker(map, global_settings, lat, lon, lid, title) {
+  function makeMarker(map, gs, lat, lon, lid, title) {
 
     var p = new google.maps.LatLng(lat, lon);
     var m = new google.maps.Marker({
-      icon: global_settings.markdone.image,
-      shadow: global_settings.markdone.shadow,
-      shape: global_settings.markdone.shape,
+      icon: gs.markdone.image,
+      shadow: gs.markdone.shadow,
+      shape: gs.markdone.shape,
       map: map,
       position: p,
       title: title
     });
 
-    if (global_settings.markeraction > 0) {
-      google.maps.event.addListener(m, global_settings.markeractiontype, function() {
-        if (global_settings.useLink) {
+    if (gs.markeraction > 0) {
+      google.maps.event.addListener(m, gs.markeractiontype, function() {
+        if (gs.useLink) {
           // fetch link and relocate
-          $.get("/getlocations/lidinfo", {lid: lid}, function(data) {
+          $.get(Drupal.settings.basePath + "getlocations/lidinfo", {lid: lid}, function(data) {
             if (data) {
               window.location = data;
             }
@@ -279,14 +306,14 @@
         }
         else {
           // fetch bubble content
-          $.get("/getlocations/info", {lid: lid}, function(data) {
+          $.get(Drupal.settings.basePath + "getlocations/info", {lid: lid}, function(data) {
             // close any previous instances
-            for (var i in global_settings.infoBubbles) {
-              global_settings.infoBubbles[i].close();
+            for (var i in gs.infoBubbles) {
+              gs.infoBubbles[i].close();
             }
-            if (global_settings.useInfoBubble) {
+            if (gs.useInfoBubble) {
               if (typeof(infoBubbleOptions) == 'object') {
-                var infoBubbleOpts = global_settings.infoBubbleOptions;
+                var infoBubbleOpts = gs.infoBubbleOptions;
               }
               else {
                 var infoBubbleOpts = {};
@@ -295,7 +322,7 @@
               var infoBubble = new InfoBubble(infoBubbleOpts);
               infoBubble.open(map, m);
               // add to the array
-              global_settings.infoBubbles.push(infoBubble);
+              gs.infoBubbles.push(infoBubble);
             }
             else {
               var infowindow = new google.maps.InfoWindow({
@@ -303,7 +330,7 @@
               });
               infowindow.open(map, m);
               // add to the array
-              global_settings.infoBubbles.push(infowindow);
+              gs.infoBubbles.push(infowindow);
             }
           });
         }
@@ -311,21 +338,21 @@
 
     }
     // we only have one marker
-    if (global_settings.datanum == 1) {
+    if (gs.datanum == 1) {
       map.setCenter(p);
-      map.setZoom(global_settings.nodezoom);
+      map.setZoom(gs.nodezoom);
     }
     return m;
   }
 
-  function doAllMarkers (map, global_settings) {
+  function doAllMarkers (map, gs) {
 
     // using markermanager
-    if (global_settings.usemarkermanager) {
+    if (gs.usemarkermanager || gs.useclustermanager) {
       var batchr = [];
     }
 
-    var arr = global_settings.latlons;
+    var arr = gs.latlons;
     for (var i = 0; i < arr.length; i++) {
       arr2 = arr[i];
       lat = arr2[0];
@@ -334,20 +361,23 @@
       name = arr2[3];
       mark = arr2[4];
       if (mark === '') {
-        global_settings.markdone = global_settings.defaultIcon;
+        gs.markdone = gs.defaultIcon;
       }
       else {
-        global_settings.markdone = Drupal.getlocations.getIcon(mark);
+        gs.markdone = Drupal.getlocations.getIcon(mark);
       }
-      m = makeMarker(map, global_settings, lat, lon, lid, name);
-      if (global_settings.usemarkermanager) {
+      m = makeMarker(map, gs, lat, lon, lid, name);
+      if (gs.usemarkermanager || gs.useclustermanager) {
         batchr.push(m);
       }
     }
     // add batchr
-    if (global_settings.usemarkermanager) {
-     global_settings. mgr.addMarkers(batchr, global_settings.minzoom, global_settings.maxzoom);
-      global_settings.mgr.refresh();
+    if (gs.usemarkermanager) {
+     gs.mgr.addMarkers(batchr, gs.minzoom, gs.maxzoom);
+      gs.mgr.refresh();
+    }
+    else if (gs.useclustermanager) {
+      gs.cmgr.addMarkers(batchr, 0);
     }
   }
 

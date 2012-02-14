@@ -8,6 +8,8 @@
  *
  * This file is pulled in whenever we need to refresh the marker information
  * and marker name caches.
+ *
+ * hook_getlocations_markerdir() code from jhm http://drupal.org/user/15946
  */
 
 /**
@@ -15,29 +17,28 @@
  */
 function _getlocations_get_icondata() {
   $icons = array();
-
   $imagetypes = array(
     'shadow',
   );
-
-  $markerdir = libraries_get_path('getlocations') .'/markers';
-
-  // The following routines are designed to be easy to comprehend, not fast.
-  // This whole process gets cached.
-
-  // Get the ini files.
-  $inifiles = file_scan_directory($markerdir, '.*\.ini$');
-  // Parse the ini files and store by path
   $inis = array();
-  foreach ($inifiles as $file) {
-    $path = substr($file->filename, strlen($markerdir), -strlen($file->basename));
-    if (!isset($inis[$path])) {
-      $inis[$path] = array();
-    }
-    $inis[$path][] = parse_ini_file($file->filename, TRUE);
-  }
-  unset($inifiles);
 
+  $markerdirs = module_invoke_all('getlocations_markerdir');
+  foreach($markerdirs as $i => $markerdir) {
+    // The following routines are designed to be easy to comprehend, not fast.
+    // This whole process gets cached.
+
+    // Get the ini files.
+    $inifiles = file_scan_directory($markerdir, '.*\.ini$');
+    // Parse the ini files and store by path
+    foreach ($inifiles as $file) {
+      $path = substr($file->filename, strlen($markerdir), -strlen($file->basename));
+      if (!isset($inis[$markerdir.$path])) {
+        $inis[$path] = array();
+      }
+      $inis[$markerdir.$path][] = parse_ini_file($file->filename, TRUE);
+    }
+    unset($inifiles);
+  }
   // Per directory..
   foreach ($inis as $path => $path_inis) {
     $icons[$path] = array(
@@ -85,7 +86,7 @@ function _getlocations_get_icondata() {
       if (empty($filename)) {
         continue;
       }
-      $size = getimagesize($markerdir . $path . $filename);
+      $size = getimagesize($path . $filename);
       $icons[$path]['f'][$counter] = $filename;
       $icons[$path]['w'][$counter] = $size[0];
       $icons[$path]['h'][$counter] = $size[1];
@@ -101,7 +102,7 @@ function _getlocations_get_icondata() {
   // Per directory...
   foreach ($inis as $path => $path_inis) {
     // Per file...
-    foreach ($path_inis as $ini) {
+    foreach ($path_inis as $i => $ini) {
       // Compression.
       foreach ($ini as $k => $v) {
         // Compress sequence filenames.
@@ -215,30 +216,33 @@ function _getlocations_compress_array(&$arr) {
 }
 
 function _getlocations_get_marker_titles() {
-  $markerdir = libraries_get_path('getlocations') .'/markers';
 
   // The following routines are designed to be easy to comprehend, not fast.
   // This whole process gets cached.
 
-  // Get the ini files.
-  $inifiles = file_scan_directory($markerdir, '.*\.ini$');
-  // Parse the ini files and store by path
   $inis = array();
-  foreach ($inifiles as $file) {
-    $data = parse_ini_file($file->filename, TRUE);
-    if (isset($data['defaults'])) {
-      // Ignore defaults
-      unset($data['defaults']);
-    }
-    foreach ($data as $k => $v) {
-      if (strpos($k, '.') !== FALSE) {
-        // Ignore files
-        unset($data[$k]);
+
+  $markerdirs = module_invoke_all('getlocations_markerdir');
+  foreach($markerdirs as $markerdir) {
+    // Get the ini files.
+    $inifiles = file_scan_directory($markerdir, '.*\.ini$');
+    // Parse the ini files and store by path
+    foreach ($inifiles as $file) {
+      $data = parse_ini_file($file->filename, TRUE);
+      if (isset($data['defaults'])) {
+        // Ignore defaults
+        unset($data['defaults']);
       }
+      foreach ($data as $k => $v) {
+        if (strpos($k, '.') !== FALSE) {
+          // Ignore files
+          unset($data[$k]);
+        }
+      }
+      $inis[] = $data;
     }
-    $inis[] = $data;
+    unset($inifiles);
   }
-  unset($inifiles);
 
   $titles = array();
   foreach ($inis as $ini => $inidata) {

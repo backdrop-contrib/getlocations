@@ -1,9 +1,38 @@
-commit e250c82
+commit 623e9d8
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 14 16:51:15 2012 +0000
+
+    added markercluster
+
+getlocations.admin.inc
+getlocations.markercluster.inc
+getlocations.markerinfo.inc
+getlocations.module
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/images/conv30.png
+js/images/conv40.png
+js/images/conv50.png
+js/images/heart30.png
+js/images/heart40.png
+js/images/heart50.png
+js/images/m1.png
+js/images/m2.png
+js/images/m3.png
+js/images/m4.png
+js/images/m5.png
+js/images/people35.png
+js/images/people45.png
+js/images/people55.png
+js/markerclusterer.js
+
+commit d90635f
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 28 00:05:37 2012 +0000
 
     added mouseover to marker actions types
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations_plugin_style_map.inc

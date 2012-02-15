@@ -549,6 +549,8 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     $settings = getlocations_fields_field_formatter_info_defaults();
   }
 
+  $locations = array();
+
   if ($entity_type == 'node') {
     $locations = getlocations_fields_load_locations($entity->vid, 'vid');
     $settings['map_marker'] = $settings['node_map_marker'];
@@ -616,6 +618,11 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
         '#locations' => $locations,
         '#settings' => $settings,
       );
+    }
+    else {
+      if ($entity_type) {
+        drupal_set_message(t("Getlocations fields does not support '@e'", array('@e' => $entity_type)));
+      }
     }
   }
 
@@ -2288,4 +2295,3 @@ function getlocations_fields_display_settings_form($defaults) {
   return $form;
 
 }
-

@@ -1,9 +1,43 @@
-commit 9be0b7a
+commit f641313
+Author: hutch <hutch@midwales.net>
+Date:   Thu Feb 16 12:29:58 2012 +0000
+
+    added profile2 support to getlocations_fields
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit ecf9305
+Author: hutch <hutch@midwales.net>
+Date:   Wed Feb 15 09:51:23 2012 +0000
+
+    added notice avoidance to function getlocations_fields_field_formatter_view
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 72dce66
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 14 18:50:13 2012 +0000
+
+    tidied up getlocations_location_taxonomize module
+
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.module
+
+commit 9b011bc
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 14 16:47:27 2012 +0000
+
+    moved function getlocations_fields_smart_ip
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit 68f311d
 Author: hutch <hutch@midwales.net>
 Date:   Sun Feb 12 09:51:46 2012 +0000
 
     added smart_ip support
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/getlocations_fields.theme.inc
 modules/getlocations_fields/js/getlocations_fields.js

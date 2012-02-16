@@ -464,7 +464,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
 
   // input form marker
   $markers = getlocations_get_marker_titles();
-  $form['map_marker'] = getlocations_element_map_marker(
+  $form['input_map_marker'] = getlocations_element_map_marker(
     t('Input form Map marker'),
     $markers,
     $settings['input_map_marker']
@@ -614,7 +614,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
       }
     }
   }
-  elseif ($entity_type == 'user') {
+  elseif ($entity_type == 'user' || $entity_type == 'profile2') {
     $locations = getlocations_fields_load_locations($entity->uid, 'uid');
     $settings['map_marker'] = $settings['user_map_marker'];
   }
@@ -692,7 +692,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   $markers = getlocations_get_marker_titles();
   // user markers
   if ($entity_type == 'user' || $entity_type == 'profile2') {
-    if (getlocations_check_user()) {
+    if (getlocations_check_user() || getlocations_check_profile2()) {
       $element['user_map_marker'] = getlocations_element_map_marker(
         t('Default User Map Marker'),
         $markers,
@@ -782,6 +782,7 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
   $entity_type = $instance['entity_type'];
+
   $summary = array();
   // map summary
   if ($settings['display_showmap']) {
@@ -864,7 +865,13 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if (count($info_display)) {
       $summary[] = t("Enabled information layers:") . '<br />' . implode(', ', $info_display);
     }
-    if ($entity_type == 'user' || $entity_type = 'profile2') {
+
+    if ($entity_type == 'user') {
+      if ($settings['user_map_marker']) {
+        $summary[] = t('User map marker: @c', array('@c' => $settings['user_map_marker']));
+      }
+    }
+    elseif ($entity_type == 'profile2') {
       if ($settings['user_map_marker']) {
         $summary[] = t('User map marker: @c', array('@c' => $settings['user_map_marker']));
       }
@@ -1280,13 +1287,18 @@ function getlocations_fields_widget_validate($element, &$form_state) {
     $field_name = $element['#field_name'];
     $entity_type = $element['#entity_type'];
     // profile2 support
-    if ($entity_type == 'profile2') {
-      $field_parents = $element['#field_parents'][0];
-      $item = $form_state['values'][$field_parents][$field_name][$language][$delta];
-    }
-    else {
-      $item = $form_state['values'][$field_name][$language][$delta];
-    }
+    #if ($entity_type == 'profile2') {
+      if (isset($element['#field_parents'][0]) && ! empty($element['#field_parents'][0])) {
+        $field_parents = $element['#field_parents'][0];
+        $item = $form_state['values'][$field_parents][$field_name][$language][$delta];
+      }
+      else {
+        $item = $form_state['values'][$field_name][$language][$delta];
+      }
+    #}
+    #else {
+    #  $item = $form_state['values'][$field_name][$language][$delta];
+    #}
 
     if ($item['active']) {
       if (empty($item['latitude']) && empty($item['longitude']) ) {

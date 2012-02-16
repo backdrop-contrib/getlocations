@@ -1,9 +1,21 @@
-commit f641313
+commit 8fcd5f5
+Author: hutch <hutch@midwales.net>
+Date:   Thu Feb 16 18:22:36 2012 +0000
+
+    fixed some profile2 bugs
+
+getlocations.admin.inc
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations_plugin_style_map.inc
+
+commit 8369d77
 Author: hutch <hutch@midwales.net>
 Date:   Thu Feb 16 12:29:58 2012 +0000
 
     added profile2 support to getlocations_fields
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit ecf9305

@@ -101,7 +101,7 @@ function getlocations_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  if ( getlocations_check_user() ) {
+  if ( getlocations_check_user() || getlocations_check_profile2() ) {
     // getlocations/user/$uid    # show all locations for a user
     $items['getlocations/user/%getlocations_id'] = array(
       'title' => 'Get user locations',
@@ -1441,6 +1441,37 @@ function getlocations_check_user() {
     $query->condition('i.bundle', 'user');
     $query->condition('f.module', $module);
     $query->condition('i.entity_type', 'user');
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $ct++;
+    }
+    if ($ct) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+// is user location enabled using profile2?
+function getlocations_check_profile2() {
+  $module = FALSE;
+  if (module_exists('getlocations_fields')) {
+    $module = 'getlocations_fields';
+  }
+  elseif (module_exists('location_cck')) {
+    $module = 'location_cck';
+  }
+  elseif (module_exists('geofield')) {
+    $module = 'geofield';
+  }
+  if ($module) {
+    $query = db_select('field_config', 'f');
+    $query->fields('f', array('id'));
+    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+#    $query->condition('i.bundle', 'user');
+    $query->condition('f.module', $module);
+    $query->condition('i.entity_type', 'profile2');
     $rows = $query->execute();
     $ct = 0;
     foreach ($rows AS $row) {

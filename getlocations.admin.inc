@@ -121,6 +121,13 @@ function getlocations_settings_form() {
         $getlocations_defaults['user_map_marker']
       );
     }
+    if (getlocations_check_profile2()) {
+      $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
+        t('Default User Map marker'),
+        $markers,
+        $getlocations_defaults['user_map_marker']
+      );
+    }
     if (getlocations_get_vocabularies()) {
       // default vocabulary marker
       $form['getlocations_default']['vocabulary_map_marker'] = getlocations_element_map_marker(
@@ -211,7 +218,7 @@ function getlocations_settings_form() {
   );
 
   if (module_exists('getlocations_fields')) {
-    if (getlocations_check_user()) {
+    if (getlocations_check_user() || getlocations_check_profile2()) {
       $form['getlocations_default']['returnlink_user_enable'] = array(
         '#type' => 'checkbox',
         '#title' => t('Show link back to user'),

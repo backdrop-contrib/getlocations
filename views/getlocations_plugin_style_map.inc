@@ -162,7 +162,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       }
     }
     // user markers
-    if (getlocations_check_user()) {
+    if (getlocations_check_user() || getlocations_check_profile2()) {
       $form['user_map_marker'] = getlocations_element_map_marker(
         t('User Map Marker'),
         $markers,

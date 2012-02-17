@@ -112,16 +112,9 @@ function getlocations_settings_form() {
     $getlocations_defaults['node_map_marker']
   );
 
-  // default user marker
   if (module_exists('getlocations_fields')) {
-    if (getlocations_check_user()) {
-      $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
-        t('Default User Map marker'),
-        $markers,
-        $getlocations_defaults['user_map_marker']
-      );
-    }
-    if (getlocations_check_profile2()) {
+    if (getlocations_check_user() || getlocations_check_profile2()) {
+      // default user marker
       $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
         t('Default User Map marker'),
         $markers,
@@ -144,6 +137,7 @@ function getlocations_settings_form() {
         $getlocations_defaults['comment_map_marker']
       );
     }
+    // default input marker
     $form['getlocations_default']['input_map_marker'] = getlocations_element_map_marker(
       t('Default Input Map marker'),
       $markers,

@@ -133,16 +133,13 @@ function getlocations_fields_field_validate($entity_type, $entity, $field, $inst
   if ($entity_type == 'node') {
     //
   }
-  elseif ($entity_type == 'user') {
+  elseif ($entity_type == 'user' || $entity_type == 'profile2') {
     //
   }
   elseif ($entity_type == 'comment') {
     //
   }
   elseif ($entity_type == 'taxonomy_term') {
-    //
-  }
-  elseif ($entity_type == 'profile2') {
     //
   }
 
@@ -176,7 +173,7 @@ function getlocations_fields_field_insert($entity_type, $entity, $field, $instan
         'nid' => $entity->nid,
       );
     }
-    elseif ($entity_type == 'user') {
+    elseif ($entity_type == 'user' || $entity_type == 'profile2') {
       $criteria = array(
         'field_name' => $field['field_name'],
         'uid' => $entity->uid,
@@ -193,12 +190,6 @@ function getlocations_fields_field_insert($entity_type, $entity, $field, $instan
       $criteria = array(
         'field_name' => $field['field_name'],
         'tid' => $entity->tid,
-      );
-    }
-    elseif ($entity_type == 'profile2') {
-      $criteria = array(
-        'field_name' => $field['field_name'],
-        'uid' => $entity->uid,
       );
     }
     if (! empty($criteria)) {
@@ -236,7 +227,7 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
         'nid' => $entity->nid,
       );
     }
-    elseif ($entity_type == 'user') {
+    elseif ($entity_type == 'user' || $entity_type == 'profile2') {
       $criteria = array(
         'field_name' => $field['field_name'],
         'uid' => $entity->uid,
@@ -252,12 +243,6 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
       $criteria = array(
         'field_name' => $field['field_name'],
         'tid' => $entity->tid,
-      );
-    }
-    elseif ($entity_type == 'profile2') {
-      $criteria = array(
-        'field_name' => $field['field_name'],
-        'uid' => $entity->uid,
       );
     }
     if (! empty($criteria)) {
@@ -303,7 +288,7 @@ function getlocations_fields_field_delete($entity_type, $entity, $field, $instan
       }
       return;
     }
-    elseif ($entity_type == 'user') {
+    elseif ($entity_type == 'user' || $entity_type == 'profile2') {
       $criteria = array(
         'field_name' => $field['field_name'],
         'uid' => $entity->uid,
@@ -319,12 +304,6 @@ function getlocations_fields_field_delete($entity_type, $entity, $field, $instan
       $criteria = array(
         'field_name' => $field['field_name'],
         'tid' => $entity->tid,
-      );
-    }
-    elseif ($entity_type == 'profile2') {
-      $criteria = array(
-        'field_name' => $field['field_name'],
-        'uid' => $entity->uid,
       );
     }
     if (! empty($criteria)) {
@@ -353,7 +332,7 @@ function getlocations_fields_field_delete($entity_type, $entity, $field, $instan
  */
 function getlocations_fields_field_delete_revision($entity_type, $entity, $field, $instance, $langcode, &$items) {
 
-  if (!empty($items)) {
+  if (! empty($items)) {
     if ($entity_type == 'node') {
       $criteria = array(
         'field_name' => $field['field_name'],
@@ -393,7 +372,7 @@ function getlocations_fields_field_load($entity_type, $entities, $field, $instan
       $location = array();
       // Load the location if it exists.
       // If we are previewing a new node it will not.
-      if (!empty($item['glid'])) {
+      if (! empty($item['glid'])) {
         $location = getlocations_fields_load_location($item['glid']);
       }
       // Combine the item with the location loaded from the database.
@@ -688,13 +667,13 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
 
   $element += getlocations_map_display_options_form($settings, FALSE);
 
-  // default marker
+  // markers
   $markers = getlocations_get_marker_titles();
   // user markers
   if ($entity_type == 'user' || $entity_type == 'profile2') {
     if (getlocations_check_user() || getlocations_check_profile2()) {
       $element['user_map_marker'] = getlocations_element_map_marker(
-        t('Default User Map Marker'),
+        t('User Map Marker'),
         $markers,
         $settings['user_map_marker']
       );
@@ -704,7 +683,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   elseif ($entity_type == 'taxonomy_term') {
     if (getlocations_get_vocabularies()) {
       $element['vocabulary_map_marker'] = getlocations_element_map_marker(
-        t('Default Vocabulary Map Marker'),
+        t('Vocabulary Map Marker'),
         $markers,
         $settings['vocabulary_map_marker']
       );
@@ -722,10 +701,11 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
       }
     }
   }
+  // comment markers
   elseif ($entity_type == 'comment') {
     if ( getlocations_check_comment()) {
       $element['comment_map_marker'] = getlocations_element_map_marker(
-        t('Default Comment Map Marker'),
+        t('Comment Map Marker'),
         $markers,
         $settings['comment_map_marker']
       );
@@ -734,7 +714,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   else {
     // default marker
     $element['node_map_marker'] = getlocations_element_map_marker(
-      t('Default Content Map marker'),
+      t('Content Map marker'),
       $markers,
       $settings['node_map_marker']
     );
@@ -866,12 +846,7 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       $summary[] = t("Enabled information layers:") . '<br />' . implode(', ', $info_display);
     }
 
-    if ($entity_type == 'user') {
-      if ($settings['user_map_marker']) {
-        $summary[] = t('User map marker: @c', array('@c' => $settings['user_map_marker']));
-      }
-    }
-    elseif ($entity_type == 'profile2') {
+    if ($entity_type == 'user' || $entity_type == 'profile2') {
       if ($settings['user_map_marker']) {
         $summary[] = t('User map marker: @c', array('@c' => $settings['user_map_marker']));
       }

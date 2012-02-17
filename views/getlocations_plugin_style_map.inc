@@ -162,7 +162,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       }
     }
     // user markers
-    if (getlocations_check_user() || getlocations_check_profile2()) {
+    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
       $form['user_map_marker'] = getlocations_element_map_marker(
         t('User Map Marker'),
         $markers,
@@ -189,7 +189,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
         }
       }
     }
-    if (getlocations_check_comment()) {
+    if (getlocations_check_entity_type('comment')) {
       // default comment marker
       $form['comment_map_marker'] = getlocations_element_map_marker(
         t('Comment Map marker'),

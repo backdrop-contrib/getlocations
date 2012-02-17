@@ -113,7 +113,7 @@ function getlocations_settings_form() {
   );
 
   if (module_exists('getlocations_fields')) {
-    if (getlocations_check_user() || getlocations_check_profile2()) {
+    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
       // default user marker
       $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
         t('Default User Map marker'),
@@ -129,7 +129,7 @@ function getlocations_settings_form() {
         $getlocations_defaults['vocabulary_map_marker']
       );
     }
-    if ( getlocations_check_comment()) {
+    if (getlocations_check_entity_type('comment')) {
       // default comment marker
       $form['getlocations_default']['comment_map_marker'] = getlocations_element_map_marker(
         t('Default Comment Map marker'),
@@ -212,7 +212,7 @@ function getlocations_settings_form() {
   );
 
   if (module_exists('getlocations_fields')) {
-    if (getlocations_check_user() || getlocations_check_profile2()) {
+    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
       $form['getlocations_default']['returnlink_user_enable'] = array(
         '#type' => 'checkbox',
         '#title' => t('Show link back to user'),
@@ -248,7 +248,7 @@ function getlocations_settings_form() {
       );
     }
 
-    if (getlocations_check_comment()) {
+    if (getlocations_check_entity_type('comment')) {
       $form['getlocations_default']['returnlink_comment_enable'] = array(
         '#type' => 'checkbox',
         '#title' => t('Show link back to comment'),

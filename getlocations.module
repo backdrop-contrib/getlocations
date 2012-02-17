@@ -101,7 +101,7 @@ function getlocations_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  if ( getlocations_check_user() || getlocations_check_profile2() ) {
+  if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
     // getlocations/user/$uid    # show all locations for a user
     $items['getlocations/user/%getlocations_id'] = array(
       'title' => 'Get user locations',
@@ -128,7 +128,7 @@ function getlocations_menu() {
       'type' => MENU_CALLBACK,
     );
   }
-  if (getlocations_check_comment()) {
+  if (getlocations_check_entity_type('comment')) {
     // getlocations/comment/$cid    # show all locations for a comment
     $items['getlocations/comment/%getlocations_id'] = array(
       'title' => 'Get comment locations',
@@ -1375,9 +1375,10 @@ function getlocations_check_node($bundle) {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('id'));
     $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-    $query->condition('i.bundle', $bundle);
-    $query->condition('f.module', $module);
-    $query->condition('i.entity_type', 'node');
+    $query->condition('i.bundle', $bundle)
+      ->condition('f.module', $module)
+      ->condition('i.entity_type', 'node')
+      ->condition('f.active', 1);
     $rows = $query->execute();
     $ct = 0;
     foreach ($rows AS $row) {
@@ -1406,9 +1407,10 @@ function getlocations_get_fieldname($bundle, $entity_type='node') {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('field_name'));
     $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-    $query->condition('i.bundle', $bundle);
-    $query->condition('f.module', $module);
-    $query->condition('i.entity_type', $entity_type);
+    $query->condition('i.bundle', $bundle)
+      ->condition('f.module', $module)
+      ->condition('i.entity_type', $entity_type)
+      ->condition('f.active', 1);
     $rows = $query->execute();
     $ct = 0;
     foreach ($rows AS $row) {
@@ -1422,8 +1424,8 @@ function getlocations_get_fieldname($bundle, $entity_type='node') {
   return FALSE;
 }
 
-// is user location enabled?
-function getlocations_check_user() {
+// is an entity_type location enabled?
+function getlocations_check_entity_type($entity_type) {
   $module = FALSE;
   if (module_exists('getlocations_fields')) {
     $module = 'getlocations_fields';
@@ -1438,70 +1440,9 @@ function getlocations_check_user() {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('id'));
     $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-    $query->condition('i.bundle', 'user');
-    $query->condition('f.module', $module);
-    $query->condition('i.entity_type', 'user');
-    $rows = $query->execute();
-    $ct = 0;
-    foreach ($rows AS $row) {
-      $ct++;
-    }
-    if ($ct) {
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
-
-// is user location enabled using profile2?
-function getlocations_check_profile2() {
-  $module = FALSE;
-  if (module_exists('getlocations_fields')) {
-    $module = 'getlocations_fields';
-  }
-  elseif (module_exists('location_cck')) {
-    $module = 'location_cck';
-  }
-  elseif (module_exists('geofield')) {
-    $module = 'geofield';
-  }
-  if ($module) {
-    $query = db_select('field_config', 'f');
-    $query->fields('f', array('id'));
-    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-#    $query->condition('i.bundle', 'user');
-    $query->condition('f.module', $module);
-    $query->condition('i.entity_type', 'profile2');
-    $rows = $query->execute();
-    $ct = 0;
-    foreach ($rows AS $row) {
-      $ct++;
-    }
-    if ($ct) {
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
-
-// is comment location enabled?
-function getlocations_check_comment() {
-  $module = FALSE;
-  if (module_exists('getlocations_fields')) {
-    $module = 'getlocations_fields';
-  }
-  elseif (module_exists('location_cck')) {
-    $module = 'location_cck';
-  }
-  elseif (module_exists('geofield')) {
-    $module = 'geofield';
-  }
-  if ($module) {
-    $query = db_select('field_config', 'f');
-    $query->fields('f', array('id'));
-    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-    $query->condition('f.module', $module);
-    $query->condition('i.entity_type', 'comment');
+    $query->condition('f.module', $module)
+      ->condition('i.entity_type', $entity_type)
+      ->condition('f.active', 1);
     $rows = $query->execute();
     $ct = 0;
     foreach ($rows AS $row) {
@@ -1554,7 +1495,8 @@ function getlocations_check_vocabulary($vocab_name) {
       $query->join('field_config_instance', 'i', 'f.id=i.field_id');
       $query->condition('i.bundle', $machine_name)
         ->condition('f.module', $module )
-        ->condition('i.entity_type', 'taxonomy_term');
+        ->condition('i.entity_type', 'taxonomy_term')
+        ->condition('f.active', 1);
       $rows = $query->execute();
       $ct = 0;
       foreach ($rows AS $row) {

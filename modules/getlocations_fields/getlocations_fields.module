@@ -671,7 +671,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   $markers = getlocations_get_marker_titles();
   // user markers
   if ($entity_type == 'user' || $entity_type == 'profile2') {
-    if (getlocations_check_user() || getlocations_check_profile2()) {
+    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
       $element['user_map_marker'] = getlocations_element_map_marker(
         t('User Map Marker'),
         $markers,
@@ -703,7 +703,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   }
   // comment markers
   elseif ($entity_type == 'comment') {
-    if ( getlocations_check_comment()) {
+    if ( getlocations_check_entity_type('comment')) {
       $element['comment_map_marker'] = getlocations_element_map_marker(
         t('Comment Map Marker'),
         $markers,

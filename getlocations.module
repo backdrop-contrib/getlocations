@@ -653,8 +653,8 @@ function getlocations_nids($nidlist) {
  * Set up javascript settings and map
  */
 function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
-  if (! getlocations_check()) {
-    return t('You need to !c first.', array('!c' => l('configure Getlocations', 'admin/config/services/getlocations')));
+  if (! getlocations_defaults_check()) {
+    return t('You need to !c first.', array('!c' => l('Configure Getlocations', 'admin/config/services/getlocations')));
   }
   global $language;
   $getlocations_defaults = getlocations_defaults();
@@ -871,7 +871,7 @@ function getlocations_defaults() {
  * @return
  *   Returns true or false
  */
-function getlocations_check() {
+function getlocations_defaults_check() {
   $check = variable_get('getlocations_default', 'xxx');
   if ($check == 'xxx') {
     return FALSE;

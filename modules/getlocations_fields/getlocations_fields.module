@@ -957,7 +957,6 @@ function getlocations_fields_field_widget_info() {
         'input_province_required'    => $getlocations_fields_defaults['input_province_required'],
         'input_postal_code_required' => $getlocations_fields_defaults['input_postal_code_required'],
         'input_country_required'     => $getlocations_fields_defaults['input_country_required'],
-        'input_map_marker'           => $getlocations_fields_defaults['input_map_marker'],
       ),
 #      'behaviour' => array(
 #        'multiple values' => FIELD_BEHAVIOR_DEFAULT
@@ -1351,7 +1350,6 @@ function getlocations_fields_getmap($settings, $active, $mapid) {
   if ($active) {
     $getlocations_defaults['places'] = 1;
   }
-
   $getlocations_defaults['latlong']         = $settings['latlong'];
   $getlocations_defaults['zoom']            = $settings['zoom'];
   $getlocations_defaults['controltype']     = $settings['controltype'];
@@ -1361,7 +1359,7 @@ function getlocations_fields_getmap($settings, $active, $mapid) {
   $getlocations_defaults['baselayers']      = $settings['baselayers'];
   $getlocations_defaults['behavior']        = $settings['behavior'];
   $getlocations_defaults['draggable']       = $settings['draggable'];
-  $getlocations_defaults['node_map_marker'] = $settings['map_marker'];
+  $getlocations_defaults['input_map_marker'] = $settings['input_map_marker'];
   $getlocations_defaults['use_address']     = $settings['use_address'];
 
   getlocations_setup_js($getlocations_defaults);
@@ -1870,7 +1868,6 @@ function getlocations_fields_defaults() {
     'input_longitude_weight'       => 0,
     'input_map_weight'             => 0,
     'input_geobutton_weight'       => 0,
-    'input_map_marker'             => $getlocations_defaults['input_map_marker'],
     'use_smart_ip_button'          => 0,
     'input_smart_ip_button_weight' => 0,
     'use_country_dropdown'         => 0,

@@ -1,9 +1,14 @@
-/* attempt to convert gmap icons.js to v3 googlemaps */
 
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Icon manager for getlocations.
  * Required for markers to operate properly.
+ * For Google maps API v3
+ *
+ * Derived from gmap icons.js
  */
 
 /**
@@ -13,7 +18,6 @@
  */
 
 (function ($) {
-
 
 Drupal.getlocations = {};
 

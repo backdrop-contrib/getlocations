@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Views 3 support for getlocations_fields.
  */
-
-// TODO EXPOSED FORM, distance
 
 /**
  * General proximity filter for location latitude/longitude.

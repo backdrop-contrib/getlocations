@@ -2,6 +2,9 @@
 
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Provides Views 3 integration for getlocations_fields.
  *
  */
@@ -706,6 +709,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['format_username'] = 1;
+  $handler->display->display_options['fields']['name']['link_to_user'] = 0;
   /* Field: Getlocations Fields: Glid */
   $handler->display->display_options['fields']['glid']['id'] = 'glid';
   $handler->display->display_options['fields']['glid']['table'] = 'getlocations_fields';

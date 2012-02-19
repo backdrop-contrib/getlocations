@@ -2,6 +2,9 @@
 
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * getlocations_fields module administration functions.
  *
  */

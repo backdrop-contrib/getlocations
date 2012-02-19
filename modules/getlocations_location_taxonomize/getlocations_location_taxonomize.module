@@ -2,6 +2,9 @@
 
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * This is a 'source module' that adds a data source for the Location Taxonomize
  * module. It implements the Location Taxonomize functionality for the
  * Getlocations_fields module.

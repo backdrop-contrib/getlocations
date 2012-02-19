@@ -1,10 +1,11 @@
 
 /**
  * @file
- * Javascript functions for getlocations_fields module admin
- *
  * @author Bob Hutchinson http://drupal.org/user/52366
- * jquery stuff
+ * @copyright GNU GPL
+ *
+ * Javascript functions for getlocations_fields module admin
+ * jquery gee whizzery
 */
 (function ($) {
   Drupal.behaviors.getlocations_fields_admin = {

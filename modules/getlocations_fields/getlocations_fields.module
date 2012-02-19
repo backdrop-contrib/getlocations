@@ -2,6 +2,9 @@
 
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Defines getlocations fields type.
  */
 
@@ -1252,7 +1255,12 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   return $widget;
 
 }
-
+/**
+ * @param array $element
+ *
+ * @param array $form_state
+ *
+ */
 function getlocations_fields_widget_validate($element, &$form_state) {
 
   if (isset($form_state['values'])) {
@@ -1413,7 +1421,17 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
 }
 
 /**
- * docs
+ * @param array $locations
+ *  An array of locations to be saved
+ *
+ * @param array $criteria
+ *  Relationship information
+ *
+ * @param string $mode
+ *  The action to be carried out
+ *
+ * @return array $locations
+ *
  */
 function getlocations_fields_save_locations($locations, $criteria, $mode) {
 
@@ -1425,7 +1443,6 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
           $locations[$key]['glid'] = $result;
          }
          else {
-          #$locations[$key]= FALSE;
           unset($locations[$key]);
          }
       }
@@ -1433,8 +1450,6 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
         // delete_location checkbox
         if (isset($locations[$key]['delete_location']) && $locations[$key]['delete_location']) {
           getlocations_fields_delete_record($locations[$key], $criteria);
-          #$locations[$key]['glid'] = FALSE;
-          #$locations[$key]= FALSE;
           unset($locations[$key]);
         }
         else {
@@ -1458,7 +1473,13 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
 }
 
 /**
- * docs
+ * Create a location
+ * @param array $location
+ *  The new location
+ *
+ * @param array $relations
+ *  Relationship information
+ *
  */
 function getlocations_fields_insert_record($location, $relations) {
 
@@ -1485,13 +1506,17 @@ function getlocations_fields_insert_record($location, $relations) {
   $result = $query->execute();
   // $result should contain glid
   // new insert id
-  $relations['glid'] = $result;
-  getlocations_fields_insert_record_relations($relations);
+  if ($result) {
+    $relations['glid'] = $result;
+    getlocations_fields_insert_record_relations($relations);
+  }
   return $result;
 }
 
 /**
- * docs
+ * Insert the relationship information
+ * @param array $relations
+ *
  */
 function getlocations_fields_insert_record_relations($relations) {
 
@@ -1500,10 +1525,15 @@ function getlocations_fields_insert_record_relations($relations) {
 }
 
 /**
- * docs
+ * Create a location
+ * @param array $location
+ *  The location
+ *
+ * @param array $relations
+ *  Relationship information
+ *
  */
 function getlocations_fields_update_record($location, $relations) {
-
 
   if (! isset($location['glid'])) {
     // this record does not exist yet
@@ -1539,7 +1569,12 @@ function getlocations_fields_update_record($location, $relations) {
 }
 
 /**
- * docs
+ * @param array $relations
+ *  Relationship information
+ *
+ * @param int $glid
+ *  The location ID
+ *
  */
 function getlocations_fields_update_record_relations($relations, $glid) {
 
@@ -1550,7 +1585,13 @@ function getlocations_fields_update_record_relations($relations, $glid) {
 }
 
 /**
- * docs
+ * Create a location
+ * @param array $location
+ *  The location
+ *
+ * @param array $relations
+ *  Relationship information
+ *
  */
 function getlocations_fields_delete_record($location, $relations) {
 
@@ -1563,7 +1604,12 @@ function getlocations_fields_delete_record($location, $relations) {
 }
 
 /**
- * docs
+ * @param array $relations
+ *  Relationship information
+ *
+ * @param int $glid
+ *  The location ID
+ *
  */
 function getlocations_fields_delete_record_relations($relations, $glid) {
 
@@ -1574,7 +1620,13 @@ function getlocations_fields_delete_record_relations($relations, $glid) {
 }
 
 /**
- * docs
+ * Create a location
+ * @param array $location
+ *  The location
+ *
+ * @param array $relations
+ *  Relationship information
+ *
  */
 function getlocations_fields_delete_revision_record($location, $relations) {
 
@@ -1603,7 +1655,12 @@ function getlocations_fields_delete_revision_record($location, $relations) {
 }
 
 /**
- * docs
+ * @param array $relations
+ *  Relationship information
+ *
+ * @param int $glid
+ *  The location ID
+ *
  */
 function getlocations_fields_delete_revision_record_relations($relations, $glid) {
 
@@ -1617,13 +1674,20 @@ function getlocations_fields_delete_revision_record_relations($relations, $glid)
 }
 
 /**
- * docs
+ * @param int $id
+ *  Primary identifier of the content type the location is linked to
+ *
+ * @param string $key
+ *  The name of the primary identifier
+ *
+ * @return array $locations
+ *  The locations associated with the content type
+ *
  */
 function getlocations_fields_load_locations($id, $key = 'vid') {
   // $key can be vid, nid, uid, tid, cid
   $locations = array();
   if ($id) {
-    module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
@@ -1677,12 +1741,12 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
 }
 
 /**
- * docs
+ * @param int $glid
+ *  Location ID
  */
 function getlocations_fields_load_location($glid) {
   $location = array();
   if ($glid) {
-    module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
@@ -1732,7 +1796,12 @@ function getlocations_fields_load_location($glid) {
 }
 
 /**
- * docs
+ * @param array $defaults
+ *  Settings
+ *
+ * @param string $mapid
+ *  Unique map identifier used in javascript to allow multiple maps
+ *
  */
 function getlocations_fields_js_settings_do($defaults, $mapid) {
 
@@ -1748,7 +1817,8 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
 }
 
 /**
- * docs
+ * @return array $defaults
+ *  Settings
  */
 function getlocations_fields_defaults() {
   $getlocations_defaults = getlocations_defaults();
@@ -1845,7 +1915,8 @@ function getlocations_fields_defaults() {
 }
 
 /**
- * docs
+ * @return array $defaults
+ *  Settings for the Field module
  */
 function getlocations_fields_field_info_defaults() {
   $getlocations_defaults = getlocations_defaults();
@@ -1942,7 +2013,8 @@ function getlocations_fields_field_info_defaults() {
 }
 
 /**
- * docs
+ * @return array $defaults
+ *  Settings for the Field formatter
  */
 function getlocations_fields_field_formatter_info_defaults() {
   $getlocations_defaults = getlocations_defaults();
@@ -1986,9 +2058,14 @@ function getlocations_fields_field_formatter_info_defaults() {
 
 }
 
-// input form settings for sharing
 /**
- * docs
+ * input settings form for sharing
+ *
+ * @param array $defaults
+ *  Settings
+ *
+ * @return array $form
+ *
  */
 function getlocations_fields_input_settings_form($defaults) {
   drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_admin.js');
@@ -2227,9 +2304,14 @@ function getlocations_fields_input_settings_form($defaults) {
 
 }
 
-// display form settings for sharing
 /**
- * docs
+ * display settings form for sharing
+ *
+ * @param array $defaults
+ *  Settings
+ *
+ * @return array $form
+ *
  */
 function getlocations_fields_display_settings_form($defaults) {
 

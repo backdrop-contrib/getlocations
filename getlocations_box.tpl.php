@@ -2,6 +2,9 @@
 
 /**
  * @file getlocations_box.tpl.php
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Template file for colorbox implementation
  */
 

@@ -1,3 +1,12 @@
+
+/**
+ * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
+ *   css for the getlocations_fields module.
+ */
+
 /* manage the latitude and longitude input boxes */
 .getlocations_fields_latlon_wrapper {
   width: 400px;

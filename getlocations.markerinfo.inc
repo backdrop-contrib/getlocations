@@ -2,6 +2,9 @@
 
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Getlocations marker information routines.
  * code derived from gmap_markerinfo.inc
  * converted to google maps version 3

@@ -1,7 +1,10 @@
 <?php
-// NEEDS TESTING
+
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Coordinates field handler.
  */
 

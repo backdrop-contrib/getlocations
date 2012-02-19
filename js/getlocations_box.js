@@ -1,9 +1,10 @@
 
 /**
  * @file
- * Javascript functions for getlocations module in colorbox
- *
  * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
+ * Javascript functions for getlocations module in colorbox
  * jquery stuff
 */
 (function ($) {

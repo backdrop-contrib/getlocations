@@ -1,8 +1,9 @@
 /**
  * @file
- * Javascript functions for getlocations_fields module for Drupal 7
- *
  * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
+ * Javascript functions for getlocations_fields module for Drupal 7
  * this is for googlemaps API version 3
  */
 

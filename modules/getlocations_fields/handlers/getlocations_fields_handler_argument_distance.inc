@@ -2,6 +2,9 @@
 // NEEDS TESTING
 /**
  * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Location proximity argument handler.
  */
 

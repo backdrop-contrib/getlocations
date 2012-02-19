@@ -957,6 +957,7 @@ function getlocations_fields_field_widget_info() {
         'input_province_required'    => $getlocations_fields_defaults['input_province_required'],
         'input_postal_code_required' => $getlocations_fields_defaults['input_postal_code_required'],
         'input_country_required'     => $getlocations_fields_defaults['input_country_required'],
+        'input_map_marker'           => $getlocations_fields_defaults['input_map_marker'],
       ),
 #      'behaviour' => array(
 #        'multiple values' => FIELD_BEHAVIOR_DEFAULT
@@ -1688,6 +1689,7 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
   // $key can be vid, nid, uid, tid, cid
   $locations = array();
   if ($id) {
+    module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
@@ -1747,6 +1749,7 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
 function getlocations_fields_load_location($glid) {
   $location = array();
   if ($glid) {
+    module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
@@ -1808,7 +1811,7 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
   $settings = array(
     $mapid => array(
       'nodezoom' => $defaults['nodezoom'],
-      'map_marker' => $defaults['node_map_marker'],
+      'map_marker' => $defaults['input_map_marker'],
       'use_address' => $defaults['use_address'],
     )
   );
@@ -1867,6 +1870,7 @@ function getlocations_fields_defaults() {
     'input_longitude_weight'       => 0,
     'input_map_weight'             => 0,
     'input_geobutton_weight'       => 0,
+    'input_map_marker'             => $getlocations_defaults['input_map_marker'],
     'use_smart_ip_button'          => 0,
     'input_smart_ip_button_weight' => 0,
     'use_country_dropdown'         => 0,

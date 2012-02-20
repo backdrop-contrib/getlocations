@@ -768,7 +768,12 @@ function getlocations_setup_js($defaults) {
     }
   }
   if (!stristr($current_js, GETLOCATIONS_PATH . '/js/getlocations.js')) {
-    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js');
+    if (is_numeric($defaults['getlocations_js_weight']) && $defaults['getlocations_js_weight'] != 0) {
+      drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js',  array('weight' => $defaults['getlocations_js_weight']));
+    }
+    else {
+      drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js');
+    }
   }
 }
 
@@ -839,6 +844,7 @@ function getlocations_defaults() {
     'returnlink_comment_enable' => 0,
     'returnlink_comment_link'   => t('Return to Comment'),
     'use_https'                 => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0),
+    'getlocations_js_weight'    => 0,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());

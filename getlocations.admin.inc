@@ -270,6 +270,14 @@ function getlocations_settings_form() {
     }
   }
 
+  $form['getlocations_default']['getlocations_js_weight'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Getlocations Javascript weight'),
+    '#default_value' => $getlocations_defaults['getlocations_js_weight'],
+    '#size' => 5,
+    '#description' => t('Set the weight of the getlocations javascript loading, only change this if you are having problems. For advanced users only.'),
+  );
+
   $form['getlocations_default']['use_https'] = array(
     '#type' => 'value',
     '#value' =>  $getlocations_defaults['use_https'],
@@ -470,6 +478,10 @@ function getlocations_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_default']['usemarkermanager'] = 0;
   }
 
+  if ( ! is_numeric($form_state['values']['getlocations_default']['getlocations_js_weight'])) {
+    form_set_error('getlocations_default][getlocations_js_weight', t('Getlocations js must be a number'));
+  }
+
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {
     if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {
       form_set_error('getlocations_colorbox][width', t('Colorbox width must be a number'));
@@ -496,9 +508,11 @@ function getlocations_settings_validate($form, &$form_state) {
   // markers
   if (isset($form_state['values']['getlocations_node_marker']) && ! $form_state['values']['getlocations_node_marker']['enable']) {
     unset($form_state['values']['getlocations_node_marker']);
+    $form_state['values']['getlocations_node_marker']['enable'] = 0;
   }
   if (isset($form_state['values']['getlocations_vocabulary_marker']) && ! $form_state['values']['getlocations_vocabulary_marker']['enable']) {
     unset($form_state['values']['getlocations_vocabulary_marker']);
+    $form_state['values']['getlocations_vocabulary_marker']['enable'] = 0;
   }
 }
 

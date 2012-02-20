@@ -1,9 +1,117 @@
-commit 8fcd5f5
+commit 77a65ec
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 20 10:53:10 2012 +0000
+
+    added getlocations_js_weight
+
+getlocations.admin.inc
+getlocations.module
+
+commit ead9a42
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 20 10:52:35 2012 +0000
+
+    comment tidyup
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+
+commit 5417334
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 19 17:06:27 2012 +0000
+
+    more fixes in input_map_marker
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 58817c7
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 19 14:02:58 2012 +0000
+
+    fixed bug in input_map_marker
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 1c9f2c8
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 19 13:15:50 2012 +0000
+
+    added some comments
+
+getlocations.admin.inc
+getlocations.css
+getlocations.install
+getlocations.markercluster.inc
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.theme.inc
+getlocations_box.tpl.php
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_box.js
+js/getlocations_colorbox.js
+js/icons.js
+modules/getlocations_feeds/getlocations_feeds.install
+modules/getlocations_feeds/getlocations_feeds.module
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_coordinates.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_latitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_longitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_sort_distance.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields_admin.js
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.install
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.module
+views/getlocations-view-map.tpl.php
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit 3fce9f2
+Author: hutch <hutch@midwales.net>
+Date:   Sat Feb 18 12:09:53 2012 +0000
+
+    moved getlocations_check() to getlocations_defaults_check()
+
+getlocations.module
+
+commit 1d15a78
+Author: hutch <hutch@midwales.net>
+Date:   Fri Feb 17 19:42:57 2012 +0000
+
+    more code tidying
+
+getlocations.admin.inc
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations_plugin_style_map.inc
+
+commit 4bf5ed7
+Author: hutch <hutch@midwales.net>
+Date:   Fri Feb 17 09:54:06 2012 +0000
+
+    code cleanup
+
+getlocations.admin.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit caf748b
 Author: hutch <hutch@midwales.net>
 Date:   Thu Feb 16 18:22:36 2012 +0000
 
     fixed some profile2 bugs
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module

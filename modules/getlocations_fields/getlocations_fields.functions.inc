@@ -158,8 +158,7 @@ function getlocations_fields_earth_distance($longitude1, $latitude1, $longitude2
 }
 
 /**
- * Returns the SQL fragment needed to add a column called 'distance'
- * to a query that includes the location table
+ * Returns the SQL fragment needed to add a column called 'distance' to a query. For use in Views distance/proximity calculations
  *
  * @param $latitude    The measurement point
  * @param $longitude   The measurement point
@@ -190,7 +189,7 @@ function getlocations_fields_earth_distance_sql($latitude, $longitude, $tbl_alia
 }
 
 /**
- * @todo This function uses earth_asin_safe so is not accurate for all possible
+ * This function uses earth_asin_safe so is not accurate for all possible
  *   parameter combinations. This means this function doesn't work properly
  *   for high distance values. This function needs to be re-written to work properly for
  *   larger distance values. See http://drupal.org/node/821628

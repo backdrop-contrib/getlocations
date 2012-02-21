@@ -569,22 +569,30 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   }
 
   $locations = array();
+  $supported_entity_types = array('node', 'user', 'taxonomy_term', 'comment', 'profile2');
+
+  $element = array();
+  if (! in_array($entity_type, $supported_entity_types)) {
+    return $element;
+  }
 
   if ($entity_type == 'node') {
     $locations = getlocations_fields_load_locations($entity->vid, 'vid');
-    $settings['map_marker'] = $settings['node_map_marker'];
-    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-    if ($getlocations_node_marker['enable']) {
-      if ($types = getlocations_get_types()) {
-        foreach ($types AS $type => $name) {
-          $field_name = getlocations_get_fieldname($type);
-          if ($locations[0]['field_name'] == $field_name) {
-            $mkey = 'node_marker_' . $field_name;
-            if (isset($settings[$mkey])) {
-              $settings['map_marker'] = $settings[$mkey];
-            }
-            else {
-              $settings['map_marker'] = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $settings['node_map_marker']);
+    if (count($locations)) {
+      $settings['map_marker'] = $settings['node_map_marker'];
+      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      if ($getlocations_node_marker['enable']) {
+        if ($types = getlocations_get_types()) {
+          foreach ($types AS $type => $name) {
+            $field_name = getlocations_get_fieldname($type);
+            if ($locations[0]['field_name'] == $field_name) {
+              $mkey = 'node_marker_' . $field_name;
+              if (isset($settings[$mkey])) {
+                $settings['map_marker'] = $settings[$mkey];
+              }
+              else {
+                $settings['map_marker'] = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $settings['node_map_marker']);
+              }
             }
           }
         }
@@ -593,19 +601,21 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   }
   elseif ($entity_type == 'taxonomy_term') {
     $locations = getlocations_fields_load_locations($entity->tid, 'tid');
-    $settings['map_marker'] = $settings['vocabulary_map_marker'];
-    $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-    if ($getlocations_vocabulary_marker['enable']) {
-      if ($types = getlocations_get_vocabularies()) {
-        foreach ($types AS $type => $name) {
-          $field_name = getlocations_get_fieldname($type, $entity_type);
-          if ($locations[0]['field_name'] == $field_name) {
-            $mkey = 'vocabulary_marker_' . $field_name;
-            if (isset($settings[$mkey])) {
-              $settings['map_marker'] = $settings[$mkey];
-            }
-            else {
-              $settings['map_marker'] = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $settings['vocabulary_map_marker']);
+    if (count($locations)) {
+      $settings['map_marker'] = $settings['vocabulary_map_marker'];
+      $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+      if ($getlocations_vocabulary_marker['enable']) {
+        if ($types = getlocations_get_vocabularies()) {
+          foreach ($types AS $type => $name) {
+            $field_name = getlocations_get_fieldname($type, $entity_type);
+            if ($locations[0]['field_name'] == $field_name) {
+              $mkey = 'vocabulary_marker_' . $field_name;
+              if (isset($settings[$mkey])) {
+                $settings['map_marker'] = $settings[$mkey];
+              }
+              else {
+                $settings['map_marker'] = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $settings['vocabulary_map_marker']);
+              }
             }
           }
         }
@@ -614,14 +624,17 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   }
   elseif ($entity_type == 'user' || $entity_type == 'profile2') {
     $locations = getlocations_fields_load_locations($entity->uid, 'uid');
-    $settings['map_marker'] = $settings['user_map_marker'];
+    if (count($locations)) {
+      $settings['map_marker'] = $settings['user_map_marker'];
+    }
   }
   elseif ($entity_type == 'comment') {
     $locations = getlocations_fields_load_locations($entity->cid, 'cid');
-    $settings['map_marker'] = $settings['comment_map_marker'];
+    if (count($locations)) {
+      $settings['map_marker'] = $settings['comment_map_marker'];
+    }
   }
 
-  $element = array();
   switch ($display['type']) {
     case 'getlocations_fields_default':
     if (count($locations)) {
@@ -637,11 +650,6 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
         '#locations' => $locations,
         '#settings' => $settings,
       );
-    }
-    else {
-      if ($entity_type) {
-        drupal_set_message(t("Getlocations fields does not support '@e'", array('@e' => $entity_type)));
-      }
     }
   }
 

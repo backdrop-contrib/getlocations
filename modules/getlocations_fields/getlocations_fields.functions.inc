@@ -301,12 +301,26 @@ function getlocations_fields_convert_distance_to_meters($distance, $distance_uni
     return NULL;
   }
 
-  if ($distance_unit != 'km' && $distance_unit != 'mile') {
+  if ($distance_unit != 'm' && $distance_unit != 'km' && $distance_unit != 'mi' && $distance_unit != 'yd' && $distance_unit != 'nmi') {
     $distance_unit = 'km';
   }
 
+  $conv = 1;
+  if ($distance_unit == 'km') {
+    $conv = 1000.0;
+  }
+  elseif ($distance_unit == 'mi') {
+    $conv = 1609.344;
+  }
+  elseif ($distance_unit == 'yd') {
+    $conv = 0.9144;
+  }
+  elseif ($distance_unit == 'nmi') {
+     $conv = 1852;
+  }
+
   // Convert distance to meters
-  $retval = round(floatval($distance) * (($distance_unit == 'km') ? 1000.0 : 1609.347), 2);
+  $retval = round(floatval($distance) * $conv, 2);
   return $retval;
 }
 
@@ -324,8 +338,11 @@ function getlocations_fields_element_distance_unit($default) {
     '#type' => 'select',
     '#title' => t('Units'),
     '#options' => array(
-      'km' => t('Kilometers'),
-      'mi' => t('Miles'),
+      'km'  => t('Kilometers'),
+      'm'   => t('Meters'),
+      'mi'  => t('Miles'),
+      'yd'  => t('Yards'),
+      'nmi' => t('Nautical miles'),
     ),
     '#default_value' => $default,
   );
@@ -371,7 +388,7 @@ function getlocations_fields_element_origin($default, $distance=FALSE) {
     'user' => t("User's Latitude / Longitude (blank if unset)"),
     'hybrid' => t("User's Latitude / Longitude (fall back to static if unset)"),
     'static' => t('Static  Latitude / Longitude'),
-    'tied' => t("Use Distance / Proximity filter"),
+#    'tied' => t("Use Distance / Proximity filter"),
 #    'postal' => t('Postal Code / Country'),
 #    'postal_default' => t('Postal Code (assume default country)'),
     'php' => t('Use PHP code to determine latitude/longitude'),

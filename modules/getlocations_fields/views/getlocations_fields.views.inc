@@ -481,6 +481,14 @@ function template_preprocess_getlocations_fields_distance(&$variables) {
     $variables['shortunit'] = 'm';
     $variables['longunit'] = 'meter(s)';
   }
+  elseif ($units == 'yd') {
+    $variables['shortunit'] = 'yd';
+    $variables['longunit'] = 'yard(s)';
+  }
+  elseif ($units == 'nmi') {
+    $variables['shortunit'] = 'nmi';
+    $variables['longunit'] = 'nautical mile(s)';
+  }
   $variables['distance'] = (float)$variables['distance'];
 }
 
@@ -500,25 +508,25 @@ function template_preprocess_getlocations_fields_distance(&$variables) {
 function getlocations_fields_views_proximity_get_reference_location($view, $options) {
   $coordinates = array();
   switch ($options['origin']) {
-#    case 'user':
-#    case 'hybrid':
-#      global $user;
-#      $user_locations = isset($user->locations) ? $user->locations : location_load_locations($user->uid, 'uid');
-#      // This user_location_delta will only possibly be set if we are dealing with the filter.
-#      $i = (isset($options['user_location_delta']) && !empty($options['user_location_delta'])) ? $options['user_location_delta'] : 0;
-#      if (isset($user_locations[$i]['latitude']) || !empty($user_locations[$i]['latitude'])) {
-#        $coordinates['latitude'] = (float) $user_locations[$i]['latitude'];
-#        $coordinates['longitude'] = (float) $user_locations[$i]['longitude'];
-#      }
-#      elseif ($options['origin'] == 'hybrid') {
-#        $coordinates['latitude'] = (float) $options['latitude'];
-#        $coordinates['longitude'] = (float) $options['longitude'];
-#      }
-#      break;
+    case 'user':
+    case 'hybrid':
+      global $user;
+      $user_locations = isset($user->locations) ? $user->locations : location_load_locations($user->uid, 'uid');
+      // This user_location_delta will only possibly be set if we are dealing with the filter.
+      $i = (isset($options['user_location_delta']) && !empty($options['user_location_delta'])) ? $options['user_location_delta'] : 0;
+      if (isset($user_locations[$i]['latitude']) || !empty($user_locations[$i]['latitude'])) {
+        $coordinates['latitude'] = (float) $user_locations[$i]['latitude'];
+        $coordinates['longitude'] = (float) $user_locations[$i]['longitude'];
+      }
+      elseif ($options['origin'] == 'hybrid') {
+        $coordinates['latitude'] = (isset($options['latitude']) ? (float) $options['latitude'] : 0);
+        $coordinates['longitude'] = (isset($options['longitude']) ? (float) $options['longitude'] : 0);
+      }
+      break;
     case 'static':
       // not tested
-      $coordinates['latitude'] = (float) $options['latitude'];
-      $coordinates['longitude'] = (float) $options['longitude'];
+      $coordinates['latitude'] = (isset($options['latitude']) ? (float) $options['latitude'] : 0);
+      $coordinates['longitude'] = (isset($options['longitude']) ? (float) $options['longitude'] : 0);
       break;
 #    case 'tied':
 #      if (!empty($view->filter)) {
@@ -553,7 +561,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
       ob_start();
       $result = eval($options['php_code']);
       ob_end_clean();
-      if ($result && $result['latitude'] && $result['longitude']) {
+      if ($result && isset($result['latitude']) && $result['latitude'] && isset($result['longitude']) && $result['longitude']) {
         $coordinates['latitude'] = (float) $result['latitude'];
         $coordinates['longitude'] = (float) $result['longitude'];
       }

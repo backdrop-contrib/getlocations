@@ -1,9 +1,35 @@
-commit 77a65ec
+commit 650ddec
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 21 13:48:20 2012 +0000
+
+    improved filter_distance handler
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 9dfbded
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 21 10:50:41 2012 +0000
+
+    added check for empty locations in getlocations_fields_field_formatter_view
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 337e63f
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 21 00:16:16 2012 +0000
+
+    improved validation
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit edd806e
 Author: hutch <hutch@midwales.net>
 Date:   Mon Feb 20 10:53:10 2012 +0000
 
     added getlocations_js_weight
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 

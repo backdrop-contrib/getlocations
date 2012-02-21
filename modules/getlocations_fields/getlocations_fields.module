@@ -133,19 +133,35 @@ function getlocations_fields_field_info() {
  */
 function getlocations_fields_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
 
-  if ($entity_type == 'node') {
-    //
+  if (! empty($items)) {
+    foreach($items AS $delta => $item) {
+      if ($item['active']) {
+        if (isset($item['delete_location']) && $item['delete_location']) {
+          return;
+        }
+        if (empty($item['latitude']) && empty($item['longitude']) ) {
+          $errors[$field['field_name']][$langcode][$delta][] = array(
+            'error' => 'latlon_empty',
+            'message' => t('Latitude and Longitude empty'),
+            'field_name' => $field['field_name'],
+            'lang' => $langcode,
+            'delta' => $delta,
+          );
+        }
+        if (isset($item['getlocations_required']) && $item['getlocations_required']) {
+          $requireds = explode(',', $item['getlocations_required']);
+          foreach ($requireds AS $id) {
+            if (isset($item[$id]) && empty($item[$id])) {
+              $errors[$field['field_name']][$langcode][$delta][] = array(
+                'error' => 'field_required_' . $id,
+                'message' => t('A required field has not been set'),
+              );
+            }
+          }
+        }
+      }
+    }
   }
-  elseif ($entity_type == 'user' || $entity_type == 'profile2') {
-    //
-  }
-  elseif ($entity_type == 'comment') {
-    //
-  }
-  elseif ($entity_type == 'taxonomy_term') {
-    //
-  }
-
 }
 
 /**
@@ -1038,7 +1054,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#delta' => $delta,
-    '#element_validate' => array('getlocations_fields_widget_validate'),
   );
 
   if (isset($items[$delta]['glid'])) {
@@ -1255,54 +1270,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   return $widget;
 
 }
-/**
- * @param array $element
- *
- * @param array $form_state
- *
- */
-function getlocations_fields_widget_validate($element, &$form_state) {
-
-  if (isset($form_state['values'])) {
-
-    $delta = $element['#delta'];
-    $language = $element['#language'];
-    $field_name = $element['#field_name'];
-    $entity_type = $element['#entity_type'];
-    // profile2 support
-    #if ($entity_type == 'profile2') {
-      if (isset($element['#field_parents'][0]) && ! empty($element['#field_parents'][0])) {
-        $field_parents = $element['#field_parents'][0];
-        $item = $form_state['values'][$field_parents][$field_name][$language][$delta];
-      }
-      else {
-        $item = $form_state['values'][$field_name][$language][$delta];
-      }
-    #}
-    #else {
-    #  $item = $form_state['values'][$field_name][$language][$delta];
-    #}
-
-    if ($item['active']) {
-      if (empty($item['latitude']) && empty($item['longitude']) ) {
-        form_set_value($element, '', $form_state);
-        unset($form_state['values'][$field_name][$language][$delta]);
-        return;
-      }
-      if (isset($item['delete_location']) && $item['delete_location']) {
-        return;
-      }
-      if (isset($item['getlocations_required']) && $item['getlocations_required']) {
-        $requireds = explode(',', $item['getlocations_required']);
-        foreach ($requireds AS $id) {
-          if (isset($item[$id]) && empty($item[$id])) {
-            form_error($element[$id], t('This field is required.'));
-          }
-        }
-      }
-    }
-  }
-}
 
 /**
  * Implements hook_field_widget_error().
@@ -1312,7 +1279,7 @@ function getlocations_fields_widget_validate($element, &$form_state) {
  *   An array containing the form element for the widget. The error needs to be
  *   flagged on the right sub-element, according to the widget's internal structure.
  * @param $error
- *   An associative array, as returned by hook_field_validate().
+ *   An associative array, as returned by getlocations_fields_field_validate().
  * @param $form
  *   The form structure where field elements are attached to. This might be a
  *   full form structure, or a sub-element of a larger form.
@@ -1322,9 +1289,31 @@ function getlocations_fields_widget_validate($element, &$form_state) {
 function getlocations_fields_field_widget_error($element, $error, $form, &$form_state) {
 
   switch ($error['error']) {
-    case 'getlocations_fields_invalid':
-      form_error($element, $error['message']);
+    case 'latlon_empty':
+      unset($form_state['values'][$error['field_name']][$error['lang']][$error['delta']]);
       break;
+    case 'field_required_name':
+      form_error($element['name'], $error['message']);
+      break;
+    case 'field_required_street':
+      form_error($element['street'], $error['message']);
+      break;
+    case 'field_required_additional':
+      form_error($element['additional'], $error['message']);
+      break;
+    case 'field_required_city':
+      form_error($element['city'], $error['message']);
+      break;
+    case 'field_required_province':
+      form_error($element['province'], $error['message']);
+      break;
+    case 'field_required_postal_code':
+      form_error($element['postal_code'], $error['message']);
+      break;
+    case 'field_required_country':
+      form_error($element['country'], $error['message']);
+      break;
+
   }
 }
 

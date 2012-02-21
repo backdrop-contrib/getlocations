@@ -283,42 +283,29 @@ function getlocations_fields_get_search_distance_sql($latitude, $longitude, $sea
 
 /**
  * @param $distance
- *   A number in either miles or km.
+ *   A number in either kilometers, meters, miles, yards or nautical miles.
  *
  * @param $distance_unit
- *   String (optional). Either 'mile' or 'km' (default)
+ *   String (optional). in either kilometers (km), meters (m), miles (mi), yards (yd) or nautical miles (nmi).
  *
  * @return
- *   A floating point number where the number in meters after the initially passed scalar has been ceil()'d
- *   This is done after the $distance_unit parmeter is forced to be 'km' or 'mile'
+ *   A floating point number where the number in meters after the initially passed scalar has been round()'d
  */
 function getlocations_fields_convert_distance_to_meters($distance, $distance_unit = 'km') {
-  if (!is_numeric($distance)) {
+  if (!is_numeric($distance) || $distance == 0) {
     return NULL;
   }
-
-  if ($distance == 0) {
-    return NULL;
-  }
-
-  if ($distance_unit != 'm' && $distance_unit != 'km' && $distance_unit != 'mi' && $distance_unit != 'yd' && $distance_unit != 'nmi') {
+  $units = array(
+    'km'  => 1000.0,
+    'm'   => 1.0,
+    'mi'  => 1609.344,
+    'yd'  => 0.9144,
+    'nmi' => 1852.0
+  );
+  if (! in_array($distance_unit, array_keys($units))) {
     $distance_unit = 'km';
   }
-
-  $conv = 1;
-  if ($distance_unit == 'km') {
-    $conv = 1000.0;
-  }
-  elseif ($distance_unit == 'mi') {
-    $conv = 1609.344;
-  }
-  elseif ($distance_unit == 'yd') {
-    $conv = 0.9144;
-  }
-  elseif ($distance_unit == 'nmi') {
-     $conv = 1852;
-  }
-
+  $conv = $units[$distance_unit];
   // Convert distance to meters
   $retval = round(floatval($distance) * $conv, 2);
   return $retval;

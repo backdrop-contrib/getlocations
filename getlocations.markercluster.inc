@@ -154,3 +154,27 @@ function getlocations_element_markerclusterer_size($default) {
   );
   return $element;
 }
+
+function getlocations_element_markerclusterer_minsize($default) {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Marker Clusterer Minimum markers'),
+    '#default_value' => $default,
+    '#options' => array(
+      '-1' => t('Default'),
+      '3' => '3',
+      '4' => '4',
+      '5' => '5',
+      '6' => '6',
+      '7' => '7',
+      '8' => '8',
+      '9' => '9',
+      '10' => '10',
+      '12' => '12',
+      '15' => '15',
+      '20' => '20',
+    ),
+  );
+  return $element;
+}

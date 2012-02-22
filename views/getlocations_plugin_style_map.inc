@@ -64,6 +64,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['markerclusterer_style'] = array('default' => $getlocations_defaults['markerclusterer_style']);
     $options['markerclusterer_zoom']  = array('default' => $getlocations_defaults['markerclusterer_zoom']);
     $options['markerclusterer_size']  = array('default' => $getlocations_defaults['markerclusterer_size']);
+    $options['markerclusterer_minsize']  = array('default' => $getlocations_defaults['markerclusterer_minsize']);
     $options['pansetting']            = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                = array('default' => $getlocations_defaults['styles']);
@@ -231,6 +232,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $form['markerclusterer_style'] = getlocations_element_markerclusterer_style($this->options['markerclusterer_style']);
       $form['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($this->options['markerclusterer_zoom']);
       $form['markerclusterer_size'] = getlocations_element_markerclusterer_size($this->options['markerclusterer_size']);
+      $form['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($this->options['markerclusterer_minsize']);
     }
     else {
       $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);

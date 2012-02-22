@@ -32,6 +32,7 @@ var inputmap = [];
         cmgr: '',
         cmgr_gridSize: null,
         cmgr_maxZoom: null,
+        cmgr_minClusterSize: null,
         cmgr_styles: '',
         cmgr_style: null,
         defaultIcon: '',
@@ -83,7 +84,10 @@ var inputmap = [];
         global_settings.useclustermanager = true;
         global_settings.usemarkermanager = false;
         global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;
-        global_settings.cmgr_style = settings.markerclusterer_style;
+        global_settings.cmgr_style = (settings.markerclusterer_style == -1 ? null : settings.markerclusterer_style);
+        global_settings.cmgr_gridSize = (settings.markerclusterer_size == -1 ? null : parseInt(settings.markerclusterer_size));
+        global_settings.cmgr_maxZoom = (settings.markerclusterer_zoom == -1 ? null : parseInt(settings.markerclusterer_zoom));
+        global_settings.cmgr_minClusterSize = (settings.markerclusterer_minsize == -1 ? null : parseInt(settings.markerclusterer_minsize));
       }
       else {
         global_settings.usemarkermanager = false;
@@ -212,9 +216,15 @@ var inputmap = [];
       }
       else if (global_settings.useclustermanager == 1) {
         global_settings.cmgr = new MarkerClusterer(
-         map[key],
-         [],
-         {gridSize: global_settings.cmgr_gridSize, maxZoom: global_settings.cmgr_maxZoom, styles: global_settings.cmgr_styles[global_settings.cmgr_style]});
+          map[key],
+          [],
+          {
+            gridSize: global_settings.cmgr_gridSize,
+            maxZoom: global_settings.cmgr_maxZoom,
+            styles: global_settings.cmgr_styles[global_settings.cmgr_style],
+            minimumClusterSize: global_settings.cmgr_minClusterSize
+          }
+        );
       }
 
       if (settings.trafficinfo) {

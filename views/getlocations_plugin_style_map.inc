@@ -23,6 +23,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
   }
 
   function option_definition() {
+    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_views.js');
     $options = parent::option_definition();
 
     $getlocations_defaults = getlocations_defaults();
@@ -68,6 +69,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['pansetting']            = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']             = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                = array('default' => $getlocations_defaults['styles']);
+    $options['custom_content_enable'] = array('default' => $getlocations_defaults['custom_content_enable']);
+    $options['custom_content_source'] = array('default' => $getlocations_defaults['custom_content_source']);
 
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
@@ -104,6 +107,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
+
+    $handlers = $this->display->handler->get_handlers('field');
+    $source_options = array('' => t('None'));
+
+    foreach ($handlers as $handle) {
+      $source_options[$handle->options['id']] = (!empty($handle->options['label'])) ? $handle->options['label'] : $handle->options['id'];
+    }
 
     $form['width'] = getlocations_element_map_tf(
       t('Map width'),
@@ -207,6 +217,25 @@ class getlocations_plugin_style_map extends views_plugin_style {
     );
     $form['markeraction'] = getlocations_element_map_markeraction(
       $this->options['markeraction']
+    );
+
+    $form['custom_content_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Replace default content'),
+      '#default_value' =>  $this->options['custom_content_enable'],
+      '#return_value' => 1,
+      '#prefix' => '<div id="wrap-custom-content-enable">',
+      '#suffix' => '</div>',
+    );
+
+    $form['custom_content_source'] = array(
+      '#type' => 'select',
+      '#title' => t('Popup Data'),
+      '#options' => $source_options,
+      '#default_value' => $this->options['custom_content_source'],
+      '#description' => t('The field to use as a data source for the marker popup.'),
+      '#prefix' => '<div id="wrap-custom-content-source">',
+      '#suffix' => '</div>',
     );
 
     // markermanager option

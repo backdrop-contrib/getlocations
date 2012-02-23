@@ -39,6 +39,7 @@ var inputmap = [];
         usemarkermanager: true,
         useInfoBubble: false,
         useInfoWindow: false,
+        useCustomContent: false,
         useLink: false,
         markeraction: 0,
         markeractiontype: 1,
@@ -100,13 +101,20 @@ var inputmap = [];
         global_settings.markeractiontype = 'mouseover';
       }
 
-      if (global_settings.markeraction == 2) {
+      if (global_settings.markeraction == 1) {
+        global_settings.useInfoWindow = true;
+      }
+
+      else if (global_settings.markeraction == 2) {
         global_settings.useInfoBubble = true;
       }
       else if (global_settings.markeraction == 3) {
         global_settings.useLink = true;
       }
 
+      if((global_settings.useInfoWindow || global_settings.useInfoBubble) && settings.custom_content_enable == 1) {
+        global_settings.useCustomContent = true;
+      }
       global_settings.defaultIcon = Drupal.getlocations.getIcon(map_marker);
 
       // pipe delim
@@ -301,7 +309,7 @@ var inputmap = [];
 
   } // end initialize
 
-  function makeMarker(map, gs, lat, lon, lid, title, lidkey) {
+  function makeMarker(map, gs, lat, lon, lid, title, lidkey, customContent) {
 
     var p = new google.maps.LatLng(lat, lon);
     var m = new google.maps.Marker({
@@ -340,13 +348,16 @@ var inputmap = [];
               else {
                 var infoBubbleOpts = {};
               }
-              infoBubbleOpts.content = data;
+              infoBubbleOpts.content = gs.useCustomContent ? customContent : data;
               var infoBubble = new InfoBubble(infoBubbleOpts);
               infoBubble.open(map, m);
               // add to the array
               gs.infoBubbles.push(infoBubble);
             }
             else {
+              if(gs.useCustomContent) {
+                  data = customContent;
+              }
               var infowindow = new google.maps.InfoWindow({
                 content: data
               });
@@ -383,13 +394,14 @@ var inputmap = [];
       name = arr2[3];
       mark = arr2[4];
       lidkey = arr2[5];
+      customContent = arr2[6];
       if (mark === '') {
         gs.markdone = gs.defaultIcon;
       }
       else {
         gs.markdone = Drupal.getlocations.getIcon(mark);
       }
-      m = makeMarker(map, gs, lat, lon, lid, name, lidkey);
+      m = makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent);
       if (gs.usemarkermanager || gs.useclustermanager) {
         batchr.push(m);
       }

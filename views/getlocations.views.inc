@@ -44,10 +44,18 @@ function template_preprocess_getlocations_view_map(&$variables) {
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
+
+  if ($options['custom_content_enable'] and !empty($options['custom_content_source'])) {
+    $custom_content_source = $options['custom_content_source'];
+  }
+  else {
+    $custom_content_source = NULL;
+  }
   if (count($locations)) {
 
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
+      $custom_content = $custom_content_source ? $location[$custom_content_source] : '';
       $lid = 0;
       if (module_exists('getlocations_fields')) {
         $lid = $location['glid'];
@@ -78,7 +86,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;
         $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
-        $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker, $base_field);
+        $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker, $base_field, $custom_content);
       }
     }
   }

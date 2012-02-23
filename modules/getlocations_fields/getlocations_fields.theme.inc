@@ -147,7 +147,13 @@ function theme_getlocations_fields_show($variables) {
         elseif ($location['cid']) {
           $base = 'cid';
         }
-        $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $settings['map_marker'], $base);
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
+        }
+        else {
+          $marker = $settings['map_marker'];
+        }
+        $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base);
         $map = getlocations_fields_getmap_show($settings, $latlons);
         $output .= $map;
       }
@@ -439,6 +445,9 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['latitude']['#suffix'] = '</div>';
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';
+
+  $form['marker']['#prefix'] = '<div class="getlocations_fields_marker_wrapper">';
+  $form['marker']['#suffix'] = '</div>';
 
   $form['city']['#prefix'] = '<div class="getlocations_fields_city_wrapper">';
   $form['city']['#suffix'] = '</div>';

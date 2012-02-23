@@ -289,6 +289,10 @@ function getlocations_nodemap($nid) {
             $location['lid'] = $nid;
           }
         }
+        // per location marker
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
+        }
         $ct++;
         $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $node->title, ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
@@ -336,6 +340,10 @@ function getlocations_usermap($uid) {
           }
           else {
             $location['lid'] = $uid;
+          }
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
           }
           $ct++;
           $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $account->name, ENT_QUOTES);
@@ -386,6 +394,10 @@ function getlocations_usersmap() {
             else {
               $location['lid'] = $uid;
             }
+            // per location marker
+            if (isset($location['marker']) && ! empty($location['marker'])) {
+              $marker = $location['marker'];
+            }
             $ct++;
             $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row->name, ENT_QUOTES);
             $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
@@ -435,6 +447,10 @@ function getlocations_termmap($tid) {
           else {
             $location['lid'] = $tid;
           }
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
+          }
           $ct++;
           $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $term->name, ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
@@ -472,6 +488,10 @@ function getlocations_commentmap($cid) {
           }
           else {
             $location['lid'] = $cid;
+          }
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
           }
           $ct++;
           $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $comment->subject, ENT_QUOTES);
@@ -538,6 +558,10 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
             elseif ($location['key'] == 'vid') {
               $location['lid'] = $vid;
             }
+          }
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
           }
           $ct++;
           $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row->title, ENT_QUOTES);
@@ -1570,46 +1594,46 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
   $lla = explode(',', $defaults['latlong']);
   $settings = array(
     $mapid => array(
-      'lat'                   => $lla[0],
-      'lng'                   => $lla[1],
-      'mylocale'              => $language->language,
-      'zoom'                  => $defaults['zoom'],
-      'maptype'               => $defaults['maptype'],
-      'controltype'           => $defaults['controltype'],
-      'mtc'                   => $defaults['mtc'],
-      'baselayers'            => $defaults['baselayers'],
-      'scale'                 => $defaults['behavior']['scale'],
-      'overview'              => $defaults['behavior']['overview'],
-      'overview_opened'       => $defaults['behavior']['overview_opened'],
-      'scrollwheel'           => $defaults['behavior']['scrollwheel'],
-      'trafficinfo'           => $defaults['trafficinfo'],
-      'bicycleinfo'           => $defaults['bicycleinfo'],
-      'streetview_show'       => $defaults['streetview_show'],
-      'pancontrol'            => $defaults['pancontrol'],
-      'panoramio_use'         => $defaults['panoramio_use'],
-      'panoramio_show'        => $defaults['panoramio_show'],
-      'poi_show'              => $defaults['poi_show'],
-      'transit_show'          => $defaults['transit_show'],
-      'map_marker'            => $defaults['node_map_marker'],
-      'markeraction'          => $defaults['markeraction'],
-      'markeractiontype'      => $defaults['markeractiontype'],
-      'minzoom'               => $defaults['minzoom'],
-      'maxzoom'               => $defaults['maxzoom'],
-      'nodezoom'              => $defaults['nodezoom'],
-      'markermanagertype'     => $defaults['markermanagertype'],
-      'usemarkermanager'      => $defaults['usemarkermanager'],
-      'useclustermanager'     => $defaults['useclustermanager'],
-      'markerclusterer_style' => $defaults['markerclusterer_style'],
-      'markerclusterer_zoom'  => $defaults['markerclusterer_zoom'],
-      'markerclusterer_size'  => $defaults['markerclusterer_size'],
+      'lat'                     => $lla[0],
+      'lng'                     => $lla[1],
+      'mylocale'                => $language->language,
+      'zoom'                    => $defaults['zoom'],
+      'maptype'                 => $defaults['maptype'],
+      'controltype'             => $defaults['controltype'],
+      'mtc'                     => $defaults['mtc'],
+      'baselayers'              => $defaults['baselayers'],
+      'scale'                   => $defaults['behavior']['scale'],
+      'overview'                => $defaults['behavior']['overview'],
+      'overview_opened'         => $defaults['behavior']['overview_opened'],
+      'scrollwheel'             => $defaults['behavior']['scrollwheel'],
+      'trafficinfo'             => $defaults['trafficinfo'],
+      'bicycleinfo'             => $defaults['bicycleinfo'],
+      'streetview_show'         => $defaults['streetview_show'],
+      'pancontrol'              => $defaults['pancontrol'],
+      'panoramio_use'           => $defaults['panoramio_use'],
+      'panoramio_show'          => $defaults['panoramio_show'],
+      'poi_show'                => $defaults['poi_show'],
+      'transit_show'            => $defaults['transit_show'],
+      'map_marker'              => $defaults['node_map_marker'],
+      'markeraction'            => $defaults['markeraction'],
+      'markeractiontype'        => $defaults['markeractiontype'],
+      'minzoom'                 => $defaults['minzoom'],
+      'maxzoom'                 => $defaults['maxzoom'],
+      'nodezoom'                => $defaults['nodezoom'],
+      'markermanagertype'       => $defaults['markermanagertype'],
+      'usemarkermanager'        => $defaults['usemarkermanager'],
+      'useclustermanager'       => $defaults['useclustermanager'],
+      'markerclusterer_style'   => $defaults['markerclusterer_style'],
+      'markerclusterer_zoom'    => $defaults['markerclusterer_zoom'],
+      'markerclusterer_size'    => $defaults['markerclusterer_size'],
       'markerclusterer_minsize' => $defaults['markerclusterer_minsize'],
-      'pansetting'            => $defaults['pansetting'],
-      'draggable'             => $defaults['draggable'],
-      'styles'                => $defaults['styles'],
-      'datanum'               => count($latlons),
-      'latlons'               => $latlons,
-      'minmaxes'              => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
-      'inputmap'              => ($inputmap ? 1 : 0),
+      'pansetting'              => $defaults['pansetting'],
+      'draggable'               => $defaults['draggable'],
+      'styles'                  => $defaults['styles'],
+      'datanum'                 => count($latlons),
+      'latlons'                 => $latlons,
+      'minmaxes'                => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
+      'inputmap'                => ($inputmap ? 1 : 0),
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');
@@ -1648,7 +1672,9 @@ function getlocations_load_location($lid) {
   if (module_exists('getlocations_fields')) {
     $location = getlocations_fields_load_location($lid);
     $type = getlocations_get_type_from_lid($lid);
-    $location['marker'] = $getlocations_defaults[$type . '_map_marker'];
+    if (! isset($location['marker']) || empty($location['marker'])) {
+      $location['marker'] = $getlocations_defaults[$type . '_map_marker'];
+    }
   }
   elseif (module_exists('location')) {
     $location = location_load_location($lid);

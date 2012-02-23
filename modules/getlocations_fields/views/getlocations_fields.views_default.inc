@@ -37,7 +37,8 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '1';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
@@ -179,6 +180,12 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  /* Field: Getlocations Fields: Marker */
+  $handler->display->display_options['fields']['marker']['id'] = 'marker';
+  $handler->display->display_options['fields']['marker']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['marker']['field'] = 'marker';
+  $handler->display->display_options['fields']['marker']['label'] = '';
+  $handler->display->display_options['fields']['marker']['exclude'] = TRUE;
   /* Field: Getlocations Fields: Field name */
   $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['table'] = 'getlocations_fields_entities';
@@ -290,6 +297,12 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  /* Field: Getlocations Fields: Marker */
+  $handler->display->display_options['fields']['marker']['id'] = 'marker';
+  $handler->display->display_options['fields']['marker']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['marker']['field'] = 'marker';
+  $handler->display->display_options['fields']['marker']['label'] = '';
+  $handler->display->display_options['fields']['marker']['exclude'] = TRUE;
   /* Field: Getlocations Fields: Field name */
   $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['table'] = 'getlocations_fields_entities';
@@ -426,6 +439,12 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['exclude'] = TRUE;
+  /* Field: Getlocations Fields: Marker */
+  $handler->display->display_options['fields']['marker']['id'] = 'marker';
+  $handler->display->display_options['fields']['marker']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['marker']['field'] = 'marker';
+  $handler->display->display_options['fields']['marker']['label'] = '';
+  $handler->display->display_options['fields']['marker']['exclude'] = TRUE;
   /* Field: Getlocations Fields: Field name */
   $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['table'] = 'getlocations_fields_entities';
@@ -484,7 +503,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['filters']['distance']['id'] = 'distance';
   $handler->display->display_options['filters']['distance']['table'] = 'getlocations_fields';
   $handler->display->display_options['filters']['distance']['field'] = 'distance';
-  $handler->display->display_options['filters']['distance']['operator'] = 'dist';
+  $handler->display->display_options['filters']['distance']['operator'] = 'mbr';
   $handler->display->display_options['filters']['distance']['value'] = array();
 
   /* Display: Block 5 */
@@ -614,6 +633,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
   $handler->display->display_options['fields']['longitude']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['longitude']['style'] = 'dd';
+  /* Field: Getlocations Fields: Marker */
+  $handler->display->display_options['fields']['marker']['id'] = 'marker';
+  $handler->display->display_options['fields']['marker']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['marker']['field'] = 'marker';
+  $handler->display->display_options['fields']['marker']['label'] = '';
+  $handler->display->display_options['fields']['marker']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['marker']['hide_alter_empty'] = 1;
   /* Field: Getlocations Fields: Field name */
   $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['table'] = 'getlocations_fields_entities';
@@ -733,6 +759,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
   $handler->display->display_options['fields']['longitude']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['longitude']['style'] = 'dd';
+  /* Field: Getlocations Fields: Marker */
+  $handler->display->display_options['fields']['marker']['id'] = 'marker';
+  $handler->display->display_options['fields']['marker']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['marker']['field'] = 'marker';
+  $handler->display->display_options['fields']['marker']['label'] = '';
+  $handler->display->display_options['fields']['marker']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['marker']['hide_alter_empty'] = 1;
   /* Filter criterion: User: Active */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
@@ -812,7 +845,8 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '1';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
@@ -945,6 +979,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
   $handler->display->display_options['fields']['longitude']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['longitude']['style'] = 'dd';
+  /* Field: Getlocations Fields: Marker */
+  $handler->display->display_options['fields']['marker']['id'] = 'marker';
+  $handler->display->display_options['fields']['marker']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['marker']['field'] = 'marker';
+  $handler->display->display_options['fields']['marker']['label'] = '';
+  $handler->display->display_options['fields']['marker']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['marker']['hide_alter_empty'] = 1;
   /* Field: Getlocations Fields: Name */
   $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
   $handler->display->display_options['fields']['name_1']['table'] = 'getlocations_fields';
@@ -1005,7 +1046,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['filters']['distance']['id'] = 'distance';
   $handler->display->display_options['filters']['distance']['table'] = 'getlocations_fields';
   $handler->display->display_options['filters']['distance']['field'] = 'distance';
-  $handler->display->display_options['filters']['distance']['operator'] = 'dist';
+  $handler->display->display_options['filters']['distance']['operator'] = 'mbr';
   $handler->display->display_options['filters']['distance']['value'] = array(
     'latitude' => '',
     'longitude' => '',

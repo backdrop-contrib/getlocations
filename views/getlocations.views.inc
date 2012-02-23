@@ -71,6 +71,9 @@ function template_preprocess_getlocations_view_map(&$variables) {
       if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
         $marker = $options['node_marker_' . $location['field_name']];
       }
+      if (isset($location['marker']) && ! empty($location['marker'])) {
+        $marker = $location['marker'];
+      }
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $ct++;

@@ -316,6 +316,23 @@ function getlocations_fields_views_data() {
 //    ),
 
   );
+
+  // marker
+  $data['getlocations_fields']['marker'] = array(
+    'title' => t('Marker'),
+    'help' => t('The marker of the selected location.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
 /*
   // address
   $data['getlocations_fields']['address'] = array(

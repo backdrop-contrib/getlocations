@@ -1,9 +1,45 @@
-commit 650ddec
+commit 2b8773a
+Author: hutch <hutch@midwales.net>
+Date:   Thu Feb 23 10:01:34 2012 +0000
+
+    added per item markers feature
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+views/getlocations.views.inc
+
+commit 1a22c0d
+Author: hutch <hutch@midwales.net>
+Date:   Wed Feb 22 10:34:51 2012 +0000
+
+    fixed markercluster parameters
+
+getlocations.admin.inc
+getlocations.markercluster.inc
+getlocations.module
+js/getlocations.js
+views/getlocations_plugin_style_map.inc
+
+commit 6817942
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 21 23:50:48 2012 +0000
+
+    improved convert_distance_to_meters
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+
+commit 91f65df
 Author: hutch <hutch@midwales.net>
 Date:   Tue Feb 21 13:48:20 2012 +0000
 
     improved filter_distance handler
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.functions.inc
 modules/getlocations_fields/views/getlocations_fields.views.inc
 

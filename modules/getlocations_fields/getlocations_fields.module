@@ -981,6 +981,7 @@ function getlocations_fields_field_widget_info() {
         'input_province_required'    => $getlocations_fields_defaults['input_province_required'],
         'input_postal_code_required' => $getlocations_fields_defaults['input_postal_code_required'],
         'input_country_required'     => $getlocations_fields_defaults['input_country_required'],
+        'per_item_marker'            => $getlocations_fields_defaults['per_item_marker'],
       ),
 #      'behaviour' => array(
 #        'multiple values' => FIELD_BEHAVIOR_DEFAULT
@@ -1213,6 +1214,27 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   if (! empty($settings['input_country_weight'])) {
     $widget['country']['#weight'] = $settings['input_country_weight'];
   }
+
+  // per_item_marker
+  if ($settings['per_item_marker']) {
+    $markers = getlocations_get_marker_titles();
+    $markers = array_merge(array('' => t('Default')), $markers);
+    $widget['marker'] = getlocations_element_map_marker(
+      t('Map marker'),
+      $markers,
+      (isset($items[$delta]['marker']) ? $items[$delta]['marker'] : '')
+    );
+    if (! empty($settings['input_marker_weight'])) {
+      $widget['marker']['#weight'] = $settings['input_marker_weight'];
+    }
+  }
+  else {
+    $widget['marker'] = array(
+      '#type' => 'value',
+      '#value' => '',
+    );
+  }
+
   // geobutton
   if ($active) {
     if (! $settings['use_address']) {
@@ -1497,7 +1519,8 @@ function getlocations_fields_insert_record($location, $relations) {
     'country' => $location['country'],
     'address' => $location['address'],
     'latitude' => (float) $location['latitude'],
-    'longitude' => (float) $location['longitude']
+    'longitude' => (float) $location['longitude'],
+    'marker' => $location['marker']
   ));
   $result = $query->execute();
   // $result should contain glid
@@ -1555,7 +1578,8 @@ function getlocations_fields_update_record($location, $relations) {
       'country' => $location['country'],
       'address' => $location['address'],
       'latitude' => (float) $location['latitude'],
-      'longitude' => (float) $location['longitude']
+      'longitude' => (float) $location['longitude'],
+      'marker' => $location['marker']
     ))
     ->condition('glid', $location['glid'])
     ->execute();
@@ -1687,7 +1711,7 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
     module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
-    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
+    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker'));
     $query->fields('e', array('nid', 'uid', 'tid', 'cid', 'field_name'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
     $query->condition('e.' . $key, $id);
@@ -1713,6 +1737,7 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
       $locations[$ct]['address'] = $row->address;
       $locations[$ct]['latitude'] = $row->latitude;
       $locations[$ct]['longitude'] = $row->longitude;
+      $locations[$ct]['marker'] = $row->marker;
       $locations[$ct]['nid'] = $row->nid;
       $locations[$ct]['uid'] = $row->uid;
       $locations[$ct]['tid'] = $row->tid;
@@ -1747,7 +1772,7 @@ function getlocations_fields_load_location($glid) {
     module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
     $query = db_select('getlocations_fields', 'f');
-    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude'));
+    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker'));
     $query->fields('e', array('nid', 'uid', 'tid', 'cid'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
     $query->condition('f.glid', $glid);
@@ -1772,6 +1797,7 @@ function getlocations_fields_load_location($glid) {
       $location['address'] = $row->address;
       $location['latitude'] = $row->latitude;
       $location['longitude'] = $row->longitude;
+      $location['marker'] = $row->marker;
       $location['nid'] = $row->nid;
       $location['uid'] = $row->uid;
       $location['tid'] = $row->tid;
@@ -1864,12 +1890,14 @@ function getlocations_fields_defaults() {
     'input_latitude_weight'        => 0,
     'input_longitude_weight'       => 0,
     'input_map_weight'             => 0,
+    'input_marker_weight'          => 0,
     'input_geobutton_weight'       => 0,
     'use_smart_ip_button'          => 0,
     'input_smart_ip_button_weight' => 0,
     'use_country_dropdown'         => 0,
     'province_autocomplete'        => 0,
     'city_autocomplete'            => 0,
+    'per_item_marker'              => 0,
     'columns'                      => array(
       'glid'        => t('Glid'),
       'name'        => t('Name'),
@@ -1969,6 +1997,7 @@ function getlocations_fields_field_info_defaults() {
         'input_postal_code_weight'     => $getlocations_fields_defaults['input_postal_code_weight'],
         'input_country_weight'         => $getlocations_fields_defaults['input_country_weight'],
         'input_map_weight'             => $getlocations_fields_defaults['input_map_weight'],
+        'input_marker_weight'          => $getlocations_fields_defaults['input_marker_weight'],
         'input_latitude_weight'        => $getlocations_fields_defaults['input_latitude_weight'],
         'input_longitude_weight'       => $getlocations_fields_defaults['input_longitude_weight'],
         'input_geobutton_weight'       => $getlocations_fields_defaults['input_geobutton_weight'],
@@ -1978,6 +2007,7 @@ function getlocations_fields_field_info_defaults() {
         'province_autocomplete'        => $getlocations_fields_defaults['province_autocomplete'],
         'city_autocomplete'            => $getlocations_fields_defaults['city_autocomplete'],
         'country'                      => $getlocations_fields_defaults['country'],
+        'per_item_marker'              => $getlocations_fields_defaults['per_item_marker'],
       ),
     ),
   );
@@ -2051,6 +2081,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'display_postal_code'   => $getlocations_fields_defaults['display_postal_code'],
     'display_country'       => $getlocations_fields_defaults['display_country'],
     'country_full'          => $getlocations_fields_defaults['country_full'],
+    'per_item_marker'       => $getlocations_fields_defaults['per_item_marker'],
   );
   return $defaults;
 
@@ -2298,6 +2329,18 @@ function getlocations_fields_input_settings_form($defaults) {
     )
   );
 
+  // per_item_marker
+  $form['per_item_marker'] = getlocations_element_map_checkbox(
+    t('Allow per item markers'),
+    $defaults['per_item_marker'],
+    t('Allow each item to have a marker selected.')
+  );
+  $form['input_marker_weight'] = getlocations_fields_element_weight(
+    t('Marker select position'),
+    $defaults['input_marker_weight'],
+    ''
+  );
+
   return $form;
 
 }
@@ -2314,6 +2357,7 @@ function getlocations_fields_input_settings_form($defaults) {
 function getlocations_fields_display_settings_form($defaults) {
 
   $form = array();
+
   // display defaults
   $form['display_showmap'] = getlocations_element_map_checkbox(
     t('Show map in display'),

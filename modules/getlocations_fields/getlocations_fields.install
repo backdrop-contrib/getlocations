@@ -91,6 +91,13 @@ function getlocations_fields_schema() {
         'default' => 0.0,
         'not null' => TRUE,
       ),
+      'marker' => array(
+        'description' => 'Marker.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+        'not null' => TRUE,
+      ),
     ),
     'primary key' => array('glid'),
   );
@@ -212,3 +219,16 @@ function getlocations_fields_enable() {
   drupal_set_message(st('Thank you for installing Getlocations fields. To set it up please visit the <a href="@url">configuration page</a>.', array('@url' => url('admin/config/services/getlocations_fields'))), 'status');
 
 }
+
+function getlocations_fields_update_7100() {
+  $spec = array(
+    'description' => 'Marker.',
+    'type' => 'varchar',
+    'length' => 255,
+    'default' => '',
+    'not null' => TRUE,
+  );
+  db_add_field('getlocations_fields', 'marker', $spec);
+}
+
+

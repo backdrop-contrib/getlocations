@@ -426,18 +426,16 @@ function theme_getlocations_fields_field_widget_form($variables) {
 
   $form = $variables['form'];
   $output = '';
+  $mapid = $form['mapid']['#value'];
+  unset($form['mapid']);
   if (isset($form['geobutton']) ) {
-    $mapid = $form['mapid']['#value'];
-    unset($form['mapid']);
     $geobutton = '<p><input type="submit" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton_' . $mapid . '" class="form-submit" /></p>';
     $geobutton .= '<p>If you leave the address empty you can Geocode by moving the marker on the map</p>';
     $form['geobutton']['#markup'] = $geobutton;
   }
 
   if (isset($form['smart_ip_button']) && module_exists('smart_ip')) {
-    $smart_ip_mapid = $form['smart_ip_mapid']['#value'];
-    unset($form['smart_ip_mapid']);
-    $smart_ip_button = '<p><input type="submit" value="' . t('Use current user position') . '" title="' . t('Get the latitude and longitude for this address from the user IP') . '" id="getlocations_smart_ip_button_' . $smart_ip_mapid . '" class="form-submit" /></p>';
+    $smart_ip_button = '<p><input type="submit" value="' . t('Use current user position') . '" title="' . t('Get the latitude and longitude for this address from the user IP') . '" id="getlocations_smart_ip_button_' . $mapid . '" class="form-submit" /></p>';
     $form['smart_ip_button']['#markup'] = $smart_ip_button;
   }
 
@@ -464,7 +462,7 @@ function theme_getlocations_fields_field_widget_form($variables) {
   if (isset($form['getlocations_required'])) {
     $requireds = explode(',', $form['getlocations_required']['#value']);
     foreach ($requireds AS $id) {
-      $form[$id]['#prefix'] = '<div class="getlocations_required">';
+      $form[$id]['#prefix'] = '<div class="getlocations_required_' . $id . '_' . $mapid . '">';
       $form[$id]['#suffix'] = '</div>';
     }
     unset($form['getlocations_required']);

@@ -355,6 +355,14 @@
           });
         }
 
+        // do 'fake' required fields
+        var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code'];
+        $.each(requireds, function(k, v) {
+          if ($(".getlocations_required_" + v + '_' + key).is("div")) {
+            $("div.getlocations_required_" + v + "_" + key + " label").append(' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>');
+          }
+        });
+
       }); // end each setting loop
 
       function getGeoErrCode(errcode) {
@@ -379,15 +387,6 @@
         }
         return errstr;
       }
-
-      // do a 'fake' required field
-      label = $("div.getlocations_required label").html();
-      label += ' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>';
-      $("div.getlocations_required label").html(label);
-      // wipes out 'error' class so not in use
-      //rclass = $("div.getlocations_required input").attr('class');
-      //rclass += ' required';
-      //$("div.getlocations_required input").attr('class', rclass);
 
     }
   };

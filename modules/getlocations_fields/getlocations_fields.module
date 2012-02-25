@@ -1107,10 +1107,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     if (! empty($settings['input_smart_ip_button_weight'])) {
       $widget['smart_ip_button']['#weight'] = $settings['input_smart_ip_button_weight'];
     }
-    $widget['smart_ip_mapid'] = array(
-      '#type' => 'value',
-      '#value' => $mapid,
-    );
   }
 
   // loop over these as they are all the same
@@ -1129,12 +1125,14 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       $widget[$id] = array(
         '#type' => 'hidden',
         '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
+        '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
       );
     }
     elseif ($settings['input_' . $id . '_required'] == 3) {
       $widget[$id] = array(
         '#type' => 'hidden',
         '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
+        '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
       );
       $widget[$id . '_display'] = array(
         '#markup' => (isset($items[$delta][$id]) ? check_plain($items[$delta][$id]) : ''),
@@ -1244,11 +1242,12 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       if (! empty($settings['input_geobutton_weight'])) {
         $widget['geobutton']['#weight'] = $settings['input_geobutton_weight'];
       }
-      $widget['mapid'] = array(
-        '#type' => 'value',
-        '#value' => $mapid,
-      );
     }
+    $widget['mapid'] = array(
+      '#type' => 'value',
+      '#value' => $mapid,
+    );
+
   }
   // map
   $widget['map'] = array(
@@ -1386,7 +1385,9 @@ function getlocations_fields_getmap($settings, $active, $mapid) {
 
   if ($active) {
     drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js');
-    getlocations_fields_js_settings_do($getlocations_defaults, $mapid);
+    $settings['nodezoom'] = $getlocations_defaults['nodezoom'];
+    getlocations_fields_js_settings_do($settings, $mapid);
+
     $latlons = array();
   }
   else {
@@ -1834,8 +1835,12 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
       'nodezoom' => $defaults['nodezoom'],
       'map_marker' => $defaults['input_map_marker'],
       'use_address' => $defaults['use_address'],
-    )
+    ),
   );
+
+  // just send them all for now
+#  $settings = array($mapid => $defaults);
+
   drupal_add_js(array('getlocations_fields' => $settings), 'setting');
 
 }

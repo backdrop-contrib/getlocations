@@ -71,11 +71,13 @@ var inputmap = [];
       var pansetting = settings.pansetting;
       var draggable = settings.draggable;
       var map_styles = settings.styles;
+
       global_settings.minzoom = parseInt(settings.minzoom);
       global_settings.maxzoom = parseInt(settings.maxzoom);
       global_settings.nodezoom = parseInt(settings.nodezoom);
       global_settings.datanum = settings.datanum;
       global_settings.markermanagertype = settings.markermanagertype;
+
       if (settings.markermanagertype == 1 && settings.usemarkermanager) {
         global_settings.usemarkermanager = true;
         global_settings.useclustermanager = false;
@@ -311,6 +313,8 @@ var inputmap = [];
 
   function makeMarker(map, gs, lat, lon, lid, title, lidkey, customContent) {
 
+    var mouseoverTimeoutId = null;
+    var mouseoverTimeout = (gs.markeractiontype == 'mouseover' ? 300 : 0);
     var p = new google.maps.LatLng(lat, lon);
     var m = new google.maps.Marker({
       icon: gs.markdone.image,
@@ -323,49 +327,56 @@ var inputmap = [];
 
     if (gs.markeraction > 0) {
       google.maps.event.addListener(m, gs.markeractiontype, function() {
-        if (gs.useLink) {
-          // fetch link and relocate
-          var path = Drupal.settings.basePath + "getlocations/lidinfo";
-          $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-            if (data) {
-              window.location = data;
-            }
-          });
-
-        }
-        else {
-          // fetch bubble content
-          var path = Drupal.settings.basePath + "getlocations/info";
-          $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-            // close any previous instances
-            for (var i in gs.infoBubbles) {
-              gs.infoBubbles[i].close();
-            }
-            if (gs.useInfoBubble) {
-              if (typeof(infoBubbleOptions) == 'object') {
-                var infoBubbleOpts = infoBubbleOptions;
+        mouseoverTimeoutId = setTimeout(function() {
+          if (gs.useLink) {
+            // fetch link and relocate
+            var path = Drupal.settings.basePath + "getlocations/lidinfo";
+            $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+              if (data) {
+                window.location = data;
+              }
+            });
+          }
+          else {
+            // fetch bubble content
+            var path = Drupal.settings.basePath + "getlocations/info";
+            $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+              // close any previous instances
+              for (var i in gs.infoBubbles) {
+                gs.infoBubbles[i].close();
+              }
+              if (gs.useInfoBubble) {
+                if (typeof(infoBubbleOptions) == 'object') {
+                  var infoBubbleOpts = infoBubbleOptions;
+                }
+                else {
+                  var infoBubbleOpts = {};
+                }
+                infoBubbleOpts.content = gs.useCustomContent ? customContent : data;
+                var infoBubble = new InfoBubble(infoBubbleOpts);
+                infoBubble.open(map, m);
+                // add to the array
+                gs.infoBubbles.push(infoBubble);
               }
               else {
-                var infoBubbleOpts = {};
-              }
-              infoBubbleOpts.content = gs.useCustomContent ? customContent : data;
-              var infoBubble = new InfoBubble(infoBubbleOpts);
-              infoBubble.open(map, m);
-              // add to the array
-              gs.infoBubbles.push(infoBubble);
-            }
-            else {
-              if(gs.useCustomContent) {
+                if(gs.useCustomContent) {
                   data = customContent;
+                }
+                var infowindow = new google.maps.InfoWindow({
+                  content: data
+                });
+                infowindow.open(map, m);
+                // add to the array
+                gs.infoBubbles.push(infowindow);
               }
-              var infowindow = new google.maps.InfoWindow({
-                content: data
-              });
-              infowindow.open(map, m);
-              // add to the array
-              gs.infoBubbles.push(infowindow);
-            }
-          });
+            });
+          }
+        }, mouseoverTimeout);
+      });
+      google.maps.event.addListener(m,'mouseout', function() {
+        if(mouseoverTimeoutId) {
+          clearTimeout(mouseoverTimeoutId);
+          mouseoverTimeoutId = null;
         }
       });
 

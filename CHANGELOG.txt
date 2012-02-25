@@ -1,9 +1,36 @@
-commit ede5021
+commit 1100b3f
+Author: hutch <hutch@midwales.net>
+Date:   Sat Feb 25 19:55:37 2012 +0000
+
+    added some checks to theme
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit d696036
+Author: hutch <hutch@midwales.net>
+Date:   Sat Feb 25 19:38:07 2012 +0000
+
+    fixed bug with 'required' fields #1455642
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit d08037b
+Author: hutch <hutch@midwales.net>
+Date:   Sat Feb 25 10:50:17 2012 +0000
+
+    added timeout to mouseover option
+
+js/getlocations.js
+
+commit 8c81dca
 Author: hutch <hutch@midwales.net>
 Date:   Thu Feb 23 23:24:59 2012 +0000
 
     added custom-content in infobubble feature
 
+CHANGELOG.txt
 getlocations.module
 js/getlocation_views.js
 js/getlocations.js

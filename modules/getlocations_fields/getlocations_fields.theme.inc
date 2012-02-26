@@ -133,7 +133,7 @@ function theme_getlocations_fields_show($variables) {
 
     if ($location['longitude'] && $location['latitude']) {
       if ($settings['display_showmap']) {
-        $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
+        $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? strip_tags($location['name']) : (isset($location['title']) && $location['title'] ? strip_tags($location['title']) : ''), ENT_QUOTES);
         $base = '';
         if ($location['nid']) {
           $base = 'nid';

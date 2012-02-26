@@ -1,9 +1,28 @@
-commit c7301fe
+commit 59f9179
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 26 21:04:29 2012 +0000
+
+    added strip_tags to tooltips name/title feed to js
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+views/getlocations.views.inc
+
+commit 10f6188
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 26 18:38:54 2012 +0000
+
+    better checks for modules
+
+views/getlocations.views.inc
+
+commit 0499208
 Author: hutch <hutch@midwales.net>
 Date:   Sun Feb 26 15:58:41 2012 +0000
 
     changed name of file from getlocation_views.js to getlocations_views.js
 
+CHANGELOG.txt
 js/getlocation_views.js
 js/getlocations_views.js
 

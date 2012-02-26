@@ -294,7 +294,7 @@ function getlocations_nodemap($nid) {
           $marker = $location['marker'];
         }
         $ct++;
-        $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $node->title, ENT_QUOTES);
+        $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($node->title), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
       }
     }
@@ -346,8 +346,8 @@ function getlocations_usermap($uid) {
             $marker = $location['marker'];
           }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $account->name, ENT_QUOTES);
-          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
+         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
     }
@@ -399,7 +399,7 @@ function getlocations_usersmap() {
               $marker = $location['marker'];
             }
             $ct++;
-            $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row->name, ENT_QUOTES);
+            $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->name), ENT_QUOTES);
             $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
           }
         }
@@ -452,7 +452,7 @@ function getlocations_termmap($tid) {
             $marker = $location['marker'];
           }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $term->name, ENT_QUOTES);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($term->name), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
@@ -494,7 +494,7 @@ function getlocations_commentmap($cid) {
             $marker = $location['marker'];
           }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $comment->subject, ENT_QUOTES);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($comment->subject), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
@@ -564,7 +564,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
             $marker = $location['marker'];
           }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row->title, ENT_QUOTES);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->title), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
@@ -605,8 +605,8 @@ function getlocations_lids($lidlist) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
         $location['key'] = '';
         $ct++;
-        $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
-        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
+        $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
+       $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
       }
     }
   }
@@ -664,7 +664,7 @@ function getlocations_nids($nidlist) {
           }
         }
         $ct++;
-        $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
+        $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
       }
     }

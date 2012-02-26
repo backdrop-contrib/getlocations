@@ -338,38 +338,16 @@ var inputmap = [];
             });
           }
           else {
-            // fetch bubble content
-            var path = Drupal.settings.basePath + "getlocations/info";
-            $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-              // close any previous instances
-              for (var i in gs.infoBubbles) {
-                gs.infoBubbles[i].close();
-              }
-              if (gs.useInfoBubble) {
-                if (typeof(infoBubbleOptions) == 'object') {
-                  var infoBubbleOpts = infoBubbleOptions;
-                }
-                else {
-                  var infoBubbleOpts = {};
-                }
-                infoBubbleOpts.content = gs.useCustomContent ? customContent : data;
-                var infoBubble = new InfoBubble(infoBubbleOpts);
-                infoBubble.open(map, m);
-                // add to the array
-                gs.infoBubbles.push(infoBubble);
-              }
-              else {
-                if(gs.useCustomContent) {
-                  data = customContent;
-                }
-                var infowindow = new google.maps.InfoWindow({
-                  content: data
-                });
-                infowindow.open(map, m);
-                // add to the array
-                gs.infoBubbles.push(infowindow);
-              }
-            });
+            if(gs.useCustomContent) {
+              showPopup(map, m, gs, customContent);
+            }
+            else {
+              // fetch bubble content
+              var path = Drupal.settings.basePath + "getlocations/info";
+              $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+                showPopup(map, m, gs, data);
+              });
+            }
           }
         }, mouseoverTimeout);
       });
@@ -387,6 +365,34 @@ var inputmap = [];
       map.setZoom(gs.nodezoom);
     }
     return m;
+  }
+
+  function showPopup(map, m, gs, data) {
+      // close any previous instances
+    for (var i in gs.infoBubbles) {
+      gs.infoBubbles[i].close();
+    }
+    if (gs.useInfoBubble) {
+      if (typeof(infoBubbleOptions) == 'object') {
+        var infoBubbleOpts = infoBubbleOptions;
+      }
+      else {
+        var infoBubbleOpts = {};
+      }
+      infoBubbleOpts.content = data;
+      var infoBubble = new InfoBubble(infoBubbleOpts);
+      infoBubble.open(map, m);
+      // add to the array
+      gs.infoBubbles.push(infoBubble);
+    }
+    else {
+      var infowindow = new google.maps.InfoWindow({
+        content: data
+      });
+      infowindow.open(map, m);
+      // add to the array
+      gs.infoBubbles.push(infowindow);
+    }
   }
 
   function doAllMarkers (map, gs) {

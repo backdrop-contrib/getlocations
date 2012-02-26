@@ -1,9 +1,35 @@
-commit 1100b3f
+commit c7301fe
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 26 15:58:41 2012 +0000
+
+    changed name of file from getlocation_views.js to getlocations_views.js
+
+js/getlocation_views.js
+js/getlocations_views.js
+
+commit 06fca09
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 26 13:26:32 2012 +0000
+
+    improved mouseover feature, 1455420-4
+
+js/getlocations.js
+
+commit 70f9f34
+Author: hutch <hutch@midwales.net>
+Date:   Sun Feb 26 05:34:54 2012 +0000
+
+    more fixes for 'required' bug
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 9a329f6
 Author: hutch <hutch@midwales.net>
 Date:   Sat Feb 25 19:55:37 2012 +0000
 
     added some checks to theme
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.theme.inc
 
 commit d696036

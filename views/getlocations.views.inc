@@ -52,45 +52,46 @@ function template_preprocess_getlocations_view_map(&$variables) {
     $custom_content_source = NULL;
   }
   if (count($locations)) {
-
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
       $custom_content = $custom_content_source ? $location[$custom_content_source] : '';
       $lid = 0;
-      if (module_exists('getlocations_fields')) {
+      if (module_exists('getlocations_fields') && isset($location['glid']) && $location['glid'] > 0) {
         $lid = $location['glid'];
       }
-      elseif (module_exists('location')) {
+      elseif (module_exists('location') && isset($location['lid']) && $location['lid'] > 0) {
         $lid = $location['lid'];
       }
-      elseif (module_exists('geofield')) {
+      elseif (module_exists('geofield')  && isset($location[$base_field]) && $location[$base_field] > 0 ) {
         $lid = $location[$base_field];
         $location['field_name'] = getlocations_get_fieldname($location['type']);
         $location['latitude'] = $location[$location['field_name']];
         $location['longitude'] = $location[$location['field_name'] . '_1'];
       }
-      // marker
-      $marker = $options['node_map_marker'];
-      if ($type = getlocations_get_type_from_lid($lid)) {
-        if (isset($options[$type . '_map_marker'])) {
-          $marker = $options[$type . '_map_marker'];
+      if ($lid > 0) {
+        // marker
+        $marker = $options['node_map_marker'];
+        if ($type = getlocations_get_type_from_lid($lid)) {
+          if (isset($options[$type . '_map_marker'])) {
+            $marker = $options[$type . '_map_marker'];
+          }
         }
-      }
-      if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
-        $marker = $options['node_marker_' . $location['field_name']];
-      }
-      if (isset($location['marker']) && ! empty($location['marker'])) {
-        $marker = $location['marker'];
-      }
-      if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-        $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
-        $ct++;
-        $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
-        $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker, $base_field, $custom_content);
+        if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
+          $marker = $options['node_marker_' . $location['field_name']];
+        }
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
+        }
+        if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+          $ct++;
+          $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? $location['name'] : (isset($location['title']) && $location['title'] ? $location['title'] : ''), ENT_QUOTES);
+          $latlons[] = array($location['latitude'], $location['longitude'], $lid, $name, $marker, $base_field, $custom_content);
+        }
       }
     }
   }
-  if ($ct < 2 ) {
+  if ($ct < 2 || $lid == 0) {
     unset($minmaxes);
     $minmaxes = '';
   }

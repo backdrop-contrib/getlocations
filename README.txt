@@ -98,6 +98,9 @@ This applies especially to the
 "/getlocations/type/zzz"
 map which shows all the markers (of a given content-type)
 
+Alternately you can use the MarkerClusterer feature, useful if you have many markers
+near each other.
+
 If you have the Colorbox module installed and enabled in Get Locations
 you can place any of the above paths in a colorbox iframe by replacing
 'getlocations' with 'getlocations_box'.
@@ -133,3 +136,7 @@ mymodule/mymarkers which contains the bespoke markersets.
 These will be added to the available markers when the
 Marker Cache is regenerated.
 
+In a Getlocations View, in Format: Getlocations | Settings,
+if you have selected InfoBubble or InfoWindow in the Marker action dropdown
+you will see a checkbox 'Replace default content' which when checked will
+provide a list of available fields to use instead of the default content.

@@ -211,8 +211,6 @@ function getlocations_settings_form() {
     '#default_value' => $getlocations_defaults['returnlink_page_link'],
     '#size' => 30,
     '#description' => t('Use %t to insert the page title'),
-    '#prefix' => '<div id="wrap-page-link">',
-    '#suffix' => '</div>',
   );
 
   if (module_exists('getlocations_fields')) {
@@ -229,8 +227,6 @@ function getlocations_settings_form() {
         '#default_value' => $getlocations_defaults['returnlink_user_link'],
         '#size' => 30,
         '#description' => t('Use %n to insert the user name'),
-        '#prefix' => '<div id="wrap-user-link">',
-        '#suffix' => '</div>',
       );
     }
 
@@ -247,8 +243,6 @@ function getlocations_settings_form() {
         '#default_value' => $getlocations_defaults['returnlink_term_link'],
         '#size' => 30,
         '#description' => t('Use %n to insert the term name'),
-        '#prefix' => '<div id="wrap-term-link">',
-        '#suffix' => '</div>',
       );
     }
 
@@ -265,8 +259,6 @@ function getlocations_settings_form() {
         '#default_value' => $getlocations_defaults['returnlink_comment_link'],
         '#size' => 30,
         '#description' => t('Use %n to insert the comment subject'),
-        '#prefix' => '<div id="wrap-comment-link">',
-        '#suffix' => '</div>',
       );
     }
   }
@@ -374,7 +366,6 @@ function getlocations_settings_form() {
       '#required' => TRUE,
       // need this to get validation to work
       '#parents' => array('getlocations_colorbox', 'width'),
-      '#prefix' => '<div id="wrap-getlocations-colorbox">',
     );
     $form['getlocations_colorbox']['height'] = array(
       '#type' => 'textfield',
@@ -384,7 +375,6 @@ function getlocations_settings_form() {
       '#required' => TRUE,
       // need this to get validation to work
       '#parents' => array('getlocations_colorbox', 'height'),
-      '#suffix' => '</div>',
     );
   }
 

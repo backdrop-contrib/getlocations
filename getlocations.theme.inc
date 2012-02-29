@@ -266,6 +266,29 @@ function theme_getlocations_settings_form($variables) {
   $prefix .= '<div class="fieldset-description">Select which maps you want to be available.</div>';
   $form['getlocations_default']['baselayers']['Map']['#prefix'] = $prefix;
   $form['getlocations_default']['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
+  $form['getlocations_default']['returnlink_page_link']['#prefix'] = '<div id="wrap-page-link">';
+  $form['getlocations_default']['returnlink_page_link']['#suffix'] = '</div>';
+  if (isset($form['getlocations_default']['returnlink_user_link'])) {
+    $form['getlocations_default']['returnlink_user_link']['#prefix'] = '<div id="wrap-user-link">';
+    $form['getlocations_default']['returnlink_user_link']['#suffix'] = '</div>';
+  }
+  if (isset($form['getlocations_default']['returnlink_term_link'])) {
+    $form['getlocations_default']['returnlink_term_link']['#prefix'] = '<div id="wrap-term-link">';
+    $form['getlocations_default']['returnlink_term_link']['#suffix'] = '</div>';
+  }
+  if (isset($form['getlocations_default']['returnlink_comment_link'])) {
+    $form['getlocations_default']['returnlink_comment_link']['#prefix'] = '<div id="wrap-comment-link">';
+    $form['getlocations_default']['returnlink_comment_link']['#suffix'] = '</div>';
+  }
+  if (isset($form['getlocations_colorbox']['width'])) {
+    $form['getlocations_colorbox']['width']['#prefix'] = '<div id="wrap-getlocations-colorbox">';
+  }
+  if (isset($form['getlocations_colorbox']['height'])) {
+    $form['getlocations_colorbox']['height']['#suffix'] = '</div>';
+  }
+
+  $form['getlocations_default']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
+  $form['getlocations_default']['markerclusterer_minsize']['#suffix'] = '</div>';
 
   $output .= drupal_render_children($form);
   return $output;

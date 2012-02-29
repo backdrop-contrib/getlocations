@@ -58,28 +58,8 @@ function getlocations_flush_caches() {
  * Implementation of hook_views_api().
  */
 function getlocations_views_api() {
-  return array('api' => 2);
-}
-
-/**
- * Implementation of hook_views_plugins().
- */
-function getlocations_views_plugins() {
-
   return array(
-    'module' => 'getlocations',
-    'style' => array(
-      'getlocations' => array(
-        'title' => t('GetLocations'),
-        'help' => t('Displays rows as a map.'),
-        'handler' => 'getlocations_plugin_style_map',
-        'theme' => 'getlocations_view_map',
-        'uses row plugin' => TRUE,
-        'uses grouping' => TRUE,
-        'uses options' => TRUE,
-        'type' => 'normal',
-      ),
-    ),
+    'api' => 2,
   );
 }
 
@@ -240,7 +220,7 @@ function getlocations_nodemap($nid) {
   $node = node_load($nid);
 
   $getlocations_defaults = getlocations_defaults();
-  $marker = $getlocations_defaults['map_marker'];
+  $marker = $getlocations_defaults['node_map_marker'];
   $typemarkers = getlocations_get_markertypes('node');
   if (isset($typemarkers[$node->type]) && $typemarkers[$node->type]) {
     $marker = $typemarkers[$node->type];
@@ -253,9 +233,24 @@ function getlocations_nodemap($nid) {
     foreach ($locations AS $key => $location) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+        if (! isset($location['key'])) {
+          $location['key'] = '';
+        }
+        else {
+          if ($location['key'] == 'nid') {
+            $location['lid'] = $nid;
+          }
+          elseif ($location['key'] == 'vid') {
+            $location['lid'] = $nid;
+          }
+        }
+        // per location marker
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
+        }
         $ct++;
-        $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $node->title, ENT_QUOTES);
-        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker);
+        $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($node->title), ENT_QUOTES);
+        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
       }
     }
   }
@@ -293,9 +288,19 @@ function getlocations_usermap($uid) {
       foreach ($locations AS $key => $location) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+          if (! isset($location['key'])) {
+            $location['key'] = '';
+          }
+          else {
+            $location['lid'] = $uid;
+          }
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
+          }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $account->name, ENT_QUOTES);
-          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
+         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
     }
@@ -327,17 +332,27 @@ function getlocations_usersmap() {
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $result = db_query("SELECT uid, name FROM users WHERE status=1");
     $ct = 0;
-    while ($row = db_fetch_array($result)) {
-      $uid = $row['uid'];
+    while ($row = db_fetch_object($result)) {
+      $uid = $row->uid;
       $locations = getlocations_load_locations($uid, 'uid');
       if (count($locations)) {
         // we should loop over them and dump bummers with no lat/lon
         foreach ($locations AS $key => $location) {
           if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+            if (! isset($location['key'])) {
+              $location['key'] = '';
+            }
+            else {
+              $location['lid'] = $uid;
+            }
+            // per location marker
+            if (isset($location['marker']) && ! empty($location['marker'])) {
+              $marker = $location['marker'];
+            }
             $ct++;
-            $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row['name'], ENT_QUOTES);
-            $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker);
+            $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->name), ENT_QUOTES);
+            $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
           }
         }
       }
@@ -363,7 +378,7 @@ function getlocations_usersmap() {
  */
 function getlocations_typemap($type, $loc_key='', $loc_val = '') {
   $getlocations_defaults = getlocations_defaults();
-  $marker = $getlocations_defaults['map_marker'];
+  $marker = $getlocations_defaults['node_map_marker'];
   $typemarkers = getlocations_get_markertypes('node');
   if (isset($typemarkers[$type]) && $typemarkers[$type]) {
     $marker = $typemarkers[$type];
@@ -373,8 +388,8 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $result = db_query("SELECT nid, title FROM node WHERE type='%s'", array($type));
   $ct = 0;
-  while ($row = db_fetch_array($result)) {
-    $nid = $row['nid'];
+  while ($row = db_fetch_object($result)) {
+    $nid = $row->nid;
     $vid = getlocations_get_vid($nid);
     $locations = getlocations_load_locations($vid);
     if (count($locations)) {
@@ -387,9 +402,24 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
             }
           }
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+          if (! isset($location['key'])) {
+            $location['key'] = '';
+          }
+          else {
+            if ($location['key'] == 'nid') {
+              $location['lid'] = $nid;
+            }
+            elseif ($location['key'] == 'vid') {
+              $location['lid'] = $vid;
+            }
+          }
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
+          }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? $location['name'] : $row['title'], ENT_QUOTES);
-          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->title), ENT_QUOTES);
+          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
     }
@@ -426,10 +456,11 @@ function getlocations_lids($lidlist) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-          $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
-          $ct++;
-          $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
-          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker']);
+        $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+        $location['key'] = '';
+        $ct++;
+        $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
+        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
       }
     }
   }
@@ -475,9 +506,20 @@ function getlocations_nids($nidlist) {
     foreach ($locations AS $key => $location) {
       if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
         $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+        if (! isset($location['key'])) {
+          $location['key'] = '';
+        }
+        else {
+          if ($location['key'] == 'nid') {
+            $location['lid'] = $nid;
+          }
+          elseif ($location['key'] == 'vid') {
+            $location['lid'] = $vid;
+          }
+        }
         $ct++;
-        $name = htmlspecialchars_decode($location['name'], ENT_QUOTES);
-        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker']);
+        $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
+        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
       }
     }
   }
@@ -518,6 +560,20 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
  * Sets up the call to googlemaps, css and the relevant getlocations js in html head
  */
 function getlocations_setup_map($defaults) {
+  getlocations_setup_js($defaults);
+  // Generate unique Map ID.
+  $mapid = uniqid();
+  return $mapid;
+}
+
+/**
+ * Function to setup the map scripts
+ *
+ * @param $defaults
+ *   Required. the current settings.
+ * Sets up the call to googlemaps, css and the relevant getlocations js in html head
+ */
+function getlocations_setup_js($defaults) {
   global $language, $getlocations_setmap;
 
   $current_js = drupal_get_js();
@@ -590,9 +646,6 @@ function getlocations_setup_map($defaults) {
   if (!stristr($current_js, GETLOCATIONS_PATH .'/js/getlocations.js')) {
     drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations.js');
   }
-  // Generate unique Map ID.
-  $mapid = uniqid();
-  return $mapid;
 }
 
 /**
@@ -633,7 +686,7 @@ function getlocations_defaults() {
     'places'                    => 0,
     'poi_show'                  => 1,
     'transit_show'              => 1,
-    'map_marker'                => 'drupal',
+    'node_map_marker'           => 'drupal',
     'user_map_marker'           => 'drupal',
     'markeraction'              => 0,
     'markeractiontype'          => 1,
@@ -646,6 +699,7 @@ function getlocations_defaults() {
     'markerclusterer_style'     => -1,
     'markerclusterer_zoom'      => -1,
     'markerclusterer_size'      => -1,
+    'markerclusterer_minsize'   => -1,
     'pansetting'                => 2,
     'draggable'                 => 1,
     'styles'                    => '',
@@ -654,6 +708,8 @@ function getlocations_defaults() {
     'returnlink_user_enable'    => 0,
     'returnlink_user_link'      => t('Return to User'),
     'use_https'                 => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0),
+    'custom_content_enable'     => 0,
+    'custom_content_source'     => '',
   );
 
   $getlocations_defaults = variable_get('getlocations_default', array());
@@ -1054,44 +1110,46 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid) {
   $lla = explode(',', $defaults['latlong']);
   $settings = array(
     $mapid => array(
-      'lat'                   => $lla[0],
-      'lng'                   => $lla[1],
-      'mylocale'              => $language->language,
-      'zoom'                  => $defaults['zoom'],
-      'maptype'               => $defaults['maptype'],
-      'controltype'           => $defaults['controltype'],
-      'mtc'                   => $defaults['mtc'],
-      'baselayers'            => $defaults['baselayers'],
-      'scale'                 => $defaults['behavior']['scale'],
-      'overview'              => $defaults['behavior']['overview'],
-      'overview_opened'       => $defaults['behavior']['overview_opened'],
-      'scrollwheel'           => $defaults['behavior']['scrollwheel'],
-      'trafficinfo'           => $defaults['trafficinfo'],
-      'bicycleinfo'           => $defaults['bicycleinfo'],
-      'streetview_show'       => $defaults['streetview_show'],
-      'pancontrol'            => $defaults['pancontrol'],
-      'panoramio_use'         => $defaults['panoramio_use'],
-      'panoramio_show'        => $defaults['panoramio_show'],
-      'poi_show'              => $defaults['poi_show'],
-      'transit_show'          => $defaults['transit_show'],
-      'map_marker'            => $defaults['map_marker'],
-      'markeraction'          => $defaults['markeraction'],
-      'markeractiontype'      => $defaults['markeractiontype'],
-      'minzoom'               => $defaults['minzoom'],
-      'maxzoom'               => $defaults['maxzoom'],
-      'nodezoom'              => $defaults['nodezoom'],
-      'markermanagertype'     => $defaults['markermanagertype'],
-      'usemarkermanager'      => $defaults['usemarkermanager'],
-      'useclustermanager'     => $defaults['useclustermanager'],
-      'markerclusterer_style' => $defaults['markerclusterer_style'],
-      'markerclusterer_zoom'  => $defaults['markerclusterer_zoom'],
-      'markerclusterer_size'  => $defaults['markerclusterer_size'],
-      'pansetting'            => $defaults['pansetting'],
-      'draggable'             => $defaults['draggable'],
-      'styles'                => $defaults['styles'],
-      'datanum'               => count($latlons),
-      'latlons'               => $latlons,
-      'minmaxes'              => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
+      'lat'                     => $lla[0],
+      'lng'                     => $lla[1],
+      'mylocale'                => $language->language,
+      'zoom'                    => $defaults['zoom'],
+      'maptype'                 => $defaults['maptype'],
+      'controltype'             => $defaults['controltype'],
+      'mtc'                     => $defaults['mtc'],
+      'baselayers'              => $defaults['baselayers'],
+      'scale'                   => $defaults['behavior']['scale'],
+      'overview'                => $defaults['behavior']['overview'],
+      'overview_opened'         => $defaults['behavior']['overview_opened'],
+      'scrollwheel'             => $defaults['behavior']['scrollwheel'],
+      'trafficinfo'             => $defaults['trafficinfo'],
+      'bicycleinfo'             => $defaults['bicycleinfo'],
+      'streetview_show'         => $defaults['streetview_show'],
+      'pancontrol'              => $defaults['pancontrol'],
+      'panoramio_use'           => $defaults['panoramio_use'],
+      'panoramio_show'          => $defaults['panoramio_show'],
+      'poi_show'                => $defaults['poi_show'],
+      'transit_show'            => $defaults['transit_show'],
+      'map_marker'              => $defaults['node_map_marker'],
+      'markeraction'            => $defaults['markeraction'],
+      'markeractiontype'        => $defaults['markeractiontype'],
+      'minzoom'                 => $defaults['minzoom'],
+      'maxzoom'                 => $defaults['maxzoom'],
+      'nodezoom'                => $defaults['nodezoom'],
+      'markermanagertype'       => $defaults['markermanagertype'],
+      'usemarkermanager'        => $defaults['usemarkermanager'],
+      'useclustermanager'       => $defaults['useclustermanager'],
+      'markerclusterer_style'   => $defaults['markerclusterer_style'],
+      'markerclusterer_zoom'    => $defaults['markerclusterer_zoom'],
+      'markerclusterer_size'    => $defaults['markerclusterer_size'],
+      'markerclusterer_minsize' => $defaults['markerclusterer_minsize'],
+      'pansetting'              => $defaults['pansetting'],
+      'draggable'               => $defaults['draggable'],
+      'styles'                  => $defaults['styles'],
+      'datanum'                 => count($latlons),
+      'latlons'                 => $latlons,
+      'minmaxes'                => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
+      'custom_content_enable'   => $defaults['custom_content_enable'],
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');

@@ -1,9 +1,26 @@
-commit 623e9d8
+commit c782c66
+Author: hutch <hutch@midwales.net>
+Date:   Wed Feb 29 00:35:12 2012 +0000
+
+    brought all uptodate with D7
+
+getlocations.admin.inc
+getlocations.markercluster.inc
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.theme.inc
+getlocations.views.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/getlocations_views.js
+
+commit 2e5e1d1
 Author: hutch <hutch@midwales.net>
 Date:   Tue Feb 14 16:51:15 2012 +0000
 
     added markercluster
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.markercluster.inc
 getlocations.markerinfo.inc

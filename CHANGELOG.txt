@@ -1,9 +1,40 @@
-commit 5e40e36
+commit 5b63a4b
+Author: hutch <hutch@midwales.net>
+Date:   Wed Feb 29 00:36:02 2012 +0000
+
+    brought all uptodate with D7
+
+getlocations.admin.inc
+getlocations.markercluster.inc
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.views.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/getlocations_views.js
+js/images/conv30.png
+js/images/conv40.png
+js/images/conv50.png
+js/images/heart30.png
+js/images/heart40.png
+js/images/heart50.png
+js/images/m1.png
+js/images/m2.png
+js/images/m3.png
+js/images/m4.png
+js/images/m5.png
+js/images/people35.png
+js/images/people45.png
+js/images/people55.png
+js/markerclusterer.js
+
+commit dfe5028
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 28 00:05:06 2012 +0000
 
     added mouseover to marker actions types
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations_plugin_style_map.inc

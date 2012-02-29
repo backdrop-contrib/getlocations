@@ -102,101 +102,14 @@ function getlocations_settings_form() {
     t('The default zoom level of a Google map.')
   );
 
-  $form['getlocations_default']['controltype'] = getlocations_element_map_zoom_controltype($getlocations_defaults['controltype']);
-  $form['getlocations_default']['pancontrol'] = getlocations_element_map_checkbox(
-    t('Show Pan control'),
-    $getlocations_defaults['pancontrol']
-  );
-
-  $form['getlocations_default']['mtc'] = getlocations_element_map_mtc($getlocations_defaults['mtc']);
-
-  $baselayers = array();
-  foreach ($getlocations_defaults['baselayers'] AS $key => $value) {
-    $baselayers[$key] = $value;
-  }
-  $form['getlocations_default']['maptype'] = getlocations_element_map_maptype($getlocations_defaults['maptype'], $baselayers);
-
-  $form['getlocations_default']['baselayers']['Map'] = getlocations_element_map_baselayers_map($getlocations_defaults['baselayers']['Map']);
-  $form['getlocations_default']['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($getlocations_defaults['baselayers']['Satellite']);
-  $form['getlocations_default']['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($getlocations_defaults['baselayers']['Hybrid']);
-  $form['getlocations_default']['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($getlocations_defaults['baselayers']['Physical']);
-
-  $form['getlocations_default']['behavior']['scale'] = getlocations_element_map_checkbox(
-     t('Scale'),
-     $getlocations_defaults['behavior']['scale'],
-     t('Show scale')
-  );
-
-  $form['getlocations_default']['behavior']['overview'] = getlocations_element_map_checkbox(
-    t('Overview map'),
-    $getlocations_defaults['behavior']['overview'],
-    t('Show overview map')
-  );
-
-  $form['getlocations_default']['behavior']['overview_opened'] = getlocations_element_map_checkbox(
-    t('Overview map state'),
-    $getlocations_defaults['behavior']['overview_opened'],
-    t('Show overview map as open by default')
-  );
-
-  $form['getlocations_default']['behavior']['scrollwheel'] = getlocations_element_map_checkbox(
-    t('Scrollwheel'),
-    $getlocations_defaults['behavior']['scrollwheel'],
-    t('Enable scrollwheel zooming')
-  );
-
-  $form['getlocations_default']['draggable'] = getlocations_element_map_checkbox(
-    t('Draggable'),
-    $getlocations_defaults['draggable'],
-    t('Enable dragging the map.')
-  );
-
-  $form['getlocations_default']['streetview_show'] = getlocations_element_map_checkbox(
-    t('Show streetview button'),
-    $getlocations_defaults['streetview_show']
-  );
-
-  $form['getlocations_default']['trafficinfo'] = getlocations_element_map_checkbox(
-    t('Enable Traffic information'),
-    $getlocations_defaults['trafficinfo'],
-    t('Google trafficinfo layer, limited availability.')
-  );
-
-  $form['getlocations_default']['bicycleinfo'] = getlocations_element_map_checkbox(
-    t('Enable Bicycling information'),
-    $getlocations_defaults['bicycleinfo'],
-    t('Google bicycling layer, limited availability.')
-  );
-
-  $form['getlocations_default']['panoramio_use'] = getlocations_element_map_checkbox(
-    t('Load Panoramio Library'),
-    $getlocations_defaults['panoramio_use'],
-    t('Provide Google panoramio library to all maps.')
-  );
-  $form['getlocations_default']['panoramio_show'] = getlocations_element_map_checkbox(
-    t('Enable Panoramio'),
-    $getlocations_defaults['panoramio_show'],
-    t('Google panoramio picture links.')
-  );
-
-  $form['getlocations_default']['poi_show'] = getlocations_element_map_checkbox(
-    t('Show Points of Interest'),
-    $getlocations_defaults['poi_show'],
-    t('Show Google points of interest icons.')
-  );
-
-  $form['getlocations_default']['transit_show'] = getlocations_element_map_checkbox(
-    t('Show Transit Points'),
-    $getlocations_defaults['transit_show'],
-    t('Show Google transit points icons.')
-  );
+  $form['getlocations_default'] += getlocations_map_display_options_form($getlocations_defaults);
 
   // default marker
   $markers = getlocations_get_marker_titles();
-  $form['getlocations_default']['map_marker'] = getlocations_element_map_marker(
+  $form['getlocations_default']['node_map_marker'] = getlocations_element_map_marker(
     t('Default Content Map marker'),
     $markers,
-    $getlocations_defaults['map_marker']
+    $getlocations_defaults['node_map_marker']
   );
   if (module_exists('location_user')) {
     $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
@@ -218,22 +131,42 @@ function getlocations_settings_form() {
     $getlocations_defaults['minzoom'],
     t('The Minimum zoom level at which markers will be visible.')
   );
+
   $form['getlocations_default']['maxzoom'] = getlocations_element_map_zoom(
     t('Maximum Zoom'),
     $getlocations_defaults['maxzoom'],
     t('The Maximum zoom level at which markers will be visible.')
   );
+
   $form['getlocations_default']['nodezoom'] = getlocations_element_map_zoom(
     t('Default Zoom for Single location'),
     $getlocations_defaults['nodezoom'],
     t('The Default zoom level for a single marker.')
   );
 
+  // marker manager
+  $form['getlocations_default']['markermanagertype'] = getlocations_element_markermanagertype($getlocations_defaults['markermanagertype']);
   $form['getlocations_default']['usemarkermanager'] = getlocations_element_map_checkbox(
     t('Use Marker manager'),
     $getlocations_defaults['usemarkermanager'],
-    t('Use Marker manager. Switching this off will use no manager')
+    t('Use Marker manager. Switching this off will use no manager.')
   );
+  $form['getlocations_default']['useclustermanager'] = getlocations_element_map_checkbox(
+    t('Use Cluster manager'),
+    $getlocations_defaults['useclustermanager'],
+    t('Use Cluster manager. Switching this off will use no manager.')
+  );
+
+  if (file_exists(GETLOCATIONS_PATH . '/getlocations.markerclusterer_override.inc')) {
+    module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
+  }
+  else {
+    module_load_include('inc', 'getlocations', 'getlocations.markercluster');
+  }
+  $form['getlocations_default']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_defaults['markerclusterer_style']);
+  $form['getlocations_default']['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($getlocations_defaults['markerclusterer_zoom']);
+  $form['getlocations_default']['markerclusterer_size'] = getlocations_element_markerclusterer_size($getlocations_defaults['markerclusterer_size']);
+  $form['getlocations_default']['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($getlocations_defaults['markerclusterer_minsize']);
 
   $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
 
@@ -356,11 +289,7 @@ function getlocations_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getlocations_paths = variable_get('getlocations_paths', array(
-    'infobubble_path' => GETLOCATIONS_PATH .'/js/infobubble.js',
-    'infobubble_options_path' => GETLOCATIONS_PATH .'/js/infobubble_options.js',
-    'markermanager_path' => GETLOCATIONS_PATH .'/js/markermanager.js')
-  );
+  $getlocations_paths = getlocations_paths_get();
   $form['getlocations_paths']['infobubble_path'] = getlocations_element_path(
     t('Path to InfoBubble javascript file'),
     $getlocations_paths['infobubble_path'],
@@ -382,6 +311,14 @@ function getlocations_settings_form() {
     60,
     128,
     t('Where the markermanager javascript file is located.')
+  );
+
+  $form['getlocations_paths']['markerclusterer_path'] = getlocations_element_path(
+    t('Path to markerclusterer javascript file'),
+    $getlocations_paths['markerclusterer_path'],
+    60,
+    128,
+    t('Where the markerclusterer javascript file is located.')
   );
 
   $form['#validate'][] = 'getlocations_settings_validate';
@@ -419,6 +356,18 @@ function getlocations_settings_validate($form, &$form_state) {
       form_set_error('getlocations_default][returnlink_user_link', t('User return link must be filled in'));
     }
   }
+
+  if (! $form_state['values']['getlocations_default']['markermanagertype']) {
+    $form_state['values']['getlocations_default']['usemarkermanager'] = 0;
+    $form_state['values']['getlocations_default']['useclustermanager'] = 0;
+  }
+  elseif ($form_state['values']['getlocations_default']['markermanagertype'] == 1) {
+    $form_state['values']['getlocations_default']['useclustermanager'] = 0;
+  }
+  elseif ($form_state['values']['getlocations_default']['markermanagertype'] == 2) {
+    $form_state['values']['getlocations_default']['usemarkermanager'] = 0;
+  }
+
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {
     if (empty($form_state['values']['getlocations_colorbox']['width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['width']) || $form_state['values']['getlocations_colorbox']['width'] < 1 ) {
       form_set_error('getlocations_colorbox][width', t('Colorbox width must be a number'));

@@ -14,18 +14,20 @@ class getlocations_plugin_style_map extends views_plugin_style {
   /**
    * Set default options
    */
-#  function options(&$options) {
-#    parent::options($options);
-#  }
+  function options(&$options) {
+    parent::options($options);
+    $options['empty_result'] = FALSE;
+  }
 
   function option_definition() {
+    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_views.js');
     $options = parent::option_definition();
 
     $getlocations_defaults = getlocations_defaults();
 
     $options['width']            = array('default' => $getlocations_defaults['width']);
     $options['height']           = array('default' => $getlocations_defaults['height']);
-    $options['map_marker']       = array('default' => $getlocations_defaults['map_marker']);
+    $options['node_map_marker']  = array('default' => $getlocations_defaults['node_map_marker']);
     $options['latlong']          = array('default' => $getlocations_defaults['latlong']);
     $options['zoom']             = array('default' => $getlocations_defaults['zoom']);
     $options['controltype']      = array('default' => $getlocations_defaults['controltype']);
@@ -47,10 +49,22 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['nodezoom']         = array('default' => $getlocations_defaults['nodezoom']);
     $options['markeraction']     = array('default' => $getlocations_defaults['markeraction']);
     $options['markeractiontype'] = array('default' => $getlocations_defaults['markeractiontype']);
+    $options['markermanagertype'] = array('default' => $getlocations_defaults['markermanagertype']);
     $options['usemarkermanager'] = array('default' => $getlocations_defaults['usemarkermanager']);
+    $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
+    if (! $getlocations_defaults['markermanagertype']) {
+      $options['usemarkermanager'] = 0;
+      $options['useclustermanager'] = 0;
+    }
+    $options['markerclusterer_style'] = array('default' => $getlocations_defaults['markerclusterer_style']);
+    $options['markerclusterer_zoom']  = array('default' => $getlocations_defaults['markerclusterer_zoom']);
+    $options['markerclusterer_size']  = array('default' => $getlocations_defaults['markerclusterer_size']);
+    $options['markerclusterer_minsize']  = array('default' => $getlocations_defaults['markerclusterer_minsize']);
     $options['pansetting']       = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']        = array('default' => $getlocations_defaults['draggable']);
     $options['styles']           = array('default' => $getlocations_defaults['styles']);
+    $options['custom_content_enable'] = array('default' => $getlocations_defaults['custom_content_enable']);
+    $options['custom_content_source'] = array('default' => $getlocations_defaults['custom_content_source']);
 
     return $options;
 
@@ -58,6 +72,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
+
+    $handlers = $this->display->handler->get_handlers('field');
+    $source_options = array('' => t('None'));
+
+    foreach ($handlers as $handle) {
+      $source_options[$handle->options['id']] = (!empty($handle->options['label'])) ? $handle->options['label'] : $handle->options['id'];
+    }
 
     $form['width'] = getlocations_element_map_tf(
       t('Map width'),
@@ -96,92 +117,15 @@ class getlocations_plugin_style_map extends views_plugin_style {
       t('The zoom level of a Google map.')
     );
 
-    $form['controltype'] = getlocations_element_map_zoom_controltype(
-      $this->options['controltype']
-    );
+    $form += getlocations_map_display_options_form($this->options, FALSE);
 
-    $form['pancontrol'] = getlocations_element_map_checkbox(
-      t('Show Pan control'),
-      $this->options['pancontrol']
-    );
 
-    $form['mtc'] = getlocations_element_map_mtc($this->options['mtc']);
-
-    $baselayers = array();
-    foreach ($this->options['baselayers'] AS $key => $value) {
-      $baselayers[$key] = $value;
-    }
-    $form['maptype'] = getlocations_element_map_maptype($this->options['maptype'], $baselayers);
-
-    $form['baselayers']['Map'] = getlocations_element_map_baselayers_map($this->options['baselayers']['Map']);
-    $form['baselayers']['Satellite'] = getlocations_element_map_baselayers_satellite($this->options['baselayers']['Satellite']);
-    $form['baselayers']['Hybrid'] = getlocations_element_map_baselayers_hybrid($this->options['baselayers']['Hybrid']);
-    $form['baselayers']['Physical'] = getlocations_element_map_baselayers_physical($this->options['baselayers']['Physical']);
-
-    $form['behavior']['scale'] = getlocations_element_map_checkbox(
-      t('Scale'),
-      $this->options['behavior']['scale'],
-      t('Show scale')
-    );
-    $form['behavior']['overview'] = getlocations_element_map_checkbox(
-      t('Overview map'),
-      $this->options['behavior']['overview'],
-      t('Show overview map')
-    );
-    $form['behavior']['overview_opened'] = getlocations_element_map_checkbox(
-      t('Overview map state'),
-      $this->options['behavior']['overview_opened'],
-      t('Show overview map as open by default')
-    );
-    $form['behavior']['scrollwheel'] = getlocations_element_map_checkbox(
-      t('Scrollwheel'),
-      $this->options['behavior']['scrollwheel'],
-      t('Enable scrollwheel zooming')
-    );
-
-    $form['draggable'] = getlocations_element_map_checkbox(
-      t('Draggable'),
-      $this->options['draggable'],
-      t('Enable dragging the map.')
-    );
-
-    $form['streetview_show'] = getlocations_element_map_checkbox(
-      t('Show streetview button'),
-      $this->options['streetview_show']
-    );
-    $form['trafficinfo'] = getlocations_element_map_checkbox(
-      t('Enable Traffic information'),
-      $this->options['trafficinfo'],
-      t('Google trafficinfo layer, limited availability.')
-    );
-    $form['bicycleinfo'] = getlocations_element_map_checkbox(
-      t('Enable Bicycling information'),
-      $this->options['bicycleinfo'],
-      t('Google bicycling layer, limited availability.')
-    );
-    if ($this->options['panoramio_use']) {
-      $form['panoramio_show'] = getlocations_element_map_checkbox(
-        t('Enable Panoramio'),
-        $this->options['panoramio_show'],
-        t('Google panoramio picture links.')
-      );
-    }
-    $form['poi_show'] = getlocations_element_map_checkbox(
-      t('Show Points of Interest'),
-      $this->options['poi_show'],
-      t('Show Google points of interest icons.')
-    );
-    $form['transit_show'] = getlocations_element_map_checkbox(
-      t('Show Transit Points'),
-      $this->options['transit_show'],
-      t('Show Google transit points icons.')
-    );
-
+    // markers
     $markers = getlocations_get_marker_titles();
-    $form['map_marker'] = getlocations_element_map_marker(
+    $form['node_map_marker'] = getlocations_element_map_marker(
       t('Marker / fallback marker to use'),
       $markers,
-      $this->options['map_marker']
+      $this->options['node_map_marker']
     );
 
     $form['markeractiontype'] = getlocations_element_map_markeractiontype(
@@ -190,6 +134,56 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $form['markeraction'] = getlocations_element_map_markeraction(
       $this->options['markeraction']
     );
+
+    $form['custom_content_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('replace default content'),
+      '#default_value' => $this->options['custom_content_enable'],
+      '#return_value' => 1,
+      '#prefix' => '<div id="wrap-custom-content-enable">',
+      '#suffix' => '</div>',
+    );
+
+    $form['custom_content_source'] = array(
+      '#type' => 'select',
+      '#title' => t('popup data'),
+      '#options' => $source_options,
+      '#default_value' => $this->options['custom_content_source'],
+      '#description' => t('the field to use as a data source for the marker popup.'),
+      '#prefix' => '<div id="wrap-custom-content-source">',
+      '#suffix' => '</div>',
+    );
+
+    // markermanager option
+    if ($this->options['markermanagertype'] == '1') {
+      $form['usemarkermanager'] = getlocations_element_map_checkbox(
+        t('Use Marker manager for this map'),
+        $this->options['usemarkermanager']
+      );
+      $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
+    }
+    elseif ($this->options['markermanagertype'] == '2')  {
+      $form['useclustermanager'] = getlocations_element_map_checkbox(
+        t('Use Cluster manager for this map'),
+        $this->options['useclustermanager']
+      );
+      $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
+      if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
+        module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
+      }
+      else {
+        module_load_include('inc', 'getlocations', 'getlocations.markercluster');
+      }
+      $form['markerclusterer_style'] = getlocations_element_markerclusterer_style($this->options['markerclusterer_style']);
+      $form['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($this->options['markerclusterer_zoom']);
+      $form['markerclusterer_size'] = getlocations_element_markerclusterer_size($this->options['markerclusterer_size']);
+      $form['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($this->options['markerclusterer_minsize']);
+    }
+    else {
+
+      $form['useclustermanager'] = array('#type' => 'hidden', '#value' => 0);
+      $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
+    }
 
     $form['minzoom'] = getlocations_element_map_zoom(
       t('Minimum Zoom'),
@@ -209,6 +203,10 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $form['pansetting'] = getlocations_element_map_pansetting(
       $this->options['pansetting']
     );
+    $form['empty_result'] = getlocations_element_map_checkbox(
+      t('Show map even if view has no results'),
+      $this->options['empty_result']
+    );
 
   } // end options_form
 
@@ -216,6 +214,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
    * Validate the options form.
    */
   function options_validate(&$form, &$form_state) {
+
     $list = array('Map', 'Satellite', 'Hybrid', 'Physical');
     $found = FALSE;
     foreach ($list AS $maptype) {
@@ -229,6 +228,17 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $form_state['values']['maptype'] = 'Map';
       $form_state['values']['baselayers']['Map'] = 1;
     }
+  }
+
+  function even_empty() {
+    return parent::even_empty() || !empty($this->options['empty_result']);
+  }
+
+  function render() {
+    if (isset($this->view->live_preview) && $this->view->live_preview) {
+      return t('Getlocations Map views are not compatible with live preview.');
+    }
+    return parent::render();
   }
 
 }

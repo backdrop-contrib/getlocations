@@ -116,6 +116,39 @@
           $("#wrap-getlocations-vocabulary-markers").hide();
         }
       });
+
+      if ($("#edit-getlocations-default-markermanagertype").val() == 1) {
+        // markermanager
+        $(".form-item-getlocations-default-usemarkermanager").show();
+        $("#wrap-getlocations-clusteropts").hide();
+      }
+      else if ($("#edit-getlocations-default-markermanagertype").val() == 2) {
+        // markerclusterer
+        $(".form-item-getlocations-default-usemarkermanager").hide();
+        $("#wrap-getlocations-clusteropts").show();
+      }
+      else {
+        // none
+        $(".form-item-getlocations-default-usemarkermanager").hide();
+        $("#wrap-getlocations-clusteropts").hide();
+      }
+      $("#edit-getlocations-default-markermanagertype").change(function() {
+        if ($(this).val() == 1) {
+          // markermanager
+          $(".form-item-getlocations-default-usemarkermanager").show();
+          $("#wrap-getlocations-clusteropts").hide();
+        }
+        else if ($(this).val() == 2) {
+          // markerclusterer
+          $(".form-item-getlocations-default-usemarkermanager").hide();
+          $("#wrap-getlocations-clusteropts").show();
+        }
+        else {
+          // none
+          $(".form-item-getlocations-default-usemarkermanager").hide();
+          $("#wrap-getlocations-clusteropts").hide();
+        }
+      });
     }
   }
 

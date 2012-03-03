@@ -88,7 +88,7 @@ function theme_getlocations_fields_show($variables) {
       $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
     }
     if (! empty($location['country']) && $settings['display_country']) {
-      if ($settings['country_full'] && strlen($location['country']) == 2 ) {
+      if ($settings['country_full'] && drupal_strlen($location['country']) == 2 ) {
         // this is a 2 letter code, we want the full name
         $countries = getlocations_fields_get_countries_list();
         $country = $countries[$location['country']];
@@ -302,7 +302,7 @@ function theme_getlocations_fields_field_settings_form($variables) {
         array('data' => $form['input_country_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['input_country_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => $form['input_country_required'], 'class' => 'getlocations_fields_input_cell3'),
-     ),
+      ),
       'no_striping' => $no_striping,
     ),
 
@@ -311,7 +311,7 @@ function theme_getlocations_fields_field_settings_form($variables) {
         array('data' => $form['input_latitude_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['input_latitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
-     ),
+      ),
       'no_striping' => $no_striping,
     ),
     array('data' =>
@@ -319,7 +319,7 @@ function theme_getlocations_fields_field_settings_form($variables) {
         array('data' => $form['input_longitude_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['input_longitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
-     ),
+      ),
       'no_striping' => $no_striping,
     ),
 
@@ -547,7 +547,7 @@ function theme_getlocations_fields_settings_form($variables) {
         array('data' => $form['getlocations_fields_defaults']['input_country_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['getlocations_fields_defaults']['input_country_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => $form['getlocations_fields_defaults']['input_country_required'], 'class' => 'getlocations_fields_input_cell3'),
-     ),
+      ),
       'no_striping' => $no_striping,
     ),
 
@@ -556,7 +556,7 @@ function theme_getlocations_fields_settings_form($variables) {
         array('data' => $form['getlocations_fields_defaults']['input_latitude_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['getlocations_fields_defaults']['input_latitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
-     ),
+      ),
       'no_striping' => $no_striping,
     ),
     array('data' =>
@@ -564,7 +564,7 @@ function theme_getlocations_fields_settings_form($variables) {
         array('data' => $form['getlocations_fields_defaults']['input_longitude_width'], 'class' => 'getlocations_fields_input_cell1'),
         array('data' => $form['getlocations_fields_defaults']['input_longitude_weight'], 'class' => 'getlocations_fields_input_cell2'),
         array('data' => '', 'class' => 'getlocations_fields_input_cell3'),
-     ),
+      ),
       'no_striping' => $no_striping,
     ),
 

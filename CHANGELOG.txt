@@ -1,9 +1,43 @@
-commit 59f9179
+commit 0e0e126
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 3 19:52:13 2012 +0000
+
+    coder review cleanup
+
+getlocations.admin.inc
+getlocations.install
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+js/icons.js
+js/infobubble.js
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_country.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit a747949
+Author: hutch <hutch@midwales.net>
+Date:   Wed Feb 29 00:33:40 2012 +0000
+
+    improved README, improved theming
+
+README.txt
+getlocations.admin.inc
+getlocations.theme.inc
+
+commit 542c691
 Author: hutch <hutch@midwales.net>
 Date:   Sun Feb 26 21:04:29 2012 +0000
 
     added strip_tags to tooltips name/title feed to js
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.theme.inc
 views/getlocations.views.inc

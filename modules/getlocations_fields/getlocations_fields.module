@@ -134,7 +134,7 @@ function getlocations_fields_field_info() {
 function getlocations_fields_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
 
   if (! empty($items)) {
-    foreach($items AS $delta => $item) {
+    foreach ($items AS $delta => $item) {
       if ($item['active']) {
         if (isset($item['delete_location']) && $item['delete_location']) {
           return;
@@ -1188,7 +1188,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   }
   else {
     $default_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
-    if ($default_value && strlen($default_value) == 2) {
+    if ($default_value && drupal_strlen($default_value) == 2) {
       $default_value = getlocations_fields_get_country_name($default_value);
     }
     $widget['country'] = array(
@@ -1460,10 +1460,10 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
         if ( $locations[$key]['latitude'] && $locations[$key]['longitude']) {
           $result = getlocations_fields_insert_record($locations[$key], $criteria);
           $locations[$key]['glid'] = $result;
-         }
-         else {
+        }
+        else {
           unset($locations[$key]);
-         }
+        }
       }
       elseif ($mode == 'update') {
         // delete_location checkbox
@@ -1728,7 +1728,7 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
       $locations[$ct]['province'] = $row->province;
       $locations[$ct]['province_name'] = $row->province;
       $locations[$ct]['postal_code'] = $row->postal_code;
-      if ($getlocations_fields_defaults['country_full'] && strlen($row->country) == 2) {
+      if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
         $location[$ct]['country_name'] = getlocations_fields_get_country_name($row->country);
       }
       else {
@@ -1788,7 +1788,7 @@ function getlocations_fields_load_location($glid) {
       $location['province'] = $row->province;
       $location['province_name'] = $row->province;
       $location['postal_code'] = $row->postal_code;
-      if ($getlocations_fields_defaults['country_full'] && strlen($row->country) == 2) {
+      if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
         $location['country_name'] = getlocations_fields_get_country_name($row->country);
       }
       else {
@@ -2124,7 +2124,7 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_address_width']['#prefix'] = '<div id="wrap-input_address_width">';
   $form['input_address_width']['#suffix'] = '</div>';
 
-  if(module_exists('smart_ip')) {
+  if (module_exists('smart_ip')) {
     $form['use_smart_ip_button'] = getlocations_element_map_checkbox(
       t('Provide IP based geocoding option'),
       $defaults['use_smart_ip_button'],

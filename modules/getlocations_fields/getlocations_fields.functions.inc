@@ -690,8 +690,8 @@ function getlocations_fields_country_autocomplete($string = '') {
   if ($string) {
     $countries = getlocations_fields_get_countries_list();
     foreach ($countries AS $country) {
-      $s = strtolower($string);
-      $c = strtolower($country);
+      $s = drupal_strtolower($string);
+      $c = drupal_strtolower($country);
       preg_match_all("/^$s/", $c, $m);
       if (count( $m[0])) {
         $matches[$country] = $country;

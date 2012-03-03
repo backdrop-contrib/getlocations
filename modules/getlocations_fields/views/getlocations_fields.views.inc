@@ -9,53 +9,6 @@
  */
 
 /**
- * Implements hook_views_handlers().
- */
-function getlocations_fields_views_handlers() {
-
-  return array(
-    'info' => array(
-      'path' => drupal_get_path('module', 'getlocations_fields') . '/handlers',
-    ),
-    'handlers' => array(
-
-#      'getlocations_fields_handler_argument_distance' => array(
-#        'parent' => 'views_handler_argument',
-#      ),
-
-      'getlocations_fields_handler_field_coordinates' => array(
-        'parent' => 'getlocations_fields_handler_field_latitude',
-      ),
-      'getlocations_fields_handler_field_country' => array(
-        'parent' => 'views_handler_field',
-      ),
-
-#      'getlocations_fields_handler_field_distance' => array(
-#        'parent' => 'views_handler_field',
-#      ),
-
-      'getlocations_fields_handler_field_latitude' => array(
-        'parent' => 'views_handler_field',
-      ),
-      'getlocations_fields_handler_field_longitude' => array(
-        'parent' => 'getlocations_fields_handler_field_latitude',
-      ),
-
-      'getlocations_fields_handler_filter_country' => array(
-        'parent' => 'views_handler_filter_in_operator',
-      ),
-      'getlocations_fields_handler_filter_distance' => array(
-        'parent' => 'views_handler_filter',
-      ),
-
-      'getlocations_fields_handler_sort_distance' => array(
-        'parent' => 'views_handler_sort',
-      ),
-    ),
-  );
-}
-
-/**
  * Implements hook_views_data().
  */
 function getlocations_fields_views_data() {
@@ -344,7 +297,7 @@ function getlocations_fields_views_data() {
       'element type' => 'div',
     ),
   );
-*/
+ */
   // ----------------------------------------------------------------
   // END getlocations_fields table -- fields
 

@@ -46,7 +46,8 @@ Drupal.getlocations.getIcon = function (setname, sequence) {
 
   if (!this.gicons[setname]) {
     if (!Drupal.getlocations.icons[setname]) {
-      alert('Request for invalid marker set ' + setname + '!');
+      var aa = {'!b': setname};
+      alert(Drupal.t('Request for invalid marker set !b', aa));
     }
     this.gicons[setname] = [];
     var q = Drupal.getlocations.icons[setname];

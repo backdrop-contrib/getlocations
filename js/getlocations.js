@@ -83,7 +83,6 @@ var inputmap = [];
         global_settings.useclustermanager = false;
       }
       else if (settings.markermanagertype == 2 && settings.useclustermanager) {
-        global_settings.js_path = settings.js_path;
         global_settings.useclustermanager = true;
         global_settings.usemarkermanager = false;
         global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;

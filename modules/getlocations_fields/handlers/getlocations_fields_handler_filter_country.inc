@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Filter on country.
  */
 class getlocations_fields_handler_filter_country extends views_handler_filter_in_operator {
@@ -144,7 +148,7 @@ class getlocations_fields_handler_filter_country extends views_handler_filter_in
     }
 
     $this->ensure_my_table();
-    $field = $this->table_alias . '.' .  $this->real_field;
+    $field = $this->table_alias . '.' . $this->real_field;
 
     // Normalize values.
     $value = $this->value;

@@ -347,7 +347,7 @@ function getlocations_usermap($uid) {
           }
           $ct++;
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
-         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
+          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
     }
@@ -543,7 +543,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
       foreach ($locations AS $key => $location) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           if ($loc_key && isset($location[$loc_key])) {
-            if (strtolower($location[$loc_key]) != strtolower($loc_val)) {
+            if (drupal_strtolower($location[$loc_key]) != drupal_strtolower($loc_val)) {
               continue;
             }
           }
@@ -606,7 +606,7 @@ function getlocations_lids($lidlist) {
         $location['key'] = '';
         $ct++;
         $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
-       $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
+        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key']);
       }
     }
   }
@@ -1288,7 +1288,7 @@ function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
  * from jhm http://drupal.org/user/15946
  */
 function getlocations_getlocations_markerdir() {
-  $markerdir = libraries_get_path('getlocations') .'/markers';
+  $markerdir = libraries_get_path('getlocations') . '/markers';
   return $markerdir;
 }
 
@@ -1789,7 +1789,7 @@ function getlocations_geofield_addressfield_load_locations($id, $key = 'vid') {
             $admin_area[] = $a['administrative_area'];
           }
           $locations[$ct]['province_name'] = (count($admin_area) ? implode(", ", $admin_area) :'');
-          $locations[$ct]['postal_code'] = strtoupper($a['postal_code']);
+          $locations[$ct]['postal_code'] = drupal_strtoupper($a['postal_code']);
           $locations[$ct]['country_name'] = $a['country_name'];
           $locations[$ct]['country'] = $a['country'];
           $ct++;
@@ -2313,13 +2313,13 @@ function getlocations_reverse_geocode($latlng) {
       elseif ($type == 'airport') {
         $out['airport'] = $component->long_name;
       }
-       elseif ($type == 'park') {
+      elseif ($type == 'park') {
         $out['park'] = $component->long_name;
       }
       elseif ($type == 'point_of_interest') {
         $out['point_of_interest'] = $component->long_name;
       }
-       elseif ($type == 'post_box') {
+      elseif ($type == 'post_box') {
         $out['post_box'] = $component->long_name;
       }
       elseif ($type == 'floor') {

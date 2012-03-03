@@ -28,24 +28,18 @@ function getlocations_theme() {
     ),
     'getlocations_info' => array(
       'variables' => array(
-        'location' => null,
+        'location' => NULL,
       ),
     ),
     'getlocations_box' => array(
       'variables' => array(
-        'content' => null,
+        'content' => NULL,
       ),
       'template' => 'getlocations_box',
     ),
     'getlocations_settings_form' => array(
       'render element' => 'form',
     ),
-#    'getlocations_view_map' => array(
-#      'variables' => array(
-#        'content' => null,
-#      ),
-#      'template' => 'getlocations_view_map',
-#    ),
   );
 }
 
@@ -114,7 +108,7 @@ function theme_getlocations_show($variables) {
   }
 
   // do map
-  $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: '. $width .'; height: '. $height .'" ></div>';
+  $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>';
   // buttons
   $buttons = array();
   if ($defaults['trafficinfo']) {
@@ -153,17 +147,17 @@ function theme_getlocations_info($variables) {
   if (! empty($location['name'])) {
     $l = $location['name'];
     if (isset($location['nid']) && $location['nid'] > 0) {
-      $l = l($location['name'], 'node/'. $location['nid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+      $l = l($location['name'], 'node/' . $location['nid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
     }
     elseif (isset($location['uid']) && $location['uid'] > 0) {
       // Use $l = $location['name'] if you don't want links to user
-      $l = l($location['name'], 'user/'. $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+      $l = l($location['name'], 'user/' . $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
     }
     elseif (isset($location['tid']) && $location['tid'] > 0) {
-      $l = l($location['name'], 'taxonomy/term/'. $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+      $l = l($location['name'], 'taxonomy/term/' . $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
     }
     elseif (isset($location['cid']) && $location['cid'] > 0) {
-      $l = l($location['name'], 'comment/'. $location['cid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+      $l = l($location['name'], 'comment/' . $location['cid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
     }
 
     // if you are using a colorbox to display getlocations you might want to make this a plain heading
@@ -193,7 +187,7 @@ function theme_getlocations_info($variables) {
     $output .= '<span class="region">' . $location['province'] . ' </span>';
   }
   if (! empty($location['postal_code'])) {
-    $output .= '<span class="postal-code">' . strtoupper($location['postal_code']) . ' </span>';
+    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
   }
   if (isset($location['country_name']) && ! empty($location['country_name'])) {
     $output .= '<div class="country-name">' . $location['country_name'] . '</div>';
@@ -216,10 +210,10 @@ function theme_getlocations_info($variables) {
  */
 function template_preprocess_getlocations_box(&$variables) {
 
-  if(module_exists('admin_menu')) {
+  if (module_exists('admin_menu')) {
     admin_menu_suppress();
   }
-  drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_box.js');
+  drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_box.js');
 
   // Construct page title
   if (drupal_get_title()) {
@@ -231,14 +225,14 @@ function template_preprocess_getlocations_box(&$variables) {
       $head_title[] = variable_get('site_slogan', '');
     }
   }
-  $variables['head_title']        = implode(' | ', $head_title);
-  $variables['base_path']         = base_path();
-  $variables['head']              = drupal_get_html_head();
-  $variables['language']          = $GLOBALS['language'];
-  $variables['language']->dir     = $GLOBALS['language']->direction ? 'rtl' : 'ltr';
-  $variables['css']               = drupal_add_css();
-  $variables['styles']            = drupal_get_css();
-  $variables['scripts']           = drupal_get_js();
+  $variables['head_title'] = implode(' | ', $head_title);
+  $variables['base_path'] = base_path();
+  $variables['head'] = drupal_get_html_head();
+  $variables['language'] = $GLOBALS['language'];
+  $variables['language']->dir = $GLOBALS['language']->direction ? 'rtl' : 'ltr';
+  $variables['css'] = drupal_add_css();
+  $variables['styles'] = drupal_get_css();
+  $variables['scripts'] = drupal_get_js();
   $variables['title'] = drupal_get_title();
   // Closure should be filled last.
   $variables['closure'] = theme('closure');

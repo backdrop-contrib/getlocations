@@ -212,8 +212,8 @@ function getlocations_fields_field_schema($field) {
 }
 
 /**
-  * Implements hook_enable()
-  */
+ * Implements hook_enable().
+ */
 function getlocations_fields_enable() {
 
   drupal_set_message(st('Thank you for installing Getlocations fields. To set it up please visit the <a href="@url">configuration page</a>.', array('@url' => url('admin/config/services/getlocations_fields'))), 'status');
@@ -230,5 +230,3 @@ function getlocations_fields_update_7100() {
   );
   db_add_field('getlocations_fields', 'marker', $spec);
 }
-
-

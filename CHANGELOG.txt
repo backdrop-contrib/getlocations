@@ -1,9 +1,23 @@
-commit c782c66
+commit b03d5de
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 3 19:50:41 2012 +0000
+
+    coder review cleanup
+
+getlocations-view-map.tpl.php
+getlocations.admin.inc
+getlocations.markerinfo.inc
+getlocations.module
+getlocations.theme.inc
+getlocations_box.tpl.php
+
+commit 2bd2803
 Author: hutch <hutch@midwales.net>
 Date:   Wed Feb 29 00:35:12 2012 +0000
 
     brought all uptodate with D7
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.markercluster.inc
 getlocations.markerinfo.inc

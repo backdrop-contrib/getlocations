@@ -167,7 +167,7 @@ function getlocations_id_load($arg) {
  *
  */
 function getlocations_type_load($arg) {
-  $result = db_query("SELECT name FROM node_type WHERE type='%s'", array($arg));
+  $result = db_query("SELECT name FROM {node_type} WHERE type='%s'", array($arg));
   $row = db_fetch_array($result);
   return ((isset($row['name']) && $row['name']) ? $arg : FALSE);
 }
@@ -300,7 +300,7 @@ function getlocations_usermap($uid) {
           }
           $ct++;
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
-         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
+          $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
     }
@@ -330,7 +330,7 @@ function getlocations_usersmap() {
     $marker = $getlocations_defaults['user_map_marker'];
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-    $result = db_query("SELECT uid, name FROM users WHERE status=1");
+    $result = db_query("SELECT uid, name FROM {users} WHERE status=1");
     $ct = 0;
     while ($row = db_fetch_object($result)) {
       $uid = $row->uid;
@@ -386,7 +386,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
 
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-  $result = db_query("SELECT nid, title FROM node WHERE type='%s'", array($type));
+  $result = db_query("SELECT nid, title FROM {node} WHERE type='%s'", array($type));
   $ct = 0;
   while ($row = db_fetch_object($result)) {
     $nid = $row->nid;
@@ -397,7 +397,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
       foreach ($locations AS $key => $location) {
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           if ($loc_key && isset($location[$loc_key])) {
-            if (strtolower($location[$loc_key]) != strtolower($loc_val)) {
+            if (drupal_strtolower($location[$loc_key]) != drupal_strtolower($loc_val)) {
               continue;
             }
           }
@@ -589,10 +589,10 @@ function getlocations_setup_js($defaults) {
   $query['language'] = $language->language;
 
   $libraries = array();
-  if($defaults['panoramio_use']) {
+  if ($defaults['panoramio_use']) {
     $libraries[] = 'panoramio';
   }
-  if($defaults['places']) {
+  if ($defaults['places']) {
     $libraries[] = 'places';
   }
   // more libraries here
@@ -787,14 +787,14 @@ function getlocations_get_vid($nid) {
 
 function getlocations_get_nid_from_lid($lid) {
   if ($lid) {
-    $result = db_query('SELECT nid FROM location_instance WHERE lid=%d',  array($lid));
+    $result = db_query('SELECT nid FROM {location_instance} WHERE lid=%d',  array($lid));
     $row = db_fetch_array($result);
     return (isset($row['nid']) && $row['nid'] ? $row['nid'] : FALSE);
   }
 }
 function getlocations_get_uid_from_lid($lid) {
   if ($lid) {
-    $result = db_query('SELECT uid FROM location_instance WHERE lid=%d',  array($lid));
+    $result = db_query('SELECT uid FROM {location_instance} WHERE lid=%d',  array($lid));
     $row = db_fetch_array($result);
     return (isset($row['uid']) && $row['uid'] ? $row['uid'] : FALSE);
   }
@@ -1664,13 +1664,13 @@ function getlocations_reverse_geocode($latlng) {
       elseif ($type == 'airport') {
         $out['airport'] = $component->long_name;
       }
-       elseif ($type == 'park') {
+      elseif ($type == 'park') {
         $out['park'] = $component->long_name;
       }
       elseif ($type == 'point_of_interest') {
         $out['point_of_interest'] = $component->long_name;
       }
-       elseif ($type == 'post_box') {
+      elseif ($type == 'post_box') {
         $out['post_box'] = $component->long_name;
       }
       elseif ($type == 'floor') {

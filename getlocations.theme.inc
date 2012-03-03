@@ -25,12 +25,12 @@ function getlocations_theme() {
     ),
     'getlocations_info' => array(
       'arguments' => array(
-        'location' => null,
+        'location' => NULL,
       ),
     ),
     'getlocations_box' => array(
       'arguments' => array(
-        'content' => null,
+        'content' => NULL,
       ),
       'template' => 'getlocations_box',
     ),
@@ -128,7 +128,7 @@ function theme_getlocations_info($location) {
     $output .= '<span class="region">' . $location['province_name'] . ' </span>';
   }
   if (! empty($location['postal_code'])) {
-    $output .= '<span class="postal-code">' . strtoupper($location['postal_code']) . ' </span>';
+    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
   }
   if (! empty($location['country_name'])) {
     $output .= '<div class="country-name">' . $location['country_name'] . '</div>';
@@ -141,7 +141,7 @@ function theme_getlocations_info($location) {
 
 function template_preprocess_getlocations_box(&$variables) {
 
-  if(module_exists('admin_menu')) {
+  if (module_exists('admin_menu')) {
     admin_menu_suppress();
   }
   drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_box.js');
@@ -182,4 +182,3 @@ function template_preprocess_getlocations_box(&$variables) {
   $variables['body_classes'] = implode(' ', $body_classes);
 
 }
-

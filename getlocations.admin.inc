@@ -55,7 +55,7 @@ function getlocations_settings_form() {
     '#type' => 'textfield',
     '#title' => t('Your Google maps API Version 3 key'),
     '#default_value' => $apikey,
-    '#description' => t('For more information about this key see this !u', array('!u' => l('page on google', 'http://code.google.com/apis/maps/documentation/javascript/tutorial.html#api_key', array('attributes' => array('target'=>'_blank'))))),
+    '#description' => t('For more information about this key see this !u', array('!u' => l('page on google', 'http://code.google.com/apis/maps/documentation/javascript/tutorial.html#api_key', array('attributes' => array('target' => '_blank'))))),
     '#size' => 95,
     '#required' => FALSE,
   );

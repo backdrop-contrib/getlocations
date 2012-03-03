@@ -1,6 +1,9 @@
 <?php
 /**
- * @file getlocations-view-map.tpl.php
+ * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
  * Default simple view template to display a list of rows as icons on a map.
  * Derived from views-view-unformatted.tpl.php
  * fed from function template_preprocess_getlocations_view_map

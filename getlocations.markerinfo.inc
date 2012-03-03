@@ -26,7 +26,7 @@ function _getlocations_get_icondata() {
   $inis = array();
 
   $markerdirs = module_invoke_all('getlocations_markerdir');
-  foreach($markerdirs as $i => $markerdir) {
+  foreach ($markerdirs as $i => $markerdir) {
     // The following routines are designed to be easy to comprehend, not fast.
     // This whole process gets cached.
 
@@ -34,11 +34,11 @@ function _getlocations_get_icondata() {
     $inifiles = file_scan_directory($markerdir, '.*\.ini$');
     // Parse the ini files and store by path
     foreach ($inifiles as $file) {
-      $path = substr($file->filename, strlen($markerdir), -strlen($file->basename));
-      if (!isset($inis[$markerdir.$path])) {
+      $path = drupal_substr($file->filename, drupal_strlen($markerdir), -drupal_strlen($file->basename));
+      if (!isset($inis[$markerdir . $path])) {
         $inis[$path] = array();
       }
-      $inis[$markerdir.$path][] = parse_ini_file($file->filename, TRUE);
+      $inis[$markerdir . $path][] = parse_ini_file($file->filename, TRUE);
     }
     unset($inifiles);
   }
@@ -226,7 +226,7 @@ function _getlocations_get_marker_titles() {
   $inis = array();
 
   $markerdirs = module_invoke_all('getlocations_markerdir');
-  foreach($markerdirs as $markerdir) {
+  foreach ($markerdirs as $markerdir) {
     // Get the ini files.
     $inifiles = file_scan_directory($markerdir, '.*\.ini$');
     // Parse the ini files and store by path

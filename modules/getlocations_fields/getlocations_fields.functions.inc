@@ -365,20 +365,20 @@ function getlocations_fields_element_search_distance($default) {
  */
 function getlocations_fields_element_origin($default, $distance=FALSE) {
   $options = array(
-    'nid_arg' => t("Node's Latitude / Longitude from views nid argument"),
-    'uid_arg' => t("User's Latitude / Longitude from views uid argument"),
+    'nid_arg' => t("Node's Lat/Lon from views nid argument"),
+    'uid_arg' => t("User's Lat/Lon from views uid argument"),
   );
   if ($distance) {
     $options += array('distance_arg' => t("Latitude / Longitude from views argument"));
   }
   $options += array(
-    'user' => t("User's Latitude / Longitude (blank if unset)"),
-    'hybrid' => t("User's Latitude / Longitude (fall back to static if unset)"),
-    'static' => t('Static  Latitude / Longitude'),
+    'user' => t("User's Lat/Lon (blank if unset)"),
+    'hybrid' => t("User's Lat/Lon (fall back to Static if unset)"),
+    'static' => t('Static Lat/Lon'),
 #    'tied' => t("Use Distance / Proximity filter"),
 #    'postal' => t('Postal Code / Country'),
 #    'postal_default' => t('Postal Code (assume default country)'),
-    'php' => t('Use PHP code to determine latitude/longitude'),
+    'php' => t('Use PHP code to determine Lat/Lon'),
   );
 
   $element = array(
@@ -407,7 +407,6 @@ function getlocations_fields_element_latitude($default, $ctools=TRUE) {
     '#default_value' => $default,
   );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('hybrid', 'static'));
   }
   return $element;
@@ -429,7 +428,6 @@ function getlocations_fields_element_longitude($default, $ctools=TRUE) {
     '#default_value' => $default,
   );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('hybrid', 'static'));
   }
   return $element;
@@ -451,7 +449,6 @@ function getlocations_fields_element_postal_code($default, $ctools=TRUE) {
     '#default_value' => $default,
   );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('postal', 'postal_default'));
   }
   return $element;
@@ -477,7 +474,6 @@ function getlocations_fields_element_country($default, $title="", $ctools=TRUE) 
     '#default_value' => $default,
   );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('postal'));
   }
   return $element;
@@ -528,7 +524,6 @@ function getlocations_fields_element_php_code($default, $ctools=TRUE) {
     '#description' => t("Enter PHP code that returns a latitude/longitude.  Do not use &lt;?php ?&gt;. You must return only an array with float values set for the 'latitude' and 'longitude' keys."),
   );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('php'));
   }
   return $element;
@@ -549,10 +544,9 @@ function getlocations_fields_element_nid_arg($default, $options, $ctools=TRUE) {
     '#title' => t('Node ID argument to use'),
     '#options' => $options,
     '#default_value' => $default,
-    '#description' => empty($options) ? t("Select which of the view's arguments to use as the node ID.  The latitude / longitude of the first location of that node will be used as the origin. You must have added arguments to the view to use this option.") : t("Select which of the view's arguments to use as the node ID.  The latitude / longitude of the first location of that node will be used as the origin."),
+    '#description' => empty($options) ? t("Select which of the view's arguments to use as the node ID. The latitude / longitude of the first location of that node will be used as the origin. You must have added arguments to the view to use this option.") : t("Select which of the view's arguments to use as the node ID. The latitude / longitude of the first location of that node will be used as the origin."),
     );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('nid_arg'));
   }
   return $element;
@@ -576,7 +570,6 @@ function getlocations_fields_element_nid_loc_field($default, $options, $ctools=T
     '#description' => t("Select which field to use as the origin. If the location supports multiple entries the first one will be used."),
     );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('nid_arg'));
   }
   return $element;
@@ -597,10 +590,9 @@ function getlocations_fields_element_uid_arg($default, $options, $ctools=TRUE) {
     '#title' => t('User ID argument to use'),
     '#options' => $options,
     '#default_value' => $default,
-    '#description' => empty($options) ? t("Select which of the view's arguments to use as the user ID. The latitude / longitude of the first location of that user will be used as the origin. You must have added arguments to the view to use this option.") : t("Select which of the view's arguments to use as the user ID.  The latitude / longitude of the first location of that user will be used as the origin."),
+    '#description' => empty($options) ? t("Select which of the view's arguments to use as the user ID. The latitude / longitude of the first location of that user will be used as the origin. You must have added arguments to the view to use this option.") : t("Select which of the view's arguments to use as the user ID. The latitude / longitude of the first location of that user will be used as the origin."),
     );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('uid_arg'));
   }
   return $element;
@@ -624,7 +616,6 @@ function getlocations_fields_element_uid_loc_field($default, $options, $ctools=T
     '#description' => t("Select which field to use as the origin. If the location supports multiple entries the first one will be used."),
     );
   if ($ctools) {
-    $element['#process'] = array('ctools_dependent_process');
     $element['#dependency'] = array('edit-options-origin' => array('uid_arg'));
   }
   return $element;

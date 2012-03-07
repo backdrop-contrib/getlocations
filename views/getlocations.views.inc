@@ -9,7 +9,7 @@
  */
 
 /**
- * Implementation of hook_views_plugins().
+ * Implements hook_views_plugins().
  */
 function getlocations_views_plugins() {
 

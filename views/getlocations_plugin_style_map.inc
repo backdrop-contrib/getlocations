@@ -93,7 +93,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
       if ($getlocations_vocabulary_marker['enable']) {
         if ($types = getlocations_get_vocabularies()) {
           foreach ($types AS $type => $name) {
-            $mkey = 'vocabulary_marker_' . $type;
+            $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+            $mkey = 'vocabulary_marker_' . $field_name;
             $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }

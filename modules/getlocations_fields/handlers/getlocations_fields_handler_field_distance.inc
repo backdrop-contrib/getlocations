@@ -1,5 +1,6 @@
 <?php
 // NEEDS WORK
+## NOT IN USE ATM
 /**
  * @file
  * Distance field handler.
@@ -21,6 +22,11 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
     $options['nid_loc_field'] = array('default' => 'node');
     $options['uid_arg'] = array('default' => '');
     $options['uid_loc_field'] = array('default' => 'user');
+    $options['tid_arg'] = array('default' => '');
+    $options['tid_loc_field'] = array('default' => 'taxonomy_term');
+    $options['cid_arg'] = array('default' => '');
+    $options['cid_loc_field'] = array('default' => 'comment');
+    $options['distance_arg'] = array('default' => '');
     return $options;
   }
 
@@ -42,17 +48,28 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
 
     $form['php_code'] = getlocations_fields_element_php_code($this->options['php_code']);
 
-    list($nid_argument_options, $uid_argument_options, $tid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
+    list($nid_argument_options, $uid_argument_options, $tid_argument_options, $cid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
     $loc_field_options = getlocations_fields_views_proximity_get_location_field_options();
+    if ($nid_argument_options) {
+      $form['nid_arg'] = getlocations_fields_element_nid_arg($this->options['nid_arg'], $nid_argument_options);
+      $form['nid_loc_field'] = getlocations_fields_element_nid_loc_field($this->options['nid_loc_field'], $loc_field_options);
+    }
+    if ($uid_argument_options) {
+      $form['uid_arg'] = getlocations_fields_element_uid_arg($this->options['uid_arg'], $uid_argument_options);
+      $form['uid_loc_field'] = getlocations_fields_element_uid_loc_field($this->options['uid_loc_field'], $loc_field_options);
+    }
+    ### TESTING
+    if ($tid_argument_options) {
+      $form['tid_arg'] = getlocations_fields_element_tid_arg($this->options['tid_arg'], $tid_argument_options);
+      $form['tid_loc_field'] = getlocations_fields_element_tid_loc_field($this->options['tid_loc_field'], $loc_field_options);
+    }
+    if ($cid_argument_options) {
+      $form['cid_arg'] = getlocations_fields_element_cid_arg($this->options['cid_arg'], $cid_argument_options);
+      $form['cid_loc_field'] = getlocations_fields_element_cid_loc_field($this->options['cid_loc_field'], $loc_field_options);
+    }
 
-    $form['nid_arg'] = getlocations_fields_element_nid_arg($this->options['nid_arg'], $nid_argument_options);
-    $form['nid_loc_field'] = getlocations_fields_element_nid_loc_field($this->options['nid_loc_field'], $loc_field_options);
 
-    $form['uid_arg'] = getlocations_fields_element_uid_arg($this->options['uid_arg'], $uid_argument_options);
-    $form['uid_loc_field'] = getlocations_fields_element_uid_loc_field($this->options['uid_loc_field'], $loc_field_options);
-
-
-#    $form['units'] = getlocations_fields_element_distance_unit($this->options['units']);
+    $form['units'] = getlocations_fields_element_distance_unit($this->options['units']);
 #    $form['search_distance'] = getlocations_fields_element_search_distance($this->options['search_distance']);
 
   }
@@ -71,10 +88,11 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
       // Unset location, empty display.
       return;
     }
-#    $dist = (float)$values->{$this->field_alias};
+    $dist = (float)$values->{$this->field_alias};
+    #$distance_meters = getlocations_fields_convert_distance_to_meters($dist, $this->options['units']);
 #    if ($this->options['units'] == 'km') {
 #      $dist = $dist / 1000.0;
-#      return theme('getlocations_fields_distance', array('distance' => $dist, 'units' => 'km'));
+      return theme('getlocations_fields_distance', array('distance' => $dist, 'units' => $this->options['units']));
 #    }
 #    else {
 #      $dist = $dist / 1609.347;

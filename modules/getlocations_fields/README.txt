@@ -44,6 +44,7 @@ You might want to try exposing the Pager, Distance or Order. Remember to set aja
 
 Name: Getlocations show all
 Description: Provides a map of all locations_fields enabled content types.
+You will probably need to flush the cache to get the path 'getlocations_showall' accepted.
 
 
 Name: Getlocations map allusers
@@ -69,3 +70,32 @@ Make sure it is pointing to the right Location to use. You can also set the defa
 Configure extra settings for sort criterion Getlocations Fields: Distance
 Make sure it is pointing to the right Location to use.
 
+Name: Getlocations terms
+Description: Provides views for getlocations_fields enabled terms
+
+
+Name: Getlocations by city
+Description: Find locations by city in argument
+Path: /getlocations_by_city/nnn
+where nnn is the name or part of a city
+
+
+Name: Getlocations by postcode
+Description: Find locations by postcode in argument
+Path: /getlocations_by_postcode/nnn
+where nnn is the name or part of a postcode
+
+
+Name: Getlocations by province
+Description: Find locations by province in argument
+Path: /getlocations_by_province/nnn
+where nnn is the name or part of a province
+
+
+Name: Getlocations by country
+Description: Find locations by country in argument
+Path: /getlocations_by_country/nn
+where nn is the country code
+
+
+All of the views may need to be limited to one or more content-types, depending on your use case.

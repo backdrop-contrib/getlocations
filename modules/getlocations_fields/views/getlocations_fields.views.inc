@@ -137,8 +137,7 @@ function getlocations_fields_views_data() {
       'click sortable' => TRUE,
     ),
     'argument' => array(
-      'handler' => 'views_handler_argument_string',
-      'empty field name' => t('Unknown'),
+      'handler' => 'getlocations_fields_handler_argument_city',
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
@@ -156,10 +155,9 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
-#    'argument' => array(
-#      'handler' => 'getlocations_fields_handler_argument_province',
-#      //'name field' => 'name',
-#    ),
+    'argument' => array(
+      'handler' => 'getlocations_fields_handler_argument_province',
+    ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
     ),
@@ -175,6 +173,9 @@ function getlocations_fields_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'getlocations_fields_handler_argument_postcode',
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_string',
@@ -192,10 +193,9 @@ function getlocations_fields_views_data() {
       'handler' => 'getlocations_fields_handler_field_country',
       'click sortable' => TRUE,
     ),
-#    'argument' => array(
-#      'handler' => 'getlocations_fields_handler_argument_country',
-#      //'name field' => 'name',
-#    ),
+    'argument' => array(
+      'handler' => 'getlocations_fields_handler_argument_country',
+    ),
     'filter' => array(
       'handler' => 'getlocations_fields_handler_filter_country',
     ),
@@ -250,17 +250,17 @@ function getlocations_fields_views_data() {
   $data['getlocations_fields']['distance'] = array(
     'title' => t('Distance'),
     'help' => t("The distance from the selected location and either the current user or a specific location."),
-    'field' => array(
-#      'handler' => 'getlocations_fields_handler_field_distance',  // not working yet
-      'handler' => 'views_handler_field',
-      'click sortable' => TRUE,
-    ),
+#    'field' => array(
+##      'handler' => 'getlocations_fields_handler_field_distance',  // not working yet
+#      'handler' => 'views_handler_field',
+#      'click sortable' => TRUE,
+#    ),
     'sort' => array(
       'handler' => 'getlocations_fields_handler_sort_distance',
     ),
-#    'argument' => array(
-#      'handler' => 'getlocations_fields_handler_argument_distance',  // not working yet
-#    ),
+    'argument' => array(
+      'handler' => 'getlocations_fields_handler_argument_distance',
+    ),
     'filter' => array(
       'handler' => 'getlocations_fields_handler_filter_distance',
     ),
@@ -326,13 +326,17 @@ function getlocations_fields_views_data() {
       'left_field' => 'tid',
       'field' => 'tid',
     ),
+    'comment' => array(
+      'left_field' => 'cid',
+      'field' => 'cid',
+    ),
   );
 
   $data['getlocations_fields_entities']['field_name'] = array(
     'title' => t('Field name'),
     'help' => t('The field name used in the Content type definition.'),
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -347,7 +351,7 @@ function getlocations_fields_views_data() {
     'title' => t('Node Id'),
     'help' => t('The Node Identifier.'),
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -361,7 +365,7 @@ function getlocations_fields_views_data() {
     'title' => t('User Id'),
     'help' => t('The User Identifier.'),
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -375,7 +379,7 @@ function getlocations_fields_views_data() {
     'title' => t('Taxonomy Term Id'),
     'help' => t('The Taxonomy Term Identifier.'),
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -386,10 +390,10 @@ function getlocations_fields_views_data() {
     ),
   );
   $data['getlocations_fields_entities']['cid'] = array(
-    'title' => t('comment Id'),
+    'title' => t('Comment Id'),
     'help' => t('The Comment Identifier.'),
     'field' => array(
-      'handler' => 'views_handler_field', // @@@
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'filter' => array(
@@ -548,8 +552,10 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
           }
           else {
             if (isset($tempnode->$field_name)) {
-              $lang = $tempnode->language;
-              if (empty($lang)) {
+              if (! isset($tempuser->language)) {
+                $lang = 'und';
+              }
+              elseif ($lang != $tempuser->language) {
                 $lang = 'und';
               }
               $location = $tempnode->$field_name;
@@ -574,8 +580,10 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
           }
           else {
             if (isset($tempuser->$field_name)) {
-              $lang = $tempuser->language;
-              if (empty($lang)) {
+              if (! isset($tempuser->language)) {
+                $lang = 'und';
+              }
+              elseif ($lang != $tempuser->language) {
                 $lang = 'und';
               }
               $location = $tempuser->$field_name;
@@ -588,19 +596,85 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         }
       }
       break;
-    case 'distance_arg':
+    case 'tid_arg':
+      // tested OK
+      if ($termhandler = $view->display_handler->get_handler('argument', $options['tid_arg'])) {
+        $tid = $termhandler->get_value();
+        if ($tid && is_numeric($tid) && $tempuser = taxonomy_term_load($tid)) {
+          $field_name = $options['tid_loc_field'];
+          if ($field_name == 'taxonomy_term') {
+            $coordinates['latitude'] = (float) $tempuser->location['latitude'];
+            $coordinates['longitude'] = (float) $tempuser->location['longitude'];
+          }
+          else {
+            if (isset($tempuser->$field_name)) {
+              if (! isset($tempuser->language)) {
+                $lang = 'und';
+              }
+              elseif ($lang != $tempuser->language) {
+                $lang = 'und';
+              }
+              $location = $tempuser->$field_name;
+              if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
+                $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
+                $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
+              }
+            }
+          }
+        }
+      }
+      break;
+
+###########
+    case 'cid_arg':
       // not tested
+      if ($commenthandler = $view->display_handler->get_handler('argument', $options['cid_arg'])) {
+        $cid = $commenthandler->get_value();
+        if ($cid && is_numeric($cid) && $tempuser = comment_load($cid)) {
+          $field_name = $options['cid_loc_field'];
+          if ($field_name == 'comment') {
+            $coordinates['latitude'] = (float) $tempuser->location['latitude'];
+            $coordinates['longitude'] = (float) $tempuser->location['longitude'];
+          }
+          else {
+            if (isset($tempuser->$field_name)) {
+              if (! isset($tempuser->language)) {
+                $lang = 'und';
+              }
+              elseif ($lang != $tempuser->language) {
+                $lang = 'und';
+              }
+              $location = $tempuser->$field_name;
+              if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
+                $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
+                $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
+              }
+            }
+          }
+        }
+      }
+      break;
+    // used by sort when argument is lat/lon
+    case 'distance_arg':
+      $coordinates = array();
       foreach ($view->argument as $argument) {
-        if ($argument->field == 'distance') {
-          list($coords, $search_distance) = explode('_', $view->args[$argument->position]);
-          list($lat, $lon) = explode(',', $coords);
+        if (isset($argument->field) && $argument->field == 'distance') {
+          $a = explode('_', $view->args[$argument->position]);
+          if (count($a) == 2) {
+            $aa = explode(',', $a[0]);
+             if (count($aa) == 2 && is_numeric($aa[0]) && is_numeric($aa[1])) {
+              $lat = $aa[0];
+              $lon = $aa[1];
+            }
+          }
           break;
         }
       }
-      $coordinates['latitude'] = (float) $lat;
-      $coordinates['longitude'] = (float) $lon;
+      if (isset($lat)) {
+        $coordinates['latitude'] = (float) $lat;
+        $coordinates['longitude'] = (float) $lon;
+      }
       break;
-
   }
 
   return $coordinates;
@@ -611,7 +685,9 @@ function getlocations_fields_views_proximity_get_argument_options($view) {
   $uid_argument_options = array();
   $nid_argument_options = array();
   $tid_argument_options = array();
+  $cid_argument_options = array();
   $arguments = $view->display_handler->get_handlers('argument');
+
   foreach ($arguments as $id => $handler) {
     if ($handler->field == 'null') {
       $uid_argument_options[$id] = $handler->ui_name();
@@ -627,8 +703,11 @@ function getlocations_fields_views_proximity_get_argument_options($view) {
     elseif ($handler->field == 'tid') {
       $tid_argument_options[$id] = $handler->ui_name();
     }
+    elseif ($handler->field == 'cid') {
+      $cid_argument_options[$id] = $handler->ui_name();
+    }
   }
-  return array($nid_argument_options, $uid_argument_options, $tid_argument_options);
+  return array($nid_argument_options, $uid_argument_options, $tid_argument_options, $cid_argument_options);
 
 }
 
@@ -644,3 +723,4 @@ function getlocations_fields_views_proximity_get_location_field_options() {
 
   return $field_options;
 }
+

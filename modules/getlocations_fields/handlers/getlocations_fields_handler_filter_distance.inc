@@ -34,6 +34,10 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
         'nid_loc_field' => 'node',
         'uid_arg' => '',
         'uid_loc_field' => 'user',
+        'tid_arg' => '',
+        'tid_loc_field' => 'taxonomy_term',
+        'cid_arg' => '',
+        'cid_loc_field' => 'comment',
         'search_distance' => 100,
         'search_units' => 'km',
       ),
@@ -89,7 +93,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     #$form['value']['country'] = getlocations_fields_element_country($this->value['country']);
     $form['value']['php_code'] = getlocations_fields_element_php_code($this->value['php_code']);
 
-    list($nid_argument_options, $uid_argument_options, $tid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
+    list($nid_argument_options, $uid_argument_options, $tid_argument_options, $cid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
     $loc_field_options = getlocations_fields_views_proximity_get_location_field_options();
     if ($nid_argument_options) {
       $form['value']['nid_arg'] = getlocations_fields_element_nid_arg($this->value['nid_arg'], $nid_argument_options);
@@ -99,6 +103,16 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       $form['value']['uid_arg'] = getlocations_fields_element_uid_arg($this->value['uid_arg'], $uid_argument_options);
       $form['value']['uid_loc_field'] = getlocations_fields_element_uid_loc_field($this->value['uid_loc_field'], $loc_field_options);
     }
+    if ($tid_argument_options) {
+      $form['value']['tid_arg'] = getlocations_fields_element_tid_arg($this->value['tid_arg'], $tid_argument_options);
+      $form['value']['tid_loc_field'] = getlocations_fields_element_tid_loc_field($this->value['tid_loc_field'], $loc_field_options);
+    }
+    ## not tested yet
+    if ($cid_argument_options) {
+      $form['value']['cid_arg'] = getlocations_fields_element_cid_arg($this->value['cid_arg'], $cid_argument_options);
+      $form['value']['cid_loc_field'] = getlocations_fields_element_cid_loc_field($this->value['cid_loc_field'], $loc_field_options);
+    }
+
 
     $form['value']['search_units'] = getlocations_fields_element_distance_unit($this->value['search_units']);
     $form['value']['search_distance'] = getlocations_fields_element_search_distance($this->value['search_distance']);
@@ -116,16 +130,18 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
         $form[$key][$el]['#dependency'] = array();
       }
     }
+    // unset anything not needed on exposed form
     unset($form[$key]['latitude']);
     unset($form[$key]['longitude']);
-
-    // And we definitely do not want to expose the php code option when exposing the filter
     unset($form[$key]['php_code']);
-    // The nid/uid arg options are not useful on an exposed form.
     unset($form[$key]['nid_arg']);
     unset($form[$key]['nid_loc_field']);
     unset($form[$key]['uid_arg']);
     unset($form[$key]['uid_loc_field']);
+    unset($form[$key]['tid_arg']);
+    unset($form[$key]['tid_loc_field']);
+    unset($form[$key]['cid_arg']);
+    unset($form[$key]['cid_loc_field']);
     unset($form['origin']);
   }
 
@@ -139,8 +155,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     // and $this->value for exposed filter values.
     $options = array_merge($this->options, $this->options['value'], $this->value);
     $coordinates = getlocations_fields_views_proximity_get_reference_location($this->view, $options);
-    // If we don't have any coordinates or distance, there's nothing to filter
-    // by, so don't modify the query at all.
+    // If we don't have any coordinates or distance, there's nothing to filter by, so don't modify the query at all.
     if (empty($coordinates) || empty($this->value['search_distance'])) {
       return;
     }
@@ -157,7 +172,6 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     // Add MBR check (always).
     // In case we go past the 180/-180 mark for longitude.
     if ($lonrange[0] > $lonrange[1]) {
-      #$where = "$this->table_alias.latitude > :minlat AND $this->table_alias.latitude < :maxlat AND (($this->table_alias.longitude < 180 AND $this->table_alias.longitude > :minlon) OR ($this->table_alias.longitude < :maxlon AND $this->table_alias.longitude > -180))";
       $where = $this->table_alias . ".latitude > :minlat
       AND " . $this->table_alias . ".latitude < :maxlat
       AND ((" . $this->table_alias . ".longitude < 180
@@ -166,7 +180,6 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       AND " . $this->table_alias . ".longitude > -180))";
     }
     else {
-      #$where = "$this->table_alias.latitude > :minlat AND $this->table_alias.latitude < :maxlat AND $this->table_alias.longitude > :minlon AND $this->table_alias.longitude < :maxlon";
       $where = $this->table_alias . ".latitude > :minlat
       AND " . $this->table_alias . ".latitude < :maxlat
       AND " . $this->table_alias . ".longitude > :minlon

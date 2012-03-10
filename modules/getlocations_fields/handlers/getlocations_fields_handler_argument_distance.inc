@@ -11,7 +11,7 @@
 /**
  * Argument handler to accept proximity
  */
-// NOT USABLE
+
 class getlocations_fields_handler_argument_distance extends views_handler_argument {
   function option_definition() {
     $options = parent::option_definition();
@@ -59,8 +59,8 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
       '#title' => t('Method'),
       '#type' => 'select',
       '#options' => array(
-        'dist' => t('Circular Proximity'),
         'mbr' => t('Rectangular Proximity'),
+        'dist' => t('Circular Proximity'),
       ),
       '#default_value' => $this->options['search_method'],
       '#description' => t('Method of determining proximity. Please note that Circular Proximity does not work with Decimal degrees.'),
@@ -85,8 +85,15 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
     if ($this->options['type'] == 'latlon') {
       foreach ($this->view->argument as $argument) {
         if ($argument->field == 'distance') {
-          list($coords, $this->value['search_distance']) = explode('_', $this->view->args[$argument->position]);
-          list($this->value['latitude'], $this->value['longitude']) = explode(',', $coords);
+          $a = explode('_', $this->view->args[$argument->position]);
+          if (count($a) == 2) {
+            $this->value['search_distance'] = $a[1];
+            $aa = explode(',', $a[0]);
+            if (count($aa) == 2 && is_numeric($aa[0]) && is_numeric($aa[1])) {
+              $this->value['latitude'] = $aa[0];
+              $this->value['longitude'] = $aa[1];
+            }
+          }
           break;
         }
       }
@@ -111,10 +118,11 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
     // search_distance
     if ($this->options['search_units'] == 'dd') {
       list($lat_distance, $lon_distance) = explode(',', $this->value['search_distance']);
-      $latrange[0] = $lat - $lat_distance;
-      $latrange[1] = $lat + $lat_distance;
-      $lonrange[0] = $lon - $lon_distance;
-      $lonrange[1] = $lon + $lon_distance;
+
+      $latrange[0] = floatval($lat - $lat_distance);
+      $latrange[1] = floatval($lat + $lat_distance);
+      $lonrange[0] = floatval($lon - $lon_distance);
+      $lonrange[1] = floatval($lon + $lon_distance);
     }
     else {
       $distance = $this->value['search_distance'];

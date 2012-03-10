@@ -368,8 +368,14 @@ function getlocations_fields_element_origin($default, $distance=FALSE) {
     'nid_arg' => t("Node's Lat/Lon from views nid argument"),
     'uid_arg' => t("User's Lat/Lon from views uid argument"),
   );
+  if (getlocations_get_vocabularies()) {
+    $options += array('tid_arg' => t("Term's Lat/Lon from views tid argument"));
+  }
+  if (module_exists('comment')) {
+    $options += array('cid_arg' => t("Comment's Lat/Lon from views cid argument"));
+  }
   if ($distance) {
-    $options += array('distance_arg' => t("Latitude / Longitude from views argument"));
+    $options += array('distance_arg' => t("Lat/Lon from views argument"));
   }
   $options += array(
     'user' => t("User's Lat/Lon (blank if unset)"),
@@ -617,6 +623,98 @@ function getlocations_fields_element_uid_loc_field($default, $options, $ctools=T
     );
   if ($ctools) {
     $element['#dependency'] = array('edit-options-origin' => array('uid_arg'));
+  }
+  return $element;
+}
+
+/**
+ * @param string $default
+ *
+ * @param bool $ctools
+ *
+ * @return
+ *   Returns form element
+ *
+ */
+function getlocations_fields_element_tid_arg($default, $options, $ctools=TRUE) {
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Term ID argument to use'),
+    '#options' => $options,
+    '#default_value' => $default,
+    '#description' => empty($options) ? t("Select which of the view's arguments to use as the term ID. The latitude / longitude of the first location of that term will be used as the origin. You must have added arguments to the view to use this option.") : t("Select which of the view's arguments to use as the term ID. The latitude / longitude of the first location of that term will be used as the origin."),
+    );
+  if ($ctools) {
+    $element['#dependency'] = array('edit-options-origin' => array('tid_arg'));
+  }
+  return $element;
+}
+
+/**
+ * @param string $default
+ *
+ * @param bool $ctools
+ *
+ * @return
+ *   Returns form element
+ *
+ */
+function getlocations_fields_element_tid_loc_field($default, $options, $ctools=TRUE) {
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Location to use'),
+    '#options' => $options,
+    '#default_value' => $default,
+    '#description' => t("Select which field to use as the origin. If the location supports multiple entries the first one will be used."),
+    );
+  if ($ctools) {
+    $element['#dependency'] = array('edit-options-origin' => array('tid_arg'));
+  }
+  return $element;
+}
+
+/**
+ * @param string $default
+ *
+ * @param bool $ctools
+ *
+ * @return
+ *   Returns form element
+ *
+ */
+function getlocations_fields_element_cid_arg($default, $options, $ctools=TRUE) {
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Comment ID argument to use'),
+    '#options' => $options,
+    '#default_value' => $default,
+    '#description' => empty($options) ? t("Select which of the view's arguments to use as the comment ID. The latitude / longitude of the first location of that comment will be used as the origin. You must have added arguments to the view to use this option.") : t("Select which of the view's arguments to use as the comment ID. The latitude / longitude of the first location of that comment will be used as the origin."),
+    );
+  if ($ctools) {
+    $element['#dependency'] = array('edit-options-origin' => array('cid_arg'));
+  }
+  return $element;
+}
+
+/**
+ * @param string $default
+ *
+ * @param bool $ctools
+ *
+ * @return
+ *   Returns form element
+ *
+ */
+function getlocations_fields_element_cid_loc_field($default, $options, $ctools=TRUE) {
+  $element = array(
+    '#type' => 'select',
+    '#title' => t('Location to use'),
+    '#options' => $options,
+    '#default_value' => $default,
+    '#description' => t("Select which field to use as the origin. If the location supports multiple entries the first one will be used."),
+    );
+  if ($ctools) {
+    $element['#dependency'] = array('edit-options-origin' => array('cid_arg'));
   }
   return $element;
 }

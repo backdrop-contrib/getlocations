@@ -46,6 +46,12 @@ function getlocations_fields_theme() {
     'getlocations_fields_settings_form' => array(
       'render element' => 'form',
     ),
+    'getlocations_fields_distance' => array(
+      'variables' => array(
+        'distance' => '',
+        'units' => 'km',
+      ),
+    ),
   );
 
 }
@@ -620,3 +626,12 @@ function theme_getlocations_fields_settings_form($variables) {
   return $output;
 
 }
+
+function theme_getlocations_fields_distance($variables) {
+  $distance = $variables['distance'];
+  $shortunit = $variables['units'];
+  $output = '';
+  $output .= number_format($distance, 2) . ' ' . $shortunit;
+  return $output;
+}
+

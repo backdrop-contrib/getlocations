@@ -1,9 +1,56 @@
-commit 0e0e126
+commit 390204c
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 10 17:41:33 2012 +0000
+
+    added more default views, more readme
+
+modules/getlocations_fields/README.txt
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_city.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_postcode.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_province.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_sort_distance.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+
+commit e5cceb4
+Author: hutch <hutch@midwales.net>
+Date:   Wed Mar 7 22:06:36 2012 +0000
+
+    coder review
+
+views/getlocations.views.inc
+
+commit 7608381
+Author: hutch <hutch@midwales.net>
+Date:   Wed Mar 7 10:14:28 2012 +0000
+
+    fixed vocab markers
+
+views/getlocations_plugin_style_map.inc
+
+commit c3f8e93
+Author: hutch <hutch@midwales.net>
+Date:   Mon Mar 5 21:59:19 2012 +0000
+
+    better views defaults, removed some obsolete code for ctools
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+
+commit 6829f0a
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 3 19:52:13 2012 +0000
 
     coder review cleanup
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.install
 getlocations.markerinfo.inc

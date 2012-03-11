@@ -245,15 +245,13 @@ function getlocations_fields_views_data() {
       'click sortable' => FALSE,
     ),
   );
-  // TODO handlers
-
+  // distance
   $data['getlocations_fields']['distance'] = array(
     'title' => t('Distance'),
     'help' => t("The distance from the selected location and either the current user or a specific location."),
 #    'field' => array(
 ##      'handler' => 'getlocations_fields_handler_field_distance',  // not working yet
 #      'handler' => 'views_handler_field',
-#      'click sortable' => TRUE,
 #    ),
     'sort' => array(
       'handler' => 'getlocations_fields_handler_sort_distance',
@@ -302,7 +300,7 @@ function getlocations_fields_views_data() {
   // END getlocations_fields table -- fields
 
 
-
+  // getlocations_fields_entities table links node, users, taxonomy_term_data and comment to location data in getlocations_fields
   $data['getlocations_fields_entities']['table']['group']  = t('Getlocations Fields');
 
   $data['getlocations_fields_entities']['table']['join'] = array(
@@ -331,7 +329,7 @@ function getlocations_fields_views_data() {
       'field' => 'cid',
     ),
   );
-
+  // entity field name
   $data['getlocations_fields_entities']['field_name'] = array(
     'title' => t('Field name'),
     'help' => t('The field name used in the Content type definition.'),
@@ -345,8 +343,8 @@ function getlocations_fields_views_data() {
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
-
   );
+  // node id
   $data['getlocations_fields_entities']['nid'] = array(
     'title' => t('Node Id'),
     'help' => t('The Node Identifier.'),
@@ -361,6 +359,7 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
+  // user id
   $data['getlocations_fields_entities']['uid'] = array(
     'title' => t('User Id'),
     'help' => t('The User Identifier.'),
@@ -375,6 +374,7 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
+  // term id
   $data['getlocations_fields_entities']['tid'] = array(
     'title' => t('Taxonomy Term Id'),
     'help' => t('The Taxonomy Term Identifier.'),
@@ -389,6 +389,7 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
   );
+  // comment id
   $data['getlocations_fields_entities']['cid'] = array(
     'title' => t('Comment Id'),
     'help' => t('The Comment Identifier.'),

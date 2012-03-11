@@ -125,39 +125,33 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
       $lonrange[1] = floatval($lon + $lon_distance);
     }
     else {
-      $distance = $this->value['search_distance'];
-      if ($this->options['search_units'] == 'm') {
-        $distance_meters = $distance;
-      }
-      else {
-        $distance_meters = getlocations_fields_convert_distance_to_meters($distance, $this->options['search_units']);
-      }
-
-      $latrange = getlocations_fields_earth_latitude_range($lon, $lat, $distance_meters);
-      $lonrange = getlocations_fields_earth_longitude_range($lon, $lat, $distance_meters);
+      $distance_meters = getlocations_fields_convert_distance_to_meters($this->value['search_distance'], $this->options['search_units']);
+      $latrange = getlocations_fields_earth_latitude_range($lat, $lon, $distance_meters);
+      $lonrange = getlocations_fields_earth_longitude_range($lat, $lon, $distance_meters);
     }
+
+    // If the table alias is specified, add on the separator.
+    $table_alias = (empty($this->table_alias) ? '' : $this->table_alias . '.');
 
     // Add MBR check (always).
     // In case we go past the 180/-180 mark for longitude.
     if ($lonrange[0] > $lonrange[1]) {
-      #$where = "$this->table_alias.latitude > :minlat AND $this->table_alias.latitude < :maxlat AND (($this->table_alias.longitude < 180 AND $this->table_alias.longitude > :minlon) OR ($this->table_alias.longitude < :maxlon AND $this->table_alias.longitude > -180))";
-      $where = $this->table_alias . ".latitude > :minlat
-      AND " . $this->table_alias . ".latitude < :maxlat
-      AND ((" . $this->table_alias . ".longitude < 180
-      AND " . $this->table_alias . ".longitude > :minlon)
-      OR (" . $this->table_alias . ".longitude < :maxlon
-      AND " . $this->table_alias . ".longitude > -180))";
+      $where = $table_alias . "latitude > :minlat
+      AND " . $table_alias . "latitude < :maxlat
+      AND ((" . $table_alias . "longitude < 180
+      AND " . $table_alias . "longitude > :minlon)
+      OR (" . $table_alias . "longitude < :maxlon
+      AND " . $table_alias . "longitude > -180))";
     }
     else {
-      #$where = "$this->table_alias.latitude > :minlat AND $this->table_alias.latitude < :maxlat AND $this->table_alias.longitude > :minlon AND $this->table_alias.longitude < :maxlon";
-      $where = $this->table_alias . ".latitude > :minlat
-      AND " . $this->table_alias . ".latitude < :maxlat
-      AND " . $this->table_alias . ".longitude > :minlon
-      AND " . $this->table_alias . ".longitude < :maxlon";
+      $where = $table_alias . "latitude > :minlat
+      AND " . $table_alias . "latitude < :maxlat
+      AND " . $table_alias . "longitude > :minlon
+      AND " . $table_alias . "longitude < :maxlon";
     }
     $this->query->add_where_expression(0, $where, array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]));
 
-    if ($this->options['search_method'] == 'dist') {
+    if ($this->options['search_method'] == 'dist' && $this->options['search_units'] != 'dd') {
       // Add radius check.
       $this->query->add_where_expression(0, getlocations_fields_earth_distance_sql($lat, $lon, $this->table_alias) . ' < :distance', array(':distance' => $distance_meters));
     }

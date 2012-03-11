@@ -144,25 +144,55 @@ function theme_getlocations_info($variables) {
 
   $output .= '<div class="location vcard">';
   $output .= '<br />';
-  if (! empty($location['name'])) {
-    $l = $location['name'];
-    if (isset($location['nid']) && $location['nid'] > 0) {
-      $l = l($location['name'], 'node/' . $location['nid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
-    }
-    elseif (isset($location['uid']) && $location['uid'] > 0) {
-      // Use $l = $location['name'] if you don't want links to user
-      $l = l($location['name'], 'user/' . $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
-    }
-    elseif (isset($location['tid']) && $location['tid'] > 0) {
-      $l = l($location['name'], 'taxonomy/term/' . $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
-    }
-    elseif (isset($location['cid']) && $location['cid'] > 0) {
-      $l = l($location['name'], 'comment/' . $location['cid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
-    }
 
-    // if you are using a colorbox to display getlocations you might want to make this a plain heading
+  // this logic gives the location name field precedence over the node title
+  // similarly for users, terms and comments
+  $link = FALSE;
+  $l =  FALSE;
+  if (isset($location['nid']) && $location['nid'] > 0) {
+    if (! empty($location['name'])) {
+      $link = $location['name'];
+    }
+    else {
+      $node = node_load($location['nid']);
+      $link = $node->title;
+    }
+    $l = l($link, 'node/' . $location['nid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+  }
+  elseif (isset($location['uid']) && $location['uid'] > 0) {
+    if (! empty($location['name'])) {
+      $link = $location['name'];
+    }
+    else {
+      $account = user_load($location['uid']);
+      $link = $account->name;
+    }
+    $l = l($link, 'user/' . $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+  }
+  elseif (isset($location['tid']) && $location['tid'] > 0) {
+    if (! empty($location['name'])) {
+      $link = $location['name'];
+    }
+    else {
+      $term = taxonomy_term_load($location['tid']);
+      $link = $term->name;
+    }
+    $l = l($link, 'taxonomy/term/' . $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+  }
+  elseif (isset($location['cid']) && $location['cid'] > 0) {
+    if (! empty($location['name'])) {
+      $link = $location['name'];
+    }
+    else {
+      $comment = comment_load($location['cid']);
+      $link = $comment->subject;
+    }
+    $l = l($link, 'comment/' . $location['cid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+  }
+  if ($l) {
     $output .= '<h4>' . $l . '</h4>';
   }
+
   $output .= '<div class="adr">';
   if (! empty($location['street'])) {
     $output .= '<div class="street-address">' . $location['street'];

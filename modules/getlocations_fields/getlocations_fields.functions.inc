@@ -131,33 +131,6 @@ function getlocations_fields_earth_radius($latitude=45) {
 }
 
 /**
- * @param float $longitude1
- *
- * @param float $latitude1
- *
- * @param float $longitude2
- *
- * @param float $latitude2
- *
- * @return
- *   Returns distance in meters
- *
- */
-function getlocations_fields_earth_distance($longitude1, $latitude1, $longitude2, $latitude2) {
-  // Estimate the earth-surface distance between two locations.
-  $long1 = deg2rad($longitude1);
-  $lat1 = deg2rad($latitude1);
-  $long2 = deg2rad($longitude2);
-  $lat2 = deg2rad($latitude2);
-  $radius = getlocations_fields_earth_radius(($latitude1 + $latitude2) / 2);
-
-  $cosangle = cos($lat1)*cos($lat2) *
-    (cos($long1)*cos($long2) + sin($long1)*sin($long2)) +
-    sin($lat1)*sin($lat2);
-  return acos($cosangle) * $radius;
-}
-
-/**
  * Returns the SQL fragment needed to add a column called 'distance' to a query. For use in Views distance/proximity calculations
  *
  * @param $latitude    The measurement point
@@ -169,7 +142,7 @@ function getlocations_fields_earth_distance_sql($latitude, $longitude, $tbl_alia
   $radius = getlocations_fields_earth_radius($latitude);
 
   // If the table alias is specified, add on the separator.
-  $tbl_alias = empty($tbl_alias) ? $tbl_alias : ($tbl_alias . '.');
+  $tbl_alias = (empty($tbl_alias) ? '' : $tbl_alias . '.');
 
   $latfield = $tbl_alias . 'latitude';
   $lonfield = $tbl_alias . 'longitude';
@@ -194,7 +167,7 @@ function getlocations_fields_earth_distance_sql($latitude, $longitude, $tbl_alia
  *   for high distance values. This function needs to be re-written to work properly for
  *   larger distance values. See http://drupal.org/node/821628
  */
-function getlocations_fields_earth_longitude_range($longitude, $latitude, $distance) {
+function getlocations_fields_earth_longitude_range($latitude, $longitude, $distance) {
   // Estimate the min and max longitudes within $distance of a given location.
   $long = deg2rad($longitude);
   $lat = deg2rad($latitude);
@@ -213,7 +186,7 @@ function getlocations_fields_earth_longitude_range($longitude, $latitude, $dista
   return array(rad2deg($minlong), rad2deg($maxlong));
 }
 
-function getlocations_fields_earth_latitude_range($longitude, $latitude, $distance) {
+function getlocations_fields_earth_latitude_range($latitude, $longitude, $distance) {
   // Estimate the min and max latitudes within $distance of a given location.
   $long = deg2rad($longitude);
   $lat = deg2rad($latitude);
@@ -719,6 +692,17 @@ function getlocations_fields_element_cid_loc_field($default, $options, $ctools=T
   return $element;
 }
 
+/**
+ * @param string $title
+ *
+ * @param string $default
+ *
+ * @param string $description
+ *
+ * @return
+ *   Returns form element
+ *
+ */
 function getlocations_fields_element_weight($title, $default, $description='') {
   $options = array('' => '');
   $options += drupal_map_assoc(range(-50, 50));
@@ -734,6 +718,17 @@ function getlocations_fields_element_weight($title, $default, $description='') {
   return $element;
 }
 
+/**
+ * @param string $title
+ *
+ * @param string $default
+ *
+ * @param string $description
+ *
+ * @return
+ *   Returns form element
+ *
+ */
 function getlocations_fields_element_opts($title, $default, $description='') {
 
   $element = array(
@@ -754,7 +749,13 @@ function getlocations_fields_element_opts($title, $default, $description='') {
   return $element;
 }
 
-// ajax callback
+/**
+ * ajax callback
+ *
+ * @return
+ *   Returns country code
+ *
+ */
 function getlocations_fields_countryinfo() {
   $country = $_GET['country'];
   $content = FALSE;
@@ -773,7 +774,15 @@ function getlocations_fields_countryinfo() {
 
 }
 
-// autocomplete for country
+/**
+ * autocomplete for country
+ *
+ * @param string $string
+ *
+ * @return
+ *   Returns country names
+ *
+ */
 function getlocations_fields_country_autocomplete($string = '') {
     $matches = array();
   if ($string) {
@@ -790,7 +799,15 @@ function getlocations_fields_country_autocomplete($string = '') {
   drupal_json_output($matches);
 }
 
-// autocomplete for province
+/**
+ * autocomplete for province
+ *
+ * @param string $string
+ *
+ * @return
+ *   Returns province names
+ *
+ */
 function getlocations_fields_province_autocomplete($string = '') {
   $matches = array();
   if ($string) {
@@ -807,7 +824,15 @@ function getlocations_fields_province_autocomplete($string = '') {
   drupal_json_output($matches);
 }
 
-// autocomplete for city
+/**
+ * autocomplete for city
+ *
+ * @param string $string
+ *
+ * @return
+ *   Returns city names
+ *
+ */
 function getlocations_fields_city_autocomplete($string = '') {
   $matches = array();
   if ($string) {
@@ -824,6 +849,11 @@ function getlocations_fields_city_autocomplete($string = '') {
   drupal_json_output($matches);
 }
 
+/**
+ * @return
+ *   Returns location array
+ *
+ */
 function getlocations_fields_smart_ip() {
   if (module_exists('smart_ip')) {
     global $user;
@@ -839,81 +869,3 @@ function getlocations_fields_smart_ip() {
   exit;
 }
 
-/***********************************************************/
-// these functions currently not in use
-function getlocations_fields_earth_xyz($longitude, $latitude, $height = 0) {
-  // Convert longitude and latitude to earth-centered earth-fixed coordinates.
-  // X axis is 0 long, 0 lat; Y axis is 90 deg E; Z axis is north pole.
-
-  $long = deg2rad($longitude);
-  $lat = deg2rad($latitude);
-
-  $coslong = cos($long);
-  $coslat = cos($lat);
-  $sinlong = sin($long);
-  $sinlat = sin($lat);
-  $radius = (GETLOCATIONS_FIELDS_EARTH_RADIUS_SEMIMAJOR / sqrt(1 - GETLOCATIONS_FIELDS_EARTH_ECCENTRICITY_SQ * $sinlat * $sinlat));
-  $x = ($radius + $height) * $coslat * $coslong;
-  $y = ($radius + $height) * $coslat * $sinlong;
-  $z = (($radius * (1 - GETLOCATIONS_FIELDS_EARTH_ECCENTRICITY_SQ ) + $height) * $sinlat);
-  return array($x, $y, $z);
-}
-
-function getlocations_fields_earth_arclength($angle, $latitude=37.9) {
-  // Convert a given angle to earth-surface distance.
-  return deg2rad($angle) * getlocations_fields_earth_radius($latitude);
-}
-
-function getlocations_fields_get_exact_distance_sql($latitude, $longitude, $tbl_alias = '') {
-  $radius = getlocations_fields_earth_radius($latitude);
-  $tbl_alias = empty($tbl_alias) ? $tbl_alias : ($tbl_alias . '.');
-  $latfield = $tbl_alias . 'latitude';
-  $lonfield = $tbl_alias . 'longitude';
-
-  // all calcs in mysql
-  #$sql = "(IFNULL(ACOS((SIN(RADIANS($latitude)) * SIN(RADIANS($latfield))) + (COS(RADIANS($latitude)) * COS(RADIANS($latfield)) * COS(RADIANS($longitude - $lonfield)))), 0.00000) * $radius)";
-  // some calcs predone in php
-  $lat = deg2rad($latitude);
-  $long = deg2rad($longitude);
-  #$coslong = cos($long);
-  $coslat = cos($lat);
-  #$sinlong = sin($long);
-  $sinlat = sin($lat);
-  $sql = "(IFNULL(ACOS(($sinlat * SIN(RADIANS($latfield))) + ($coslat * COS(RADIANS($latfield)) * COS(RADIANS($longitude - $lonfield)))), 0.00000) * $radius)";
-  return $sql;
-}
-
-/**
- * Given two points in lat/lon form, returns the distance between them.
- * @param $latlon_a
- *   An associative array where
- *      'lon' => is a floating point of the longitude coordinate for the point given by latlonA
- *      'lat' => is a floating point of the latitude coordinate for the point given by latlonB
- * @param $latlon_b
- *      Another point formatted like $latlon_b
- * @param $distance_unit
- *      A string that is either 'km' or 'mile'.
- *      If neither 'km' or 'mile' is passed, the parameter is forced to 'km'
- * @return
- *    NULL if sense can't be made of the parameters.
- *    An associative array where
- *      'scalar' => Is the distance between the two lat/lon parameter points
- *      'distance_unit' => Is the unit of distance being represented by 'scalar'.
- *                         This will be 'km' unless 'mile' is passed for the $distance_unit param
- */
-function getlocations_fields_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km') {
-  if (!isset($latlon_a['lon']) || !isset($latlon_a['lat']) || !isset($latlon_b['lon']) || !isset($latlon_b['lat'])) {
-    return NULL;
-  }
-
-  if ($distance_unit != 'km' && $distance_unit != 'mile') {
-    return NULL;
-  }
-
-  // $conversion_factor = number to divide by to convert meters to $distance_unit
-  // At this point, $distance_unit == 'km' or 'mile' and nothing else
-  //$conversion_factor = ($distance_unit == 'km') ? 1000.0 : 1609.347;
-
-  $meters = getlocations_fields_earth_distance($latlon_a['lon'], $latlon_a['lat'], $latlon_b['lon'], $latlon_b['lat']);
-  return array('scalar' => round($meters/(($distance_unit == 'km') ? 1000.0 : 1609.347), 1), 'distance_unit' => $distance_unit);
-}

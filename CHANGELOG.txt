@@ -1,9 +1,23 @@
-commit 390204c
+commit 5582c8e
+Author: hutch <hutch@midwales.net>
+Date:   Sun Mar 11 11:57:40 2012 +0000
+
+    cleanup, removed unused code, better vcard
+
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 069bf00
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 10 17:41:33 2012 +0000
 
     added more default views, more readme
 
+CHANGELOG.txt
 modules/getlocations_fields/README.txt
 modules/getlocations_fields/getlocations_fields.functions.inc
 modules/getlocations_fields/getlocations_fields.info

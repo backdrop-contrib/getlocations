@@ -134,6 +134,15 @@ function getlocations_fields_field_info() {
 function getlocations_fields_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
 
   if (! empty($items)) {
+    $fieldnames = array(
+      'name' => t('Name'),
+      'street' => t('Street'),
+      'additional' => t('Additional'),
+      'city' => t('City/Town'),
+      'province' => t('Province/State/County'),
+      'postal_code' => t('Post code/Zip code'),
+      'country' => t('Country'),
+    );
     foreach ($items AS $delta => $item) {
       if ($item['active']) {
         if (isset($item['delete_location']) && $item['delete_location']) {
@@ -154,7 +163,7 @@ function getlocations_fields_field_validate($entity_type, $entity, $field, $inst
             if (isset($item[$id]) && empty($item[$id])) {
               $errors[$field['field_name']][$langcode][$delta][] = array(
                 'error' => 'field_required_' . $id,
-                'message' => t('A required field has not been set'),
+                'message' => t('The %tt field is required', array('%tt' => $fieldnames[$id])),
               );
             }
           }
@@ -504,9 +513,6 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
  *   FALSE otherwise.
  */
 function getlocations_fields_field_is_empty($item, $field) {
-#  if (empty($item['value'])) {
-#    return TRUE;
-#  }
   return FALSE;
 }
 

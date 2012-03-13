@@ -206,7 +206,7 @@ function theme_getlocations_fields_latitude_dms($variables) {
   $latitude = $variables['latitude'];
   $output = '';
   list($degrees, $minutes, $seconds, $negative) = getlocations_fields_dd_to_dms($latitude);
-  $output .= "${degrees}° ${minutes}' ${seconds}\" ";
+  $output .= $degrees . "&deg; " . $minutes . "&#39; " . $seconds . "&#34; ";
   if (!$negative) {
     $output .= 'N';
   }
@@ -227,7 +227,7 @@ function theme_getlocations_fields_longitude_dms($variables) {
   $longitude = $variables['longitude'];
   $output = '';
   list($degrees, $minutes, $seconds, $negative) = getlocations_fields_dd_to_dms($longitude);
-  $output .= "${degrees}° ${minutes}' ${seconds}\" ";
+  $output .= $degrees . "&deg; " . $minutes . "&#39; " . $seconds . "&#34; ";
   if (!$negative) {
     $output .= 'E';
   }

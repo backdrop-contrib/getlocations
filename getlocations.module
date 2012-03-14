@@ -1508,38 +1508,40 @@ function getlocations_get_vocabularies() {
 }
 
 function getlocations_check_vocabulary($vocab_name) {
-  $module = FALSE;
-  if (module_exists('getlocations_fields')) {
-    $module = 'getlocations_fields';
-  }
-  elseif (module_exists('location_cck')) {
-    $module = 'location_cck';
-  }
-  elseif (module_exists('geofield')) {
-    $module = 'geofield';
-  }
-  if ($module) {
-    // first we need to get the machine name of the vocab.
-    $query = db_select('taxonomy_vocabulary', 'v');
-    $query->fields('v', array('machine_name'));
-    $query->condition('v.name', $vocab_name);
-    $row = $query->execute()->fetchObject();
-    if ($row) {
-      $machine_name = $row->machine_name;
-      $query = db_select('field_config', 'f');
-      $query->fields('f', array('id'));
-      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-      $query->condition('i.bundle', $machine_name)
-        ->condition('f.module', $module )
-        ->condition('i.entity_type', 'taxonomy_term')
-        ->condition('f.active', 1);
-      $rows = $query->execute();
-      $ct = 0;
-      foreach ($rows AS $row) {
-        $ct++;
-      }
-      if ($ct) {
-        return TRUE;
+  if (module_exists('taxonomy')) {
+    $module = FALSE;
+    if (module_exists('getlocations_fields')) {
+      $module = 'getlocations_fields';
+    }
+    elseif (module_exists('location_cck')) {
+      $module = 'location_cck';
+    }
+    elseif (module_exists('geofield')) {
+      $module = 'geofield';
+    }
+    if ($module) {
+      // first we need to get the machine name of the vocab.
+      $query = db_select('taxonomy_vocabulary', 'v');
+      $query->fields('v', array('machine_name'));
+      $query->condition('v.name', $vocab_name);
+      $row = $query->execute()->fetchObject();
+      if ($row) {
+        $machine_name = $row->machine_name;
+        $query = db_select('field_config', 'f');
+        $query->fields('f', array('id'));
+        $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+        $query->condition('i.bundle', $machine_name)
+          ->condition('f.module', $module )
+          ->condition('i.entity_type', 'taxonomy_term')
+          ->condition('f.active', 1);
+        $rows = $query->execute();
+        $ct = 0;
+        foreach ($rows AS $row) {
+          $ct++;
+        }
+        if ($ct) {
+          return TRUE;
+        }
       }
     }
   }
@@ -2169,4 +2171,3 @@ function getlocations_paths_get() {
   }
   return $getlocations_paths;
 }
-

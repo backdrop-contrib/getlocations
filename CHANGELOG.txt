@@ -1,9 +1,10 @@
-commit 7efe75e
+commit 5cd32e7
 Author: hutch <hutch@midwales.net>
 Date:   Wed Mar 14 14:16:47 2012 +0000
 
     added taxonomy module check
 
+CHANGELOG.txt
 getlocations.module
 
 commit 9e1d905

@@ -1492,7 +1492,7 @@ function getlocations_check_entity_type($entity_type) {
 }
 
 function getlocations_get_vocabularies() {
-  if (module_exists('getlocations_fields')) {
+  if (module_exists('getlocations_fields') && module_exists('taxonomy')) {
     $vocabularies = taxonomy_get_vocabularies();
     $options = array();
     if (count($vocabularies)) {

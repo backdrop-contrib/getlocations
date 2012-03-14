@@ -1,9 +1,34 @@
-commit 5582c8e
+commit 7efe75e
+Author: hutch <hutch@midwales.net>
+Date:   Wed Mar 14 14:16:47 2012 +0000
+
+    added taxonomy module check
+
+getlocations.module
+
+commit 9e1d905
+Author: hutch <hutch@midwales.net>
+Date:   Tue Mar 13 16:38:07 2012 +0000
+
+    added function getlocations_fields_dms_to_dd()
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit c203a13
+Author: hutch <hutch@midwales.net>
+Date:   Tue Mar 13 16:36:51 2012 +0000
+
+    added htmlentities to dms output
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 2b059ea
 Author: hutch <hutch@midwales.net>
 Date:   Sun Mar 11 11:57:40 2012 +0000
 
     cleanup, removed unused code, better vcard
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 modules/getlocations_fields/getlocations_fields.functions.inc

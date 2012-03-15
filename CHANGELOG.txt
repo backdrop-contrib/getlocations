@@ -1,3 +1,20 @@
+commit df9bab6
+Author: hutch <hutch@midwales.net>
+Date:   Thu Mar 15 00:13:12 2012 +0000
+
+    fixed bug in older ie #1480800
+
+js/getlocations.js
+
+commit 4075d08
+Author: hutch <hutch@midwales.net>
+Date:   Wed Mar 14 14:34:23 2012 +0000
+
+    added another toxonomy module check
+
+CHANGELOG.txt
+getlocations.module
+
 commit 5cd32e7
 Author: hutch <hutch@midwales.net>
 Date:   Wed Mar 14 14:16:47 2012 +0000

@@ -367,10 +367,19 @@ var inputmap = [];
   }
 
   function showPopup(map, m, gs, data) {
-      // close any previous instances
-    for (var i in gs.infoBubbles) {
-      gs.infoBubbles[i].close();
+    var ver = msiedetect();
+    var pushit = false;
+    if ( (ver == '') || (ver && ver > 8)) {
+      pushit = true;
     }
+
+    if (pushit) {
+      // close any previous instances
+      for (var i in gs.infoBubbles) {
+        gs.infoBubbles[i].close();
+      }
+    }
+
     if (gs.useInfoBubble) {
       if (typeof(infoBubbleOptions) == 'object') {
         var infoBubbleOpts = infoBubbleOptions;
@@ -381,16 +390,20 @@ var inputmap = [];
       infoBubbleOpts.content = data;
       var infoBubble = new InfoBubble(infoBubbleOpts);
       infoBubble.open(map, m);
-      // add to the array
-      gs.infoBubbles.push(infoBubble);
+      if (pushit) {
+        // add to the array
+        gs.infoBubbles.push(infoBubble);
+      }
     }
     else {
       var infowindow = new google.maps.InfoWindow({
         content: data
       });
       infowindow.open(map, m);
-      // add to the array
-      gs.infoBubbles.push(infowindow);
+      if (pushit) {
+        // add to the array
+        gs.infoBubbles.push(infowindow);
+      }
     }
   }
 
@@ -445,6 +458,14 @@ var inputmap = [];
         map.fitBounds(bounds);
       }
     }
+  }
+
+  function msiedetect() {
+    var ieversion = '';
+    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
+     ieversion = new Number(RegExp.$1) // capture x.x portion and store as a number
+    }
+    return ieversion;
   }
 
   // gogogo

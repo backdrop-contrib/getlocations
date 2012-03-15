@@ -1,9 +1,18 @@
-commit b03d5de
+commit e8f7a77
+Author: hutch <hutch@midwales.net>
+Date:   Thu Mar 15 00:13:56 2012 +0000
+
+    fixed bug in older ie #1480800
+
+js/getlocations.js
+
+commit 9ee3f9e
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 3 19:50:41 2012 +0000
 
     coder review cleanup
 
+CHANGELOG.txt
 getlocations-view-map.tpl.php
 getlocations.admin.inc
 getlocations.markerinfo.inc

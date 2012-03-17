@@ -415,6 +415,13 @@ function getlocations_settings_form() {
     128,
     t('Where the InfoBubble javascript file is located.')
   );
+  $form['getlocations_paths']['infowindow_options_path'] = getlocations_element_path(
+    t('Path to InfoWindow options javascript file'),
+    $getlocations_paths['infowindow_options_path'],
+    60,
+    128,
+    t('Where the InfoWindow options javascript file is located. If this file does not exist the default settings will be used.')
+  );
   $form['getlocations_paths']['infobubble_options_path'] = getlocations_element_path(
     t('Path to InfoBubble options javascript file'),
     $getlocations_paths['infobubble_options_path'],
@@ -422,7 +429,6 @@ function getlocations_settings_form() {
     128,
     t('Where the InfoBubble options javascript file is located. If this file does not exist the default settings will be used.')
   );
-
   $form['getlocations_paths']['markermanager_path'] = getlocations_element_path(
     t('Path to markermanager javascript file'),
     $getlocations_paths['markermanager_path'],

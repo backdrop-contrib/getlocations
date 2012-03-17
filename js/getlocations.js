@@ -396,9 +396,14 @@ var inputmap = [];
       }
     }
     else {
-      var infowindow = new google.maps.InfoWindow({
-        content: data
-      });
+      if (typeof(infoWindowOptions) == 'object') {
+        var infoWindowOpts = infoWindowOptions;
+      }
+      else {
+        var infoWindowOpts = {};
+      }
+      infoWindowOpts.content = data;
+      var infowindow = new google.maps.InfoWindow(infoWindowOpts);
       infowindow.open(map, m);
       if (pushit) {
         // add to the array
@@ -467,6 +472,7 @@ var inputmap = [];
     }
     return ieversion;
   }
+
 
   // gogogo
   Drupal.behaviors.getlocations = {

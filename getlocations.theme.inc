@@ -83,7 +83,7 @@ function theme_getlocations_show($variables) {
       $returnlink = '<div class="getlocations_returnlink">' . $l . '</div>';
     }
   }
-  elseif ($type == 'term' && $defaults['returnlink_term_enable']) {
+  elseif ($type == 'term' && $defaults['returnlink_term_enable'] && module_exists('taxonomy')) {
     if (is_object($node)) {
       $linktext = $defaults['returnlink_term_link'];
       if ( preg_match("/%n/", $linktext)) {
@@ -93,7 +93,7 @@ function theme_getlocations_show($variables) {
       $returnlink = '<div class="getlocations_returnlink">' . $l . '</div>';
     }
   }
-  elseif ($type == 'comment' && $defaults['returnlink_comment_enable']) {
+  elseif ($type == 'comment' && $defaults['returnlink_comment_enable'] && module_exists('comment')) {
     if (is_object($node)) {
       $linktext = $defaults['returnlink_comment_link'];
       if ( preg_match("/%n/", $linktext)) {
@@ -169,7 +169,7 @@ function theme_getlocations_info($variables) {
     }
     $l = l($link, 'user/' . $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
   }
-  elseif (isset($location['tid']) && $location['tid'] > 0) {
+  elseif (isset($location['tid']) && $location['tid'] > 0 && module_exists('taxonomy')) {
     if (! empty($location['name'])) {
       $link = $location['name'];
     }
@@ -179,7 +179,7 @@ function theme_getlocations_info($variables) {
     }
     $l = l($link, 'taxonomy/term/' . $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
   }
-  elseif (isset($location['cid']) && $location['cid'] > 0) {
+  elseif (isset($location['cid']) && $location['cid'] > 0 && module_exists('comment')) {
     if (! empty($location['name'])) {
       $link = $location['name'];
     }

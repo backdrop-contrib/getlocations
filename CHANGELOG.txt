@@ -1,9 +1,28 @@
-commit df9bab6
+commit 32171e2
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 17 11:04:13 2012 +0000
+
+    better permissions, added some descriptions
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+
+commit 963fc9e
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 17 11:03:16 2012 +0000
+
+    added hook_modules_uninstalled()
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 5ecff58
 Author: hutch <hutch@midwales.net>
 Date:   Thu Mar 15 00:13:12 2012 +0000
 
     fixed bug in older ie #1480800
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit 4075d08

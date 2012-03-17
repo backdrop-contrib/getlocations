@@ -109,42 +109,61 @@ function getlocations_settings_form() {
 
   // default node marker
   $markers = getlocations_get_marker_titles();
+  $desc = '';
+  if (getlocations_check_entity_type('node')) {
+    $desc = t('In use');
+  }
   $form['getlocations_default']['node_map_marker'] = getlocations_element_map_marker(
     t('Default Content Map marker'),
     $markers,
-    $getlocations_defaults['node_map_marker']
+    $getlocations_defaults['node_map_marker'],
+    $desc
   );
 
   if (module_exists('getlocations_fields')) {
+    // default user marker
+    $desc = '';
     if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
-      // default user marker
-      $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
-        t('Default User Map marker'),
-        $markers,
-        $getlocations_defaults['user_map_marker']
-      );
+      $desc = t('In use');
     }
-    if (getlocations_get_vocabularies()) {
+    $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
+      t('Default User Map marker'),
+      $markers,
+      $getlocations_defaults['user_map_marker'],
+      $desc
+    );
+    if (module_exists('taxonomy')) {
       // default vocabulary marker
+      $desc = '';
+      if (getlocations_get_vocabularies()) {
+        $desc = t('In use');
+      }
       $form['getlocations_default']['vocabulary_map_marker'] = getlocations_element_map_marker(
         t('Default Vocabulary Map marker'),
         $markers,
-        $getlocations_defaults['vocabulary_map_marker']
+        $getlocations_defaults['vocabulary_map_marker'],
+        $desc
       );
     }
-    if (getlocations_check_entity_type('comment')) {
+    if (module_exists('comment')) {
       // default comment marker
+      $desc = '';
+      if (getlocations_check_entity_type('comment')) {
+        $desc = t('In use');
+      }
       $form['getlocations_default']['comment_map_marker'] = getlocations_element_map_marker(
         t('Default Comment Map marker'),
         $markers,
-        $getlocations_defaults['comment_map_marker']
+        $getlocations_defaults['comment_map_marker'],
+        $desc
       );
     }
     // default input marker
     $form['getlocations_default']['input_map_marker'] = getlocations_element_map_marker(
       t('Default Input Map marker'),
       $markers,
-      $getlocations_defaults['input_map_marker']
+      $getlocations_defaults['input_map_marker'],
+      t('The draggable marker used on add/edit maps.')
     );
   }
 

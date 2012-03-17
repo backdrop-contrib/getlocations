@@ -131,15 +131,17 @@ function getlocations_menu() {
       'type' => MENU_CALLBACK,
     );
   }
-  if (getlocations_check_entity_type('comment')) {
-    // getlocations/comment/$cid    # show all locations for a comment
-    $items['getlocations/comment/%getlocations_id'] = array(
-      'title' => 'Get comment locations',
-      'access callback' => 'getlocations_access_location',
-      'page callback' => 'getlocations_commentmap',
-      'page arguments' => array(2),
-      'type' => MENU_CALLBACK,
-    );
+  if (module_exists('comment')) {
+    if (getlocations_check_entity_type('comment')) {
+      // getlocations/comment/$cid    # show all locations for a comment
+      $items['getlocations/comment/%getlocations_id'] = array(
+        'title' => 'Get comment locations',
+        'access callback' => 'getlocations_access_location',
+        'page callback' => 'getlocations_commentmap',
+        'page arguments' => array(2),
+        'type' => MENU_CALLBACK,
+      );
+    }
   }
 
   // getlocations/type/$type     # show all locations of nodes of content-type machine name
@@ -424,7 +426,7 @@ function getlocations_usersmap() {
  *
  */
 function getlocations_termmap($tid) {
-  if (module_exists('getlocations_fields')) {
+  if (module_exists('getlocations_fields') && module_exists('taxonomy')) {
     $locations = getlocations_load_locations($tid, 'tid');
     $term = taxonomy_term_load($tid);
     $getlocations_defaults = getlocations_defaults();
@@ -470,7 +472,7 @@ function getlocations_termmap($tid) {
 }
 
 function getlocations_commentmap($cid) {
-  if (module_exists('getlocations_fields')) {
+  if (module_exists('getlocations_fields') && module_exists('comment')) {
     $locations = getlocations_load_locations($cid, 'cid');
     $comment = comment_load($cid);
     $getlocations_defaults = getlocations_defaults();
@@ -1039,10 +1041,10 @@ function getlocations_get_type_from_lid($lid) {
       elseif (isset($row['uid']) && $row['uid'] > 0) {
         $type = 'user';
       }
-      elseif (isset($row['tid']) && $row['tid'] > 0) {
+      elseif (isset($row['tid']) && $row['tid'] > 0 && module_exists('taxonomy')) {
         $type = 'vocabulary';
       }
-      elseif (isset($row['cid']) && $row['cid'] > 0) {
+      elseif (isset($row['cid']) && $row['cid'] > 0 && module_exists('comment')) {
         $type = 'comment';
       }
       return $type;
@@ -1070,10 +1072,10 @@ function getlocations_get_path_from_lid($lid) {
       elseif (isset($row['uid']) && $row['uid'] > 0) {
         $path = $base_path . 'user/' . $row['uid'];
       }
-      elseif (isset($row['tid']) && $row['tid'] > 0) {
+      elseif (isset($row['tid']) && $row['tid'] > 0 && module_exists('taxonomy')) {
         $path = $base_path . 'taxonomy/term/' . $row['tid'];
       }
-      elseif (isset($row['cid']) && $row['cid'] > 0) {
+      elseif (isset($row['cid']) && $row['cid'] > 0 && module_exists('comment')) {
         $path = $base_path . 'comment/' . $row['cid'];
       }
       return $path;
@@ -1107,12 +1109,12 @@ function getlocations_info() {
           $location['uid'] = $uid;
         }
       }
-      elseif ($type == 'vocabulary') {
+      elseif ($type == 'vocabulary' && module_exists('taxonomy')) {
         if ($tid = getlocations_get_tid_from_lid($lid)) {
           $location['tid'] = $tid;
         }
       }
-      elseif ($type == 'comment') {
+      elseif ($type == 'comment' && module_exists('comment')) {
         if ($cid = getlocations_get_cid_from_lid($lid)) {
           $location['cid'] = $cid;
         }
@@ -1154,10 +1156,10 @@ function getlocations_lidinfo() {
       elseif ($lidkey == 'uid') {
         $path = $base_path . 'user/' . $lid;
       }
-      elseif ($lidkey == 'tid') {
+      elseif ($lidkey == 'tid' && module_exists('taxonomy')) {
         $path = $base_path . 'taxonomy/term/' . $lid;
       }
-      elseif ($lidkey == 'cid') {
+      elseif ($lidkey == 'cid' && module_exists('comment')) {
         $path = $base_path . 'comment/' . $lid;
       }
       if ($path) {
@@ -1724,10 +1726,10 @@ function getlocations_geofield_addressfield_load_locations($id, $key = 'vid') {
     elseif ($key == 'uid') {
       $obj = user_load($id);
     }
-    elseif ($key == 'tid') {
+    elseif ($key == 'tid' && module_exists('taxonomy')) {
       $obj = taxonomy_term_load($id);
     }
-    elseif ($key == 'cid') {
+    elseif ($key == 'cid' && module_exists('comment')) {
       $obj = comment_load($id);
     }
 
@@ -1845,7 +1847,7 @@ function getlocations_geofield_addressfield_get_fieldname($type, $module, $entit
  * Some form helper functions
  * for admin and views plugin style
  */
-function getlocations_element_map_marker($title, $options, $default) {
+function getlocations_element_map_marker($title, $options, $default, $description='') {
 
   $element = array(
     '#type' => 'select',
@@ -1853,6 +1855,9 @@ function getlocations_element_map_marker($title, $options, $default) {
     '#options' => $options,
     '#default_value' => $default,
   );
+  if ($description) {
+    $element['#description'] = $description;
+  }
   return $element;
 }
 

@@ -2448,3 +2448,72 @@ function getlocations_fields_display_settings_form($defaults) {
   return $form;
 
 }
+
+/**
+ * Implements hook_modules_uninstalled().
+ *
+ * Cleans up entries related to taxonomy or comment modules
+ */
+
+function getlocations_fields_modules_uninstalled($modules) {
+
+  $identifier = '';
+  foreach ($modules as $module) {
+    if ($module == 'taxonomy') {
+      $identifier = 'tid';
+    }
+    elseif ($module == 'comment') {
+      $identifier = 'cid';
+    }
+    elseif ($module == 'profile2') {
+      $identifier = 'uid';
+    }
+
+    if ($identifier) {
+      $instances = array();
+      // field_info_instances() is unuseable so roll our own
+      $query = db_select('field_config', 'f');
+      $query->fields('i', array('field_name', 'entity_type', 'bundle'));
+      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+      $query->condition('f.module', 'getlocations_fields')
+        ->condition('f.type', 'getlocations_fields')
+        ->condition('i.entity_type', $module);
+      $result = $query->execute();
+      if ($result) {
+        $ct = 0;
+        foreach ($result AS $row) {
+          $instances[$ct]['field_name'] = $row->field_name;
+          $instances[$ct]['entity_type'] = $row->entity_type;
+          $instances[$ct]['bundle'] = $row->bundle;
+          $ct++;
+        }
+      }
+      if (count($instances)) {
+        $glids = array();
+        foreach ($instances AS $k => $instance) {
+          $query = db_select('getlocations_fields_entities', 'e');
+          $query->fields('e', array('glid'));
+          $query->condition('e.' . $identifier, 0, '>')
+            ->condition('e.field_name', $instance['field_name']);
+          $result2 = $query->execute();
+          if ($result2) {
+            foreach ($result2 AS $row) {
+              $glids[] = $row->glid;
+            }
+          }
+          field_delete_instance($instance);
+        }
+        if (count($glids)) {
+          foreach ($glids AS $glid) {
+            getlocations_fields_delete_record(array('glid' => $glid), '');
+          }
+        }
+        field_purge_batch(1000);
+        // for some reason the record in field_config_instance does not get deleted
+        // even though it is set to be deleted, so do it now.
+        db_delete('field_config_instance')->condition('entity_type', $module)->execute();
+      }
+    }
+  }
+}
+

@@ -444,6 +444,13 @@ function getlocations_settings_form() {
     128,
     t('Where the markerclusterer javascript file is located.')
   );
+  $form['getlocations_paths']['getlocations_path'] = getlocations_element_path(
+    t('Path to getlocations javascript file'),
+    $getlocations_paths['getlocations_path'],
+    60,
+    128,
+    t('Where the getlocations javascript file is located.')
+  );
 
   unset($form['#theme']);
   $form['#theme'] = 'getlocations_settings_form';

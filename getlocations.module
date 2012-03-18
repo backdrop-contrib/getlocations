@@ -797,12 +797,12 @@ function getlocations_setup_js($defaults) {
     drupal_add_js($getlocations_paths['infowindow_options_path']);
   }
 
-  if (!stristr($current_js, GETLOCATIONS_PATH . '/js/getlocations.js')) {
+  if (!stristr($current_js, $getlocations_paths['getlocations_path'])) {
     if (is_numeric($defaults['getlocations_js_weight']) && $defaults['getlocations_js_weight'] != 0) {
-      drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js',  array('weight' => $defaults['getlocations_js_weight']));
+      drupal_add_js($getlocations_paths['getlocations_path'],  array('weight' => $defaults['getlocations_js_weight']));
     }
     else {
-      drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations.js');
+      drupal_add_js($getlocations_paths['getlocations_path']);
     }
   }
 }
@@ -2174,6 +2174,7 @@ function getlocations_paths_get() {
       'markermanager_path' => GETLOCATIONS_PATH . '/js/markermanager.js',
       'markerclusterer_path' => GETLOCATIONS_PATH . '/js/markerclusterer.js',
       'infowindow_options_path' => GETLOCATIONS_PATH . '/js/infowindow_options.js',
+      'getlocations_path' => GETLOCATIONS_PATH . '/js/getlocations.js',
     )
   );
   if (! isset($getlocations_paths['markerclusterer_path'])) {
@@ -2182,5 +2183,9 @@ function getlocations_paths_get() {
   if (! isset($getlocations_paths['infowindow_options_path'])) {
     $getlocations_paths['infowindow_options_path'] = GETLOCATIONS_PATH . '/js/infowindow_options.js';
   }
+  if (! isset($getlocations_paths['getlocations_path'])) {
+    $getlocations_paths['getlocations_path'] = GETLOCATIONS_PATH . '/js/getlocations.js';
+  }
+
   return $getlocations_paths;
 }

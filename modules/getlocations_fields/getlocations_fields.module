@@ -1390,7 +1390,8 @@ function getlocations_fields_getmap($settings, $active, $mapid) {
   drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   if ($active) {
-    drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js');
+    $getlocations_fields_paths = variable_get('getlocations_fields_paths', array('getlocations_fields_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js'));
+    drupal_add_js($getlocations_fields_paths['getlocations_fields_path']);
     $settings['nodezoom'] = $getlocations_defaults['nodezoom'];
     getlocations_fields_js_settings_do($settings, $mapid);
 
@@ -2516,4 +2517,3 @@ function getlocations_fields_modules_uninstalled($modules) {
     }
   }
 }
-

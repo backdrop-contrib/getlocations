@@ -92,6 +92,46 @@ function getlocations_fields_dd_to_dms($coord) {
 }
 
 /**
+ * Convert dms string to decimal degrees.
+ * Should be reasonably tolerant of sloppy input
+ *
+ * @param string
+ *
+ * @return string
+ */
+function getlocations_fields_dms_to_dd($dms) {
+  // If it ends with a word starting with S or W, then it's a negative
+  // case insensitive
+  $direction = 1;
+  preg_match("/\s(\w+)\b$/", $dms, $m);
+  if (preg_match("/^s/i", $m[1]) || preg_match("/^w/i", $m[1]) ) {
+    $direction = -1;
+  }
+
+  $dmsarr = explode(' ', $dms);
+  $dmsarr2 = array();
+  foreach ($dmsarr AS $v) {
+    if ($v) {
+      // strip out non-numbers found at the end of the string so we keep '.'
+      $tmp = preg_replace("/\D+$/", '', $v);
+      $tmp = trim($tmp);
+      if ($tmp) {
+        $dmsarr2[] = $tmp;
+      }
+    }
+  }
+  $dd = FALSE;
+  if (count($dmsarr2) == 3) {
+    list($degrees, $minutes, $seconds) = $dmsarr2;
+    $dd = floatval($degrees + ((($minutes * 60) + ($seconds )) / 3600));
+    if ($dd > 0) {
+      $dd = $direction * $dd;
+    }
+  }
+  return $dd;
+}
+
+/**
  * Calculations functions.
  * from location module
  */
@@ -868,4 +908,3 @@ function getlocations_fields_smart_ip() {
   }
   exit;
 }
-

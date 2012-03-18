@@ -32,6 +32,24 @@ function getlocations_fields_settings_form() {
 
   $form['getlocations_fields_defaults'] += getlocations_fields_display_settings_form($getlocations_fields_defaults);
 
+  $form['getlocations_fields_paths'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Javascript paths'),
+    '#description' => t('For advanced users who want to supply their own javascript.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getlocations_fields_paths = variable_get('getlocations_fields_paths', array('getlocations_fields_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js'));
+  $form['getlocations_fields_paths']['getlocations_fields_path'] = getlocations_element_path(
+    t('Path to getlocations_fields javascript file'),
+    $getlocations_fields_paths['getlocations_fields_path'],
+    70,
+    128,
+    t('Where the getlocations_fields javascript file is located.')
+  );
+
   unset($form['#theme']);
   $form['#theme'] = 'getlocations_fields_settings_form';
   $form['#validate'][] = 'getlocations_fields_settings_validate';

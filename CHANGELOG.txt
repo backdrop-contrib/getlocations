@@ -1,9 +1,48 @@
-commit 32171e2
+commit f39a2b2
+Author: hutch <hutch@midwales.net>
+Date:   Tue Mar 20 22:19:02 2012 +0000
+
+    more work on default views
+
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+
+commit 5cbde0f
+Author: hutch <hutch@midwales.net>
+Date:   Sun Mar 18 18:21:05 2012 +0000
+
+    added getlocations.js to getlocations_paths
+
+getlocations.admin.inc
+getlocations.module
+
+commit 1ddf6bd
+Author: hutch <hutch@midwales.net>
+Date:   Sun Mar 18 00:47:59 2012 +0000
+
+    added getlocations_fields_paths
+
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit 3a2bd21
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 17 18:42:24 2012 +0000
+
+    added infowindow_options
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+js/infowindow_options.txt
+
+commit b1f5ca9
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 17 11:04:13 2012 +0000
 
     better permissions, added some descriptions
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations.theme.inc

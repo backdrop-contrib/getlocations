@@ -1,9 +1,50 @@
-commit f39a2b2
+commit e151bc5
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 3 19:43:14 2012 +0100
+
+    added getlocations blocks module
+
+modules/getlocations_blocks/README.txt
+modules/getlocations_blocks/getlocations_blocks.css
+modules/getlocations_blocks/getlocations_blocks.info
+modules/getlocations_blocks/getlocations_blocks.install
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_blocks/js/getlocations_blocks.js
+
+commit 30d6e48
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 3 19:42:27 2012 +0100
+
+    added colorbox markers feature
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+getlocations_box.tpl.php
+getlocations_marker_box.tpl.php
+images/info.png
+js/getlocations_admin.js
+js/getlocations_marker_box.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+views/getlocations_plugin_style_map.inc
+
+commit bfb335b
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 3 19:32:47 2012 +0100
+
+    some cleanup
+
+getlocations.admin.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+
+commit b2b884c
 Author: hutch <hutch@midwales.net>
 Date:   Tue Mar 20 22:19:02 2012 +0000
 
     more work on default views
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields.views_default.inc
 
 commit 5cbde0f

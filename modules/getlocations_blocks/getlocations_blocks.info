@@ -1,0 +1,8 @@
+name = Getlocations Blocks
+description = Provides some blocks to help with getlocations_fields Views.
+core = 7.x
+package = Other
+php = 5
+dependencies[] = getlocations_fields
+dependencies[] = views
+dependencies[] = block

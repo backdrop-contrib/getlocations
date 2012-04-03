@@ -109,6 +109,9 @@ class getlocations_plugin_style_map extends views_plugin_style {
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
+    $form['#theme'] = 'getlocations_plugin_style_map_options_form';
+
+
     $handlers = $this->display->handler->get_handlers('field');
     $source_options = array('' => t('None'));
 
@@ -327,3 +330,4 @@ class getlocations_plugin_style_map extends views_plugin_style {
   }
 
 }
+

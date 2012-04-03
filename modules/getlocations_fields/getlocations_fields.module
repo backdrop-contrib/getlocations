@@ -725,7 +725,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
         foreach ($types AS $type => $name) {
           $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
           $mkey = 'vocabulary_marker_' . $field_name;
-          $form[$mkey] = getlocations_element_map_marker(
+          $element[$mkey] = getlocations_element_map_marker(
             t('%name Vocabulary Marker', array('%name' => $name)),
             $markers,
             $settings[$mkey]
@@ -757,7 +757,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
         foreach ($types AS $type => $name) {
           $field_name = getlocations_get_fieldname($type);
           $mkey = 'node_marker_' . $field_name;
-          $form[$mkey] = getlocations_element_map_marker(
+          $element[$mkey] = getlocations_element_map_marker(
             t('%name Node Marker', array('%name' => $name)),
             $markers,
             $settings[$mkey]

@@ -384,6 +384,11 @@ function theme_getlocations_fields_field_settings_form($variables) {
   $form['mapwidth']['#prefix'] = $prefix;
   $form['draggable']['#suffix'] = '</div></fieldset>';
 
+  if (isset($form['input_map_marker'])) {
+    $link = getlocations_markerpicker_link($form['input_map_marker']['#id'], 'i');
+    $form['input_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+  }
+
   $output .= drupal_render_children($form);
   return $output;
 
@@ -453,8 +458,13 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';
 
-  $form['marker']['#prefix'] = '<div class="getlocations_fields_marker_wrapper">';
-  $form['marker']['#suffix'] = '</div>';
+  if (isset($form['marker'])) {
+    // colorbox marker
+    $link = getlocations_markerpicker_link($form['marker']['#id'], 'i');
+    $form['marker']['#field_suffix'] = '&nbsp;' . $link;
+    $form['marker']['#prefix'] = '<div class="getlocations_fields_marker_wrapper">';
+    $form['marker']['#suffix'] = '</div>';
+  }
 
   $form['city']['#prefix'] = '<div class="getlocations_fields_city_wrapper">';
   $form['city']['#suffix'] = '</div>';
@@ -634,4 +644,3 @@ function theme_getlocations_fields_distance($variables) {
   $output .= number_format($distance, 2) . ' ' . $shortunit;
   return $output;
 }
-

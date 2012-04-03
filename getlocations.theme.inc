@@ -37,7 +37,16 @@ function getlocations_theme() {
       ),
       'template' => 'getlocations_box',
     ),
+    'getlocations_marker_box' => array(
+      'variables' => array(
+        'content' => NULL,
+      ),
+      'template' => 'getlocations_marker_box',
+    ),
     'getlocations_settings_form' => array(
+      'render element' => 'form',
+    ),
+    'getlocations_plugin_style_map_options_form' => array(
       'render element' => 'form',
     ),
   );
@@ -279,6 +288,46 @@ function template_preprocess_getlocations_box(&$variables) {
 
 }
 
+/**
+ * @param array $variables
+ *
+ * @return
+ *   Modifies $variables in situ
+ *
+ */
+function template_preprocess_getlocations_marker_box(&$variables) {
+
+  if (module_exists('admin_menu')) {
+    admin_menu_suppress();
+  }
+  drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_marker_box.js');
+
+  $head_title = t('Getlocations markers');
+  $variables['head_title'] = $head_title;
+  $variables['base_path'] = base_path();
+  $variables['head'] = drupal_get_html_head();
+  $variables['language'] = $GLOBALS['language'];
+  $variables['language']->dir = $GLOBALS['language']->direction ? 'rtl' : 'ltr';
+  $variables['css'] = drupal_add_css();
+  $variables['styles'] = drupal_get_css();
+  $variables['scripts'] = drupal_get_js();
+  $variables['title'] = $head_title;
+
+  // Closure should be filled last.
+  $variables['closure'] = theme('closure');
+  // Compile a list of classes that are going to be applied to the body element.
+  // This allows advanced theming based on context (home page, node of certain type, etc.).
+  $body_classes = array();
+  // Add a class that tells us whether we're on the front page or not.
+  $body_classes[] = $variables['is_front'] ? 'front' : 'not-front';
+  // Add a class that tells us whether the page is viewed by an authenticated user or not.
+  $body_classes[] = $variables['logged_in'] ? 'logged-in' : 'not-logged-in';
+  $body_classes[] = 'no-sidebars';
+  // Implode with spaces.
+  $variables['body_classes'] = implode(' ', $body_classes);
+
+}
+
 function theme_getlocations_settings_form($variables) {
 
   $form = $variables['form'];
@@ -304,11 +353,63 @@ function theme_getlocations_settings_form($variables) {
     $form['getlocations_default']['returnlink_comment_link']['#prefix'] = '<div id="wrap-comment-link">';
     $form['getlocations_default']['returnlink_comment_link']['#suffix'] = '</div>';
   }
-  if (isset($form['getlocations_colorbox']['width'])) {
+  if (isset($form['getlocations_colorbox']['width']) && isset($form['getlocations_colorbox']['height'])) {
     $form['getlocations_colorbox']['width']['#prefix'] = '<div id="wrap-getlocations-colorbox">';
-  }
-  if (isset($form['getlocations_colorbox']['height'])) {
     $form['getlocations_colorbox']['height']['#suffix'] = '</div>';
+  }
+  if (isset($form['getlocations_colorbox']['marker_width']) && isset($form['getlocations_colorbox']['marker_height'])) {
+    $form['getlocations_colorbox']['marker_width']['#prefix'] = '<div id="wrap-getlocations-marker-colorbox">';
+    $form['getlocations_colorbox']['marker_height']['#suffix'] = '</div>';
+  }
+
+  // marker colorbox
+  if (module_exists('colorbox')) {
+    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
+      'enable' => 0,
+      'width' => 600,
+      'height' => 600,
+      'marker_enable' => 0,
+      'marker_width' => 600,
+      'marker_height' => 600,
+    ));
+    if ($getlocations_colorbox['marker_enable']) {
+      $link = getlocations_markerpicker_link($form['getlocations_default']['node_map_marker']['#id'], 'n');
+      $form['getlocations_default']['node_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+
+      if (isset($form['getlocations_default']['user_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['getlocations_default']['user_map_marker']['#id'], 'u');
+        $form['getlocations_default']['user_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+
+      if (isset($form['getlocations_default']['vocabulary_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['getlocations_default']['vocabulary_map_marker']['#id'], 'v');
+        $form['getlocations_default']['vocabulary_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+      if (isset($form['getlocations_default']['comment_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['getlocations_default']['comment_map_marker']['#id'], 'c');
+        $form['getlocations_default']['comment_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+      $link = getlocations_markerpicker_link($form['getlocations_default']['input_map_marker']['#id'], 'i');
+      $form['getlocations_default']['input_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+
+      if ($types = getlocations_get_types()) {
+        foreach ($types AS $type => $name) {
+          if (isset($form['getlocations_node_marker']['content_type'][$type]['map_marker'])) {
+            $link = getlocations_markerpicker_link($form['getlocations_node_marker']['content_type'][$type]['map_marker']['#id'], 'n');
+            $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+          }
+        }
+      }
+
+      if (module_exists('getlocations_fields') && $types = getlocations_get_vocabularies()) {
+        foreach ($types AS $type => $name) {
+          if (isset($form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker'])) {
+            $link = getlocations_markerpicker_link($form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#id'], 'v');
+            $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+          }
+        }
+      }
+    }
   }
 
   $form['getlocations_default']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
@@ -316,4 +417,61 @@ function theme_getlocations_settings_form($variables) {
 
   $output .= drupal_render_children($form);
   return $output;
+}
+
+function theme_getlocations_plugin_style_map_options_form($variables) {
+  $form = $variables['form'];
+
+  if (module_exists('colorbox')) {
+    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
+      'enable' => 0,
+      'width' => 600,
+      'height' => 600,
+      'marker_enable' => 0,
+      'marker_width' => 600,
+      'marker_height' => 600,
+    ));
+    if ($getlocations_colorbox['marker_enable']) {
+      if (isset($form['node_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['node_map_marker']['#id'], 'n');
+        $form['node_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      if ($getlocations_node_marker['enable']) {
+        if ($types = getlocations_get_types()) {
+          foreach ($types AS $type => $name) {
+            $field_name = getlocations_get_fieldname($type);
+            $mkey = 'node_marker_' . $field_name;
+            $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
+            $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+          }
+        }
+      }
+      if (isset($form['user_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['user_map_marker']['#id'], 'n');
+        $form['user_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+      if (isset($form['vocabulary_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['vocabulary_map_marker']['#id'], 'v');
+        $form['vocabulary_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+      $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+      if ($getlocations_vocabulary_marker['enable']) {
+        foreach ($types AS $type => $name) {
+          $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+          $mkey = 'vocabulary_marker_' . $field_name;
+          $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
+          $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+        }
+      }
+      if (isset($form['comment_map_marker'])) {
+        $link = getlocations_markerpicker_link($form['comment_map_marker']['#id'], 'n');
+        $form['comment_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+    }
+  }
+
+  $output .= drupal_render_children($form);
+  return $output;
+
 }

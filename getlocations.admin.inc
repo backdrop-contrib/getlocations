@@ -23,7 +23,7 @@ function getlocations_settings_form() {
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
-    '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button to rebuild the marker cache file.'),
+    '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button.'),
   );
   if (file_default_scheme() != 'public') {
     $form['rebuild']['getlocations_private_markerfile'] = array(
@@ -369,6 +369,9 @@ function getlocations_settings_form() {
       'enable' => 0,
       'width' => 600,
       'height' => 600,
+      'marker_enable' => 0,
+      'marker_width' => 600,
+      'marker_height' => 600,
     ));
     $form['getlocations_colorbox']['enable'] = array(
       '#type' => 'checkbox',
@@ -395,6 +398,33 @@ function getlocations_settings_form() {
       // need this to get validation to work
       '#parents' => array('getlocations_colorbox', 'height'),
     );
+
+    $form['getlocations_colorbox']['marker_enable'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable Marker picker'),
+      '#default_value' =>  (isset($getlocations_colorbox['marker_enable']) ? $getlocations_colorbox['marker_enable'] : 0),
+      '#return_value' => 1,
+      '#description' => t('Show Markers in a Colorbox.'),
+    );
+    $form['getlocations_colorbox']['marker_width'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Marker Colorbox width'),
+      '#default_value' => (isset($getlocations_colorbox['marker_width']) ? $getlocations_colorbox['marker_width'] : 600),
+      '#size' => 5,
+      '#required' => TRUE,
+      // need this to get validation to work
+      '#parents' => array('getlocations_colorbox', 'marker_width'),
+    );
+    $form['getlocations_colorbox']['marker_height'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Marker Colorbox height'),
+      '#default_value' => (isset($getlocations_colorbox['marker_height']) ? $getlocations_colorbox['marker_height'] : 600),
+      '#size' => 5,
+      '#required' => TRUE,
+      // need this to get validation to work
+      '#parents' => array('getlocations_colorbox', 'marker_height'),
+    );
+
   }
 
   $form['getlocations_paths'] = array(
@@ -511,6 +541,15 @@ function getlocations_settings_validate($form, &$form_state) {
     }
     if (empty($form_state['values']['getlocations_colorbox']['height']) || ! is_numeric($form_state['values']['getlocations_colorbox']['height']) || $form_state['values']['getlocations_colorbox']['height'] < 1 ) {
       form_set_error('getlocations_colorbox][height', t('Colorbox height must be a number'));
+    }
+  }
+
+  if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['marker_enable']) && $form_state['values']['getlocations_colorbox']['marker_enable']) {
+    if (empty($form_state['values']['getlocations_colorbox']['marker_width']) || ! is_numeric($form_state['values']['getlocations_colorbox']['marker_width']) || $form_state['values']['getlocations_colorbox']['marker_width'] < 1 ) {
+      form_set_error('getlocations_colorbox][marker_width', t('Colorbox width must be a number'));
+    }
+    if (empty($form_state['values']['getlocations_colorbox']['marker_height']) || ! is_numeric($form_state['values']['getlocations_colorbox']['marker_height']) || $form_state['values']['getlocations_colorbox']['marker_height'] < 1 ) {
+      form_set_error('getlocations_colorbox][marker_height', t('Colorbox height must be a number'));
     }
   }
 

@@ -47,6 +47,5 @@
     </div></div>
   </div></div>
   <?php print $closure; ?>
-</script>
 </body>
 </html>

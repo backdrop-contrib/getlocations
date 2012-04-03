@@ -87,6 +87,21 @@
         }
       });
 
+      if ($("#edit-getlocations-colorbox-marker-enable").attr('checked')) {
+        $("#wrap-getlocations-marker-colorbox").show();
+      }
+      else {
+        $("#wrap-getlocations-marker-colorbox").hide();
+      }
+      $("#edit-getlocations-colorbox-marker-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-marker-colorbox").show();
+        }
+        else {
+          $("#wrap-getlocations-marker-colorbox").hide();
+        }
+      });
+
       if ($("#edit-getlocations-node-marker-enable").attr('checked')) {
         $("#wrap-getlocations-node-markers").show();
       }

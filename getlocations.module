@@ -28,11 +28,15 @@ function getlocations_help($path, $arg) {
  */
 function getlocations_init() {
   module_load_include('inc', 'getlocations', 'getlocations.theme');
+
   if (module_exists('colorbox')) {
     $getlocations_colorbox = variable_get('getlocations_colorbox', array(
       'enable' => 0,
       'width' => 600,
       'height' => 600,
+      'marker_enable' => 0,
+      'marker_width' => 600,
+      'marker_height' => 600,
     ));
     $settings = array('getlocations_colorbox' => $getlocations_colorbox);
     drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_colorbox.js');
@@ -188,6 +192,11 @@ function getlocations_menu() {
     'title' => 'Get locations',
     'access arguments' => array('access getlocations'),
     'page callback' => 'getlocations_box',
+    'type' => MENU_CALLBACK,
+  );
+  $items['getlocations/markerinfo'] = array(
+    'access callback' => TRUE,
+    'page callback' => 'getlocations_markerinfo',
     'type' => MENU_CALLBACK,
   );
 
@@ -1174,6 +1183,52 @@ function getlocations_lidinfo() {
 
   print $content;
   exit();
+}
+
+// provides data for marker colorbox
+function getlocations_markerinfo() {
+  $linktype = $_GET['lt'];
+  $cat =  $_GET['cat'];
+  $content = "";
+  $icons =   getlocations_get_icondata();
+  $data = array();
+  $files = array();
+  $machine_names = array();
+  $display_names = array();
+  $positions = array();
+  $iconct = 0;
+  foreach (array_keys($icons) AS $path) {
+    if (preg_match("~^/.*/$~", $path)) {
+      continue;
+    }
+    $files = $icons[$path]['f'];
+    $machine_names = $icons[$path]['i'][0][0][0];
+    $display_names = $icons[$path]['i'][0][0][1];
+    $positions     = $icons[$path]['i'][0][0][2];
+    $newpositions = array();
+    foreach ($positions AS $pos) {
+      if (isset($pos[0])) {
+        $newpositions[] = $pos[0];
+      }
+    }
+    foreach ($newpositions AS $pos) {
+      $adj = 0;
+      // no shadow
+      if ($pos < 1) {
+        $adj = 1;
+      }
+      $data[$iconct]['path'] = $path . $files[$pos];
+      $data[$iconct]['machine_name'] = $machine_names[$pos + $adj];
+      $data[$iconct]['display_name'] = $display_names[$pos + $adj];
+      $iconct++;
+    }
+  }
+  $content['data'] = $data;
+  $content['linktype'] = $linktype;
+  $content['cat'] = $cat;
+  $output = theme('getlocations_marker_box', array('content' => $content));
+  print $output;
+  exit;
 }
 
 /**
@@ -2188,4 +2243,33 @@ function getlocations_paths_get() {
   }
 
   return $getlocations_paths;
+}
+
+function getlocations_markerpicker_link($id, $cat, $infoimg='') {
+  if (module_exists('colorbox')) {
+    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
+      'enable' => 0,
+      'width' => 600,
+      'height' => 600,
+      'marker_enable' => 0,
+      'marker_width' => 600,
+      'marker_height' => 600,
+    ));
+    if ($getlocations_colorbox['marker_enable']) {
+      $boxwidth = $getlocations_colorbox['marker_width'];
+      $boxheight = $getlocations_colorbox['marker_height'];
+      if (empty($infoimg)) {
+        $infoimg = '<img class="getlocations_infoimg" src="' . base_path() . drupal_get_path( 'module','getlocations') . '/images/info.png' . '" title="' . t('Click here to select an icon from a colorbox') . '" >';
+      }
+      $link = l($infoimg, 'getlocations/markerinfo', array(
+          'attributes' => array(
+            'class' => 'colorbox-load',
+          ),
+          'html' => TRUE,
+          'query' => array('width' => $boxwidth, 'height' => $boxheight, 'iframe' => 'true', 'lt' => $id, 'cat' => $cat),
+        )
+      );
+      return $link;
+    }
+  }
 }

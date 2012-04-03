@@ -23,7 +23,7 @@ function getlocations_settings_form() {
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
-    '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click here to rebuild the marker cache file.'),
+    '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button to rebuild the marker cache file.'),
   );
   if (file_default_scheme() != 'public') {
     $form['rebuild']['getlocations_private_markerfile'] = array(
@@ -88,7 +88,7 @@ function getlocations_settings_form() {
     '#type' => 'textarea',
     '#title' => t('Default styles'),
     '#default_value' => $getlocations_defaults['styles'],
-    '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l('http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', array('external' => TRUE)))),
+    '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l(t('this wizard'), 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html', array('external' => TRUE)))),
   );
 
   $form['getlocations_default']['latlong'] = getlocations_element_map_tf(

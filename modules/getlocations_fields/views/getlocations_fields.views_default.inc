@@ -1923,7 +1923,6 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['arguments']['tid']['id'] = 'tid';
   $handler->display->display_options['arguments']['tid']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['arguments']['tid']['field'] = 'tid';
-  $handler->display->display_options['arguments']['tid']['default_action'] = 'default';
   $handler->display->display_options['arguments']['tid']['default_argument_type'] = 'taxonomy_tid';
   $handler->display->display_options['arguments']['tid']['default_argument_options']['term_page'] = 1;
   $handler->display->display_options['arguments']['tid']['default_argument_options']['node'] = 0;
@@ -2290,7 +2289,6 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['arguments']['distance']['id'] = 'distance';
   $handler->display->display_options['arguments']['distance']['table'] = 'getlocations_fields';
   $handler->display->display_options['arguments']['distance']['field'] = 'distance';
-  $handler->display->display_options['arguments']['distance']['default_action'] = 'default';
   $handler->display->display_options['arguments']['distance']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['distance']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['distance']['default_argument_skip_url'] = 0;
@@ -2643,7 +2641,6 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['arguments']['country']['id'] = 'country';
   $handler->display->display_options['arguments']['country']['table'] = 'getlocations_fields';
   $handler->display->display_options['arguments']['country']['field'] = 'country';
-  $handler->display->display_options['arguments']['country']['default_action'] = 'default';
   $handler->display->display_options['arguments']['country']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['country']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['country']['default_argument_skip_url'] = 0;
@@ -2998,7 +2995,6 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['arguments']['postal_code']['id'] = 'postal_code';
   $handler->display->display_options['arguments']['postal_code']['table'] = 'getlocations_fields';
   $handler->display->display_options['arguments']['postal_code']['field'] = 'postal_code';
-  $handler->display->display_options['arguments']['postal_code']['default_action'] = 'default';
   $handler->display->display_options['arguments']['postal_code']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['postal_code']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['postal_code']['default_argument_skip_url'] = 0;
@@ -3355,7 +3351,6 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['arguments']['province']['id'] = 'province';
   $handler->display->display_options['arguments']['province']['table'] = 'getlocations_fields';
   $handler->display->display_options['arguments']['province']['field'] = 'province';
-  $handler->display->display_options['arguments']['province']['default_action'] = 'default';
   $handler->display->display_options['arguments']['province']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['province']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['province']['default_argument_skip_url'] = 0;
@@ -3712,7 +3707,6 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['arguments']['city']['id'] = 'city';
   $handler->display->display_options['arguments']['city']['table'] = 'getlocations_fields';
   $handler->display->display_options['arguments']['city']['field'] = 'city';
-  $handler->display->display_options['arguments']['city']['default_action'] = 'default';
   $handler->display->display_options['arguments']['city']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['city']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['city']['default_argument_skip_url'] = 0;

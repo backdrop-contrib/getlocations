@@ -268,7 +268,7 @@ function getlocations_blocks_city_get() {
   $result = $query->execute();
   foreach ($result AS $row) {
     if ($row->city) {
-      $matches[$row->city] = check_plain($row->city);
+      $matches[$row->city] = htmlspecialchars_decode(check_plain($row->city), ENT_QUOTES);
     }
   }
   ksort($matches);
@@ -287,7 +287,7 @@ function getlocations_blocks_province_get() {
   $result = $query->execute();
   foreach ($result AS $row) {
     if ($row->province) {
-      $matches[$row->province] = check_plain($row->province);
+      $matches[$row->province] = htmlspecialchars_decode(check_plain($row->province), ENT_QUOTES);
     }
   }
   ksort($matches);
@@ -306,7 +306,7 @@ function getlocations_blocks_postalcode_get() {
   $result = $query->execute();
   foreach ($result AS $row) {
     if ($row->city) {
-      $matches[$row->city] = check_plain($row->city);
+      $matches[$row->postal_code] = htmlspecialchars_decode(check_plain($row->postal_code), ENT_QUOTES);
     }
   }
   ksort($matches);

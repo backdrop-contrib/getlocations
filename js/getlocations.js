@@ -321,7 +321,8 @@ var inputmap = [];
       shape: gs.markdone.shape,
       map: map,
       position: p,
-      title: title
+      title: title,
+      optimized: false
     });
 
     if (gs.markeraction > 0) {

@@ -1,9 +1,26 @@
-commit e151bc5
+commit 199264c
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 10 09:52:38 2012 +0100
+
+    issue #1398818 bug
+
+js/getlocations.js
+
+commit c08ebc2
+Author: hutch <hutch@midwales.net>
+Date:   Wed Apr 4 10:24:24 2012 +0100
+
+    fixed bug in postalcodes, added html decoding for apostrophes
+
+modules/getlocations_blocks/getlocations_blocks.module
+
+commit b19e772
 Author: hutch <hutch@midwales.net>
 Date:   Tue Apr 3 19:43:14 2012 +0100
 
     added getlocations blocks module
 
+CHANGELOG.txt
 modules/getlocations_blocks/README.txt
 modules/getlocations_blocks/getlocations_blocks.css
 modules/getlocations_blocks/getlocations_blocks.info

@@ -1,9 +1,19 @@
-commit 199264c
+commit 806be5e
+Author: hutch <hutch@midwales.net>
+Date:   Sat Apr 14 12:53:41 2012 +0100
+
+    translation bugs
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 7e7d606
 Author: hutch <hutch@midwales.net>
 Date:   Tue Apr 10 09:52:38 2012 +0100
 
     issue #1398818 bug
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit c08ebc2

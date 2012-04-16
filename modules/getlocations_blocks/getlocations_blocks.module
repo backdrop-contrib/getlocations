@@ -81,14 +81,21 @@ function getlocations_blocks_block_configure($delta = '') {
   $options = array('dropdown' => t('Dropdown'), 'autocomplete' => t('Autocomplete'));
   $get = getlocations_blocks_get_var();
   $form = array();
-
+  $desc2 = array();
+  $desc2[0] = t('Please enable this view.');
+  $desc2[1] = t('This view is enabled.');
   switch ($delta) {
     case 'getlocations_blocks_city':
+      $view = 'getlocations_by_city';
+      $tarr = array('%t' => $desc2[0]);
+      if (getlocations_blocks_check_view($view)) {
+        $tarr = array('%t' => $desc2[1]);
+      }
       $form['getlocations_blocks_city_path'] = array(
         '#type' => 'textfield',
         '#title' => t('Path'),
         '#size' => 40,
-        '#description' => t("The path to the 'Getlocations by city' View. This view must be enabled"),
+        '#description' => t("The path to the 'Getlocations by city' View. %t", $tarr),
         '#default_value' => $get['city_path'],
       );
       $form['getlocations_blocks_city_element'] = array(
@@ -100,11 +107,16 @@ function getlocations_blocks_block_configure($delta = '') {
       break;
 
     case 'getlocations_blocks_province':
+      $view = 'getlocations_by_province';
+      $tarr = array('%t' => $desc2[0]);
+      if (getlocations_blocks_check_view($view)) {
+        $tarr = array('%t' => $desc2[1]);
+      }
       $form['getlocations_blocks_province_path'] = array(
         '#type' => 'textfield',
         '#title' => t('Path'),
         '#size' => 40,
-        '#description' => t("The path to the 'Getlocations by province' View. This view must be enabled"),
+        '#description' => t("The path to the 'Getlocations by province' View. %t", $tarr),
         '#default_value' => $get['province_path'],
       );
       $form['getlocations_blocks_province_element'] = array(
@@ -116,11 +128,16 @@ function getlocations_blocks_block_configure($delta = '') {
       break;
 
     case 'getlocations_blocks_postalcode':
+      $view = 'getlocations_bypostcode';
+      $tarr = array('%t' => $desc2[0]);
+      if (getlocations_blocks_check_view($view)) {
+        $tarr = array('%t' => $desc2[1]);
+      }
       $form['getlocations_blocks_postalcode_path'] = array(
         '#type' => 'textfield',
         '#title' => t('Path'),
         '#size' => 40,
-        '#description' => t("The path to the 'Getlocations by postalcode' View. This view must be enabled"),
+        '#description' => t("The path to the 'Getlocations by postalcode' View. %t", $tarr),
         '#default_value' => $get['postalcode_path'],
       );
       $form['getlocations_blocks_postalcode_element'] = array(
@@ -132,11 +149,16 @@ function getlocations_blocks_block_configure($delta = '') {
       break;
 
     case 'getlocations_blocks_country':
+      $view = 'getlocations_bycountry';
+      $tarr = array('%t' => $desc2[0]);
+      if (getlocations_blocks_check_view($view)) {
+        $tarr = array('%t' => $desc2[1]);
+      }
       $form['getlocations_blocks_country_path'] = array(
         '#type' => 'textfield',
         '#title' => t('Path'),
         '#size' => 40,
-        '#description' => t("The path to the 'Getlocations by country' View. This view must be enabled"),
+        '#description' => t("The path to the 'Getlocations by country' View. %t", $tarr),
         '#default_value' => $get['country_path'],
       );
       $form['getlocations_blocks_country_element'] = array(
@@ -268,7 +290,7 @@ function getlocations_blocks_city_get() {
   $result = $query->execute();
   foreach ($result AS $row) {
     if ($row->city) {
-      $matches[$row->city] = htmlspecialchars_decode(check_plain($row->city), ENT_QUOTES);
+      $matches[$row->city] = getlocations_apoclean($row->city);
     }
   }
   ksort($matches);
@@ -287,7 +309,7 @@ function getlocations_blocks_province_get() {
   $result = $query->execute();
   foreach ($result AS $row) {
     if ($row->province) {
-      $matches[$row->province] = htmlspecialchars_decode(check_plain($row->province), ENT_QUOTES);
+      $matches[$row->province] = getlocations_apoclean($row->province);
     }
   }
   ksort($matches);
@@ -306,7 +328,7 @@ function getlocations_blocks_postalcode_get() {
   $result = $query->execute();
   foreach ($result AS $row) {
     if ($row->city) {
-      $matches[$row->postal_code] = htmlspecialchars_decode(check_plain($row->postal_code), ENT_QUOTES);
+      $matches[$row->postal_code] = getlocations_apoclean($row->postal_code);
     }
   }
   ksort($matches);
@@ -667,4 +689,25 @@ function getlocations_blocks_set_var($var) {
   $oldvar = getlocations_blocks_get_var();
   $newvar = array_merge($oldvar, $var);
   variable_set('getlocations_blocks', $newvar);
+}
+
+/**
+ * Check that a view is enabled.
+ *
+ * @param string $view The Views machine name
+ *
+ * @return bool
+ *
+ */
+function getlocations_blocks_check_view($view) {
+  $views = views_get_enabled_views();
+  $views_names = array();
+  foreach (array_keys($views) AS $key) {
+    $views_names[] = $key;
+  }
+  if (in_array($view, $views_names)) {
+    return TRUE;
+  }
+  return FALSE;
+
 }

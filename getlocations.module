@@ -2273,3 +2273,8 @@ function getlocations_markerpicker_link($id, $cat, $infoimg='') {
     }
   }
 }
+
+// run string through check_plain but then restore apostrophes
+function getlocations_apoclean($string) {
+  return htmlspecialchars_decode(check_plain($string), ENT_QUOTES);
+}

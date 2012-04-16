@@ -69,41 +69,8 @@ function getlocations_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $form['getlocations_default']['width'] = getlocations_element_map_tf(
-    t('Default width'),
-    $getlocations_defaults['width'],
-    10,
-    10,
-    t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
-  );
-  $form['getlocations_default']['height'] = getlocations_element_map_tf(
-    t('Default height'),
-    $getlocations_defaults['height'],
-    10,
-    10,
-    t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
-  );
 
-  $form['getlocations_default']['styles'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Default styles'),
-    '#default_value' => $getlocations_defaults['styles'],
-    '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l(t('this wizard'), 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html', array('external' => TRUE)))),
-  );
-
-  $form['getlocations_default']['latlong'] = getlocations_element_map_tf(
-    t('Map center'),
-    $getlocations_defaults['latlong'],
-    30,
-    30,
-    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0')
-  );
-
-  $form['getlocations_default']['zoom'] = getlocations_element_map_zoom(
-    t('Zoom'),
-    $getlocations_defaults['zoom'],
-    t('The default zoom level of a Google map.')
-  );
+  $form['getlocations_default'] += getlocations_map_display_basics_form($getlocations_defaults);
 
   $form['getlocations_default'] += getlocations_map_display_options_form($getlocations_defaults);
 

@@ -731,7 +731,7 @@ function getlocations_setup_map($defaults) {
  *   Required. the current settings.
  * Sets up the call to googlemaps, css and the relevant getlocations js in html head
  */
-function getlocations_setup_js($defaults) {
+function getlocations_setup_js($defaults, $googleonly = FALSE) {
   global $language;
 
   $current_js = drupal_get_js();
@@ -772,6 +772,9 @@ function getlocations_setup_js($defaults) {
   $gmaplink = url($scheme . '://' . $gmapdomain, array('query' => $query));
   if (!stristr($current_js, $scheme . '://' . $gmapdomain)) {
     drupal_add_js($gmaplink, 'external');
+  }
+  if ($googleonly) {
+    return;
   }
 
   if (!stristr($current_css, GETLOCATIONS_PATH . '/getlocations.css')) {
@@ -1654,7 +1657,7 @@ function getlocations_get_nodetype($nid) {
   return (isset($row['type']) && $row['type'] ? $row['type'] : FALSE);
 }
 
-function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $inputmap = FALSE) {
+function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $inputmap = FALSE, $searchmap = FALSE) {
   global $language;
   $lla = explode(',', $defaults['latlong']);
   $settings = array(
@@ -1699,7 +1702,8 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'latlons'                 => $latlons,
       'minmaxes'                => (empty($minmaxes) ? '' : implode(',', $minmaxes)),
       'inputmap'                => ($inputmap ? 1 : 0),
-      'custom_content_enable' => $defaults['custom_content_enable'],
+      'searchmap'               => ($searchmap ? 1 : 0),
+      'custom_content_enable'   => $defaults['custom_content_enable'],
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');
@@ -2139,6 +2143,47 @@ function getlocations_element_map_behavior($type, $default) {
     return $element;
   }
   return FALSE;
+}
+
+function getlocations_map_display_basics_form($defaults) {
+  $form = array();
+  $form['width'] = getlocations_element_map_tf(
+    t('Default width'),
+    $defaults['width'],
+    10,
+    10,
+    t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+  );
+
+  $form['height'] = getlocations_element_map_tf(
+    t('Default height'),
+    $defaults['height'],
+    10,
+    10,
+    t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+  );
+
+  $form['styles'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Default styles'),
+    '#default_value' => $defaults['styles'],
+    '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l(t('this wizard'), 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html', array('external' => TRUE)))),
+  );
+
+  $form['latlong'] = getlocations_element_map_tf(
+    t('Map center'),
+    $defaults['latlong'],
+    30,
+    30,
+    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0')
+  );
+
+  $form['zoom'] = getlocations_element_map_zoom(
+    t('Zoom'),
+    $defaults['zoom'],
+    t('The default zoom level of a Google map.')
+  );
+  return $form;
 }
 
 function getlocations_map_display_options_form($defaults, $config = TRUE, $extras = TRUE) {

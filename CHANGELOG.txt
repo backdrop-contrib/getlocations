@@ -1,9 +1,52 @@
-commit 806be5e
+commit 95b8a2b
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 16 23:54:43 2012 +0100
+
+    added getlocations_search module
+
+modules/getlocations_search/README.txt
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.css
+modules/getlocations_search/getlocations_search.info
+modules/getlocations_search/getlocations_search.install
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit c30f8f1
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 16 23:40:20 2012 +0100
+
+    globalised map to getlocations_map
+
+js/getlocations.js
+
+commit 850ab45
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 16 23:39:23 2012 +0100
+
+    improved admin form
+
+getlocations.admin.inc
+getlocations.module
+
+commit 2c82669
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 16 23:18:47 2012 +0100
+
+    add apoclean, better blocks
+
+getlocations.module
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_blocks/js/getlocations_blocks.js
+
+commit 82f0f2b
 Author: hutch <hutch@midwales.net>
 Date:   Sat Apr 14 12:53:41 2012 +0100
 
     translation bugs
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/getlocations_fields.theme.inc
 

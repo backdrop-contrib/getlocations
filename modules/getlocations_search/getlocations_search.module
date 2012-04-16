@@ -1,0 +1,562 @@
+<?php
+
+/**
+ * @file
+ * @author Bob Hutchinson http://drupal.org/user/52366
+ * @copyright GNU GPL
+ *
+ * Provides blocks for use with getlocations_fields views.
+ * for Drupal 7
+ */
+
+define('GETLOCATIONS_SEARCH_PATH', drupal_get_path('module', 'getlocations_search'));
+
+/**
+ * Implements hook_help().
+ */
+function getlocations_search_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#getlocations_search':
+      $output = '<p>' . t('Provide a search faciliy for locations on a map.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_init().
+ */
+function getlocations_search_init() {
+    drupal_add_css(GETLOCATIONS_SEARCH_PATH . '/getlocations_search.css');
+
+}
+
+/**
+ * Implements hook_menu().
+ */
+function getlocations_search_menu() {
+  $items = array();
+
+  $items['admin/config/services/getlocations_search'] = array(
+    'title' => 'Getlocations search',
+    'description' => 'Configure Getlocations search',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('getlocations_search_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'getlocations_search.admin.inc',
+  );
+
+  $items['getlocations_search'] = array(
+    'title' => 'Getlocations search',
+    'access arguments' => array('access getlocations'),
+    'page callback' => 'getlocations_search',
+    #'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+  // getlocations_search/info     # ajax callback to fetch all location info
+  $items['getlocations_search/info'] = array(
+    'page callback' => 'getlocations_search_allinfo',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  if (module_exists('taxonomy')) {
+    $items['getlocations_search/term_autocomplete'] = array(
+      'page callback' => 'getlocations_search_term_autocomplete',
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK,
+    );
+  }
+
+  return $items;
+}
+
+/**
+ * Menu item
+ */
+function getlocations_search() {
+  $contents = '';
+  $form = drupal_get_form('getlocations_search_form');
+  $contents .= drupal_render($form);
+
+  $map = getlocations_search_getmap();
+  $contents .= $map;
+
+  return $contents;
+}
+
+/**
+ * The search form
+ *
+ */
+function getlocations_search_form($form, &$form_state) {
+  $getlocations_search_defaults = getlocations_search_defaults();
+
+  if ($getlocations_search_defaults['method'] == 'vocab' && $getlocations_search_defaults['vocab_element'] == 'dropdown') {
+    //
+    $form['getlocations_search'] = array(
+      '#type' => 'select',
+      '#title' => t('Search'),
+      '#options' => getlocations_search_term_get(),
+    );
+  }
+  else {
+    $form['getlocations_search'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Search'),
+      '#maxlength' => 255,
+      '#size' => 50,
+    );
+    if ($getlocations_search_defaults['method'] == 'vocab' && $getlocations_search_defaults['vocab_element'] == 'autocomplete') {
+      $form['getlocations_search']['#autocomplete_path'] = 'getlocations_search/term_autocomplete';
+    }
+  }
+
+  $form['getlocations_search_distance'] = getlocations_fields_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
+
+  $form['getlocations_search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
+
+  $form['getlocations_search_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Restrict the search'),
+    '#options' => array('' => t('Show All'), 'node' => t('Nodes'), 'user' => t('Users'), 'term' => t('Terms'), 'comment' => t('Comments')),
+  );
+
+  if ($getlocations_search_defaults['method'] != 'google_ac') {
+    $form['getlocations_search_submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Go')
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Set up the map and use getlocations to spit it out
+ *
+ */
+function getlocations_search_getmap() {
+  $getlocations_defaults = getlocations_defaults();
+  $getlocations_defaults['places'] = 1;
+
+  $getlocations_search_defaults = getlocations_search_defaults();
+
+  // we need a markermanager enabled
+  if ($getlocations_defaults['markermanagertype'] < 1) {
+    $getlocations_search_defaults['markermanagertype'] = 1;
+  }
+  $getlocations_search_defaults['pansetting'] = $getlocations_defaults['pansetting'];
+
+  // we need to update $getlocations_defaults with data from $getlocations_search_defaults
+  $keys = array('width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol', 'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'trafficinfo', 'bicycleinfo', 'panoramio_use', 'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype');
+  foreach ($keys AS $key) {
+    $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
+  }
+
+  $mapid = getlocations_setup_map($getlocations_defaults);
+
+  getlocations_search_js_settings_do($getlocations_search_defaults, $mapid);
+  $getlocations_search_paths = variable_get('getlocations_search_paths', array('getlocations_search_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_search.js'));
+  $jsfile = $getlocations_search_paths['getlocations_search_path'];
+  drupal_add_js($jsfile);
+
+  $minmaxes = '';
+  #$lla = explode(',', $getlocations_search_defaults['latlong']);
+  #$latlons[] = array($lla[0], $lla[1], 0, '', $getlocations_search_defaults['search_map_marker'], '');
+  $latlons = array();
+  getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid, FALSE, TRUE);
+
+  $map = theme('getlocations_show', array('width' => $getlocations_defaults['width'] , 'height' => $getlocations_defaults['height'] , 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'type' => '', 'node' => ''));
+  return $map;
+}
+
+/**
+ * @param array $defaults
+ *  Settings
+ *
+ * @param string $mapid
+ *  Unique map identifier used in javascript to allow multiple maps
+ *
+ */
+function getlocations_search_js_settings_do($defaults, $mapid) {
+
+  $settings = array(
+    $mapid => array(
+      'method' => $defaults['method'],
+      'maxzoom' => $defaults['maxzoom'],
+    ),
+  );
+
+  drupal_add_js(array('getlocations_search' => $settings), 'setting');
+}
+
+
+
+/**
+ * Implements hook_theme().
+ *
+ * This lets us tell Drupal about our theme functions and their arguments.
+ */
+function getlocations_search_theme() {
+  return array(
+    'getlocations_search_form' => array(
+      'render element' => 'form',
+    ),
+    'getlocations_search_settings_form' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+function theme_getlocations_search_form($variables) {
+  $form = $variables['form'];
+  $output = '';
+  $form['getlocations_search']['#prefix'] = '<div id="getlocations_search_wrapper">';
+  $form['getlocations_search_submit']['#suffix'] = '</div>';
+  $output .= drupal_render_children($form);
+
+  $output .= '<div id="getlocations_search_result">';
+  $output .= '<h4>' . t('Results') . '</h4>';
+  $output .= '<div id="getlocations_search_address"></div>';
+  $output .= '<div id="getlocations_search_count"></div>';
+  $output .= '<div id="getlocations_search_distance"></div>';
+  $output .= '<div id="getlocations_search_type"></div>';
+  $output .= '<div id="getlocations_search_latlon_wrapper">';
+  $output .= '<div id="getlocations_search_lat"></div>';
+  $output .= '<div id="getlocations_search_lon"></div>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  #$output .= '<div id="getlocations_search_test"></div>';
+
+  return $output;
+
+}
+
+function theme_getlocations_search_settings_form($variables) {
+  $form = $variables['form'];
+  $output = '';
+
+  if (isset($form['getlocations_search_defaults']['vocab']) ) {
+    $form['getlocations_search_defaults']['vocab']['#prefix'] = '<div id="getlocations_search_defaults_vocab">';
+    $form['getlocations_search_defaults']['vocab_element']['#suffix'] = '</div>';
+  }
+
+#  if (module_exists('colorbox')) {
+#    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
+#      'enable' => 0,
+#      'width' => 600,
+#      'height' => 600,
+#      'marker_enable' => 0,
+#      'marker_width' => 600,
+#      'marker_height' => 600,
+#    ));
+#    if ($getlocations_colorbox['marker_enable']) {
+#      $link = getlocations_markerpicker_link($form['getlocations_search_defaults']['search_map_marker']['#id'], 's');
+#      $form['getlocations_search_defaults']['search_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+#    }
+#  }
+
+  $output .= drupal_render_children($form);
+  return $output;
+
+}
+
+function getlocations_search_defaults() {
+  $getlocations_defaults = getlocations_defaults();
+  $defaults = array(
+    'method' => 'google_ac',
+    'vocab' => '',
+    'vocab_element' => 'dropdown',
+    'search_map_marker' => 'drupal',
+    'search_distance' => 1,
+    'search_units' => 'km',
+    'display_dms' => 0,
+    'width'                     => $getlocations_defaults['width'],
+    'height'                    => $getlocations_defaults['height'],
+    'styles'                    => $getlocations_defaults['styles'],
+    'latlong'                   => $getlocations_defaults['latlong'],
+    'zoom'                      => $getlocations_defaults['zoom'],
+    'controltype'               => $getlocations_defaults['controltype'],
+    'pancontrol'                => $getlocations_defaults['pancontrol'],
+    'mtc'                       => $getlocations_defaults['mtc'],
+    'maptype'                   => $getlocations_defaults['maptype'],
+    'baselayers' => array(
+      'Map'                     => $getlocations_defaults['baselayers']['Map'],
+      'Satellite'               => $getlocations_defaults['baselayers']['Satellite'],
+      'Hybrid'                  => $getlocations_defaults['baselayers']['Hybrid'],
+      'Physical'                => $getlocations_defaults['baselayers']['Physical'],
+    ),
+    'behavior' => array(
+      'scale'                   => $getlocations_defaults['behavior']['scale'],
+      'overview'                => $getlocations_defaults['behavior']['overview'],
+      'overview_opened'         => $getlocations_defaults['behavior']['overview_opened'],
+      'scrollwheel'             => $getlocations_defaults['behavior']['scrollwheel'],
+    ),
+    'draggable'                 => $getlocations_defaults['draggable'],
+    'streetview_show'           => $getlocations_defaults['streetview_show'],
+    'trafficinfo'               => $getlocations_defaults['trafficinfo'],
+    'bicycleinfo'               => $getlocations_defaults['bicycleinfo'],
+    'panoramio_use'             => $getlocations_defaults['panoramio_use'],
+    'poi_show'                  => $getlocations_defaults['poi_show'],
+    'transit_show'              => $getlocations_defaults['transit_show'],
+    'minzoom'                   => $getlocations_defaults['minzoom'],
+    'maxzoom'                   => $getlocations_defaults['maxzoom'],
+    'nodezoom'                  => $getlocations_defaults['nodezoom'],
+    'markermanagertype'         => $getlocations_defaults['markermanagertype'],
+    'pansetting'                => $getlocations_defaults['pansetting'],
+  );
+  $getlocations_search_defaults = variable_get('getlocations_search_defaults', array());
+  // array_merge deletes things in $defaults that are not in $getlocations_search_defaults ;-/
+  // roll my own
+  $newdefaults = array();
+  foreach ($defaults AS $k => $v) {
+    if (is_array($v)) {
+      foreach ($defaults[$k] AS $k1 => $v1) {
+        if (isset($getlocations_search_defaults[$k][$k1])) {
+          $newdefaults[$k][$k1] = $getlocations_search_defaults[$k][$k1];
+        }
+        else {
+          $newdefaults[$k][$k1] = $v1;
+        }
+      }
+    }
+    else {
+      if (isset($getlocations_search_defaults[$k])) {
+        $newdefaults[$k] = $getlocations_search_defaults[$k];
+      }
+      else {
+        $newdefaults[$k] = $v;
+      }
+    }
+  }
+  return $newdefaults;
+}
+
+function getlocations_search_get_vocabularies() {
+  if (module_exists('taxonomy')) {
+    $vocabularies = taxonomy_get_vocabularies();
+    $options = array();
+    if (count($vocabularies)) {
+      foreach ($vocabularies as $vid => $vocabulary) {
+        $options[$vid] = $vocabulary->name;
+      }
+      return $options;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * autocomplete for taxonomy terms
+ *
+ * @param string $string
+ *
+ * @return
+ *   Returns term names
+ *
+ */
+function getlocations_search_term_autocomplete($string) {
+  $matches = array();
+
+  // Taxonomy which holds locative info
+  $getlocations_search_defaults = getlocations_search_defaults();
+  $vid = FALSE;
+  if (is_numeric($getlocations_search_defaults['vocab']) && $getlocations_search_defaults['vocab'] > 0) {
+    $vid = $getlocations_search_defaults['vocab'];
+  }
+
+  if ($vid) {
+    $query = db_select('taxonomy_term_data', 't');
+    $query->fields('t', array('name'))
+     ->where("LOWER(name) LIKE LOWER(:st)", array(':st' => $string . '%'))
+     ->condition('t.vid', $vid, '=')
+      ->range(0, 15);
+    $result = $query->execute();
+    foreach ($result AS $row) {
+      $matches[$row->name] = check_plain($row->name);
+    }
+  }
+  drupal_json_output($matches);
+}
+
+function getlocations_search_term_get() {
+  $matches = array();
+
+  // Taxonomy which holds locative info
+  $getlocations_search_defaults = getlocations_search_defaults();
+  $vid = FALSE;
+  if (is_numeric($getlocations_search_defaults['vocab']) && $getlocations_search_defaults['vocab'] > 0) {
+    $vid = $getlocations_search_defaults['vocab'];
+  }
+
+  if ($vid) {
+    $query = db_select('taxonomy_term_data', 't');
+    $query->fields('t', array('name'))
+     ->condition('t.vid', $vid, '=');
+    $result = $query->execute();
+    foreach ($result AS $row) {
+      $matches[$row->name] = getlocations_apoclean($row->name);
+    }
+  }
+  ksort($matches);
+  return $matches;
+}
+
+
+function getlocations_search_allinfo() {
+  $lat = $_GET['lat'];
+  $lon = $_GET['lon'];
+  $getlocations_search_defaults = getlocations_search_defaults();
+  $distance = $getlocations_search_defaults['search_distance'];
+  if (isset($_GET['distance']) && is_numeric($_GET['distance'])) {
+    $distance = $_GET['distance'];
+  }
+  $units = $getlocations_search_defaults['search_units'];
+  if (isset($_GET['units'])) {
+    $units = $_GET['units'];
+  }
+  $type = '';
+  if (isset($_GET['type'])) {
+    $type = $_GET['type'];
+  }
+  $dosort = TRUE;
+  $dms = ($getlocations_search_defaults['display_dms'] ? TRUE : FALSE);
+  // sanity check
+  $latlon = $lat . ',' . $lon;
+  if (getlocations_latlon_check($latlon)) {
+    $output = getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dosort, $dms);
+    drupal_json_output($output);
+  }
+}
+
+// $type can be node, user, comment, term. anything else is all
+function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dosort, $dms) {
+
+  $getlocations_defaults = getlocations_defaults();
+
+  $distance_meters = getlocations_fields_convert_distance_to_meters($distance, $units);
+  $latrange = getlocations_fields_earth_latitude_range($lat, $lon, $distance_meters);
+  $lonrange = getlocations_fields_earth_longitude_range($lat, $lon, $distance_meters);
+
+  if ($lonrange[0] > $lonrange[1]) {
+    $where = "g.latitude > :minlat
+    AND g.latitude < :maxlat
+    AND ((g.longitude < 180
+    AND g.longitude > :minlon)
+    OR (g.longitude < :maxlon
+    AND g.longitude > -180))";
+  }
+  else {
+    $where = "g.latitude > :minlat
+    AND g.latitude < :maxlat
+    AND g.longitude > :minlon
+    AND g.longitude < :maxlon";
+  }
+
+  $sort = getlocations_fields_earth_distance_sql($lat, $lon, 'g');
+
+  $fields = array();
+  $fields[] = 'g.glid';
+  $fields[] = 'g.name';
+  $fields[] = 'g.latitude';
+  $fields[] = 'g.longitude';
+  $fields[] = 'g.marker';
+
+  $fields[] = 'f.nid';
+  $fields[] = 'f.uid';
+  $fields[] = 'f.tid';
+  $fields[] = 'f.cid';
+
+  $sqlsnip1 = "";
+  $sqlsnip2 = "";
+  $marker = '';
+  if ($type == 'node') {
+    $fields[] = 'n.title AS title';
+    $fields[] = 'n.nid';
+    $sqlsnip1 = "LEFT JOIN {node} n ON f.vid = n.vid ";
+    $sqlsnip2 = "AND n.nid > 0 ";
+    $marker = $getlocations_defaults['node_map_marker'];
+  }
+  elseif ($type == 'user') {
+    $fields[] = 'u.name AS title';
+    $fields[] = 'u.uid';
+    $sqlsnip1 = "LEFT JOIN {users} u ON f.uid = u.uid ";
+    $sqlsnip2 = "AND u.uid > 0 ";
+    $marker = $getlocations_defaults['user_map_marker'];
+  }
+  elseif ($type == 'term') {
+    $fields[] = 't.name AS title';
+    $fields[] = 't.tid';
+    $sqlsnip1 = "LEFT JOIN {taxonomy_term_data} t ON f.tid = t.tid ";
+    $sqlsnip2 = "AND t.tid > 0 ";
+    $marker = $getlocations_defaults['vocabulary_map_marker'];
+ }
+  elseif ($type == 'comment') {
+    $fields[] = 'c.subject AS title';
+    $fields[] = 'c.cid';
+    $sqlsnip1 = "LEFT JOIN {comment} c ON f.cid = c.cid ";
+    $sqlsnip2 = "AND c.cid > 0 ";
+    $marker = $getlocations_defaults['comment_map_marker'];
+  }
+  if ($dosort) {
+    $fields[] = "$sort AS distance_sort ";
+  }
+
+  $selects = implode(",", $fields);
+
+  $sql = "SELECT $selects ";
+  $sql .= "FROM {getlocations_fields} g LEFT JOIN {getlocations_fields_entities} f ON g.glid = f.glid ";
+  $sql .= $sqlsnip1;
+  $sql .= "WHERE ($where) ";
+  $sql .= "AND g.glid IS NOT NULL ";
+  $sql .= "AND g.latitude != '0' ";
+  $sql .= "AND g.longitude != '0' ";
+  $sql .= $sqlsnip2;
+  if ($dosort) {
+    $sql .= "ORDER BY distance_sort ASC ";
+  }
+
+  $result = db_query($sql, array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]));
+  $newresult = array();
+  foreach ($result AS $k => $row) {
+    $newresult[$k] = $row;
+    if (empty($newresult[$k]->marker)) {
+      if (! empty($marker)) {
+        $newresult[$k]->marker = $marker;
+      }
+      else {
+        // must be an 'all' search so we have to figure out a marker
+        if ($newresult[$k]->nid > 0) {
+          $newresult[$k]->marker = $getlocations_defaults['node_map_marker'];
+        }
+        elseif ($newresult[$k]->uid > 0) {
+          $newresult[$k]->marker = $getlocations_defaults['user_map_marker'];
+        }
+        elseif ($newresult[$k]->tid > 0) {
+          $newresult[$k]->marker = $getlocations_defaults['vocabulary_map_marker'];
+        }
+        elseif ($newresult[$k]->cid > 0) {
+          $newresult[$k]->marker = $getlocations_defaults['comment_map_marker'];
+        }
+      }
+    }
+  }
+  $minmaxes = $latrange[0] . ',' . $lonrange[0] . ',' . $latrange[1] . ',' . $lonrange[1];
+  if ($dms) {
+    $latout = theme('getlocations_fields_latitude_dms', array('latitude' => $lat));
+    $lonout = theme('getlocations_fields_longitude_dms', array('longitude' => $lon));
+  }
+  else {
+    $latout = round($lat, 6);
+    $lonout = round($lon, 6);
+  }
+  $infoarr = array($distance, $units, ($type ? $type : 'all'), $latout, $lonout);
+  $info = implode(",", $infoarr);
+  $ret = array('main' => $newresult, 'minmaxes' => $minmaxes, 'info' => $info);
+  return $ret;
+
+}
+
+

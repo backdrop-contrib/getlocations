@@ -116,10 +116,18 @@ function getlocations_search_form($form, &$form_state) {
 
   $form['getlocations_search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
 
+  $opts = array('' => t('Show All'), 'node' => t('Nodes'));
+  if (user_access('access user getlocations')) {
+    $opts['user'] = t('Users');
+  }
+  $opts['term'] = t('Terms');
+  if (user_access('access comments')) {
+    $opts['comment'] = t('Comments');
+  }
   $form['getlocations_search_type'] = array(
     '#type' => 'select',
     '#title' => t('Restrict the search'),
-    '#options' => array('' => t('Show All'), 'node' => t('Nodes'), 'user' => t('Users'), 'term' => t('Terms'), 'comment' => t('Comments')),
+    '#options' => $opts,
   );
 
   if ($getlocations_search_defaults['method'] != 'google_ac') {
@@ -417,9 +425,14 @@ function getlocations_search_allinfo() {
   if (isset($_GET['units'])) {
     $units = $_GET['units'];
   }
-  $type = '';
+  $type = 'all';
   if (isset($_GET['type'])) {
     $type = $_GET['type'];
+    // sanity check
+    $typarr = array('node', 'user', 'term', 'comment');
+    if (! in_array($type, $typarr)) {
+      $type = 'all';
+    }
   }
   $dosort = TRUE;
   $dms = ($getlocations_search_defaults['display_dms'] ? TRUE : FALSE);
@@ -455,8 +468,6 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
     AND g.longitude < :maxlon";
   }
 
-  $sort = getlocations_fields_earth_distance_sql($lat, $lon, 'g');
-
   $fields = array();
   $fields[] = 'g.glid';
   $fields[] = 'g.name';
@@ -472,35 +483,57 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
   $sqlsnip1 = "";
   $sqlsnip2 = "";
   $marker = '';
-  if ($type == 'node') {
+  if ($type == 'node' && user_access('access content') && user_access('access getlocations')) {
     $fields[] = 'n.title AS title';
     $fields[] = 'n.nid';
     $sqlsnip1 = "LEFT JOIN {node} n ON f.vid = n.vid ";
     $sqlsnip2 = "AND n.nid > 0 ";
     $marker = $getlocations_defaults['node_map_marker'];
   }
-  elseif ($type == 'user') {
+  elseif ($type == 'user' && getlocations_access_user_location()) {
     $fields[] = 'u.name AS title';
     $fields[] = 'u.uid';
     $sqlsnip1 = "LEFT JOIN {users} u ON f.uid = u.uid ";
     $sqlsnip2 = "AND u.uid > 0 ";
     $marker = $getlocations_defaults['user_map_marker'];
   }
-  elseif ($type == 'term') {
+  elseif ($type == 'term' && user_access('access getlocations')) {
     $fields[] = 't.name AS title';
     $fields[] = 't.tid';
     $sqlsnip1 = "LEFT JOIN {taxonomy_term_data} t ON f.tid = t.tid ";
     $sqlsnip2 = "AND t.tid > 0 ";
     $marker = $getlocations_defaults['vocabulary_map_marker'];
  }
-  elseif ($type == 'comment') {
+  elseif ($type == 'comment' && user_access('access comments') && user_access('access getlocations')) {
     $fields[] = 'c.subject AS title';
     $fields[] = 'c.cid';
     $sqlsnip1 = "LEFT JOIN {comment} c ON f.cid = c.cid ";
     $sqlsnip2 = "AND c.cid > 0 ";
     $marker = $getlocations_defaults['comment_map_marker'];
   }
+  elseif ($type == 'all') {
+    $sqlsnip2arr = array();
+    if (user_access('access content') && user_access('access getlocations')) {
+      $sqlsnip2arr[] = "f.nid > 0";
+      $sqlsnip2arr[] = "f.tid > 0";
+    }
+    if (getlocations_access_user_location()) {
+      $sqlsnip2arr[] = "f.uid > 0";
+    }
+    if (user_access('access comments') && user_access('access getlocations')) {
+      $sqlsnip2arr[] = "f.cid > 0";
+    }
+    if (! empty($sqlsnip2arr)) {
+      $sqlsnip2 = "AND (" . implode(" OR ", $sqlsnip2arr) . ") ";
+    }
+    else {
+      // this user may not see anything
+      $sqlsnip2 = "AND 1=0 ";
+    }
+  }
+
   if ($dosort) {
+    $sort = getlocations_fields_earth_distance_sql($lat, $lon, 'g');
     $fields[] = "$sort AS distance_sort ";
   }
 
@@ -544,6 +577,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
     }
   }
   $minmaxes = $latrange[0] . ',' . $lonrange[0] . ',' . $latrange[1] . ',' . $lonrange[1];
+  // format lat/lon
   if ($dms) {
     $latout = theme('getlocations_fields_latitude_dms', array('latitude' => $lat));
     $lonout = theme('getlocations_fields_longitude_dms', array('longitude' => $lon));
@@ -558,5 +592,3 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
   return $ret;
 
 }
-
-

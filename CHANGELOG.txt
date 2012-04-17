@@ -1,9 +1,28 @@
-commit 95b8a2b
+commit 67a16d6
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 17 23:02:14 2012 +0100
+
+    added apoclean and global map
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 72b842d
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 17 23:01:30 2012 +0100
+
+    better permissions in search module
+
+modules/getlocations_search/getlocations_search.module
+
+commit be256fd
 Author: hutch <hutch@midwales.net>
 Date:   Mon Apr 16 23:54:43 2012 +0100
 
     added getlocations_search module
 
+CHANGELOG.txt
 modules/getlocations_search/README.txt
 modules/getlocations_search/getlocations_search.admin.inc
 modules/getlocations_search/getlocations_search.css

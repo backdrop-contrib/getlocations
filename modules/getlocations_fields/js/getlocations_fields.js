@@ -42,7 +42,7 @@
         lng = $("#" + lonfield + key).val();
         if (lat && lng) {
           point[key] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-          updateMap(inputmap[key], point[key], key);
+          updateMap(getlocations_inputmap[key], point[key], key);
         }
 
         if (use_address) {
@@ -62,7 +62,7 @@
                 $("#" + latfield + gkey).val(lat);
                 $("#" + lonfield + gkey).val(lng);
                 $("#" + adrsfield + gkey).val(place_adrs.formatted_address);
-                updateMap(inputmap[gkey], point[gkey], gkey);
+                updateMap(getlocations_inputmap[gkey], point[gkey], gkey);
                 set_address_components(gkey, place_adrs.address_components);
               }
               else {
@@ -82,7 +82,7 @@
         }
 
         function manageGeobutton(k) {
-          var mmap = inputmap[k];
+          var mmap = getlocations_inputmap[k];
           var kk = k;
           var input_adrs_arr = [];
           var streetfield_value = $("#" + streetfield + k).val();
@@ -152,7 +152,7 @@
                 }
               }
               else {
-                var prm = {'!b': getGeoErrCode(status) };
+                var prm = {'!b': Drupal.getlocations.getGeoErrCode(status) };
                 var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
                 alert(msg);
               }
@@ -250,14 +250,14 @@
           }
         } // set_address_components
 
-        google.maps.event.addListener(inputmap[gkey], 'click', function (event) {
+        google.maps.event.addListener(getlocations_inputmap[gkey], 'click', function (event) {
           if (! mark[gkey]) {
             // make an icon
             if (! point[gkey]) {
               point[gkey] = event.latLng;
-              inputmap[gkey].setCenter(point[gkey]);
+              getlocations_inputmap[gkey].setCenter(point[gkey]);
             }
-            makeMoveMarker(inputmap[gkey], point[gkey], gkey);
+            makeMoveMarker(getlocations_inputmap[gkey], point[gkey], gkey);
           }
         });
 
@@ -349,7 +349,7 @@
                   }
                 }
                 point[kk] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-                updateMap(inputmap[kk], point[kk], kk);
+                updateMap(getlocations_inputmap[kk], point[kk], kk);
               }
             }
           });
@@ -365,28 +365,6 @@
 
       }); // end each setting loop
 
-      function getGeoErrCode(errcode) {
-        var errstr;
-        if (errcode == google.maps.GeocoderStatus.ERROR) {
-          errstr = Drupal.t("There was a problem contacting the Google servers.");
-        }
-        else if (errcode == google.maps.GeocoderStatus.INVALID_REQUEST) {
-          errstr = Drupal.t("This GeocoderRequest was invalid.");
-        }
-        else if (errcode == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-          errstr = Drupal.t("The webpage has gone over the requests limit in too short a period of time.");
-        }
-        else if (errcode == google.maps.GeocoderStatus.REQUEST_DENIED) {
-          errstr = Drupal.t("The webpage is not allowed to use the geocoder.");
-        }
-        else if (errcode == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
-          errstr = Drupal.t("A geocoding request could not be processed due to a server error. The request may succeed if you try again.");
-        }
-        else if (errcode == google.maps.GeocoderStatus.ZERO_RESULTS) {
-          errstr = Drupal.t("No result was found for this GeocoderRequest.");
-        }
-        return errstr;
-      }
 
     }
   };

@@ -327,16 +327,20 @@ function getlocations_fields_convert_distance_to_meters($distance, $distance_uni
 // form elements
 /**
  * @param string $default
+ * @param string $title
+ * @param string $description
  *
  * @return
  *   Returns form element
  *
  */
-function getlocations_fields_element_distance_unit($default) {
-
-    $element = array(
+function getlocations_fields_element_distance_unit($default, $title = '', $description = '') {
+  if (empty($title)) {
+    $title = t('Units');
+  }
+  $element = array(
     '#type' => 'select',
-    '#title' => t('Units'),
+    '#title' => $title,
     '#options' => array(
       'km'  => t('Kilometers'),
       'm'   => t('Meters'),
@@ -346,24 +350,35 @@ function getlocations_fields_element_distance_unit($default) {
     ),
     '#default_value' => $default,
   );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
   return $element;
 
 }
 
 /**
  * @param string $default
+ * @param string $title
+ * @param string $description
  *
  * @return
  *   Returns form element
  *
  */
-function getlocations_fields_element_search_distance($default) {
+function getlocations_fields_element_search_distance($default, $title = '', $description = '') {
+  if (empty($title)) {
+    $title = t('Distance');
+  }
   $element = array(
     '#type' => 'textfield',
-    '#title' => t('Distance'),
+    '#title' => $title,
     '#default_value' => $default,
     '#size' => 10,
   );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
   return $element;
 }
 

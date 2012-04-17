@@ -1024,17 +1024,9 @@ function getlocations_fields_field_widget_info() {
 function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
 
   // is this real or a demo in settings
-#  if (isset($form['#node_edit_form']) && $form['#node_edit_form'] ) {
-#    $active = TRUE;
-#  }
-#  else {
-#    $active = FALSE;
-#  }
+  $active = TRUE;
   if (isset($form['#title']) && $form['#title'] == 'Default value') {
     $active = FALSE;
-  }
-  else {
-    $active = TRUE;
   }
 
   // not in demo mode
@@ -1051,7 +1043,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
     elseif (isset($form_state['comment']->cid) && $form_state['comment']->cid) {
       $items = getlocations_fields_load_locations($form_state['comment']->cid, 'cid');
     }
-    // TODO test comment and terms
   }
 
   $settings = $field['settings'];
@@ -1141,14 +1132,14 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
       );
       $widget[$id . '_display'] = array(
-        '#markup' => (isset($items[$delta][$id]) ? check_plain($items[$delta][$id]) : ''),
+        '#markup' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
       );
     }
     else {
       $widget[$id] = array(
         '#type' => 'textfield',
-        '#default_value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
-        '#size' => $settings['input_' . $id . '_width'],
+        '#default_value' => (isset($items[$delta][$id]) ? htmlspecialchars_decode($items[$delta][$id], ENT_QUOTES) : ''),
+       '#size' => $settings['input_' . $id . '_width'],
         '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
         '#title' => $title,
         '#maxlength' => 255,
@@ -1169,7 +1160,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       if ($active) {
         # needs to be replaced with a 'fake'
         $required[] = $id;
-        #$widget[$id]['#required'] = TRUE;
       }
       else {
         $widget[$id]['#field_suffix'] = t('(Required)');
@@ -1518,14 +1508,14 @@ function getlocations_fields_insert_record($location, $relations) {
   }
   $query = db_insert('getlocations_fields');
   $query->fields(array(
-    'name' => $location['name'],
-    'street' => $location['street'],
-    'additional' => $location['additional'],
-    'city' => $location['city'],
-    'province' => $location['province'],
-    'postal_code' => $location['postal_code'],
-    'country' => $location['country'],
-    'address' => $location['address'],
+    'name' => getlocations_apoclean($location['name']),
+    'street' => getlocations_apoclean($location['street']),
+    'additional' => getlocations_apoclean($location['additional']),
+    'city' => getlocations_apoclean($location['city']),
+    'province' => getlocations_apoclean($location['province']),
+    'postal_code' => getlocations_apoclean($location['postal_code']),
+    'country' => check_plain($location['country']),
+    'address' => getlocations_apoclean($location['address']),
     'latitude' => (float) $location['latitude'],
     'longitude' => (float) $location['longitude'],
     'marker' => $location['marker']
@@ -1577,14 +1567,14 @@ function getlocations_fields_update_record($location, $relations) {
   }
   $num_updated = db_update('getlocations_fields')
     ->fields(array(
-      'name' => $location['name'],
-      'street' => $location['street'],
-      'additional' => $location['additional'],
-      'city' => $location['city'],
-      'province' => $location['province'],
-      'postal_code' => $location['postal_code'],
-      'country' => $location['country'],
-      'address' => $location['address'],
+      'name' => getlocations_apoclean($location['name']),
+      'street' => getlocations_apoclean($location['street']),
+      'additional' => getlocations_apoclean($location['additional']),
+      'city' => getlocations_apoclean($location['city']),
+      'province' => getlocations_apoclean($location['province']),
+      'postal_code' => getlocations_apoclean($location['postal_code']),
+      'country' => check_plain($location['country']),
+      'address' => getlocations_apoclean($location['address']),
       'latitude' => (float) $location['latitude'],
       'longitude' => (float) $location['longitude'],
       'marker' => $location['marker']
@@ -1593,7 +1583,6 @@ function getlocations_fields_update_record($location, $relations) {
     ->execute();
 
   getlocations_fields_update_record_relations($relations, $location['glid']);
-
 }
 
 /**

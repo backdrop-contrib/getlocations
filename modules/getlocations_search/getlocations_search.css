@@ -14,7 +14,7 @@
 
 #getlocations_search_result {
   width: 500px;
-  height: 112px;
+  height: auto;
   border: 1px solid #C0C0C0;
   margin-top: 24px;
   padding:  4px;

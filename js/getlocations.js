@@ -260,7 +260,7 @@ var getlocations_map = [];
       }
 
       if (! settings.inputmap && ! settings.searchmap) {
-        setTimeout(function() { doAllMarkers(getlocations_map[key], global_settings) }, 1000);
+        setTimeout(function() { doAllMarkers(getlocations_map[key], global_settings) }, 300);
 
         if (pansetting == 1) {
           Drupal.getlocations.doBounds(getlocations_map[key], minlat, minlon, maxlat, maxlon, true);
@@ -387,7 +387,7 @@ var getlocations_map = [];
             var path = Drupal.settings.basePath + "getlocations/lidinfo";
             $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
               if (data) {
-                window.location = data;
+                window.location = data.content;
               }
             });
           }
@@ -443,7 +443,7 @@ var getlocations_map = [];
       else {
         var infoBubbleOpts = {};
       }
-      infoBubbleOpts.content = data;
+      infoBubbleOpts.content = data.content;
       var infoBubble = new InfoBubble(infoBubbleOpts);
       infoBubble.open(map, m);
       if (pushit) {
@@ -458,7 +458,7 @@ var getlocations_map = [];
       else {
         var infoWindowOpts = {};
       }
-      infoWindowOpts.content = data;
+      infoWindowOpts.content = data.content;
       var infowindow = new google.maps.InfoWindow(infoWindowOpts);
       infowindow.open(map, m);
       if (pushit) {

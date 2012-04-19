@@ -1143,8 +1143,7 @@ function getlocations_info() {
     }
     $content = theme('getlocations_info', array('location' => $location));
   }
-  print $content;
-  exit();
+  drupal_json_output(array('content' => $content));
 }
 
 // ajax callback to provide a link
@@ -1183,9 +1182,7 @@ function getlocations_lidinfo() {
       }
     }
   }
-
-  print $content;
-  exit();
+  drupal_json_output(array('content' => $content));
 }
 
 // provides data for marker colorbox

@@ -116,21 +116,33 @@ function getlocations_search_form($form, &$form_state) {
     $form['getlocations_search_distance'] = getlocations_fields_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
   }
   else {
-    $form['getlocations_search_distance'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_distance'], '#attributes' => array('id' => 'edit-getlocations-search-distance'));
+    $form['getlocations_search_distance'] = array(
+      '#type' => 'hidden',
+      '#value' => $getlocations_search_defaults['search_distance'],
+      '#attributes' => array('id' => 'edit-getlocations-search-distance')
+    );
   }
 
   if ($getlocations_search_defaults['display_search_units']) {
     $form['getlocations_search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
   }
   else {
-    $form['getlocations_search_units'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_units'], '#attributes' => array('id' => 'edit-getlocations-search-units'));
+    $form['getlocations_search_units'] = array(
+      '#type' => 'hidden',
+      '#value' => $getlocations_search_defaults['search_units'],
+      '#attributes' => array('id' => 'edit-getlocations-search-units')
+    );
   }
 
   if ($getlocations_search_defaults['display_search_limits']) {
     $form['getlocations_search_limits'] = getlocations_element_map_limits($getlocations_search_defaults['search_limits']);
   }
   else {
-    $form['getlocations_search_limits'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_limits'], '#attributes' => array('id' => 'edit-getlocations-search-limits'));
+    $form['getlocations_search_limits'] = array(
+      '#type' => 'hidden',
+      '#value' => $getlocations_search_defaults['search_limits'],
+      '#attributes' => array('id' => 'edit-getlocations-search-limits')
+    );
   }
 
   if ($getlocations_search_defaults['display_search_type']) {
@@ -154,9 +166,12 @@ function getlocations_search_form($form, &$form_state) {
 
   }
   else {
-    $form['getlocations_search_type'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_type'], '#attributes' => array('id' => 'edit-getlocations-search-type'));
+    $form['getlocations_search_type'] = array(
+      '#type' => 'hidden',
+      '#value' => $getlocations_search_defaults['search_type'],
+      '#attributes' => array('id' => 'edit-getlocations-search-type')
+    );
   }
-
 
   if ($getlocations_search_defaults['method'] != 'google_ac') {
     $form['getlocations_search_submit'] = array(
@@ -245,6 +260,15 @@ function getlocations_search_theme() {
   );
 }
 
+/**
+ * Themes the search form and results.
+ *
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
+ */
 function theme_getlocations_search_form($variables) {
   $form = $variables['form'];
   $output = '';
@@ -263,13 +287,18 @@ function theme_getlocations_search_form($variables) {
   $output .= '<div id="getlocations_search_lon"></div>';
   $output .= '</div>';
   $output .= '</div>';
-
-  #$output .= '<div id="getlocations_search_test"></div>';
-
   return $output;
-
 }
 
+/**
+ * Themes getlocations_search settings form
+ *
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
+ */
 function theme_getlocations_search_settings_form($variables) {
   $form = $variables['form'];
   $output = '';
@@ -299,6 +328,12 @@ function theme_getlocations_search_settings_form($variables) {
 
 }
 
+/**
+ * Set up default settings.
+ *
+ * @return array $newdefaults
+ *
+ */
 function getlocations_search_defaults() {
   $getlocations_defaults = getlocations_defaults();
   $defaults = array(
@@ -376,6 +411,10 @@ function getlocations_search_defaults() {
   return $newdefaults;
 }
 
+/**
+ * @return array $options
+ *   Returns list of vocabularies suitable for a dropdown
+ */
 function getlocations_search_get_vocabularies() {
   if (module_exists('taxonomy')) {
     $vocabularies = taxonomy_get_vocabularies();
@@ -423,6 +462,10 @@ function getlocations_search_term_autocomplete($string) {
   drupal_json_output($matches);
 }
 
+/**
+ * @return array $matches
+ *   Returns a list of terms of a given vocabulary, suitable for a dropdown
+ */
 function getlocations_search_term_get() {
   $matches = array();
 
@@ -446,7 +489,11 @@ function getlocations_search_term_get() {
   return $matches;
 }
 
-
+/**
+ * @return json format $output
+ *   Returns search result to getlocations_search.js
+ *
+ */
 function getlocations_search_allinfo() {
   $lat = $_GET['lat'];
   $lon = $_GET['lon'];
@@ -646,7 +693,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
   }
   $infoarr = array($distance, $units, ($type ? $type : 'all'), $latout, $lonout);
   $info = implode(",", $infoarr);
-  $ret = array('main' => $newresult, 'minmaxes' => $minmaxes, 'info' => $info);
+  $ret = array('locations' => $newresult, 'minmaxes' => $minmaxes, 'info' => $info);
   return $ret;
 
 }

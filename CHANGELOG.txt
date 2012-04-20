@@ -1,9 +1,19 @@
-commit 0703f71
+commit d5bbc9d
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 20 21:26:26 2012 +0100
+
+    cleanup of search module
+
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 913d4c3
 Author: hutch <hutch@midwales.net>
 Date:   Fri Apr 20 14:12:47 2012 +0100
 
     improved search config, added limits
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.admin.inc
 modules/getlocations_search/getlocations_search.module
 modules/getlocations_search/js/getlocations_search.js

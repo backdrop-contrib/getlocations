@@ -10,7 +10,6 @@
   var batchr = [];
   Drupal.getlocations.doSearch = function(map, gs) {
     var searchsettings = Drupal.settings.getlocations_search;
-
     jQuery.each(searchsettings, function (searchkey, ssettings) {
       var method = ssettings.method;
       if (gs.markermanagertype == 1) {
@@ -55,9 +54,7 @@
           return false;
         });
       }
-
     }); // end each search loop
-
   }
 
   // cleans out any existing markers, sets up a new geocoder and runs it, filling in the results.
@@ -85,12 +82,10 @@
     $("#getlocations_search_type").html();
     $("#getlocations_search_lat").html();
     $("#getlocations_search_lon").html();
-    // set up some vars
+    // set up some display vars
     var unitsdisplay = {'km': Drupal.t('Kilometer'), 'm': Drupal.t('Meter'), 'mi': Drupal.t('Mile'), 'yd': Drupal.t('Yard'), 'nmi': Drupal.t('Nautical mile')};
     var unitsdisplaypl = {'km': Drupal.t('Kilometers'), 'm': Drupal.t('Meters'), 'mi': Drupal.t('Miles'), 'yd': Drupal.t('Yards'), 'nmi': Drupal.t('Nautical miles')};
     var typesdisplay = {'all': Drupal.t('All'), 'node': Drupal.t('Nodes'), 'user': Drupal.t('Users'), 'term': Drupal.t('Terms'), 'comment': Drupal.t('Comments')};
-    var maxlat = ''; var maxlon = ''; var mainat = ''; var minlon = ''; var cenlat = ''; var cenlon = '';
-    var pansetting = gs.pansetting;
     // get settings from the DOM
     var distance = $("#edit-getlocations-search-distance").val();
     var units = $("#edit-getlocations-search-units").val();
@@ -100,16 +95,11 @@
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode(adrs, function (results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
-        point = results[0].geometry.location;
-        lat = results[0].geometry.location.lat();
-        lon = results[0].geometry.location.lng();
-        $("#getlocations_search_address").html('<span class="results-label">' + Drupal.t('Search') + ':</span><span class="results-value">' +  results[0].formatted_address + '</span>');
-        var path = Drupal.settings.basePath + "getlocations_search/info";
-        var qs = {'lat':lat,'lon':lon,'distance':distance,'units':units,'type':type,'limits':limits};
+        var address = results[0].formatted_address;
         // go get the data
-        $.get(path, qs, function(data) {
+        $.get(Drupal.settings.basePath + "getlocations_search/info", {'lat':results[0].geometry.location.lat(),'lon':results[0].geometry.location.lng(),'distance':distance,'units':units,'type':type,'limits':limits}, function(data) {
           // in data, an array of locations, minmaxes and info
-          var locations = data['main'];
+          var locations = data['locations'];
           var minmaxes = data['minmaxes'];
           var minlat = ''; var minlon = ''; var maxlat = ''; var maxlon = ''; var cenlat = ''; var cenlon = '';
           if (minmaxes) {
@@ -143,12 +133,12 @@
             locationct++;
           }
           // display results
+          $("#getlocations_search_address").html('<span class="results-label">' + Drupal.t('Search') + ':</span><span class="results-value">' +  address + '</span>');
           $("#getlocations_search_count").html('<span class="results-label">' + Drupal.t('Locations found') + ':</span><span class="results-value">' + locationct + '</span>');
           $("#getlocations_search_distance").html('<span class="results-label">' + Drupal.t('Distance') + ':</span><span class="results-value">' + distance + ' ' + (distance == 1 ? unitsdisplay[units] : unitsdisplaypl[units] ) + '</span>');
           $("#getlocations_search_type").html('<span class="results-label">' + Drupal.t('Search Type') + ':</span><span class="results-value">' + typesdisplay[type] + '</span>');
           $("#getlocations_search_lat").html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
           $("#getlocations_search_lon").html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
-
           // markermanagers add batchr
           if (gs.usemarkermanager) {
             mgr.addMarkers(batchr, gs.minzoom, gs.maxzoom);
@@ -157,13 +147,13 @@
             cmgr.addMarkers(batchr, 0);
           }
           if (minlat !== '' && minlon !== '' && maxlat !== '' && maxlon !== '') {
-            if (pansetting == 1) {
+            if (gs.pansetting == 1) {
               Drupal.getlocations.doBounds(map, minlat, minlon, maxlat, maxlon, true);
             }
-            else if (pansetting == 2) {
+            else if (gs.pansetting == 2) {
               Drupal.getlocations.doBounds(map, minlat, minlon, maxlat, maxlon, false);
             }
-            else if (pansetting == 3) {
+            else if (gs.pansetting == 3) {
               if (cenlat && cenlon) {
                 c = new google.maps.LatLng(cenlat, cenlon);
                 map.setCenter(c);
@@ -183,10 +173,7 @@
         var msg = Drupal.t('Geocode for (!a) was not successful for the following reason: !b', prm);
         alert(msg);
       }
-      //return false;
     });
-
-
   }
 
 })(jQuery);

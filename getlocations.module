@@ -2264,6 +2264,28 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
 
 }
 
+function getlocations_element_map_limits($default, $title = '', $description = '') {
+
+  if (empty($title)) {
+    $title = t('Locations to show');
+  }
+  if (empty($description)) {
+    $description = t('The maximum number of locations to show, sorted by distance');
+  }
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#description' => $description,
+    '#options' => array(0 => t('All'), 10 => '10', 20 => '20', 30 => '30', 40 => '40', 50 => '50', 75 => '75',
+      100 => '100', 150 => '150', 175 => '175', 200 => '200', 250 => '250', 300 => '300', 400 => '400', 500 => '500',
+    ),
+    '#default_value' => $default,
+  );
+
+  return $element;
+
+}
+
 function getlocations_paths_get() {
     $getlocations_paths = variable_get('getlocations_paths', array(
       'infobubble_path' => GETLOCATIONS_PATH . '/js/infobubble.js',

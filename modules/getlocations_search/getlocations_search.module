@@ -112,23 +112,51 @@ function getlocations_search_form($form, &$form_state) {
     }
   }
 
-  $form['getlocations_search_distance'] = getlocations_fields_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
-
-  $form['getlocations_search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
-
-  $opts = array('' => t('Show All'), 'node' => t('Nodes'));
-  if (user_access('access user getlocations')) {
-    $opts['user'] = t('Users');
+  if ($getlocations_search_defaults['display_search_distance']) {
+    $form['getlocations_search_distance'] = getlocations_fields_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
   }
-  $opts['term'] = t('Terms');
-  if (user_access('access comments')) {
-    $opts['comment'] = t('Comments');
+  else {
+    $form['getlocations_search_distance'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_distance'], '#attributes' => array('id' => 'edit-getlocations-search-distance'));
   }
-  $form['getlocations_search_type'] = array(
-    '#type' => 'select',
-    '#title' => t('Restrict the search'),
-    '#options' => $opts,
-  );
+
+  if ($getlocations_search_defaults['display_search_units']) {
+    $form['getlocations_search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
+  }
+  else {
+    $form['getlocations_search_units'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_units'], '#attributes' => array('id' => 'edit-getlocations-search-units'));
+  }
+
+  if ($getlocations_search_defaults['display_search_limits']) {
+    $form['getlocations_search_limits'] = getlocations_element_map_limits($getlocations_search_defaults['search_limits']);
+  }
+  else {
+    $form['getlocations_search_limits'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_limits'], '#attributes' => array('id' => 'edit-getlocations-search-limits'));
+  }
+
+  if ($getlocations_search_defaults['display_search_type']) {
+    $opts = array('all' => t('Show All'), 'node' => t('Nodes'));
+    if (user_access('access user getlocations')) {
+      $opts['user'] = t('Users');
+    }
+    if (module_exists('taxonomy')) {
+      $opts['term'] = t('Terms');
+    }
+    if (user_access('access comments') && module_exists('comment')) {
+      $opts['comment'] = t('Comments');
+    }
+    $form['getlocations_search_type'] = array(
+      '#type' => 'select',
+      '#title' => t('Restrict the search'),
+      '#options' => $opts,
+      '#default_value' => $getlocations_search_defaults['search_type'],
+      '#description' => t('Restrict the search to a content type'),
+    );
+
+  }
+  else {
+    $form['getlocations_search_type'] = array('#type' => 'hidden', '#value' => $getlocations_search_defaults['search_type'], '#attributes' => array('id' => 'edit-getlocations-search-type'));
+  }
+
 
   if ($getlocations_search_defaults['method'] != 'google_ac') {
     $form['getlocations_search_submit'] = array(
@@ -280,7 +308,13 @@ function getlocations_search_defaults() {
     'search_map_marker' => 'drupal',
     'search_distance' => 1,
     'search_units' => 'km',
+    'search_limits' => 0,
+    'search_type' => 'all',
     'display_dms' => 0,
+    'display_search_distance' => 1,
+    'display_search_units' => 1,
+    'display_search_limits' => 1,
+    'display_search_type' => 1,
     'width'                     => $getlocations_defaults['width'],
     'height'                    => $getlocations_defaults['height'],
     'styles'                    => $getlocations_defaults['styles'],
@@ -420,32 +454,53 @@ function getlocations_search_allinfo() {
   $distance = $getlocations_search_defaults['search_distance'];
   if (isset($_GET['distance']) && is_numeric($_GET['distance'])) {
     $distance = $_GET['distance'];
+    // sanity check
+    if ($distance < 1) {
+      $distance = $getlocations_search_defaults['search_distance'];
+    }
   }
   $units = $getlocations_search_defaults['search_units'];
   if (isset($_GET['units'])) {
     $units = $_GET['units'];
+    // sanity check
+    $unitsarr = array('km', 'm', 'mi', 'yd', 'nmi');
+    if (! in_array($units, $unitsarr)) {
+      $units = $getlocations_search_defaults['search_units'];
+    }
   }
-  $type = 'all';
+  $type = $getlocations_search_defaults['search_type'];
   if (isset($_GET['type'])) {
     $type = $_GET['type'];
     // sanity check
-    $typarr = array('node', 'user', 'term', 'comment');
+    $typarr = array('all', 'node', 'user', 'term', 'comment');
     if (! in_array($type, $typarr)) {
-      $type = 'all';
+      $type = $getlocations_search_defaults['search_type'];
     }
   }
-  $dosort = TRUE;
+
+  $dosort = FALSE;
+  if (isset($_GET['limits']) && is_numeric($_GET['limits'])) {
+    $limits = $_GET['limits'];
+    // sanity check
+    if ($limits < 0) {
+      $limits = 0;
+    }
+    if ($limits > 0) {
+      $dosort = TRUE;
+    }
+  }
+
   $dms = ($getlocations_search_defaults['display_dms'] ? TRUE : FALSE);
   // sanity check
   $latlon = $lat . ',' . $lon;
   if (getlocations_latlon_check($latlon)) {
-    $output = getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dosort, $dms);
+    $output = getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dosort, $limits, $dms);
     drupal_json_output($output);
   }
 }
 
 // $type can be node, user, comment, term. anything else is all
-function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dosort, $dms) {
+function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dosort, $limits, $dms) {
 
   $getlocations_defaults = getlocations_defaults();
 
@@ -549,6 +604,9 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
   $sql .= $sqlsnip2;
   if ($dosort) {
     $sql .= "ORDER BY distance_sort ASC ";
+  }
+  if ($limits > 0) {
+    $sql .= "LIMIT 0, $limits ";
   }
 
   $result = db_query($sql, array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]));

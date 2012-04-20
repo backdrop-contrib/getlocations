@@ -35,7 +35,6 @@
         );
       }
       if (method == 'google_ac') {
-        var marker = {};
         var input_adrs = document.getElementById("edit-getlocations-search");
         var fm_adrs = '';
         var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
@@ -80,12 +79,12 @@
       batchr = [];
     }
     // clear the results box
-    $("#getlocations_search_lat").html();
-    $("#getlocations_search_lon").html();
     $("#getlocations_search_address").html();
     $("#getlocations_search_count").html();
     $("#getlocations_search_distance").html();
     $("#getlocations_search_type").html();
+    $("#getlocations_search_lat").html();
+    $("#getlocations_search_lon").html();
     // set up some vars
     var unitsdisplay = {'km': Drupal.t('Kilometer'), 'm': Drupal.t('Meter'), 'mi': Drupal.t('Mile'), 'yd': Drupal.t('Yard'), 'nmi': Drupal.t('Nautical mile')};
     var unitsdisplaypl = {'km': Drupal.t('Kilometers'), 'm': Drupal.t('Meters'), 'mi': Drupal.t('Miles'), 'yd': Drupal.t('Yards'), 'nmi': Drupal.t('Nautical miles')};
@@ -96,6 +95,7 @@
     var distance = $("#edit-getlocations-search-distance").val();
     var units = $("#edit-getlocations-search-units").val();
     var type = $("#edit-getlocations-search-type").val();
+    var limits = $("#edit-getlocations-search-limits").val();
     // start geocoder
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode(adrs, function (results, status) {
@@ -105,7 +105,7 @@
         lon = results[0].geometry.location.lng();
         $("#getlocations_search_address").html('<span class="results-label">' + Drupal.t('Search') + ':</span><span class="results-value">' +  results[0].formatted_address + '</span>');
         var path = Drupal.settings.basePath + "getlocations_search/info";
-        var qs = {'lat':lat,'lon':lon,'distance':distance,'units':units,'type':type};
+        var qs = {'lat':lat,'lon':lon,'distance':distance,'units':units,'type':type,'limits':limits};
         // go get the data
         $.get(path, qs, function(data) {
           // in data, an array of locations, minmaxes and info
@@ -142,17 +142,16 @@
             batchr.push(marker);
             locationct++;
           }
-
-          $("#getlocations_search_lat").html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
-          $("#getlocations_search_lon").html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
+          // display results
           $("#getlocations_search_count").html('<span class="results-label">' + Drupal.t('Locations found') + ':</span><span class="results-value">' + locationct + '</span>');
           $("#getlocations_search_distance").html('<span class="results-label">' + Drupal.t('Distance') + ':</span><span class="results-value">' + distance + ' ' + (distance == 1 ? unitsdisplay[units] : unitsdisplaypl[units] ) + '</span>');
           $("#getlocations_search_type").html('<span class="results-label">' + Drupal.t('Search Type') + ':</span><span class="results-value">' + typesdisplay[type] + '</span>');
-          // markermanagers
-          // add batchr
+          $("#getlocations_search_lat").html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
+          $("#getlocations_search_lon").html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
+
+          // markermanagers add batchr
           if (gs.usemarkermanager) {
             mgr.addMarkers(batchr, gs.minzoom, gs.maxzoom);
-            mgr.refresh();
           }
           else if (gs.useclustermanager) {
             cmgr.addMarkers(batchr, 0);
@@ -170,6 +169,12 @@
                 map.setCenter(c);
               }
             }
+          }
+          if (gs.usemarkermanager) {
+            mgr.refresh();
+          }
+          else if (gs.useclustermanager) {
+             cmgr.repaint();
           }
         });
       }

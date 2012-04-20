@@ -1,9 +1,38 @@
-commit 67a16d6
+commit 0703f71
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 20 14:12:47 2012 +0100
+
+    improved search config, added limits
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 1dcbf35
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 20 14:01:22 2012 +0100
+
+    added function getlocations_element_map_limits()
+
+getlocations.module
+
+commit 55f6bd2
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 20 00:47:53 2012 +0100
+
+    better ajax return for info and lidinfo
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_search/getlocations_search.css
+
+commit 749b063
 Author: hutch <hutch@midwales.net>
 Date:   Tue Apr 17 23:02:14 2012 +0100
 
     added apoclean and global map
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.functions.inc
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/js/getlocations_fields.js

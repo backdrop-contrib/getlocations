@@ -169,6 +169,7 @@
           streetfield_value = '';
           streetnumber_value = '';
           additionalfield_value = '';
+          neighborhood_value = '';
           cityfield_value = '';
           provincefield_value = '';
           countryfield_value = '';
@@ -194,6 +195,9 @@
             else if (type == 'sublocality') {
               additionalfield_value = address_components[i].long_name;
             }
+            else if (type == 'neighborhood') {
+              neighborhood_value = address_components[i].long_name;
+            }
             else if (type == 'administrative_area_level_3') {
               admin_area_level_3 = address_components[i].long_name;
             }
@@ -214,17 +218,19 @@
             }
           }
           $("#" + streetfield + k).val( (streetnumber_value ? streetnumber_value + ' ' : '') + streetfield_value);
-          if (admin_area_level_3 ) {
-            provincefield_value = admin_area_level_3;
+
+          if (admin_area_level_1) {
+            provincefield_value = admin_area_level_1;
           }
           if (admin_area_level_2 && ! provincefield_value) {
             provincefield_value = admin_area_level_2;
           }
-          if (admin_area_level_1 && ! provincefield_value) {
-            provincefield_value = admin_area_level_1;
+          if (admin_area_level_3  && ! provincefield_value) {
+            provincefield_value = admin_area_level_3;
           }
+
           $("#" + provincefield + k).val(provincefield_value);
-          $("#" + additionalfield + k).val(additionalfield_value);
+          $("#" + additionalfield + k).val((additionalfield_value ? additionalfield_value : neighborhood_value));
           $("#" + cityfield + k).val(cityfield_value);
           if (postal_codefield_value) {
             $("#" + postal_codefield + k).val(postal_codefield_value);

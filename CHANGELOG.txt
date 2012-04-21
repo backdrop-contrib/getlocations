@@ -1,9 +1,18 @@
-commit ee4b1ff
+commit dd1d386
+Author: hutch <hutch@midwales.net>
+Date:   Sat Apr 21 23:30:05 2012 +0100
+
+    rejigged address_components output
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 447e834
 Author: hutch <hutch@midwales.net>
 Date:   Sat Apr 21 17:44:02 2012 +0100
 
     fixed issue #1539866 multiple getlocations_fields instances
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 2e06dee

@@ -573,7 +573,10 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   if (empty($settings)) {
     $settings = getlocations_fields_field_formatter_info_defaults();
   }
-
+  $field_name = '';
+  if (isset($field['field_name'])) {
+    $field_name = $field['field_name'];
+  }
   $locations = array();
   $supported_entity_types = array('node', 'user', 'taxonomy_term', 'comment', 'profile2');
 
@@ -583,7 +586,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   }
 
   if ($entity_type == 'node') {
-    $locations = getlocations_fields_load_locations($entity->vid, 'vid');
+    $locations = getlocations_fields_load_locations($entity->vid, 'vid', $field_name);
     if (count($locations)) {
       $settings['map_marker'] = $settings['node_map_marker'];
       $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
@@ -606,7 +609,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     }
   }
   elseif ($entity_type == 'taxonomy_term') {
-    $locations = getlocations_fields_load_locations($entity->tid, 'tid');
+    $locations = getlocations_fields_load_locations($entity->tid, 'tid', $field_name);
     if (count($locations)) {
       $settings['map_marker'] = $settings['vocabulary_map_marker'];
       $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
@@ -629,13 +632,13 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     }
   }
   elseif ($entity_type == 'user' || $entity_type == 'profile2') {
-    $locations = getlocations_fields_load_locations($entity->uid, 'uid');
+    $locations = getlocations_fields_load_locations($entity->uid, 'uid', $field_name);
     if (count($locations)) {
       $settings['map_marker'] = $settings['user_map_marker'];
     }
   }
   elseif ($entity_type == 'comment') {
-    $locations = getlocations_fields_load_locations($entity->cid, 'cid');
+    $locations = getlocations_fields_load_locations($entity->cid, 'cid', $field_name);
     if (count($locations)) {
       $settings['map_marker'] = $settings['comment_map_marker'];
     }
@@ -1028,25 +1031,29 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   if (isset($form['#title']) && $form['#title'] == 'Default value') {
     $active = FALSE;
   }
+  $field_name = '';
+  if (isset($field['field_name'])) {
+    $field_name = $field['field_name'];
+  }
 
   // not in demo mode
   if ($active) {
     if (isset($form_state['node']->vid) && $form_state['node']->vid) {
-      $items = getlocations_fields_load_locations($form_state['node']->vid, 'vid');
+      $items = getlocations_fields_load_locations($form_state['node']->vid, 'vid', $field_name);
     }
     elseif (isset($form_state['user']->uid) && $form_state['user']->uid) {
-      $items = getlocations_fields_load_locations($form_state['user']->uid, 'uid');
+      $items = getlocations_fields_load_locations($form_state['user']->uid, 'uid', $field_name);
     }
     elseif (isset($form_state['term']->tid) && $form_state['term']->tid) {
-      $items = getlocations_fields_load_locations($form_state['term']->tid, 'tid');
+      $items = getlocations_fields_load_locations($form_state['term']->tid, 'tid', $field_name);
     }
     elseif (isset($form_state['comment']->cid) && $form_state['comment']->cid) {
-      $items = getlocations_fields_load_locations($form_state['comment']->cid, 'cid');
+      $items = getlocations_fields_load_locations($form_state['comment']->cid, 'cid', $field_name);
     }
   }
 
   $settings = $field['settings'];
-  $m = getlocations_fields_getmap($settings, $active, $delta);
+  $m = getlocations_fields_getmap($settings, $active);
   $map = $m[0];
   $mapid = $m[1];
 
@@ -1350,7 +1357,7 @@ function getlocations_fields_field_widget_error($element, $error, $form, &$form_
  * @param $active
  *    Determine wether this is from the edit form or just a demo on the settings
  */
-function getlocations_fields_getmap($settings, $active, $mapid) {
+function getlocations_fields_getmap($settings, $active) {
 
   $getlocations_defaults = getlocations_defaults();
 
@@ -1376,7 +1383,7 @@ function getlocations_fields_getmap($settings, $active, $mapid) {
   $getlocations_defaults['input_map_marker'] = $settings['input_map_marker'];
   $getlocations_defaults['use_address']     = $settings['use_address'];
 
-  getlocations_setup_js($getlocations_defaults);
+  $mapid = getlocations_setup_map($getlocations_defaults);
   drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   if ($active) {
@@ -1701,7 +1708,7 @@ function getlocations_fields_delete_revision_record_relations($relations, $glid)
  *  The locations associated with the content type
  *
  */
-function getlocations_fields_load_locations($id, $key = 'vid') {
+function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '') {
   // $key can be vid, nid, uid, tid, cid
   $locations = array();
   if ($id) {
@@ -1711,6 +1718,10 @@ function getlocations_fields_load_locations($id, $key = 'vid') {
     $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker'));
     $query->fields('e', array('nid', 'uid', 'tid', 'cid', 'field_name'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
+    if ($field_name) {
+      $query->join('field_config', 'c', 'e.field_name = c.field_name');
+      $query->condition('e.field_name', $field_name);
+    }
     $query->condition('e.' . $key, $id);
     $rows = $query->execute();
     $ct = 0;

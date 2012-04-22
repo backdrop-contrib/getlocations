@@ -393,7 +393,9 @@ var getlocations_map = [];
           }
           else {
             if(gs.useCustomContent) {
-              Drupal.getlocations.showPopup(map, m, gs, customContent);
+              var cc = [];
+              cc.content = customContent;
+              Drupal.getlocations.showPopup(map, m, gs, cc);
             }
             else {
               // fetch bubble content

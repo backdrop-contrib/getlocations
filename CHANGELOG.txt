@@ -1,9 +1,18 @@
-commit dd1d386
+commit 6464aa4
+Author: hutch <hutch@midwales.net>
+Date:   Sun Apr 22 12:26:23 2012 +0100
+
+    fixed bug in customcontent js
+
+js/getlocations.js
+
+commit 9746a88
 Author: hutch <hutch@midwales.net>
 Date:   Sat Apr 21 23:30:05 2012 +0100
 
     rejigged address_components output
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields.js
 
 commit 447e834

@@ -16,7 +16,8 @@
 
 function getlocations_get_markerclusterer_styles() {
 
-  $jspath = GETLOCATIONS_PATH . '/js/';
+  $base_path = base_path();
+  $jspath = $base_path . GETLOCATIONS_PATH . '/js/';
 
   $markerclusterer_styles = array(
     array(

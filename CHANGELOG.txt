@@ -1,9 +1,68 @@
-commit 6464aa4
+commit 564aca6
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 21:42:00 2012 +0100
+
+    fixed marker cluster path
+
+getlocations.markercluster.inc
+
+commit 6dd42fd
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 21:02:35 2012 +0100
+
+    moved marker cluster js settings to init
+
+getlocations.module
+
+commit a23be22
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 13:31:12 2012 +0100
+
+    better labelling on getlocations_map_display_basics_form
+
+getlocations.module
+views/getlocations_plugin_style_map.inc
+
+commit 2163597
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 10:16:37 2012 +0100
+
+    coder review cleanup
+
+getlocations.module
+views/getlocations_plugin_style_map.inc
+
+commit dc9c6b9
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 10:16:14 2012 +0100
+
+    better link construction
+
+views/getlocations.views_default.inc
+
+commit f8f0f72
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 10:15:27 2012 +0100
+
+    better uninstall
+
+modules/getlocations_fields/getlocations_fields.install
+
+commit 58caf92
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 10:14:13 2012 +0100
+
+    added php snippet example
+
+modules/getlocations_fields/README.txt
+
+commit f088a79
 Author: hutch <hutch@midwales.net>
 Date:   Sun Apr 22 12:26:23 2012 +0100
 
     fixed bug in customcontent js
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit 9746a88

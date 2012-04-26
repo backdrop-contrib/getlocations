@@ -1,9 +1,18 @@
-commit 564aca6
+commit d7aafde
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 26 23:08:11 2012 +0100
+
+    added relationships to getlocations_fields views, see #1549606
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 38f7c71
 Author: hutch <hutch@midwales.net>
 Date:   Thu Apr 26 21:42:00 2012 +0100
 
     fixed marker cluster path
 
+CHANGELOG.txt
 getlocations.markercluster.inc
 
 commit 6dd42fd

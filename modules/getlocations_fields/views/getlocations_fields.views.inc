@@ -313,8 +313,8 @@ function getlocations_fields_views_data() {
       'field' => 'uid',
     ),
     'node' => array(
-      'left_field' => 'vid',
-      'field' => 'vid',
+      'left_field' => 'nid',
+      'field' => 'nid',
     ),
     'node_revision' => array(
       'left_field' => 'vid',
@@ -346,11 +346,14 @@ function getlocations_fields_views_data() {
   );
   // node id
   $data['getlocations_fields_entities']['nid'] = array(
-    'title' => t('Node Id'),
+    'title' => t('Node ID'),
     'help' => t('The Node Identifier.'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric'
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_numeric',
@@ -358,10 +361,16 @@ function getlocations_fields_views_data() {
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
+    'relationship' => array(
+      'base' => 'node',
+      'field' => 'nid',
+      'label' => 'content',
+      'help' => t('Bring in the node data.'),
+    ),
   );
   // user id
   $data['getlocations_fields_entities']['uid'] = array(
-    'title' => t('User Id'),
+    'title' => t('User ID'),
     'help' => t('The User Identifier.'),
     'field' => array(
       'handler' => 'views_handler_field',
@@ -373,10 +382,16 @@ function getlocations_fields_views_data() {
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
+    'relationship' => array(
+      'base' => 'user',
+      'field' => 'uid',
+      'label' => 'user',
+      'help' => t('Bring in the user data.'),
+    ),
   );
   // term id
   $data['getlocations_fields_entities']['tid'] = array(
-    'title' => t('Taxonomy Term Id'),
+    'title' => t('Taxonomy Term ID'),
     'help' => t('The Taxonomy Term Identifier.'),
     'field' => array(
       'handler' => 'views_handler_field',
@@ -388,10 +403,16 @@ function getlocations_fields_views_data() {
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
+    'relationship' => array(
+      'base' => 'taxonomy_index',
+      'field' => 'tid',
+      'label' => 'term',
+      'help' => t('Bring in the taxonomy data.'),
+    ),
   );
   // comment id
   $data['getlocations_fields_entities']['cid'] = array(
-    'title' => t('Comment Id'),
+    'title' => t('Comment ID'),
     'help' => t('The Comment Identifier.'),
     'field' => array(
       'handler' => 'views_handler_field',
@@ -403,13 +424,19 @@ function getlocations_fields_views_data() {
     'sort' => array(
       'handler' => 'views_handler_sort',
     ),
+    'relationship' => array(
+      'base' => 'comment',
+      'field' => 'cid',
+      'label' => 'comment',
+      'help' => t('Bring in the comment data.'),
+    ),
   );
 
   // Tell the base tables about us.
   $data['node']['table']['join']['getlocations_fields'] = array(
     'left_table' => 'getlocations_fields_entities',
-    'left_field' => 'vid',
-    'field' => 'vid',
+    'left_field' => 'nid',
+    'field' => 'nid',
   );
   $data['node_revision']['table']['join']['getlocations_fields'] = array(
     'left_table' => 'getlocations_fields_entities',
@@ -724,4 +751,3 @@ function getlocations_fields_views_proximity_get_location_field_options() {
 
   return $field_options;
 }
-

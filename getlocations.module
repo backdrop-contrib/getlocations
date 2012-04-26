@@ -2323,7 +2323,7 @@ function getlocations_markerpicker_link($id, $cat, $infoimg='') {
       $boxwidth = $getlocations_colorbox['marker_width'];
       $boxheight = $getlocations_colorbox['marker_height'];
       if (empty($infoimg)) {
-        $infoimg = '<img class="getlocations_infoimg" src="' . base_path() . drupal_get_path( 'module','getlocations') . '/images/info.png' . '" title="' . t('Click here to select an icon from a colorbox') . '" >';
+        $infoimg = '<img class="getlocations_infoimg" src="' . base_path() . drupal_get_path( 'module', 'getlocations') . '/images/info.png' . '" title="' . t('Click here to select an icon from a colorbox') . '" >';
       }
       $link = l($infoimg, 'getlocations/markerinfo', array(
           'attributes' => array(

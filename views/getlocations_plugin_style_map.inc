@@ -139,7 +139,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       '#type' => 'textarea',
       '#title' => t('Default styles'),
       '#default_value' => $this->options['styles'],
-      '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l('http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/', array('external' => TRUE)))),
+      '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l(t('this wizard'), 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html', array('external' => TRUE)))),
     );
 
     $form['latlong'] = getlocations_element_map_tf(
@@ -330,4 +330,3 @@ class getlocations_plugin_style_map extends views_plugin_style {
   }
 
 }
-

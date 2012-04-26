@@ -99,3 +99,12 @@ where nn is the country code
 
 
 All of the views may need to be limited to one or more content-types, depending on your use case.
+
+
+An example of a PHP snippet in Getlocations Fields Distance / Proximity Filter
+to provide the latitude/longitude of the current user as supplied by the
+Smart IP module. See issue #1541620
+
+if (isset($_SESSION['smart_ip']['location'])) {
+  return array('latitude' => $_SESSION['smart_ip']['location']['latitude'], 'longitude' => $_SESSION['smart_ip']['location']['longitude']);
+}

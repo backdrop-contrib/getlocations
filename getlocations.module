@@ -46,6 +46,19 @@ function getlocations_init() {
   }
   drupal_add_js($settings, 'setting');
 
+  $getlocations_defaults = getlocations_defaults();
+  if ($getlocations_defaults['markermanagertype'] == 2) {
+    if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
+      module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
+    }
+    else {
+      module_load_include('inc', 'getlocations', 'getlocations.markercluster');
+    }
+    $markerclusterer_styles = getlocations_get_markerclusterer_styles();
+    drupal_add_js(array('getlocations_markerclusterer' => $markerclusterer_styles), 'setting');
+  }
+
+
 }
 
 /**
@@ -1704,17 +1717,6 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');
-
-  if ($defaults['markermanagertype'] == 2) {
-    if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
-      module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
-    }
-    else {
-      module_load_include('inc', 'getlocations', 'getlocations.markercluster');
-    }
-    $markerclusterer_styles = getlocations_get_markerclusterer_styles();
-    drupal_add_js(array('getlocations_markerclusterer' => $markerclusterer_styles), 'setting');
-  }
 
 }
 

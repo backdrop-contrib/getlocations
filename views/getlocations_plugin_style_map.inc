@@ -118,44 +118,15 @@ class getlocations_plugin_style_map extends views_plugin_style {
     foreach ($handlers as $handle) {
       $source_options[$handle->options['id']] = (!empty($handle->options['label'])) ? $handle->options['label'] : $handle->options['id'];
     }
-
-    $form['width'] = getlocations_element_map_tf(
-      t('Map width'),
-      $this->options['width'],
-      10,
-      10,
-      t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    $labels = array(
+      'width' => t('Width'),
+      'height' => t('Height'),
+      'styles' => t('Styles'),
+      'latlong' => t('Map center'),
+      'zoom' => t('Zoom')
     );
 
-    $form['height'] = getlocations_element_map_tf(
-      t('Map height'),
-      $this->options['height'],
-      10,
-      10,
-      t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
-    );
-
-    $form['styles'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Default styles'),
-      '#default_value' => $this->options['styles'],
-      '#description' => t('The default styles of a Google map. Use !link for generating your styles', array('!link' => l(t('this wizard'), 'http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html', array('external' => TRUE)))),
-    );
-
-    $form['latlong'] = getlocations_element_map_tf(
-      t('Map center'),
-      $this->options['latlong'],
-      30,
-      30,
-      t('The center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma.')
-    );
-
-    $form['zoom'] = getlocations_element_map_zoom(
-      t('Zoom'),
-      $this->options['zoom'],
-      t('The zoom level of a Google map.')
-    );
-
+    $form += getlocations_map_display_basics_form($this->options, $labels);
     $form += getlocations_map_display_options_form($this->options, FALSE);
 
     // markers

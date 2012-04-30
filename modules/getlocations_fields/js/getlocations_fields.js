@@ -222,6 +222,15 @@
           if (admin_area_level_1) {
             provincefield_value = admin_area_level_1;
           }
+          if (admin_area_level_1 && admin_area_level_2) {
+            provincefield_value = admin_area_level_2 + ', ' + admin_area_level_1;
+          }
+          if (admin_area_level_1 && admin_area_level_2 && admin_area_level_3) {
+            provincefield_value = admin_area_level_3 + ', ' + admin_area_level_2 + ', ' + admin_area_level_1;
+          }
+          if (admin_area_level_2 && admin_area_level_3) {
+            provincefield_value = admin_area_level_3 + ', ' + admin_area_level_2;
+          }
           if (admin_area_level_2 && ! provincefield_value) {
             provincefield_value = admin_area_level_2;
           }

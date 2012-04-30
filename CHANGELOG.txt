@@ -1,9 +1,19 @@
-commit d7aafde
+commit 0da3e70
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 30 08:54:48 2012 +0100
+
+    added fix for duplicate marker, see#1551882
+
+js/getlocations.js
+modules/getlocations_search/js/getlocations_search.js
+
+commit 99823cc
 Author: hutch <hutch@midwales.net>
 Date:   Thu Apr 26 23:08:11 2012 +0100
 
     added relationships to getlocations_fields views, see #1549606
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields.views.inc
 
 commit 38f7c71

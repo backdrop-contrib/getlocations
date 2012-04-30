@@ -9,6 +9,7 @@
 
 var getlocations_inputmap = [];
 var getlocations_map = [];
+var getlocations_markers = [];
 (function ($) {
   // global vars
   var settings = [];
@@ -70,6 +71,10 @@ var getlocations_map = [];
       var pansetting = settings.pansetting;
       var draggable = settings.draggable;
       var map_styles = settings.styles;
+
+      getlocations_markers[key] = {};
+      getlocations_markers[key].coords = {};
+      getlocations_markers[key].lids = {};
 
       global_settings.minzoom = parseInt(settings.minzoom);
       global_settings.maxzoom = parseInt(settings.maxzoom);
@@ -260,7 +265,7 @@ var getlocations_map = [];
       }
 
       if (! settings.inputmap && ! settings.searchmap) {
-        setTimeout(function() { doAllMarkers(getlocations_map[key], global_settings) }, 300);
+        setTimeout(function() { doAllMarkers(getlocations_map[key], global_settings, key) }, 300);
 
         if (pansetting == 1) {
           Drupal.getlocations.doBounds(getlocations_map[key], minlat, minlon, maxlat, maxlon, true);
@@ -278,7 +283,7 @@ var getlocations_map = [];
 
       // searchmap
       if (settings.searchmap) {
-        setTimeout(function() { Drupal.getlocations.doSearch(getlocations_map[key], global_settings) }, 300);
+        setTimeout(function() { Drupal.getlocations.doSearch(getlocations_map[key], global_settings, key) }, 300);
       } // end searchmap
 
       function manageTrafficButton(map, trafficInfo, key) {
@@ -317,7 +322,7 @@ var getlocations_map = [];
     }); // end each setting loop
 
 
-    function doAllMarkers (map, gs) {
+    function doAllMarkers (map, gs, mkey) {
 
       // using markermanager
       if (gs.usemarkermanager || gs.useclustermanager) {
@@ -343,7 +348,9 @@ var getlocations_map = [];
         else {
           gs.markdone = Drupal.getlocations.getIcon(mark);
         }
-        m = Drupal.getlocations.makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent);
+        m = Drupal.getlocations.makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent, mkey);
+        // still experimental
+        getlocations_markers[mkey].lids[lid] = m;
         if (gs.usemarkermanager || gs.useclustermanager) {
           batchr.push(m);
         }
@@ -360,11 +367,39 @@ var getlocations_map = [];
 
   } // end initialize
 
-  Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent) {
+  Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, mkey) {
 
     //if (! gs.markdone) {
     //  return;
     //}
+
+    // check for duplicates
+    var hash = lat + lon;
+    hash = hash.replace(".","").replace(",", "").replace("-","");
+    if (getlocations_markers[mkey].coords[hash] == null) {
+      getlocations_markers[mkey].coords[hash] = 1;
+    }
+    else {
+      // we have a duplicate
+      // 10000 constrains the max, 0.0001 constrains the min distance
+      m1 = (Math.random() /10000) + 0.0001;
+      // randomise the operator
+      m2 = Math.random();
+      if (m2 > 0.5) {
+        lat = parseFloat(lat) + m1;
+      }
+      else {
+        lat = parseFloat(lat) - m1;
+      }
+      m1 = (Math.random() /10000) + 0.0001;
+      m2 = Math.random();
+      if (m2 > 0.5) {
+        lon = parseFloat(lon) + m1;
+      }
+      else {
+        lon = parseFloat(lon) - m1;
+      }
+    }
 
     var mouseoverTimeoutId = null;
     var mouseoverTimeout = (gs.markeractiontype == 'mouseover' ? 300 : 0);

@@ -8,7 +8,7 @@
 */
 (function ($) {
   var batchr = [];
-  Drupal.getlocations.doSearch = function(map, gs) {
+  Drupal.getlocations.doSearch = function(map, gs, mkey) {
     var searchsettings = Drupal.settings.getlocations_search;
     jQuery.each(searchsettings, function (searchkey, ssettings) {
       var method = ssettings.method;
@@ -41,7 +41,7 @@
           var place_adrs = ac_adrs.getPlace();
           fm_adrs = {'address': place_adrs.formatted_address};
           // Create a Client Geocoder
-          do_Geocode(map, gs, fm_adrs);
+          do_Geocode(map, gs, fm_adrs, mkey);
         });
       }
       else {
@@ -50,7 +50,7 @@
           input_adrs = $("#edit-getlocations-search").val();
           fm_adrs = {'address': input_adrs};
           // Create a Client Geocoder
-          do_Geocode(map, gs, fm_adrs);
+          do_Geocode(map, gs, fm_adrs, mkey);
           return false;
         });
       }
@@ -58,7 +58,7 @@
   }
 
   // cleans out any existing markers, sets up a new geocoder and runs it, filling in the results.
-  function do_Geocode(map, gs, adrs) {
+  function do_Geocode(map, gs, adrs, mkey) {
     // are there any markers already?
     if (batchr.length > 1) {
       // clear out markers
@@ -128,7 +128,7 @@
             else if (locations[i].tid > 0) { lidkey = 'tid'; }
             else if (locations[i].cid > 0) { lidkey = 'cid'; }
             gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
-            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, locations[i].glid, locations[i].title, lidkey, '');
+            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, locations[i].glid, locations[i].title, lidkey, '', mkey);
             batchr.push(marker);
             locationct++;
           }

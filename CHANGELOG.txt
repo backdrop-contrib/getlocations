@@ -1,9 +1,43 @@
-commit 0da3e70
+commit d376436
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 4 10:05:58 2012 +0100
+
+    added trim to apoclean()
+
+getlocations.module
+
+commit fd76ab4
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 4 10:01:30 2012 +0100
+
+    fixed bug in theme, see #1559982
+
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 07149f2
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 3 01:59:14 2012 +0100
+
+    updated markerclusterer installed
+
+js/markerclusterer.js
+
+commit 568409b
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 30 16:13:55 2012 +0100
+
+    better admin_level distribution
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 89127c3
 Author: hutch <hutch@midwales.net>
 Date:   Mon Apr 30 08:54:48 2012 +0100
 
     added fix for duplicate marker, see#1551882
 
+CHANGELOG.txt
 js/getlocations.js
 modules/getlocations_search/js/getlocations_search.js
 

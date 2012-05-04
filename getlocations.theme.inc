@@ -211,7 +211,7 @@ function theme_getlocations_info($variables) {
     $output .= '</div>';
   }
   if (! empty($location['city'])) {
-    $output .= '<span class="locality">' . $location['city'] . ' </span>';
+    $output .= '<span class="locality">' . $location['city'] . '</span>';
     if (! empty($location['province_name'])) {
       $output .= ",&nbsp;";
     }
@@ -220,13 +220,19 @@ function theme_getlocations_info($variables) {
     }
   }
   if (isset($location['province_name']) && ! empty($location['province_name'])) {
-    $output .= '<span class="region">' . $location['province_name'] . ' </span>';
+    $output .= '<span class="region">' . $location['province_name'] . '</span>';
+    if (! empty($location['postal_code'])) {
+      $output .= "&nbsp;";
+    }
   }
   elseif (isset($location['province']) && ! empty($location['province'])) {
-    $output .= '<span class="region">' . $location['province'] . ' </span>';
+    $output .= '<span class="region">' . $location['province'] . '</span>';
+    if (! empty($location['postal_code'])) {
+      $output .= "&nbsp;";
+    }
   }
   if (! empty($location['postal_code'])) {
-    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
+    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . '</span>';
   }
   if (isset($location['country_name']) && ! empty($location['country_name'])) {
     $output .= '<div class="country-name">' . $location['country_name'] . '</div>';

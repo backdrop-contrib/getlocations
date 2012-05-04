@@ -82,16 +82,19 @@ function theme_getlocations_fields_show($variables) {
       $output .= '</div>';
     }
     if (! empty($location['city']) && $settings['display_city']) {
-      $output .= '<span class="locality">' . $location['city'] . ' </span>';
+      $output .= '<span class="locality">' . $location['city'] . '</span>';
       if (! empty($location['province']) && $settings['display_province']) {
         $output .= ",&nbsp;";
       }
     }
     if (! empty($location['province']) && $settings['display_province']) {
-      $output .= '<span class="region">' . $location['province'] . ' </span>';
+      $output .= '<span class="region">' . $location['province'] . '</span>';
+      if (! empty($location['postal_code']) && $settings['display_postal_code']) {
+        $output .= "&nbsp;";
+      }
     }
     if (! empty($location['postal_code']) && $settings['display_postal_code']) {
-      $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
+      $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . '</span>';
     }
     if (! empty($location['country']) && $settings['display_country']) {
       if ($settings['country_full'] && drupal_strlen($location['country']) == 2 ) {

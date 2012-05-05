@@ -1,9 +1,26 @@
-commit e8f7a77
+commit 85ea2e2
+Author: hutch <hutch@midwales.net>
+Date:   Sat May 5 08:11:55 2012 +0100
+
+    fixed address spaces bug
+
+getlocations.theme.inc
+
+commit 640337d
+Author: hutch <hutch@midwales.net>
+Date:   Sat May 5 08:11:22 2012 +0100
+
+    fixed markerclusterer path
+
+getlocations.markercluster.inc
+
+commit e1edc33
 Author: hutch <hutch@midwales.net>
 Date:   Thu Mar 15 00:13:56 2012 +0000
 
     fixed bug in older ie #1480800
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit 9ee3f9e

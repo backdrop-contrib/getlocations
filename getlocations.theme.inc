@@ -119,16 +119,19 @@ function theme_getlocations_info($location) {
     $output .= '</div>';
   }
   if (! empty($location['city'])) {
-    $output .= '<span class="locality">' . $location['city'] . ' </span>';
+    $output .= '<span class="locality">' . $location['city'] . '</span>';
     if (! empty($location['province_name'])) {
       $output .= ",&nbsp;";
     }
   }
   if (! empty($location['province_name'])) {
-    $output .= '<span class="region">' . $location['province_name'] . ' </span>';
+    $output .= '<span class="region">' . $location['province_name'] . '</span>';
+    if (! empty($location['postal_code'])) {
+      $output .= "&nbsp;";
+    }
   }
   if (! empty($location['postal_code'])) {
-    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
+    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . '</span>';
   }
   if (! empty($location['country_name'])) {
     $output .= '<div class="country-name">' . $location['country_name'] . '</div>';

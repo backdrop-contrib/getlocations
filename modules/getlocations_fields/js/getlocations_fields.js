@@ -13,10 +13,11 @@
     attach: function () {
 
       var settings = Drupal.settings.getlocations_fields;
-
+      var gsettings = Drupal.settings.getlocations;
       // each map has its own settings
       jQuery.each(settings, function (key, sett) {
 
+        var gset = gsettings[key];
         var point = [];
         var adrsfield = 'getlocations_address_';
         var namefield = 'getlocations_name_';
@@ -43,6 +44,15 @@
         if (lat && lng) {
           point[key] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
           updateMap(getlocations_inputmap[key], point[key], key);
+        }
+
+        if (! mark[key]) {
+          // make an icon
+          if (! point[key]) {
+            point[key] = new google.maps.LatLng(parseFloat(gset.lat), parseFloat(gset.lng));
+            getlocations_inputmap[key].setCenter(point[key]);
+          }
+          makeMoveMarker(getlocations_inputmap[key], point[key], key);
         }
 
         if (use_address) {
@@ -264,17 +274,6 @@
             });
           }
         } // set_address_components
-
-        google.maps.event.addListener(getlocations_inputmap[gkey], 'click', function (event) {
-          if (! mark[gkey]) {
-            // make an icon
-            if (! point[gkey]) {
-              point[gkey] = event.latLng;
-              getlocations_inputmap[gkey].setCenter(point[gkey]);
-            }
-            makeMoveMarker(getlocations_inputmap[gkey], point[gkey], gkey);
-          }
-        });
 
         function makeMoveMarker(mmap, ppoint, mkey) {
           // remove existing marker

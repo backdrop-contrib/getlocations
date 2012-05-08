@@ -1,9 +1,26 @@
-commit d376436
+commit 8159afa
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 8 09:05:59 2012 +0100
+
+    set movable marker immediately
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 7379b35
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 8 09:05:07 2012 +0100
+
+    replaced uniqid with a counter for mapid
+
+getlocations.module
+
+commit d522f8c
 Author: hutch <hutch@midwales.net>
 Date:   Fri May 4 10:05:58 2012 +0100
 
     added trim to apoclean()
 
+CHANGELOG.txt
 getlocations.module
 
 commit fd76ab4

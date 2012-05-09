@@ -364,7 +364,7 @@ var getlocations_markers = [];
         gs.cmgr.addMarkers(batchr, 0);
       }
     }
-
+    $("body").addClass("getlocations-maps-processed");
   } // end initialize
 
   Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, mkey) {
@@ -555,7 +555,9 @@ var getlocations_markers = [];
   // gogogo
   Drupal.behaviors.getlocations = {
     attach: function() {
-      initialize();
+      if (! $(".getlocations-maps-processed").is("body")) {
+        initialize();
+      }
     }
   };
 

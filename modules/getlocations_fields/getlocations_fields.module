@@ -1906,7 +1906,7 @@ function getlocations_fields_defaults() {
     'input_geobutton_weight'       => 0,
     'use_smart_ip_button'          => 0,
     'input_smart_ip_button_weight' => 0,
-    'use_country_dropdown'         => 0,
+    'use_country_dropdown'         => 1,
     'province_autocomplete'        => 0,
     'city_autocomplete'            => 0,
     'per_item_marker'              => 0,

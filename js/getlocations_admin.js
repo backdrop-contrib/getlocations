@@ -132,6 +132,21 @@
         }
       });
 
+      if ($("#edit-getlocations-term-marker-enable").attr('checked')) {
+        $("#wrap-getlocations-term-markers").show();
+      }
+      else {
+        $("#wrap-getlocations-term-markers").hide();
+      }
+      $("#edit-getlocations-term-marker-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-term-markers").show();
+        }
+        else {
+          $("#wrap-getlocations-term-markers").hide();
+        }
+      });
+
       if ($("#edit-getlocations-default-markermanagertype").val() == 1) {
         // markermanager
         $(".form-item-getlocations-default-usemarkermanager").show();

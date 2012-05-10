@@ -82,6 +82,14 @@ function template_preprocess_getlocations_view_map(&$variables) {
         if (isset($location['marker']) && ! empty($location['marker'])) {
           $marker = $location['marker'];
         }
+        if ($nid = getlocations_get_nid_from_lid($lid)) {
+          $results = db_query('SELECT tid FROM {taxonomy_index} WHERE nid = :nid', array(':nid' => $nid));
+          foreach ($results as $result) {
+            if (isset($options['term_marker_' . $result->tid])) {
+              $marker = $options['term_marker_' . $result->tid];
+            }
+          }
+        }
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
           $ct++;

@@ -879,6 +879,7 @@ function getlocations_defaults() {
     'node_map_marker'           => 'drupal',
     'user_map_marker'           => 'drupal',
     'vocabulary_map_marker'     => 'drupal',
+    'term_map_marker'           => 'drupal',
     'comment_map_marker'        => 'drupal',
     'input_map_marker'          => 'drupal',
     'markeraction'              => 0,
@@ -1660,10 +1661,26 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
+  elseif ($type == 'term') {
+    $default_marker = $getlocations_defaults['term_map_marker'];
+    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+    if ($getlocations_term_marker['vid']) {
+      $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+      $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
+      foreach ($terms AS $term) {
+        if ($getlocations_term_marker['enable'] && isset($getlocations_term_marker['term'][$term->tid]['map_marker'])) {
+          $markertypes[$content_type] = $getlocations_term_marker['term'][$term->tid]['map_marker'];
+        }
+        else {
+          $markertypes[$content_type] = $default_marker;
+        }
+      }
+    }
+    return $markertypes;
+  }
   else {
     return FALSE;
   }
-
 }
 
 function getlocations_get_nodetype($nid) {

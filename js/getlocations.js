@@ -7,23 +7,20 @@
  * this is for googlemaps API version 3
 */
 
+// global vars
 var getlocations_inputmap = [];
 var getlocations_map = [];
 var getlocations_markers = [];
 (function ($) {
-  // global vars
-  var settings = [];
 
-  function initialize() {
+  function getlocations_init() {
 
     // in icons.js
     Drupal.getlocations.iconSetup();
 
-    settings = Drupal.settings.getlocations;
-
     // each map has its own settings
-    jQuery.each(settings, function (key, settings) {
-
+    $.each(Drupal.settings.getlocations, function (key, settings) {
+      // defaults
       var global_settings = {
         maxzoom: 16,
         minzoom: 7,
@@ -320,7 +317,7 @@ var getlocations_markers = [];
       }
 
     }); // end each setting loop
-
+    $("body").addClass("getlocations-maps-processed");
 
     function doAllMarkers (map, gs, mkey) {
 
@@ -364,8 +361,7 @@ var getlocations_markers = [];
         gs.cmgr.addMarkers(batchr, 0);
       }
     }
-    $("body").addClass("getlocations-maps-processed");
-  } // end initialize
+  } // end getlocations_init
 
   Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, mkey) {
 
@@ -556,7 +552,7 @@ var getlocations_markers = [];
   Drupal.behaviors.getlocations = {
     attach: function() {
       if (! $(".getlocations-maps-processed").is("body")) {
-        initialize();
+        getlocations_init();
       }
     }
   };

@@ -86,6 +86,9 @@ function theme_getlocations_fields_show($variables) {
       if (! empty($location['province']) && $settings['display_province']) {
         $output .= ",&nbsp;";
       }
+      else {
+        $output .= "&nbsp;";
+      }
     }
     if (! empty($location['province']) && $settings['display_province']) {
       $output .= '<span class="region">' . $location['province'] . '</span>';

@@ -218,6 +218,9 @@ function theme_getlocations_info($variables) {
     elseif (! empty($location['province'])) {
       $output .= ",&nbsp;";
     }
+    else {
+      $output .= "&nbsp;";
+    }
   }
   if (isset($location['province_name']) && ! empty($location['province_name'])) {
     $output .= '<span class="region">' . $location['province_name'] . '</span>';

@@ -1100,18 +1100,17 @@ function getlocations_get_path_from_lid($lid) {
     if ($query) {
       $row = $query->execute()->fetchAssoc();
       $path = '';
-      $base_path = base_path();
       if (isset($row['nid']) && $row['nid'] > 0) {
-        $path = $base_path . 'node/' . $row['nid'];
+        $path = url('node/' . $row['nid']);
       }
       elseif (isset($row['uid']) && $row['uid'] > 0) {
-        $path = $base_path . 'user/' . $row['uid'];
+        $path = url('user/' . $row['uid']);
       }
       elseif (isset($row['tid']) && $row['tid'] > 0 && module_exists('taxonomy')) {
-        $path = $base_path . 'taxonomy/term/' . $row['tid'];
+        $path = url('taxonomy/term/' . $row['tid']);
       }
       elseif (isset($row['cid']) && $row['cid'] > 0 && module_exists('comment')) {
-        $path = $base_path . 'comment/' . $row['cid'];
+        $path = url('comment/' . $row['cid']);
       }
       return $path;
     }
@@ -1179,22 +1178,21 @@ function getlocations_lidinfo() {
       }
     }
     elseif (module_exists('geofield') && module_exists('addressfield')) {
-      $base_path = base_path();
       if ($lidkey == 'nid') {
-        $path = $base_path . 'node/' . $lid;
+        $path = url('node/' . $lid);
       }
       elseif ($lidkey == 'vid') {
         $nid = getlocations_get_nid($lid);
-        $path = $base_path . 'node/' . $nid;
+        $path = url('node/' . $nid);
       }
       elseif ($lidkey == 'uid') {
-        $path = $base_path . 'user/' . $lid;
+        $path = url('user/' . $lid);
       }
       elseif ($lidkey == 'tid' && module_exists('taxonomy')) {
-        $path = $base_path . 'taxonomy/term/' . $lid;
+        $path = url('taxonomy/term/' . $lid);
       }
       elseif ($lidkey == 'cid' && module_exists('comment')) {
-        $path = $base_path . 'comment/' . $lid;
+        $path = url('comment/' . $lid);
       }
       if ($path) {
         $content = $path;

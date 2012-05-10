@@ -1,9 +1,88 @@
-commit 8159afa
+commit 36fc000
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 22:12:06 2012 +0100
+
+    added map wrapper div, see #1571236
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 83677c7
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 21:52:58 2012 +0100
+
+    fixed return alias, see #1571208
+
+getlocations.module
+
+commit 213c734
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 21:14:09 2012 +0100
+
+    fixed spacing in vcard
+
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 83b3f6c
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 10:23:53 2012 +0100
+
+    added term markers
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations_admin.js
+views/getlocations.views.inc
+views/getlocations_plugin_style_map.inc
+
+commit 754feba
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 10:16:47 2012 +0100
+
+    rejigged code to protect behaviours from being rerun by drupal's ajax
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit eb41433
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 10:15:21 2012 +0100
+
+    cleaned up getlocations.js
+
+js/getlocations.js
+
+commit b41a004
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 10 10:05:14 2012 +0100
+
+    make dropdown default for country
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit dde1b5a
+Author: hutch <hutch@midwales.net>
+Date:   Wed May 9 11:43:47 2012 +0100
+
+    prevent initialise in getlocations.js from running more than once
+
+js/getlocations.js
+
+commit 3bb4d6e
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 8 16:26:54 2012 +0100
+
+    changed wording of map message
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 47136de
 Author: hutch <hutch@midwales.net>
 Date:   Tue May 8 09:05:59 2012 +0100
 
     set movable marker immediately
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields.js
 
 commit 7379b35

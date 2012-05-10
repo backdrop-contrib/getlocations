@@ -481,7 +481,9 @@ function theme_getlocations_fields_field_widget_form($variables) {
 
   $msg = t('To use the map to find a location, drag the marker.');
   $map = $form['map']['#markup'];
-  $form['map']['#markup'] = '<p>' . $msg . '</p>' . $map;
+  $form['map']['#prefix'] = '<div class="getlocations_fields_map_wrapper">';
+  $form['map']['#suffix'] = '</div>';
+  $form['map']['#markup'] = '<p>' . $msg . '</p><div class="getlocations_fields_map">' . $map . '</div>';
 
   // wrap 'fake' required in a div
   if ($mapid !== NULL && isset($form['getlocations_required'])) {

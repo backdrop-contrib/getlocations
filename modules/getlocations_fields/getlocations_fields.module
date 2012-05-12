@@ -1924,32 +1924,9 @@ function getlocations_fields_defaults() {
     ),
   );
 
-  $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', array());
-  // array_merge deletes things in $defaults that are not in $getlocations_fields_defaults ;-/
-  // roll my own
-  $newdefaults = array();
-  foreach ($defaults AS $k => $v) {
-    if (is_array($v)) {
-      foreach ($defaults[$k] AS $k1 => $v1) {
-        if (isset($getlocations_fields_defaults[$k][$k1])) {
-          $newdefaults[$k][$k1] = $getlocations_fields_defaults[$k][$k1];
-        }
-        else {
-          $newdefaults[$k][$k1] = $v1;
-        }
-      }
-    }
-    else {
-      if (isset($getlocations_fields_defaults[$k])) {
-        $newdefaults[$k] = $getlocations_fields_defaults[$k];
-      }
-      else {
-        $newdefaults[$k] = $v;
-      }
-    }
-  }
+  $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
+  $newdefaults = getlocations_adjust_vars($defaults, $getlocations_fields_defaults);
   return $newdefaults;
-
 }
 
 /**

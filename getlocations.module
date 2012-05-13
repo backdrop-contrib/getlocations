@@ -2394,3 +2394,51 @@ function getlocations_adjust_vars($defaults, $settings) {
   return $newdefaults;
 }
 
+/**
+ * Fetch fieldnames for a given module and type
+ *
+ * @param array $module module name
+ * @param array $type type name
+ *
+ * @return array suitable for use in a dropdown.
+ */
+function getlocations_get_fieldnames($module = 'getlocations_fields', $type = 'getlocations_fields') {
+
+  $field_names = array();
+  $query = db_select('field_config', 'f');
+  $query->fields('f', array('field_name'));
+  $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+  $query->condition('f.module', $module)
+    ->condition('f.type', $type)
+    ->condition('f.active', 1);
+  $rows = $query->execute();
+  foreach ($rows AS $row) {
+    $field_names[$row->field_name] = $row->field_name;
+  }
+  return $field_names;
+}
+
+/**
+ * Fetch bundle names for a given module and type
+ *
+ * @param array $module module name
+ * @param array $type type name
+ *
+ * @return array suitable for use in a dropdown.
+ */
+function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getlocations_fields') {
+
+  $bundles = array();
+  $query = db_select('field_config', 'f');
+  $query->fields('i', array('bundle'));
+  $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+  $query->condition('f.module', $module)
+    ->condition('f.type', $type)
+    ->condition('f.active', 1);
+  $rows = $query->execute();
+  foreach ($rows AS $row) {
+    $bundles[$row->bundle] = $row->bundle;
+  }
+  return $bundles;
+}
+

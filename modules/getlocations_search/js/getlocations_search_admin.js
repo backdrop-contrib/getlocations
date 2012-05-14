@@ -26,6 +26,38 @@
       });
 
 
+      if ($("#edit-getlocations-search-defaults-markermanagertype").val() == 1) {
+        // markermanager
+        $(".form-item-getlocations-search-defaults-usemarkermanager").show();
+        $("#wrap-getlocations-clusteropts").hide();
+      }
+      else if ($("#edit-getlocations-search-defaults-markermanagertype").val() == 2) {
+        // markerclusterer
+        $(".form-item-getlocations-search-defaults-usemarkermanager").hide();
+        $("#wrap-getlocations-clusteropts").show();
+      }
+      else {
+        // none
+        $(".form-item-getlocations-search-defaults-usemarkermanager").hide();
+        $("#wrap-getlocations-clusteropts").hide();
+      }
+      $("#edit-getlocations-search-defaults-markermanagertype").change(function() {
+        if ($(this).val() == 1) {
+          // markermanager
+          $(".form-item-getlocations-search-defaults-usemarkermanager").show();
+          $("#wrap-getlocations-clusteropts").hide();
+        }
+        else if ($(this).val() == 2) {
+          // markerclusterer
+          $(".form-item-getlocations-search-defaults-usemarkermanager").hide();
+          $("#wrap-getlocations-clusteropts").show();
+        }
+        else {
+          // none
+          $(".form-item-getlocations-search-defaults-usemarkermanager").hide();
+          $("#wrap-getlocations-clusteropts").hide();
+        }
+      });
 
 
 
@@ -33,4 +65,3 @@
     }
   };
 })(jQuery);
-

@@ -118,6 +118,13 @@ function getlocations_search_settings_form() {
 
   $form['getlocations_search_defaults'] += getlocations_map_display_options_form($getlocations_search_defaults, FALSE, TRUE);
 
+  $form['getlocations_search_defaults']['markeractiontype'] = getlocations_element_map_markeractiontype(
+    $getlocations_search_defaults['markeractiontype']
+  );
+  $form['getlocations_search_defaults']['markeraction'] = getlocations_element_map_markeraction(
+    $getlocations_search_defaults['markeraction']
+  );
+
   $form['getlocations_search_defaults']['minzoom'] = getlocations_element_map_zoom(
     t('Minimum Zoom'),
     $getlocations_search_defaults['minzoom'],
@@ -135,6 +142,29 @@ function getlocations_search_settings_form() {
     $getlocations_search_defaults['nodezoom'],
     t('The Default zoom level for a single marker.')
   );
+  // marker manager
+  $form['getlocations_search_defaults']['markermanagertype'] = getlocations_element_markermanagertype($getlocations_search_defaults['markermanagertype']);
+  $form['getlocations_search_defaults']['usemarkermanager'] = getlocations_element_map_checkbox(
+    t('Use Marker manager'),
+    $getlocations_search_defaults['usemarkermanager'],
+    t('Use Marker manager. Switching this off will use no manager.')
+  );
+  $form['getlocations_search_defaults']['useclustermanager'] = getlocations_element_map_checkbox(
+    t('Use Cluster manager'),
+    $getlocations_search_defaults['useclustermanager'],
+    t('Use Cluster manager. Switching this off will use no manager.')
+  );
+
+  if (file_exists(GETLOCATIONS_PATH . '/getlocations.markerclusterer_override.inc')) {
+    module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
+  }
+  else {
+    module_load_include('inc', 'getlocations', 'getlocations.markercluster');
+  }
+  $form['getlocations_search_defaults']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_search_defaults['markerclusterer_style']);
+  $form['getlocations_search_defaults']['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($getlocations_search_defaults['markerclusterer_zoom']);
+  $form['getlocations_search_defaults']['markerclusterer_size'] = getlocations_element_markerclusterer_size($getlocations_search_defaults['markerclusterer_size']);
+  $form['getlocations_search_defaults']['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($getlocations_search_defaults['markerclusterer_minsize']);
 
   #$form['getlocations_search_defaults']['pansetting'] = getlocations_element_map_pansetting($getlocations_search_defaults['pansetting']);
 
@@ -162,4 +192,3 @@ function getlocations_search_settings_form() {
   return $form;
 
 }
-

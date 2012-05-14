@@ -418,14 +418,14 @@ function getlocations_settings_form() {
     $form['getlocations_colorbox']['marker_enable'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Marker picker'),
-      '#default_value' =>  (isset($getlocations_colorbox['marker_enable']) ? $getlocations_colorbox['marker_enable'] : 0),
+      '#default_value' =>  $getlocations_colorbox['marker_enable'],
       '#return_value' => 1,
       '#description' => t('Show Markers in a Colorbox.'),
     );
     $form['getlocations_colorbox']['marker_width'] = array(
       '#type' => 'textfield',
       '#title' => t('Marker Colorbox width'),
-      '#default_value' => (isset($getlocations_colorbox['marker_width']) ? $getlocations_colorbox['marker_width'] : 600),
+      '#default_value' => $getlocations_colorbox['marker_width'],
       '#size' => 5,
       '#required' => TRUE,
       // need this to get validation to work
@@ -434,7 +434,7 @@ function getlocations_settings_form() {
     $form['getlocations_colorbox']['marker_height'] = array(
       '#type' => 'textfield',
       '#title' => t('Marker Colorbox height'),
-      '#default_value' => (isset($getlocations_colorbox['marker_height']) ? $getlocations_colorbox['marker_height'] : 600),
+      '#default_value' => $getlocations_colorbox['marker_height'],
       '#size' => 5,
       '#required' => TRUE,
       // need this to get validation to work

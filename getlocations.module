@@ -30,14 +30,7 @@ function getlocations_init() {
   module_load_include('inc', 'getlocations', 'getlocations.theme');
 
   if (module_exists('colorbox')) {
-    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
-      'enable' => 0,
-      'width' => 600,
-      'height' => 600,
-      'marker_enable' => 0,
-      'marker_width' => 600,
-      'marker_height' => 600,
-    ));
+    $getlocations_colorbox = getlocations_colorbox_settings();
     $settings = array('getlocations_colorbox' => $getlocations_colorbox);
     drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_colorbox.js');
   }
@@ -57,8 +50,6 @@ function getlocations_init() {
     $markerclusterer_styles = getlocations_get_markerclusterer_styles();
     drupal_add_js(array('getlocations_markerclusterer' => $markerclusterer_styles), 'setting');
   }
-
-
 }
 
 /**
@@ -2308,38 +2299,24 @@ function getlocations_element_map_limits($default, $title = '', $description = '
 }
 
 function getlocations_paths_get() {
-    $getlocations_paths = variable_get('getlocations_paths', array(
-      'infobubble_path' => GETLOCATIONS_PATH . '/js/infobubble.js',
-      'infobubble_options_path' => GETLOCATIONS_PATH . '/js/infobubble_options.js',
-      'markermanager_path' => GETLOCATIONS_PATH . '/js/markermanager.js',
-      'markerclusterer_path' => GETLOCATIONS_PATH . '/js/markerclusterer.js',
-      'infowindow_options_path' => GETLOCATIONS_PATH . '/js/infowindow_options.js',
-      'getlocations_path' => GETLOCATIONS_PATH . '/js/getlocations.js',
-    )
+
+  $defaults = array(
+    'infobubble_path' => GETLOCATIONS_PATH . '/js/infobubble.js',
+    'infobubble_options_path' => GETLOCATIONS_PATH . '/js/infobubble_options.js',
+    'markermanager_path' => GETLOCATIONS_PATH . '/js/markermanager.js',
+    'markerclusterer_path' => GETLOCATIONS_PATH . '/js/markerclusterer.js',
+    'infowindow_options_path' => GETLOCATIONS_PATH . '/js/infowindow_options.js',
+    'getlocations_path' => GETLOCATIONS_PATH . '/js/getlocations.js',
   );
-  if (! isset($getlocations_paths['markerclusterer_path'])) {
-    $getlocations_paths['markerclusterer_path'] = GETLOCATIONS_PATH . '/js/markerclusterer.js';
-  }
-  if (! isset($getlocations_paths['infowindow_options_path'])) {
-    $getlocations_paths['infowindow_options_path'] = GETLOCATIONS_PATH . '/js/infowindow_options.js';
-  }
-  if (! isset($getlocations_paths['getlocations_path'])) {
-    $getlocations_paths['getlocations_path'] = GETLOCATIONS_PATH . '/js/getlocations.js';
-  }
+  $settings = variable_get('getlocations_paths', $defaults);
+  $getlocations_paths = getlocations_adjust_vars($defaults, $settings);
 
   return $getlocations_paths;
 }
 
 function getlocations_markerpicker_link($id, $cat, $infoimg='') {
   if (module_exists('colorbox')) {
-    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
-      'enable' => 0,
-      'width' => 600,
-      'height' => 600,
-      'marker_enable' => 0,
-      'marker_width' => 600,
-      'marker_height' => 600,
-    ));
+    $getlocations_colorbox = getlocations_colorbox_settings();
     if ($getlocations_colorbox['marker_enable']) {
       $boxwidth = $getlocations_colorbox['marker_width'];
       $boxheight = $getlocations_colorbox['marker_height'];
@@ -2357,6 +2334,20 @@ function getlocations_markerpicker_link($id, $cat, $infoimg='') {
       return $link;
     }
   }
+}
+
+function getlocations_colorbox_settings() {
+  $colorbox_defaults = array(
+    'enable' => 0,
+    'width' => 600,
+    'height' => 600,
+    'marker_enable' => 0,
+    'marker_width' => 600,
+    'marker_height' => 600,
+  );
+  $colorbox_settings =  variable_get('getlocations_colorbox', $colorbox_defaults);
+  $getlocations_colorbox = getlocations_adjust_vars($colorbox_defaults, $colorbox_settings);
+  return $getlocations_colorbox;
 }
 
 // run string through check_plain but then restore apostrophes

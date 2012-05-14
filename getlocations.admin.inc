@@ -382,20 +382,13 @@ function getlocations_settings_form() {
 
   // colorbox
   if (module_exists('colorbox')) {
+    $getlocations_colorbox = getlocations_colorbox_settings();
     $form['getlocations_colorbox'] = array(
       '#type' => 'fieldset',
       '#title' => t('Colorbox settings'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
     );
-    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
-      'enable' => 0,
-      'width' => 600,
-      'height' => 600,
-      'marker_enable' => 0,
-      'marker_width' => 600,
-      'marker_height' => 600,
-    ));
     $form['getlocations_colorbox']['enable'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable Colorbox'),

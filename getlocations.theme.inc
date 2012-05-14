@@ -373,14 +373,7 @@ function theme_getlocations_settings_form($variables) {
 
   // marker colorbox
   if (module_exists('colorbox')) {
-    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
-      'enable' => 0,
-      'width' => 600,
-      'height' => 600,
-      'marker_enable' => 0,
-      'marker_width' => 600,
-      'marker_height' => 600,
-    ));
+    $getlocations_colorbox = getlocations_colorbox_settings();
     if ($getlocations_colorbox['marker_enable']) {
       $link = getlocations_markerpicker_link($form['getlocations_default']['node_map_marker']['#id'], 'n');
       $form['getlocations_default']['node_map_marker']['#field_suffix'] = '&nbsp;' . $link;
@@ -451,14 +444,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
   $form = $variables['form'];
 
   if (module_exists('colorbox')) {
-    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
-      'enable' => 0,
-      'width' => 600,
-      'height' => 600,
-      'marker_enable' => 0,
-      'marker_width' => 600,
-      'marker_height' => 600,
-    ));
+    $getlocations_colorbox = getlocations_colorbox_settings();
     if ($getlocations_colorbox['marker_enable']) {
       if (isset($form['node_map_marker'])) {
         $link = getlocations_markerpicker_link($form['node_map_marker']['#id'], 'n');

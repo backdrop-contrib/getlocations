@@ -309,14 +309,7 @@ function theme_getlocations_search_settings_form($variables) {
   }
 
 #  if (module_exists('colorbox')) {
-#    $getlocations_colorbox = variable_get('getlocations_colorbox', array(
-#      'enable' => 0,
-#      'width' => 600,
-#      'height' => 600,
-#      'marker_enable' => 0,
-#      'marker_width' => 600,
-#      'marker_height' => 600,
-#    ));
+#    $getlocations_colorbox = getlocations_colorbox_settings();
 #    if ($getlocations_colorbox['marker_enable']) {
 #      $link = getlocations_markerpicker_link($form['getlocations_search_defaults']['search_map_marker']['#id'], 's');
 #      $form['getlocations_search_defaults']['search_map_marker']['#field_suffix'] = '&nbsp;' . $link;

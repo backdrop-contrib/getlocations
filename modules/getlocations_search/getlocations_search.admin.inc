@@ -156,15 +156,10 @@ function getlocations_search_settings_form() {
     t('Where the getlocations_search javascript file is located.')
   );
 
-
   $form = system_settings_form($form);
   unset($form['#theme']);
   $form['#theme'] = 'getlocations_search_settings_form';
   return $form;
 
-  #return system_settings_form($form);
 }
 
-#function getlocations_search_settings_validate($form, &$form_state) {
-#
-#}

@@ -102,6 +102,21 @@
         }
       });
 
+      // warn on empty Latitude/Longitude
+      $("input.form-submit#edit-submit").click( function () {
+        if ($("#" + latfield + key).val() == '' && $("#" + lonfield + key).val() == '') {
+          if (use_address) {
+            msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
+          }
+          else {
+             msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
+          }
+          alert(msg);
+          return false;
+        }
+        return true;
+      });
+
     }); // end each
     $("body").addClass("getlocations-fields-maps-processed");
 

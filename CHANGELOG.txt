@@ -1,9 +1,67 @@
-commit 36fc000
+commit d666b3e
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 14 21:37:54 2012 +0100
+
+    added empty Latitude/Longitude warnibg
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 415d9e3
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 14 20:15:38 2012 +0100
+
+    more features in getlocations_search
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit b3089ab
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 14 12:00:54 2012 +0100
+
+    cleanup
+
+getlocations.admin.inc
+
+commit e0f2ca5
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 14 10:09:38 2012 +0100
+
+    applied adjust_vars to colorbox and paths
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+
+commit 3e673b5
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 13 21:40:44 2012 +0100
+
+    added filters to getlocations_blocks
+
+getlocations.module
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_blocks/js/getlocations_blocks_admin.js
+
+commit 09fd945
+Author: hutch <hutch@midwales.net>
+Date:   Sat May 12 09:56:53 2012 +0100
+
+    added function getlocations_adjust_vars()
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+
+commit f7e5550
 Author: hutch <hutch@midwales.net>
 Date:   Thu May 10 22:12:06 2012 +0100
 
     added map wrapper div, see #1571236
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.theme.inc
 
 commit 83677c7

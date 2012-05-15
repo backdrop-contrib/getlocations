@@ -15,9 +15,6 @@
 class getlocations_fields_handler_argument_distance extends views_handler_argument {
   function option_definition() {
     $options = parent::option_definition();
-    // As only us and uk use miles, make km the default otherwise.
-    #$country = variable_get('location_default_country', 'us');
-    #$options['search_units'] = array('default' => ($country == 'us' || $country == 'uk' ? 'mile' : 'km'));
     $options['search_units'] = array('default' => 'km');
     $options['search_method'] = array('default' => 'mbr');
     $options['type'] = array('default' => 'latlon');
@@ -34,10 +31,8 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
       '#type' => 'select',
       '#options' => array(
         'latlon' => t('Decimal Latitude and Longitude coordinates, comma delimited'),
-#        'postal' => t('Postal Code (Zipcode)'),
       ),
       '#default_value' => $this->options['type'],
-      #'#description' => t('Type of center point.') . '<br />' . t('Postal code argument format: country_postcode_distance or postcode_distance') . '<br />' . t('Lat/Lon argument format: lat,lon_distance') . '<br />' . t('where distance is either a number or a comma delimited pair of decimal degrees'),
       '#description' => t('Type of center point.') . '<br />' . t('Lat/Lon argument format: lat,lon_distance') . '<br />' . t('where distance is either a number or a comma delimited pair of decimal degrees'),
     );
 
@@ -46,10 +41,12 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
       '#type' => 'select',
       '#title' => t('Distance unit'),
       '#options' => array(
-        'km' => t('Kilometers'),
-        'm' => t('Meters'),
-        'mile' => t('Miles'),
-        'dd' => t('Decimal degrees'),
+        'km'  => t('Kilometers'),
+        'm'   => t('Meters'),
+        'mi'  => t('Miles'),
+        'yd'  => t('Yards'),
+        'nmi' => t('Nautical miles'),
+        'dd'  => t('Decimal degrees'),
       ),
       '#default_value' => $this->options['search_units'],
       '#description' => t('Select the unit of distance. Decimal degrees should be comma delimited.'),

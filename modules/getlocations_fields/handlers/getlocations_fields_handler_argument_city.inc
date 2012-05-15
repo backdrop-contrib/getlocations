@@ -54,7 +54,7 @@ class getlocations_fields_handler_argument_city extends views_handler_argument {
     $value = FALSE;
 
     if ($this->options['type'] == 'city' && isset($this->argument)) {
-      $value = check_plain($this->argument);
+      $value = getlocations_apoclean($this->argument);
     }
 
     if ($value) {

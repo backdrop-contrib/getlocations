@@ -55,7 +55,7 @@ class getlocations_fields_handler_argument_province extends views_handler_argume
     $value = FALSE;
 
     if ($this->options['type'] == 'province' && isset($this->argument)) {
-      $value = check_plain($this->argument);
+      $value = getlocations_apoclean($this->argument);
     }
 
     if ($value) {

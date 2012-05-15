@@ -16,6 +16,7 @@ function getlocations_uninstall() {
   variable_del('getlocations_paths');
   variable_del('getlocations_node_marker');
   variable_del('getlocations_vocabulary_marker');
+  variable_del('getlocations_term_marker');
   variable_del('getlocations_colorbox');
 }
 

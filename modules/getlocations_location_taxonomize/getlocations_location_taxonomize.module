@@ -60,7 +60,7 @@ function getlocations_location_taxonomize_form_field_ui_field_edit_form_alter(&$
     $settings = $form['#instance']['widget']['settings'];
     $enable = array(
       '#type' => 'checkbox',
-      '#title' => t('Taxonomize locations from this field using Location Taxonomize'),
+      '#title' => t('Taxonomize locations from this field using Getlocations Fields Location Taxonomize'),
       '#default_value' => $settings['location_taxonomize'],
     );
     $form['instance']['widget']['settings']['location_taxonomize'] = $enable;

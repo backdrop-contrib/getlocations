@@ -21,3 +21,6 @@ in the block as well.
 
 Each form is fully themed so you can alter it using the usual theming methods.
 Each block is wrapped in a div which you can control with css.
+
+The blocks can be filtered on fieldname or content type, in both cases
+you will need to know the machine name.

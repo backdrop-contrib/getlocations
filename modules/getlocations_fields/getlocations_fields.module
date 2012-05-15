@@ -703,6 +703,14 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
 
   $element += getlocations_map_display_options_form($settings, FALSE);
 
+  // markeraction
+  $element['markeractiontype'] = getlocations_element_map_markeractiontype(
+    $settings['markeractiontype']
+  );
+  $element['markeraction'] = getlocations_element_map_markeraction(
+    $settings['markeraction']
+  );
+
   // markers
   $markers = getlocations_get_marker_titles();
   // user markers
@@ -901,6 +909,25 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       if ($settings['node_map_marker']) {
         $summary[] = t('Content map marker: @c', array('@c' => $settings['node_map_marker']));
       }
+    }
+
+    if ($settings['markeraction'] > 0) {
+      if ($settings['markeraction'] == 1) {
+        $msg = t('InfoWindow');
+      }
+      elseif ($settings['markeraction'] == 2) {
+        $msg = t('InfoBubble');
+      }
+      else {
+        $msg = t('Link');
+      }
+      if ($settings['markeractiontype'] == 2) {
+        $msg2 = t('Mouse over');
+      }
+      else {
+        $msg2 = t('Click');
+      }
+      $summary[] = t('Marker action: @a on @b', array('@a' => $msg, '@b' => $msg2));
     }
   }
   else {
@@ -1432,7 +1459,8 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
   $getlocations_defaults['user_map_marker']       = $settings['user_map_marker'];
   $getlocations_defaults['vocabulary_map_marker'] = $settings['vocabulary_map_marker'];
   $getlocations_defaults['comment_map_marker']    = $settings['comment_map_marker'];
-  $getlocations_defaults['markeraction']          = 0;
+  $getlocations_defaults['markeraction']          = $settings['markeraction'];
+  $getlocations_defaults['markeractiontype']      = $settings['markeractiontype'];
 
   $latlons[] = $lls;
 
@@ -2062,6 +2090,8 @@ function getlocations_fields_field_formatter_info_defaults() {
     'user_map_marker'       => $getlocations_defaults['user_map_marker'],
     'vocabulary_map_marker' => $getlocations_defaults['vocabulary_map_marker'],
     'comment_map_marker'    => $getlocations_defaults['comment_map_marker'],
+    'markeraction'          => $getlocations_defaults['markeraction'],
+    'markeractiontype'      => $getlocations_defaults['markeractiontype'],
     'display_name'          => $getlocations_fields_defaults['display_name'],
     'display_street'        => $getlocations_fields_defaults['display_street'],
     'display_additional'    => $getlocations_fields_defaults['display_additional'],

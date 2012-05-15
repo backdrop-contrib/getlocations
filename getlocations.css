@@ -13,6 +13,11 @@
  */
 .getlocations_map_canvas {
 }
+/* see issue #1577634 #6 */
+.getlocations_map_canvas img {
+  max-width: none;
+}
+
 .getlocations_map_buttons {
 }
 .getlocations_returnlink {

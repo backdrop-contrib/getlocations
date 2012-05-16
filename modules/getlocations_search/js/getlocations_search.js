@@ -29,7 +29,8 @@
             gridSize: gs.cmgr_gridSize,
             maxZoom: gs.cmgr_maxZoom,
             styles: gs.cmgr_styles[gs.cmgr_style],
-            minimumClusterSize: gs.cmgr_minClusterSize
+            minimumClusterSize: gs.cmgr_minClusterSize,
+            title: gs.cmgr_title
           }
         );
       }

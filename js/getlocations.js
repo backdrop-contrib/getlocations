@@ -86,6 +86,7 @@ var getlocations_markers = [];
         global_settings.cmgr_gridSize = (settings.markerclusterer_size == -1 ? null : parseInt(settings.markerclusterer_size));
         global_settings.cmgr_maxZoom = (settings.markerclusterer_zoom == -1 ? null : parseInt(settings.markerclusterer_zoom));
         global_settings.cmgr_minClusterSize = (settings.markerclusterer_minsize == -1 ? null : parseInt(settings.markerclusterer_minsize));
+        global_settings.cmgr_title = settings.markerclusterer_title;
       }
 
       if (settings.markermanagertype == 1 && settings.usemarkermanager) {
@@ -236,7 +237,8 @@ var getlocations_markers = [];
             gridSize: global_settings.cmgr_gridSize,
             maxZoom: global_settings.cmgr_maxZoom,
             styles: global_settings.cmgr_styles[global_settings.cmgr_style],
-            minimumClusterSize: global_settings.cmgr_minClusterSize
+            minimumClusterSize: global_settings.cmgr_minClusterSize,
+            title: global_settings.cmgr_title
           }
         );
       }

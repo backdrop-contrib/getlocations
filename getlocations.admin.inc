@@ -185,6 +185,14 @@ function getlocations_settings_form() {
     module_load_include('inc', 'getlocations', 'getlocations.markercluster');
   }
   $form['getlocations_default']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_defaults['markerclusterer_style']);
+  $form['getlocations_default']['markerclusterer_title'] =  array(
+    '#type' => 'textfield',
+    '#title' => t('Markerclusterer tooltip'),
+    '#default_value' => $getlocations_defaults['markerclusterer_title'],
+    '#size' => 30,
+    '#description' => t('The text of a Markerclusterer tooltip'),
+  );
+
   $form['getlocations_default']['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($getlocations_defaults['markerclusterer_zoom']);
   $form['getlocations_default']['markerclusterer_size'] = getlocations_element_markerclusterer_size($getlocations_defaults['markerclusterer_size']);
   $form['getlocations_default']['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($getlocations_defaults['markerclusterer_minsize']);

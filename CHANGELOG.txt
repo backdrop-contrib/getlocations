@@ -1,9 +1,64 @@
-commit d666b3e
+commit 2c09c4f
+Author: hutch <hutch@midwales.net>
+Date:   Wed May 16 11:46:47 2012 +0100
+
+    changed search methods in input form, see #1578466
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 904a4ed
+Author: hutch <hutch@midwales.net>
+Date:   Wed May 16 10:11:09 2012 +0100
+
+    updated markerclusterer, added tooltip
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+js/markerclusterer.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit bb92c8a
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 15 23:45:35 2012 +0100
+
+    added markeraction to Manage Display
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 741d33c
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 15 16:20:59 2012 +0100
+
+    general cleanup
+
+getlocations.install
+modules/getlocations_blocks/README.txt
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_city.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_postcode.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_province.inc
+modules/getlocations_location_taxonomize/README.txt
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.module
+
+commit a99023c
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 15 15:34:37 2012 +0100
+
+    added fix see issue #1577634 #6
+
+getlocations.css
+
+commit 4d8c872
 Author: hutch <hutch@midwales.net>
 Date:   Mon May 14 21:37:54 2012 +0100
 
-    added empty Latitude/Longitude warnibg
+    added empty Latitude/Longitude warning
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields.js
 
 commit 415d9e3

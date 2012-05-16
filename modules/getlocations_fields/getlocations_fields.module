@@ -1265,7 +1265,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
 
   // geobutton
   if ($active) {
-    if (! $settings['use_address']) {
+    if ($settings['use_address'] < 2) {
       $widget['geobutton'] = array(
         '#markup' => '',
       );
@@ -1277,7 +1277,6 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       '#type' => 'value',
       '#value' => $mapid,
     );
-
   }
   // map
   $widget['map'] = array(
@@ -1870,6 +1869,7 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
       'nodezoom' => $defaults['nodezoom'],
       'map_marker' => $defaults['input_map_marker'],
       'use_address' => $defaults['use_address'],
+      'latlon_warning' => $defaults['latlon_warning'],
     ),
   );
 
@@ -1938,6 +1938,7 @@ function getlocations_fields_defaults() {
     'province_autocomplete'        => 0,
     'city_autocomplete'            => 0,
     'per_item_marker'              => 0,
+    'latlon_warning'               => 0,
     'columns'                      => array(
       'glid'        => t('Glid'),
       'name'        => t('Name'),
@@ -2025,6 +2026,7 @@ function getlocations_fields_field_info_defaults() {
         'city_autocomplete'            => $getlocations_fields_defaults['city_autocomplete'],
         'country'                      => $getlocations_fields_defaults['country'],
         'per_item_marker'              => $getlocations_fields_defaults['per_item_marker'],
+        'latlon_warning'               => $getlocations_fields_defaults['latlon_warning'],
       ),
     ),
   );
@@ -2121,11 +2123,11 @@ function getlocations_fields_input_settings_form($defaults) {
 
   $form = array();
   // input form defaults
-
-  $form['use_address'] = getlocations_element_map_checkbox(
-    t('Use searchbox in input form'),
+  $form['use_address'] = getlocations_fields_element_dd(
     $defaults['use_address'],
-    t('Use Google Autocomplete to search for an address')
+    t('Search options'),
+    array('0' => t('No Search box'), '1' => t('Search box with Geocode button'), '2' => t('Search box with Automatic Geocoding')),
+    t("With 'No Search box' you must fill in the address then use the Geocode button to find the location.<br />With 'Search box with Geocode button' you can fill in the Search box then use the Geocode button to find the location.<br />With 'Search box with Automatic Geocoding' the Geocoding will be done when the Search has been selected.")
   );
 
   $form['input_address_width'] = getlocations_element_map_tf(
@@ -2358,6 +2360,13 @@ function getlocations_fields_input_settings_form($defaults) {
     t('Marker select position'),
     $defaults['input_marker_weight'],
     ''
+  );
+
+  // latlon_warning
+  $form['latlon_warning'] = getlocations_element_map_checkbox(
+    t('Enable empty lat/lon popup warning'),
+    $defaults['latlon_warning'],
+    t('Enables a javascript popup that warns users that they have not geocoded the address. Only use this if you have a fixed number of addresses.')
   );
 
   return $form;

@@ -53,38 +53,32 @@
         makeMoveMarker(getlocations_inputmap[key], point[key], key);
       }
 
-      if (use_address) {
+      if (use_address > 0) {
+        if (use_address == 1) {
+          $("#" + 'getlocations_geocodebutton_' + key).attr('disabled', 'disabled');
+        }
         var input_adrs = document.getElementById(adrsfield + key);
         var fm_adrs = '';
         var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
         google.maps.event.addListener(ac_adrs, 'place_changed', function () {
           var place_adrs = ac_adrs.getPlace();
-          fm_adrs = {'address': place_adrs.formatted_address};
-          // Create a Client Geocoder
-          var geocoder = new google.maps.Geocoder();
-          geocoder.geocode(fm_adrs, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              point[gkey] = results[0].geometry.location;
-              lat = results[0].geometry.location.lat();
-              lng = results[0].geometry.location.lng();
-              $("#" + latfield + gkey).val(lat);
-              $("#" + lonfield + gkey).val(lng);
-              $("#" + adrsfield + gkey).val(place_adrs.formatted_address);
-              updateMap(getlocations_inputmap[gkey], point[gkey], gkey);
-              set_address_components(gkey, place_adrs.address_components);
-            }
-            else {
-              var prm = {'!a': place_adrs, '!b': getGeoErrCode(status) };
-              var msg = Drupal.t('Geocode for (!a) was not successful for the following reason: !b', prm);
-              alert(msg);
-            }
-          });
+          if (use_address == 1) {
+            // search box with geocode button
+            $("#" + 'getlocations_geocodebutton_' + key).removeAttr('disabled');
+            $("#" + 'getlocations_geocodebutton_' + key).click( function () {
+              manageGeobutton(key, use_address, place_adrs);
+              return false;
+            });
+          }
+          else {
+            manageGeobutton(key, use_address, place_adrs);
+          }
         });
       }
       else {
         // no autocomplete
         $("#" + 'getlocations_geocodebutton_' + key).click( function () {
-          manageGeobutton(key);
+          manageGeobutton(key, use_address, '');
           return false;
         });
       }
@@ -102,58 +96,66 @@
         }
       });
 
-      // warn on empty Latitude/Longitude
-      $("input.form-submit#edit-submit").click( function () {
-        if ($("#" + latfield + key).val() == '' && $("#" + lonfield + key).val() == '') {
-          if (use_address) {
-            msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
+      if (settings.latlon_warning > 0) {
+        // warn on empty Latitude/Longitude
+        $("input.form-submit#edit-submit").click( function () {
+          if ($("#" + latfield + key).val() == '' && $("#" + lonfield + key).val() == '') {
+            if (use_address > 0) {
+              msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
+            }
+            else {
+               msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
+            }
+            alert(msg);
+            return false;
           }
-          else {
-             msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
-          }
-          alert(msg);
-          return false;
-        }
-        return true;
-      });
+          return true;
+        });
+      }
 
     }); // end each
     $("body").addClass("getlocations-fields-maps-processed");
 
     // functions
 
-    function manageGeobutton(k) {
+    function manageGeobutton(k, use_adrs, adrs) {
       var mmap = getlocations_inputmap[k];
       var kk = k;
-      var input_adrs_arr = [];
-      var streetfield_value = $("#" + streetfield + k).val();
-      if (streetfield_value) {
-        input_adrs_arr.push(streetfield_value);
-      }
-      var additionalfield_value = $("#" + additionalfield + k).val();
-      if (additionalfield_value) {
-        input_adrs_arr.push(additionalfield_value);
-      }
-      var cityfield_value = $("#" + cityfield + k).val();
-      if (cityfield_value) {
-        input_adrs_arr.push(cityfield_value);
-      }
-      var provincefield_value = $("#" + provincefield + k).val();
-      if (provincefield_value) {
-        input_adrs_arr.push(provincefield_value);
-      }
-      var postal_codefield_value = $("#" + postal_codefield + k).val();
-      if (postal_codefield_value) {
-        input_adrs_arr.push(postal_codefield_value);
-      }
-      var countryfield_value = $("#" + countryfield + k).val();
-      if (countryfield_value && streetfield_value) {
-        if (countryfield_value == 'GB' ) {
-          countryfield_value = 'UK';
+      if (adrs == '') {
+        // pull the address out of the form
+        var input_adrs_arr = [];
+        var streetfield_value = $("#" + streetfield + k).val();
+        if (streetfield_value) {
+          input_adrs_arr.push(streetfield_value);
         }
-        input_adrs_arr.push(countryfield_value);
+        var additionalfield_value = $("#" + additionalfield + k).val();
+        if (additionalfield_value) {
+          input_adrs_arr.push(additionalfield_value);
+        }
+        var cityfield_value = $("#" + cityfield + k).val();
+        if (cityfield_value) {
+          input_adrs_arr.push(cityfield_value);
+        }
+        var provincefield_value = $("#" + provincefield + k).val();
+        if (provincefield_value) {
+          input_adrs_arr.push(provincefield_value);
+        }
+        var postal_codefield_value = $("#" + postal_codefield + k).val();
+        if (postal_codefield_value) {
+          input_adrs_arr.push(postal_codefield_value);
+        }
+        var countryfield_value = $("#" + countryfield + k).val();
+        if (countryfield_value && streetfield_value) {
+          if (countryfield_value == 'GB' ) {
+            countryfield_value = 'UK';
+          }
+          input_adrs_arr.push(countryfield_value);
+        }
+        var input_adrstmp = input_adrs_arr.join(", ");
       }
-      var input_adrstmp = input_adrs_arr.join(", ");
+      else {
+        var input_adrstmp = adrs.formatted_address;
+      }
       if (input_adrstmp) {
         var input_adrs = {'address': input_adrstmp};
         // Create a Client Geocoder
@@ -166,6 +168,9 @@
             $("#" + latfield + kk).val(lat);
             $("#" + lonfield + kk).val(lng);
             updateMap(mmap, point[kk], kk);
+            if (use_adrs > 0) {
+              set_address_components(kk, adrs.address_components);
+            }
           }
           else {
             var prm = {'!a': input_adrstmp, '!b': getGeoErrCode(status) };
@@ -175,6 +180,7 @@
         });
       }
       else if ( ($("#" + latfield + k).val() !== '') && ($("#" + lonfield + k).val() !== '')  ) {
+        // reverse geocoding
         lat = $("#" + latfield + k).val();
         lng = $("#" + lonfield + k).val();
         point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
@@ -183,9 +189,7 @@
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode(input_ll, function (results, status) {
           if (status == google.maps.GeocoderStatus.OK) {
-            //
             if (results[0]) {
-              //results[0].formatted_address
               if ($("#" + namefield + kk).val() == '') {
                 $("#" + namefield + kk).val(results[0].formatted_address);
               }

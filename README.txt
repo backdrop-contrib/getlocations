@@ -140,3 +140,70 @@ In a Getlocations View, in Format: Getlocations | Settings,
 if you have selected InfoBubble or InfoWindow in the Marker action dropdown
 you will see a checkbox 'Replace default content' which when checked will
 provide a list of available fields to use instead of the default content.
+
+Geofield and Geolocation support
+Getlocations provides some default Views to work with the
+Geofield and Geolocation modules but if you want maps you will have to do
+some tweaking.
+
+Geofield:
+In the Getlocations view, add a block and in 'Fields'
+add Content: Location (or whatever you called it),
+Select Formatter: Latitude only
+Select Data options: Use full geometry
+Select Format: decimal degrees
+Under 'More' give it an Administrative title of 'latitude'
+
+Repeat for longitude
+
+Then add Content: Type
+You should now have the following in Fields:
+Content: Title
+Content: Nid (make sure this has 'Rewrite the output of this field' and 'Output this field as a link' switched off)
+latitude
+longitude
+Content: Type
+
+They should be in that order.
+exclude all from display except Content: Nid
+
+Then add to Filter criteria
+Content: Type and select the content type(s) you want
+
+Under Format: select Getlocations and set up the map
+Edit the Block title to whatever suits you
+Save the view, enable the block and test.
+
+You can do much the same in 'Getlocations links' View
+
+Geolocation:
+In the Getlocations view, add a block and in 'Fields'
+add Content: Location (or whatever you called it),
+Select Formatter: Latitude text-based formatter
+Under 'More' give it an Administrative title of 'latitude'
+
+Repeat for longitude
+
+Then add Content: Type
+You should now have the following in Fields:
+Content: Title
+Content: Nid (make sure this has 'Rewrite the output of this field' and 'Output this field as a link' switched off)
+latitude
+longitude
+Content: Type
+
+They should be in that order.
+exclude all from display except Content: Nid
+
+Then add to Filter criteria
+Content: Type and select the content type(s) you want
+
+Under Format: select Getlocations and set up the map
+Edit the Block title to whatever suits you
+Save the view, enable the block and test.
+
+You can do much the same in 'Getlocations links' View
+
+Addressfield support.
+If the Addressfield module is supplying an address in conjunction with Geofield or Geolocation
+the address will be used to populate the InfoWindow or InfoBubble.

@@ -40,7 +40,6 @@ function template_preprocess_getlocations_view_map(&$variables) {
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
   $base_field = $variables['view']->style_plugin->view->base_field;
-
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -62,7 +61,13 @@ function template_preprocess_getlocations_view_map(&$variables) {
       elseif (module_exists('location') && isset($location['lid']) && $location['lid'] > 0) {
         $lid = $location['lid'];
       }
-      elseif (module_exists('geofield')  && isset($location[$base_field]) && $location[$base_field] > 0 ) {
+      elseif (module_exists('geofield') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
+        $lid = $location[$base_field];
+        $location['field_name'] = getlocations_get_fieldname($location['type']);
+        $location['latitude'] = $location[$location['field_name']];
+        $location['longitude'] = $location[$location['field_name'] . '_1'];
+      }
+      elseif (module_exists('geolocation') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
         $lid = $location[$base_field];
         $location['field_name'] = getlocations_get_fieldname($location['type']);
         $location['latitude'] = $location[$location['field_name']];

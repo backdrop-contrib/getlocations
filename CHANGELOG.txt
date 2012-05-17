@@ -1,9 +1,21 @@
-commit 2c09c4f
+commit ff17098
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 17 21:45:59 2012 +0100
+
+    added geolocation support, more in readme
+
+README.txt
+getlocations.module
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+
+commit c12a22d
 Author: hutch <hutch@midwales.net>
 Date:   Wed May 16 11:46:47 2012 +0100
 
     changed search methods in input form, see #1578466
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/js/getlocations_fields.js
 

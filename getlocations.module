@@ -245,7 +245,10 @@ function getlocations_access_location() {
     elseif (module_exists('location') && (module_exists('location_node') || module_exists('location_cck'))) {
       return TRUE;
     }
-    elseif (module_exists('geofield') && module_exists('addressfield')) {
+    elseif (module_exists('geofield')) {
+      return TRUE;
+    }
+    elseif (module_exists('geolocation')) {
       return TRUE;
     }
   }
@@ -257,7 +260,10 @@ function getlocations_access_user_location() {
     if (module_exists('getlocations_fields')) {
       return TRUE;
     }
-    elseif (module_exists('geofield') && module_exists('addressfield')) {
+    elseif (module_exists('geofield')) {
+      return TRUE;
+    }
+    elseif (module_exists('geolocation')) {
       return TRUE;
     }
   }
@@ -1123,10 +1129,11 @@ function getlocations_info() {
       }
 
     }
-    elseif (module_exists('geofield') && module_exists('addressfield')) {
+    elseif (module_exists('geofield') || module_exists('geolocation')) {
       $locations = getlocations_load_locations($lid, $lidkey);
       $location = $locations[0];
     }
+
     $content = theme('getlocations_info', array('location' => $location));
   }
   drupal_json_output(array('content' => $content));
@@ -1145,7 +1152,7 @@ function getlocations_lidinfo() {
         $content = $path;
       }
     }
-    elseif (module_exists('geofield') && module_exists('addressfield')) {
+    elseif (module_exists('geofield') || module_exists('geolocation') ) {
       if ($lidkey == 'nid') {
         $path = url('node/' . $lid);
       }
@@ -1452,6 +1459,9 @@ function getlocations_check_node($bundle) {
   elseif (module_exists('geofield')) {
     $module = 'geofield';
   }
+  elseif (module_exists('geolocation')) {
+    $module = 'geolocation';
+  }
 
   if ($module) {
     $query = db_select('field_config', 'f');
@@ -1485,6 +1495,9 @@ function getlocations_get_fieldname($bundle, $entity_type='node') {
   elseif (module_exists('geofield')) {
     $module = 'geofield';
   }
+  elseif (module_exists('geolocation')) {
+    $module = 'geolocation';
+  }
   if ($module) {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('field_name'));
@@ -1517,6 +1530,9 @@ function getlocations_check_entity_type($entity_type) {
   }
   elseif (module_exists('geofield')) {
     $module = 'geofield';
+  }
+  elseif (module_exists('geolocation')) {
+    $module = 'geolocation';
   }
   if ($module) {
     $query = db_select('field_config', 'f');
@@ -1564,6 +1580,9 @@ function getlocations_check_vocabulary($vocab_name) {
     }
     elseif (module_exists('geofield')) {
       $module = 'geofield';
+    }
+    elseif (module_exists('geolocation')) {
+      $module = 'geolocation';
     }
     if ($module) {
       // first we need to get the machine name of the vocab.
@@ -1717,8 +1736,11 @@ function getlocations_load_locations($id, $key = 'vid') {
   elseif (module_exists('location')) {
     $locations = location_load_locations($id, $key);
   }
-  elseif (module_exists('geofield') && module_exists('addressfield')) {
-    $locations = getlocations_geofield_addressfield_load_locations($id, $key);
+  elseif (module_exists('geofield')) {
+    $locations = getlocations_other_load_locations($id, $key, 'geofield');
+  }
+  elseif (module_exists('geolocation')) {
+    $locations = getlocations_other_load_locations($id, $key, 'geolocation');
   }
   return $locations;
 }
@@ -1741,118 +1763,65 @@ function getlocations_load_location($lid) {
   return $location;
 }
 
-function getlocations_geofield_addressfield_load_locations($id, $key = 'vid') {
-
+function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
+  global $language;
   $locations = array();
-  if ($key == 'nid' || $key == 'vid') {
+  if (empty($module)) {
+    return $locations;
+  }
+
+  if ($key == 'nid') {
     $entity_type = 'node';
+    $obj = node_load($id);
+    $location_name = $obj->title;
+  }
+  elseif ($key == 'vid') {
+    $entity_type = 'node';
+    $obj = node_load(NULL, $id);
+    $location_name = $obj->title;
   }
   elseif ($key == 'uid') {
     $entity_type = 'user';
+    $obj = user_load($id);
+    $location_name = $obj->name;
   }
   elseif ($key == 'tid') {
     $entity_type = 'taxonomy_term';
+    $obj = taxonomy_term_load($id);
+    $location_name = $obj->name;
   }
   elseif ($key == 'cid') {
     $entity_type = 'comment';
+    $obj = comment_load($id);
+    $location_name = $obj->subject;
+  }
+  // get the field_xxx names
+  $objfields = array();
+  foreach ($obj AS $k => $therest) {
+    if (preg_match("/^field_/", $k)) {
+      $objfields[] = $k;
+    }
+  }
+  if (empty($objfields)) {
+    return $locations;
   }
 
   // find a geofield
-  $type = 'geofield';
-  $module = 'geofield';
-  $geofields = getlocations_geofield_addressfield_get_fieldname($type, $module, $entity_type);
-  // find an addressfield
-  $type = 'addressfield';
-  $module = 'addressfield';
-  $addressfields = getlocations_geofield_addressfield_get_fieldname($type, $module, $entity_type);
-
-  if (! empty($geofields) && ! empty($addressfields)) {
-
-    if ($key == 'nid') {
-      $obj = node_load($id);
-    }
-    elseif ($key == 'vid') {
-      $obj = node_load(NULL, $id);
-    }
-    elseif ($key == 'uid') {
-      $obj = user_load($id);
-    }
-    elseif ($key == 'tid' && module_exists('taxonomy')) {
-      $obj = taxonomy_term_load($id);
-    }
-    elseif ($key == 'cid' && module_exists('comment')) {
-      $obj = comment_load($id);
-    }
-
-    // get the cck field names
-    $objfields = array();
-    foreach ($obj AS $k => $therest) {
-      if ( preg_match("/^field_/", $k)) {
-        $objfields[] = $k;
-      }
-    }
-    if ( empty($objfields)) {
-      return $locations;
-    }
-    // obj fields
-    $geofield = '';
-    $addressfield = '';
-    foreach ($objfields AS $field) {
-      // test for geofields
-      if (in_array($field, $geofields)) {
-        $geofield = $field;
-      }
-      // test for addressfields
-      elseif (in_array($field, $addressfields)) {
-        $addressfield = $field;
-      }
-    }
-    if ( empty($geofield) || empty($addressfield)) {
-      return $locations;
-    }
-
-    // addressfield
-    $addr = $obj->$addressfield;
-    $addr_keys = array_keys($addr);
-    foreach ($addr_keys AS $lang) {
-      if ($lang == $language->language || $lang == $obj->language || $lang == 'und') {
-        $ct = 0;
-        foreach ($addr[$lang] AS $a) {
-          $locations[$ct]['name'] = $a['organisation_name'];
-          $locations[$ct]['street'] = $a['thoroughfare'];
-          $additional = array();
-          if ($a['premise']) {
-            $additional[] = $a['premise'];
-          }
-          if ($a['sub_premise']) {
-            $additional[] = $a['sub_premise'];
-          }
-          $locations[$ct]['additional'] = (count($additional) ? implode(", ", $additional) : '');
-          $city = array();
-          if ($a['dependent_locality']) {
-            $city[] = $a['dependent_locality'];
-          }
-          if ($a['locality']) {
-            $city[] = $a['locality'];
-          }
-          $locations[$ct]['city'] = (count($city) ? implode(", ", $city) : '');
-          $admin_area = array();
-          if ($a['sub_administrative_area']) {
-            $admin_area[] = $a['sub_administrative_area'];
-          }
-          if ($a['administrative_area']) {
-            $admin_area[] = $a['administrative_area'];
-          }
-          $locations[$ct]['province_name'] = (count($admin_area) ? implode(", ", $admin_area) :'');
-          $locations[$ct]['postal_code'] = drupal_strtoupper($a['postal_code']);
-          $locations[$ct]['country_name'] = $a['country_name'];
-          $locations[$ct]['country'] = $a['country'];
-          $ct++;
+  if ($module == 'geofield') {
+    $type = 'geofield';
+    $geofields = getlocations_other_get_fieldname($type, $module, $entity_type);
+    if (! empty($geofields)) {
+      $geofield = '';
+      foreach ($objfields AS $field) {
+        if (in_array($field, $geofields)) {
+          $geofield = $field;
         }
       }
+      if ( empty($geofield)) {
+        return $locations;
+      }
     }
-
-    // geofield
+    // got one
     $geo = $obj->$geofield;
     $geo_keys = array_keys($geo);
     foreach ($geo_keys AS $lang) {
@@ -1870,12 +1839,106 @@ function getlocations_geofield_addressfield_load_locations($id, $key = 'vid') {
         }
       }
     }
+
+
   }
+  elseif ($module == 'geolocation') {
+    $type = 'geolocation_latlng';
+    $geolocationfields = getlocations_other_get_fieldname($type, $module, $entity_type);
+    if (! empty($geolocationfields)) {
+      $geolocationfield = '';
+      foreach ($objfields AS $field) {
+        // test for geolocationfields
+        if (in_array($field, $geolocationfields)) {
+          $geolocationfield = $field;
+        }
+      }
+      if (empty($geolocationfield)) {
+        return $locations;
+      }
+      // got one
+      $geo = $obj->$geolocationfield;
+      $geo_keys = array_keys($geo);
+      foreach ($geo_keys AS $lang) {
+        if ($lang == $language->language || $lang == $obj->language || $lang == 'und') {
+          $ct = 0;
+          foreach ($geo[$lang] AS $g) {
+            $locations[$ct]['latitude']  = $g['lat'];
+            $locations[$ct]['longitude'] = $g['lng'];
+            $locations[$ct][$key] = $id;
+            if ($key == 'vid') {
+              $locations[$ct]['nid'] = getlocations_get_nid($id);
+            }
+            $locations[$ct]['key'] = $key;
+            $locations[$ct]['name'] = $location_name;
+            $ct++;
+          }
+        }
+      }
+    }
+  }
+
+  // addressfield
+  if (module_exists('addressfield')) {
+    // find an addressfield
+    $type = 'addressfield';
+    $addressfields = getlocations_other_get_fieldname($type, 'addressfield', $entity_type);
+    if (! empty($addressfields)) {
+      foreach ($objfields AS $field) {
+        if (in_array($field, $addressfields)) {
+          $addressfield = $field;
+        }
+      }
+      if (empty($addressfield)) {
+        return $locations;
+      }
+      // got one
+      $addr = $obj->$addressfield;
+      $addr_keys = array_keys($addr);
+      foreach ($addr_keys AS $lang) {
+        if ($lang == $language->language || $lang == $obj->language || $lang == 'und') {
+          $ct = 0;
+          foreach ($addr[$lang] AS $a) {
+            $locations[$ct]['name'] = $a['organisation_name'];
+            $locations[$ct]['street'] = $a['thoroughfare'];
+            $additional = array();
+            if ($a['premise']) {
+              $additional[] = $a['premise'];
+            }
+            if ($a['sub_premise']) {
+              $additional[] = $a['sub_premise'];
+            }
+            $locations[$ct]['additional'] = (count($additional) ? implode(", ", $additional) : '');
+            $city = array();
+            if ($a['dependent_locality']) {
+              $city[] = $a['dependent_locality'];
+            }
+            if ($a['locality']) {
+              $city[] = $a['locality'];
+            }
+            $locations[$ct]['city'] = (count($city) ? implode(", ", $city) : '');
+            $admin_area = array();
+            if ($a['sub_administrative_area']) {
+              $admin_area[] = $a['sub_administrative_area'];
+            }
+            if ($a['administrative_area']) {
+              $admin_area[] = $a['administrative_area'];
+            }
+            $locations[$ct]['province_name'] = (count($admin_area) ? implode(", ", $admin_area) :'');
+            $locations[$ct]['postal_code'] = drupal_strtoupper($a['postal_code']);
+            $locations[$ct]['country_name'] = $a['country_name'];
+            $locations[$ct]['country'] = $a['country'];
+            $ct++;
+          }
+        }
+      }
+    }
+  }
+
   return $locations;
 }
 
-// for use with geofield/addressfield support
-function getlocations_geofield_addressfield_get_fieldname($type, $module, $entity_type) {
+function getlocations_other_get_fieldname($type, $module, $entity_type) {
 
   $query = db_select('field_config', 'fc');
   $query->fields('fc', array('field_name'));
@@ -2434,4 +2497,3 @@ function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getl
   }
   return $bundles;
 }
-

@@ -42,10 +42,6 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
 
     $form['longitude'] = getlocations_fields_element_longitude($this->options['longitude']);
 
-#    $form['postal_code'] = getlocations_fields_element_postal_code($this->options['postal_code']);
-
-#    $form['country'] = getlocations_fields_element_country($this->options['country']);
-
     $form['php_code'] = getlocations_fields_element_php_code($this->options['php_code']);
 
     list($nid_argument_options, $uid_argument_options, $tid_argument_options, $cid_argument_options) = getlocations_fields_views_proximity_get_argument_options($this->view);
@@ -68,9 +64,7 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
       $form['cid_loc_field'] = getlocations_fields_element_cid_loc_field($this->options['cid_loc_field'], $loc_field_options);
     }
 
-
-    $form['units'] = getlocations_fields_element_distance_unit($this->options['units']);
-#    $form['search_distance'] = getlocations_fields_element_search_distance($this->options['search_distance']);
+    $form['units'] = getlocations_element_distance_unit($this->options['units']);
 
   }
 
@@ -79,7 +73,7 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
     $location = getlocations_fields_views_proximity_get_reference_location($this->view, $this->options);
 
     if ($location) {
-      $this->query->add_orderby(NULL, getlocations_fields_earth_distance_sql($location['latitude'], $location['longitude'], $this->table_alias), $order, $this->field_alias);
+      $this->query->add_orderby(NULL, getlocations_earth_distance_sql($location['latitude'], $location['longitude'], $this->table_alias), $order, $this->field_alias);
     }
   }
 
@@ -89,15 +83,7 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
       return;
     }
     $dist = (float)$values->{$this->field_alias};
-    #$distance_meters = getlocations_fields_convert_distance_to_meters($dist, $this->options['units']);
-#    if ($this->options['units'] == 'km') {
-#      $dist = $dist / 1000.0;
-      return theme('getlocations_fields_distance', array('distance' => $dist, 'units' => $this->options['units']));
-#    }
-#    else {
-#      $dist = $dist / 1609.347;
-#      return theme('getlocations_fields_distance', array('distance' => $dist, 'units' => 'mi'));
-#    }
+    return theme('getlocations_fields_distance', array('distance' => $dist, 'units' => $this->options['units']));
   }
 
   function query() {
@@ -111,7 +97,7 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
 
       $lat = $coordinates['latitude'];
       $lon = $coordinates['longitude'];
-      $this->field_alias = $this->query->add_field(NULL, getlocations_fields_earth_distance_sql($lat, $lon, $this->table_alias), $this->table_alias . '_' . $this->field);
+      $this->field_alias = $this->query->add_field(NULL, getlocations_earth_distance_sql($lat, $lon, $this->table_alias), $this->table_alias . '_' . $this->field);
     }
     else {
       $this->field_alias = $this->query->add_field(NULL, "'Unknown'", $this->table_alias . '_' . $this->field);

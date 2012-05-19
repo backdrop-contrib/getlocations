@@ -536,7 +536,7 @@ function getlocations_blocks_country_get() {
   $settings = getlocations_blocks_get_var();
   $countries = array();
   if ($settings['country_full']) {
-    $countries = getlocations_fields_get_countries_list();
+    $countries = getlocations_get_countries_list();
   }
   else {
     // need to make a list of existing countries, these are stored as 2 letter codes so need to be converted
@@ -555,7 +555,7 @@ function getlocations_blocks_country_get() {
 
     $result = $query->execute();
     foreach ($result AS $row) {
-      $country = getlocations_fields_get_country_name($row->country);
+      $country = getlocations_get_country_name($row->country);
       $countries[$row->country] = $country;
     }
     asort($countries);
@@ -827,7 +827,7 @@ function getlocations_blocks_country_autocomplete($string = '') {
   $matches = array();
   if ($string) {
     if ($settings['country_full']) {
-      $countries = getlocations_fields_get_countries_list();
+      $countries = getlocations_get_countries_list();
       foreach ($countries AS $code => $country) {
         $s = drupal_strtolower($string);
         $c = drupal_strtolower($country);
@@ -852,7 +852,7 @@ function getlocations_blocks_country_autocomplete($string = '') {
       }
       $result = $query->execute();
       foreach ($result AS $row) {
-        $country = getlocations_fields_get_country_name($row->country);
+        $country = getlocations_get_country_name($row->country);
         $s = drupal_strtolower($string);
         $c = drupal_strtolower($country);
         preg_match_all("/^$s/", $c, $m);

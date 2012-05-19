@@ -28,6 +28,7 @@ function getlocations_fields_help($path, $arg) {
 function getlocations_fields_init() {
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.theme');
+  module_load_include('inc', 'getlocations', 'getlocations.functions');
 }
 
 /**
@@ -1206,7 +1207,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
 
   // country
   if ($settings['use_country_dropdown'] == 1) {
-    $countries = getlocations_fields_get_countries_list();
+    $countries = getlocations_get_countries_list();
     $countries = array_merge(array('' => t('---Please select a country---')), $countries);
     $widget['country'] = array(
       '#type' => 'select',
@@ -1219,7 +1220,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
   else {
     $default_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
     if ($default_value && drupal_strlen($default_value) == 2) {
-      $default_value = getlocations_fields_get_country_name($default_value);
+      $default_value = getlocations_get_country_name($default_value);
     }
     $widget['country'] = array(
       '#type' => 'textfield',
@@ -1763,7 +1764,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       $locations[$ct]['province_name'] = $row->province;
       $locations[$ct]['postal_code'] = $row->postal_code;
       if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
-        $location[$ct]['country_name'] = getlocations_fields_get_country_name($row->country);
+        $location[$ct]['country_name'] = getlocations_get_country_name($row->country);
       }
       else {
         $location[$ct]['country_name'] = $row->country;
@@ -1823,7 +1824,7 @@ function getlocations_fields_load_location($glid) {
       $location['province_name'] = $row->province;
       $location['postal_code'] = $row->postal_code;
       if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
-        $location['country_name'] = getlocations_fields_get_country_name($row->country);
+        $location['country_name'] = getlocations_get_country_name($row->country);
       }
       else {
         $location['country_name'] = $row->country;
@@ -2123,7 +2124,7 @@ function getlocations_fields_input_settings_form($defaults) {
 
   $form = array();
   // input form defaults
-  $form['use_address'] = getlocations_fields_element_dd(
+  $form['use_address'] = getlocations_element_dd(
     $defaults['use_address'],
     t('Search options'),
     array('0' => t('No Search box'), '1' => t('Search box with Geocode button'), '2' => t('Search box with Automatic Geocoding')),
@@ -2318,7 +2319,7 @@ function getlocations_fields_input_settings_form($defaults) {
   );
 
   // city_autocomplete
-  $form['city_autocomplete'] = getlocations_fields_element_dd(
+  $form['city_autocomplete'] = getlocations_element_dd(
     $defaults['city_autocomplete'],
     t('City input method'),
     array(
@@ -2328,7 +2329,7 @@ function getlocations_fields_input_settings_form($defaults) {
   );
 
   // province_autocomplete
-  $form['province_autocomplete'] = getlocations_fields_element_dd(
+  $form['province_autocomplete'] = getlocations_element_dd(
     $defaults['province_autocomplete'],
     t('Province/State/County input method'),
     array(
@@ -2340,7 +2341,7 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['country'] = getlocations_fields_element_country($defaults['country'], t('Default country'), FALSE);
 
   // country dropdown
-  $form['use_country_dropdown'] = getlocations_fields_element_dd(
+  $form['use_country_dropdown'] = getlocations_element_dd(
     $defaults['use_country_dropdown'],
     t('Country input method'),
     array(

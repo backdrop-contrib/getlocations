@@ -36,7 +36,7 @@ class getlocations_fields_handler_field_latitude extends views_handler_field {
       return check_plain($values->{$this->field_alias});
     }
     else {
-      return theme('getlocations_fields_latitude_dms', array('latitude' => $values->{$this->field_alias}));
+      return theme('getlocations_latitude_dms', array('latitude' => $values->{$this->field_alias}));
     }
   }
 }

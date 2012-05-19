@@ -166,13 +166,13 @@ function getlocations_feeds_set_country($source, $entity, $target, $value) {
     $val = trim($val);
     if (drupal_strlen($val) == 2) {
       // we have a code
-      if (getlocations_fields_get_country_name($val)) {
+      if (getlocations_get_country_name($val)) {
         $entity->{$field_name}['und'][$i][$sub_field] = drupal_strtoupper($val);
       }
     }
     else {
       // full country name
-      if ($id = getlocations_fields_get_country_id($val)) {
+      if ($id = getlocations_get_country_id($val)) {
         $entity->{$field_name}['und'][$i][$sub_field] = $id;
       }
     }

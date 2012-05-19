@@ -24,16 +24,6 @@ function getlocations_fields_theme() {
         'settings' => '',
       ),
     ),
-    'getlocations_fields_latitude_dms' => array(
-      'variables' => array(
-        'latitude' => '',
-      ),
-    ),
-    'getlocations_fields_longitude_dms' => array(
-      'variables' => array(
-        'longitude' => '',
-      ),
-    ),
     'getlocations_fields_field_settings_form' => array(
       'render element' => 'form',
     ),
@@ -102,7 +92,7 @@ function theme_getlocations_fields_show($variables) {
     if (! empty($location['country']) && $settings['display_country']) {
       if ($settings['country_full'] && drupal_strlen($location['country']) == 2 ) {
         // this is a 2 letter code, we want the full name
-        $countries = getlocations_fields_get_countries_list();
+        $countries = getlocations_get_countries_list();
         $country = $countries[$location['country']];
         if (empty($country)) {
           $country = $location['country'];
@@ -120,8 +110,8 @@ function theme_getlocations_fields_show($variables) {
       $lat = $location['latitude'];
       $lng = $location['longitude'];
       if ($settings['display_dms']) {
-        $lat = theme('getlocations_fields_latitude_dms', array('latitude' => $lat));
-        $lng = theme('getlocations_fields_longitude_dms', array('longitude' => $lng));
+        $lat = theme('getlocations_latitude_dms', array('latitude' => $lat));
+        $lng = theme('getlocations_longitude_dms', array('longitude' => $lng));
       }
       if ($settings['display_showmap']) {
         $output .= '<div class="getlocations_fields_latlon_wrapper_themed">';
@@ -197,51 +187,6 @@ function theme_getlocations_fields_show($variables) {
 
 }
 
-/**
- * Display a coordinate.
- * from location module
- */
-/**
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_latitude_dms($variables) {
-  $latitude = $variables['latitude'];
-  $output = '';
-  list($degrees, $minutes, $seconds, $negative) = getlocations_fields_dd_to_dms($latitude);
-  $output .= $degrees . "&deg; " . $minutes . "&#39; " . $seconds . "&#34; ";
-  if (!$negative) {
-    $output .= 'N';
-  }
-  else {
-    $output .= 'S';
-  }
-  return $output;
-}
-
-/**
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_longitude_dms($variables) {
-  $longitude = $variables['longitude'];
-  $output = '';
-  list($degrees, $minutes, $seconds, $negative) = getlocations_fields_dd_to_dms($longitude);
-  $output .= $degrees . "&deg; " . $minutes . "&#39; " . $seconds . "&#34; ";
-  if (!$negative) {
-    $output .= 'E';
-  }
-  else {
-    $output .= 'W';
-  }
-  return $output;
-}
 
 /**
  * @param array $variables

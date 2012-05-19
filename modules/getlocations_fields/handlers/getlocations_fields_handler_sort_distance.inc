@@ -102,7 +102,7 @@ class getlocations_fields_handler_sort_distance extends views_handler_sort {
       // This is done exactly the same as the field version.
       // Views is ok with us redefining the formula for a field.
       // If ANYTHING differs in the configuration, we will use a new alias.
-      $this->query->add_orderby(NULL, getlocations_fields_earth_distance_sql($coordinates['latitude'], $coordinates['longitude'], $this->table_alias), $this->options['order'], $alias);
+      $this->query->add_orderby(NULL, getlocations_earth_distance_sql($coordinates['latitude'], $coordinates['longitude'], $this->table_alias), $this->options['order'], $alias);
     }
   }
 }

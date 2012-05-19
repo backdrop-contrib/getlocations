@@ -122,9 +122,9 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
       $lonrange[1] = floatval($lon + $lon_distance);
     }
     else {
-      $distance_meters = getlocations_fields_convert_distance_to_meters($this->value['search_distance'], $this->options['search_units']);
-      $latrange = getlocations_fields_earth_latitude_range($lat, $lon, $distance_meters);
-      $lonrange = getlocations_fields_earth_longitude_range($lat, $lon, $distance_meters);
+      $distance_meters = getlocations_convert_distance_to_meters($this->value['search_distance'], $this->options['search_units']);
+      $latrange = getlocations_earth_latitude_range($lat, $lon, $distance_meters);
+      $lonrange = getlocations_earth_longitude_range($lat, $lon, $distance_meters);
     }
 
     // If the table alias is specified, add on the separator.
@@ -150,7 +150,7 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
 
     if ($this->options['search_method'] == 'dist' && $this->options['search_units'] != 'dd') {
       // Add radius check.
-      $this->query->add_where_expression(0, getlocations_fields_earth_distance_sql($lat, $lon, $this->table_alias) . ' < :distance', array(':distance' => $distance_meters));
+      $this->query->add_where_expression(0, getlocations_earth_distance_sql($lat, $lon, $this->table_alias) . ' < :distance', array(':distance' => $distance_meters));
     }
   }
 }

@@ -1938,7 +1938,7 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
   return $locations;
 }
 
-function getlocations_other_get_fieldname($type, $module, $entity_type) {
+function getlocations_other_get_fieldname($type, $module, $entity_type = '') {
 
   $query = db_select('field_config', 'fc');
   $query->fields('fc', array('field_name'));
@@ -1947,7 +1947,9 @@ function getlocations_other_get_fieldname($type, $module, $entity_type) {
   $query->condition('fc.type', $type);
   $query->condition('fc.active', 1);
   $query->condition('fc.storage_active', 1);
-  $query->condition('i.entity_type', $entity_type);
+  if (! empty($entity_type)) {
+    $query->condition('i.entity_type', $entity_type);
+  }
   $rows = $query->execute();
   $field_names = array();
   foreach ($rows AS $row) {
@@ -2497,3 +2499,4 @@ function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getl
   }
   return $bundles;
 }
+

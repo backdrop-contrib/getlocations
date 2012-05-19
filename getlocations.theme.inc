@@ -49,6 +49,16 @@ function getlocations_theme() {
     'getlocations_plugin_style_map_options_form' => array(
       'render element' => 'form',
     ),
+    'getlocations_latitude_dms' => array(
+      'variables' => array(
+        'latitude' => '',
+      ),
+    ),
+    'getlocations_longitude_dms' => array(
+      'variables' => array(
+        'longitude' => '',
+      ),
+    ),
   );
 }
 
@@ -506,4 +516,50 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
   $output .= drupal_render_children($form);
   return $output;
 
+}
+
+/**
+ * Display a coordinate.
+ * from location module
+ */
+/**
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
+ */
+function theme_getlocations_latitude_dms($variables) {
+  $latitude = $variables['latitude'];
+  $output = '';
+  list($degrees, $minutes, $seconds, $negative) = getlocations_dd_to_dms($latitude);
+  $output .= $degrees . "&deg; " . $minutes . "&#39; " . $seconds . "&#34; ";
+  if (!$negative) {
+    $output .= 'N';
+  }
+  else {
+    $output .= 'S';
+  }
+  return $output;
+}
+
+/**
+ * @param array $variables
+ *
+ * @return
+ *   Returns $output
+ *
+ */
+function theme_getlocations_longitude_dms($variables) {
+  $longitude = $variables['longitude'];
+  $output = '';
+  list($degrees, $minutes, $seconds, $negative) = getlocations_dd_to_dms($longitude);
+  $output .= $degrees . "&deg; " . $minutes . "&#39; " . $seconds . "&#34; ";
+  if (!$negative) {
+    $output .= 'E';
+  }
+  else {
+    $output .= 'W';
+  }
+  return $output;
 }

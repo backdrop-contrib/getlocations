@@ -28,7 +28,7 @@ class getlocations_fields_handler_field_country extends views_handler_field {
 
   function render($values) {
     if ($this->options['style'] == 'name') {
-      return check_plain(getlocations_fields_get_country_name($values->{$this->field_alias}));
+      return check_plain(getlocations_get_country_name($values->{$this->field_alias}));
     }
     else {
       return check_plain(drupal_strtoupper($values->{$this->field_alias}));

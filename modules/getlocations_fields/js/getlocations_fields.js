@@ -303,8 +303,8 @@
         var path = Drupal.settings.basePath + "getlocations_fields/countryinfo";
         var kk = k;
         $.get(path, {'country': countryfield_value}, function (data) {
-          if (data) {
-            $("#" + countryfield + kk).val(data).attr('selected', 'selected');
+          if (data.content) {
+            $("#" + countryfield + kk).val(data.content).attr('selected', 'selected');
           }
         });
       }

@@ -114,8 +114,8 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     }
 
 
-    $form['value']['search_units'] = getlocations_fields_element_distance_unit($this->value['search_units']);
-    $form['value']['search_distance'] = getlocations_fields_element_search_distance($this->value['search_distance']);
+    $form['value']['search_units'] = getlocations_element_distance_unit($this->value['search_units']);
+    $form['value']['search_distance'] = getlocations_element_search_distance($this->value['search_distance']);
 
   }
   // TODO
@@ -165,9 +165,9 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $lat = $coordinates['latitude'];
     $lon = $coordinates['longitude'];
 
-    $distance_meters = getlocations_fields_convert_distance_to_meters($this->value['search_distance'], $this->value['search_units']);
-    $latrange = getlocations_fields_earth_latitude_range($lat, $lon, $distance_meters);
-    $lonrange = getlocations_fields_earth_longitude_range($lat, $lon, $distance_meters);
+    $distance_meters = getlocations_convert_distance_to_meters($this->value['search_distance'], $this->value['search_units']);
+    $latrange = getlocations_earth_latitude_range($lat, $lon, $distance_meters);
+    $lonrange = getlocations_earth_longitude_range($lat, $lon, $distance_meters);
 
     // If the table alias is specified, add on the separator.
     $table_alias = (empty($this->table_alias) ? '' : $this->table_alias . '.');
@@ -191,7 +191,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $this->query->add_where_expression($this->options['group'], $where, array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]));
     if ($this->operator == 'dist') {
       // Add radius check.
-      $this->query->add_where_expression($this->options['group'], getlocations_fields_earth_distance_sql($lat, $lon, $this->table_alias) . ' < :distance', array(':distance' => $distance_meters));
+      $this->query->add_where_expression($this->options['group'], getlocations_earth_distance_sql($lat, $lon, $this->table_alias) . ' < :distance', array(':distance' => $distance_meters));
     }
   }
 }

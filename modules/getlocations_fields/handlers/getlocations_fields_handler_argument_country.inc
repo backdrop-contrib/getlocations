@@ -38,7 +38,7 @@ class getlocations_fields_handler_argument_country extends views_handler_argumen
     if ($this->options['type'] == 'country' && isset($this->argument)) {
       $value = drupal_strtolower($this->argument);
       // check this
-      if (! getlocations_fields_get_country_name($value)) {
+      if (! getlocations_get_country_name($value)) {
         $value = FALSE;
       }
     }

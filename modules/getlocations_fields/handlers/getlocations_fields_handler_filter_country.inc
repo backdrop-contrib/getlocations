@@ -18,7 +18,7 @@ class getlocations_fields_handler_filter_country extends views_handler_filter_in
   }
 
   function get_value_options() {
-    $this->value_options = getlocations_fields_get_countries_list();
+    $this->value_options = getlocations_get_countries_list();
   }
 
   /**

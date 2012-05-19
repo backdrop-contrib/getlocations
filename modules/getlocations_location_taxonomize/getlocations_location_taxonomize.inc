@@ -100,12 +100,12 @@ function getlocations_location_taxonomize_fixup($location) {
   if (isset($location['country']) && ! empty($location['country'])) {
     if (drupal_strlen($location['country']) == 2) {
       // got code, get full name
-      $location['country_name'] = getlocations_fields_get_country_name($location['country']);
+      $location['country_name'] = getlocations_get_country_name($location['country']);
     }
     else {
       // got full name, get code if possible
       $location['country_name'] = $location['country'];
-      $location['country'] = getlocations_fields_get_country_id($location['country_name']);
+      $location['country'] = getlocations_get_country_id($location['country_name']);
     }
   }
   else {

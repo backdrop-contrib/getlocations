@@ -5,7 +5,7 @@
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
- * Provides blocks for use with getlocations_fields views.
+ * Provides a search page.
  * for Drupal 7
  */
 
@@ -26,7 +26,8 @@ function getlocations_search_help($path, $arg) {
  * Implements hook_init().
  */
 function getlocations_search_init() {
-    drupal_add_css(GETLOCATIONS_SEARCH_PATH . '/getlocations_search.css');
+  drupal_add_css(GETLOCATIONS_SEARCH_PATH . '/getlocations_search.css');
+  module_load_include('inc', 'getlocations', 'getlocations.functions');
 
 }
 
@@ -113,7 +114,7 @@ function getlocations_search_form($form, &$form_state) {
   }
 
   if ($getlocations_search_defaults['display_search_distance']) {
-    $form['getlocations_search_distance'] = getlocations_fields_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
+    $form['getlocations_search_distance'] = getlocations_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
   }
   else {
     $form['getlocations_search_distance'] = array(
@@ -124,7 +125,7 @@ function getlocations_search_form($form, &$form_state) {
   }
 
   if ($getlocations_search_defaults['display_search_units']) {
-    $form['getlocations_search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
+    $form['getlocations_search_units'] = getlocations_element_distance_unit($getlocations_search_defaults['search_units'], t('Distance units'));
   }
   else {
     $form['getlocations_search_units'] = array(
@@ -232,10 +233,12 @@ function getlocations_search_getmap() {
  */
 function getlocations_search_js_settings_do($defaults, $mapid) {
 
+  $do_lookup = getlocations_search_do_types();
   $settings = array(
     $mapid => array(
       'method' => $defaults['method'],
       'maxzoom' => $defaults['maxzoom'],
+      'do_lookup' => ($do_lookup ? 1 : 0),
     ),
   );
 
@@ -279,8 +282,8 @@ function theme_getlocations_search_form($variables) {
   $output .= '<div id="getlocations_search_result">';
   $output .= '<h4>' . t('Results') . '</h4>';
   $output .= '<div id="getlocations_search_address"></div>';
-  $output .= '<div id="getlocations_search_count"></div>';
   $output .= '<div id="getlocations_search_distance"></div>';
+  $output .= '<div id="getlocations_search_count"></div>';
   $output .= '<div id="getlocations_search_type"></div>';
   $output .= '<div id="getlocations_search_latlon_wrapper">';
   $output .= '<div id="getlocations_search_lat"></div>';
@@ -535,141 +538,312 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
 
   $getlocations_defaults = getlocations_defaults();
 
-  $distance_meters = getlocations_fields_convert_distance_to_meters($distance, $units);
-  $latrange = getlocations_fields_earth_latitude_range($lat, $lon, $distance_meters);
-  $lonrange = getlocations_fields_earth_longitude_range($lat, $lon, $distance_meters);
+  $distance_meters = getlocations_convert_distance_to_meters($distance, $units);
+  $latrange = getlocations_earth_latitude_range($lat, $lon, $distance_meters);
+  $lonrange = getlocations_earth_longitude_range($lat, $lon, $distance_meters);
 
-  if ($lonrange[0] > $lonrange[1]) {
-    $where = "g.latitude > :minlat
-    AND g.latitude < :maxlat
-    AND ((g.longitude < 180
-    AND g.longitude > :minlon)
-    OR (g.longitude < :maxlon
-    AND g.longitude > -180))";
-  }
-  else {
-    $where = "g.latitude > :minlat
-    AND g.latitude < :maxlat
-    AND g.longitude > :minlon
-    AND g.longitude < :maxlon";
-  }
+  $locations = array();
 
-  $fields = array();
-  $fields[] = 'g.glid';
-  $fields[] = 'g.name';
-  $fields[] = 'g.latitude';
-  $fields[] = 'g.longitude';
-  $fields[] = 'g.marker';
-
-  $fields[] = 'f.nid';
-  $fields[] = 'f.uid';
-  $fields[] = 'f.tid';
-  $fields[] = 'f.cid';
-
-  $sqlsnip1 = "";
-  $sqlsnip2 = "";
-  $marker = '';
-  if ($type == 'node' && user_access('access content') && user_access('access getlocations')) {
-    $fields[] = 'n.title AS title';
-    $fields[] = 'n.nid';
-    $sqlsnip1 = "LEFT JOIN {node} n ON f.vid = n.vid ";
-    $sqlsnip2 = "AND n.nid > 0 ";
-    $marker = $getlocations_defaults['node_map_marker'];
-  }
-  elseif ($type == 'user' && getlocations_access_user_location()) {
-    $fields[] = 'u.name AS title';
-    $fields[] = 'u.uid';
-    $sqlsnip1 = "LEFT JOIN {users} u ON f.uid = u.uid ";
-    $sqlsnip2 = "AND u.uid > 0 ";
-    $marker = $getlocations_defaults['user_map_marker'];
-  }
-  elseif ($type == 'term' && user_access('access getlocations')) {
-    $fields[] = 't.name AS title';
-    $fields[] = 't.tid';
-    $sqlsnip1 = "LEFT JOIN {taxonomy_term_data} t ON f.tid = t.tid ";
-    $sqlsnip2 = "AND t.tid > 0 ";
-    $marker = $getlocations_defaults['vocabulary_map_marker'];
- }
-  elseif ($type == 'comment' && user_access('access comments') && user_access('access getlocations')) {
-    $fields[] = 'c.subject AS title';
-    $fields[] = 'c.cid';
-    $sqlsnip1 = "LEFT JOIN {comment} c ON f.cid = c.cid ";
-    $sqlsnip2 = "AND c.cid > 0 ";
-    $marker = $getlocations_defaults['comment_map_marker'];
-  }
-  elseif ($type == 'all') {
-    $sqlsnip2arr = array();
-    if (user_access('access content') && user_access('access getlocations')) {
-      $sqlsnip2arr[] = "f.nid > 0";
-      $sqlsnip2arr[] = "f.tid > 0";
-    }
-    if (getlocations_access_user_location()) {
-      $sqlsnip2arr[] = "f.uid > 0";
-    }
-    if (user_access('access comments') && user_access('access getlocations')) {
-      $sqlsnip2arr[] = "f.cid > 0";
-    }
-    if (! empty($sqlsnip2arr)) {
-      $sqlsnip2 = "AND (" . implode(" OR ", $sqlsnip2arr) . ") ";
+  if (module_exists('getlocations_fields')) {
+    if ($lonrange[0] > $lonrange[1]) {
+      $where = "g.latitude > :minlat AND g.latitude < :maxlat AND ((g.longitude < 180 AND g.longitude > :minlon) OR (g.longitude < :maxlon AND g.longitude > -180))";
     }
     else {
-      // this user may not see anything
-      $sqlsnip2 = "AND 1=0 ";
+      $where = "g.latitude > :minlat AND g.latitude < :maxlat AND g.longitude > :minlon AND g.longitude < :maxlon";
     }
-  }
+    $sqlarr = array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]);
 
-  if ($dosort) {
-    $sort = getlocations_fields_earth_distance_sql($lat, $lon, 'g');
-    $fields[] = "$sort AS distance_sort ";
-  }
+    $fields = array();
+    $fields[] = 'g.glid';
+    $fields[] = 'g.name';
+    $fields[] = 'g.latitude';
+    $fields[] = 'g.longitude';
+    $fields[] = 'g.marker';
 
-  $selects = implode(",", $fields);
+    $fields[] = 'f.nid';
+    $fields[] = 'f.uid';
+    $fields[] = 'f.tid';
+    $fields[] = 'f.cid';
 
-  $sql = "SELECT $selects ";
-  $sql .= "FROM {getlocations_fields} g LEFT JOIN {getlocations_fields_entities} f ON g.glid = f.glid ";
-  $sql .= $sqlsnip1;
-  $sql .= "WHERE ($where) ";
-  $sql .= "AND g.glid IS NOT NULL ";
-  $sql .= "AND g.latitude != '0' ";
-  $sql .= "AND g.longitude != '0' ";
-  $sql .= $sqlsnip2;
-  if ($dosort) {
-    $sql .= "ORDER BY distance_sort ASC ";
-  }
-  if ($limits > 0) {
-    $sql .= "LIMIT 0, $limits ";
-  }
-
-  $result = db_query($sql, array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]));
-  $newresult = array();
-  foreach ($result AS $k => $row) {
-    $newresult[$k] = $row;
-    if (empty($newresult[$k]->marker)) {
-      if (! empty($marker)) {
-        $newresult[$k]->marker = $marker;
+    $sqlsnip1 = "";
+    $sqlsnip2 = "";
+    $marker = '';
+    if ($type == 'node' && user_access('access content') && user_access('access getlocations')) {
+      $fields[] = 'n.title AS title';
+      $fields[] = 'n.nid';
+      $sqlsnip1 = "LEFT JOIN {node} n ON f.vid = n.vid ";
+      $sqlsnip2 = "AND n.nid > 0 ";
+      $marker = $getlocations_defaults['node_map_marker'];
+    }
+    elseif ($type == 'user' && getlocations_access_user_location()) {
+      $fields[] = 'u.name AS title';
+      $fields[] = 'u.uid';
+      $sqlsnip1 = "LEFT JOIN {users} u ON f.uid = u.uid ";
+      $sqlsnip2 = "AND u.uid > 0 ";
+      $marker = $getlocations_defaults['user_map_marker'];
+    }
+    elseif ($type == 'term' && user_access('access getlocations')) {
+      $fields[] = 't.name AS title';
+      $fields[] = 't.tid';
+      $sqlsnip1 = "LEFT JOIN {taxonomy_term_data} t ON f.tid = t.tid ";
+      $sqlsnip2 = "AND t.tid > 0 ";
+      $marker = $getlocations_defaults['vocabulary_map_marker'];
+    }
+    elseif ($type == 'comment' && user_access('access comments') && user_access('access getlocations')) {
+      $fields[] = 'c.subject AS title';
+      $fields[] = 'c.cid';
+      $sqlsnip1 = "LEFT JOIN {comment} c ON f.cid = c.cid ";
+      $sqlsnip2 = "AND c.cid > 0 ";
+      $marker = $getlocations_defaults['comment_map_marker'];
+    }
+    elseif ($type == 'all') {
+      $sqlsnip2arr = array();
+      if (user_access('access content') && user_access('access getlocations')) {
+        $sqlsnip2arr[] = "f.nid > 0";
+        $sqlsnip2arr[] = "f.tid > 0";
+      }
+      if (getlocations_access_user_location()) {
+        $sqlsnip2arr[] = "f.uid > 0";
+      }
+      if (user_access('access comments') && user_access('access getlocations')) {
+        $sqlsnip2arr[] = "f.cid > 0";
+      }
+      if (! empty($sqlsnip2arr)) {
+        $sqlsnip2 = "AND (" . implode(" OR ", $sqlsnip2arr) . ") ";
       }
       else {
-        // must be an 'all' search so we have to figure out a marker
-        if ($newresult[$k]->nid > 0) {
-          $newresult[$k]->marker = $getlocations_defaults['node_map_marker'];
+        // this user may not see anything
+        $sqlsnip2 = "AND 1=0 ";
+      }
+    }
+
+    if ($dosort) {
+      $sort = getlocations_earth_distance_sql($lat, $lon, 'g');
+      $fields[] = "$sort AS distance_sort ";
+    }
+
+    $selects = implode(",", $fields);
+
+    $sql = "SELECT $selects ";
+    $sql .= "FROM {getlocations_fields} g LEFT JOIN {getlocations_fields_entities} f ON g.glid = f.glid ";
+    $sql .= $sqlsnip1;
+    $sql .= "WHERE ($where) ";
+    $sql .= "AND g.glid IS NOT NULL ";
+    $sql .= "AND g.latitude != '0' ";
+    $sql .= "AND g.longitude != '0' ";
+    $sql .= $sqlsnip2;
+    if ($dosort) {
+      $sql .= "ORDER BY distance_sort ASC ";
+    }
+    if ($limits > 0) {
+      $sql .= "LIMIT 0, $limits ";
+    }
+
+    $result = db_query($sql, $sqlarr);
+    foreach ($result AS $k => $row) {
+      $locations[$k] = $row;
+      if (empty($locations[$k]->marker)) {
+        if (! empty($marker)) {
+          $locations[$k]->marker = $marker;
         }
-        elseif ($newresult[$k]->uid > 0) {
-          $newresult[$k]->marker = $getlocations_defaults['user_map_marker'];
-        }
-        elseif ($newresult[$k]->tid > 0) {
-          $newresult[$k]->marker = $getlocations_defaults['vocabulary_map_marker'];
-        }
-        elseif ($newresult[$k]->cid > 0) {
-          $newresult[$k]->marker = $getlocations_defaults['comment_map_marker'];
+        else {
+          // must be an 'all' search so we have to figure out a marker
+          if ($locations[$k]->nid > 0) {
+            $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
+          }
+          elseif ($locations[$k]->uid > 0) {
+            $locations[$k]->marker = $getlocations_defaults['user_map_marker'];
+          }
+          elseif ($locations[$k]->tid > 0) {
+            $locations[$k]->marker = $getlocations_defaults['vocabulary_map_marker'];
+          }
+          elseif ($locations[$k]->cid > 0) {
+            $locations[$k]->marker = $getlocations_defaults['comment_map_marker'];
+          }
         }
       }
     }
+
+  } // getlocations_fields sql
+  elseif (module_exists('geolocation')) {
+    $module = 'geolocation';
+    $gtype = 'geolocation_latlng';
+    $entity_type = '';
+    $fieldnames = getlocations_other_get_fieldname($gtype, $module, $entity_type);
+    if (! empty($fieldnames)) {
+      $tabledata = array();
+      $ct = 0;
+      foreach ($fieldnames AS $fieldname) {
+        $tabledata[$ct]['table'] = 'field_data_' . $fieldname;
+        $tabledata[$ct]['fieldname_latitude'] = $fieldname . '_lat';
+        $tabledata[$ct]['fieldname_longitude'] = $fieldname . '_lng';
+        $ct++;
+      }
+    }
   }
+  elseif (module_exists('geofield')) {
+    $module = 'geofield';
+    $gtype = 'geofield';
+    $entity_type = '';
+    $fieldnames = getlocations_other_get_fieldname($gtype, $module, $entity_type);
+    if (! empty($fieldnames)) {
+      $tabledata = array();
+      $ct = 0;
+      foreach ($fieldnames AS $fieldname) {
+        $tabledata[$ct]['table'] = 'field_data_' . $fieldname;
+        $tabledata[$ct]['fieldname_latitude'] = $fieldname . '_lat';
+        $tabledata[$ct]['fieldname_longitude'] = $fieldname . '_lon';
+        $ct++;
+      }
+    }
+  }
+  if ((module_exists('geolocation') || module_exists('geofield')) && ! empty($fieldnames)) {
+    //
+    $location_ct = 0;
+    foreach ($tabledata AS $data) {
+      $table = $data['table'];
+      $latfield = 'g.' . $data['fieldname_latitude'];
+      $lonfield = 'g.' . $data['fieldname_longitude'];
+      if ($lonrange[0] > $lonrange[1]) {
+        $where = "$latfield > :minlat AND $latfield < :maxlat AND (($lonfield < 180 AND $lonfield > :minlon) OR ($lonfield < :maxlon AND $lonfield > -180))";
+      }
+      else {
+        $where = "$latfield > :minlat AND $latfield < :maxlat AND $lonfield > :minlon AND $lonfield < :maxlon";
+      }
+      $sqlarr = array(':minlat' => $latrange[0], ':maxlat' => $latrange[1], ':minlon' => $lonrange[0], ':maxlon' => $lonrange[1]);
+
+      $fields = array();
+      $fields[] = "$latfield AS latitude";
+      $fields[] = "$lonfield AS longitude";
+      $fields[] = "g.entity_type AS entity_type";
+      $fields[] = "g.entity_id AS entity_id";
+
+      $sqlsnip1 = "";
+      $sqlsnip2 = "";
+      $marker = '';
+      if ($type == 'node' && user_access('access content') && user_access('access getlocations')) {
+        $fields[] = 'n.title AS title';
+        $fields[] = 'n.nid';
+        $sqlsnip1 = "LEFT JOIN {node} n ON g.entity_id = n.nid ";
+        $sqlsnip2 = "AND g.entity_type = :type AND n.nid > 0 ";
+        $sqlarr[':type'] = $type;
+        $marker = $getlocations_defaults['node_map_marker'];
+      }
+      elseif ($type == 'user' && getlocations_access_user_location()) {
+        $fields[] = 'u.name AS title';
+        $fields[] = 'u.uid';
+        $sqlsnip1 = "LEFT JOIN {users} u ON g.entity_id = u.uid ";
+        $sqlsnip2 = "AND g.entity_type = :type AND u.uid > 0 ";
+        $sqlarr[':type'] = $type;
+        $marker = $getlocations_defaults['user_map_marker'];
+      }
+      elseif ($type == 'term' && user_access('access getlocations')) {
+        $fields[] = 't.name AS title';
+        $fields[] = 't.tid';
+        $sqlsnip1 = "LEFT JOIN {taxonomy_term_data} t ON g.entity_id = t.tid ";
+        $sqlsnip2 = "AND g.entity_type = :type AND t.tid > 0 ";
+        $sqlarr[':type'] = $type;
+        $marker = $getlocations_defaults['vocabulary_map_marker'];
+      }
+      elseif ($type == 'comment' && user_access('access comments') && user_access('access getlocations')) {
+        $fields[] = 'c.subject AS title';
+        $fields[] = 'c.cid';
+        $sqlsnip1 = "LEFT JOIN {comment} c ON g.entity_id = c.cid ";
+        $sqlsnip2 = "AND g.entity_type = :type AND c.cid > 0 ";
+        $sqlarr[':type'] = $type;
+        $marker = $getlocations_defaults['comment_map_marker'];
+      }
+      elseif ($type == 'all') {
+        // need a list of all the entity_types in this table so that we can limit on permissions
+        $sqlsnip2arr = array();
+        $permitted_entity_types = array();
+        if (user_access('access content') && user_access('access getlocations')) {
+          $permitted_entity_types[] = 'node';
+        }
+        if (getlocations_access_user_location()) {
+          $permitted_entity_types[] = 'user';
+        }
+        if (user_access('access getlocations')) {
+          $permitted_entity_types[] = 'term';
+        }
+        if (user_access('access comments') && user_access('access getlocations')) {
+          $permitted_entity_types[] = 'comment';
+        }
+
+        $sql = "SELECT DISTINCT entity_type FROM {$table} ";
+        $rows = db_query($sql);
+        $at = '';
+        $ct = 1;
+        $sqlsnip2 = '';
+        foreach ($rows AS $row) {
+          $et = $row->entity_type;
+          if (in_array($et, $permitted_entity_types)) {
+            $sqlsnip2arr[] = "g.entity_type = :et_$ct";
+            $sqlarr[":et_$ct"] = $et;
+            $ct++;
+          }
+        }
+        if (! empty($sqlsnip2arr)) {
+          $sqlsnip2 = "AND (" . implode(" OR ", $sqlsnip2arr) . ") ";
+        }
+        else {
+          // this user may not see anything
+          $sqlsnip2 = "AND 1=0 ";
+        }
+      }
+
+      if ($dosort) {
+        $sort = getlocations_earth_distance_sql($lat, $lon, 'g');
+        $fields[] = "$sort AS distance_sort ";
+      }
+
+      $selects = implode(",", $fields);
+
+      $sql = "SELECT $selects FROM {$table} g ";
+      $sql .= $sqlsnip1;
+      $sql .= "WHERE ($where) ";
+      $sql .= "AND $latfield != '0' ";
+      $sql .= "AND $lonfield != '0' ";
+      $sql .= $sqlsnip2;
+      if ($dosort) {
+        $sql .= "ORDER BY distance_sort ASC ";
+      }
+      if ($limits > 0) {
+        $sql .= "LIMIT 0, $limits ";
+      }
+
+      $result = db_query($sql, $sqlarr);
+      foreach ($result AS $row) {
+        $locations[$location_ct]->latitude = $row->latitude;
+        $locations[$location_ct]->longitude = $row->longitude;
+        $locations[$location_ct]->title = $row->title;
+        if ($row->entity_type == 'node') {
+          $locations[$location_ct]->nid = $row->entity_id;
+          $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
+        }
+        elseif ($row->entity_type == 'user') {
+          $locations[$location_ct]->uid = $row->entity_id;
+          $locations[$location_ct]->marker = $getlocations_defaults['user_map_marker'];
+        }
+        elseif ($row->entity_type == 'term') {
+          $locations[$location_ct]->tid = $row->entity_id;
+          $locations[$location_ct]->marker = $getlocations_defaults['vocabulary_map_marker'];
+        }
+        elseif ($row->entity_type == 'comment') {
+          $locations[$location_ct]->cid = $row->entity_id;
+          $locations[$location_ct]->marker = $getlocations_defaults['comment_map_marker'];
+        }
+
+        $location_ct++;
+      }
+    }
+  }
+
   $minmaxes = $latrange[0] . ',' . $lonrange[0] . ',' . $latrange[1] . ',' . $lonrange[1];
   // format lat/lon
   if ($dms) {
-    $latout = theme('getlocations_fields_latitude_dms', array('latitude' => $lat));
-    $lonout = theme('getlocations_fields_longitude_dms', array('longitude' => $lon));
+    $latout = theme('getlocations_latitude_dms', array('latitude' => $lat));
+    $lonout = theme('getlocations_longitude_dms', array('longitude' => $lon));
   }
   else {
     $latout = round($lat, 6);
@@ -677,7 +851,23 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
   }
   $infoarr = array($distance, $units, ($type ? $type : 'all'), $latout, $lonout);
   $info = implode(",", $infoarr);
-  $ret = array('locations' => $newresult, 'minmaxes' => $minmaxes, 'info' => $info);
+  $ret = array('locations' => $locations, 'minmaxes' => $minmaxes, 'info' => $info);
+
   return $ret;
 
+}
+
+function getlocations_search_do_types() {
+  $return = FALSE;
+  if (module_exists('getlocations_fields')) {
+    $return = TRUE;
+  }
+  elseif (module_exists('geolocation')) {
+    $return = TRUE;
+  }
+  elseif (module_exists('geofield')) {
+    $return = TRUE;
+  }
+
+  return $return;
 }

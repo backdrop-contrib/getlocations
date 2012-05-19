@@ -8,10 +8,12 @@
 */
 (function ($) {
   var batchr = [];
+  var do_lookup = 0;
   Drupal.getlocations.doSearch = function(map, gs, mkey) {
     var searchsettings = Drupal.settings.getlocations_search;
     jQuery.each(searchsettings, function (searchkey, ssettings) {
       var method = ssettings.method;
+      do_lookup = ssettings.do_lookup;
       if (gs.markermanagertype == 1) {
         gs.usemarkermanager = true;
         mgr = new MarkerManager(map, {
@@ -135,9 +137,11 @@
           }
           // display results
           $("#getlocations_search_address").html('<span class="results-label">' + Drupal.t('Search') + ':</span><span class="results-value">' +  address + '</span>');
-          $("#getlocations_search_count").html('<span class="results-label">' + Drupal.t('Locations found') + ':</span><span class="results-value">' + locationct + '</span>');
           $("#getlocations_search_distance").html('<span class="results-label">' + Drupal.t('Distance') + ':</span><span class="results-value">' + distance + ' ' + (distance == 1 ? unitsdisplay[units] : unitsdisplaypl[units] ) + '</span>');
-          $("#getlocations_search_type").html('<span class="results-label">' + Drupal.t('Search Type') + ':</span><span class="results-value">' + typesdisplay[type] + '</span>');
+          if (do_lookup) {
+            $("#getlocations_search_count").html('<span class="results-label">' + Drupal.t('Locations found') + ':</span><span class="results-value">' + locationct + '</span>');
+            $("#getlocations_search_type").html('<span class="results-label">' + Drupal.t('Search Type') + ':</span><span class="results-value">' + typesdisplay[type] + '</span>');
+          }
           $("#getlocations_search_lat").html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
           $("#getlocations_search_lon").html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
           // markermanagers add batchr

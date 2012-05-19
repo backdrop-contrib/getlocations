@@ -64,27 +64,41 @@ function getlocations_search_settings_form() {
 #    ''
 #  );
 
-  $form['getlocations_search_defaults']['search_distance'] = getlocations_fields_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
+  $form['getlocations_search_defaults']['search_distance'] = getlocations_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
 
-  $form['getlocations_search_defaults']['search_units'] = getlocations_fields_element_distance_unit($getlocations_search_defaults['search_units']);
+  $form['getlocations_search_defaults']['search_units'] = getlocations_element_distance_unit($getlocations_search_defaults['search_units']);
 
-  $form['getlocations_search_defaults']['search_limits'] = getlocations_element_map_limits($getlocations_search_defaults['search_limits']);
+  // are there any modules providing locations?
+  if (getlocations_search_do_types()) {
 
-  $opts = array('all' => t('Show All'), 'node' => t('Nodes'));
-  $opts['user'] = t('Users');
-  if (module_exists('taxonomy')) {
-    $opts['term'] = t('Terms');
+    $form['getlocations_search_defaults']['search_limits'] = getlocations_element_map_limits($getlocations_search_defaults['search_limits']);
+
+    $opts = array('all' => t('Show All'), 'node' => t('Nodes'));
+    $opts['user'] = t('Users');
+    if (module_exists('taxonomy')) {
+      $opts['term'] = t('Terms');
+    }
+    if (module_exists('comment')) {
+      $opts['comment'] = t('Comments');
+    }
+    $form['getlocations_search_defaults']['search_type'] = array(
+      '#type' => 'select',
+      '#title' => t('Restrict the search'),
+      '#options' => $opts,
+      '#default_value' => $getlocations_search_defaults['search_type'],
+      '#description' => t('The default for the type of content location.'),
+    );
   }
-  if (module_exists('comment')) {
-    $opts['comment'] = t('Comments');
+  else {
+    $form['getlocations_search_defaults']['search_limits'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+    $form['getlocations_search_defaults']['search_type'] = array(
+      '#type' => 'value',
+      '#value' => 'all',
+    );
   }
-  $form['getlocations_search_defaults']['search_type'] = array(
-    '#type' => 'select',
-    '#title' => t('Restrict the search'),
-    '#options' => $opts,
-    '#default_value' => $getlocations_search_defaults['search_type'],
-    '#description' => t('The default for the type of content location.'),
-  );
 
   $form['getlocations_search_defaults']['display_search_distance'] = getlocations_element_map_checkbox(
     t('Display Search distance box'),
@@ -96,18 +110,30 @@ function getlocations_search_settings_form() {
     $getlocations_search_defaults['display_search_units'],
     t('Allow users to modify the search units.')
   );
-  $form['getlocations_search_defaults']['display_search_limits'] = getlocations_element_map_checkbox(
-    t('Display Search limits dropdown'),
-    $getlocations_search_defaults['display_search_limits'],
-    t('Allow users to modify the search limits.')
-  );
 
-  $form['getlocations_search_defaults']['display_search_type'] = getlocations_element_map_checkbox(
-    t('Display Search type dropdown'),
-    $getlocations_search_defaults['display_search_type'],
-    t('Allow users to modify the search type.')
-  );
+  if (getlocations_search_do_types()) {
+    $form['getlocations_search_defaults']['display_search_limits'] = getlocations_element_map_checkbox(
+      t('Display Search limits dropdown'),
+      $getlocations_search_defaults['display_search_limits'],
+      t('Allow users to modify the search limits.')
+    );
 
+    $form['getlocations_search_defaults']['display_search_type'] = getlocations_element_map_checkbox(
+      t('Display Search type dropdown'),
+      $getlocations_search_defaults['display_search_type'],
+      t('Allow users to modify the search type.')
+    );
+  }
+  else {
+    $form['getlocations_search_defaults']['display_search_limits'] =  array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+    $form['getlocations_search_defaults']['display_search_type'] = array(
+      '#type' => 'value',
+      '#value' => 0,
+    );
+  }
   $form['getlocations_search_defaults']['display_dms'] = getlocations_element_map_checkbox(
     t('Show Latitude/Longitude in Degrees, minutes, seconds'),
     $getlocations_search_defaults['display_dms'],

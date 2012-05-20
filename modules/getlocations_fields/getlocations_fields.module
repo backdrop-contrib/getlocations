@@ -28,7 +28,6 @@ function getlocations_fields_help($path, $arg) {
 function getlocations_fields_init() {
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.theme');
-  module_load_include('inc', 'getlocations', 'getlocations.functions');
 }
 
 /**

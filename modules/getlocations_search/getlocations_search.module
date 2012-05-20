@@ -27,8 +27,6 @@ function getlocations_search_help($path, $arg) {
  */
 function getlocations_search_init() {
   drupal_add_css(GETLOCATIONS_SEARCH_PATH . '/getlocations_search.css');
-  module_load_include('inc', 'getlocations', 'getlocations.functions');
-
 }
 
 /**

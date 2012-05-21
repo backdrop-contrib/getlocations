@@ -1490,6 +1490,12 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
 
   if (isset($locations) && is_array($locations) && !empty($criteria) && is_array($criteria)) {
     foreach (array_keys($locations) as $key) {
+      // remove empties
+      if ( empty($locations[$key]['latitude']) && empty($locations[$key]['longitude'])) {
+        unset($locations[$key]);
+        continue;
+      }
+
       if ($mode == 'insert') {
         if ( $locations[$key]['latitude'] && $locations[$key]['longitude']) {
           $result = getlocations_fields_insert_record($locations[$key], $criteria);

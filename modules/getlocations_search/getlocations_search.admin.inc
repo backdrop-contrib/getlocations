@@ -33,45 +33,42 @@ function getlocations_search_settings_form() {
     $options['vocab'] = t('Vocabulary');
     $vocab_list = getlocations_search_get_vocabularies();
   }
-  $form['getlocations_search_defaults']['method'] = array(
-    '#type' => 'select',
-    '#title' => t('Input type'),
-    '#options' => $options,
-    '#default_value' => $getlocations_search_defaults['method'],
+  $form['getlocations_search_defaults']['method'] = getlocations_element_dd(
+    t('Input type'),
+    $getlocations_search_defaults['method'],
+    $options
   );
   // taxonomy support
   if ($vocab_list) {
-    $form['getlocations_search_defaults']['vocab'] = array(
-      '#type' => 'select',
-      '#title' => t('Vocabulary'),
-      '#options' => $vocab_list,
-      '#default_value' => $getlocations_search_defaults['vocab'],
+    $form['getlocations_search_defaults']['vocab'] = getlocations_element_dd(
+      t('Vocabulary'),
+      $getlocations_search_defaults['vocab'],
+      $vocab_list
     );
     $vocab_opts = array('dropdown' => t('Dropdown'), 'autocomplete' => t('Autocomplete'));
-    $form['getlocations_search_defaults']['vocab_element'] = array(
-      '#type' => 'select',
-      '#title' => t('Vocabulary Selection method'),
-      '#options' => $vocab_opts,
-      '#default_value' => $getlocations_search_defaults['vocab_element'],
+    $form['getlocations_search_defaults']['vocab_element'] = getlocations_element_dd(
+      t('Vocabulary Selection method'),
+      $getlocations_search_defaults['vocab_element'],
+      $vocab_opts
     );
   }
 
-#  $markers = getlocations_get_marker_titles();
-#  $form['getlocations_search_defaults']['search_map_marker'] = getlocations_element_map_marker(
-#    t('Search Map marker'),
-#    $markers,
-#    $getlocations_search_defaults['search_map_marker'],
-#    ''
-#  );
+  $form['getlocations_search_defaults']['search_distance'] = getlocations_element_search_distance(
+    $getlocations_search_defaults['search_distance'],
+    t('Search distance'),
+    t('The distance away from the center to search for locations.')
+  );
 
-  $form['getlocations_search_defaults']['search_distance'] = getlocations_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
-
-  $form['getlocations_search_defaults']['search_units'] = getlocations_element_distance_unit($getlocations_search_defaults['search_units']);
+  $form['getlocations_search_defaults']['search_units'] = getlocations_element_distance_unit(
+    $getlocations_search_defaults['search_units']
+  );
 
   // are there any modules providing locations?
   if (getlocations_search_do_types()) {
 
-    $form['getlocations_search_defaults']['search_limits'] = getlocations_element_map_limits($getlocations_search_defaults['search_limits']);
+    $form['getlocations_search_defaults']['search_limits'] = getlocations_element_map_limits(
+      $getlocations_search_defaults['search_limits']
+    );
 
     $opts = array('all' => t('Show All'), 'node' => t('Nodes'));
     $opts['user'] = t('Users');
@@ -81,12 +78,11 @@ function getlocations_search_settings_form() {
     if (module_exists('comment')) {
       $opts['comment'] = t('Comments');
     }
-    $form['getlocations_search_defaults']['search_type'] = array(
-      '#type' => 'select',
-      '#title' => t('Restrict the search'),
-      '#options' => $opts,
-      '#default_value' => $getlocations_search_defaults['search_type'],
-      '#description' => t('The default for the type of content location.'),
+    $form['getlocations_search_defaults']['search_type'] = getlocations_element_dd(
+      t('Restrict the search'),
+      $getlocations_search_defaults['search_type'],
+      $opts,
+      t('The default for the type of content location.')
     );
   }
   else {
@@ -188,13 +184,16 @@ function getlocations_search_settings_form() {
     module_load_include('inc', 'getlocations', 'getlocations.markercluster');
   }
   $form['getlocations_search_defaults']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_search_defaults['markerclusterer_style']);
-  $form['getlocations_search_defaults']['markerclusterer_title'] =  array(
-    '#type' => 'textfield',
-    '#title' => t('Markerclusterer tooltip'),
-    '#default_value' => $getlocations_search_defaults['markerclusterer_title'],
-    '#size' => 30,
-    '#description' => t('The text of a Markerclusterer tooltip'),
+
+  $form['getlocations_search_defaults']['markerclusterer_title'] = getlocations_element_map_tf(
+    t('Markerclusterer tooltip'),
+    $getlocations_search_defaults['markerclusterer_title'],
+    t('The text of a Markerclusterer tooltip'),
+    30,
+    64,
+    TRUE
   );
+
   $form['getlocations_search_defaults']['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($getlocations_search_defaults['markerclusterer_zoom']);
   $form['getlocations_search_defaults']['markerclusterer_size'] = getlocations_element_markerclusterer_size($getlocations_search_defaults['markerclusterer_size']);
   $form['getlocations_search_defaults']['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($getlocations_search_defaults['markerclusterer_minsize']);

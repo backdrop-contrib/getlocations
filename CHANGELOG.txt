@@ -1,9 +1,91 @@
-commit ff17098
+commit 692a86b
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 21 09:41:52 2012 +0100
+
+    cleaned up search admin
+
+modules/getlocations_search/getlocations_search.admin.inc
+
+commit fc733d1
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 21 09:21:35 2012 +0100
+
+    functionalised admin form
+
+getlocations.admin.inc
+getlocations.module
+
+commit b9c91b8
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 20 16:51:34 2012 +0100
+
+    fixed bug #1439626
+
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+
+commit f914be2
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 20 15:38:49 2012 +0100
+
+    removed getlocations.functions.inc
+
+getlocations.functions.inc
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+
+commit 72e6472
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 20 00:08:57 2012 +0100
+
+    added support for geofield and geolocation to getlocations_search
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.info
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit eb91369
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 20 00:07:58 2012 +0100
+
+    changed some function names
+
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_feeds/getlocations_feeds.module
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_coordinates.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_latitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_longitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_sort_distance.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+
+commit f264b34
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 20 00:05:55 2012 +0100
+
+    created getlocations.functions.inc
+
+getlocations.functions.inc
+
+commit f4f7c87
 Author: hutch <hutch@midwales.net>
 Date:   Thu May 17 21:45:59 2012 +0100
 
     added geolocation support, more in readme
 
+CHANGELOG.txt
 README.txt
 getlocations.module
 views/getlocations.views.inc

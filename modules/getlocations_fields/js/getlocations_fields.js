@@ -406,6 +406,8 @@
       if (! $(".getlocations-fields-maps-processed").is("body")) {
         getlocations_fields_init();
       }
+      // knock out the add more button, it wrecks all the maps
+      $("input.field-add-more-submit").hide();
     }
   };
 })(jQuery);

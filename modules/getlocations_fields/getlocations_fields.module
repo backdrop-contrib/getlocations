@@ -450,23 +450,26 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['mapwidth'] = getlocations_element_map_tf(
     t('Input form Map width'),
     $settings['mapwidth'],
+    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
-    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    TRUE
   );
   $form['mapheight'] = getlocations_element_map_tf(
     t('Input form Map height'),
     $settings['mapheight'],
+    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
-    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    TRUE
   );
   $form['latlong'] = getlocations_element_map_tf(
     t('Input form Map center'),
     $settings['latlong'],
+    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0'),
     30,
     30,
-    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0')
+    TRUE
   );
 
   // input form marker
@@ -2124,8 +2127,8 @@ function getlocations_fields_input_settings_form($defaults) {
   $form = array();
   // input form defaults
   $form['use_address'] = getlocations_element_dd(
-    $defaults['use_address'],
     t('Search options'),
+    $defaults['use_address'],
     array('0' => t('No Search box'), '1' => t('Search box with Geocode button'), '2' => t('Search box with Automatic Geocoding')),
     t("With 'No Search box' you must fill in the address then use the Geocode button to find the location.<br />With 'Search box with Geocode button' you can fill in the Search box then use the Geocode button to find the location.<br />With 'Search box with Automatic Geocoding' the Geocoding will be done when the Search has been selected.")
   );
@@ -2133,9 +2136,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_address_width'] = getlocations_element_map_tf(
     t('Search box width'),
     $defaults['input_address_width'],
+    t('The width of the Google Autocomplete search textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the Google Autocomplete search textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_address_width']['#prefix'] = '<div id="wrap-input_address_width">';
   $form['input_address_width']['#suffix'] = '</div>';
@@ -2151,9 +2155,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_name_width'] = getlocations_element_map_tf(
     t('Name box width'),
     $defaults['input_name_width'],
+    t('The width of the name textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the name textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_name_required'] = getlocations_fields_element_opts(
     t('Name box settings'),
@@ -2169,9 +2174,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_street_width'] = getlocations_element_map_tf(
     t('Street box width'),
     $defaults['input_street_width'],
+    t('The width of the street textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the street textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_street_required'] = getlocations_fields_element_opts(
     t('Street box settings'),
@@ -2187,9 +2193,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_additional_width'] = getlocations_element_map_tf(
     t('Additional box width'),
     $defaults['input_additional_width'],
+    t('The width of the additional textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the additional textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_additional_required'] = getlocations_fields_element_opts(
     t('Additional box settings'),
@@ -2205,9 +2212,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_city_width'] = getlocations_element_map_tf(
     t('City box width'),
     $defaults['input_city_width'],
+    t('The width of the city textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the city textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_city_required'] = getlocations_fields_element_opts(
     t('City box settings'),
@@ -2223,9 +2231,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_province_width'] = getlocations_element_map_tf(
     t('Province box width'),
     $defaults['input_province_width'],
+    t('The width of the province/county/state textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the province/county/state textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_province_required'] = getlocations_fields_element_opts(
     t('Province box settings'),
@@ -2241,9 +2250,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_postal_code_width'] = getlocations_element_map_tf(
     t('Postal code box width'),
     $defaults['input_postal_code_width'],
+    t('The width of the post code textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the post code textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_postal_code_required'] = getlocations_fields_element_opts(
     t('Postal code box settings'),
@@ -2259,9 +2269,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_latitude_width'] = getlocations_element_map_tf(
     t('Latitude box width'),
     $defaults['input_latitude_width'],
+    t('The width of the latitude textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the latitude textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_latitude_weight'] = getlocations_fields_element_weight(
     t('Latitude box position'),
@@ -2271,9 +2282,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_longitude_width'] = getlocations_element_map_tf(
     t('Longitude box width'),
     $defaults['input_longitude_width'],
+    t('The width of the longitude textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the longitude textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_longitude_weight'] = getlocations_fields_element_weight(
     t('Longitude box position'),
@@ -2302,9 +2314,10 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_country_width'] = getlocations_element_map_tf(
     t('Country box width'),
     $defaults['input_country_width'],
+    t('The width of the country textbox. Must be a positive number.'),
     10,
     10,
-    t('The width of the country textbox. Must be a positive number.')
+    TRUE
   );
   $form['input_country_required'] = getlocations_fields_element_opts(
     t('Country box settings'),
@@ -2319,8 +2332,8 @@ function getlocations_fields_input_settings_form($defaults) {
 
   // city_autocomplete
   $form['city_autocomplete'] = getlocations_element_dd(
-    $defaults['city_autocomplete'],
     t('City input method'),
+    $defaults['city_autocomplete'],
     array(
       0 => t('Normal textfield'),
       1 => t('Autocomplete'),
@@ -2329,8 +2342,8 @@ function getlocations_fields_input_settings_form($defaults) {
 
   // province_autocomplete
   $form['province_autocomplete'] = getlocations_element_dd(
-    $defaults['province_autocomplete'],
     t('Province/State/County input method'),
+    $defaults['province_autocomplete'],
     array(
       0 => t('Normal textfield'),
       1 => t('Autocomplete'),
@@ -2341,8 +2354,8 @@ function getlocations_fields_input_settings_form($defaults) {
 
   // country dropdown
   $form['use_country_dropdown'] = getlocations_element_dd(
-    $defaults['use_country_dropdown'],
     t('Country input method'),
+    $defaults['use_country_dropdown'],
     array(
       0 => t('Normal textfield'),
       1 => t('Dropdown'),
@@ -2400,16 +2413,18 @@ function getlocations_fields_display_settings_form($defaults) {
   $form['display_mapwidth'] = getlocations_element_map_tf(
     t('Map width'),
     $defaults['display_mapwidth'],
+    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
-    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    TRUE
   );
   $form['display_mapheight'] = getlocations_element_map_tf(
     t('Map height'),
     $defaults['display_mapheight'],
+    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
-    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    TRUE
   );
   $form['display_latlong'] = getlocations_element_map_checkbox(
     t('Show Latitude/Longitude in display'),

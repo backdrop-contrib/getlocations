@@ -1463,6 +1463,7 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
   $getlocations_defaults['comment_map_marker']    = $settings['comment_map_marker'];
   $getlocations_defaults['markeraction']          = $settings['markeraction'];
   $getlocations_defaults['markeractiontype']      = $settings['markeractiontype'];
+  $getlocations_defaults['nodezoom']              = $settings['nodezoom'];
 
   $latlons[] = $lls;
 
@@ -1899,6 +1900,7 @@ function getlocations_fields_defaults() {
     'country'                      => variable_get('site_default_country', ''),
     'display_mapwidth'             => $getlocations_defaults['width'],
     'display_mapheight'            => $getlocations_defaults['height'],
+    'nodezoom'                     => $getlocations_defaults['nodezoom'],
     'display_showmap'              => 1,
     'display_maplink'              => 1,
     'display_latlong'              => 1,
@@ -2112,6 +2114,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'display_country'       => $getlocations_fields_defaults['display_country'],
     'country_full'          => $getlocations_fields_defaults['country_full'],
     'per_item_marker'       => $getlocations_fields_defaults['per_item_marker'],
+    'nodezoom'              => $getlocations_fields_defaults['nodezoom'],
   );
   return $defaults;
 
@@ -2481,6 +2484,11 @@ function getlocations_fields_display_settings_form($defaults) {
     t('Display full country name'),
     $defaults['country_full'],
     ''
+  );
+  $form['nodezoom'] = getlocations_element_map_zoom(
+    t('Zoom'),
+    $defaults['nodezoom'],
+    t('The zoom level for a display map.')
   );
 
   return $form;

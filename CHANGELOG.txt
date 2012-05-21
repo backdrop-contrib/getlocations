@@ -1,9 +1,42 @@
-commit 692a86b
+commit 565b615
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 21 21:29:38 2012 +0100
+
+    added zoom setting to display map
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit e11654e
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 21 20:32:37 2012 +0100
+
+    jquery to hide add more button
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit b2a1919
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 21 16:45:46 2012 +0100
+
+    fixed delete location bug
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit a4a07ed
+Author: hutch <hutch@midwales.net>
+Date:   Mon May 21 12:10:34 2012 +0100
+
+    bug fix in form
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 7e07229
 Author: hutch <hutch@midwales.net>
 Date:   Mon May 21 09:41:52 2012 +0100
 
     cleaned up search admin
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.admin.inc
 
 commit fc733d1

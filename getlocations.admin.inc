@@ -26,11 +26,13 @@ function getlocations_settings_form() {
     '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button.'),
   );
   if (file_default_scheme() != 'public') {
-    $form['rebuild']['getlocations_private_markerfile'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Path to getlocations_markers.js'),
-      '#description' => t('You are using the <em>Private</em> download method. For markers to work properly. you must press the <em>Regenerate</em> button, manually copy js/getlocations_markers.js from the files directory to a location accessible by the webserver, and enter the file path relative to the Drupal root (including the filename) in this field. Example: <em>sites/default/misc/getlocations_markers.js</em>'),
-      '#default_value' => variable_get('getlocations_private_markerfile', ''),
+    $form['rebuild']['getlocations_private_markerfile'] = getlocations_element_map_tf(
+      t('Path to getlocations_markers.js'),
+      variable_get('getlocations_private_markerfile', ''),
+      t('You are using the <em>Private</em> download method. For markers to work properly. you must press the <em>Regenerate</em> button, manually copy js/getlocations_markers.js from the files directory to a location accessible by the webserver, and enter the file path relative to the Drupal root (including the filename) in this field. Example: <em>sites/default/misc/getlocations_markers.js</em>'),
+      60,
+      255,
+      FALSE
     );
   }
   if (! getlocations_get_markerfile()) {
@@ -54,13 +56,14 @@ function getlocations_settings_form() {
     #'#collapsed' => ($apikey ? TRUE : FALSE),
     '#collapsed' => TRUE,
   );
-  $form['api3']['getlocations_api3_key'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Your Google maps API Version 3 key'),
-    '#default_value' => $apikey,
-    '#description' => t('For more information about this key see this !u', array('!u' => l(t('page on google'), 'http://code.google.com/apis/maps/documentation/javascript/tutorial.html#api_key', array('attributes' => array('target' => '_blank'))))),
-    '#size' => 95,
-    '#required' => FALSE,
+
+  $form['api3']['getlocations_api3_key'] = getlocations_element_map_tf(
+    t('Your Google maps API Version 3 key'),
+    $apikey,
+    t('For more information about this key see this !u', array('!u' => l(t('page on google'), 'http://code.google.com/apis/maps/documentation/javascript/tutorial.html#api_key', array('attributes' => array('target' => '_blank'))))),
+    95,
+    255,
+    FALSE
   );
 
   $form['getlocations_default'] = array(
@@ -140,12 +143,8 @@ function getlocations_settings_form() {
     );
   }
 
-  $form['getlocations_default']['markeractiontype'] = getlocations_element_map_markeractiontype(
-    $getlocations_defaults['markeractiontype']
-  );
-  $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction(
-    $getlocations_defaults['markeraction']
-  );
+  $form['getlocations_default']['markeractiontype'] = getlocations_element_map_markeractiontype($getlocations_defaults['markeractiontype']);
+  $form['getlocations_default']['markeraction'] = getlocations_element_map_markeraction($getlocations_defaults['markeraction']);
 
   $form['getlocations_default']['minzoom'] = getlocations_element_map_zoom(
     t('Minimum Zoom'),
@@ -185,12 +184,13 @@ function getlocations_settings_form() {
     module_load_include('inc', 'getlocations', 'getlocations.markercluster');
   }
   $form['getlocations_default']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_defaults['markerclusterer_style']);
-  $form['getlocations_default']['markerclusterer_title'] =  array(
-    '#type' => 'textfield',
-    '#title' => t('Markerclusterer tooltip'),
-    '#default_value' => $getlocations_defaults['markerclusterer_title'],
-    '#size' => 30,
-    '#description' => t('The text of a Markerclusterer tooltip'),
+  $form['getlocations_default']['markerclusterer_title'] = getlocations_element_map_tf(
+    t('Markerclusterer tooltip'),
+    $getlocations_defaults['markerclusterer_title'],
+    t('The text of a Markerclusterer tooltip'),
+    30,
+    64,
+    TRUE
   );
 
   $form['getlocations_default']['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($getlocations_defaults['markerclusterer_zoom']);
@@ -199,76 +199,69 @@ function getlocations_settings_form() {
 
   $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
 
-  $form['getlocations_default']['returnlink_page_enable'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show link back to page'),
-    '#default_value' =>  $getlocations_defaults['returnlink_page_enable'],
-    '#return_value' => 1,
+  $form['getlocations_default']['returnlink_page_enable'] = getlocations_element_map_checkbox(
+    t('Show link back to page'),
+    $getlocations_defaults['returnlink_page_enable']
   );
-  $form['getlocations_default']['returnlink_page_link'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Text of page return link'),
-    '#default_value' => $getlocations_defaults['returnlink_page_link'],
-    '#size' => 30,
-    '#description' => t('Use %t to insert the page title'),
+  $form['getlocations_default']['returnlink_page_link'] = getlocations_element_map_tf(
+    t('Text of page return link'),
+    $getlocations_defaults['returnlink_page_link'],
+    t('Use %t to insert the page title'),
+    30,
+    64
   );
 
   if (module_exists('getlocations_fields')) {
     if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
-      $form['getlocations_default']['returnlink_user_enable'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Show link back to user'),
-        '#default_value' =>  $getlocations_defaults['returnlink_user_enable'],
-        '#return_value' => 1,
+      $form['getlocations_default']['returnlink_user_enable'] = getlocations_element_map_checkbox(
+         t('Show link back to user'),
+         $getlocations_defaults['returnlink_user_enable']
       );
-      $form['getlocations_default']['returnlink_user_link'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Text of user return link'),
-        '#default_value' => $getlocations_defaults['returnlink_user_link'],
-        '#size' => 30,
-        '#description' => t('Use %n to insert the user name'),
+      $form['getlocations_default']['returnlink_user_link'] = getlocations_element_map_tf(
+        t('Text of user return link'),
+        $getlocations_defaults['returnlink_user_link'],
+        t('Use %n to insert the user name'),
+        30,
+        64
       );
     }
 
     if (getlocations_get_vocabularies()) {
-      $form['getlocations_default']['returnlink_term_enable'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Show link back to term'),
-        '#default_value' =>  $getlocations_defaults['returnlink_term_enable'],
-        '#return_value' => 1,
+      $form['getlocations_default']['returnlink_term_enable'] = getlocations_element_map_checkbox(
+        t('Show link back to term'),
+        $getlocations_defaults['returnlink_term_enable']
       );
-      $form['getlocations_default']['returnlink_term_link'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Text of term return link'),
-        '#default_value' => $getlocations_defaults['returnlink_term_link'],
-        '#size' => 30,
-        '#description' => t('Use %n to insert the term name'),
+      $form['getlocations_default']['returnlink_term_link'] = getlocations_element_map_tf(
+        t('Text of term return link'),
+        $getlocations_defaults['returnlink_term_link'],
+        t('Use %n to insert the term name'),
+        30,
+        64
       );
     }
 
     if (getlocations_check_entity_type('comment')) {
-      $form['getlocations_default']['returnlink_comment_enable'] = array(
-        '#type' => 'checkbox',
-        '#title' => t('Show link back to comment'),
-        '#default_value' =>  $getlocations_defaults['returnlink_comment_enable'],
-        '#return_value' => 1,
+      $form['getlocations_default']['returnlink_comment_enable'] = getlocations_element_map_checkbox(
+        t('Show link back to comment'),
+        $getlocations_defaults['returnlink_comment_enable']
       );
-      $form['getlocations_default']['returnlink_comment_link'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Text of comment return link'),
-        '#default_value' => $getlocations_defaults['returnlink_comment_link'],
-        '#size' => 30,
-        '#description' => t('Use %n to insert the comment subject'),
+      $form['getlocations_default']['returnlink_comment_link'] = getlocations_element_map_tf(
+        t('Text of comment return link'),
+        $getlocations_defaults['returnlink_comment_link'],
+        t('Use %n to insert the comment subject'),
+        30,
+        64
       );
     }
   }
 
-  $form['getlocations_default']['getlocations_js_weight'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Getlocations Javascript weight'),
-    '#default_value' => $getlocations_defaults['getlocations_js_weight'],
-    '#size' => 5,
-    '#description' => t('Set the weight of the getlocations javascript loading, only change this if you are having problems. For advanced users only.'),
+  $form['getlocations_default']['getlocations_js_weight'] = getlocations_element_map_tf(
+    t('Getlocations Javascript weight'),
+    $getlocations_defaults['getlocations_js_weight'],
+    t('Set the weight of the getlocations javascript loading, only change this if you are having problems. For advanced users only.'),
+    5,
+    99,
+    TRUE
   );
 
   $form['getlocations_default']['use_https'] = array(
@@ -285,11 +278,9 @@ function getlocations_settings_form() {
       '#tree' => TRUE,
     );
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-    $form['getlocations_node_marker']['enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Markers for Content types'),
-      '#default_value' =>  $getlocations_node_marker['enable'],
-      '#return_value' => 1,
+    $form['getlocations_node_marker']['enable'] = getlocations_element_map_checkbox(
+      t('Enable Markers for Content types'),
+      $getlocations_node_marker['enable']
     );
     $typect = 0;
     foreach ($types AS $type => $name) {
@@ -316,11 +307,9 @@ function getlocations_settings_form() {
       '#tree' => TRUE,
     );
     $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-    $form['getlocations_vocabulary_marker']['enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Markers for Vocabularies'),
-      '#default_value' =>  $getlocations_vocabulary_marker['enable'],
-      '#return_value' => 1,
+    $form['getlocations_vocabulary_marker']['enable'] = getlocations_element_map_checkbox(
+      t('Enable Markers for Vocabularies'),
+      $getlocations_vocabulary_marker['enable']
     );
     $typect = 0;
     foreach ($types AS $type => $name) {
@@ -346,23 +335,20 @@ function getlocations_settings_form() {
     '#tree' => TRUE,
   );
   $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-  $form['getlocations_term_marker']['enable'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable Markers for Terms'),
-    '#default_value' =>  $getlocations_term_marker['enable'],
-    '#return_value' => 1,
+  $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
+    t('Enable Markers for Terms'),
+    $getlocations_term_marker['enable']
   );
   $options = array(0 => '- Select -');
   foreach (taxonomy_vocabulary_get_names() as $vocab) {
     $options[$vocab->vid] = $vocab->name;
   }
-  $form['getlocations_term_marker']['vid'] = array(
-    '#type' => 'select',
-    '#title' => t('Vocabulary to specify markers for'),
-    '#default_value' =>  $getlocations_term_marker['vid'],
-    '#options' => $options,
-    '#prefix' => '<div id="wrap-getlocations-term-markers">',
+  $form['getlocations_term_marker']['vid'] = getlocations_element_dd(
+    t('Vocabulary to specify markers for'),
+    $getlocations_term_marker['vid'],
+    $options
   );
+  $form['getlocations_term_marker']['vid']['#prefix'] = '<div id="wrap-getlocations-term-markers">';
   if ($getlocations_term_marker['vid']) {
     $termct = 0;
     $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
@@ -379,14 +365,13 @@ function getlocations_settings_form() {
     }
   }
 
-  $form['getlocations_term_marker']['max_depth'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Maximum depth'),
-    '#description' => t('The maximum depth for hierarchical vocabulary to specify markers for. Leave blank for all levels.'),
-    '#default_value' =>  $getlocations_term_marker['max_depth'],
-    '#size' => 5,
-    '#suffix' => '</div>',
+  $form['getlocations_term_marker']['max_depth'] = getlocations_element_map_tf(
+    t('Maximum depth'),
+    $getlocations_term_marker['max_depth'],
+    t('The maximum depth for hierarchical vocabulary to specify markers for. Leave blank for all levels.'),
+    5
   );
+  $form['getlocations_term_marker']['max_depth']['#suffix'] = '</div>';
 
   // colorbox
   if (module_exists('colorbox')) {
@@ -397,58 +382,56 @@ function getlocations_settings_form() {
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
     );
-    $form['getlocations_colorbox']['enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Colorbox'),
-      '#default_value' =>  $getlocations_colorbox['enable'],
-      '#return_value' => 1,
-      '#description' => t('Show Getlocations in a Colorbox.'),
+    $form['getlocations_colorbox']['enable'] = getlocations_element_map_checkbox(
+      t('Enable Colorbox'),
+      $getlocations_colorbox['enable'],
+      t('Show Getlocations in a Colorbox.')
     );
-    $form['getlocations_colorbox']['width'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Colorbox width'),
-      '#default_value' => $getlocations_colorbox['width'],
-      '#size' => 5,
-      '#required' => TRUE,
-      // need this to get validation to work
-      '#parents' => array('getlocations_colorbox', 'width'),
+    $form['getlocations_colorbox']['width'] = getlocations_element_map_tf(
+      t('Colorbox width'),
+      $getlocations_colorbox['width'],
+      '',
+      5,
+      10,
+      TRUE
     );
-    $form['getlocations_colorbox']['height'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Colorbox height'),
-      '#default_value' => $getlocations_colorbox['height'],
-      '#size' => 5,
-      '#required' => TRUE,
-      // need this to get validation to work
-      '#parents' => array('getlocations_colorbox', 'height'),
+    // need this to get validation to work
+    $form['getlocations_colorbox']['width']['#parents'] = array('getlocations_colorbox', 'width');
+    $form['getlocations_colorbox']['height'] = getlocations_element_map_tf(
+      t('Colorbox height'),
+      $getlocations_colorbox['height'],
+      '',
+      5,
+      10,
+      TRUE
     );
-
-    $form['getlocations_colorbox']['marker_enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Marker picker'),
-      '#default_value' =>  $getlocations_colorbox['marker_enable'],
-      '#return_value' => 1,
-      '#description' => t('Show Markers in a Colorbox.'),
+    // need this to get validation to work
+    $form['getlocations_colorbox']['height']['#parents'] = array('getlocations_colorbox', 'height');
+    $form['getlocations_colorbox']['marker_enable'] = getlocations_element_map_checkbox(
+      t('Enable Marker picker'),
+      $getlocations_colorbox['marker_enable'],
+      t('Show Markers in a Colorbox.')
     );
-    $form['getlocations_colorbox']['marker_width'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Marker Colorbox width'),
-      '#default_value' => $getlocations_colorbox['marker_width'],
-      '#size' => 5,
-      '#required' => TRUE,
-      // need this to get validation to work
-      '#parents' => array('getlocations_colorbox', 'marker_width'),
+    $form['getlocations_colorbox']['marker_width'] = getlocations_element_map_tf(
+      t('Marker Colorbox width'),
+      $getlocations_colorbox['marker_width'],
+      '',
+      5,
+      10,
+      TRUE
     );
-    $form['getlocations_colorbox']['marker_height'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Marker Colorbox height'),
-      '#default_value' => $getlocations_colorbox['marker_height'],
-      '#size' => 5,
-      '#required' => TRUE,
-      // need this to get validation to work
-      '#parents' => array('getlocations_colorbox', 'marker_height'),
+    // need this to get validation to work
+    $form['getlocations_colorbox']['marker_width']['#parents'] = array('getlocations_colorbox', 'marker_width');
+    $form['getlocations_colorbox']['marker_height'] = getlocations_element_map_tf(
+      t('Marker Colorbox height'),
+      $getlocations_colorbox['marker_height'],
+      '',
+      5,
+      10,
+      TRUE
     );
-
+    // need this to get validation to work
+    $form['getlocations_colorbox']['marker_height']['#parents'] = array('getlocations_colorbox', 'marker_height');
   }
 
   $form['getlocations_paths'] = array(

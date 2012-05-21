@@ -1977,7 +1977,7 @@ function getlocations_element_map_marker($title, $options, $default, $descriptio
   return $element;
 }
 
-function getlocations_element_map_tf($title, $default, $size, $maxlength, $description='', $required=TRUE) {
+function getlocations_element_map_tf($title, $default, $description='', $size=60, $maxlength=255, $required=FALSE, $weight='') {
 
   $element = array(
     '#type' => 'textfield',
@@ -1985,10 +1985,15 @@ function getlocations_element_map_tf($title, $default, $size, $maxlength, $descr
     '#default_value' => $default,
     '#size' => $size,
     '#maxlength' => $maxlength,
-    '#required' => $required,
   );
+  if ($required) {
+    $element['#required'] = TRUE;
+  }
   if ($description) {
     $element['#description'] = $description;
+  }
+  if (is_numeric($weight)) {
+    $element['#weight'] = $weight;
   }
 
   return $element;
@@ -2160,15 +2165,13 @@ function getlocations_element_markermanagertype($default) {
 
 
 function getlocations_element_path($title, $default, $size, $maxlength, $description) {
-
-  $element = array(
-    '#type' => 'textfield',
-    '#title' => $title,
-    '#default_value' => $default,
-    '#size' => $size,
-    '#maxlength' => $maxlength,
-    '#description' => $description,
-    '#required' => TRUE,
+  $element = getlocations_element_map_tf(
+    $title,
+    $default,
+    $description,
+    $size,
+    $maxlength,
+    TRUE
   );
   return $element;
 }
@@ -2196,6 +2199,61 @@ function getlocations_element_map_behavior($type, $default) {
     return $element;
   }
   return FALSE;
+}
+
+function getlocations_element_map_limits($default, $title = '', $description = '') {
+
+  if (empty($title)) {
+    $title = t('Locations to show');
+  }
+  if (empty($description)) {
+    $description = t('The maximum number of locations to show, sorted by distance');
+  }
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#description' => $description,
+    '#options' => array(0 => t('All'), 10 => '10', 20 => '20', 30 => '30', 40 => '40', 50 => '50', 75 => '75',
+      100 => '100', 150 => '150', 175 => '175', 200 => '200', 250 => '250', 300 => '300', 400 => '400', 500 => '500',
+    ),
+    '#default_value' => $default,
+  );
+
+  return $element;
+
+}
+
+/**
+ * @param string $default
+ * @param string $title
+ * @param array $options
+ * @param string $description
+ * @param bool $multiple
+ * @param int $weight
+ *
+ * @return
+ *   Returns form element
+ *
+ */
+function getlocations_element_dd($title, $default, $options, $description = '', $multiple = FALSE, $weight = '') {
+
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#options' => $options,
+  );
+  if ($description) {
+    $element['#description'] = $description;
+  }
+  if ($multiple) {
+    $element['#multiple'] = TRUE;
+    $element['#size'] = min(12, count($options));
+  }
+  if (is_numeric($weight)) {
+    $element['#weight'] = $weight;
+  }
+  return $element;
 }
 
 function getlocations_map_display_basics_form($defaults, $labels = array()) {
@@ -2226,17 +2284,19 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
   $form['width'] = getlocations_element_map_tf(
     $label['width'],
     $defaults['width'],
+    t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
-    t('The default width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    TRUE
   );
 
   $form['height'] = getlocations_element_map_tf(
     $label['height'],
     $defaults['height'],
+    t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
-    t('The default height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>')
+    TRUE
   );
 
   $form['styles'] = array(
@@ -2249,9 +2309,10 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
   $form['latlong'] = getlocations_element_map_tf(
     $label['latlong'],
     $defaults['latlong'],
+    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0'),
     30,
     30,
-    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0')
+    TRUE
   );
 
   $form['zoom'] = getlocations_element_map_zoom(
@@ -2340,28 +2401,6 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
   }
 
   return $form;
-
-}
-
-function getlocations_element_map_limits($default, $title = '', $description = '') {
-
-  if (empty($title)) {
-    $title = t('Locations to show');
-  }
-  if (empty($description)) {
-    $description = t('The maximum number of locations to show, sorted by distance');
-  }
-  $element = array(
-    '#type' => 'select',
-    '#title' => $title,
-    '#description' => $description,
-    '#options' => array(0 => t('All'), 10 => '10', 20 => '20', 30 => '30', 40 => '40', 50 => '50', 75 => '75',
-      100 => '100', 150 => '150', 175 => '175', 200 => '200', 250 => '250', 300 => '300', 400 => '400', 500 => '500',
-    ),
-    '#default_value' => $default,
-  );
-
-  return $element;
 
 }
 
@@ -2622,7 +2661,7 @@ function getlocations_dms_to_dd($dms) {
   }
   return $dd;
 }
-//////////////////////////////
+
 /**
  * Calculations functions.
  * from location module
@@ -2867,6 +2906,7 @@ function getlocations_element_search_distance($default, $title = '', $descriptio
     '#title' => $title,
     '#default_value' => $default,
     '#size' => 10,
+    '#required' => TRUE,
   );
   if (! empty($description)) {
     $element['#description'] = $description;
@@ -2874,29 +2914,3 @@ function getlocations_element_search_distance($default, $title = '', $descriptio
   return $element;
 }
 
-/**
- * @param string $default
- *
- * @param string $title
- *
- * @param array $options
- *
- * @param string $description
- *
- * @return
- *   Returns form element
- *
- */
-function getlocations_element_dd($default, $title, $options, $description = '') {
-
-  $element = array(
-    '#type' => 'select',
-    '#title' => $title,
-    '#default_value' => $default,
-    '#options' => $options,
-  );
-  if ($description) {
-    $element['#description'] = $description;
-  }
-  return $element;
-}

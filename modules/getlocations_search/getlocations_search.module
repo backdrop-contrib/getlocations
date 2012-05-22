@@ -23,13 +23,6 @@ function getlocations_search_help($path, $arg) {
 }
 
 /**
- * Implements hook_init().
- */
-function getlocations_search_init() {
-  drupal_add_css(GETLOCATIONS_SEARCH_PATH . '/getlocations_search.css');
-}
-
-/**
  * Implements hook_menu().
  */
 function getlocations_search_menu() {
@@ -91,6 +84,7 @@ function getlocations_search() {
 function getlocations_search_form($form, &$form_state) {
   $getlocations_search_defaults = getlocations_search_defaults();
 
+  $form['#attached']['css'] = array(GETLOCATIONS_SEARCH_PATH . '/getlocations_search.css');
   if ($getlocations_search_defaults['method'] == 'vocab' && $getlocations_search_defaults['vocab_element'] == 'dropdown') {
     //
     $form['getlocations_search'] = array(

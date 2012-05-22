@@ -12,24 +12,6 @@
 define('GETLOCATIONS_BLOCKS_PATH', drupal_get_path('module', 'getlocations_blocks'));
 
 /**
- * Implements hook_init().
- */
-function getlocations_blocks_init() {
-
-  drupal_add_js(GETLOCATIONS_BLOCKS_PATH . '/js/getlocations_blocks.js');
-  drupal_add_css(GETLOCATIONS_BLOCKS_PATH . '/getlocations_blocks.css');
-  $get = getlocations_blocks_get_var();
-  $gets = array(
-    'city_path' => $get['city_path'],
-    'province_path' => $get['province_path'],
-    'postalcode_path' => $get['postalcode_path'],
-    'country_path' => $get['country_path'],
-  );
-  $settings = array('getlocations_blocks' => $gets);
-  drupal_add_js($settings, 'setting');
-}
-
-/**
  * Implements hook_menu().
  */
 function getlocations_blocks_menu() {
@@ -597,6 +579,7 @@ function getlocations_blocks_city_form($form, &$form_state) {
     '#type' => 'submit',
     '#value' => t('Go')
   );
+  $form += getlocations_blocks_get_attached_elements();
   return $form;
 }
 
@@ -631,6 +614,7 @@ function getlocations_blocks_province_form($form, &$form_state) {
     '#type' => 'submit',
     '#value' => t('Go')
   );
+  $form += getlocations_blocks_get_attached_elements();
   return $form;
 }
 
@@ -665,6 +649,7 @@ function getlocations_blocks_postalcode_form($form, &$form_state) {
     '#type' => 'submit',
     '#value' => t('Go')
   );
+  $form += getlocations_blocks_get_attached_elements();
   return $form;
 }
 
@@ -699,6 +684,7 @@ function getlocations_blocks_country_form($form, &$form_state) {
     '#type' => 'submit',
     '#value' => t('Go')
   );
+  $form += getlocations_blocks_get_attached_elements();
   return $form;
 }
 
@@ -1025,4 +1011,26 @@ function getlocations_blocks_check_view($view) {
   }
   return FALSE;
 
+}
+
+function getlocations_blocks_get_settings() {
+
+  $get = getlocations_blocks_get_var();
+  return array(
+    'city_path' => $get['city_path'],
+    'province_path' => $get['province_path'],
+    'postalcode_path' => $get['postalcode_path'],
+    'country_path' => $get['country_path'],
+  );
+}
+
+function getlocations_blocks_get_attached_elements() {
+  $form['#attached']['css'] = array(GETLOCATIONS_BLOCKS_PATH . '/getlocations_blocks.css');
+  $form['#attached']['js'] = array(GETLOCATIONS_BLOCKS_PATH . '/js/getlocations_blocks.js');
+  $settings = getlocations_blocks_get_settings();
+  $form['#attached']['js'][] = array(
+    'data' => array('getlocations_blocks' => $settings),
+    'type' => 'setting',
+  );
+  return $form;
 }

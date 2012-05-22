@@ -932,6 +932,7 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       }
       $summary[] = t('Marker action: @a on @b', array('@a' => $msg, '@b' => $msg2));
     }
+    $summary[] = t('Zoom level: @z', array('@z' => $settings['nodezoom']));
   }
   else {
     $summary[] = t('Show map: No');

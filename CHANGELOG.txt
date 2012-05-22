@@ -1,9 +1,45 @@
-commit 565b615
+commit 2c811c8
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 22 15:17:40 2012 +0100
+
+    fixed getlocations_colorbox in init
+
+getlocations.module
+
+commit 969a0f7
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 22 09:45:17 2012 +0100
+
+    updated js, added packed versions
+
+js/markerclusterer.js
+js/markerclusterer_packed.js
+js/markermanager_packed.js
+
+commit 3ae00fc
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 22 09:01:06 2012 +0100
+
+    attached css and js to forms, removed init()
+
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_search/getlocations_search.module
+
+commit 2a59d7a
+Author: hutch <hutch@midwales.net>
+Date:   Tue May 22 08:59:13 2012 +0100
+
+    added zoom level to display summary
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 6a7252a
 Author: hutch <hutch@midwales.net>
 Date:   Mon May 21 21:29:38 2012 +0100
 
     added zoom setting to display map
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit e11654e

@@ -32,12 +32,9 @@ function getlocations_init() {
       'height' => 600,
     ));
     $settings = array('getlocations_colorbox' => $getlocations_colorbox);
+    drupal_add_js($settings, 'setting');
     drupal_add_js(GETLOCATIONS_PATH .'/js/getlocations_colorbox.js');
   }
-  else {
-    $settings = array('getlocations_colorbox' => array('enable' => 0));
-  }
-  drupal_add_js($settings, 'setting');
 }
 
 /**

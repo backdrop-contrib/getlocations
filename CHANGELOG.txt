@@ -1,9 +1,27 @@
-commit 2c811c8
+commit 07d71ed
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 24 16:49:12 2012 +0100
+
+    better preview and edit
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit aefd13b
+Author: hutch <hutch@midwales.net>
+Date:   Thu May 24 14:13:13 2012 +0100
+
+    added a map check to js
+
+js/getlocations.js
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 3bebfe5
 Author: hutch <hutch@midwales.net>
 Date:   Tue May 22 15:17:40 2012 +0100
 
     fixed getlocations_colorbox in init
 
+CHANGELOG.txt
 getlocations.module
 
 commit 969a0f7

@@ -1057,279 +1057,267 @@ function getlocations_fields_field_widget_info() {
  */
 function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
 
-  // is this real or a demo in settings
-  $active = TRUE;
-  if (isset($form['#title']) && $form['#title'] == 'Default value') {
-    $active = FALSE;
-  }
-  $field_name = '';
-  if (isset($field['field_name'])) {
-    $field_name = $field['field_name'];
-  }
+  switch ($instance['widget']['type']) {
+    case 'getlocations_fields':
 
-  // not in demo mode
-  if ($active) {
-    if (isset($form_state['node']->vid) && $form_state['node']->vid) {
-      $items = getlocations_fields_load_locations($form_state['node']->vid, 'vid', $field_name);
-    }
-    elseif (isset($form_state['user']->uid) && $form_state['user']->uid) {
-      $items = getlocations_fields_load_locations($form_state['user']->uid, 'uid', $field_name);
-    }
-    elseif (isset($form_state['term']->tid) && $form_state['term']->tid) {
-      $items = getlocations_fields_load_locations($form_state['term']->tid, 'tid', $field_name);
-    }
-    elseif (isset($form_state['comment']->cid) && $form_state['comment']->cid) {
-      $items = getlocations_fields_load_locations($form_state['comment']->cid, 'cid', $field_name);
-    }
-  }
+      // is this real or a demo in settings
+      $active = TRUE;
+      if (empty($element['#entity'])){
+        $active = FALSE;
+      }
 
-  $settings = $field['settings'];
-  $m = getlocations_fields_getmap($settings, $active);
-  $map = $m[0];
-  $mapid = $m[1];
+      $element['#delta'] = $delta;
 
-  // vertical tabs works but map does not render
-  $widget = $element;
-  $widget['#delta'] = $delta;
+      $field_name = '';
+      if (isset($field['field_name'])) {
+        $field_name = $field['field_name'];
+        $items[$delta]['field_name'] = $field_name;
+      }
 
-  $widget += array(
-    '#type' => 'fieldset',
-    '#title' => t('Location'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-    '#delta' => $delta,
-  );
+      $settings = $field['settings'];
+      $m = getlocations_fields_getmap($settings, $active);
+      $map = $m[0];
+      $mapid = $m[1];
 
-  if (isset($items[$delta]['glid'])) {
-    $widget['glid'] = array(
-      '#type' => 'value',
-      '#value' => $items[$delta]['glid'],
-    );
-    $widget['delete_location'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Delete'),
-      '#default_value' => FALSE,
-      '#description' => t('Check this box to delete this location.'),
-    );
-  }
-  // search field
-  if ($settings['use_address']) {
-    $widget['address'] = array(
-      '#type' => 'textfield',
-      '#default_value' => (isset($items[$delta]['address']) ? $items[$delta]['address'] : ''),
-      '#size' => $settings['input_address_width'],
-      '#attributes' => array('id' => ($active ? 'getlocations_address_' . $mapid : 'getlocations_default_address'), 'placeholder' => t('Enter an address')),
-      '#title' => t('Search'),
-      '#description' => t('Start typing an address and select from the dropdown.'),
-      '#field_name' => $instance['field_name'],
-      '#maxlength' => 255,
-    );
-    if ($instance['required']) {
-      if ($active) {
-        $widget['address']['#required'] = TRUE;
+      // Wrap in a fieldset for single fields
+      if ($field['cardinality'] == 1) {
+        $element['#type'] = 'fieldset';
+        $element['#collapsible'] = TRUE;
+        $element['#collapsed'] = FALSE;
+      }
+
+      if (isset($items[$delta]['glid'])) {
+        $element['glid'] = array(
+          '#type' => 'value',
+          '#value' => $items[$delta]['glid'],
+        );
+        $element['delete_location'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Delete'),
+          '#default_value' => FALSE,
+          '#description' => t('Check this box to delete this location.'),
+        );
+      }
+      // search field
+      if ($settings['use_address']) {
+        $element['address'] = array(
+          '#type' => 'textfield',
+          '#default_value' => (isset($items[$delta]['address']) ? $items[$delta]['address'] : ''),
+          '#size' => $settings['input_address_width'],
+          '#attributes' => array('id' => ($active ? 'getlocations_address_' . $mapid : 'getlocations_default_address'), 'placeholder' => t('Enter an address')),
+          '#title' => t('Search'),
+          '#description' => t('Start typing an address and select from the dropdown.'),
+          '#field_name' => $instance['field_name'],
+          '#maxlength' => 255,
+        );
+        if ($instance['required']) {
+          if ($active) {
+            $element['address']['#required'] = TRUE;
+          }
+          else {
+            $element['address']['#field_suffix'] = t('(Required)');
+          }
+        }
+      } // TODO add a message, required form or not
+
+      // smart_ip
+      if ($active && module_exists('smart_ip') && $settings['use_smart_ip_button']) {
+        $element['smart_ip_button'] = array(
+          '#markup' => '',
+        );
+        if (! empty($settings['input_smart_ip_button_weight'])) {
+          $element['smart_ip_button']['#weight'] = $settings['input_smart_ip_button_weight'];
+        }
+      }
+
+      // loop over these as they are all the same
+      $required = array();
+      $inputarr = array(
+        'name' => t('Name'),
+        'street' => t('Street'),
+        'additional' => t('Additional'),
+        'city' => t('City/Town'),
+        'province' => t('Province/State/County'),
+        'postal_code' => t('Post code/Zip code'),
+      );
+      foreach ($inputarr AS $id => $title) {
+        if ($settings['input_' . $id . '_required'] == 4) {
+          // hidden form
+          $element[$id] = array(
+            '#type' => 'hidden',
+            '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
+            '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
+          );
+        }
+        elseif ($settings['input_' . $id . '_required'] == 3) {
+          $element[$id] = array(
+            '#type' => 'hidden',
+            '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
+            '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
+          );
+          $element[$id . '_display'] = array(
+            '#markup' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
+          );
+        }
+        else {
+          $element[$id] = array(
+            '#type' => 'textfield',
+            '#default_value' => (isset($items[$delta][$id]) ? htmlspecialchars_decode($items[$delta][$id], ENT_QUOTES) : ''),
+           '#size' => $settings['input_' . $id . '_width'],
+            '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
+            '#title' => $title,
+            '#maxlength' => 255,
+          );
+          // autocomplete for province
+          if ($id == 'province' && $settings['province_autocomplete'] ) {
+            $element[$id]['#autocomplete_path'] = 'getlocations_fields/province_autocomplete';
+          }
+          // autocomplete for city
+          elseif ($id == 'city' && $settings['city_autocomplete'] ) {
+            $element[$id]['#autocomplete_path'] = 'getlocations_fields/city_autocomplete';
+          }
+        }
+        if ($settings['input_' . $id . '_required'] == 2) {
+          $element[$id]['#disabled'] = TRUE;
+        }
+        elseif ($settings['input_' . $id . '_required'] == 1) {
+          if ($active) {
+            # needs to be replaced with a 'fake'
+            $required[] = $id;
+          }
+          else {
+            $element[$id]['#field_suffix'] = t('(Required)');
+          }
+        }
+        if (! empty($settings['input_' . $id . '_weight'])) {
+          $element[$id]['#weight'] = $settings['input_' . $id . '_weight'];
+        }
+      }
+
+      // country
+      if ($settings['use_country_dropdown'] == 1) {
+        $countries = getlocations_get_countries_list();
+        $countries = array_merge(array('' => t('---Please select a country---')), $countries);
+        $element['country'] = array(
+          '#type' => 'select',
+          '#default_value' => (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']),
+          '#options' => $countries,
+          '#title' => t('Country'),
+          '#attributes' => array('id' => 'getlocations_country_' . $mapid),
+        );
       }
       else {
-        $widget['address']['#field_suffix'] = t('(Required)');
+        $default_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
+        if ($default_value && drupal_strlen($default_value) == 2) {
+          $default_value = getlocations_get_country_name($default_value);
+        }
+        $element['country'] = array(
+          '#type' => 'textfield',
+          '#default_value' => $default_value,
+          '#autocomplete_path' => ($settings['use_country_dropdown'] == 2 ? 'getlocations_fields/country_autocomplete' : ''),
+          '#size' => $settings['input_country_width'],
+          '#attributes' => array('id' => 'getlocations_country_' . $mapid),
+          '#title' => t('Country'),
+          '#maxlength' => 255,
+        );
       }
-    }
-  } // TODO add a message, required form or not
+      if ($settings['input_country_required']) {
+        if ($active) {
+          $element['country']['#required'] = TRUE;
+        }
+        else {
+          $element['country']['#field_suffix'] = t('(Required)');
+        }
+      }
+      if (! empty($settings['input_country_weight'])) {
+        $element['country']['#weight'] = $settings['input_country_weight'];
+      }
 
-  // smart_ip
-  if ($active && module_exists('smart_ip') && $settings['use_smart_ip_button']) {
-    $widget['smart_ip_button'] = array(
-      '#markup' => '',
-    );
-    if (! empty($settings['input_smart_ip_button_weight'])) {
-      $widget['smart_ip_button']['#weight'] = $settings['input_smart_ip_button_weight'];
-    }
-  }
+      // per_item_marker
+      if ($settings['per_item_marker']) {
+        $markers = getlocations_get_marker_titles();
+        $markers = array_merge(array('' => t('Default')), $markers);
+        $element['marker'] = getlocations_element_map_marker(
+          t('Map marker'),
+          $markers,
+          (isset($items[$delta]['marker']) ? $items[$delta]['marker'] : '')
+        );
+        if (! empty($settings['input_marker_weight'])) {
+          $element['marker']['#weight'] = $settings['input_marker_weight'];
+        }
+      }
+      else {
+        $element['marker'] = array(
+          '#type' => 'value',
+          '#value' => '',
+        );
+      }
 
-  // loop over these as they are all the same
-  $required = array();
-  $inputarr = array(
-    'name' => t('Name'),
-    'street' => t('Street'),
-    'additional' => t('Additional'),
-    'city' => t('City/Town'),
-    'province' => t('Province/State/County'),
-    'postal_code' => t('Post code/Zip code'),
-  );
-  foreach ($inputarr AS $id => $title) {
-    if ($settings['input_' . $id . '_required'] == 4) {
-      // hidden form
-      $widget[$id] = array(
-        '#type' => 'hidden',
-        '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
-        '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
+      // geobutton
+      if ($active) {
+        if ($settings['use_address'] < 2) {
+          $element['geobutton'] = array(
+            '#markup' => '',
+          );
+          if (! empty($settings['input_geobutton_weight'])) {
+            $element['geobutton']['#weight'] = $settings['input_geobutton_weight'];
+          }
+        }
+        $element['mapid'] = array(
+          '#type' => 'value',
+          '#value' => $mapid,
+        );
+      }
+      // map
+      $element['map'] = array(
+        '#markup' => $map,
       );
-    }
-    elseif ($settings['input_' . $id . '_required'] == 3) {
-      $widget[$id] = array(
-        '#type' => 'hidden',
-        '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
-        '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
-      );
-      $widget[$id . '_display'] = array(
-        '#markup' => (isset($items[$delta][$id]) ? $items[$delta][$id] : ''),
-      );
-    }
-    else {
-      $widget[$id] = array(
+      if (! empty($settings['input_map_weight'])) {
+        $element['map']['#weight'] = $settings['input_map_weight'];
+      }
+      // latitude
+      $element['latitude'] = array(
         '#type' => 'textfield',
-        '#default_value' => (isset($items[$delta][$id]) ? htmlspecialchars_decode($items[$delta][$id], ENT_QUOTES) : ''),
-       '#size' => $settings['input_' . $id . '_width'],
-        '#attributes' => array('id' => 'getlocations_' . $id . '_' . $mapid),
-        '#title' => $title,
-        '#maxlength' => 255,
+        '#default_value' => isset($items[$delta]['latitude']) ? $items[$delta]['latitude'] : '',
+        '#size' => $settings['input_latitude_width'],
+        '#attributes' => array('id' => 'getlocations_latitude_' . $mapid),
+        '#title' => t('Latitude'),
+        '#maxlength' => 20,
       );
-      // autocomplete for province
-      if ($id == 'province' && $settings['province_autocomplete'] ) {
-        $widget[$id]['#autocomplete_path'] = 'getlocations_fields/province_autocomplete';
+      if (! empty($settings['input_latitude_weight'])) {
+        $element['latitude']['#weight'] = $settings['input_latitude_weight'];
       }
-      // autocomplete for city
-      elseif ($id == 'city' && $settings['city_autocomplete'] ) {
-        $widget[$id]['#autocomplete_path'] = 'getlocations_fields/city_autocomplete';
-      }
-    }
-    if ($settings['input_' . $id . '_required'] == 2) {
-      $widget[$id]['#disabled'] = TRUE;
-    }
-    elseif ($settings['input_' . $id . '_required'] == 1) {
-      if ($active) {
-        # needs to be replaced with a 'fake'
-        $required[] = $id;
-      }
-      else {
-        $widget[$id]['#field_suffix'] = t('(Required)');
-      }
-    }
-    if (! empty($settings['input_' . $id . '_weight'])) {
-      $widget[$id]['#weight'] = $settings['input_' . $id . '_weight'];
-    }
-  }
-
-  // country
-  if ($settings['use_country_dropdown'] == 1) {
-    $countries = getlocations_get_countries_list();
-    $countries = array_merge(array('' => t('---Please select a country---')), $countries);
-    $widget['country'] = array(
-      '#type' => 'select',
-      '#default_value' => (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']),
-      '#options' => $countries,
-      '#title' => t('Country'),
-      '#attributes' => array('id' => 'getlocations_country_' . $mapid),
-    );
-  }
-  else {
-    $default_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
-    if ($default_value && drupal_strlen($default_value) == 2) {
-      $default_value = getlocations_get_country_name($default_value);
-    }
-    $widget['country'] = array(
-      '#type' => 'textfield',
-      '#default_value' => $default_value,
-      '#autocomplete_path' => ($settings['use_country_dropdown'] == 2 ? 'getlocations_fields/country_autocomplete' : ''),
-      '#size' => $settings['input_country_width'],
-      '#attributes' => array('id' => 'getlocations_country_' . $mapid),
-      '#title' => t('Country'),
-      '#maxlength' => 255,
-    );
-  }
-  if ($settings['input_country_required']) {
-    if ($active) {
-      $widget['country']['#required'] = TRUE;
-    }
-    else {
-      $widget['country']['#field_suffix'] = t('(Required)');
-    }
-  }
-  if (! empty($settings['input_country_weight'])) {
-    $widget['country']['#weight'] = $settings['input_country_weight'];
-  }
-
-  // per_item_marker
-  if ($settings['per_item_marker']) {
-    $markers = getlocations_get_marker_titles();
-    $markers = array_merge(array('' => t('Default')), $markers);
-    $widget['marker'] = getlocations_element_map_marker(
-      t('Map marker'),
-      $markers,
-      (isset($items[$delta]['marker']) ? $items[$delta]['marker'] : '')
-    );
-    if (! empty($settings['input_marker_weight'])) {
-      $widget['marker']['#weight'] = $settings['input_marker_weight'];
-    }
-  }
-  else {
-    $widget['marker'] = array(
-      '#type' => 'value',
-      '#value' => '',
-    );
-  }
-
-  // geobutton
-  if ($active) {
-    if ($settings['use_address'] < 2) {
-      $widget['geobutton'] = array(
-        '#markup' => '',
+      // longitude
+      $element['longitude'] = array(
+        '#type' => 'textfield',
+        '#default_value' => isset($items[$delta]['longitude']) ? $items[$delta]['longitude'] : NULL,
+        '#size' => $settings['input_longitude_width'],
+        '#attributes' => array('id' => 'getlocations_longitude_' . $mapid),
+        '#title' => t('Longitude'),
+        '#maxlength' => 20,
       );
-      if (! empty($settings['input_geobutton_weight'])) {
-        $widget['geobutton']['#weight'] = $settings['input_geobutton_weight'];
+      if (! empty($settings['input_longitude_weight'])) {
+        $element['longitude']['#weight'] = $settings['input_longitude_weight'];
       }
-    }
-    $widget['mapid'] = array(
-      '#type' => 'value',
-      '#value' => $mapid,
-    );
-  }
-  // map
-  $widget['map'] = array(
-    '#markup' => $map,
-  );
-  if (! empty($settings['input_map_weight'])) {
-    $widget['map']['#weight'] = $settings['input_map_weight'];
-  }
-  // latitude
-  $widget['latitude'] = array(
-    '#type' => 'textfield',
-    '#default_value' => isset($items[$delta]['latitude']) ? $items[$delta]['latitude'] : '',
-    '#size' => $settings['input_latitude_width'],
-    '#attributes' => array('id' => 'getlocations_latitude_' . $mapid),
-    '#title' => t('Latitude'),
-    '#maxlength' => 20,
-  );
-  if (! empty($settings['input_latitude_weight'])) {
-    $widget['latitude']['#weight'] = $settings['input_latitude_weight'];
-  }
-  // longitude
-  $widget['longitude'] = array(
-    '#type' => 'textfield',
-    '#default_value' => isset($items[$delta]['longitude']) ? $items[$delta]['longitude'] : NULL,
-    '#size' => $settings['input_longitude_width'],
-    '#attributes' => array('id' => 'getlocations_longitude_' . $mapid),
-    '#title' => t('Longitude'),
-    '#maxlength' => 20,
-  );
-  if (! empty($settings['input_longitude_weight'])) {
-    $widget['longitude']['#weight'] = $settings['input_longitude_weight'];
+
+      $element['active'] = array(
+        '#type' => 'value',
+        '#value' => $active,
+      );
+
+      if (count($required)) {
+        $element['getlocations_required'] = array(
+          '#type' => 'value',
+          '#value' => implode(',', $required),
+        );
+      }
+
+      unset($element['#theme']);
+      $element['#theme'] = 'getlocations_fields_field_widget_form';
+    break;
   }
 
-  $widget['active'] = array(
-    '#type' => 'value',
-    '#value' => $active,
-  );
-
-  if (count($required)) {
-    $widget['getlocations_required'] = array(
-      '#type' => 'value',
-      '#value' => implode(',', $required),
-    );
-  }
-
-  unset($widget['#theme']);
-  $widget['#theme'] = 'getlocations_fields_field_widget_form';
-
-  return $widget;
+  return $element;
 
 }
 
@@ -1465,6 +1453,9 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
   $getlocations_defaults['markeraction']          = $settings['markeraction'];
   $getlocations_defaults['markeractiontype']      = $settings['markeractiontype'];
   $getlocations_defaults['nodezoom']              = $settings['nodezoom'];
+
+  // not ideal but required for preview
+  $getlocations_defaults['places'] = 1;
 
   $latlons[] = $lls;
 

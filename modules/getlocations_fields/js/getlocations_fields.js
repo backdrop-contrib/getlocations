@@ -29,90 +29,92 @@
 
     // each map has its own settings
     $.each(Drupal.settings.getlocations_fields, function (key, settings) {
+      // is there really a map?
+      if ( $("#getlocations_map_canvas_" + key).is('div') ) {
 
-      var gset = gsettings[key];
-      var use_address = settings.use_address;
-      var gkey = key;
-      nodezoom = parseInt(settings.nodezoom);
-      map_marker = settings.map_marker;
+        var gset = gsettings[key];
+        var use_address = settings.use_address;
+        var gkey = key;
+        nodezoom = parseInt(settings.nodezoom);
+        map_marker = settings.map_marker;
 
-    // we need to see if this is an update
-      lat = $("#" + latfield + key).val();
-      lng = $("#" + lonfield + key).val();
-      if (lat && lng) {
-        point[key] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-        updateMap(getlocations_inputmap[key], point[key], key);
-      }
-
-      if (! mark[key]) {
-        // make an icon
-        if (! point[key]) {
-          point[key] = new google.maps.LatLng(parseFloat(gset.lat), parseFloat(gset.lng));
-          getlocations_inputmap[key].setCenter(point[key]);
+      // we need to see if this is an update
+        lat = $("#" + latfield + key).val();
+        lng = $("#" + lonfield + key).val();
+        if (lat && lng) {
+          point[key] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+          updateMap(getlocations_inputmap[key], point[key], key);
         }
-        makeMoveMarker(getlocations_inputmap[key], point[key], key);
-      }
 
-      if (use_address > 0) {
-        if (use_address == 1) {
-          $("#" + 'getlocations_geocodebutton_' + key).attr('disabled', 'disabled');
+        if (! mark[key]) {
+          // make an icon
+          if (! point[key]) {
+            point[key] = new google.maps.LatLng(parseFloat(gset.lat), parseFloat(gset.lng));
+            getlocations_inputmap[key].setCenter(point[key]);
+          }
+          makeMoveMarker(getlocations_inputmap[key], point[key], key);
         }
-        var input_adrs = document.getElementById(adrsfield + key);
-        var fm_adrs = '';
-        var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
-        google.maps.event.addListener(ac_adrs, 'place_changed', function () {
-          var place_adrs = ac_adrs.getPlace();
+
+        if (use_address > 0) {
           if (use_address == 1) {
-            // search box with geocode button
-            $("#" + 'getlocations_geocodebutton_' + key).removeAttr('disabled');
-            $("#" + 'getlocations_geocodebutton_' + key).click( function () {
-              manageGeobutton(key, use_address, place_adrs);
-              return false;
-            });
+            $("#" + 'getlocations_geocodebutton_' + key).attr('disabled', 'disabled');
           }
-          else {
-            manageGeobutton(key, use_address, place_adrs);
-          }
-        });
-      }
-      else {
-        // no autocomplete
-        $("#" + 'getlocations_geocodebutton_' + key).click( function () {
-          manageGeobutton(key, use_address, '');
-          return false;
-        });
-      }
-
-      $("#" + 'getlocations_smart_ip_button_' + key).click( function () {
-        manageSmartIpbutton(key);
-        return false;
-      });
-
-      // do 'fake' required fields
-      var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code'];
-      $.each(requireds, function(k, v) {
-        if ($(".getlocations_required_" + v + '_' + key).is("div")) {
-          $("div.getlocations_required_" + v + "_" + key + " label").append(' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>');
-        }
-      });
-
-      if (settings.latlon_warning > 0) {
-        // warn on empty Latitude/Longitude
-        $("input.form-submit#edit-submit").click( function () {
-          if ($("#" + latfield + key).val() == '' && $("#" + lonfield + key).val() == '') {
-            if (use_address > 0) {
-              msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
+          var input_adrs = document.getElementById(adrsfield + key);
+          var fm_adrs = '';
+          var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
+          google.maps.event.addListener(ac_adrs, 'place_changed', function () {
+            var place_adrs = ac_adrs.getPlace();
+            if (use_address == 1) {
+              // search box with geocode button
+              $("#" + 'getlocations_geocodebutton_' + key).removeAttr('disabled');
+              $("#" + 'getlocations_geocodebutton_' + key).click( function () {
+                manageGeobutton(key, use_address, place_adrs);
+                return false;
+              });
             }
             else {
-               msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
+              manageGeobutton(key, use_address, place_adrs);
             }
-            alert(msg);
+          });
+        }
+        else {
+          // no autocomplete
+          $("#" + 'getlocations_geocodebutton_' + key).click( function () {
+            manageGeobutton(key, use_address, '');
             return false;
-          }
-          return true;
-        });
-      }
+          });
+        }
 
+        $("#" + 'getlocations_smart_ip_button_' + key).click( function () {
+          manageSmartIpbutton(key);
+          return false;
+        });
+
+        // do 'fake' required fields
+        var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code'];
+        $.each(requireds, function(k, v) {
+          if ($(".getlocations_required_" + v + '_' + key).is("div")) {
+            $("div.getlocations_required_" + v + "_" + key + " label").append(' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>');
+          }
+        });
+
+        if (settings.latlon_warning > 0) {
+          // warn on empty Latitude/Longitude
+          $("input.form-submit#edit-submit").click( function () {
+            if ($("#" + latfield + key).val() == '' && $("#" + lonfield + key).val() == '') {
+              if (use_address > 0) {
+                msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
+              }
+              else {
+                 msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
+              }
+              alert(msg);
+              return false;
+            }
+            return true;
+          });
+        }
+      }
     }); // end each
     $("body").addClass("getlocations-fields-maps-processed");
 

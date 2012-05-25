@@ -1,9 +1,33 @@
-commit 07d71ed
+commit e685ac6
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 25 19:30:54 2012 +0100
+
+    fixed bug in settings
+
+modules/getlocations_search/getlocations_search.module
+
+commit fcff8ac
+Author: hutch <hutch@midwales.net>
+Date:   Fri May 25 17:14:10 2012 +0100
+
+    added support for html5/jsapi searches
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit c3b6a6f
 Author: hutch <hutch@midwales.net>
 Date:   Thu May 24 16:49:12 2012 +0100
 
     better preview and edit
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit aefd13b

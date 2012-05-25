@@ -199,7 +199,7 @@ function getlocations_search_getmap() {
   $getlocations_search_defaults['pansetting'] = $getlocations_defaults['pansetting'];
 
   // we need to update $getlocations_defaults with data from $getlocations_search_defaults
-  $keys = array('width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol', 'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'trafficinfo', 'bicycleinfo', 'panoramio_use', 'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager', 'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title');
+  $keys = array('width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol', 'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'trafficinfo', 'bicycleinfo', 'panoramio_use', 'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager', 'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title', 'markeraction', 'markeractiontype');
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }

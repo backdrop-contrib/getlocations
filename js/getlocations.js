@@ -553,6 +553,15 @@ var getlocations_markers = [];
     return errstr;
   }
 
+  Drupal.getlocations.geolocationErrorMessages = function(errcode) {
+    var codes = [
+      Drupal.t("due to an unknown error"),
+      Drupal.t("because you didn't give me permission"),
+      Drupal.t("because your browser couldn't determine your location"),
+      Drupal.t("because it was taking too long to determine your location")];
+    return codes[errcode];
+  }
+
   // gogogo
   Drupal.behaviors.getlocations = {
     attach: function() {

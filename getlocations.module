@@ -785,6 +785,13 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
   if (!stristr($current_js, $scheme . '://' . $gmapdomain)) {
     drupal_add_js($gmaplink, 'external');
   }
+  if ($defaults['use_jsapi']) {
+    $jsapilink =  url($scheme . '://' . 'www.google.com/jsapi');
+    if (!stristr($current_js, $jsapilink)) {
+      drupal_add_js($jsapilink, 'external');
+    }
+  }
+
   if ($googleonly) {
     return;
   }
@@ -902,6 +909,7 @@ function getlocations_defaults() {
     'getlocations_js_weight'    => 0,
     'custom_content_enable'     => 0,
     'custom_content_source'     => '',
+    'use_jsapi'                 => 0,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -2910,4 +2918,3 @@ function getlocations_element_search_distance($default, $title = '', $descriptio
   }
   return $element;
 }
-

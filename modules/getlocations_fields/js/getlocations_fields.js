@@ -30,7 +30,7 @@
     // each map has its own settings
     $.each(Drupal.settings.getlocations_fields, function (key, settings) {
       // is there really a map?
-      if ( $("#getlocations_map_canvas_" + key).is('div') ) {
+      if ($("#getlocations_map_canvas_" + key).is('div')) {
 
         var gset = gsettings[key];
         var use_address = settings.use_address;
@@ -89,6 +89,16 @@
           manageSmartIpbutton(key);
           return false;
         });
+
+        if (navigator.geolocation || google.loader.ClientLocation) {
+          $("#getlocations_geolocation_button_" + key + ":not(.getlocations-fields-geolocation-processed)").addClass("getlocations-fields-geolocation-processed").click( function () {
+            manageGeolocationbutton(key);
+            return false;
+          });
+        }
+        else {
+          $("#getlocations_geolocation_button_" + key).hide();
+        }
 
         // do 'fake' required fields
         var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code'];
@@ -186,24 +196,8 @@
         lat = $("#" + latfield + k).val();
         lng = $("#" + lonfield + k).val();
         point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-        var input_ll = {'latLng': point[k]};
-        // Create a Client Geocoder
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode(input_ll, function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            if (results[0]) {
-              if ($("#" + namefield + kk).val() == '') {
-                $("#" + namefield + kk).val(results[0].formatted_address);
-              }
-              set_address_components(kk, results[0].address_components);
-            }
-          }
-          else {
-            var prm = {'!b': Drupal.getlocations.getGeoErrCode(status) };
-            var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
-            alert(msg);
-          }
-        });
+        doReverseGeocode(point[k], k);
+        updateMap(getlocations_inputmap[k], point[k], k);
       }
       else {
         var msg = Drupal.t('You have not entered an address.');
@@ -397,6 +391,69 @@
             point[kk] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
             updateMap(getlocations_inputmap[kk], point[kk], kk);
           }
+        }
+      });
+    }
+
+    function manageGeolocationbutton(k) {
+      var statusdiv = '#getlocations_geolocation_status_' + k;
+      var statusmsg = '';
+      var result = false;
+      if (google.loader.ClientLocation) {
+        // google
+        lat = google.loader.ClientLocation.latitude;
+        lng = google.loader.ClientLocation.longitude;
+        result = true;
+        statusmsg += 'OK';
+      }
+      else {
+        statusmsg += " Sorry, I couldn't guess your location using Google.";
+      }
+      if (! result) {
+        // html5
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            result = true;
+            statusmsg += 'OK';
+          }, function(error) {
+            statusmsg += " Sorry, I couldn't guess your location using the browser: " + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
+          });
+        }
+      }
+      if (result) {
+        $("#" + latfield + k).val(lat);
+        $("#" + lonfield + k).val(lng);
+        point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+        updateMap(getlocations_inputmap[k], point[k], k);
+        doReverseGeocode(point[k], k);
+        //$(outputdiv).html(outputmsg);
+      }
+      if (statusmsg) {
+        $(statusdiv).html(statusmsg);
+      }
+    }
+
+    // reverse geocoding
+    function doReverseGeocode(pt, k) {
+      var kk = k;
+      var input_ll = {'latLng': pt};
+      // Create a Client Geocoder
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode(input_ll, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          if (results[0]) {
+            if ($("#" + namefield + kk).val() == '') {
+              $("#" + namefield + kk).val(results[0].formatted_address);
+            }
+            set_address_components(kk, results[0].address_components);
+          }
+        }
+        else {
+          var prm = {'!b': Drupal.getlocations.getGeoErrCode(status) };
+          var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
+          alert(msg);
         }
       });
     }

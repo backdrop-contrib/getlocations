@@ -57,6 +57,18 @@
           return false;
         });
       }
+
+      if (navigator.geolocation || google.loader.ClientLocation) {
+        $("#getlocations_search_geolocation_button").click( function () {
+          do_Geolocationbutton(map, gs, mkey);
+          return false;
+        });
+      }
+      else {
+        $("#getlocations_search_geolocation_button").hide();
+      }
+
+
     }); // end each search loop
   }
 
@@ -179,6 +191,46 @@
         alert(msg);
       }
     });
+  }
+
+  function do_Geolocationbutton(map, gs, mkey) {
+    var statusdiv = '#getlocations_search_geolocation_status';
+    var statusmsg = '';
+    $(statusdiv).html(statusmsg);
+    var result = false;
+    var lat = '';
+    var lng = '';
+    if (google.loader.ClientLocation) {
+      // google
+      lat = google.loader.ClientLocation.latitude;
+      lng = google.loader.ClientLocation.longitude;
+      result = true;
+      statusmsg = Drupal.t('OK');
+    }
+    else {
+      statusmsg = Drupal.t("Sorry, I couldn't guess your location using Google.");
+    }
+    if (! result) {
+      // html5
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          lat = position.coords.latitude;
+          lng = position.coords.longitude;
+          result = true;
+          statusmsg = Drupal.t('OK');
+        }, function(error) {
+          statusmsg = Drupal.t("Sorry, I couldn't guess your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
+        });
+      }
+    }
+    if (result) {
+      var p = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+      var fm_adrs = {'latLng': p};
+      do_Geocode(map, gs, fm_adrs, mkey);
+    }
+    if (statusmsg) {
+      $(statusdiv).html(statusmsg);
+    }
   }
 
 })(jQuery);

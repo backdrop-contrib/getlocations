@@ -1121,15 +1121,24 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       } // TODO add a message, required form or not
 
       // smart_ip
-      if ($active && module_exists('smart_ip') && $settings['use_smart_ip_button']) {
-        $element['smart_ip_button'] = array(
-          '#markup' => '',
-        );
-        if (! empty($settings['input_smart_ip_button_weight'])) {
-          $element['smart_ip_button']['#weight'] = $settings['input_smart_ip_button_weight'];
+      if ($active) {
+        if (module_exists('smart_ip') && $settings['use_smart_ip_button']) {
+          $element['smart_ip_button'] = array(
+            '#markup' => '',
+          );
+          if (! empty($settings['input_smart_ip_button_weight'])) {
+            $element['smart_ip_button']['#weight'] = $settings['input_smart_ip_button_weight'];
+          }
+        }
+        if ($settings['use_geolocation_button']) {
+          $element['geolocation_button'] = array(
+            '#markup' => '',
+          );
+          if (! empty($settings['input_geolocation_button_weight'])) {
+            $element['geolocation_button']['#weight'] = $settings['input_geolocation_button_weight'];
+          }
         }
       }
-
       // loop over these as they are all the same
       $required = array();
       $inputarr = array(
@@ -1400,6 +1409,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['draggable']       = $settings['draggable'];
   $getlocations_defaults['input_map_marker'] = $settings['input_map_marker'];
   $getlocations_defaults['use_address']     = $settings['use_address'];
+  $getlocations_defaults['use_jsapi']       = $settings['use_geolocation_button'];
 
   $mapid = getlocations_setup_map($getlocations_defaults);
   drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
@@ -1937,6 +1947,8 @@ function getlocations_fields_defaults() {
     'input_geobutton_weight'       => 0,
     'use_smart_ip_button'          => 0,
     'input_smart_ip_button_weight' => 0,
+    'use_geolocation_button'       => 0,
+    'input_geolocation_button_weight' => 0,
     'use_country_dropdown'         => 1,
     'province_autocomplete'        => 0,
     'city_autocomplete'            => 0,
@@ -2030,6 +2042,8 @@ function getlocations_fields_field_info_defaults() {
         'country'                      => $getlocations_fields_defaults['country'],
         'per_item_marker'              => $getlocations_fields_defaults['per_item_marker'],
         'latlon_warning'               => $getlocations_fields_defaults['latlon_warning'],
+        'use_geolocation_button'       => $getlocations_fields_defaults['use_geolocation_button'],
+        'input_geolocation_button_weight' => $getlocations_fields_defaults['input_geolocation_button_weight'],
       ),
     ),
   );
@@ -2152,6 +2166,12 @@ function getlocations_fields_input_settings_form($defaults) {
       t('Use Smart IP module to provide a location.')
     );
   }
+
+  $form['use_geolocation_button'] = getlocations_element_map_checkbox(
+    t('Provide Browser based geocoding option'),
+    $defaults['use_geolocation_button'],
+    t('Use the browser to find a location.')
+  );
 
   $form['input_name_width'] = getlocations_element_map_tf(
     t('Name box width'),
@@ -2311,6 +2331,12 @@ function getlocations_fields_input_settings_form($defaults) {
       ''
     );
   }
+
+  $form['input_geolocation_button_weight'] = getlocations_fields_element_weight(
+    t('Geolocation button position'),
+    $defaults['input_geolocation_button_weight'],
+    ''
+  );
 
   $form['input_country_width'] = getlocations_element_map_tf(
     t('Country box width'),

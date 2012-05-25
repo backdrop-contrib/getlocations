@@ -105,6 +105,12 @@ function getlocations_search_form($form, &$form_state) {
     }
   }
 
+  if ($getlocations_search_defaults['use_geolocation_button']) {
+    $form['getlocations_search_geolocation_button'] = array(
+      '#markup' => '',
+    );
+  }
+
   if ($getlocations_search_defaults['display_search_distance']) {
     $form['getlocations_search_distance'] = getlocations_element_search_distance($getlocations_search_defaults['search_distance'], t('Search distance'), t('The distance away from the center to search for locations.'));
   }
@@ -198,6 +204,9 @@ function getlocations_search_getmap() {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
 
+  if ($getlocations_search_defaults['use_geolocation_button']) {
+    $getlocations_defaults['use_jsapi'] = 1;
+  }
   $mapid = getlocations_setup_map($getlocations_defaults);
 
   getlocations_search_js_settings_do($getlocations_search_defaults, $mapid);
@@ -269,6 +278,13 @@ function theme_getlocations_search_form($variables) {
   $output = '';
   $form['getlocations_search']['#prefix'] = '<div id="getlocations_search_wrapper">';
   $form['getlocations_search_submit']['#suffix'] = '</div>';
+
+  if (isset($form['getlocations_search_geolocation_button'])) {
+    $geolocation_button = '<p><input type="submit" value="' . t('Find current Location') . '" title="' . t('Get the latitude and longitude for this location from the browser') . '" id="getlocations_search_geolocation_button" class="form-submit" />&nbsp;<span id="getlocations_search_geolocation_status" ></span></p>';
+    $geolocation_button .= '<p>Use the browser to find your current location</p>';
+    $form['getlocations_search_geolocation_button']['#markup'] = $geolocation_button;
+  }
+
   $output .= drupal_render_children($form);
 
   $output .= '<div id="getlocations_search_result">';
@@ -382,6 +398,7 @@ function getlocations_search_defaults() {
     'markerclusterer_minsize'   => $getlocations_defaults['markerclusterer_minsize'],
     'markerclusterer_title'     => $getlocations_defaults['markerclusterer_title'],
     'pansetting'                => $getlocations_defaults['pansetting'],
+    'use_geolocation_button'    => $getlocations_defaults['use_jsapi'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);

@@ -143,7 +143,8 @@
             else if (locations[i].tid > 0) { lidkey = 'tid'; }
             else if (locations[i].cid > 0) { lidkey = 'cid'; }
             gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
-            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, locations[i].glid, locations[i].title, lidkey, '', mkey);
+            title = (locations[i].title ? locations[i].title : (locations[i].name ? locations[i].name : ''));
+            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, locations[i].glid, title, lidkey, '', mkey);
             batchr.push(marker);
             locationct++;
           }

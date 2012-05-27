@@ -1,9 +1,28 @@
-commit e685ac6
+commit ea547d1
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 27 19:18:37 2012 +0100
+
+    added preload_data feature
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+
+commit 61703ec
+Author: hutch <hutch@midwales.net>
+Date:   Sun May 27 19:17:23 2012 +0100
+
+    fixed tooltips bug in getlocations_search
+
+modules/getlocations_search/js/getlocations_search.js
+
+commit ecfd0d5
 Author: hutch <hutch@midwales.net>
 Date:   Fri May 25 19:30:54 2012 +0100
 
     fixed bug in settings
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.module
 
 commit fcff8ac

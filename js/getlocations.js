@@ -72,6 +72,11 @@ var getlocations_markers = [];
         var draggable = settings.draggable;
         var map_styles = settings.styles;
 
+        global_settings.preload_data = settings.preload_data;
+        if (settings.preload_data) {
+          global_settings.getlocations_info = Drupal.settings.getlocations_info[key];
+        }
+
         getlocations_markers[key] = {};
         getlocations_markers[key].coords = {};
         getlocations_markers[key].lids = {};
@@ -419,13 +424,24 @@ var getlocations_markers = [];
       google.maps.event.addListener(m, gs.markeractiontype, function() {
         mouseoverTimeoutId = setTimeout(function() {
           if (gs.useLink) {
-            // fetch link and relocate
-            var path = Drupal.settings.basePath + "getlocations/lidinfo";
-            $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-              if (data) {
-                window.location = data.content;
+            if (gs.preload_data) {
+              arr = gs.getlocations_info;
+              for (var i = 0; i < arr.length; i++) {
+                data = arr[i];
+                if (lid == data.lid && lidkey == data.lidkey && data.content) {
+                  window.location = data.content;
+                }
               }
-            });
+            }
+            else {
+              // fetch link and relocate
+              var path = Drupal.settings.basePath + "getlocations/lidinfo";
+              $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+                if (data.content) {
+                  window.location = data.content;
+                }
+              });
+            }
           }
           else {
             if(gs.useCustomContent) {
@@ -435,10 +451,21 @@ var getlocations_markers = [];
             }
             else {
               // fetch bubble content
-              var path = Drupal.settings.basePath + "getlocations/info";
-              $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-                Drupal.getlocations.showPopup(map, m, gs, data);
-              });
+              if (gs.preload_data) {
+                arr = gs.getlocations_info;
+                for (var i = 0; i < arr.length; i++) {
+                  data = arr[i];
+                  if (lid == data.lid && lidkey == data.lidkey && data.content) {
+                    Drupal.getlocations.showPopup(map, m, gs, data);
+                  }
+                }
+              }
+              else {
+                var path = Drupal.settings.basePath + "getlocations/info";
+                $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+                  Drupal.getlocations.showPopup(map, m, gs, data);
+                });
+              }
             }
           }
         }, mouseoverTimeout);

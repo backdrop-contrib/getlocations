@@ -910,6 +910,7 @@ function getlocations_defaults() {
     'custom_content_enable'     => 0,
     'custom_content_source'     => '',
     'use_jsapi'                 => 0,
+    'preload_data'              => 0,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -1102,6 +1103,18 @@ function getlocations_info() {
 
   $lid = $_GET['lid'];
   $lidkey = $_GET['key'];
+  $content = getlocations_getinfo($lid, $lidkey);
+  drupal_json_output(array('content' => $content));
+
+}
+
+/**
+ * @param int $lid location id
+ * @param string entity id
+ * @return string formatted address
+ */
+function getlocations_getinfo($lid, $lidkey) {
+
   $content = FALSE;
   if ($lid > 0) {
     if (module_exists('getlocations_fields') || module_exists('location')) {
@@ -1132,7 +1145,6 @@ function getlocations_info() {
           $location['cid'] = $cid;
         }
       }
-
     }
     elseif (module_exists('geofield') || module_exists('geolocation')) {
       $locations = getlocations_load_locations($lid, $lidkey);
@@ -1141,15 +1153,27 @@ function getlocations_info() {
 
     $content = theme('getlocations_info', array('location' => $location));
   }
-  drupal_json_output(array('content' => $content));
+  return $content;
+
 }
 
 // ajax callback to provide a link
 function getlocations_lidinfo() {
+
   $lid = $_GET['lid'];
   $lidkey = $_GET['key'];
-  $content = FALSE;
+  $content = getlocations_getlidinfo($lid, $lidkey);
+  drupal_json_output(array('content' => $content));
 
+}
+/**
+ * @param int $lid location id
+ * @param string entity id
+ * @return string path
+ */
+function getlocations_getlidinfo($lid, $lidkey) {
+
+  $content = FALSE;
   if ($lid > 0) {
     if (module_exists('getlocations_fields') || module_exists('location')) {
       $path = getlocations_get_path_from_lid($lid);
@@ -1179,7 +1203,8 @@ function getlocations_lidinfo() {
       }
     }
   }
-  drupal_json_output(array('content' => $content));
+  return $content;
+
 }
 
 // provides data for marker colorbox
@@ -1727,9 +1752,33 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'inputmap'                => ($inputmap ? 1 : 0),
       'searchmap'               => ($searchmap ? 1 : 0),
       'custom_content_enable'   => $defaults['custom_content_enable'],
+      'preload_data'            => $defaults['preload_data'],
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');
+
+  if ($defaults['preload_data']) {
+    $info = array();
+    if (count($latlons)) {
+      $ct = 0;
+      foreach ($latlons AS $latlon) {
+        $info[$ct]['lid'] = $latlon[2];
+        $info[$ct]['lidkey'] = $latlon[5];
+        $info[$ct]['content'] = '';
+        if ($defaults['markeraction'] == 1 || $defaults['markeraction'] == 2) {
+          $info[$ct]['content'] = getlocations_getinfo($latlon[2], $latlon[5]);
+        }
+        elseif ($defaults['markeraction'] == 3) {
+          $info[$ct]['content'] = getlocations_getlidinfo($latlon[2], $latlon[5]);
+        }
+        $ct++;
+      }
+    }
+    $info_settings = array(
+      $mapid => $info,
+    );
+    drupal_add_js(array('getlocations_info' => $info_settings), 'setting');
+  }
 
 }
 

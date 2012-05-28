@@ -189,6 +189,7 @@ function getlocations_search_form($form, &$form_state) {
 function getlocations_search_getmap() {
   $getlocations_defaults = getlocations_defaults();
   $getlocations_defaults['places'] = 1;
+  $getlocations_defaults['preload_data'] = 0;
 
   $getlocations_search_defaults = getlocations_search_defaults();
 

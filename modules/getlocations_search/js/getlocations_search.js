@@ -11,65 +11,65 @@
   var do_lookup = 0;
   Drupal.getlocations.doSearch = function(map, gs, mkey) {
     var searchsettings = Drupal.settings.getlocations_search;
+    var method = '';
     jQuery.each(searchsettings, function (searchkey, ssettings) {
-      var method = ssettings.method;
+      method = ssettings.method;
       do_lookup = ssettings.do_lookup;
-      if (gs.markermanagertype == 1) {
-        gs.usemarkermanager = true;
-        mgr = new MarkerManager(map, {
-          borderPadding: 50,
-          maxZoom: ssettings.maxzoom,
-          trackMarkers: false
-        });
-      }
-      else if (gs.markermanagertype == 2) {
-        gs.useclustermanager = true;
-        cmgr = new MarkerClusterer(
-          map,
-          [],
-          {
-            gridSize: gs.cmgr_gridSize,
-            maxZoom: gs.cmgr_maxZoom,
-            styles: gs.cmgr_styles[gs.cmgr_style],
-            minimumClusterSize: gs.cmgr_minClusterSize,
-            title: gs.cmgr_title
-          }
-        );
-      }
-      if (method == 'google_ac') {
-        var input_adrs = document.getElementById("edit-getlocations-search");
-        var fm_adrs = '';
-        var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
-        google.maps.event.addListener(ac_adrs, 'place_changed', function () {
-          var place_adrs = ac_adrs.getPlace();
-          fm_adrs = {'address': place_adrs.formatted_address};
-          // Create a Client Geocoder
-          do_Geocode(map, gs, fm_adrs, mkey);
-        });
-      }
-      else {
-        $("#edit-getlocations-search-submit").click( function() {
-          // collect the search string
-          input_adrs = $("#edit-getlocations-search").val();
-          fm_adrs = {'address': input_adrs};
-          // Create a Client Geocoder
-          do_Geocode(map, gs, fm_adrs, mkey);
-          return false;
-        });
-      }
-
-      if (navigator.geolocation || google.loader.ClientLocation) {
-        $("#getlocations_search_geolocation_button").click( function () {
-          do_Geolocationbutton(map, gs, mkey);
-          return false;
-        });
-      }
-      else {
-        $("#getlocations_search_geolocation_button").hide();
-      }
-
-
     }); // end each search loop
+
+    if (gs.markermanagertype == 1) {
+      gs.usemarkermanager = true;
+      mgr = new MarkerManager(map, {
+        borderPadding: 50,
+        maxZoom: ssettings.maxzoom,
+        trackMarkers: false
+      });
+    }
+    else if (gs.markermanagertype == 2) {
+      gs.useclustermanager = true;
+      cmgr = new MarkerClusterer(
+        map,
+        [],
+        {
+          gridSize: gs.cmgr_gridSize,
+          maxZoom: gs.cmgr_maxZoom,
+          styles: gs.cmgr_styles[gs.cmgr_style],
+          minimumClusterSize: gs.cmgr_minClusterSize,
+          title: gs.cmgr_title
+        }
+      );
+    }
+    if (method == 'google_ac') {
+      var input_adrs = document.getElementById("edit-getlocations-search");
+      var fm_adrs = '';
+      var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
+      google.maps.event.addListener(ac_adrs, 'place_changed', function () {
+        var place_adrs = ac_adrs.getPlace();
+        fm_adrs = {'address': place_adrs.formatted_address};
+        // Create a Client Geocoder
+        do_Geocode(map, gs, fm_adrs, mkey);
+      });
+    }
+    else {
+      $("#edit-getlocations-search-submit").click( function() {
+        // collect the search string
+        input_adrs = $("#edit-getlocations-search").val();
+        fm_adrs = {'address': input_adrs};
+        // Create a Client Geocoder
+        do_Geocode(map, gs, fm_adrs, mkey);
+        return false;
+      });
+    }
+
+    if (navigator.geolocation || google.loader.ClientLocation) {
+      $("#getlocations_search_geolocation_button").click( function () {
+        do_Geolocationbutton(map, gs, mkey);
+        return false;
+      });
+    }
+    else {
+      $("#getlocations_search_geolocation_button").hide();
+    }
   }
 
   // cleans out any existing markers, sets up a new geocoder and runs it, filling in the results.

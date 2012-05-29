@@ -1762,14 +1762,19 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     if (count($latlons)) {
       $ct = 0;
       foreach ($latlons AS $latlon) {
-        $info[$ct]['lid'] = $latlon[2];
-        $info[$ct]['lidkey'] = $latlon[5];
+        $info[$ct]['lid'] = 0;
+        $info[$ct]['lidkey'] = '';
         $info[$ct]['content'] = '';
-        if ($defaults['markeraction'] == 1 || $defaults['markeraction'] == 2) {
-          $info[$ct]['content'] = getlocations_getinfo($latlon[2], $latlon[5]);
-        }
-        elseif ($defaults['markeraction'] == 3) {
-          $info[$ct]['content'] = getlocations_getlidinfo($latlon[2], $latlon[5]);
+        if (isset($latlon[2]) && isset($latlon[5])) {
+          $info[$ct]['lid'] = $latlon[2];
+          $info[$ct]['lidkey'] = $latlon[5];
+          $info[$ct]['content'] = '';
+          if ($defaults['markeraction'] == 1 || $defaults['markeraction'] == 2) {
+            $info[$ct]['content'] = getlocations_getinfo($latlon[2], $latlon[5]);
+          }
+          elseif ($defaults['markeraction'] == 3) {
+            $info[$ct]['content'] = getlocations_getlidinfo($latlon[2], $latlon[5]);
+          }
         }
         $ct++;
       }

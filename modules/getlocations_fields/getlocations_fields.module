@@ -2580,3 +2580,9 @@ function getlocations_fields_modules_uninstalled($modules) {
     }
   }
 }
+
+// backward compat
+function getlocations_fields_get_countries_list($upper = TRUE) {
+  $countries = getlocations_get_countries_list($upper);
+  return $countries;
+}

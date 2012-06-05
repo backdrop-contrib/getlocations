@@ -751,3 +751,15 @@ function getlocations_fields_views_proximity_get_location_field_options() {
 
   return $field_options;
 }
+
+/**
+ * Implements hook_field_views_data().
+ *
+ * Views integration for getlocations_fields.
+ *
+ */
+#function getlocations_fields_field_views_data($field) {
+#  $data = field_views_field_default_views_data($field);
+#  return $data;
+#}
+

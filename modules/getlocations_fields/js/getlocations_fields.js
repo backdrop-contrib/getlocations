@@ -26,6 +26,7 @@
     var latfield = 'getlocations_latitude_';
     var lonfield = 'getlocations_longitude_';
     var point = [];
+    var is_mobile = 0;
 
     // each map has its own settings
     $.each(Drupal.settings.getlocations_fields, function (key, settings) {
@@ -33,6 +34,7 @@
       if ($("#getlocations_map_canvas_" + key).is('div')) {
 
         var gset = gsettings[key];
+        is_mobile = gset.is_mobile;
         var use_address = settings.use_address;
         var gkey = key;
         nodezoom = parseInt(settings.nodezoom);
@@ -90,14 +92,16 @@
           return false;
         });
 
-        if (navigator.geolocation || google.loader.ClientLocation) {
-          $("#getlocations_geolocation_button_" + key + ":not(.getlocations-fields-geolocation-processed)").addClass("getlocations-fields-geolocation-processed").click( function () {
-            manageGeolocationbutton(key);
-            return false;
-          });
-        }
-        else {
-          $("#getlocations_geolocation_button_" + key).hide();
+        if (is_mobile) {
+          if (navigator && navigator.geolocation) {
+            $("#getlocations_geolocation_button_" + key + ":not(.getlocations-fields-geolocation-processed)").addClass("getlocations-fields-geolocation-processed").click( function () {
+              manageGeolocationbutton(key);
+              return false;
+            });
+          }
+          else {
+            $("#getlocations_geolocation_button_" + key).hide();
+          }
         }
 
         // do 'fake' required fields
@@ -395,44 +399,30 @@
       });
     }
 
+    // html5 geolocation
     function manageGeolocationbutton(k) {
+      // html5
       var statusdiv = '#getlocations_geolocation_status_' + k;
       var statusmsg = '';
-      var result = false;
-      if (google.loader.ClientLocation) {
-        // google
-        lat = google.loader.ClientLocation.latitude;
-        lng = google.loader.ClientLocation.longitude;
-        result = true;
-        statusmsg += 'OK';
-      }
-      else {
-        statusmsg += " Sorry, I couldn't guess your location using Google.";
-      }
-      if (! result) {
-        // html5
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            lat = position.coords.latitude;
-            lng = position.coords.longitude;
-            result = true;
-            statusmsg += 'OK';
-          }, function(error) {
-            statusmsg += " Sorry, I couldn't guess your location using the browser: " + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
-          });
+      $(statusdiv).html(statusmsg);
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          lat = position.coords.latitude;
+          lng = position.coords.longitude;
+          $("#" + latfield + k).val(lat);
+          $("#" + lonfield + k).val(lng);
+          point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+          updateMap(getlocations_inputmap[k], point[k], k);
+          doReverseGeocode(point[k], k);
+          //statusmsg = Drupal.t('Browser OK');
+          //$(statusdiv).html(statusmsg);
+        },
+        function(error) {
+          statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
+          $(statusdiv).html(statusmsg);
         }
-      }
-      if (result) {
-        $("#" + latfield + k).val(lat);
-        $("#" + lonfield + k).val(lng);
-        point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-        updateMap(getlocations_inputmap[k], point[k], k);
-        doReverseGeocode(point[k], k);
-        //$(outputdiv).html(outputmsg);
-      }
-      if (statusmsg) {
-        $(statusdiv).html(statusmsg);
-      }
+        , {maximumAge:10000}
+      );
     }
 
     // reverse geocoding

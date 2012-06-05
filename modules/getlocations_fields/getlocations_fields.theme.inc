@@ -404,7 +404,7 @@ function theme_getlocations_fields_field_widget_form($variables) {
     $form['smart_ip_button']['#markup'] = $smart_ip_button;
   }
   // html5 and google
-  if ($mapid !== NULL && isset($form['geolocation_button'])) {
+  if (getlocations_is_mobile() && $mapid !== NULL && isset($form['geolocation_button'])) {
     $geolocation_button = '<p><input type="submit" value="' . t('Find Location') . '" title="' . t('Get the latitude and longitude for this address from the browser') . '" id="getlocations_geolocation_button_' . $mapid . '" class="form-submit" />&nbsp;<span id="getlocations_geolocation_status_' . $mapid . '" ></span></p>';
     $geolocation_button .= '<p>Use the browser to find your current location</p>';
     $form['geolocation_button']['#markup'] = $geolocation_button;

@@ -911,6 +911,7 @@ function getlocations_defaults() {
     'custom_content_source'     => '',
     'use_jsapi'                 => 0,
     'preload_data'              => 0,
+    'is_mobile'                 => (getlocations_is_mobile() ? 1 : 0),
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -1753,6 +1754,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'searchmap'               => ($searchmap ? 1 : 0),
       'custom_content_enable'   => $defaults['custom_content_enable'],
       'preload_data'            => $defaults['preload_data'],
+      'is_mobile'               => $defaults['is_mobile'],
     ),
   );
   drupal_add_js(array('getlocations' => $settings), 'setting');
@@ -2971,4 +2973,13 @@ function getlocations_element_search_distance($default, $title = '', $descriptio
     $element['#description'] = $description;
   }
   return $element;
+}
+
+function getlocations_is_mobile() {
+  $is_mobile = FALSE;
+  $ua = $_SERVER['HTTP_USER_AGENT'];
+  if (preg_match("/iphone|ipad|android|blackberry|blazer|bolt|symbian|mobile safari|fennec|gobrowser|iemobile|maemo browser|profile midp|minimo|kindle|opera mini|opera mobi|skyfire|teashark|uzardweb/i", $ua)) {
+    $is_mobile = TRUE;
+  }
+  return $is_mobile;
 }

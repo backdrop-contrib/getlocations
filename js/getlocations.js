@@ -87,6 +87,8 @@ var getlocations_markers = [];
         global_settings.datanum = settings.datanum;
         global_settings.markermanagertype = settings.markermanagertype;
         global_settings.pansetting = settings.pansetting;
+        // mobiles
+        global_settings.is_mobile = settings.is_mobile;
 
         if (settings.markermanagertype == 2) {
           global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;

@@ -1,9 +1,26 @@
-commit 41b0568
+commit 98a22bc
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jun 5 18:17:36 2012 +0100
+
+    improved navigator.geolocation
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 9ab8425
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jun 2 14:15:33 2012 +0100
 
     added getlocations_fields_get_countries_list() back in for backward compat with getdirections
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 6f90ab1

@@ -1409,7 +1409,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['draggable']       = $settings['draggable'];
   $getlocations_defaults['input_map_marker'] = $settings['input_map_marker'];
   $getlocations_defaults['use_address']     = $settings['use_address'];
-  $getlocations_defaults['use_jsapi']       = $settings['use_geolocation_button'];
+  #$getlocations_defaults['use_jsapi']       = $settings['use_geolocation_button'];
 
   $mapid = getlocations_setup_map($getlocations_defaults);
   drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');

@@ -69,6 +69,23 @@
         $("#wrap-getlocations-node-markers").hide();
       }
     });
+
+    if ($("#edit-getlocations-default-weather-use").attr('checked')) {
+      $("#wrap-getlocations-weather").show();
+    }
+    else {
+      $("#wrap-getlocations-weather").hide();
+    }
+    $("#edit-getlocations-default-weather-use").change(function() {
+      if ($(this).attr('checked')) {
+        $("#wrap-getlocations-weather").show();
+      }
+      else {
+        $("#wrap-getlocations-weather").hide();
+      }
+    });
+
+
 /*
 
     if ($("#edit-getlocations-vocabulary-marker-enable").attr('checked')) {

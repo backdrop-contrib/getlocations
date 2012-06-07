@@ -1,9 +1,22 @@
-commit 479cf70
+commit 99107e2
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jun 7 20:35:15 2012 +0100
+
+    added weather layer
+
+getlocations.module
+getlocations.theme.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/getlocations_admin.js
+
+commit d0176c2
 Author: hutch <hutch@midwales.net>
 Date:   Tue May 22 15:21:36 2012 +0100
 
     fixed getlocations_colorbox in init
 
+CHANGELOG.txt
 getlocations.module
 
 commit a474679

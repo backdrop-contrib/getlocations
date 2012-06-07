@@ -78,6 +78,12 @@ function theme_getlocations_show($width, $height, $defaults, $mapid, $type = '',
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
     $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio" class="form-submit" />';
   }
+  if ($defaults['weather_use'] && $defaults['weather_show']) {
+    $buttons[] = '<input type="submit" value="' . t('Toggle weather') . '" id="getlocations_toggleWeather_' . $mapid . '" class="form-submit" />';
+    if ($defaults['weather_cloud']) {
+      $buttons[] = '<input type="submit" value="' . t('Toggle clouds') . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
+    }
+  }
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons" class="container-inline">';
     $output .= implode('&nbsp;', $buttons);
@@ -119,16 +125,19 @@ function theme_getlocations_info($location) {
     $output .= '</div>';
   }
   if (! empty($location['city'])) {
-    $output .= '<span class="locality">' . $location['city'] . ' </span>';
+    $output .= '<span class="locality">' . $location['city'] . '</span>';
     if (! empty($location['province_name'])) {
       $output .= ",&nbsp;";
     }
   }
   if (! empty($location['province_name'])) {
-    $output .= '<span class="region">' . $location['province_name'] . ' </span>';
+    $output .= '<span class="region">' . $location['province_name'] . '</span>';
+    if (! empty($location['postal_code'])) {
+      $output .= "&nbsp;";
+    }
   }
   if (! empty($location['postal_code'])) {
-    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . ' </span>';
+    $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . '</span>';
   }
   if (! empty($location['country_name'])) {
     $output .= '<div class="country-name">' . $location['country_name'] . '</div>';

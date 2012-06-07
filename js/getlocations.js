@@ -48,7 +48,11 @@
         traffictoggleState: [],
         bicycletoggleState: [],
         panoramioLayer: {},
-        panoramiotoggleState: []
+        panoramiotoggleState: [],
+        weatherLayer: {},
+        weathertoggleState: [],
+        cloudLayer: {},
+        cloudtoggleState: []
       };
 
       var lat = parseFloat(settings.lat);
@@ -248,6 +252,46 @@
         global_settings.panoramiotoggleState[key] = 1;
         $("#getlocations_togglePanoramio_" + key).click( function() { managePanoramioButton(map[key], global_settings.panoramioLayer[key], key) });
       }
+      // weather layer
+      if (settings.weather_use && settings.weather_show) {
+        tu = google.maps.weather.TemperatureUnit.CELSIUS;
+        if (settings.weather_temp == 2) {
+          tu = google.maps.weather.TemperatureUnit.FAHRENHEIT;
+        }
+        sp = google.maps.weather.WindSpeedUnit.KILOMETERS_PER_HOUR;
+        if (settings.weather_speed == 2) {
+          sp = google.maps.weather.WindSpeedUnit.METERS_PER_SECOND;
+        }
+        else if (settings.weather_speed == 3) {
+          sp = google.maps.weather.WindSpeedUnit.MILES_PER_HOUR;
+        }
+        var weatherOpts =  {
+          temperatureUnits: tu,
+          windSpeedUnits: sp,
+          clickable: (settings.weather_clickable ? true : false),
+          suppressInfoWindows: (settings.weather_info ? false : true)
+        };
+        if (settings.weather_label > 0) {
+          weatherOpts.labelColor = google.maps.weather.LabelColor.BLACK;
+          if (settings.weather_label == 2) {
+            weatherOpts.labelColor = google.maps.weather.LabelColor.WHITE;
+          }
+        }
+        global_settings.weatherLayer[key] = new google.maps.weather.WeatherLayer(weatherOpts);
+        global_settings.weatherLayer[key].setMap(map[key]);
+        global_settings.weathertoggleState[key] = 1;
+        global_settings.weather_cloud = settings.weather_cloud;
+        if (settings.weather_cloud) {
+          global_settings.cloudLayer[key] = new google.maps.weather.CloudLayer();
+          global_settings.cloudLayer[key].setMap(map[key]);
+          global_settings.cloudtoggleState[key] = 1;
+          $("#getlocations_toggleCloud_" + key).click( function() { manageCloudButton(map[key], global_settings.cloudLayer[key], key) });
+        }
+        else {
+          global_settings.cloudLayer[key] = null;
+        }
+        $("#getlocations_toggleWeather_" + key).click( function() { manageWeatherButton(map[key], global_settings.weatherLayer[key], global_settings.cloudLayer[key], key) });
+      }
 
       setTimeout(function() { doAllMarkers(map[key], global_settings) }, 1000);
 
@@ -294,6 +338,36 @@
         else {
           panoramioLayer.setMap(map);
           global_settings.panoramiotoggleState[key] = 1;
+        }
+      }
+
+      function manageWeatherButton(map, weatherLayer, cloudLayer, key) {
+        if ( global_settings.weathertoggleState[key] == 1) {
+          weatherLayer.setMap();
+          global_settings.weathertoggleState[key] = 0;
+          if (global_settings.weather_cloud) {
+            cloudLayer.setMap();
+            global_settings.cloudtoggleState[key] = 0;
+          }
+        }
+        else {
+          weatherLayer.setMap(map);
+          global_settings.weathertoggleState[key] = 1;
+          if (global_settings.weather_cloud) {
+            cloudLayer.setMap(map);
+            global_settings.cloudtoggleState[key] = 1;
+          }
+        }
+      }
+
+      function manageCloudButton(map, cloudLayer, key) {
+        if ( global_settings.cloudtoggleState[key] == 1) {
+          cloudLayer.setMap();
+          global_settings.cloudtoggleState[key] = 0;
+        }
+        else {
+          cloudLayer.setMap(map);
+          global_settings.cloudtoggleState[key] = 1;
         }
       }
 

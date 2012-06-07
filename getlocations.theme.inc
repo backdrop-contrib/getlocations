@@ -78,6 +78,12 @@ function theme_getlocations_show($width, $height, $defaults, $mapid, $type = '',
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
     $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio" class="form-submit" />';
   }
+  if ($defaults['weather_use'] && $defaults['weather_show']) {
+    $buttons[] = '<input type="submit" value="' . t('Toggle weather') . '" id="getlocations_toggleWeather_' . $mapid . '" class="form-submit" />';
+    if ($defaults['weather_cloud']) {
+      $buttons[] = '<input type="submit" value="' . t('Toggle clouds') . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
+    }
+  }
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons" class="container-inline">';
     $output .= implode('&nbsp;', $buttons);

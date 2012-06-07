@@ -139,6 +139,12 @@ function theme_getlocations_show($variables) {
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
     $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio_' . $mapid . '" class="form-submit" />';
   }
+  if ($defaults['weather_use'] && $defaults['weather_show']) {
+    $buttons[] = '<input type="submit" value="' . t('Toggle weather') . '" id="getlocations_toggleWeather_' . $mapid . '" class="form-submit" />';
+    if ($defaults['weather_cloud']) {
+      $buttons[] = '<input type="submit" value="' . t('Toggle clouds') . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
+    }
+  }
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons" class="container-inline">';
     $output .= implode('&nbsp;', $buttons);
@@ -445,6 +451,9 @@ function theme_getlocations_settings_form($variables) {
 
   $form['getlocations_default']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
   $form['getlocations_default']['markerclusterer_minsize']['#suffix'] = '</div>';
+
+  $form['getlocations_default']['weather_show']['#prefix'] = '<div id="wrap-getlocations-weather">';
+  $form['getlocations_default']['weather_info']['#suffix'] = '</div>';
 
   $output .= drupal_render_children($form);
   return $output;

@@ -1,9 +1,33 @@
-commit 98a22bc
+commit 1e3de15
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jun 7 16:46:15 2012 +0100
+
+    added weather layer
+
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit dbfbfdd
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jun 7 16:45:32 2012 +0100
+
+    cleanup
+
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_search/js/getlocations_search.js
+
+commit 6956b8c
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jun 5 18:17:36 2012 +0100
 
     improved navigator.geolocation
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 modules/getlocations_fields/getlocations_fields.module

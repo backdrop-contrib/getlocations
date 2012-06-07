@@ -1395,6 +1395,9 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['bicycleinfo']     = 0;
   $getlocations_defaults['markeraction']    = 0;
   $getlocations_defaults['streetview_show'] = 0;
+  $getlocations_defaults['weather_use']     = 0;
+  $getlocations_defaults['weather_show']    = 0;
+
   if ($active) {
     $getlocations_defaults['places'] = 1;
   }

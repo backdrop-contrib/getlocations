@@ -59,6 +59,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['markermanagertype']     = array('default' => $getlocations_defaults['markermanagertype']);
     $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
     $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
+    $options['weather_use']           = array('default' => $getlocations_defaults['weather_use']);
+    $options['weather_show']          = array('default' => $getlocations_defaults['weather_show']);
     if (! $getlocations_defaults['markermanagertype']) {
       $options['usemarkermanager'] = 0;
       $options['useclustermanager'] = 0;

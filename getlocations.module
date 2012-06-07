@@ -766,6 +766,13 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
   if ($defaults['places']) {
     $libraries[] = 'places';
   }
+  // not active yet
+  if ($defaults['geometry']) {
+    $libraries[] = 'geometry';
+  }
+  if ($defaults['weather_use']) {
+    $libraries[] = 'weather';
+  }
   // more libraries here
 
   // load libraries if any
@@ -912,6 +919,15 @@ function getlocations_defaults() {
     'use_jsapi'                 => 0,
     'preload_data'              => 0,
     'is_mobile'                 => (getlocations_is_mobile() ? 1 : 0),
+    'geometry'                  => 0,
+    'weather_use'               => 0,
+    'weather_show'              => 0,
+    'weather_temp'              => 1,
+    'weather_speed'             => 1,
+    'weather_label'             => 0,
+     'weather_cloud'            => 1,
+    'weather_clickable'         => 1,
+    'weather_info'              => 1,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -1755,8 +1771,18 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'custom_content_enable'   => $defaults['custom_content_enable'],
       'preload_data'            => $defaults['preload_data'],
       'is_mobile'               => $defaults['is_mobile'],
+      'weather_use'             => $defaults['weather_use'],
     ),
   );
+  if ($defaults['weather_use']) {
+    $settings[$mapid]['weather_show'] = $defaults['weather_show'];
+    $settings[$mapid]['weather_temp'] = $defaults['weather_temp'];
+    $settings[$mapid]['weather_speed'] = $defaults['weather_speed'];
+    $settings[$mapid]['weather_label'] = $defaults['weather_label'];
+    $settings[$mapid]['weather_cloud'] = $defaults['weather_cloud'];
+    $settings[$mapid]['weather_clickable'] = $defaults['weather_clickable'];
+    $settings[$mapid]['weather_info'] = $defaults['weather_info'];
+  }
   drupal_add_js(array('getlocations' => $settings), 'setting');
 
   if ($defaults['preload_data']) {
@@ -2445,6 +2471,54 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
         t('Enable Panoramio'),
         $defaults['panoramio_show'],
         t('Google panoramio picture links.')
+      );
+    }
+    // weather
+    if ($config) {
+      $form['weather_use'] = getlocations_element_map_checkbox(
+        t('Load Weather Library'),
+        $defaults['weather_use'],
+        t('Provide Google weather library to all maps.')
+      );
+      $form['weather_show'] = getlocations_element_map_checkbox(
+        t('Enable Weather information'),
+        $defaults['weather_show'],
+        t('Google weather information.')
+      );
+      $form['weather_temp'] = getlocations_element_dd(
+        t('Temperature units'),
+        $defaults['weather_temp'],
+        array(1 => t('Celsius'), 2 => t('Fahrenheit'))
+      );
+      $form['weather_speed'] = getlocations_element_dd(
+        t('Windspeed units'),
+        $defaults['weather_speed'],
+        array(1 => t('Kilometers per hour'), 2 => t('Meters per second'), 3 => t('Miles per hour'))
+      );
+      $form['weather_label'] = getlocations_element_dd(
+        t('Label colour'),
+        $defaults['weather_label'],
+        array(0 => ('Auto'),  1 => t('Black'), 2 => t('White'))
+      );
+      $form['weather_cloud'] = getlocations_element_map_checkbox(
+        t('Enable Cloud Layer'),
+        $defaults['weather_cloud'],
+        t('Google cloud information.')
+      );
+      $form['weather_clickable'] = getlocations_element_map_checkbox(
+        t('Enable clicking on maps'),
+        $defaults['weather_clickable']
+      );
+      $form['weather_info'] = getlocations_element_map_checkbox(
+        t('Enable weather InfoWindows'),
+        $defaults['weather_info']
+      );
+    }
+    elseif ($defaults['weather_use']) {
+      $form['weather_show'] = getlocations_element_map_checkbox(
+        t('Enable Weather information'),
+        $defaults['weather_show'],
+        t('Google weather information.')
       );
     }
 

@@ -213,8 +213,7 @@
       function(error) {
         statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error.code) + ".";
         $(statusdiv).html(statusmsg);
-      }
-      , {maximumAge:10000}
+      }, {maximumAge:10000}
     );
   }
 

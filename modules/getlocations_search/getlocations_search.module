@@ -662,6 +662,10 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
           // must be an 'all' search so we have to figure out a marker
           if ($locations[$k]->nid > 0) {
             $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
+
+            // term markers
+            $locations[$k]->marker = getlocations_get_term_marker($locations[$k]->nid, $locations[$k]->marker);
+
           }
           elseif ($locations[$k]->uid > 0) {
             $locations[$k]->marker = $getlocations_defaults['user_map_marker'];
@@ -832,6 +836,10 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         if ($row->entity_type == 'node') {
           $locations[$location_ct]->nid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
+
+          // term markers
+          $locations[$location_ct]->marker = getlocations_get_term_marker($row->entity_id, $locations[$location_ct]->marker);
+
         }
         elseif ($row->entity_type == 'user') {
           $locations[$location_ct]->uid = $row->entity_id;

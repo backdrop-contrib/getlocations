@@ -1,9 +1,22 @@
-commit 1e3de15
+commit cd16621
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jun 8 19:36:42 2012 +0100
+
+    fixed term markers
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_search/getlocations_search.module
+views/getlocations.views.inc
+views/getlocations_plugin_style_map.inc
+
+commit cc4eb20
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jun 7 16:46:15 2012 +0100
 
     added weather layer
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 js/getlocations.js

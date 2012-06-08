@@ -307,6 +307,10 @@ function getlocations_nodemap($nid) {
             $location['lid'] = $nid;
           }
         }
+
+        // term markers
+        $marker = getlocations_get_term_marker($nid, $marker);
+
         // per location marker
         if (isset($location['marker']) && ! empty($location['marker'])) {
           $marker = $location['marker'];
@@ -577,6 +581,10 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
               $location['lid'] = $vid;
             }
           }
+
+          // term markers
+          $marker = getlocations_get_term_marker($nid, $marker);
+
           // per location marker
           if (isset($location['marker']) && ! empty($location['marker'])) {
             $marker = $location['marker'];
@@ -3057,3 +3065,18 @@ function getlocations_is_mobile() {
   }
   return $is_mobile;
 }
+
+function getlocations_get_term_marker($nid, $marker) {
+  $getlocations_defaults = getlocations_defaults();
+  // term markers
+  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+  if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vid']) {
+    $results = db_query('SELECT i.tid FROM {taxonomy_index} i JOIN {taxonomy_term_data} d ON i.tid=d.tid WHERE i.nid = :nid AND d.vid =:vid', array(':nid' => $nid, ':vid' => $getlocations_term_marker['vid']));
+    $record = $results->fetchObject();
+    if ($record) {
+      $marker = (isset($getlocations_term_marker['term'][$record->tid]['map_marker']) ? $getlocations_term_marker['term'][$record->tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
+    }
+  }
+  return $marker;
+}
+

@@ -105,7 +105,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       }
 
       // term markers
-      $getlocations_term_marker = $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
       if ($getlocations_term_marker['enable']) {
         if ($getlocations_term_marker['vid']) {
           $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;

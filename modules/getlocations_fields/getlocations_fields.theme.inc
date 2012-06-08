@@ -155,6 +155,16 @@ function theme_getlocations_fields_show($variables) {
         else {
           $marker = $settings['map_marker'];
         }
+        if ($base == 'nid') {
+
+          // term markers, nodes only
+          $marker = getlocations_get_term_marker($location['nid'], $marker);
+          // per location marker
+          if (isset($location['marker']) && ! empty($location['marker'])) {
+            $marker = $location['marker'];
+          }
+
+        }
         $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base);
         $map = getlocations_fields_getmap_show($settings, $latlons);
         $output .= $map;

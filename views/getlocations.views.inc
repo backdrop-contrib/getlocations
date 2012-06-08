@@ -84,9 +84,6 @@ function template_preprocess_getlocations_view_map(&$variables) {
         if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
           $marker = $options['node_marker_' . $location['field_name']];
         }
-        if (isset($location['marker']) && ! empty($location['marker'])) {
-          $marker = $location['marker'];
-        }
         if ($nid = getlocations_get_nid_from_lid($lid)) {
           $results = db_query('SELECT tid FROM {taxonomy_index} WHERE nid = :nid', array(':nid' => $nid));
           foreach ($results as $result) {
@@ -94,6 +91,9 @@ function template_preprocess_getlocations_view_map(&$variables) {
               $marker = $options['term_marker_' . $result->tid];
             }
           }
+        }
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
         }
         if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);

@@ -193,6 +193,12 @@ function getlocations_fields_field_validate($entity_type, $entity, $field, $inst
 function getlocations_fields_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
 
   if (!empty($items)) {
+    foreach ($items AS $key => $item) {
+      if ( empty($item['latitude']) || empty($item['longitude']) ) {
+        unset($items[$key]);
+      }
+    }
+
     $criteria = array();
     if ($entity_type == 'node') {
       $criteria = array(
@@ -221,8 +227,7 @@ function getlocations_fields_field_insert($entity_type, $entity, $field, $instan
       );
     }
     if (! empty($criteria)) {
-      $result = getlocations_fields_save_locations($items, $criteria, 'insert');
-      $items = $result;
+      $items = getlocations_fields_save_locations($items, $criteria, 'insert');
     }
   }
 }
@@ -247,6 +252,13 @@ function getlocations_fields_field_insert($entity_type, $entity, $field, $instan
 function getlocations_fields_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
 
   if (!empty($items)) {
+    // look for delete_location in $items
+    foreach ($items AS $key => $item) {
+      if (isset($item['delete_location']) && $item['delete_location'] > 0) {
+        getlocations_fields_field_delete($entity_type, $entity, $field, $instance, $langcode, $items);
+      }
+    }
+
     $criteria = array();
     if ($entity_type == 'node') {
       $criteria = array(
@@ -274,10 +286,7 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
       );
     }
     if (! empty($criteria)) {
-      $result = getlocations_fields_save_locations($items, $criteria, 'update');
-      if ($result) {
-        $items = $result;
-      }
+      $items = getlocations_fields_save_locations($items, $criteria, 'update');
     }
   }
 
@@ -305,16 +314,11 @@ function getlocations_fields_field_delete($entity_type, $entity, $field, $instan
   if (!empty($items)) {
     $criteria = array();
     if ($entity_type == 'node') {
-      $result = db_query('SELECT vid FROM {node_revision} WHERE nid = :nid', array(':nid' => $entity->nid));
-      foreach ($result as $row) {
-        $criteria = array(
-          'field_name' => $field['field_name'],
-          'vid' => $row->vid,
-          'nid' => $entity->nid,
-        );
-        getlocations_fields_save_locations($items, $criteria, 'delete');
-      }
-      return;
+      $criteria = array(
+        'field_name' => $field['field_name'],
+        'nid' => $entity->nid,
+        'vid' => $entity->vid,
+      );
     }
     elseif ($entity_type == 'user' || $entity_type == 'profile2') {
       $criteria = array(
@@ -335,9 +339,8 @@ function getlocations_fields_field_delete($entity_type, $entity, $field, $instan
       );
     }
     if (! empty($criteria)) {
-      getlocations_fields_save_locations($items, $criteria, 'delete');
+      $items = getlocations_fields_save_locations($items, $criteria, 'delete');
     }
-    $items = array();
   }
 }
 
@@ -366,7 +369,7 @@ function getlocations_fields_field_delete_revision($entity_type, $entity, $field
         'field_name' => $field['field_name'],
         'vid' => $entity->vid,
       );
-      getlocations_fields_save_locations($items, $criteria, 'delete_revision');
+      $items = getlocations_fields_save_locations($items, $criteria, 'delete_revision');
     }
   }
 }
@@ -1085,8 +1088,8 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         $element['#collapsible'] = TRUE;
         $element['#collapsed'] = FALSE;
       }
-
-      if (isset($items[$delta]['glid'])) {
+      // delete location
+      if ( ! $instance['required'] && isset($items[$delta]['glid']) && $items[$delta]['glid'] > 0 ) {
         $element['glid'] = array(
           '#type' => 'value',
           '#value' => $items[$delta]['glid'],
@@ -1495,6 +1498,7 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
 function getlocations_fields_save_locations($locations, $criteria, $mode) {
 
   if (isset($locations) && is_array($locations) && !empty($criteria) && is_array($criteria)) {
+
     foreach (array_keys($locations) as $key) {
       // remove empties
       if ( empty($locations[$key]['latitude']) && empty($locations[$key]['longitude'])) {
@@ -1505,32 +1509,34 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
       if ($mode == 'insert') {
         if ( $locations[$key]['latitude'] && $locations[$key]['longitude']) {
           $result = getlocations_fields_insert_record($locations[$key], $criteria);
-          $locations[$key]['glid'] = $result;
+          if ($result) {
+            $locations[$key]['glid'] = $result;
+          }
+          else {
+            unset($locations[$key]);
+            continue;
+          }
         }
         else {
           unset($locations[$key]);
+          continue;
         }
       }
       elseif ($mode == 'update') {
-        // delete_location checkbox
-        if (isset($locations[$key]['delete_location']) && $locations[$key]['delete_location']) {
-          getlocations_fields_delete_record($locations[$key], $criteria);
-          unset($locations[$key]);
-        }
-        else {
-          $result = getlocations_fields_update_record($locations[$key], $criteria);
-          if ($result && ! isset($locations[$key]['glid'])) {
-            $locations[$key]['glid'] = $result;
-          }
+        $result = getlocations_fields_update_record($locations[$key], $criteria);
+        if ($result && ! isset($locations[$key]['glid'])) {
+          $locations[$key]['glid'] = $result;
         }
       }
       elseif ($mode == 'delete') {
-        getlocations_fields_delete_record($locations[$key], $criteria);
-        $locations[$key] = FALSE;
+        if (isset($locations[$key]['delete_location']) && $locations[$key]['delete_location'] > 0) {
+          getlocations_fields_delete_record($locations[$key], $criteria);
+          unset($locations[$key]);
+        }
       }
       elseif ($mode == 'delete_revision') {
         getlocations_fields_delete_revision_record($locations[$key], $criteria);
-        $locations[$key] = FALSE;
+        unset($locations[$key]);
       }
     }
     return $locations;
@@ -1575,8 +1581,9 @@ function getlocations_fields_insert_record($location, $relations) {
   if ($result) {
     $relations['glid'] = $result;
     getlocations_fields_insert_record_relations($relations);
+    return $result;
   }
-  return $result;
+  return FALSE;
 }
 
 /**
@@ -1661,11 +1668,12 @@ function getlocations_fields_update_record_relations($relations, $glid) {
  */
 function getlocations_fields_delete_record($location, $relations) {
 
-  db_delete('getlocations_fields')
-    ->condition('glid', $location['glid'])
-    ->execute();
-
-  getlocations_fields_delete_record_relations($relations, $location['glid']);
+  if (isset($location['glid'])) {
+    db_delete('getlocations_fields')
+      ->condition('glid', $location['glid'])
+      ->execute();
+    getlocations_fields_delete_record_relations($relations, $location['glid']);
+  }
 
 }
 

@@ -1,9 +1,18 @@
-commit cd16621
+commit 6671135
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jun 18 09:13:57 2012 +0100
+
+    fixed delete locations bugs
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 9aae569
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jun 8 19:36:42 2012 +0100
 
     fixed term markers
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.theme.inc
 modules/getlocations_search/getlocations_search.module

@@ -252,10 +252,13 @@ function getlocations_fields_field_insert($entity_type, $entity, $field, $instan
 function getlocations_fields_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
 
   if (!empty($items)) {
+
     // look for delete_location in $items
-    foreach ($items AS $key => $item) {
-      if (isset($item['delete_location']) && $item['delete_location'] > 0) {
-        getlocations_fields_field_delete($entity_type, $entity, $field, $instance, $langcode, $items);
+    if (! $instance['required'] ) {
+      foreach ($items AS $key => $item) {
+        if (isset($item['delete_location']) && $item['delete_location'] > 0) {
+          getlocations_fields_field_delete($entity_type, $entity, $field, $instance, $langcode, $items);
+        }
       }
     }
 
@@ -1089,17 +1092,19 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         $element['#collapsed'] = FALSE;
       }
       // delete location
-      if ( ! $instance['required'] && isset($items[$delta]['glid']) && $items[$delta]['glid'] > 0 ) {
+      if (isset($items[$delta]['glid']) && $items[$delta]['glid'] > 0 ) {
         $element['glid'] = array(
           '#type' => 'value',
           '#value' => $items[$delta]['glid'],
         );
-        $element['delete_location'] = array(
-          '#type' => 'checkbox',
-          '#title' => t('Delete'),
-          '#default_value' => FALSE,
-          '#description' => t('Check this box to delete this location.'),
-        );
+        if ( ! $instance['required']) {
+          $element['delete_location'] = array(
+            '#type' => 'checkbox',
+            '#title' => t('Delete'),
+            '#default_value' => FALSE,
+            '#description' => t('Check this box to delete this location.'),
+          );
+        }
       }
       // search field
       if ($settings['use_address']) {

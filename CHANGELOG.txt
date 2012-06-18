@@ -1,9 +1,18 @@
-commit 6671135
+commit 13b2dae
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jun 18 14:50:47 2012 +0100
+
+    fixed bug in field required
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 2858a94
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jun 18 09:13:57 2012 +0100
 
     fixed delete locations bugs
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 9aae569

@@ -105,7 +105,7 @@
         }
 
         // do 'fake' required fields
-        var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code'];
+        var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code', 'country'];
         $.each(requireds, function(k, v) {
           if ($(".getlocations_required_" + v + '_' + key).is("div")) {
             $("div.getlocations_required_" + v + "_" + key + " label").append(' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>');
@@ -455,7 +455,7 @@
         getlocations_fields_init();
       }
       // knock out the add more button, it wrecks all the maps
-      $("input.field-add-more-submit").hide();
+      $(".field-type-getlocations-fields input.field-add-more-submit").hide();
     }
   };
 })(jQuery);

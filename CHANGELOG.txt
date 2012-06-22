@@ -1,9 +1,20 @@
-commit 13b2dae
+commit fcdafc3
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jun 22 14:29:16 2012 +0100
+
+    fixed requireds error, hide more link
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+
+commit eda1dd1
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jun 18 14:50:47 2012 +0100
 
     fixed bug in field required
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 2858a94

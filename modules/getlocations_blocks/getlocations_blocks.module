@@ -503,7 +503,7 @@ function getlocations_blocks_postalcode_get() {
 
   $result = $query->execute();
   foreach ($result AS $row) {
-    if ($row->city) {
+    if ($row->postal_code) {
       $matches[$row->postal_code] = getlocations_apoclean($row->postal_code);
     }
   }

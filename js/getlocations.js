@@ -103,11 +103,18 @@ var getlocations_markers = [];
           global_settings.cmgr_title = settings.markerclusterer_title;
         }
 
-        if (settings.markermanagertype == 1 && settings.usemarkermanager) {
+        // prevent old msie from running markermanager
+        var ver = Drupal.getlocations.msiedetect();
+        var pushit = false;
+        if ( (ver == '') || (ver && ver > 8)) {
+          pushit = true;
+        }
+
+        if (pushit && settings.markermanagertype == 1 && settings.usemarkermanager) {
           global_settings.usemarkermanager = true;
           global_settings.useclustermanager = false;
         }
-        else if (settings.markermanagertype == 2 && settings.useclustermanager) {
+        else if (pushit && settings.markermanagertype == 2 && settings.useclustermanager) {
           global_settings.useclustermanager = true;
           global_settings.usemarkermanager = false;
         }

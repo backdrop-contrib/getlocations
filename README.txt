@@ -3,8 +3,7 @@ Getlocations will provide a Google maps API version 3 enabled map on which to
 display markers of locations found in location-enabled content-types.
 
 INSTALL
-Before installing getlocations please ensure that you have location and
-libraries modules installed
+Before installing getlocations please ensure that you have the libraries module installed
 
 You can fetch markers from dropbox:
 As tarballs:

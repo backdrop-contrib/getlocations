@@ -80,18 +80,28 @@
       global_settings.datanum = settings.datanum;
       global_settings.markermanagertype = settings.markermanagertype;
 
-      if (settings.markermanagertype == 1 && settings.usemarkermanager) {
-        global_settings.usemarkermanager = true;
-        global_settings.useclustermanager = false;
-      }
-      else if (settings.markermanagertype == 2 && settings.useclustermanager) {
-        global_settings.useclustermanager = true;
-        global_settings.usemarkermanager = false;
+      if (settings.markermanagertype == 2) {
         global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;
         global_settings.cmgr_style = (settings.markerclusterer_style == -1 ? null : settings.markerclusterer_style);
         global_settings.cmgr_gridSize = (settings.markerclusterer_size == -1 ? null : parseInt(settings.markerclusterer_size));
         global_settings.cmgr_maxZoom = (settings.markerclusterer_zoom == -1 ? null : parseInt(settings.markerclusterer_zoom));
         global_settings.cmgr_minClusterSize = (settings.markerclusterer_minsize == -1 ? null : parseInt(settings.markerclusterer_minsize));
+      }
+
+      // prevent old msie from running markermanager
+      var ver = msiedetect();
+      var pushit = false;
+      if ( (ver == '') || (ver && ver > 8)) {
+        pushit = true;
+      }
+
+      if (pushit && settings.markermanagertype == 1 && settings.usemarkermanager) {
+        global_settings.usemarkermanager = true;
+        global_settings.useclustermanager = false;
+      }
+      else if (pushit && settings.markermanagertype == 2 && settings.useclustermanager) {
+        global_settings.useclustermanager = true;
+        global_settings.usemarkermanager = false;
       }
       else {
         global_settings.usemarkermanager = false;

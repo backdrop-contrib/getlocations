@@ -42,7 +42,6 @@ function getlocations_search_menu() {
     'title' => 'Getlocations search',
     'access arguments' => array('access getlocations'),
     'page callback' => 'getlocations_search',
-    #'type' => MENU_NORMAL_ITEM,
     'type' => MENU_SUGGESTED_ITEM,
   );
   // getlocations_search/info     # ajax callback to fetch all location info

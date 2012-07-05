@@ -420,7 +420,7 @@ function theme_getlocations_fields_field_widget_form($variables) {
     $form['geolocation_button']['#markup'] = $geolocation_button;
   }
 
-  $form['latitude']['#prefix'] = '<div class="getlocations_fields_latlon_wrapper"><div class="getlocations_fields_lat_wrapper">';
+  $form['latitude']['#prefix'] = '<div class="getlocations_fields_latlon_wrapper clearfix"><div class="getlocations_fields_lat_wrapper">';
   $form['latitude']['#suffix'] = '</div>';
   $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
   $form['longitude']['#suffix'] = '</div></div>';

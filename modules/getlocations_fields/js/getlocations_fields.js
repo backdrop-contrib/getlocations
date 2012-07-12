@@ -39,6 +39,7 @@
         var gkey = key;
         nodezoom = parseInt(settings.nodezoom);
         map_marker = settings.map_marker;
+        var autocomplete_bias = settings.autocomplete_bias;
 
       // we need to see if this is an update
         lat = $("#" + latfield + key).val();
@@ -64,6 +65,9 @@
           var input_adrs = document.getElementById(adrsfield + key);
           var fm_adrs = '';
           var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
+          if (autocomplete_bias) {
+            ac_adrs.bindTo('bounds', getlocations_inputmap[key]);
+          }
           google.maps.event.addListener(ac_adrs, 'place_changed', function () {
             var place_adrs = ac_adrs.getPlace();
             if (use_address == 1) {

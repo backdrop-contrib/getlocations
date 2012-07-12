@@ -38,6 +38,13 @@ function getlocations_search_settings_form() {
     $getlocations_search_defaults['method'],
     $options
   );
+  $form['getlocations_search_defaults']['autocomplete_bias'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable Viewport bias'),
+    '#description' => t('Bias the Google Autocomplete results to the area on the map.'),
+    '#default_value' => ($getlocations_search_defaults['autocomplete_bias'] ? $getlocations_search_defaults['autocomplete_bias'] : 0),
+    '#return_value' => 1,
+  );
   $form['getlocations_search_defaults']['use_geolocation_button'] = getlocations_element_map_checkbox(
     t('Provide Browser based geocoding option'),
     $getlocations_search_defaults['use_geolocation_button'],

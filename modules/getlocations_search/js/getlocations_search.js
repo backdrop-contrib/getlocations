@@ -12,9 +12,11 @@
   Drupal.getlocations.doSearch = function(map, gs, mkey) {
     var searchsettings = Drupal.settings.getlocations_search;
     var method = '';
+    var autocomplete_bias = 0;
     jQuery.each(searchsettings, function (searchkey, ssettings) {
       method = ssettings.method;
       do_lookup = ssettings.do_lookup;
+      autocomplete_bias = ssettings.autocomplete_bias;
     }); // end each search loop
 
     if (gs.markermanagertype == 1) {
@@ -43,6 +45,9 @@
       var input_adrs = document.getElementById("edit-getlocations-search");
       var fm_adrs = '';
       var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
+      if (autocomplete_bias) {
+        ac_adrs.bindTo('bounds', map);
+      }
       google.maps.event.addListener(ac_adrs, 'place_changed', function () {
         var place_adrs = ac_adrs.getPlace();
         fm_adrs = {'address': place_adrs.formatted_address};

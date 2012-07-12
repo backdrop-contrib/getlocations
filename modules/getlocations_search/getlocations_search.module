@@ -240,6 +240,7 @@ function getlocations_search_js_settings_do($defaults, $mapid) {
       'method' => $defaults['method'],
       'maxzoom' => $defaults['maxzoom'],
       'do_lookup' => ($do_lookup ? 1 : 0),
+      'autocomplete_bias' => $defaults['autocomplete_bias'],
     ),
   );
 
@@ -356,6 +357,7 @@ function getlocations_search_defaults() {
     'display_search_units' => 1,
     'display_search_limits' => 1,
     'display_search_type' => 1,
+    'autocomplete_bias' => 0,
     'width'                     => $getlocations_defaults['width'],
     'height'                    => $getlocations_defaults['height'],
     'styles'                    => $getlocations_defaults['styles'],

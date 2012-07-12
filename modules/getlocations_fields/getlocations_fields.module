@@ -1943,6 +1943,7 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
       'map_marker' => $defaults['input_map_marker'],
       'use_address' => $defaults['use_address'],
       'latlon_warning' => $defaults['latlon_warning'],
+      'autocomplete_bias' => $defaults['autocomplete_bias'],
     ),
   );
 
@@ -2015,6 +2016,7 @@ function getlocations_fields_defaults() {
     'city_autocomplete'            => 0,
     'per_item_marker'              => 0,
     'latlon_warning'               => 0,
+    'autocomplete_bias'            => 0,
     'columns'                      => array(
       'glid'        => t('Glid'),
       'name'        => t('Name'),
@@ -2105,6 +2107,7 @@ function getlocations_fields_field_info_defaults() {
         'latlon_warning'               => $getlocations_fields_defaults['latlon_warning'],
         'use_geolocation_button'       => $getlocations_fields_defaults['use_geolocation_button'],
         'input_geolocation_button_weight' => $getlocations_fields_defaults['input_geolocation_button_weight'],
+        'autocomplete_bias'            => $getlocations_fields_defaults['autocomplete_bias'],
       ),
     ),
   );
@@ -2219,6 +2222,12 @@ function getlocations_fields_input_settings_form($defaults) {
   );
   $form['input_address_width']['#prefix'] = '<div id="wrap-input_address_width">';
   $form['input_address_width']['#suffix'] = '</div>';
+
+  $form['autocomplete_bias'] = getlocations_element_map_checkbox(
+    t('Enable Viewport bias'),
+    $defaults['autocomplete_bias'],
+    t('Bias the Search box results to the area on the map.')
+  );
 
   if (module_exists('smart_ip')) {
     $form['use_smart_ip_button'] = getlocations_element_map_checkbox(

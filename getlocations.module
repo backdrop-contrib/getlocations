@@ -885,6 +885,7 @@ function getlocations_defaults() {
     'streetview_show'           => 0,
     'trafficinfo'               => 0,
     'bicycleinfo'               => 0,
+    'transitinfo'               => 0,
     'panoramio_use'             => 0,
     'panoramio_show'            => 0,
     'places'                    => 0,
@@ -1748,6 +1749,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'scrollwheel'             => $defaults['behavior']['scrollwheel'],
       'trafficinfo'             => $defaults['trafficinfo'],
       'bicycleinfo'             => $defaults['bicycleinfo'],
+      'transitinfo'             => $defaults['transitinfo'],
       'streetview_show'         => $defaults['streetview_show'],
       'pancontrol'              => $defaults['pancontrol'],
       'panoramio_use'           => $defaults['panoramio_use'],
@@ -2460,6 +2462,11 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
       t('Enable Bicycling information'),
       $defaults['bicycleinfo'],
       t('Google bicycling layer, limited availability.')
+    );
+    $form['transitinfo'] = getlocations_element_map_checkbox(
+      t('Enable Public transport information'),
+      $defaults['transitinfo'],
+      t('Google transit layer, limited availability.')
     );
 
     if ($config) {

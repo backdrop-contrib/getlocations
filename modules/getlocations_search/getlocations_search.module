@@ -199,7 +199,7 @@ function getlocations_search_getmap() {
   $getlocations_search_defaults['pansetting'] = $getlocations_defaults['pansetting'];
 
   // we need to update $getlocations_defaults with data from $getlocations_search_defaults
-  $keys = array('width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol', 'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'trafficinfo', 'bicycleinfo', 'panoramio_use', 'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager', 'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title', 'markeraction', 'markeractiontype', 'weather_show');
+  $keys = array('width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol', 'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'trafficinfo', 'bicycleinfo', 'transitinfo', 'panoramio_use', 'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager', 'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title', 'markeraction', 'markeractiontype', 'weather_show');
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
@@ -383,6 +383,7 @@ function getlocations_search_defaults() {
     'streetview_show'           => $getlocations_defaults['streetview_show'],
     'trafficinfo'               => $getlocations_defaults['trafficinfo'],
     'bicycleinfo'               => $getlocations_defaults['bicycleinfo'],
+    'transitinfo'               => $getlocations_defaults['transitinfo'],
     'panoramio_use'             => $getlocations_defaults['panoramio_use'],
     'poi_show'                  => $getlocations_defaults['poi_show'],
     'transit_show'              => $getlocations_defaults['transit_show'],

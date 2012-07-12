@@ -895,6 +895,9 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if ($settings['bicycleinfo']) {
       $info_display[] = t('Bicycling');
     }
+    if ($settings['transitinfo']) {
+      $info_display[] = t('Transit');
+    }
     if ($settings['panoramio_show']) {
       $info_display[] = t('Panoramio');
     }
@@ -1446,6 +1449,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['panoramio_show']  = 0;
   $getlocations_defaults['trafficinfo']     = 0;
   $getlocations_defaults['bicycleinfo']     = 0;
+  $getlocations_defaults['transitinfo']     = 0;
   $getlocations_defaults['markeraction']    = 0;
   $getlocations_defaults['streetview_show'] = 0;
   $getlocations_defaults['weather_use']     = 0;
@@ -1509,6 +1513,7 @@ function getlocations_fields_getmap_show($settings, $lls = '') {
   $getlocations_defaults['streetview_show']       = $settings['streetview_show'];
   $getlocations_defaults['trafficinfo']           = $settings['trafficinfo'];
   $getlocations_defaults['bicycleinfo']           = $settings['bicycleinfo'];
+  $getlocations_defaults['transitinfo']           = $settings['transitinfo'];
   $getlocations_defaults['panoramio_show']        = $settings['panoramio_show'];
   $getlocations_defaults['poi_show']              = $settings['poi_show'];
   $getlocations_defaults['transit_show']          = $settings['transit_show'];
@@ -2165,6 +2170,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'streetview_show'       => $getlocations_defaults['streetview_show'],
     'trafficinfo'           => $getlocations_defaults['trafficinfo'],
     'bicycleinfo'           => $getlocations_defaults['bicycleinfo'],
+    'transitinfo'           => $getlocations_defaults['transitinfo'],
     'panoramio_show'        => $getlocations_defaults['panoramio_show'],
     'poi_show'              => $getlocations_defaults['poi_show'],
     'transit_show'          => $getlocations_defaults['transit_show'],

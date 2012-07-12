@@ -1,9 +1,51 @@
-commit 0993825
+commit b5609e5
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 12 12:01:20 2012 +0100
+
+    added transit layer
+
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit 054e707
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 12 10:37:50 2012 +0100
+
+    added viewport bias
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit a3c4c89
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 5 11:37:38 2012 +0100
+
+    fixed #1671352 missing clearfix
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit f34fbc0
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jun 30 12:19:21 2012 +0100
+
+    getlocations search cleanup and more notes in README
+
+modules/getlocations_search/README.txt
+modules/getlocations_search/getlocations_search.module
+
+commit 050d536
 Author: hutch <hutch@midwales.net>
 Date:   Wed Jun 27 23:17:01 2012 +0100
 
     fixed msie push problem
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit 93c65fa

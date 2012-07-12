@@ -136,6 +136,9 @@ function theme_getlocations_show($variables) {
   if ($defaults['bicycleinfo']) {
     $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle_' . $mapid . '" class="form-submit" />';
   }
+  if ($defaults['transitinfo']) {
+    $buttons[] = '<input type="submit" value="' . t('Toggle transit info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTransit_' . $mapid . '" class="form-submit" />';
+  }
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
     $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio_' . $mapid . '" class="form-submit" />';
   }

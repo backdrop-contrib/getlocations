@@ -1,9 +1,18 @@
-commit b5609e5
+commit 8f72097
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 13 16:16:51 2012 +0100
+
+    fixed missing function, #1662568
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
+
+commit 4e83a7c
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jul 12 12:01:20 2012 +0100
 
     added transit layer
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 modules/getlocations_fields/getlocations_fields.module

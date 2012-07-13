@@ -29,7 +29,7 @@ class getlocations_fields_handler_field_country extends views_handler_field {
   function render($values) {
     if ($this->options['style'] == 'name') {
       if (drupal_strlen($values->{$this->field_alias}) == 2) {
-        return check_plain(getlocations_fields_get_country_name($values->{$this->field_alias}));
+        return check_plain(getlocations_get_country_name($values->{$this->field_alias}));
       }
       else {
         return check_plain($values->{$this->field_alias});
@@ -40,7 +40,7 @@ class getlocations_fields_handler_field_country extends views_handler_field {
         return check_plain(drupal_strtoupper($values->{$this->field_alias}));
       }
       else {
-        return check_plain(drupal_strtoupper(getlocations_fields_get_country_id($values->{$this->field_alias})));
+        return check_plain(drupal_strtoupper(getlocations_get_country_id($values->{$this->field_alias})));
       }
     }
   }

@@ -574,17 +574,17 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         $nid = $nodehandler->get_value();
         if ($nid && is_numeric($nid) && $tempnode = node_load($nid)) {
           $field_name = $options['nid_loc_field'];
-          if ($field_name == 'node') {
+          if (isset($tempnode->location['latitude']) && $field_name == 'node') {
             $coordinates['latitude'] = (float) $tempnode->location['latitude'];
             $coordinates['longitude'] = (float) $tempnode->location['longitude'];
           }
           else {
             if (isset($tempnode->$field_name)) {
-              if (! isset($tempuser->language)) {
+              if (! isset($tempnode->language)) {
                 $lang = 'und';
               }
-              elseif ($lang != $tempuser->language) {
-                $lang = 'und';
+              else {
+                $lang = $tempnode->language;
               }
               $location = $tempnode->$field_name;
               if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
@@ -611,8 +611,8 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
               if (! isset($tempuser->language)) {
                 $lang = 'und';
               }
-              elseif ($lang != $tempuser->language) {
-                $lang = 'und';
+              else {
+                $lang = $tempuser->language;
               }
               $location = $tempuser->$field_name;
               if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
@@ -639,8 +639,8 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
               if (! isset($tempuser->language)) {
                 $lang = 'und';
               }
-              elseif ($lang != $tempuser->language) {
-                $lang = 'und';
+              else {
+                $lang = $tempuser->language;
               }
               $location = $tempuser->$field_name;
               if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
@@ -653,7 +653,6 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
       }
       break;
 
-###########
     case 'cid_arg':
       // not tested
       if ($commenthandler = $view->display_handler->get_handler('argument', $options['cid_arg'])) {
@@ -669,8 +668,8 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
               if (! isset($tempuser->language)) {
                 $lang = 'und';
               }
-              elseif ($lang != $tempuser->language) {
-                $lang = 'und';
+              else {
+                $lang = $tempuser->language;
               }
               $location = $tempuser->$field_name;
               if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {

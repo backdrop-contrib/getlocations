@@ -47,8 +47,10 @@ var getlocations_markers = [];
           datanum: 0,
           trafficInfo: {},
           bicycleInfo: {},
+          transitInfo: {},
           traffictoggleState: [],
           bicycletoggleState: [],
+          transittoggleState: [],
           panoramioLayer: {},
           panoramiotoggleState: [],
           weatherLayer: {},
@@ -274,7 +276,12 @@ var getlocations_markers = [];
           global_settings.bicycleInfo[key].setMap(getlocations_map[key]);
           global_settings.bicycletoggleState[key] = 1;
           $("#getlocations_toggleBicycle_" + key).click( function() { manageBicycleButton(getlocations_map[key], global_settings.bicycleInfo[key], key) });
-
+        }
+        if (settings.transitinfo) {
+          global_settings.transitInfo[key] = new google.maps.TransitLayer();
+          global_settings.transitInfo[key].setMap(getlocations_map[key]);
+          global_settings.transittoggleState[key] = 1;
+          $("#getlocations_toggleTransit_" + key).click( function() { manageTransitButton(getlocations_map[key], global_settings.transitInfo[key], key) });
         }
         if (settings.panoramio_use && settings.panoramio_show) {
           global_settings.panoramioLayer[key] = new google.maps.panoramio.PanoramioLayer();
@@ -366,7 +373,16 @@ var getlocations_markers = [];
             global_settings.bicycletoggleState[key] = 1;
           }
         }
-
+        function manageTransitButton(map, transitInfo, key) {
+          if ( global_settings.transittoggleState[key] == 1) {
+            transitInfo.setMap();
+            global_settings.transittoggleState[key] = 0;
+          }
+          else {
+            transitInfo.setMap(map);
+            global_settings.transittoggleState[key] = 1;
+          }
+        }
         function managePanoramioButton(map, panoramioLayer, key) {
           if ( global_settings.panoramiotoggleState[key] == 1) {
             panoramioLayer.setMap();

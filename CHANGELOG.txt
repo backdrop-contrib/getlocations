@@ -1,9 +1,26 @@
-commit 8f72097
+commit dc684ea
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 14 11:03:17 2012 +0100
+
+    added transit
+
+js/getlocations.js
+
+commit e5841fd
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 13 19:55:21 2012 +0100
+
+    added additional check in getlocations_fields_views_proximity_get_reference_location
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 5a9fdd9
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jul 13 16:16:51 2012 +0100
 
     fixed missing function, #1662568
 
+CHANGELOG.txt
 modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
 
 commit 4e83a7c

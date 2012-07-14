@@ -602,7 +602,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         $uid = $userhandler->get_value();
         if ($uid && is_numeric($uid) && $tempuser = user_load($uid)) {
           $field_name = $options['uid_loc_field'];
-          if ($field_name == 'user') {
+          if (isset($tempuser->location['latitude']) && $field_name == 'user') {
             $coordinates['latitude'] = (float) $tempuser->location['latitude'];
             $coordinates['longitude'] = (float) $tempuser->location['longitude'];
           }
@@ -630,7 +630,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         $tid = $termhandler->get_value();
         if ($tid && is_numeric($tid) && $tempuser = taxonomy_term_load($tid)) {
           $field_name = $options['tid_loc_field'];
-          if ($field_name == 'taxonomy_term') {
+          if (isset($tempuser->location['latitude']) && $field_name == 'taxonomy_term') {
             $coordinates['latitude'] = (float) $tempuser->location['latitude'];
             $coordinates['longitude'] = (float) $tempuser->location['longitude'];
           }
@@ -659,7 +659,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         $cid = $commenthandler->get_value();
         if ($cid && is_numeric($cid) && $tempuser = comment_load($cid)) {
           $field_name = $options['cid_loc_field'];
-          if ($field_name == 'comment') {
+          if (isset($tempuser->location['latitude']) && $field_name == 'comment') {
             $coordinates['latitude'] = (float) $tempuser->location['latitude'];
             $coordinates['longitude'] = (float) $tempuser->location['longitude'];
           }

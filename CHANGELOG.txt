@@ -1,9 +1,18 @@
-commit dc684ea
+commit 422652e
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 14 11:27:29 2012 +0100
+
+    more fixes to getlocations_fields_views
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 9fd154b
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jul 14 11:03:17 2012 +0100
 
     added transit
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit e5841fd

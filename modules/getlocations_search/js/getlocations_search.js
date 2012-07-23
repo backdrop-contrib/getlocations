@@ -145,13 +145,29 @@
           locationct = 0;
           for (var i = 0; i < locations.length; i++) {
             lidkey = 'nid';
-            if (locations[i].nid > 0) { lidkey = 'nid'; }
-            else if (locations[i].uid > 0) { lidkey = 'uid'; }
-            else if (locations[i].tid > 0) { lidkey = 'tid'; }
-            else if (locations[i].cid > 0) { lidkey = 'cid'; }
+            lid = 0;
+            if (locations[i].nid > 0) {
+              lidkey = 'nid';
+              lid = locations[i].nid;
+            }
+            else if (locations[i].uid > 0) {
+              lidkey = 'uid';
+              lid = locations[i].uid;
+            }
+            else if (locations[i].tid > 0) {
+              lidkey = 'tid';
+              lid = locations[i].tid;
+            }
+            else if (locations[i].cid > 0) {
+              lidkey = 'cid';
+              lid = locations[i].cid;
+            }
+            if (locations[i].glid > 0) {
+              lid = locations[i].glid;
+            }
             gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
             title = (locations[i].title ? locations[i].title : (locations[i].name ? locations[i].name : ''));
-            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, locations[i].glid, title, lidkey, '', mkey);
+            marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, lid, title, lidkey, '', mkey);
             batchr.push(marker);
             locationct++;
           }

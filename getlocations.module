@@ -3050,12 +3050,20 @@ function getlocations_element_search_distance($default, $title = '', $descriptio
 }
 
 function getlocations_is_mobile() {
+  $getlocations_ua = getlocations_ua_get();
+  $str = "/" . $getlocations_ua['ua_string'] . "/i";
   $is_mobile = FALSE;
   $ua = $_SERVER['HTTP_USER_AGENT'];
-  if (preg_match("/iphone|ipad|android|blackberry|blazer|bolt|symbian|mobile safari|fennec|gobrowser|iemobile|maemo browser|profile midp|minimo|kindle|opera mini|opera mobi|skyfire|teashark|uzardweb/i", $ua)) {
+  if (preg_match($str, $ua)) {
     $is_mobile = TRUE;
   }
   return $is_mobile;
+}
+
+function getlocations_ua_get() {
+  $default = array('ua_string' => "iphone|ipad|android|blackberry|blazer|bolt|symbian|mobile safari|fennec|gobrowser|iemobile|maemo browser|profile midp|minimo|kindle|opera mini|opera mobi|skyfire|teashark|uzardweb");
+  $getlocations_ua = variable_get('getlocations_ua', $default);
+  return $getlocations_ua;
 }
 
 function getlocations_get_term_marker($nid, $marker) {

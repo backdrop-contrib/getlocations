@@ -445,6 +445,26 @@ function getlocations_settings_form() {
     $form['getlocations_colorbox']['marker_height']['#parents'] = array('getlocations_colorbox', 'marker_height');
   }
 
+  $form['getlocations_ua'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('User Agent detection'),
+    '#description' => t('For advanced users who want to edit the User Agent detection string.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+
+  $getlocations_ua = getlocations_ua_get();
+  $form['getlocations_ua']['ua_string'] = getlocations_element_map_tf(
+    t('User Agent detection'),
+    $getlocations_ua['ua_string'],
+    t('User Agent detection is used to determine wether the browser is on a mobile device. Edit this regular expression with care.'),
+    60,
+    255,
+    TRUE
+  );
+
   $form['getlocations_paths'] = array(
     '#type' => 'fieldset',
     '#title' => t('Javascript paths'),

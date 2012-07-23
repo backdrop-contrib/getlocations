@@ -192,6 +192,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
@@ -269,7 +276,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['link_to_node'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
   /* Field: Getlocations Fields: Glid */
   $handler->display->display_options['fields']['glid']['id'] = 'glid';
   $handler->display->display_options['fields']['glid']['table'] = 'getlocations_fields';
@@ -308,6 +315,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -448,6 +462,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Contextual filter: Content: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
@@ -631,6 +652,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Sort criterion: Getlocations Fields: Distance */
   $handler->display->display_options['sorts']['distance']['id'] = 'distance';
   $handler->display->display_options['sorts']['distance']['table'] = 'getlocations_fields';
@@ -752,6 +780,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Sort criterion: Getlocations Fields: Distance */
   $handler->display->display_options['sorts']['distance']['id'] = 'distance';
   $handler->display->display_options['sorts']['distance']['table'] = 'getlocations_fields';
@@ -879,6 +914,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Filter criterion: Getlocations Fields: Glid */
   $handler->display->display_options['filters']['glid']['id'] = 'glid';
   $handler->display->display_options['filters']['glid']['table'] = 'getlocations_fields';
@@ -2282,6 +2324,19 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
   $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 1;
   $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
+  /* Field: Getlocations Fields: Field name */
+  $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
+  $handler->display->display_options['fields']['field_name']['table'] = 'getlocations_fields_entities';
+  $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
+  $handler->display->display_options['fields']['field_name']['label'] = '';
+  $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Sort criterion: Getlocations Fields: Distance */
   $handler->display->display_options['sorts']['distance']['id'] = 'distance';
   $handler->display->display_options['sorts']['distance']['table'] = 'getlocations_fields';
@@ -2639,6 +2694,19 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name']['hide_alter_empty'] = 1;
+  /* Field: Getlocations Fields: Field name */
+  $handler->display->display_options['fields']['field_name']['id'] = 'field_name';
+  $handler->display->display_options['fields']['field_name']['table'] = 'getlocations_fields_entities';
+  $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
+  $handler->display->display_options['fields']['field_name']['label'] = '';
+  $handler->display->display_options['fields']['field_name']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Contextual filter: Getlocations Fields: Country */
   $handler->display->display_options['arguments']['country']['id'] = 'country';
   $handler->display->display_options['arguments']['country']['table'] = 'getlocations_fields';
@@ -2993,6 +3061,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['postal_code']['hide_empty'] = 0;
   $handler->display->display_options['fields']['postal_code']['empty_zero'] = 0;
   $handler->display->display_options['fields']['postal_code']['hide_alter_empty'] = 1;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Contextual filter: Getlocations Fields: Postal Code */
   $handler->display->display_options['arguments']['postal_code']['id'] = 'postal_code';
   $handler->display->display_options['arguments']['postal_code']['table'] = 'getlocations_fields';
@@ -3349,6 +3424,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['province']['hide_empty'] = 0;
   $handler->display->display_options['fields']['province']['empty_zero'] = 0;
   $handler->display->display_options['fields']['province']['hide_alter_empty'] = 1;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Contextual filter: Getlocations Fields: Province */
   $handler->display->display_options['arguments']['province']['id'] = 'province';
   $handler->display->display_options['arguments']['province']['table'] = 'getlocations_fields';
@@ -3705,6 +3787,13 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name']['hide_alter_empty'] = 1;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
   /* Contextual filter: Getlocations Fields: City */
   $handler->display->display_options['arguments']['city']['id'] = 'city';
   $handler->display->display_options['arguments']['city']['table'] = 'getlocations_fields';

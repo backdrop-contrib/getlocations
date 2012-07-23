@@ -81,27 +81,25 @@ class getlocations_plugin_style_map extends views_plugin_style {
     if ($getlocations_node_marker['enable']) {
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
-          $field_name = getlocations_get_fieldname($type);
-          if ($field_name) {
-            $mkey = 'node_marker_' . $field_name;
-            $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['node_map_marker']);
+          $field_names = getlocations_get_fieldname2($type, 'node');
+          foreach ($field_names AS $field_name) {
+            $mkey = 'node_marker__' . $type . '__' . $field_name;
+            $mmarker = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $getlocations_defaults['node_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }
         }
       }
     }
 
-    if (module_exists('getlocations_fields')) {
-      // vocabulary markers
+    // vocabulary markers
+    if ($types = getlocations_get_vocabularies()) {
       $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
       if ($getlocations_vocabulary_marker['enable']) {
-        if ($types = getlocations_get_vocabularies()) {
-          foreach ($types AS $type => $name) {
-            $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
-            $mkey = 'vocabulary_marker_' . $field_name;
-            $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
-            $options[$mkey] = array('default' => $mmarker);
-          }
+        foreach ($types AS $type => $name) {
+          $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+          $mkey = 'vocabulary_marker_' . $field_name;
+          $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
+          $options[$mkey] = array('default' => $mmarker);
         }
       }
 
@@ -120,6 +118,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
           }
         }
       }
+
     }
 
     return $options;
@@ -151,24 +150,31 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     // markers
     $markers = getlocations_get_marker_titles();
-    $form['node_map_marker'] = getlocations_element_map_marker(
-      t('Content Map marker'),
-      $markers,
-      $this->options['node_map_marker']
-    );
+    // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
-          $field_name = getlocations_get_fieldname($type);
-          $mkey = 'node_marker_' . $field_name;
-          $form[$mkey] = getlocations_element_map_marker(
-            t('%name Content Map Marker', array('%name' => $name)),
-            $markers,
-            $this->options[$mkey]
-          );
+          $field_names = getlocations_get_fieldname2($type, 'node');
+          foreach ($field_names AS $field_name) {
+            if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
+              $mkey = 'node_marker__' . $type . '__' . $field_name;
+              $form[$mkey] = getlocations_element_map_marker(
+                t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
+                $markers,
+                (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'])
+              );
+            }
+          }
         }
       }
+    }
+    else {
+      $form['node_map_marker'] = getlocations_element_map_marker(
+        t('Content Map marker'),
+        $markers,
+        $this->options['node_map_marker']
+      );
     }
     // user markers
     if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
@@ -179,47 +185,54 @@ class getlocations_plugin_style_map extends views_plugin_style {
       );
     }
     // vocabulary markers
-    if ($types = getlocations_get_vocabularies()) {
-      $form['vocabulary_map_marker'] = getlocations_element_map_marker(
-        t('Vocabulary Map Marker'),
-        $markers,
-        $this->options['vocabulary_map_marker']
-      );
+    if ($types = getlocations_get_machine_vocabularies()) {
+      $types2 = getlocations_get_vocabularies();
       $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
       if ($getlocations_vocabulary_marker['enable']) {
         foreach ($types AS $type => $name) {
-          $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+          $field_name = getlocations_get_fieldname($name, 'taxonomy_term');
           $mkey = 'vocabulary_marker_' . $field_name;
           $form[$mkey] = getlocations_element_map_marker(
-            t('%name Vocabulary Marker', array('%name' => $name)),
+            t('%name Vocabulary Marker', array('%name' => $types2[$type])),
             $markers,
-            $this->options[$mkey]
+            (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'])
           );
         }
       }
-    }
-    // term markers
-    $form['term_map_marker'] = getlocations_element_map_marker(
-      t('Term Map marker'),
-      $markers,
-      $this->options['term_map_marker']
-    );
-    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-    if ($getlocations_term_marker['enable']) {
-      if ($getlocations_term_marker['vid']) {
-        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-        $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
-        foreach ($terms AS $term) {
-          $name = $term->name;
-          $tid = $term->tid;
-          $mkey = 'term_marker_' . $tid;
-          $form[$mkey] = getlocations_element_map_marker(
-            t('%name Term Map Marker', array('%name' => $name)),
-            $markers,
-            $this->options[$mkey]
-          );
+      else {
+        $form['vocabulary_map_marker'] = getlocations_element_map_marker(
+          t('Vocabulary Map Marker'),
+          $markers,
+          $this->options['vocabulary_map_marker']
+        );
+      }
+
+      // term markers
+      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+      if ($getlocations_term_marker['enable']) {
+        if ($getlocations_term_marker['vid']) {
+          $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+          $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
+          foreach ($terms AS $term) {
+            $name = $term->name;
+            $tid = $term->tid;
+            $mkey = 'term_marker_' . $tid;
+            $form[$mkey] = getlocations_element_map_marker(
+              t('%name Term Map Marker', array('%name' => $name)),
+              $markers,
+              $this->options[$mkey]
+            );
+          }
         }
       }
+      else {
+        $form['term_map_marker'] = getlocations_element_map_marker(
+          t('Term Map marker'),
+          $markers,
+          $this->options['term_map_marker']
+        );
+      }
+
     }
 
     if (getlocations_check_entity_type('comment')) {

@@ -1,9 +1,35 @@
-commit 422652e
+commit 7d1d7ec
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 23 20:34:18 2012 +0100
+
+    fixed markers
+
+getlocations.admin.inc
+getlocations.install
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+views/getlocations.views.inc
+views/getlocations_plugin_style_map.inc
+
+commit 16eae36
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 23 20:32:19 2012 +0100
+
+    fixed buble and link in search
+
+modules/getlocations_search/js/getlocations_search.js
+
+commit 69cdf85
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jul 14 11:27:29 2012 +0100
 
     more fixes to getlocations_fields_views
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields.views.inc
 
 commit 9fd154b

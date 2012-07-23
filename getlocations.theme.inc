@@ -419,14 +419,17 @@ function theme_getlocations_settings_form($variables) {
 
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
-          if (isset($form['getlocations_node_marker']['content_type'][$type]['map_marker'])) {
-            $link = getlocations_markerpicker_link($form['getlocations_node_marker']['content_type'][$type]['map_marker']['#id'], 'n');
-            $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+          $field_names = getlocations_get_fieldname2($type, 'node');
+          foreach ($field_names AS $field_name) {
+            if (isset($form['getlocations_node_marker']['content_type'][$type]['field_name'][$field_name]['map_marker'])) {
+              $link = getlocations_markerpicker_link($form['getlocations_node_marker']['content_type'][$type]['field_name'][$field_name]['map_marker']['#id'], 'n');
+              $form['getlocations_node_marker']['content_type'][$type]['field_name'][$field_name]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+            }
           }
         }
       }
 
-      if (module_exists('getlocations_fields') && $types = getlocations_get_vocabularies()) {
+      if ($types = getlocations_get_vocabularies()) {
         foreach ($types AS $type => $name) {
           if (isset($form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker'])) {
             $link = getlocations_markerpicker_link($form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#id'], 'v');
@@ -476,10 +479,12 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
       if ($getlocations_node_marker['enable']) {
         if ($types = getlocations_get_types()) {
           foreach ($types AS $type => $name) {
-            $field_name = getlocations_get_fieldname($type);
-            $mkey = 'node_marker_' . $field_name;
-            $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
-            $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+            $field_names = getlocations_get_fieldname2($type, 'node');
+            foreach ($field_names AS $field_name) {
+              $mkey = 'node_marker__' . $type . '__' . $field_name;
+              $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
+              $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+            }
           }
         }
       }

@@ -149,21 +149,16 @@ function theme_getlocations_fields_show($variables) {
         elseif ($location['cid']) {
           $base = 'cid';
         }
-        if (isset($location['marker']) && ! empty($location['marker'])) {
-          $marker = $location['marker'];
-        }
-        else {
-          $marker = $settings['map_marker'];
-        }
-        if ($base == 'nid') {
 
+        $marker = $settings['map_marker'];
+        if ($base == 'nid') {
           // term markers, nodes only
           $marker = getlocations_get_term_marker($location['nid'], $marker);
-          // per location marker
-          if (isset($location['marker']) && ! empty($location['marker'])) {
-            $marker = $location['marker'];
-          }
+        }
 
+        // per location marker
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
         }
         $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base);
         $map = getlocations_fields_getmap_show($settings, $latlons);

@@ -58,12 +58,10 @@ function getlocations_permission() {
     'title' => t('Access Getlocations'),
     'description' => t('View and use the Getlocations module.')
   );
-  if (module_exists('getlocations_fields')) {
-    $perms['access user getlocations'] = array(
-      'title' => t('Access User locations'),
-      'description' => t('View User locations with Getlocation maps.')
-    );
-  }
+  $perms['access user getlocations'] = array(
+    'title' => t('Access User locations'),
+    'description' => t('View User locations with Getlocation maps.')
+  );
   return $perms;
 }
 
@@ -236,17 +234,11 @@ function getlocations_cdints_load($arg) {
  */
 function getlocations_access_location() {
   if (user_access('access getlocations')) {
-    if (module_exists('getlocations_fields')) {
-      return TRUE;
-    }
-    elseif (module_exists('location') && (module_exists('location_node') || module_exists('location_cck'))) {
-      return TRUE;
-    }
-    elseif (module_exists('geofield')) {
-      return TRUE;
-    }
-    elseif (module_exists('geolocation')) {
-      return TRUE;
+    $modules = getlocations_supported_modules();
+    foreach ($modules AS $module) {
+      if (module_exists($module)) {
+        return TRUE;
+      }
     }
   }
   return FALSE;
@@ -254,14 +246,11 @@ function getlocations_access_location() {
 
 function getlocations_access_user_location() {
   if (user_access('access user getlocations') && user_access('access user profiles')) {
-    if (module_exists('getlocations_fields')) {
-      return TRUE;
-    }
-    elseif (module_exists('geofield')) {
-      return TRUE;
-    }
-    elseif (module_exists('geolocation')) {
-      return TRUE;
+    $modules = getlocations_supported_modules();
+    foreach ($modules AS $module) {
+      if (module_exists($module)) {
+        return TRUE;
+      }
     }
   }
   return FALSE;
@@ -343,15 +332,67 @@ function getlocations_nodemap($nid) {
  *
  */
 function getlocations_usermap($uid) {
-  if (module_exists('getlocations_fields')) {
-    $getlocations_defaults = getlocations_defaults();
 
-    $marker = $getlocations_defaults['user_map_marker'];
+  $getlocations_defaults = getlocations_defaults();
+
+  $marker = $getlocations_defaults['user_map_marker'];
+  $locations = getlocations_load_locations($uid, 'uid');
+  $account = user_load($uid);
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $ct = 0;
+  if (count($locations)) {
+    // we should loop over them and dump bummers with no lat/lon
+    foreach ($locations AS $key => $location) {
+      if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
+        $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
+        if (! isset($location['key'])) {
+          $location['key'] = '';
+        }
+        else {
+          $location['lid'] = $uid;
+        }
+        // per location marker
+        if (isset($location['marker']) && ! empty($location['marker'])) {
+          $marker = $location['marker'];
+        }
+        $ct++;
+        $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
+        $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
+      }
+    }
+  }
+  if ($ct < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
+
+  drupal_set_title(t('View user !t locations', array('!t' => $account->name)));
+
+  return getlocations_setlocations($latlons, $minmaxes, 'user', $account);
+
+}
+
+/**
+ * Menu callback
+ *
+ *
+ * @return
+ *   Returns a map of locations of all the users
+ *
+ */
+function getlocations_usersmap() {
+
+  $getlocations_defaults = getlocations_defaults();
+  $marker = $getlocations_defaults['user_map_marker'];
+  $latlons = array();
+  $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $query = db_select('users', 'u')->fields('u', array('uid', 'name'))->condition('u.status', 1);
+  $rows = $query->execute();
+  $ct = 0;
+  foreach ($rows AS $row) {
+    $uid = $row->uid;
     $locations = getlocations_load_locations($uid, 'uid');
-    $account = user_load($uid);
-    $latlons = array();
-    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-    $ct = 0;
     if (count($locations)) {
       // we should loop over them and dump bummers with no lat/lon
       foreach ($locations AS $key => $location) {
@@ -368,72 +409,19 @@ function getlocations_usermap($uid) {
             $marker = $location['marker'];
           }
           $ct++;
-          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
+          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->name), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
         }
       }
     }
-    if ($ct < 2 ) {
-      unset($minmaxes);
-      $minmaxes = '';
-    }
-
-    drupal_set_title(t('View user !t locations', array('!t' => $account->name)));
-
-    return getlocations_setlocations($latlons, $minmaxes, 'user', $account);
   }
-}
 
-/**
- * Menu callback
- *
- *
- * @return
- *   Returns a map of locations of all the users
- *
- */
-function getlocations_usersmap() {
-
-  if (module_exists('getlocations_fields')) {
-    $getlocations_defaults = getlocations_defaults();
-    $marker = $getlocations_defaults['user_map_marker'];
-    $latlons = array();
-    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-    $query = db_select('users', 'u')->fields('u', array('uid', 'name'))->condition('u.status', 1);
-    $rows = $query->execute();
-    $ct = 0;
-    foreach ($rows AS $row) {
-      $uid = $row->uid;
-      $locations = getlocations_load_locations($uid, 'uid');
-      if (count($locations)) {
-        // we should loop over them and dump bummers with no lat/lon
-        foreach ($locations AS $key => $location) {
-          if (getlocations_latlon_check($location['latitude'] . ',' . $location['longitude']) ) {
-            $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
-            if (! isset($location['key'])) {
-              $location['key'] = '';
-            }
-            else {
-              $location['lid'] = $uid;
-            }
-            // per location marker
-            if (isset($location['marker']) && ! empty($location['marker'])) {
-              $marker = $location['marker'];
-            }
-            $ct++;
-            $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->name), ENT_QUOTES);
-            $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key']);
-          }
-        }
-      }
-    }
-
-    if ($ct < 2 ) {
-      unset($minmaxes);
-      $minmaxes = '';
-    }
-    return getlocations_setlocations($latlons, $minmaxes, 'users');
+  if ($ct < 2 ) {
+    unset($minmaxes);
+    $minmaxes = '';
   }
+  return getlocations_setlocations($latlons, $minmaxes, 'users');
+
 }
 
 /**
@@ -446,7 +434,7 @@ function getlocations_usersmap() {
  *
  */
 function getlocations_termmap($tid) {
-  if (module_exists('getlocations_fields') && module_exists('taxonomy')) {
+  if (module_exists('taxonomy')) {
     $locations = getlocations_load_locations($tid, 'tid');
     $term = taxonomy_term_load($tid);
     $getlocations_defaults = getlocations_defaults();
@@ -492,7 +480,7 @@ function getlocations_termmap($tid) {
 }
 
 function getlocations_commentmap($cid) {
-  if (module_exists('getlocations_fields') && module_exists('comment')) {
+  if (module_exists('comment')) {
     $locations = getlocations_load_locations($cid, 'cid');
     $comment = comment_load($cid);
     $getlocations_defaults = getlocations_defaults();
@@ -1502,23 +1490,7 @@ function getlocations_get_types() {
 
 function getlocations_check_node($bundle) {
 
-  $module = FALSE;
-  if (module_exists('location_node')) {
-    return TRUE;
-  }
-  if (module_exists('getlocations_fields')) {
-    $module = 'getlocations_fields';
-  }
-  elseif (module_exists('location_cck')) {
-    $module = 'location_cck';
-  }
-  elseif (module_exists('geofield')) {
-    $module = 'geofield';
-  }
-  elseif (module_exists('geolocation')) {
-    $module = 'geolocation';
-  }
-
+  $module = getlocations_get_current_supported_module();
   if ($module) {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('id'));
@@ -1541,19 +1513,7 @@ function getlocations_check_node($bundle) {
 
 function getlocations_get_fieldname($bundle, $entity_type='node') {
 
-  $module = FALSE;
-  if (module_exists('getlocations_fields')) {
-    $module = 'getlocations_fields';
-  }
-  elseif (module_exists('location_cck')) {
-    $module = 'location_cck';
-  }
-  elseif (module_exists('geofield')) {
-    $module = 'geofield';
-  }
-  elseif (module_exists('geolocation')) {
-    $module = 'geolocation';
-  }
+  $module = getlocations_get_current_supported_module();
   if ($module) {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('field_name'));
@@ -1565,8 +1525,32 @@ function getlocations_get_fieldname($bundle, $entity_type='node') {
     $rows = $query->execute();
     $ct = 0;
     foreach ($rows AS $row) {
-      $ct++;
       $data = $row->field_name;
+      $ct++;
+    }
+    if ($ct) {
+      return $data;
+    }
+  }
+  return FALSE;
+}
+
+function getlocations_get_fieldname2($bundle, $entity_type='node') {
+
+  $module = getlocations_get_current_supported_module();
+  if ($module) {
+    $query = db_select('field_config', 'f');
+    $query->fields('f', array('field_name'));
+    $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+    $query->condition('i.bundle', $bundle)
+      ->condition('f.module', $module)
+      ->condition('i.entity_type', $entity_type)
+      ->condition('f.active', 1);
+    $rows = $query->execute();
+    $ct = 0;
+    foreach ($rows AS $row) {
+      $data[$ct] = $row->field_name;
+      $ct++;
     }
     if ($ct) {
       return $data;
@@ -1577,19 +1561,8 @@ function getlocations_get_fieldname($bundle, $entity_type='node') {
 
 // is an entity_type location enabled?
 function getlocations_check_entity_type($entity_type) {
-  $module = FALSE;
-  if (module_exists('getlocations_fields')) {
-    $module = 'getlocations_fields';
-  }
-  elseif (module_exists('location_cck')) {
-    $module = 'location_cck';
-  }
-  elseif (module_exists('geofield')) {
-    $module = 'geofield';
-  }
-  elseif (module_exists('geolocation')) {
-    $module = 'geolocation';
-  }
+
+  $module = getlocations_get_current_supported_module();
   if ($module) {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('id'));
@@ -1610,7 +1583,7 @@ function getlocations_check_entity_type($entity_type) {
 }
 
 function getlocations_get_vocabularies() {
-  if (module_exists('getlocations_fields') && module_exists('taxonomy')) {
+  if (module_exists('taxonomy')) {
     $vocabularies = taxonomy_get_vocabularies();
     $options = array();
     if (count($vocabularies)) {
@@ -1625,21 +1598,26 @@ function getlocations_get_vocabularies() {
   return FALSE;
 }
 
+function getlocations_get_machine_vocabularies() {
+  if (module_exists('taxonomy')) {
+    $vocabularies = taxonomy_get_vocabularies();
+    $options = array();
+    if (count($vocabularies)) {
+      foreach ($vocabularies as $vid => $vocabulary) {
+        if (getlocations_check_vocabulary($vocabulary->name)) {
+          $options[$vid] = $vocabulary->machine_name;
+        }
+      }
+      return $options;
+    }
+  }
+  return FALSE;
+}
+
+
 function getlocations_check_vocabulary($vocab_name) {
   if (module_exists('taxonomy')) {
-    $module = FALSE;
-    if (module_exists('getlocations_fields')) {
-      $module = 'getlocations_fields';
-    }
-    elseif (module_exists('location_cck')) {
-      $module = 'location_cck';
-    }
-    elseif (module_exists('geofield')) {
-      $module = 'geofield';
-    }
-    elseif (module_exists('geolocation')) {
-      $module = 'geolocation';
-    }
+    $module = getlocations_get_current_supported_module();
     if ($module) {
       // first we need to get the machine name of the vocab.
       $query = db_select('taxonomy_vocabulary', 'v');
@@ -1676,14 +1654,20 @@ function getlocations_get_markertypes($type) {
   $markertypes = array();
   if ($type == 'node') {
     $default_marker = $getlocations_defaults['node_map_marker'];
-    $content_types = getlocations_get_types();
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-    foreach ($content_types AS $content_type => $name ) {
-      if ($getlocations_node_marker['enable'] && isset($getlocations_node_marker['content_type'][$content_type]['map_marker'])) {
-        $markertypes[$content_type] = $getlocations_node_marker['content_type'][$content_type]['map_marker'];
-      }
-      else {
-        $markertypes[$content_type] = $default_marker;
+    if ($getlocations_node_marker['enable']) {
+      if($content_types = getlocations_get_types()) {
+        foreach ($content_types AS $content_type => $name ) {
+          $field_names = getlocations_get_fieldname2($content_type, 'node');
+          foreach ($field_names AS $field_name) {
+            if (isset($getlocations_node_marker['content_type'][$content_type]['field_name'][$field_name]['map_marker'])) {
+              $markertypes[$content_type] = $getlocations_node_marker['content_type'][$content_type]['field_name'][$field_name]['map_marker'];
+            }
+            else {
+              $markertypes[$content_type] = $default_marker;
+            }
+          }
+        }
       }
     }
     return $markertypes;
@@ -1830,7 +1814,7 @@ function getlocations_load_locations($id, $key = 'vid') {
   if (module_exists('getlocations_fields')) {
     $locations = getlocations_fields_load_locations($id, $key);
   }
-  elseif (module_exists('location')) {
+  elseif (module_exists('location_cck')) {
     $locations = location_load_locations($id, $key);
   }
   elseif (module_exists('geofield')) {
@@ -1853,7 +1837,7 @@ function getlocations_load_location($lid) {
       $location['marker'] = $getlocations_defaults[$type . '_map_marker'];
     }
   }
-  elseif (module_exists('location')) {
+  elseif (module_exists('location_cck')) {
     $location = location_load_location($lid);
     $location['marker'] = $getlocations_defaults['node_map_marker'];
   }
@@ -1862,6 +1846,7 @@ function getlocations_load_location($lid) {
 
 function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
   global $language;
+
   $locations = array();
   if (empty($module)) {
     return $locations;
@@ -1922,7 +1907,7 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
     $geo = $obj->$geofield;
     $geo_keys = array_keys($geo);
     foreach ($geo_keys AS $lang) {
-      if ($lang == $language->language || $lang == $obj->language || $lang == 'und') {
+      if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
         $ct = 0;
         foreach ($geo[$lang] AS $g) {
           $locations[$ct]['latitude']  = $g['lat'];
@@ -1957,7 +1942,7 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
       $geo = $obj->$geolocationfield;
       $geo_keys = array_keys($geo);
       foreach ($geo_keys AS $lang) {
-        if ($lang == $language->language || $lang == $obj->language || $lang == 'und') {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
           $ct = 0;
           foreach ($geo[$lang] AS $g) {
             $locations[$ct]['latitude']  = $g['lat'];
@@ -1993,7 +1978,7 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
       $addr = $obj->$addressfield;
       $addr_keys = array_keys($addr);
       foreach ($addr_keys AS $lang) {
-        if ($lang == $language->language || $lang == $obj->language || $lang == 'und') {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
           $ct = 0;
           foreach ($addr[$lang] AS $a) {
             $locations[$ct]['name'] = $a['organisation_name'];
@@ -3087,3 +3072,21 @@ function getlocations_get_term_marker($nid, $marker) {
   return $marker;
 }
 
+function getlocations_supported_modules() {
+  return array(
+    'getlocations_fields',
+    'geofield',
+    'geolocation',
+    'location_cck'
+  );
+}
+
+function getlocations_get_current_supported_module() {
+  $modules = getlocations_supported_modules();
+  foreach ($modules AS $module) {
+    if (module_exists($module)) {
+      return $module;
+    }
+  }
+  return FALSE;
+}

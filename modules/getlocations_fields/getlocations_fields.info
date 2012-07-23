@@ -1,7 +1,7 @@
 name = Getlocations Fields
 description = Defines a Getlocations Geocoding Field type.
 core = 7.x
-package = Field
+package = Fields
 dependencies[] = getlocations
 
 files[] = handlers/getlocations_fields_handler_argument_distance.inc

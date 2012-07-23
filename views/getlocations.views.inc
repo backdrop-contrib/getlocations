@@ -40,9 +40,20 @@ function template_preprocess_getlocations_view_map(&$variables) {
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
   $base_field = $variables['view']->style_plugin->view->base_field;
+
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
+  $entity_type = 'node';
+  if ($base_field == 'uid') {
+    $entity_type = 'user';
+  }
+  elseif ($base_field == 'tid') {
+    $entity_type = 'taxonomy_term';
+  }
+  elseif ($base_field == 'cid') {
+    $entity_type = 'comment';
+  }
 
   if ($options['custom_content_enable'] and !empty($options['custom_content_source'])) {
     $custom_content_source = $options['custom_content_source'];
@@ -53,6 +64,11 @@ function template_preprocess_getlocations_view_map(&$variables) {
   if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
+
+      if (! isset($location['type']) && isset($location['machine_name'])) {
+        $location['type'] = $location['machine_name'];
+      }
+
       $custom_content = $custom_content_source ? $location[$custom_content_source] : '';
       $lid = 0;
       if (module_exists('getlocations_fields') && isset($location['glid']) && $location['glid'] > 0) {
@@ -63,35 +79,49 @@ function template_preprocess_getlocations_view_map(&$variables) {
       }
       elseif (module_exists('geofield') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
         $lid = $location[$base_field];
-        $location['field_name'] = getlocations_get_fieldname($location['type']);
+        $location['field_name'] = getlocations_get_fieldname($location['type'], $entity_type);
         $location['latitude'] = $location[$location['field_name']];
         $location['longitude'] = $location[$location['field_name'] . '_1'];
       }
       elseif (module_exists('geolocation') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
         $lid = $location[$base_field];
-        $location['field_name'] = getlocations_get_fieldname($location['type']);
+        $location['field_name'] = getlocations_get_fieldname($location['type'], $entity_type);
         $location['latitude'] = $location[$location['field_name']];
         $location['longitude'] = $location[$location['field_name'] . '_1'];
       }
       if ($lid > 0) {
-        // marker
-        $marker = $options['node_map_marker'];
-        if ($type = getlocations_get_type_from_lid($lid)) {
-          if (isset($options[$type . '_map_marker'])) {
-            $marker = $options[$type . '_map_marker'];
-          }
-        }
-        if (isset($location['field_name']) && isset($options['node_marker_' . $location['field_name']])) {
-          $marker = $options['node_marker_' . $location['field_name']];
-        }
-        if ($nid = getlocations_get_nid_from_lid($lid)) {
-          $results = db_query('SELECT tid FROM {taxonomy_index} WHERE nid = :nid', array(':nid' => $nid));
-          foreach ($results as $result) {
-            if (isset($options['term_marker_' . $result->tid])) {
-              $marker = $options['term_marker_' . $result->tid];
+        if ($entity_type == 'node') {
+          $marker = $options['node_map_marker'];
+          if (isset($location['type']) && isset($location['field_name']) ) {
+            if (isset($options['node_marker__' . $location['type'] . '__' . $location['field_name']])) {
+              $marker = $options['node_marker__' . $location['type'] . '__' . $location['field_name']];
             }
           }
         }
+        elseif ($entity_type == 'taxonomy_term') {
+          $marker = $options['vocabulary_map_marker'];
+          if (isset($location['field_name'])) {
+            if (isset($options['vocabulary_marker_' . $location['field_name']])) {
+              $marker = $options['vocabulary_marker_' . $location['field_name']];
+            }
+          }
+          // term marker
+          if ($nid = getlocations_get_nid_from_lid($lid)) {
+            $results = db_query('SELECT tid FROM {taxonomy_index} WHERE nid = :nid', array(':nid' => $nid));
+            foreach ($results as $result) {
+              if (isset($options['term_marker_' . $result->tid])) {
+                $marker = $options['term_marker_' . $result->tid];
+              }
+            }
+          }
+        }
+        elseif ($entity_type == 'user') {
+          $marker = $options['user_map_marker'];
+        }
+        elseif ($entity_type == 'comment') {
+          $marker = $options['comment_map_marker'];
+        }
+        // per item marker
         if (isset($location['marker']) && ! empty($location['marker'])) {
           $marker = $location['marker'];
         }

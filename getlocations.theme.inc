@@ -149,7 +149,7 @@ function theme_getlocations_show($variables) {
     }
   }
   if (count($buttons)) {
-    $output .= '<div class="getlocations_map_buttons" class="container-inline">';
+    $output .= '<div class="getlocations_map_buttons container-inline">';
     $output .= implode('&nbsp;', $buttons);
     $output .= '</div>';
   }

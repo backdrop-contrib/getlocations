@@ -1029,7 +1029,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
 
       // is this real or a demo in settings
       $active = TRUE;
-      if (empty($element['#entity'])){
+      if (empty($element['#entity'])) {
         $active = FALSE;
       }
 

@@ -1656,7 +1656,7 @@ function getlocations_get_markertypes($type) {
     $default_marker = $getlocations_defaults['node_map_marker'];
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
-      if($content_types = getlocations_get_types()) {
+      if ($content_types = getlocations_get_types()) {
         foreach ($content_types AS $content_type => $name ) {
           $field_names = getlocations_get_fieldname2($content_type, 'node');
           foreach ($field_names AS $field_name) {

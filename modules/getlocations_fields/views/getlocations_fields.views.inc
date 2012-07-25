@@ -525,6 +525,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         $coordinates['longitude'] = (isset($options['longitude']) ? (float) $options['longitude'] : 0);
       }
       break;
+
     case 'static':
       // not tested
       $coordinates['latitude'] = (isset($options['latitude']) ? (float) $options['latitude'] : 0);
@@ -558,8 +559,8 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
 #        }
 #      }
 #      break;
+
     case 'php':
-      // not tested
       ob_start();
       $result = eval($options['php_code']);
       ob_end_clean();
@@ -568,26 +569,29 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         $coordinates['longitude'] = (float) $result['longitude'];
       }
       break;
+
     case 'nid_arg':
-      // tested OK
       if ($nodehandler = $view->display_handler->get_handler('argument', $options['nid_arg'])) {
         $nid = $nodehandler->get_value();
-        if ($nid && is_numeric($nid) && $tempnode = node_load($nid)) {
+        if ($nid && is_numeric($nid) && $tempobj = node_load($nid)) {
           $field_name = $options['nid_loc_field'];
-          if (isset($tempnode->location['latitude']) && $field_name == 'node') {
-            $coordinates['latitude'] = (float) $tempnode->location['latitude'];
-            $coordinates['longitude'] = (float) $tempnode->location['longitude'];
+          if (isset($tempobj->location['latitude']) && isset($tempobj->location['longitude']) && $field_name == 'node') {
+            $coordinates['latitude'] = (float) $tempobj->location['latitude'];
+            $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempnode->$field_name)) {
-              if (! isset($tempnode->language)) {
+            if (isset($tempobj->$field_name)) {
+              if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
-                $lang = $tempnode->language;
+                $lang = $tempobj->language;
+                if (! isset($tempobj->$field_name[$lang])) {
+                  $lang = 'und';
+                }
               }
-              $location = $tempnode->$field_name;
-              if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
+              $location = $tempobj->$field_name;
+              if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
               }
@@ -596,26 +600,29 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         }
       }
       break;
+
     case 'uid_arg':
-      // tested OK
       if ($userhandler = $view->display_handler->get_handler('argument', $options['uid_arg'])) {
         $uid = $userhandler->get_value();
-        if ($uid && is_numeric($uid) && $tempuser = user_load($uid)) {
+        if ($uid && is_numeric($uid) && $tempobj = user_load($uid)) {
           $field_name = $options['uid_loc_field'];
-          if (isset($tempuser->location['latitude']) && $field_name == 'user') {
-            $coordinates['latitude'] = (float) $tempuser->location['latitude'];
-            $coordinates['longitude'] = (float) $tempuser->location['longitude'];
+          if (isset($tempobj->location['latitude']) && isset($tempobj->location['longitude']) && $field_name == 'user') {
+            $coordinates['latitude'] = (float) $tempobj->location['latitude'];
+            $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempuser->$field_name)) {
-              if (! isset($tempuser->language)) {
+            if (isset($tempobj->$field_name)) {
+              if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
-                $lang = $tempuser->language;
+                $lang = $tempobj->language;
+                if (! isset($tempobj->$field_name[$lang])) {
+                  $lang = 'und';
+                }
               }
-              $location = $tempuser->$field_name;
-              if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
+              $location = $tempobj->$field_name;
+              if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
               }
@@ -624,26 +631,29 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         }
       }
       break;
+
     case 'tid_arg':
-      // tested OK
       if ($termhandler = $view->display_handler->get_handler('argument', $options['tid_arg'])) {
         $tid = $termhandler->get_value();
-        if ($tid && is_numeric($tid) && $tempuser = taxonomy_term_load($tid)) {
+        if ($tid && is_numeric($tid) && $tempobj = taxonomy_term_load($tid)) {
           $field_name = $options['tid_loc_field'];
-          if (isset($tempuser->location['latitude']) && $field_name == 'taxonomy_term') {
-            $coordinates['latitude'] = (float) $tempuser->location['latitude'];
-            $coordinates['longitude'] = (float) $tempuser->location['longitude'];
+          if (isset($tempobj->location['latitude']) && isset($tempobj->location['longitude']) && $field_name == 'taxonomy_term') {
+            $coordinates['latitude'] = (float) $tempobj->location['latitude'];
+            $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempuser->$field_name)) {
-              if (! isset($tempuser->language)) {
+            if (isset($tempobj->$field_name)) {
+              if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
-                $lang = $tempuser->language;
+                $lang = $tempobj->language;
+                if (! isset($tempobj->$field_name[$lang])) {
+                  $lang = 'und';
+                }
               }
-              $location = $tempuser->$field_name;
-              if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
+              $location = $tempobj->$field_name;
+              if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
               }
@@ -657,22 +667,25 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
       // not tested
       if ($commenthandler = $view->display_handler->get_handler('argument', $options['cid_arg'])) {
         $cid = $commenthandler->get_value();
-        if ($cid && is_numeric($cid) && $tempuser = comment_load($cid)) {
+        if ($cid && is_numeric($cid) && $tempobj = comment_load($cid)) {
           $field_name = $options['cid_loc_field'];
-          if (isset($tempuser->location['latitude']) && $field_name == 'comment') {
-            $coordinates['latitude'] = (float) $tempuser->location['latitude'];
-            $coordinates['longitude'] = (float) $tempuser->location['longitude'];
+          if (isset($tempobj->location['latitude']) && isset($tempobj->location['longitude']) && $field_name == 'comment') {
+            $coordinates['latitude'] = (float) $tempobj->location['latitude'];
+            $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempuser->$field_name)) {
-              if (! isset($tempuser->language)) {
+            if (isset($tempobj->$field_name)) {
+              if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
-                $lang = $tempuser->language;
+                $lang = $tempobj->language;
+                if (! isset($tempobj->$field_name[$lang])) {
+                  $lang = 'und';
+                }
               }
-              $location = $tempuser->$field_name;
-              if (isset($location[$lang][0]['longitude']) && isset($location[$lang][0]['latitude'])) {
+              $location = $tempobj->$field_name;
+              if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
               }
@@ -681,6 +694,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
         }
       }
       break;
+
     // used by sort when argument is lat/lon
     case 'distance_arg':
       $coordinates = array();
@@ -689,7 +703,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
           $a = explode('_', $view->args[$argument->position]);
           if (count($a) == 2) {
             $aa = explode(',', $a[0]);
-             if (count($aa) == 2 && is_numeric($aa[0]) && is_numeric($aa[1])) {
+              if (count($aa) == 2 && is_numeric($aa[0]) && is_numeric($aa[1])) {
               $lat = $aa[0];
               $lon = $aa[1];
             }
@@ -761,4 +775,3 @@ function getlocations_fields_views_proximity_get_location_field_options() {
 #  $data = field_views_field_default_views_data($field);
 #  return $data;
 #}
-

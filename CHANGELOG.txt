@@ -1,9 +1,37 @@
-commit 7d1d7ec
+commit e871b6e
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 25 09:04:58 2012 +0100
+
+    fixed entity translation bug #1699596 and some coder review fixes
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit a00cc79
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 24 12:46:44 2012 +0100
+
+    bug in theme
+
+getlocations.theme.inc
+
+commit 597012d
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 23 23:32:35 2012 +0100
+
+    added configfor ua string
+
+getlocations.admin.inc
+getlocations.module
+
+commit 8928e8d
 Author: hutch <hutch@midwales.net>
 Date:   Mon Jul 23 20:34:18 2012 +0100
 
     fixed markers
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.install
 getlocations.module

@@ -171,6 +171,12 @@ function getlocations_search_form($form, &$form_state) {
     );
   }
 
+  if ($getlocations_search_defaults['restrict_by_country'] && $getlocations_search_defaults['country']) {
+    $form['getlocations_search_country'] = array(
+      '#markup' => $getlocations_search_defaults['country'],
+    );
+  }
+
   if ($getlocations_search_defaults['method'] != 'google_ac') {
     $form['getlocations_search_submit'] = array(
       '#type' => 'submit',
@@ -241,6 +247,8 @@ function getlocations_search_js_settings_do($defaults, $mapid) {
       'maxzoom' => $defaults['maxzoom'],
       'do_lookup' => ($do_lookup ? 1 : 0),
       'autocomplete_bias' => $defaults['autocomplete_bias'],
+      'restrict_by_country' => $defaults['restrict_by_country'],
+      'country' => $defaults['country'],
     ),
   );
 
@@ -284,6 +292,11 @@ function theme_getlocations_search_form($variables) {
     $geolocation_button = '<p><input type="submit" value="' . t('Find current Location') . '" title="' . t('Get the latitude and longitude for this location from the browser') . '" id="getlocations_search_geolocation_button" class="form-submit" />&nbsp;<span id="getlocations_search_geolocation_status" ></span></p>';
     $geolocation_button .= '<p>Use the browser to find your current location</p>';
     $form['getlocations_search_geolocation_button']['#markup'] = $geolocation_button;
+  }
+
+  if (isset($form['getlocations_search_country']['#markup'])) {
+    $restrict_country = '<p>' . t('Restrict the search to %c', array('%c' => getlocations_get_country_name($form['getlocations_search_country']['#markup']))) . '</p>';
+    $form['getlocations_search_country']['#markup'] = $restrict_country;
   }
 
   $output .= drupal_render_children($form);
@@ -358,6 +371,8 @@ function getlocations_search_defaults() {
     'display_search_limits' => 1,
     'display_search_type' => 1,
     'autocomplete_bias' => 0,
+    'restrict_by_country' => 0,
+    'country' => variable_get('site_default_country', ''),
     'width'                     => $getlocations_defaults['width'],
     'height'                    => $getlocations_defaults['height'],
     'styles'                    => $getlocations_defaults['styles'],

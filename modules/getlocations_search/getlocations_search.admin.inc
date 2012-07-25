@@ -45,6 +45,22 @@ function getlocations_search_settings_form() {
     '#default_value' => ($getlocations_search_defaults['autocomplete_bias'] ? $getlocations_search_defaults['autocomplete_bias'] : 0),
     '#return_value' => 1,
   );
+
+  // country restriction
+  $form['getlocations_search_defaults']['restrict_by_country'] = getlocations_element_map_checkbox(
+    t('Restrict by country'),
+    $getlocations_search_defaults['restrict_by_country'],
+    t('Restrict searches to the country set below. Works with Google Autocomplete.')
+  );
+  $form['getlocations_search_defaults']['restrict_by_country']['#suffix'] = '<div id="getlocations_search_country">';
+  $countries = getlocations_get_countries_list();
+  $form['getlocations_search_defaults']['country'] = getlocations_element_dd(
+    t('Search country'),
+    $getlocations_search_defaults['country'],
+    $countries
+  );
+  $form['getlocations_search_defaults']['country']['#suffix'] = '</div>';
+
   $form['getlocations_search_defaults']['use_geolocation_button'] = getlocations_element_map_checkbox(
     t('Provide Browser based geocoding option'),
     $getlocations_search_defaults['use_geolocation_button'],
@@ -148,6 +164,7 @@ function getlocations_search_settings_form() {
     $getlocations_search_defaults['display_dms'],
     ''
   );
+
 
   $form['getlocations_search_defaults'] += getlocations_map_display_basics_form($getlocations_search_defaults);
 

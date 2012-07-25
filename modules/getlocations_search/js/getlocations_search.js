@@ -13,10 +13,14 @@
     var searchsettings = Drupal.settings.getlocations_search;
     var method = '';
     var autocomplete_bias = 0;
+    var restrict_by_country = 0;
+    var country = '';
     jQuery.each(searchsettings, function (searchkey, ssettings) {
       method = ssettings.method;
       do_lookup = ssettings.do_lookup;
       autocomplete_bias = ssettings.autocomplete_bias;
+      restrict_by_country = ssettings.restrict_by_country;
+      country = ssettings.country;
     }); // end each search loop
 
     if (gs.markermanagertype == 1) {
@@ -44,7 +48,12 @@
     if (method == 'google_ac') {
       var input_adrs = document.getElementById("edit-getlocations-search");
       var fm_adrs = '';
-      var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
+      var opts = {};
+      if (restrict_by_country > 0 && country) {
+        var c = {'country':country};
+        opts = {'componentRestrictions':c};
+      }
+      var ac_adrs = new google.maps.places.Autocomplete(input_adrs, opts);
       if (autocomplete_bias) {
         ac_adrs.bindTo('bounds', map);
       }

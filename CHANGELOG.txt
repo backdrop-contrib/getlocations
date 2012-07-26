@@ -1,9 +1,41 @@
-commit e871b6e
+commit 33d8532
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 26 13:10:37 2012 +0100
+
+    added restrict by country to getlocations_fields
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit f03785a
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 26 12:01:31 2012 +0100
+
+    added info on theming to README
+
+README.txt
+modules/getlocations_blocks/README.txt
+modules/getlocations_fields/README.txt
+modules/getlocations_search/README.txt
+
+commit d25e778
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 25 18:07:49 2012 +0100
+
+    added restrict country feature to search
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 3235c4b
 Author: hutch <hutch@midwales.net>
 Date:   Wed Jul 25 09:04:58 2012 +0100
 
     fixed entity translation bug #1699596 and some coder review fixes
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/views/getlocations_fields.views.inc

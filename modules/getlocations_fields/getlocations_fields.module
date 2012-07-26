@@ -1179,21 +1179,9 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       }
 
       // country
-      $default_country_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
-      $default_country_value_long = $default_country_value;
-      if ($default_country_value && drupal_strlen($default_country_value) == 2) {
+      if ($settings['restrict_by_country'] && $settings['search_country']) {
+        $default_country_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['search_country']);
         $default_country_value_long = getlocations_get_country_name($default_country_value);
-      }
-      if ($settings['input_country_required'] == 4) {
-        // hidden form
-        $element['country'] = array(
-          '#type' => 'hidden',
-          '#value' => $default_country_value,
-          '#attributes' => array('id' => 'getlocations_country_' . $mapid),
-        );
-      }
-      elseif ($settings['input_country_required'] == 3) {
-        // hidden form
         $element['country'] = array(
           '#type' => 'hidden',
           '#value' => $default_country_value,
@@ -1204,47 +1192,74 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         );
       }
       else {
-        if ($settings['use_country_dropdown'] == 1) {
-          $countries = getlocations_get_countries_list();
-          $countries = array_merge(array('' => t('---Please select a country---')), $countries);
+        $default_country_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : $settings['country']);
+        $default_country_value_long = $default_country_value;
+        if ($default_country_value && drupal_strlen($default_country_value) == 2) {
+          $default_country_value_long = getlocations_get_country_name($default_country_value);
+        }
+        if ($settings['input_country_required'] == 4) {
+          // hidden form
           $element['country'] = array(
-            '#type' => 'select',
-            '#default_value' => $default_country_value,
-            '#options' => $countries,
-            '#title' => t('Country'),
+            '#type' => 'hidden',
+            '#value' => $default_country_value,
             '#attributes' => array('id' => 'getlocations_country_' . $mapid),
+          );
+        }
+        elseif ($settings['input_country_required'] == 3) {
+          // hidden form
+          $element['country'] = array(
+            '#type' => 'hidden',
+            '#value' => $default_country_value,
+            '#attributes' => array('id' => 'getlocations_country_' . $mapid),
+          );
+          $element['country_display'] = array(
+            '#markup' => $default_country_value_long,
           );
         }
         else {
-          $element['country'] = array(
-            '#type' => 'textfield',
-            '#default_value' => $default_country_value_long,
-            '#autocomplete_path' => ($settings['use_country_dropdown'] == 2 ? 'getlocations_fields/country_autocomplete' : ''),
-            '#size' => $settings['input_country_width'],
-            '#attributes' => array('id' => 'getlocations_country_' . $mapid),
-            '#title' => t('Country'),
-            '#maxlength' => 255,
-          );
-        }
-        if ($settings['input_country_required'] == 2) {
-          $element['country']['#disabled'] = TRUE;
-        }
-        elseif ($settings['input_country_required'] == 1) {
-          if ($active) {
-            if ($cardinality == -1) {
-              $required[] = 'country';
-            }
-            else {
-              $element['country']['#required'] = TRUE;
-            }
+          if ($settings['use_country_dropdown'] == 1) {
+            $countries = getlocations_get_countries_list();
+            $countries = array_merge(array('' => t('---Please select a country---')), $countries);
+            $element['country'] = array(
+              '#type' => 'select',
+              '#default_value' => $default_country_value,
+              '#options' => $countries,
+              '#title' => t('Country'),
+              '#attributes' => array('id' => 'getlocations_country_' . $mapid),
+            );
           }
           else {
-            $element['country']['#field_suffix'] = t('(Required)');
+            $element['country'] = array(
+              '#type' => 'textfield',
+              '#default_value' => $default_country_value_long,
+              '#autocomplete_path' => ($settings['use_country_dropdown'] == 2 ? 'getlocations_fields/country_autocomplete' : ''),
+              '#size' => $settings['input_country_width'],
+              '#attributes' => array('id' => 'getlocations_country_' . $mapid),
+              '#title' => t('Country'),
+              '#maxlength' => 255,
+            );
+          }
+          if ($settings['input_country_required'] == 2) {
+            $element['country']['#disabled'] = TRUE;
+          }
+          elseif ($settings['input_country_required'] == 1) {
+            if ($active) {
+              if ($cardinality == -1) {
+                $required[] = 'country';
+              }
+              else {
+                $element['country']['#required'] = TRUE;
+              }
+            }
+            else {
+              $element['country']['#field_suffix'] = t('(Required)');
+            }
           }
         }
-      }
-      if (! empty($settings['input_country_weight'])) {
-        $element['country']['#weight'] = $settings['input_country_weight'];
+        if (! empty($settings['input_country_weight'])) {
+          $element['country']['#weight'] = $settings['input_country_weight'];
+        }
+
       }
 
       // per_item_marker
@@ -1898,11 +1913,10 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
       'use_address' => $defaults['use_address'],
       'latlon_warning' => $defaults['latlon_warning'],
       'autocomplete_bias' => $defaults['autocomplete_bias'],
+      'restrict_by_country' => $defaults['restrict_by_country'],
+      'search_country' => $defaults['search_country'],
     ),
   );
-
-  // just send them all for now
-#  $settings = array($mapid => $defaults);
 
   drupal_add_js(array('getlocations_fields' => $settings), 'setting');
 
@@ -1971,6 +1985,8 @@ function getlocations_fields_defaults() {
     'per_item_marker'              => 0,
     'latlon_warning'               => 0,
     'autocomplete_bias'            => 0,
+    'restrict_by_country'          => 0,
+    'search_country'               => variable_get('site_default_country', ''),
     'columns'                      => array(
       'glid'        => t('Glid'),
       'name'        => t('Name'),
@@ -2062,6 +2078,8 @@ function getlocations_fields_field_info_defaults() {
         'use_geolocation_button'       => $getlocations_fields_defaults['use_geolocation_button'],
         'input_geolocation_button_weight' => $getlocations_fields_defaults['input_geolocation_button_weight'],
         'autocomplete_bias'            => $getlocations_fields_defaults['autocomplete_bias'],
+        'restrict_by_country'          => $getlocations_fields_defaults['restrict_by_country'],
+        'search_country'               => $getlocations_fields_defaults['search_country'],
       ),
     ),
   );
@@ -2157,8 +2175,18 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['autocomplete_bias'] = getlocations_element_map_checkbox(
     t('Enable Viewport bias'),
     $defaults['autocomplete_bias'],
-    t('Bias the Search box results to the area on the map.')
+    t('Bias the Google Autocomplete results to the area on the map.')
   );
+
+  // country restriction
+  $form['restrict_by_country'] = getlocations_element_map_checkbox(
+    t('Restrict by country'),
+    $defaults['restrict_by_country'],
+    t('Restrict searches to the country set below. Works with Google Autocomplete. This will override all other country settings.')
+  );
+  $form['restrict_by_country']['#suffix'] = '<div id="getlocations_fields_search_country">';
+  $form['search_country'] = getlocations_fields_element_country($defaults['search_country'], t('Search country'), FALSE);
+  $form['search_country']['#suffix'] = '</div>';
 
   if (module_exists('smart_ip')) {
     $form['use_smart_ip_button'] = getlocations_element_map_checkbox(

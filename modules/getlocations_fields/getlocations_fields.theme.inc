@@ -433,7 +433,12 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['province']['#prefix'] = '<div class="getlocations_fields_province_wrapper">';
   $form['province']['#suffix'] = '</div>';
   $form['country']['#prefix'] = '<div class="getlocations_fields_country_wrapper">';
-  $form['country']['#suffix'] = '</div>';
+  if (isset($form['country_display'])) {
+    $form['country_display']['#suffix'] = '</div>';
+  }
+  else {
+    $form['country']['#suffix'] = '</div>';
+  }
 
   $msg = t('To use the map to find a location, drag the marker.');
   $map = $form['map']['#markup'];

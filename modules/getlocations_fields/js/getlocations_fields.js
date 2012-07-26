@@ -40,6 +40,8 @@
         nodezoom = parseInt(settings.nodezoom);
         map_marker = settings.map_marker;
         var autocomplete_bias = settings.autocomplete_bias;
+        var restrict_by_country = settings.restrict_by_country;
+        var search_country = settings.search_country;
 
       // we need to see if this is an update
         lat = $("#" + latfield + key).val();
@@ -64,7 +66,12 @@
           }
           var input_adrs = document.getElementById(adrsfield + key);
           var fm_adrs = '';
-          var ac_adrs = new google.maps.places.Autocomplete(input_adrs);
+          var opts = {};
+          if (restrict_by_country > 0 && search_country) {
+            var c = {'country':search_country};
+            opts = {'componentRestrictions':c};
+          }
+          var ac_adrs = new google.maps.places.Autocomplete(input_adrs, opts);
           if (autocomplete_bias) {
             ac_adrs.bindTo('bounds', getlocations_inputmap[key]);
           }

@@ -206,3 +206,32 @@ You can do much the same in 'Getlocations links' View
 Addressfield support.
 If the Addressfield module is supplying an address in conjunction with Geofield or Geolocation
 the address will be used to populate the InfoWindow or InfoBubble.
+
+Theming.
+Getlocations pages can be themed by copying the relevant function to your theme's template.php,
+renaming it in the usual manner.
+eg
+theme_getlocations_info() becomes MYTHEME_getlocations_info() where MYTHEME is the name of your theme.
+You can edit it there to suit your needs.
+
+These functions can be found in the file getlocations.theme.inc
+
+Theming the content of InfoWindow or InfoBubble.
+This is done with function theme_getlocations_info()
+
+Theming the map display.
+This is done with function theme_getlocations_show()
+
+Theming the Getlocations settings form.
+This is done with function theme_getlocations_settings_form()
+
+Theming the Getlocations options form in Views.
+This is done with function theme_getlocations_plugin_style_map_options_form()
+
+function template_preprocess_getlocations_box() and
+function template_preprocess_getlocations_marker_box() are for use in conjunction
+with the colorbox module and use the files getlocations_box.tpl.php and
+getlocations_marker_box.tpl.php respectively.
+
+More information on theming can be found on http://drupal.org/documentation/theme
+

@@ -24,3 +24,17 @@ Each block is wrapped in a div which you can control with css.
 
 The blocks can be filtered on fieldname or content type, in both cases
 you will need to know the machine name.
+
+Theming.
+Getlocations Blocks can be themed by copying the relevant function to your theme's template.php,
+renaming it in the usual manner.
+eg
+theme_getlocations_blocks_city_form() becomes MYTHEME_getlocations_blocks_city_form() where MYTHEME is the name of your theme.
+You can edit it there to suit your needs.
+
+These functions can be found in the file getlocations_blocks.module
+
+The functions theme_getlocations_blocks_city_form(), theme_getlocations_blocks_province_form(),
+theme_getlocations_blocks_postalcode_form() and theme_getlocations_blocks_country_form()
+can be used to theme the city, province, postalcode and country blocks respectively.
+

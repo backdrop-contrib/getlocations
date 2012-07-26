@@ -108,3 +108,28 @@ Smart IP module. See issue #1541620
 if (isset($_SESSION['smart_ip']['location'])) {
   return array('latitude' => $_SESSION['smart_ip']['location']['latitude'], 'longitude' => $_SESSION['smart_ip']['location']['longitude']);
 }
+
+Theming.
+Getlocations Fields pages can be themed by copying the relevant function to your theme's template.php,
+renaming it in the usual manner.
+eg
+theme_getlocations_fields_show() becomes MYTHEME_getlocations_fields_show() where MYTHEME is the name of your theme.
+You can edit it there to suit your needs.
+
+These functions can be found in the file getlocations_fields.theme.inc
+
+Theming the Getlocations Fields display.
+This is done with function theme_getlocations_fields_show()
+
+Theming the Getlocations Fields per instance settings form.
+This is done with function theme_getlocations_fields_field_settings_form()
+
+Theming the Getlocations Fields display settings form.
+This is done with function theme_getlocations_fields_field_formatter_settings_form()
+
+Theming the Getlocations Fields input form.
+This is done with function theme_getlocations_fields_field_widget_form()
+
+Theming the Getlocations Fields defaults settings form.
+This is done with function theme_getlocations_fields_settings_form()
+

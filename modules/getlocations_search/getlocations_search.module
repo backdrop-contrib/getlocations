@@ -674,11 +674,27 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
       if (empty($locations[$k]->marker)) {
         if (! empty($marker)) {
           $locations[$k]->marker = $marker;
+          if (isset($locations[$k]->nid) && $locations[$k]->nid > 0) {
+            $t = getlocations_get_nodetype($locations[$k]->nid);
+            if ($t) {
+              $typemarkers = getlocations_get_markertypes('node');
+              if (isset($typemarkers[$t]) && $typemarkers[$t]) {
+                $locations[$k]->marker = $typemarkers[$t];
+              }
+            }
+          }
         }
         else {
           // must be an 'all' search so we have to figure out a marker
           if ($locations[$k]->nid > 0) {
             $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
+            $t = getlocations_get_nodetype($locations[$k]->nid);
+            if ($t) {
+              $typemarkers = getlocations_get_markertypes('node');
+              if (isset($typemarkers[$t]) && $typemarkers[$t]) {
+                $locations[$k]->marker = $typemarkers[$t];
+              }
+            }
 
             // term markers
             $locations[$k]->marker = getlocations_get_term_marker($locations[$k]->nid, $locations[$k]->marker);

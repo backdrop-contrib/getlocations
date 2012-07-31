@@ -59,6 +59,14 @@ function getlocations_search_menu() {
     );
   }
 
+  // colorbox
+  $items['getlocations_search_box'] = array(
+    'title' => 'Getlocations search',
+    'access arguments' => array('access getlocations'),
+    'page callback' => 'getlocations_search_box',
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -188,6 +196,17 @@ function getlocations_search_form($form, &$form_state) {
 }
 
 /**
+ * colorbox
+ *
+ */
+function getlocations_search_box() {
+  $content = getlocations_search();
+  $output = theme('getlocations_search_box', array('content' => $content));
+  print $output;
+  exit;
+}
+
+/**
  * Set up the map and use getlocations to spit it out
  *
  */
@@ -270,6 +289,12 @@ function getlocations_search_theme() {
     'getlocations_search_settings_form' => array(
       'render element' => 'form',
     ),
+    'getlocations_search_box' => array(
+      'variables' => array(
+        'content' => NULL,
+      ),
+      'template' => 'getlocations_search_box',
+    ),
   );
 }
 
@@ -347,6 +372,58 @@ function theme_getlocations_search_settings_form($variables) {
   return $output;
 
 }
+
+/**
+ * @param array $variables
+ *
+ * @return
+ *   Modifies $variables in situ
+ *
+ */
+function template_preprocess_getlocations_search_box(&$variables) {
+
+  $getlocations_search_defaults = getlocations_search_defaults();
+  $variables['box_width'] = $getlocations_search_defaults['width'];
+  $variables['box_height'] = $getlocations_search_defaults['height'];
+
+  if (module_exists('admin_menu')) {
+    admin_menu_suppress();
+  }
+
+  // Construct page title
+  if (drupal_get_title()) {
+    $head_title = array(strip_tags(drupal_get_title()), variable_get('site_name', 'Drupal'));
+  }
+  else {
+    $head_title = array(variable_get('site_name', 'Drupal'));
+    if (variable_get('site_slogan', '')) {
+      $head_title[] = variable_get('site_slogan', '');
+    }
+  }
+  $variables['head_title'] = implode(' | ', $head_title);
+  $variables['base_path'] = base_path();
+  $variables['head'] = drupal_get_html_head();
+  $variables['language'] = $GLOBALS['language'];
+  $variables['language']->dir = $GLOBALS['language']->direction ? 'rtl' : 'ltr';
+  $variables['css'] = drupal_add_css();
+  $variables['styles'] = drupal_get_css();
+  $variables['scripts'] = drupal_get_js();
+  $variables['title'] = drupal_get_title();
+  // Closure should be filled last.
+  $variables['closure'] = theme('closure');
+  // Compile a list of classes that are going to be applied to the body element.
+  // This allows advanced theming based on context (home page, node of certain type, etc.).
+  $body_classes = array();
+  // Add a class that tells us whether we're on the front page or not.
+  $body_classes[] = $variables['is_front'] ? 'front' : 'not-front';
+  // Add a class that tells us whether the page is viewed by an authenticated user or not.
+  $body_classes[] = $variables['logged_in'] ? 'logged-in' : 'not-logged-in';
+  $body_classes[] = 'no-sidebars';
+  // Implode with spaces.
+  $variables['body_classes'] = implode(' ', $body_classes);
+
+}
+
 
 /**
  * Set up default settings.

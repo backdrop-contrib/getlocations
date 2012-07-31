@@ -25,3 +25,6 @@ This is done with function theme_getlocations_search_form()
 Theming the Getlocations Search settings form.
 This is done with function theme_getlocations_search_settings_form()
 
+Getlocations Search can be viewed in a Colorbox. The colorbox module must be installed and "colorbox load" enabled.
+To make it work add a url in the following form:
+<a class="colorbox-load" href="/getlocations_search_box?width=550&height=600&iframe=true">Getlocations search in a colorbox</a>

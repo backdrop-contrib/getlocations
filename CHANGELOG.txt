@@ -1,9 +1,41 @@
-commit 33d8532
+commit fb75c67
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 1 18:00:57 2012 +0100
+
+    added getlocations_search in a block
+
+js/getlocations.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.css
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit 241ae4d
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 31 10:05:46 2012 +0100
+
+    added support for colorbox in getlocations_search
+
+modules/getlocations_search/README.txt
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/getlocations_search_box.tpl.php
+
+commit c286204
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 30 13:16:04 2012 +0100
+
+    added per instance markers to search
+
+modules/getlocations_search/getlocations_search.module
+
+commit 35d5d50
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jul 26 13:10:37 2012 +0100
 
     added restrict by country to getlocations_fields
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/getlocations_fields.theme.inc
 modules/getlocations_fields/js/getlocations_fields.js

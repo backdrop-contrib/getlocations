@@ -11,6 +11,8 @@
 var getlocations_inputmap = [];
 var getlocations_map = [];
 var getlocations_markers = [];
+var getlocations_settings = {};
+
 (function ($) {
 
   function getlocations_init() {
@@ -24,7 +26,7 @@ var getlocations_markers = [];
       if ( $("#getlocations_map_canvas_" + key).is('div') ) {
 
         // defaults
-        var global_settings = {
+        global_settings = {
           maxzoom: 16,
           minzoom: 7,
           nodezoom: 12,
@@ -56,7 +58,8 @@ var getlocations_markers = [];
           weatherLayer: {},
           weathertoggleState: [],
           cloudLayer: {},
-          cloudtoggleState: []
+          cloudtoggleState: [],
+          batchr: []
         };
 
         var lat = parseFloat(settings.lat);
@@ -239,6 +242,7 @@ var getlocations_markers = [];
 
         getlocations_map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
 
+        // input map
         if (settings.inputmap) {
           getlocations_inputmap[key] = getlocations_map[key];
         }
@@ -329,9 +333,14 @@ var getlocations_markers = [];
           }
           $("#getlocations_toggleWeather_" + key).click( function() { manageWeatherButton(getlocations_map[key], global_settings.weatherLayer[key], global_settings.cloudLayer[key], key) });
         }
+
+        // exporting global_settings to getlocations_settings
+        getlocations_settings[key] = global_settings;
+
         // markers and bounding
         if (! settings.inputmap && ! settings.searchmap) {
-          setTimeout(function() { doAllMarkers(getlocations_map[key], global_settings, key) }, 300);
+          //setTimeout(function() { doAllMarkers(getlocations_map[key], global_settings, key) }, 300);
+          doAllMarkers(getlocations_map[key], global_settings, key);
 
           if (pansetting == 1) {
             Drupal.getlocations.doBounds(getlocations_map[key], minlat, minlon, maxlat, maxlon, true);
@@ -346,11 +355,6 @@ var getlocations_markers = [];
             }
           }
         }
-
-        // searchmap
-        if (settings.searchmap) {
-          setTimeout(function() { Drupal.getlocations.doSearch(getlocations_map[key], global_settings, key) }, 300);
-        } // end searchmap
 
         function manageTrafficButton(map, trafficInfo, key) {
           if ( global_settings.traffictoggleState[key] == 1) {
@@ -373,6 +377,7 @@ var getlocations_markers = [];
             global_settings.bicycletoggleState[key] = 1;
           }
         }
+
         function manageTransitButton(map, transitInfo, key) {
           if ( global_settings.transittoggleState[key] == 1) {
             transitInfo.setMap();
@@ -383,6 +388,7 @@ var getlocations_markers = [];
             global_settings.transittoggleState[key] = 1;
           }
         }
+
         function managePanoramioButton(map, panoramioLayer, key) {
           if ( global_settings.panoramiotoggleState[key] == 1) {
             panoramioLayer.setMap();
@@ -430,11 +436,6 @@ var getlocations_markers = [];
 
     function doAllMarkers (map, gs, mkey) {
 
-      // using markermanager
-      if (gs.usemarkermanager || gs.useclustermanager) {
-        var batchr = [];
-      }
-
       var arr = gs.latlons;
       for (var i = 0; i < arr.length; i++) {
         arr2 = arr[i];
@@ -458,16 +459,16 @@ var getlocations_markers = [];
         // still experimental
         getlocations_markers[mkey].lids[lid] = m;
         if (gs.usemarkermanager || gs.useclustermanager) {
-          batchr.push(m);
+          gs.batchr.push(m);
         }
       }
       // add batchr
       if (gs.usemarkermanager) {
-       gs.mgr.addMarkers(batchr, gs.minzoom, gs.maxzoom);
+       gs.mgr.addMarkers(gs.batchr, gs.minzoom, gs.maxzoom);
         gs.mgr.refresh();
       }
       else if (gs.useclustermanager) {
-        gs.cmgr.addMarkers(batchr, 0);
+        gs.cmgr.addMarkers(gs.batchr, 0);
       }
     }
   } // end getlocations_init

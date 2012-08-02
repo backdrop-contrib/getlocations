@@ -1,9 +1,18 @@
-commit fb75c67
+commit 60214e8
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 2 07:44:48 2012 +0100
+
+    fixed places not loading bug
+
+getlocations.module
+
+commit 0a65c77
 Author: hutch <hutch@midwales.net>
 Date:   Wed Aug 1 18:00:57 2012 +0100
 
     added getlocations_search in a block
 
+CHANGELOG.txt
 js/getlocations.js
 modules/getlocations_search/getlocations_search.admin.inc
 modules/getlocations_search/getlocations_search.css

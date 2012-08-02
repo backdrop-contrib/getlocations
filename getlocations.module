@@ -759,7 +759,7 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
   if ($defaults['panoramio_use']) {
     $libraries[] = 'panoramio';
   }
-  if ($defaults['places']) {
+  if ($defaults['places'] || module_exists('getlocations_search')) {
     $libraries[] = 'places';
   }
   // not active yet

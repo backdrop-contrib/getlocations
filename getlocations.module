@@ -752,8 +752,8 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
   if (! empty($key)) {
     $query['key'] = $key;
   }
-  $query['sensor'] = 'false';
-  $query['language'] = $language->language;
+  $query['sensor'] = (getlocations_is_mobile() ? 'true' : 'false');
+  $query['language'] = (isset($language->language) ? $language->language : 'und');
 
   $libraries = array();
   if ($defaults['panoramio_use']) {
@@ -922,7 +922,7 @@ function getlocations_defaults() {
     'weather_temp'              => 1,
     'weather_speed'             => 1,
     'weather_label'             => 0,
-     'weather_cloud'            => 1,
+    'weather_cloud'             => 1,
     'weather_clickable'         => 1,
     'weather_info'              => 1,
   );
@@ -1764,7 +1764,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'searchmap'               => ($searchmap ? 1 : 0),
       'custom_content_enable'   => $defaults['custom_content_enable'],
       'preload_data'            => $defaults['preload_data'],
-      'is_mobile'               => $defaults['is_mobile'],
+      'is_mobile'               => (getlocations_is_mobile() ? 1 : 0),
       'weather_use'             => $defaults['weather_use'],
     ),
   );

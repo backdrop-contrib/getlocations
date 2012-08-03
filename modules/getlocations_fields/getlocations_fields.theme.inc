@@ -57,7 +57,15 @@ function theme_getlocations_fields_show($variables) {
   $locations = $variables['locations'];
   $settings = $variables['settings'];
 
+  if ($settings['display_onemap']) {
+    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  }
+  else {
+    $minmaxes = '';
+  }
+
   $output = '';
+  $location_ct = 0;
   foreach ($locations AS $location) {
     $output .= '<div class="location vcard">';
     if (! empty($location['name']) && $settings['display_name']) {
@@ -160,9 +168,16 @@ function theme_getlocations_fields_show($variables) {
         if (isset($location['marker']) && ! empty($location['marker'])) {
           $marker = $location['marker'];
         }
-        $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base);
-        $map = getlocations_fields_getmap_show($settings, $latlons);
-        $output .= $map;
+        // onemap
+        if ($settings['display_onemap']) {
+          $latlons[] = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base);
+          $minmaxes = getlocations_do_minmaxes($location_ct, $location, $minmaxes);
+        }
+        else {
+          $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base);
+          $map = getlocations_fields_getmap_show($settings, $latlons);
+          $output .= $map;
+        }
       }
       else {
         if ($settings['display_maplink']) {
@@ -185,7 +200,17 @@ function theme_getlocations_fields_show($variables) {
           }
         }
       }
+      $location_ct++;
     }
+  }
+  // onemap
+  if ($settings['display_showmap'] && $settings['display_onemap'] && isset($latlons)) {
+    if ($location_ct < 2 ) {
+      unset($minmaxes);
+      $minmaxes = '';
+    }
+    $map = getlocations_fields_getmap_show($settings, $latlons, $minmaxes);
+    $output .= $map;
   }
 
   return $output;

@@ -76,6 +76,9 @@ function template_preprocess_getlocations_view_map(&$variables) {
       }
       elseif (module_exists('location') && isset($location['lid']) && $location['lid'] > 0) {
         $lid = $location['lid'];
+        if (isset($location['type'])) {
+          $location['field_name'] = getlocations_get_fieldname($location['type'], $entity_type);
+        }
       }
       elseif (module_exists('geofield') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
         $lid = $location[$base_field];

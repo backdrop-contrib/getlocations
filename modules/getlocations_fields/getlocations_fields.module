@@ -262,15 +262,6 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
 
   if (!empty($items)) {
 
-    // look for delete_location in $items
-    if (! $instance['required'] ) {
-      foreach ($items AS $key => $item) {
-        if (isset($item['delete_location']) && $item['delete_location'] > 0) {
-          getlocations_fields_field_delete($entity_type, $entity, $field, $instance, $langcode, $items);
-        }
-      }
-    }
-
     $criteria = array();
     if ($entity_type == 'node') {
       $criteria = array(
@@ -298,6 +289,15 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
       );
     }
     if (! empty($criteria)) {
+      // look for delete_location in $items
+      if (! $instance['required'] || ($instance['required'] && count($items) > 1 )) {
+        foreach ($items AS $key => $item) {
+          if (isset($item['delete_location']) && $item['delete_location'] > 0) {
+            getlocations_fields_delete_record($items[$key], $criteria);
+            unset($items[$key]);
+          }
+        }
+      }
       $items = getlocations_fields_save_locations($items, $criteria, 'update');
     }
   }
@@ -1556,10 +1556,8 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
         }
       }
       elseif ($mode == 'delete') {
-        if (isset($locations[$key]['delete_location']) && $locations[$key]['delete_location'] > 0) {
-          getlocations_fields_delete_record($locations[$key], $criteria);
-          unset($locations[$key]);
-        }
+        getlocations_fields_delete_record($locations[$key], $criteria);
+        unset($locations[$key]);
       }
       elseif ($mode == 'delete_revision') {
         getlocations_fields_delete_revision_record($locations[$key], $criteria);
@@ -2504,11 +2502,13 @@ function getlocations_fields_display_settings_form($defaults) {
     $defaults['display_dms'],
     ''
   );
+
   $form['display_onemap'] = getlocations_element_map_checkbox(
     t('Show all markers on one map'),
     $defaults['display_onemap'],
     ''
   );
+
   $form['display_name'] = getlocations_element_map_checkbox(
     t('Show Name in display'),
     $defaults['display_name'],

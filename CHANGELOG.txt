@@ -1,9 +1,45 @@
-commit 60214e8
+commit 134daa7
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 6 17:55:32 2012 +0100
+
+    fixed delete bug
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit cf82451
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 5 22:59:45 2012 +0100
+
+    added nearby view for location module, fixed markers for location module
+
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+
+commit 4156536
+Author: hutch <hutch@midwales.net>
+Date:   Fri Aug 3 20:41:43 2012 +0100
+
+    added multiple locations on one map feature
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 9fbba46
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 2 10:12:02 2012 +0100
+
+    added sensor detection for mobile
+
+getlocations.module
+
+commit b4f27cc
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 2 07:44:48 2012 +0100
 
     fixed places not loading bug
 
+CHANGELOG.txt
 getlocations.module
 
 commit 0a65c77

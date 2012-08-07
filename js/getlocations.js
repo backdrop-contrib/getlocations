@@ -162,12 +162,12 @@ var getlocations_settings = {};
 
         if (minmaxes) {
           mmarr = minmaxes.split(',');
-          minlat = mmarr[0];
-          minlon = mmarr[1];
-          maxlat = mmarr[2];
-          maxlon = mmarr[3];
-          cenlat = parseFloat((minlat + maxlat)/2);
-          cenlon = parseFloat((minlon + maxlon)/2);
+          minlat = parseFloat(mmarr[0]);
+          minlon = parseFloat(mmarr[1]);
+          maxlat = parseFloat(mmarr[2]);
+          maxlon = parseFloat(mmarr[3]);
+          cenlat = ((minlat + maxlat)/2);
+          cenlon = ((minlon + maxlon)/2);
         }
         // menu type
         var mtc = settings.mtc;
@@ -349,8 +349,8 @@ var getlocations_settings = {};
             Drupal.getlocations.doBounds(getlocations_map[key], minlat, minlon, maxlat, maxlon, false);
           }
           else if (pansetting == 3) {
-            if (cenlat && cenlon) {
-              c = new google.maps.LatLng(cenlat, cenlon);
+            if (cenlat  && cenlon) {
+              c = new google.maps.LatLng(parseFloat(cenlat), parseFloat(cenlon));
               getlocations_map[key].setCenter(c);
             }
           }

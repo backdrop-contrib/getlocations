@@ -70,13 +70,16 @@ function theme_getlocations_show($width, $height, $defaults, $mapid, $type = '',
   // buttons
   $buttons = array();
   if ($defaults['trafficinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic" class="form-submit" />';
+    $buttons[] = '<input type="submit" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['bicycleinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle" class="form-submit" />';
+    $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle_' . $mapid . '" class="form-submit" />';
+  }
+  if ($defaults['transitinfo']) {
+    $buttons[] = '<input type="submit" value="' . t('Toggle transit info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTransit_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio" class="form-submit" />';
+    $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['weather_use'] && $defaults['weather_show']) {
     $buttons[] = '<input type="submit" value="' . t('Toggle weather') . '" id="getlocations_toggleWeather_' . $mapid . '" class="form-submit" />';
@@ -84,6 +87,7 @@ function theme_getlocations_show($width, $height, $defaults, $mapid, $type = '',
       $buttons[] = '<input type="submit" value="' . t('Toggle clouds') . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
     }
   }
+
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons" class="container-inline">';
     $output .= implode('&nbsp;', $buttons);

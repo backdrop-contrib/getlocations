@@ -45,8 +45,10 @@
         datanum: 0,
         trafficInfo: {},
         bicycleInfo: {},
+        transitInfo: {},
         traffictoggleState: [],
         bicycletoggleState: [],
+        transittoggleState: [],
         panoramioLayer: {},
         panoramiotoggleState: [],
         weatherLayer: {},
@@ -245,23 +247,56 @@
 
       if (settings.trafficinfo) {
         global_settings.trafficInfo[key] = new google.maps.TrafficLayer();
-        global_settings.trafficInfo[key].setMap(map[key]);
-        global_settings.traffictoggleState[key] = 1;
+        if (settings.trafficinfo_state > 0) {
+          global_settings.trafficInfo[key].setMap(map[key]);
+          global_settings.traffictoggleState[key] = 1;
+        }
+        else {
+          global_settings.trafficInfo[key].setMap(null);
+          global_settings.traffictoggleState[key] = 0;
+        }
         $("#getlocations_toggleTraffic_" + key).click( function() { manageTrafficButton(map[key], global_settings.trafficInfo[key], key) });
       }
+
       if (settings.bicycleinfo) {
         global_settings.bicycleInfo[key] = new google.maps.BicyclingLayer();
-        global_settings.bicycleInfo[key].setMap(map[key]);
-        global_settings.bicycletoggleState[key] = 1;
+        if (settings.bicycleinfo_state > 0) {
+          global_settings.bicycleInfo[key].setMap(map[key]);
+          global_settings.bicycletoggleState[key] = 1;
+        }
+        else {
+          global_settings.bicycleInfo[key].setMap(null);
+          global_settings.bicycletoggleState[key] = 0;
+        }
         $("#getlocations_toggleBicycle_" + key).click( function() { manageBicycleButton(map[key], global_settings.bicycleInfo[key], key) });
-
       }
+
+      if (settings.transitinfo) {
+        global_settings.transitInfo[key] = new google.maps.TransitLayer();
+        if (settings.transitinfo_state > 0) {
+          global_settings.transitInfo[key].setMap(map[key]);
+          global_settings.transittoggleState[key] = 1;
+        }
+        else {
+          global_settings.transitInfo[key].setMap(null);
+          global_settings.transittoggleState[key] = 0;
+        }
+        $("#getlocations_toggleTransit_" + key).click( function() { manageTransitButton(map[key], global_settings.transitInfo[key], key) });
+      }
+
       if (settings.panoramio_use && settings.panoramio_show) {
         global_settings.panoramioLayer[key] = new google.maps.panoramio.PanoramioLayer();
-        global_settings.panoramioLayer[key].setMap(map[key]);
-        global_settings.panoramiotoggleState[key] = 1;
+        if (settings.panoramio_state > 0) {
+          global_settings.panoramioLayer[key].setMap(map[key]);
+          global_settings.panoramiotoggleState[key] = 1;
+        }
+        else {
+          global_settings.panoramioLayer[key].setMap(null);
+          global_settings.panoramiotoggleState[key] = 0;
+        }
         $("#getlocations_togglePanoramio_" + key).click( function() { managePanoramioButton(map[key], global_settings.panoramioLayer[key], key) });
       }
+
       // weather layer
       if (settings.weather_use && settings.weather_show) {
         tu = google.maps.weather.TemperatureUnit.CELSIUS;
@@ -288,13 +323,25 @@
           }
         }
         global_settings.weatherLayer[key] = new google.maps.weather.WeatherLayer(weatherOpts);
-        global_settings.weatherLayer[key].setMap(map[key]);
-        global_settings.weathertoggleState[key] = 1;
+        if (settings.weather_state > 0) {
+          global_settings.weatherLayer[key].setMap(map[key]);
+          global_settings.weathertoggleState[key] = 1;
+        }
+        else {
+          global_settings.weatherLayer[key].setMap(null);
+          global_settings.weathertoggleState[key] = 0;
+        }
         global_settings.weather_cloud = settings.weather_cloud;
         if (settings.weather_cloud) {
           global_settings.cloudLayer[key] = new google.maps.weather.CloudLayer();
-          global_settings.cloudLayer[key].setMap(map[key]);
-          global_settings.cloudtoggleState[key] = 1;
+          if (settings.weather_cloud_state > 0) {
+            global_settings.cloudLayer[key].setMap(map[key]);
+            global_settings.cloudtoggleState[key] = 1;
+          }
+          else {
+            global_settings.cloudLayer[key].setMap(null);
+            global_settings.cloudtoggleState[key] = 0;
+          }
           $("#getlocations_toggleCloud_" + key).click( function() { manageCloudButton(map[key], global_settings.cloudLayer[key], key) });
         }
         else {
@@ -337,6 +384,17 @@
         else {
           bicycleInfo.setMap(map);
           global_settings.bicycletoggleState[key] = 1;
+        }
+      }
+
+      function manageTransitButton(map, transitInfo, key) {
+        if ( global_settings.transittoggleState[key] == 1) {
+          transitInfo.setMap(null);
+          global_settings.transittoggleState[key] = 0;
+        }
+        else {
+          transitInfo.setMap(map);
+          global_settings.transittoggleState[key] = 1;
         }
       }
 

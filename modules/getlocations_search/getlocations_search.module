@@ -238,7 +238,14 @@ function getlocations_search_getmap($which = 'page') {
   $getlocations_search_defaults['pansetting'] = $getlocations_defaults['pansetting'];
 
   // we need to update $getlocations_defaults with data from $getlocations_search_defaults
-  $keys = array('width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol', 'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'trafficinfo', 'bicycleinfo', 'transitinfo', 'panoramio_use', 'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager', 'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title', 'markeraction', 'markeractiontype', 'weather_show');
+  $keys = array(
+    'width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol',
+    'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show',
+    'trafficinfo', 'trafficinfo_state', 'bicycleinfo', 'bicycleinfo_state', 'transitinfo', 'transitinfo_state',
+    'panoramio_use', 'panoramio_state', 'poi_show', 'transit_show',
+    'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager',
+    'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title',
+    'markeraction', 'markeractiontype', 'weather_show', 'weather_state', 'weather_cloud', 'weather_cloud_state');
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
@@ -535,9 +542,14 @@ function getlocations_search_defaults() {
     'draggable'                 => $getlocations_defaults['draggable'],
     'streetview_show'           => $getlocations_defaults['streetview_show'],
     'trafficinfo'               => $getlocations_defaults['trafficinfo'],
+    'trafficinfo_state'         => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'               => $getlocations_defaults['bicycleinfo'],
+    'bicycleinfo_state'         => $getlocations_defaults['bicycleinfo_state'],
     'transitinfo'               => $getlocations_defaults['transitinfo'],
+    'transitinfo_state'         => $getlocations_defaults['transitinfo_state'],
     'panoramio_use'             => $getlocations_defaults['panoramio_use'],
+    'panoramio_show'            => $getlocations_defaults['panoramio_show'],
+    'panoramio_state'           => $getlocations_defaults['panoramio_state'],
     'poi_show'                  => $getlocations_defaults['poi_show'],
     'transit_show'              => $getlocations_defaults['transit_show'],
     'markeraction'              => $getlocations_defaults['markeraction'],
@@ -557,6 +569,9 @@ function getlocations_search_defaults() {
     'use_geolocation_button'    => $getlocations_defaults['use_jsapi'],
     'weather_use'               => $getlocations_defaults['weather_use'],
     'weather_show'              => $getlocations_defaults['weather_show'],
+    'weather_state'             => $getlocations_defaults['weather_state'],
+    'weather_cloud'             => $getlocations_defaults['weather_cloud'],
+    'weather_cloud_state'       => $getlocations_defaults['weather_cloud_state'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);

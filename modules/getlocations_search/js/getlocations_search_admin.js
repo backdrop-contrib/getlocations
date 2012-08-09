@@ -75,10 +75,107 @@
         }
       });
 
-/////////////////////
+      if ($("#edit-getlocations-search-defaults-trafficinfo").is('input')) {
+        if ($("#edit-getlocations-search-defaults-trafficinfo").attr('checked')) {
+          $("#wrap-getlocations-trafficinfo").show();
+        }
+        else {
+          $("#wrap-getlocations-trafficinfo").hide();
+        }
+        $("#edit-getlocations-search-defaults-trafficinfo").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-trafficinfo").show();
+          }
+          else {
+            $("#wrap-getlocations-trafficinfo").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-search-defaults-bicycleinfo").is('input')) {
+        if ($("#edit-getlocations-search-defaults-bicycleinfo").attr('checked')) {
+          $("#wrap-getlocations-bicycleinfo").show();
+        }
+        else {
+          $("#wrap-getlocations-bicycleinfo").hide();
+        }
+        $("#edit-getlocations-search-defaults-bicycleinfo").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-bicycleinfo").show();
+          }
+          else {
+            $("#wrap-getlocations-bicycleinfo").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-search-defaults-transitinfo").is('input')) {
+        if ($("#edit-getlocations-search-defaults-transitinfo").attr('checked')) {
+          $("#wrap-getlocations-transitinfo").show();
+        }
+        else {
+          $("#wrap-getlocations-transitinfo").hide();
+        }
+        $("#edit-getlocations-search-defaults-transitinfo").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-transitinfo").show();
+          }
+          else {
+            $("#wrap-getlocations-transitinfo").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-search-defaults-panoramio-show").is('input')) {
+        if ($("#edit-getlocations-search-defaults-panoramio-show").attr('checked')) {
+          $("#wrap-getlocations-panoramio").show();
+        }
+        else {
+          $("#wrap-getlocations-panoramio").hide();
+        }
+        $("#edit-getlocations-search-defaults-panoramio-show").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-panoramio").show();
+          }
+          else {
+            $("#wrap-getlocations-panoramio").hide();
+          }
+        });
+      }
+
+      if ($("#edit-getlocations-search-defaults-weather-show").is('input')) {
+        if ($("#edit-getlocations-search-defaults-weather-show").attr('checked')) {
+          $("#wrap-getlocations-weather").show();
+        }
+        else {
+          $("#wrap-getlocations-weather").hide();
+        }
+        $("#edit-getlocations-search-defaults-weather-show").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-weather").show();
+          }
+          else {
+            $("#wrap-getlocations-weather").hide();
+          }
+        });
+
+        if ($("#edit-getlocations-search-defaults-weather-cloud").attr('checked')) {
+          $("#wrap-getlocations-weather-cloud").show();
+        }
+        else {
+          $("#wrap-getlocations-weather-cloud").hide();
+        }
+        $("#edit-getlocations-search-defaults-weather-cloud").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-weather-cloud").show();
+          }
+          else {
+            $("#wrap-getlocations-weather-cloud").hide();
+          }
+        });
 
 
-/////////////////////
+      }
 
 
     }

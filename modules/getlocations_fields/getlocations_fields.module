@@ -1479,9 +1479,13 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['draggable']             = $settings['draggable'];
   $getlocations_defaults['streetview_show']       = $settings['streetview_show'];
   $getlocations_defaults['trafficinfo']           = $settings['trafficinfo'];
+  $getlocations_defaults['trafficinfo_state']     = $settings['trafficinfo_state'];
   $getlocations_defaults['bicycleinfo']           = $settings['bicycleinfo'];
+  $getlocations_defaults['bicycleinfo_state']     = $settings['bicycleinfo_state'];
   $getlocations_defaults['transitinfo']           = $settings['transitinfo'];
+  $getlocations_defaults['transitinfo_state']     = $settings['transitinfo_state'];
   $getlocations_defaults['panoramio_show']        = $settings['panoramio_show'];
+  $getlocations_defaults['panoramio_state']       = $settings['panoramio_state'];
   $getlocations_defaults['poi_show']              = $settings['poi_show'];
   $getlocations_defaults['transit_show']          = $settings['transit_show'];
   $getlocations_defaults['node_map_marker']       = $settings['node_map_marker'];
@@ -1491,6 +1495,10 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['markeraction']          = $settings['markeraction'];
   $getlocations_defaults['markeractiontype']      = $settings['markeractiontype'];
   $getlocations_defaults['nodezoom']              = $settings['nodezoom'];
+  $getlocations_defaults['weather_show']          = $settings['weather_show'];
+  $getlocations_defaults['weather_state']         = $settings['weather_state'];
+  $getlocations_defaults['weather_cloud']         = $settings['weather_cloud'];
+  $getlocations_defaults['weather_cloud_state']   = $settings['weather_cloud_state'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;

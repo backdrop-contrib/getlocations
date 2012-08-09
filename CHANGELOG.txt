@@ -1,9 +1,34 @@
-commit 134daa7
+commit 2e34e4c
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 9 14:35:15 2012 +0100
+
+    added buttons activate feature
+
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_views.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit a5db864
+Author: hutch <hutch@midwales.net>
+Date:   Tue Aug 7 16:57:21 2012 +0100
+
+    fixed bug in Automatic Panning
+
+js/getlocations.js
+
+commit 0f24612
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 6 17:55:32 2012 +0100
 
     fixed delete bug
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.functions.inc
 modules/getlocations_fields/getlocations_fields.module
 

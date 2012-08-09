@@ -45,10 +45,14 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['behavior']              = array('default' => $getlocations_defaults['behavior']);
     $options['streetview_show']       = array('default' => $getlocations_defaults['streetview_show']);
     $options['trafficinfo']           = array('default' => $getlocations_defaults['trafficinfo']);
+    $options['trafficinfo_state']     = array('default' => $getlocations_defaults['trafficinfo_state']);
     $options['bicycleinfo']           = array('default' => $getlocations_defaults['bicycleinfo']);
+    $options['bicycleinfo_state']     = array('default' => $getlocations_defaults['bicycleinfo_state']);
     $options['transitinfo']           = array('default' => $getlocations_defaults['transitinfo']);
+    $options['transitinfo_state']     = array('default' => $getlocations_defaults['transitinfo_state']);
     $options['panoramio_use']         = array('default' => $getlocations_defaults['panoramio_use']);
     $options['panoramio_show']        = array('default' => $getlocations_defaults['panoramio_show']);
+    $options['panoramio_state']       = array('default' => $getlocations_defaults['panoramio_state']);
     $options['places']                = array('default' => $getlocations_defaults['places']);
     $options['poi_show']              = array('default' => $getlocations_defaults['poi_show']);
     $options['transit_show']          = array('default' => $getlocations_defaults['transit_show']);
@@ -62,6 +66,9 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
     $options['weather_use']           = array('default' => $getlocations_defaults['weather_use']);
     $options['weather_show']          = array('default' => $getlocations_defaults['weather_show']);
+    $options['weather_state']         = array('default' => $getlocations_defaults['weather_state']);
+    $options['weather_cloud']         = array('default' => $getlocations_defaults['weather_cloud']);
+    $options['weather_cloud_state']   = array('default' => $getlocations_defaults['weather_cloud_state']);
     if (! $getlocations_defaults['markermanagertype']) {
       $options['usemarkermanager'] = 0;
       $options['useclustermanager'] = 0;

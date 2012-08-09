@@ -1,9 +1,23 @@
-commit 17de763
+commit 54bfb43
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 9 21:04:16 2012 +0100
+
+    better buttons
+
+getlocations.module
+getlocations.theme.inc
+getlocations_plugin_style_map.inc
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_views.js
+
+commit 3ee92b0
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jun 28 08:28:07 2012 +0100
 
     fixed msie push issue
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit 5652bd5

@@ -2595,7 +2595,6 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
         $defaults['weather_state'],
         t('Activate Weather information when map is first displayed.')
       );
-      #$form['weather_state']['#suffix'] = '</div>';
 
       $form['weather_cloud'] = getlocations_element_map_checkbox(
         t('Enable Cloud Layer'),

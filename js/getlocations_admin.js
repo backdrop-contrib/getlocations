@@ -264,8 +264,6 @@
         });
       }
 
-/////////////////////////
-
       if ( $("#edit-getlocations-default-weather-use").is('input') && $("#edit-getlocations-default-weather-show").is('input')) {
 
         if ($("#edit-getlocations-default-weather-use").attr('checked')) {

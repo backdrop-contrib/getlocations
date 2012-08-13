@@ -78,7 +78,6 @@ function getlocations_search($which = 'page') {
   $getmap = getlocations_search_getmap($which);
   $map = $getmap['map'];
   $mapid = $getmap['mapid'];
-  $mapid2 = preg_replace("/_/", "-", $mapid);
   $form = drupal_get_form('getlocations_search_form', $which, $mapid);
   $contents .= drupal_render($form);
   $contents .= $map;
@@ -90,6 +89,7 @@ function getlocations_search($which = 'page') {
  *
  */
 function getlocations_search_form($form, &$form_state, $which, $mapid) {
+  $mapid2 = preg_replace("/_/", "-", $mapid);
   $getlocations_search_defaults = getlocations_search_defaults();
 
   if ($which == 'block') {

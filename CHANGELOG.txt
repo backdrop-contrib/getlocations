@@ -1,9 +1,27 @@
-commit 2e34e4c
+commit 4984722
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 13 11:42:25 2012 +0100
+
+    bug in search
+
+modules/getlocations_search/getlocations_search.module
+
+commit d9a3d2f
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 9 21:00:39 2012 +0100
+
+    some cleanup
+
+getlocations.module
+js/getlocations_admin.js
+
+commit 2f4c90b
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 9 14:35:15 2012 +0100
 
     added buttons activate feature
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 js/getlocations.js

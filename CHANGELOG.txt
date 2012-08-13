@@ -1,3 +1,19 @@
+commit 704a839
+Merge: acee928 4984722
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 13 11:45:17 2012 +0100
+
+    Merge remote-tracking branch 'origin/7.x-1.x' into 7.x-1.x
+
+commit acee928
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 13 11:42:25 2012 +0100
+
+    bug in search
+
+CHANGELOG.txt
+modules/getlocations_search/getlocations_search.module
+
 commit 4984722
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 13 11:42:25 2012 +0100

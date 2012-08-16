@@ -1451,8 +1451,7 @@ function getlocations_fields_getmap($settings, $active) {
   }
   else {
     // demo mode
-    $ll = explode(",", $settings['latlong']);
-    $latlons = array($ll[0], $ll[1], '', '', '');
+    $latlons = array();
     $getlocations_defaults['nodezoom'] = $getlocations_defaults['zoom'];
   }
 

@@ -1,4 +1,28 @@
-commit 704a839
+commit 389125d
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 20 14:38:00 2012 +0100
+
+    added some js to getlocations_fields admin form
+
+modules/getlocations_fields/js/getlocations_fields_admin.js
+
+commit 324736b
+Author: hutch <hutch@midwales.net>
+Date:   Fri Aug 17 11:53:06 2012 +0100
+
+    added some defaults to formatter_info_defaults
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit a99e2d8
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 16 16:24:19 2012 +0100
+
+    fixed latlons bug in demo mode
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 9f523ea
 Merge: acee928 4984722
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 13 11:45:17 2012 +0100

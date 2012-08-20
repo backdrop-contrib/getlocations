@@ -47,6 +47,22 @@
         });
        }
 
+      if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").is('input')) {
+        if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").attr('checked')) {
+          $("#getlocations_fields_search_country").show();
+        }
+        else {
+          $("#getlocations_fields_search_country").hide();
+        }
+        $("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").change( function() {
+          if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").attr('checked')) {
+            $("#getlocations_fields_search_country").show();
+          }
+          else {
+            $("#getlocations_fields_search_country").hide();
+          }
+        });
+      }
 
 
     }

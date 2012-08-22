@@ -863,6 +863,10 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
             $locations[$k]->marker = $getlocations_defaults['comment_map_marker'];
           }
         }
+        // just in case
+        if (empty($locations[$k]->marker)) {
+          $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
+        }
       }
     }
 
@@ -1039,7 +1043,10 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
           $locations[$location_ct]->cid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['comment_map_marker'];
         }
-
+        // just in case
+        if (empty($locations[$location_ct]->marker)) {
+          $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
+        }
         $location_ct++;
       }
     }

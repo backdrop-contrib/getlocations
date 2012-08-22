@@ -180,7 +180,13 @@
             if (locations[i].glid > 0) {
               lid = locations[i].glid;
             }
-            gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
+            // just in case
+            if (locations[i].marker === '') {
+              gs.markdone = gs.defaultIcon;
+            }
+            else {
+              gs.markdone = Drupal.getlocations.getIcon(locations[i].marker);
+            }
             title = (locations[i].title ? locations[i].title : (locations[i].name ? locations[i].name : ''));
             // make a marker
             marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, lid, title, lidkey, '', mkey);

@@ -894,8 +894,8 @@ function getlocations_defaults() {
     'minzoom'                   => 6,
     'maxzoom'                   => 16,
     'nodezoom'                  => 12,
-    'markermanagertype'         => 1,
-    'usemarkermanager'          => 1,
+    'markermanagertype'         => 0,
+    'usemarkermanager'          => 0,
     'useclustermanager'         => 0,
     'markerclusterer_style'     => -1,
     'markerclusterer_zoom'      => -1,
@@ -2249,8 +2249,8 @@ function getlocations_element_markermanagertype($default) {
     '#default_value' => $default,
     '#options' => array(
       0 => t('None'),
+      2 => t('Marker Clusterer'),
       1 => t('Marker Manager'),
-      2 => t('Marker Clusterer')
     ),
     '#description' => t('The type of marker management software to load, if any.'),
   );

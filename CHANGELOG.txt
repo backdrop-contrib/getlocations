@@ -1,9 +1,35 @@
-commit 389125d
+commit c81797a
+Author: hutch <hutch@midwales.net>
+Date:   Fri Aug 24 10:12:16 2012 +0100
+
+    fixed bug in views #1748588
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 0fe570a
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 23 10:42:38 2012 +0100
+
+    changed marker manager default to none
+
+getlocations.module
+
+commit aae4435
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 22 08:19:06 2012 +0100
+
+    added additional checks for a marker
+
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 1519764
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 20 14:38:00 2012 +0100
 
     added some js to getlocations_fields admin form
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields_admin.js
 
 commit 324736b

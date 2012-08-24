@@ -383,7 +383,7 @@ function getlocations_fields_views_data() {
       'handler' => 'views_handler_sort',
     ),
     'relationship' => array(
-      'base' => 'user',
+      'base' => 'users',
       'field' => 'uid',
       'label' => 'user',
       'help' => t('Bring in the user data.'),

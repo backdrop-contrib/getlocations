@@ -513,7 +513,7 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
     case 'user':
     case 'hybrid':
       global $user;
-      $user_locations = isset($user->locations) ? $user->locations : location_load_locations($user->uid, 'uid');
+      $user_locations = isset($user->locations) ? $user->locations : getlocations_load_locations($user->uid, 'uid');
       // This user_location_delta will only possibly be set if we are dealing with the filter.
       $i = (isset($options['user_location_delta']) && !empty($options['user_location_delta'])) ? $options['user_location_delta'] : 0;
       if (isset($user_locations[$i]['latitude']) || !empty($user_locations[$i]['latitude'])) {

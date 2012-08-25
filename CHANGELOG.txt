@@ -1,9 +1,30 @@
-commit c81797a
+commit ac7c5c4
+Author: hutch <hutch@midwales.net>
+Date:   Sat Aug 25 23:00:25 2012 +0100
+
+    fixed getlocations_fields_handler_field_distance, #1751868
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 886b6e6
+Author: hutch <hutch@midwales.net>
+Date:   Fri Aug 24 21:54:22 2012 +0100
+
+    fixed load locations bug
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 5c352f2
 Author: hutch <hutch@midwales.net>
 Date:   Fri Aug 24 10:12:16 2012 +0100
 
     fixed bug in views #1748588
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields.views.inc
 
 commit 0fe570a

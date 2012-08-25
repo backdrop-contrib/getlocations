@@ -633,7 +633,9 @@ function theme_getlocations_fields_settings_form($variables) {
 
 function theme_getlocations_fields_distance($variables) {
   $distance = $variables['distance'];
-  $shortunit = $variables['units'];
+  $shortunit = $variables['shortunit'];
+  // also available
+  // $longunit = $variables['longunit'];
   $output = '';
   $output .= number_format($distance, 2) . ' ' . $shortunit;
   return $output;

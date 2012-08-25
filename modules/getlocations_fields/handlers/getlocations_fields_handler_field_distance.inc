@@ -11,8 +11,7 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
   function option_definition() {
     $options = parent::option_definition();
     $options['origin'] = array('default' => 'nid_arg');
-#    $options['units'] = array('default' => 'km');
-#    $options['search_distance']  = array('default' => '100');
+    $options['units'] = array('default' => 'km');
     $options['latitude'] = array('default' => '');
     $options['longitude'] = array('default' => '');
 #    $options['postal_code'] = array('default' => '');
@@ -82,8 +81,11 @@ class getlocations_fields_handler_field_distance extends views_handler_field {
       // Unset location, empty display.
       return;
     }
-    $dist = (float)$values->{$this->field_alias};
-    return theme('getlocations_fields_distance', array('distance' => $dist, 'units' => $this->options['units']));
+    $meters = (float)$values->{$this->field_alias};
+    $distance = getlocations_convert_meters_to_distance($meters, $this->options['units']);
+
+    return theme('getlocations_fields_distance', array('distance' => $distance, 'units' => $this->options['units']));
+
   }
 
   function query() {

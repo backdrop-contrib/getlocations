@@ -3079,6 +3079,36 @@ function getlocations_convert_distance_to_meters($distance, $distance_unit = 'km
   return $retval;
 }
 
+/**
+ * @param $meters
+ *   The distance in meters.
+ *
+ * @param $distance_unit
+ *   String (optional). in either kilometers (km), meters (m), miles (mi), yards (yd) or nautical miles (nmi).
+ *
+ * @return
+ *   A floating point number where the converted number has been round()'d
+ */
+function getlocations_convert_meters_to_distance($meters, $distance_unit = 'km') {
+  if (!is_numeric($meters) || $meters == 0) {
+    return NULL;
+  }
+  $units = array(
+    'km'  => 0.001,
+    'm'   => 1.0,
+    'mi'  => 0.000621371,
+    'yd'  => 1.093613298,
+    'nmi' => 0.000539957
+  );
+  if (! in_array($distance_unit, array_keys($units))) {
+    $distance_unit = 'km';
+  }
+  $conv = $units[$distance_unit];
+  // Convert meters to display units. formatting in theme_getlocations_fields_distance();
+  $retval = ($meters * $conv);
+  return $retval;
+}
+
 // form elements
 /**
  * @param string $default

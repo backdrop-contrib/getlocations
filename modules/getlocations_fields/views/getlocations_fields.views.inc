@@ -249,10 +249,9 @@ function getlocations_fields_views_data() {
   $data['getlocations_fields']['distance'] = array(
     'title' => t('Distance'),
     'help' => t("The distance from the selected location and either the current user or a specific location."),
-#    'field' => array(
-##      'handler' => 'getlocations_fields_handler_field_distance',  // not working yet
-#      'handler' => 'views_handler_field',
-#    ),
+    'field' => array(
+      'handler' => 'getlocations_fields_handler_field_distance',
+    ),
     'sort' => array(
       'handler' => 'getlocations_fields_handler_sort_distance',
     ),
@@ -265,7 +264,6 @@ function getlocations_fields_views_data() {
 //    'relationship' => array(
 //      'handler' => 'getlocations_fields_handler_relationship_distance',
 //    ),
-
   );
 
   // marker
@@ -465,31 +463,30 @@ function getlocations_fields_views_data() {
 
 
 /**
- * Theme preprocess function for location_distance.
+ * Theme preprocess function for getlocations_fields_distance.
  */
 function template_preprocess_getlocations_fields_distance(&$variables) {
-  // from getlocations_fields_handler_field_nearby.inc
   $units = $variables['units'];
   unset($variables['units']);
   if ($units == 'km') {
     $variables['shortunit'] = 'km';
-    $variables['longunit'] = 'kilometer(s)';
+    $variables['longunit'] = t('Kilometer(s)');
   }
   elseif ($units == 'mi') {
     $variables['shortunit'] = 'mi';
-    $variables['longunit'] = 'mile(s)';
+    $variables['longunit'] = t('Mile(s)');
   }
   elseif ($units == 'm') {
     $variables['shortunit'] = 'm';
-    $variables['longunit'] = 'meter(s)';
+    $variables['longunit'] = t('Meter(s)');
   }
   elseif ($units == 'yd') {
     $variables['shortunit'] = 'yd';
-    $variables['longunit'] = 'yard(s)';
+    $variables['longunit'] = t('Yard(s)');
   }
   elseif ($units == 'nmi') {
     $variables['shortunit'] = 'nmi';
-    $variables['longunit'] = 'nautical mile(s)';
+    $variables['longunit'] = t('Nautical mile(s)');
   }
   $variables['distance'] = (float)$variables['distance'];
 }

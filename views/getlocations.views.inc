@@ -101,13 +101,16 @@ function template_preprocess_getlocations_view_map(&$variables) {
             }
           }
           // term marker
-          if ($nid = getlocations_get_nid_from_lid($lid)) {
-            $query = db_select('taxonomy_index', 't')
-              ->fields('t', array('tid'))
-              ->condition('nid', $nid);
-            $result = $query->execute()->fetchObject();
-            if (isset($result->tid) && $result->tid > 0) {
-              $marker = $options['term_marker_' . $result->tid];
+          $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0));
+          if ($getlocations_term_marker['enable']) {
+            if ($nid = getlocations_get_nid_from_lid($lid)) {
+              $query = db_select('taxonomy_index', 't')
+                ->fields('t', array('tid'))
+                ->condition('nid', $nid);
+              $result = $query->execute()->fetchObject();
+              if (isset($result->tid) && $result->tid > 0) {
+                $marker = $options['term_marker_' . $result->tid];
+              }
             }
           }
         }

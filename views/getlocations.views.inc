@@ -100,21 +100,22 @@ function template_preprocess_getlocations_view_map(&$variables) {
               $marker = $options['node_marker__' . $location['type'] . '__' . $location['field_name']];
             }
           }
+          // term marker
+          if ($nid = getlocations_get_nid_from_lid($lid)) {
+            $query = db_select('taxonomy_index', 't')
+              ->fields('t', array('tid'))
+              ->condition('nid', $nid);
+            $result = $query->execute()->fetchObject();
+            if (isset($result->tid) && $result->tid > 0) {
+              $marker = $options['term_marker_' . $result->tid];
+            }
+          }
         }
         elseif ($entity_type == 'taxonomy_term') {
           $marker = $options['vocabulary_map_marker'];
           if (isset($location['field_name'])) {
             if (isset($options['vocabulary_marker_' . $location['field_name']])) {
               $marker = $options['vocabulary_marker_' . $location['field_name']];
-            }
-          }
-          // term marker
-          if ($nid = getlocations_get_nid_from_lid($lid)) {
-            $results = db_query('SELECT tid FROM {taxonomy_index} WHERE nid = :nid', array(':nid' => $nid));
-            foreach ($results as $result) {
-              if (isset($options['term_marker_' . $result->tid])) {
-                $marker = $options['term_marker_' . $result->tid];
-              }
             }
           }
         }

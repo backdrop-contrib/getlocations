@@ -640,3 +640,32 @@ function theme_getlocations_fields_distance($variables) {
   $output .= number_format($distance, 2) . ' ' . $shortunit;
   return $output;
 }
+
+/**
+ * Theme preprocess function for getlocations_fields_distance.
+ */
+function template_preprocess_getlocations_fields_distance(&$variables) {
+  $units = $variables['units'];
+  unset($variables['units']);
+  if ($units == 'km') {
+    $variables['shortunit'] = 'km';
+    $variables['longunit'] = t('Kilometer(s)');
+  }
+  elseif ($units == 'mi') {
+    $variables['shortunit'] = 'mi';
+    $variables['longunit'] = t('Mile(s)');
+  }
+  elseif ($units == 'm') {
+    $variables['shortunit'] = 'm';
+    $variables['longunit'] = t('Meter(s)');
+  }
+  elseif ($units == 'yd') {
+    $variables['shortunit'] = 'yd';
+    $variables['longunit'] = t('Yard(s)');
+  }
+  elseif ($units == 'nmi') {
+    $variables['shortunit'] = 'nmi';
+    $variables['longunit'] = t('Nautical mile(s)');
+  }
+  $variables['distance'] = (float)$variables['distance'];
+}

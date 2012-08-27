@@ -590,7 +590,7 @@ function getlocations_fields_views_default_views() {
    */
   $view = new view;
   $view->name = 'getlocations_list_nearby';
-  $view->description = 'Provides a map of all nearby locations_fields enabled nodes.';
+  $view->description = 'Provides a list of all nearby locations_fields enabled nodes.';
   $view->tag = 'getlocations view';
   $view->base_table = 'node';
   $view->human_name = 'Getlocations list nearby';

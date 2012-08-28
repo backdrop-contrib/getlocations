@@ -1605,7 +1605,7 @@ function getlocations_fields_insert_record($location, $relations) {
     'address' => getlocations_apoclean($location['address']),
     'latitude' => (float) $location['latitude'],
     'longitude' => (float) $location['longitude'],
-    'marker' => $location['marker']
+    'marker' => ($location['marker'] ? $location['marker'] : '')
   ));
   $result = $query->execute();
   // $result should contain glid
@@ -1665,7 +1665,7 @@ function getlocations_fields_update_record($location, $relations) {
       'address' => getlocations_apoclean($location['address']),
       'latitude' => (float) $location['latitude'],
       'longitude' => (float) $location['longitude'],
-      'marker' => $location['marker']
+      'marker' => ($location['marker'] ? $location['marker'] : '')
     ))
     ->condition('glid', $location['glid'])
     ->execute();

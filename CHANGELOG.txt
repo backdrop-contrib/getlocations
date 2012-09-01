@@ -1,9 +1,54 @@
-commit ac7c5c4
+commit ea42936
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 1 12:41:09 2012 +0100
+
+    moved modules into Location package in info files
+
+getlocations.info
+modules/getlocations_blocks/getlocations_blocks.info
+modules/getlocations_search/getlocations_search.info
+
+commit d515090
+Author: hutch <hutch@midwales.net>
+Date:   Tue Aug 28 01:20:51 2012 +0100
+
+    prevent null in marker field
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 963d76b
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 27 20:12:29 2012 +0100
+
+    added check for term_marker enable
+
+views/getlocations.views.inc
+
+commit 0f8941b
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 27 19:05:14 2012 +0100
+
+    fixed term_marker in views
+
+views/getlocations.views.inc
+
+commit 91d9f4c
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 27 12:39:31 2012 +0100
+
+    moved  template_preprocess_getlocations_fields_distance(), improved description in default views
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+
+commit cbf5c54
 Author: hutch <hutch@midwales.net>
 Date:   Sat Aug 25 23:00:25 2012 +0100
 
     fixed getlocations_fields_handler_field_distance, #1751868
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.info
 modules/getlocations_fields/getlocations_fields.theme.inc

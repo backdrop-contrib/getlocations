@@ -1,10 +1,8 @@
 name = Get Locations
 description = "Show locations on a Google map."
-package = Other
+package = "Location"
 core = 7.x
 php = 5
-
 dependencies[] = libraries
-
 files[] = "views/getlocations_plugin_style_map.inc"
 

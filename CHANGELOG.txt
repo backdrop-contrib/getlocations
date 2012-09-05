@@ -1,9 +1,29 @@
-commit 0b67080
+commit 621b776
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 5 21:00:44 2012 +0100
+
+    fixed path
+
+getlocations.markercluster.inc
+
+commit 45cb2a8
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 5 20:58:16 2012 +0100
+
+    per type markers in views
+
+getlocations.admin.inc
+getlocations.views.inc
+getlocations.views_default.inc
+getlocations_plugin_style_map.inc
+
+commit 35fbc6e
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 9 21:04:51 2012 +0100
 
     better buttons
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 getlocations_plugin_style_map.inc

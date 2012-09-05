@@ -1,9 +1,21 @@
-commit 54bfb43
+commit 8e42152
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 5 20:56:38 2012 +0100
+
+    per type node markers in views
+
+getlocations.admin.inc
+getlocations.views.inc
+getlocations.views_default.inc
+getlocations_plugin_style_map.inc
+
+commit 543aa21
 Author: hutch <hutch@midwales.net>
 Date:   Thu Aug 9 21:04:16 2012 +0100
 
     better buttons
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 getlocations_plugin_style_map.inc

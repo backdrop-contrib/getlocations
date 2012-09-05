@@ -398,6 +398,40 @@ function getlocations_views_default_views() {
       'field' => 'lid',
       'relationship' => 'none',
     ),
+    'type' => array(
+      'label' => 'Type',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'absolute' => 0,
+        'link_class' => '',
+        'alt' => '',
+        'rel' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'hide_alter_empty' => 1,
+      'link_to_node' => 0,
+      'machine_name' => 1,
+      'exclude' => 1,
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('arguments', array(
     'nid' => array(
@@ -418,42 +452,16 @@ function getlocations_views_default_views() {
       'table' => 'node',
       'field' => 'nid',
       'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-        '4' => 0,
-        '5' => 0,
-        '3' => 0,
-      ),
+      'validate_user_roles' => array(),
       'relationship' => 'none',
       'default_options_div_prefix' => '',
       'default_argument_user' => 0,
       'default_argument_fixed' => '',
       'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'blog' => 0,
-        'product' => 0,
-        'usernews' => 0,
-        'forum' => 0,
-        'classified' => 0,
-        'event' => 0,
-        'freelisting' => 0,
-        'group' => 0,
-        'listing' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
+      'validate_argument_node_type' => array(),
       'validate_argument_node_access' => 0,
       'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '2' => 0,
-        '6' => 0,
-        '1' => 0,
-        '8' => 0,
-        '7' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
-      ),
+      'validate_argument_vocabulary' => array(),
       'validate_argument_type' => 'tid',
       'validate_argument_transform' => 0,
       'validate_user_restrict_roles' => 0,
@@ -548,47 +556,13 @@ function getlocations_views_default_views() {
   ));
   $handler->override_option('title', 'View locations');
   $handler->override_option('items_per_page', 0);
-  $handler->override_option('style_plugin', 'getlocations');
   $handler->override_option('style_options', array(
-    'grouping' => 'title',
-    'width' => '300px',
-    'height' => '200x',
-    'latlong' => '40,0',
-    'zoom' => '3',
-    'controltype' => 'small',
-    'pancontrol' => 1,
-    'mtc' => 'standard',
-    'maptype' => 'Map',
-    'baselayers' => array(
-      'Map' => 1,
-      'Satellite' => 1,
-      'Hybrid' => 1,
-      'Physical' => 1,
-    ),
-    'behavior' => array(
-      'scale' => 0,
-      'overview' => 0,
-      'overview_opened' => 0,
-      'scrollwheel' => 0,
-    ),
-    'draggable' => 1,
-    'styles' => '',
-    'streetview_show' => 0,
-    'trafficinfo' => 0,
-    'bicycleinfo' => 0,
-    'panoramio_show' => 0,
-    'places' => 0,
-    'poi_show' => 0,
-    'transit_show' => 0,
-    'map_marker' => 'drupal',
-    'markeraction' => '0',
-    'minzoom' => '6',
-    'maxzoom' => '16',
-    'nodezoom' => '12',
-    'usemarkermanager' => 1,
-    'pansetting' => '2',
+    'grouping' => '',
   ));
   $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->override_option('style_plugin', 'getlocations');
+  $handler->override_option('style_options', array(
+  ));
   $handler->override_option('block_description', '');
   $handler->override_option('block_caching', -1);
 
@@ -1178,10 +1152,9 @@ function getlocations_views_default_views() {
   $view->name = 'getlocations_map_allnodes';
   $view->description = 'Provides a map showing all locations of location enabled nodes.';
   $view->tag = 'getlocations view';
-  $view->view_php = '';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->core = 0;
+  $view->api_version = '2';
   $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
   $handler = $view->new_display('default', 'Defaults', 'default');
   $handler->override_option('fields', array(
@@ -1303,6 +1276,40 @@ function getlocations_views_default_views() {
       'id' => 'lid',
       'table' => 'location',
       'field' => 'lid',
+      'relationship' => 'none',
+    ),
+    'type' => array(
+      'label' => 'Type',
+      'alter' => array(
+        'alter_text' => 0,
+        'text' => '',
+        'make_link' => 0,
+        'path' => '',
+        'absolute' => 0,
+        'link_class' => '',
+        'alt' => '',
+        'rel' => '',
+        'prefix' => '',
+        'suffix' => '',
+        'target' => '',
+        'help' => '',
+        'trim' => 0,
+        'max_length' => '',
+        'word_boundary' => 1,
+        'ellipsis' => 1,
+        'html' => 0,
+        'strip_tags' => 0,
+      ),
+      'empty' => '',
+      'hide_empty' => 0,
+      'empty_zero' => 0,
+      'hide_alter_empty' => 1,
+      'link_to_node' => 0,
+      'machine_name' => 1,
+      'exclude' => 1,
+      'id' => 'type',
+      'table' => 'node',
+      'field' => 'type',
       'relationship' => 'none',
     ),
   ));

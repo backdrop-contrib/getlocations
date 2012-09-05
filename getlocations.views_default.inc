@@ -56,8 +56,9 @@ function getlocations_views_default_views() {
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['alter']['alter_text'] = 1;
-  $handler->display->display_options['fields']['nid']['alter']['text'] = '<a href="/getlocations/node/[nid]">See [title] on a map</a> ';
-  $handler->display->display_options['fields']['nid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['text'] = 'See [title] on a map';
+  $handler->display->display_options['fields']['nid']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['path'] = 'getlocations/node/[nid]';
   $handler->display->display_options['fields']['nid']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
@@ -135,53 +136,14 @@ function getlocations_views_default_views() {
   $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-
-  $handler->display->display_options['style_plugin'] = 'getlocations';
-  $handler->display->display_options['style_options']['grouping'] = 'title';
-  $handler->display->display_options['style_options']['width'] = '300px';
-  $handler->display->display_options['style_options']['height'] = '200px';
-  $handler->display->display_options['style_options']['styles'] = '';
-  $handler->display->display_options['style_options']['latlong'] = '40,0';
-  $handler->display->display_options['style_options']['zoom'] = '3';
-  $handler->display->display_options['style_options']['controltype'] = 'small';
-  $handler->display->display_options['style_options']['pancontrol'] = 1;
-  $handler->display->display_options['style_options']['mtc'] = 'standard';
-  $handler->display->display_options['style_options']['maptype'] = 'Map';
-  $handler->display->display_options['style_options']['baselayers'] = array(
-    'Map' => 1,
-    'Satellite' => 1,
-    'Hybrid' => 1,
-    'Physical' => 1,
-  );
-  $handler->display->display_options['style_options']['behavior'] = array(
-    'scale' => 0,
-    'overview' => 0,
-    'overview_opened' => 0,
-    'scrollwheel' => 0,
-  );
-  $handler->display->display_options['style_options']['draggable'] = 1;
-  $handler->display->display_options['style_options']['streetview_show'] =  0;
-  $handler->display->display_options['style_options']['trafficinfo'] = 0;
-  $handler->display->display_options['style_options']['bicycleinfo'] = 0;
-  $handler->display->display_options['style_options']['panoramio_show'] = 0;
-  $handler->display->display_options['style_options']['poi_show'] = 0;
-  $handler->display->display_options['style_options']['transit_show'] = 0;
-  $handler->display->display_options['style_options']['map_marker'] = 'drupal';
-  $handler->display->display_options['style_options']['markeraction'] = '0';
-  $handler->display->display_options['style_options']['minzoom'] = '6';
-  $handler->display->display_options['style_options']['maxzoom'] = '16';
-  $handler->display->display_options['style_options']['nodezoom'] = '12';
-  $handler->display->display_options['style_options']['usemarkermanager'] = 1;
-  $handler->display->display_options['style_options']['pansetting'] = '2';
-
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['row_options']['hide_empty'] = 0;
   $handler->display->display_options['row_options']['default_field_elements'] = 1;
-  /* Field: Content: Title */
+  /* Field: Node: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -298,36 +260,60 @@ function getlocations_views_default_views() {
   $handler->display->display_options['fields']['name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name']['hide_alter_empty'] = 0;
-  /* Contextual filter: Content: Nid */
+  /* Field: Node: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['type']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['type']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['type']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['type']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['type']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['type']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['type']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['type']['link_to_node'] = 0;
+  $handler->display->display_options['fields']['type']['machine_name'] = 1;
+
+  /* Argument: Node: Nid */
   $handler->display->display_options['arguments']['nid']['id'] = 'nid';
   $handler->display->display_options['arguments']['nid']['table'] = 'node';
   $handler->display->display_options['arguments']['nid']['field'] = 'nid';
   $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['nid']['exception']['title_enable'] = 1;
+  $handler->display->display_options['arguments']['nid']['style_plugin'] = 'default_summary';
   $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
-  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['nid']['specify_validation'] = 1;
   $handler->display->display_options['arguments']['nid']['break_phrase'] = 0;
   $handler->display->display_options['arguments']['nid']['not'] = 0;
-  /* Filter criterion: Content: Published */
+
+  /* Filter: Node: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Location: Lid */
+  /* Filter: Location: Lid */
   $handler->display->display_options['filters']['lid']['id'] = 'lid';
   $handler->display->display_options['filters']['lid']['table'] = 'location';
   $handler->display->display_options['filters']['lid']['field'] = 'lid';
   $handler->display->display_options['filters']['lid']['operator'] = 'not empty';
   $handler->display->display_options['filters']['lid']['expose']['operator'] = FALSE;
-  /* Filter criterion: Location: Latitude */
+  /* Filter: Location: Latitude */
   $handler->display->display_options['filters']['latitude']['id'] = 'latitude';
   $handler->display->display_options['filters']['latitude']['table'] = 'location';
   $handler->display->display_options['filters']['latitude']['field'] = 'latitude';
   $handler->display->display_options['filters']['latitude']['operator'] = '!=';
   $handler->display->display_options['filters']['latitude']['value']['value'] = '0';
-  /* Filter criterion: Location: Longitude */
+  /* Filter: Location: Longitude */
   $handler->display->display_options['filters']['longitude']['id'] = 'longitude';
   $handler->display->display_options['filters']['longitude']['table'] = 'location';
   $handler->display->display_options['filters']['longitude']['field'] = 'longitude';
@@ -336,6 +322,14 @@ function getlocations_views_default_views() {
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'getlocations';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = 0;
+  $handler->display->display_options['row_options']['default_field_elements'] = 1;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
 
   $views[$view->name] = $view;
 
@@ -357,52 +351,14 @@ function getlocations_views_default_views() {
   $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-
-  $handler->display->display_options['style_plugin'] = 'getlocations';
-  $handler->display->display_options['style_options']['width'] = '300px';
-  $handler->display->display_options['style_options']['height'] = '200px';
-  $handler->display->display_options['style_options']['styles'] = '';
-  $handler->display->display_options['style_options']['latlong'] = '40,0';
-  $handler->display->display_options['style_options']['zoom'] = '3';
-  $handler->display->display_options['style_options']['controltype'] = 'small';
-  $handler->display->display_options['style_options']['pancontrol'] = 1;
-  $handler->display->display_options['style_options']['mtc'] = 'standard';
-  $handler->display->display_options['style_options']['maptype'] = 'Map';
-  $handler->display->display_options['style_options']['baselayers'] = array(
-    'Map' => 1,
-    'Satellite' => 1,
-    'Hybrid' => 1,
-    'Physical' => 1,
-  );
-  $handler->display->display_options['style_options']['behavior'] = array(
-    'scale' => 0,
-    'overview' => 0,
-    'overview_opened' => 0,
-    'scrollwheel' => 0,
-  );
-  $handler->display->display_options['style_options']['draggable'] = 1;
-  $handler->display->display_options['style_options']['streetview_show'] =  0;
-  $handler->display->display_options['style_options']['trafficinfo'] = 0;
-  $handler->display->display_options['style_options']['bicycleinfo'] = 0;
-  $handler->display->display_options['style_options']['panoramio_show'] = 0;
-  $handler->display->display_options['style_options']['poi_show'] = 0;
-  $handler->display->display_options['style_options']['transit_show'] = 0;
-  $handler->display->display_options['style_options']['map_marker'] = 'drupal';
-  $handler->display->display_options['style_options']['markeraction'] = '0';
-  $handler->display->display_options['style_options']['minzoom'] = '6';
-  $handler->display->display_options['style_options']['maxzoom'] = '16';
-  $handler->display->display_options['style_options']['nodezoom'] = '12';
-  $handler->display->display_options['style_options']['usemarkermanager'] = 1;
-  $handler->display->display_options['style_options']['pansetting'] = '2';
-
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['row_options']['hide_empty'] = 0;
   $handler->display->display_options['row_options']['default_field_elements'] = 1;
-  /* Field: Content: Title */
+  /* Field: Node: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
@@ -519,25 +475,50 @@ function getlocations_views_default_views() {
   $handler->display->display_options['fields']['name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name']['hide_alter_empty'] = 0;
-  /* Filter criterion: Content: Published */
+  /* Field: Node: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['type']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['type']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['type']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['type']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['type']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['type']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['type']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['type']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['type']['link_to_node'] = 0;
+  $handler->display->display_options['fields']['type']['machine_name'] = 1;
+
+  /* Filter: Node: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Location: Lid */
+  /* Filter: Location: Lid */
   $handler->display->display_options['filters']['lid']['id'] = 'lid';
   $handler->display->display_options['filters']['lid']['table'] = 'location';
   $handler->display->display_options['filters']['lid']['field'] = 'lid';
   $handler->display->display_options['filters']['lid']['operator'] = 'not empty';
   $handler->display->display_options['filters']['lid']['expose']['operator'] = FALSE;
-  /* Filter criterion: Location: Latitude */
+  /* Filter: Location: Latitude */
   $handler->display->display_options['filters']['latitude']['id'] = 'latitude';
   $handler->display->display_options['filters']['latitude']['table'] = 'location';
   $handler->display->display_options['filters']['latitude']['field'] = 'latitude';
   $handler->display->display_options['filters']['latitude']['operator'] = '!=';
   $handler->display->display_options['filters']['latitude']['value']['value'] = '0';
-  /* Filter criterion: Location: Longitude */
+  /* Filter: Location: Longitude */
   $handler->display->display_options['filters']['longitude']['id'] = 'longitude';
   $handler->display->display_options['filters']['longitude']['table'] = 'location';
   $handler->display->display_options['filters']['longitude']['field'] = 'longitude';
@@ -546,6 +527,28 @@ function getlocations_views_default_views() {
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block_1');
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'getlocations';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = 0;
+  $handler->display->display_options['row_options']['default_field_elements'] = 1;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'getlocations';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['hide_empty'] = 0;
+  $handler->display->display_options['row_options']['default_field_elements'] = 1;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+
+  $handler->display->display_options['path'] = 'getlocations_all';
 
   $views[$view->name] = $view;
 

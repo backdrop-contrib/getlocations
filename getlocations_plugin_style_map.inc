@@ -74,6 +74,18 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['custom_content_enable'] = array('default' => $getlocations_defaults['custom_content_enable']);
     $options['custom_content_source'] = array('default' => $getlocations_defaults['custom_content_source']);
 
+    // node type markers
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    if ($getlocations_node_marker['enable']) {
+      if ($types = getlocations_get_types()) {
+        foreach ($types AS $type => $name) {
+          $mkey = 'node_marker__' . $type;
+          $mmarker = (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker']);
+          $options[$mkey] = array('default' => $mmarker);
+        }
+      }
+    }
+
     return $options;
 
   } // end option_definition
@@ -127,7 +139,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     $form += getlocations_map_display_options_form($this->options, FALSE);
 
-
     // markers
     $markers = getlocations_get_marker_titles();
     $form['node_map_marker'] = getlocations_element_map_marker(
@@ -135,6 +146,23 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $markers,
       $this->options['node_map_marker']
     );
+
+    // node type markers
+    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    if ($getlocations_node_marker['enable']) {
+      if ($types = getlocations_get_types()) {
+        foreach ($types AS $type => $name) {
+          if (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ) {
+            $mkey = 'node_marker__' . $type;
+            $form[$mkey] = getlocations_element_map_marker(
+              t('%name Content Map Marker', array('%name' => $name)),
+              $markers,
+              (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_node_marker['content_type'][$type]['map_marker'])
+            );
+          }
+        }
+      }
+    }
 
     $form['markeractiontype'] = getlocations_element_map_markeractiontype(
       $this->options['markeractiontype']

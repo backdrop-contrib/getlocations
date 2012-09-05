@@ -205,38 +205,43 @@ function getlocations_settings_form() {
 
   $form['getlocations_default']['use_https'] = array(
     '#type' => 'value',
-    '#value' =>  $getlocations_defaults['use_https'],
+    '#value' =>  ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0),
   );
 
-  // node type markers
-  if ($types = getlocations_get_types()) {
-    $form['getlocations_node_marker'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Content type markers'),
-      // This will store all the defaults in one variable.
-      '#tree' => TRUE,
-    );
-    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-    $form['getlocations_node_marker']['enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable Markers for Content types'),
-      '#default_value' =>  $getlocations_node_marker['enable'],
-      '#return_value' => 1,
-    );
-    $typect = 0;
-    foreach ($types AS $type => $name) {
-      $form['getlocations_node_marker']['content_type'][$type]['map_marker'] = getlocations_element_map_marker(
-        t('%name Map marker', array('%name' => $name)),
-        $markers,
-        (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+  if (module_exists('location_cck')) {
+    // node type markers
+    if ($types = getlocations_get_types()) {
+      $form['getlocations_node_marker'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Content type markers'),
+        // This will store all the defaults in one variable.
+        '#tree' => TRUE,
       );
+      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      $form['getlocations_node_marker']['enable'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Enable Markers for Content types'),
+        '#default_value' =>  $getlocations_node_marker['enable'],
+        '#return_value' => 1,
+      );
+      $typect = 0;
+      foreach ($types AS $type => $name) {
+        $form['getlocations_node_marker']['content_type'][$type]['map_marker'] = getlocations_element_map_marker(
+          t('%name Map marker', array('%name' => $name)),
+          $markers,
+          (isset($getlocations_node_marker['content_type'][$type]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['map_marker'] : $getlocations_defaults['map_marker'])
+        );
 
-      if (! $typect) {
-        $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-node-markers">';
+        if (! $typect) {
+          $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#prefix'] = '<div id="wrap-getlocations-node-markers">';
+        }
+        $typect++;
       }
-      $typect++;
+      $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
     }
-    $form['getlocations_node_marker']['content_type'][$type]['map_marker']['#suffix'] = '</div>';
+  }
+  else {
+    variable_set('getlocations_node_marker', array('enable' => 0));
   }
 
   if (module_exists('colorbox')) {

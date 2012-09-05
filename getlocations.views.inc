@@ -39,7 +39,6 @@ function template_preprocess_getlocations_view_map(&$variables) {
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
   $base_field = $variables['view']->style_plugin->view->base_field;
-
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
@@ -55,7 +54,25 @@ function template_preprocess_getlocations_view_map(&$variables) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
       $custom_content = $custom_content_source ? $location[$custom_content_source] : '';
+      // default marker
       $marker = $options['node_map_marker'];
+      // per type markers
+      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      if ($getlocations_node_marker['enable']) {
+        if (isset($location['type'])) {
+          if ($types = getlocations_get_types()) {
+            foreach ($types AS $type => $name) {
+              if ($type == $location['type']) {
+                $mkey = 'node_marker__' . $type;
+                if (isset($options[$mkey])) {
+                  $marker = $options[$mkey];
+                }
+              }
+            }
+          }
+        }
+      }
+
       if (isset($location['uid'])) {
         $marker = $getlocations_defaults['user_map_marker'];
       }

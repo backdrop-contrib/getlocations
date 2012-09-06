@@ -271,11 +271,6 @@ function getlocations_settings_form() {
     TRUE
   );
 
-  $form['getlocations_default']['use_https'] = array(
-    '#type' => 'value',
-    '#value' =>  $getlocations_defaults['use_https'],
-  );
-
   // node type markers
   if ($types = getlocations_get_types()) {
     $form['getlocations_node_marker'] = array(

@@ -103,13 +103,17 @@ function template_preprocess_getlocations_view_map(&$variables) {
           // term marker
           $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0));
           if ($getlocations_term_marker['enable']) {
-            if ($nid = getlocations_get_nid_from_lid($lid)) {
-              $query = db_select('taxonomy_index', 't')
-                ->fields('t', array('tid'))
-                ->condition('nid', $nid);
-              $result = $query->execute()->fetchObject();
-              if (isset($result->tid) && $result->tid > 0) {
-                $marker = $options['term_marker_' . $result->tid];
+            if ($vid = $getlocations_term_marker['vid']) {
+              if ($nid = getlocations_get_nid_from_lid($lid)) {
+                $query = db_select('taxonomy_index', 't');
+                $query->fields('t', array('tid'));
+                $query->join('taxonomy_term_data', 'd', 't.tid=d.tid');
+                $query->condition('t.nid', $nid);
+                $query->condition('d.vid', $vid);
+                $result = $query->execute()->fetchObject();
+                if (isset($result->tid) && $result->tid > 0 && isset($options['term_marker_' . $result->tid])) {
+                  $marker = $options['term_marker_' . $result->tid];
+                }
               }
             }
           }

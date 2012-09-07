@@ -1,9 +1,18 @@
-commit 621b776
+commit e0778d2
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 8 00:14:28 2012 +0100
+
+    fixed node_marker bug
+
+getlocations.module
+
+commit 255d03c
 Author: hutch <hutch@midwales.net>
 Date:   Wed Sep 5 21:00:44 2012 +0100
 
     fixed path
 
+CHANGELOG.txt
 getlocations.markercluster.inc
 
 commit 45cb2a8

@@ -1,9 +1,18 @@
-commit 8e42152
+commit 65b350a
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 8 00:13:48 2012 +0100
+
+    fixed node_marker bug
+
+getlocations.module
+
+commit 8d40355
 Author: hutch <hutch@midwales.net>
 Date:   Wed Sep 5 20:56:38 2012 +0100
 
     per type node markers in views
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.views.inc
 getlocations.views_default.inc

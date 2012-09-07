@@ -1093,7 +1093,7 @@ function getlocations_check_node($type) {
 function getlocations_get_markertypes($type) {
 
   $getlocations_defaults = getlocations_defaults();
-  $default_marker = $getlocations_defaults['map_marker'];
+  $default_marker = $getlocations_defaults['node_map_marker'];
   $markertypes = array();
   if ($type == 'node') {
     $content_types = getlocations_get_types();

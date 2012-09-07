@@ -101,7 +101,7 @@ function getlocations_settings_form() {
     $getlocations_defaults['user_map_marker'],
     $desc
   );
-  if (module_exists('taxonomy') && getlocations_get_vocabularies()) {
+  if (module_exists('taxonomy')) {
     // default vocabulary marker
     $desc = '';
     if (getlocations_get_vocabularies()) {
@@ -238,14 +238,14 @@ function getlocations_settings_form() {
         t('Show link back to term'),
         $getlocations_defaults['returnlink_term_enable']
       );
-      $form['getlocations_default']['returnlink_term_link'] = getlocations_element_map_tf(
-        t('Text of term return link'),
-        $getlocations_defaults['returnlink_term_link'],
-        t('Use %n to insert the term name'),
-        30,
-        64
-      );
     }
+    $form['getlocations_default']['returnlink_term_link'] = getlocations_element_map_tf(
+      t('Text of term return link'),
+      $getlocations_defaults['returnlink_term_link'],
+      t('Use %n to insert the term name'),
+      30,
+      64
+    );
 
     if (getlocations_check_entity_type('comment')) {
       $form['getlocations_default']['returnlink_comment_enable'] = getlocations_element_map_checkbox(
@@ -330,54 +330,52 @@ function getlocations_settings_form() {
       $typect++;
     }
     $form['getlocations_vocabulary_marker']['vocabulary'][$type]['map_marker']['#suffix'] = '</div>';
-
-    // term markers
-    $form['getlocations_term_marker'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Term markers'),
-      // This will store all the defaults in one variable.
-      '#tree' => TRUE,
-    );
-    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-    $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
-      t('Enable Markers for Terms'),
-      $getlocations_term_marker['enable']
-    );
-    $options = array(0 => '- Select -');
-    foreach (taxonomy_vocabulary_get_names() as $vocab) {
-      $options[$vocab->vid] = $vocab->name;
-    }
-    $form['getlocations_term_marker']['vid'] = getlocations_element_dd(
-      t('Vocabulary to specify markers for'),
-      $getlocations_term_marker['vid'],
-      $options
-    );
-    $form['getlocations_term_marker']['vid']['#prefix'] = '<div id="wrap-getlocations-term-markers">';
-    if ($getlocations_term_marker['vid']) {
-      $termct = 0;
-      $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-      $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
-      foreach ($terms AS $term) {
-        $tid = $term->tid;
-        $name = $term->name;
-        $form['getlocations_term_marker']['term'][$tid]['map_marker'] = getlocations_element_map_marker(
-          t('%name Map marker', array('%name' => $name)),
-          $markers,
-          (isset($getlocations_term_marker['term'][$tid]['map_marker']) ? $getlocations_term_marker['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker'])
-        );
-        $termct++;
-      }
-    }
-    $form['getlocations_term_marker']['max_depth'] = getlocations_element_map_tf(
-      t('Maximum depth'),
-      $getlocations_term_marker['max_depth'],
-      t('The maximum depth for hierarchical vocabulary to specify markers for. Leave blank for all levels.'),
-      5
-    );
-    $form['getlocations_term_marker']['max_depth']['#suffix'] = '</div>';
-
   }
 
+  // term markers
+  $form['getlocations_term_marker'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Term markers'),
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
+  );
+  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+  $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
+    t('Enable Markers for Terms'),
+    $getlocations_term_marker['enable']
+  );
+  $options = array(0 => '- Select -');
+  foreach (taxonomy_vocabulary_get_names() as $vocab) {
+    $options[$vocab->vid] = $vocab->name;
+  }
+  $form['getlocations_term_marker']['vid'] = getlocations_element_dd(
+    t('Vocabulary to specify markers for'),
+    $getlocations_term_marker['vid'],
+    $options
+  );
+  $form['getlocations_term_marker']['vid']['#prefix'] = '<div id="wrap-getlocations-term-markers">';
+  if ($getlocations_term_marker['vid']) {
+    $termct = 0;
+    $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+    $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
+    foreach ($terms AS $term) {
+      $tid = $term->tid;
+      $name = $term->name;
+      $form['getlocations_term_marker']['term'][$tid]['map_marker'] = getlocations_element_map_marker(
+        t('%name Map marker', array('%name' => $name)),
+        $markers,
+        (isset($getlocations_term_marker['term'][$tid]['map_marker']) ? $getlocations_term_marker['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker'])
+      );
+      $termct++;
+    }
+  }
+  $form['getlocations_term_marker']['max_depth'] = getlocations_element_map_tf(
+    t('Maximum depth'),
+    $getlocations_term_marker['max_depth'],
+    t('The maximum depth for hierarchical vocabulary to specify markers for. Leave blank for all levels.'),
+    5
+  );
+  $form['getlocations_term_marker']['max_depth']['#suffix'] = '</div>';
 
   // colorbox
   if (module_exists('colorbox')) {

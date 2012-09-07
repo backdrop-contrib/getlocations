@@ -124,7 +124,7 @@ function getlocations_menu() {
       'type' => MENU_CALLBACK,
     );
   }
-  if (getlocations_get_vocabularies()) {
+  if (module_exists('taxonomy')) {
     // getlocations/term/$tid    # show all locations for a term
     $items['getlocations/term/%getlocations_id'] = array(
       'title' => 'Get term locations',

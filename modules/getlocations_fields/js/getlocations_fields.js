@@ -346,6 +346,15 @@
         $("#" + latfield + mmkey).val(lat);
         $("#" + lonfield + mmkey).val(lng);
       });
+      google.maps.event.addListener(mmap, "click", function (e) {
+        p = e.latLng;
+        mmmap.panTo(p);
+        mark[mmkey].setPosition(p);
+        lat = p.lat();
+        lng = p.lng();
+        $("#" + latfield + mmkey).val(lat);
+        $("#" + lonfield + mmkey).val(lng);
+      });
     }
 
     function updateMap(umap, pt, ukey) {

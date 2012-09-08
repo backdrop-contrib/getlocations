@@ -465,7 +465,7 @@ function theme_getlocations_fields_field_widget_form($variables) {
     $form['country']['#suffix'] = '</div>';
   }
 
-  $msg = t('To use the map to find a location, drag the marker.');
+  $msg = t('To use the map to find a location, drag the marker or click on the map.');
   $map = $form['map']['#markup'];
   $form['map']['#prefix'] = '<div class="getlocations_fields_map_wrapper">';
   $form['map']['#suffix'] = '</div>';

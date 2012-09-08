@@ -1,9 +1,19 @@
-commit a40ac96
+commit bf61475
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 8 09:13:33 2012 +0100
+
+    added click on the map feature, #1763672
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit f39d385
 Author: hutch <hutch@midwales.net>
 Date:   Fri Sep 7 09:04:24 2012 +0100
 
     separated term markers from vocab markers
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module

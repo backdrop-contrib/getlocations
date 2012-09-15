@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 commit 68c430b
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 15 20:09:13 2012 +0100
@@ -7,14 +8,21 @@ Date:   Sat Sep 15 20:09:13 2012 +0100
 modules/getlocations_search/getlocations_search.admin.inc
 
 commit 47b236e
+=======
+commit 314997d
+>>>>>>> origin/7.x-1.x
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 15 18:53:42 2012 +0100
 
     fixed a bug in markers with no shadow
 
+<<<<<<< HEAD
 CHANGELOG.txt
 getlocations.module
 modules/getlocations_search/getlocations_search.module
+=======
+getlocations.module
+>>>>>>> origin/7.x-1.x
 
 commit d4a2031
 Author: hutch <hutch@midwales.net>

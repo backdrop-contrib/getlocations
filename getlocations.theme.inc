@@ -268,7 +268,7 @@ function theme_getlocations_info($variables) {
       $unit_disp = getlocations_get_unit_names($location['sunit']);
     }
     else {
-      $unit_disp = getlocations_get_unit_names($location['sunit'], FALSE);
+      $unit_disp = getlocations_get_unit_names($location['sunit'], 'single');
     }
     $output .= '<div class="search-distance">' . number_format(floatval($location['sdist']), 2) . ' ' . $unit_disp . '</div>';
   }

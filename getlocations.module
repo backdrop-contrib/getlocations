@@ -3156,13 +3156,20 @@ function getlocations_convert_meters_to_distance($meters, $distance_unit = 'km')
   return $retval;
 }
 
-function getlocations_get_unit_names($unit = '', $plural = TRUE) {
+function getlocations_get_unit_names($unit = '', $type = 'plural') {
   $units_plural = array(
     'km'  => t('Kilometers'),
     'm'   => t('Meters'),
     'mi'  => t('Miles'),
     'yd'  => t('Yards'),
     'nmi' => t('Nautical miles'),
+  );
+  $units_plurals = array(
+    'km'  => t('Kilometer(s)'),
+    'm'   => t('Meter(s)'),
+    'mi'  => t('Mile(s)'),
+    'yd'  => t('Yard(s)'),
+    'nmi' => t('Nautical mile(s)'),
   );
   $units = array(
     'km'  => t('Kilometer'),
@@ -3174,8 +3181,11 @@ function getlocations_get_unit_names($unit = '', $plural = TRUE) {
   // for dropdown
   $return = FALSE;
   if (empty($unit)) {
-    if ($plural) {
+    if ($type == 'plural') {
       $return = $units_plural;
+    }
+    elseif ($type == 'plurals') {
+      $return = $units_plurals;
     }
     else {
       $return = $units;
@@ -3186,8 +3196,11 @@ function getlocations_get_unit_names($unit = '', $plural = TRUE) {
     if (! in_array($unit, array_keys($units))) {
       $unit = 'km';
     }
-    if ($plural) {
+    if ($type == 'plural') {
       $return = $units_plural[$unit];
+    }
+    elseif ($type == 'plurals') {
+      $return = $units_plurals[$unit];
     }
     else {
       $return = $units[$unit];

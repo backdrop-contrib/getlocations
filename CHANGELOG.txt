@@ -1,4 +1,12 @@
-commit a303bf2
+commit 68c430b
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 20:09:13 2012 +0100
+
+    cleanup
+
+modules/getlocations_search/getlocations_search.admin.inc
+
+commit 47b236e
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 15 18:53:42 2012 +0100
 

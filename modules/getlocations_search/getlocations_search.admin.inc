@@ -87,7 +87,6 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     TRUE
   );
 
-
   $form[$varname]['autocomplete_bias'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable Viewport bias'),

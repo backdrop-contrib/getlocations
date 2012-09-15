@@ -593,7 +593,19 @@ var getlocations_settings = {};
               }
               else {
                 var path = Drupal.settings.basePath + "getlocations/info";
-                $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+                var qs = {'lid': lid, 'key': lidkey};
+                if (gs.show_distance) {
+                  if ($("#getlocations_search_slat_" + mkey).is('div')) {
+                    var slat = $("#getlocations_search_slat_" + mkey).html();
+                    var slon = $("#getlocations_search_slon_" + mkey).html();
+                    var sunit = $("#getlocations_search_sunit_" + mkey).html();
+                    if (slat && slon) {
+                      qs = {'lid': lid, 'key': lidkey, 'sdist': sunit + '|' + slat + '|' + slon};
+                    }
+                  }
+                }
+
+                $.get(path, qs, function(data) {
                   Drupal.getlocations.showPopup(map, m, gs, data);
                 });
               }

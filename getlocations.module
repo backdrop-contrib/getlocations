@@ -1120,7 +1120,8 @@ function getlocations_info() {
 
   $lid = $_GET['lid'];
   $lidkey = $_GET['key'];
-  $content = getlocations_getinfo($lid, $lidkey);
+  $extra = (isset($_GET['sdist']) ? array('sdist' => $_GET['sdist']) : '');
+  $content = getlocations_getinfo($lid, $lidkey, $extra);
   drupal_json_output(array('content' => $content));
 
 }
@@ -1130,7 +1131,7 @@ function getlocations_info() {
  * @param string entity id
  * @return string formatted address
  */
-function getlocations_getinfo($lid, $lidkey) {
+function getlocations_getinfo($lid, $lidkey, $extra=FALSE) {
 
   $content = FALSE;
   if ($lid > 0) {
@@ -1166,6 +1167,23 @@ function getlocations_getinfo($lid, $lidkey) {
     elseif (module_exists('geofield') || module_exists('geolocation')) {
       $locations = getlocations_load_locations($lid, $lidkey);
       $location = $locations[0];
+    }
+
+    if ($extra) {
+      if (is_array($extra) && isset($extra['sdist'])) {
+        $sdist = $extra['sdist'];
+        $arr = explode('|', $sdist);
+        $sunit = $arr[0];
+        $slat = $arr[1];
+        $slon = $arr[2];
+        $lat = $location['latitude'];
+        $lon = $location['longitude'];
+        $latlon_a = array('lat' => $slat, 'lon' => $slon);
+        $latlon_b = array('lat' => $lat, 'lon' => $lon);
+        $dist = getlocations_distance_between($latlon_a, $latlon_b, $sunit);
+        $location['sdist'] = $dist['scalar'];
+        $location['sunit'] = $dist['distance_unit'];
+      }
     }
 
     $content = theme('getlocations_info', array('location' => $location));
@@ -2954,6 +2972,38 @@ function getlocations_earth_distance_sql($latitude, $longitude, $tbl_alias = '')
 }
 
 /**
+ * @param float $longitude1
+ *
+ * @param float $latitude1
+ *
+ * @param float $longitude2
+ *
+ * @param float $latitude2
+ *
+ * @return
+ *   Returns distance in meters
+ *
+ */
+function getlocations_earth_distance($longitude1, $latitude1, $longitude2, $latitude2) {
+  $longitude1 = floatval($longitude1);
+  $latitude1 = floatval($latitude1);
+  $longitude2 = floatval($longitude2);
+  $latitude2 = floatval($latitude2);
+
+  // Estimate the earth-surface distance between two locations.
+  $long1 = deg2rad($longitude1);
+  $lat1 = deg2rad($latitude1);
+  $long2 = deg2rad($longitude2);
+  $lat2 = deg2rad($latitude2);
+  $radius = getlocations_earth_radius(($latitude1 + $latitude2) / 2);
+
+  $cosangle = cos($lat1)*cos($lat2) *
+    (cos($long1)*cos($long2) + sin($long1)*sin($long2)) +
+    sin($lat1)*sin($lat2);
+  return acos($cosangle) * $radius;
+}
+
+/**
  * This function uses earth_asin_safe so is not accurate for all possible
  *   parameter combinations. This means this function doesn't work properly
  *   for high distance values. This function needs to be re-written to work properly for
@@ -3106,6 +3156,46 @@ function getlocations_convert_meters_to_distance($meters, $distance_unit = 'km')
   return $retval;
 }
 
+function getlocations_get_unit_names($unit = '', $plural = TRUE) {
+  $units_plural = array(
+    'km'  => t('Kilometers'),
+    'm'   => t('Meters'),
+    'mi'  => t('Miles'),
+    'yd'  => t('Yards'),
+    'nmi' => t('Nautical miles'),
+  );
+  $units = array(
+    'km'  => t('Kilometer'),
+    'm'   => t('Meter'),
+    'mi'  => t('Mile'),
+    'yd'  => t('Yard'),
+    'nmi' => t('Nautical mile'),
+  );
+  // for dropdown
+  $return = FALSE;
+  if (empty($unit)) {
+    if ($plural) {
+      $return = $units_plural;
+    }
+    else {
+      $return = $units;
+    }
+  }
+  else {
+    // if $unit is supplied, return display name
+    if (! in_array($unit, array('km', 'm', 'mi', 'yd', 'nmi'))) {
+      $unit = 'km';
+    }
+    if ($plural) {
+      $return = $units_plural[$unit];
+    }
+    else {
+      $return = $units[$unit];
+    }
+  }
+  return $return;
+}
+
 // form elements
 /**
  * @param string $default
@@ -3120,16 +3210,11 @@ function getlocations_element_distance_unit($default, $title = '', $description 
   if (empty($title)) {
     $title = t('Units');
   }
+  $units = getlocations_get_unit_names();
   $element = array(
     '#type' => 'select',
     '#title' => $title,
-    '#options' => array(
-      'km'  => t('Kilometers'),
-      'm'   => t('Meters'),
-      'mi'  => t('Miles'),
-      'yd'  => t('Yards'),
-      'nmi' => t('Nautical miles'),
-    ),
+    '#options' => $units,
     '#default_value' => $default,
   );
   if (! empty($description)) {
@@ -3214,3 +3299,77 @@ function getlocations_get_current_supported_module() {
   }
   return FALSE;
 }
+
+/**
+ * Given two points in lat/lon form, returns the distance between them.
+ * @param $latlon_a
+ *   An associative array where
+ *      'lon' => is a floating point of the longitude coordinate for the point given by latlonA
+ *      'lat' => is a floating point of the latitude coordinate for the point given by latlonB
+ * @param $latlon_b
+ *      Another point formatted like $latlon_b
+ * @param $distance_unit
+ *      A string that is one of 'km', 'm', 'mi', 'yd', 'nmi'.
+ *      Defaults to 'km'
+ * @return
+ *    NULL if sense can't be made of the parameters.
+ *    An associative array where
+ *      'scalar' => Is the distance between the two lat/lon parameter points
+ *      'distance_unit' => Is the unit of distance being represented by 'scalar'.
+ *
+ */
+function getlocations_distance_between($latlon_a = array(), $latlon_b = array(), $distance_unit = 'km') {
+  if (!isset($latlon_a['lon']) || !isset($latlon_a['lat']) || !isset($latlon_b['lon']) || !isset($latlon_b['lat'])) {
+    return NULL;
+  }
+
+  $meters = getlocations_earth_distance($latlon_a['lon'], $latlon_a['lat'], $latlon_b['lon'], $latlon_b['lat']);
+  $distance = getlocations_convert_meters_to_distance($meters, $distance_unit);
+  return array('scalar' => $distance, 'distance_unit' => $distance_unit);
+}
+
+
+/***********************************************************/
+// these functions currently not in use
+function getlocations_earth_xyz($longitude, $latitude, $height = 0) {
+  // Convert longitude and latitude to earth-centered earth-fixed coordinates.
+  // X axis is 0 long, 0 lat; Y axis is 90 deg E; Z axis is north pole.
+
+  $long = deg2rad($longitude);
+  $lat = deg2rad($latitude);
+
+  $coslong = cos($long);
+  $coslat = cos($lat);
+  $sinlong = sin($long);
+  $sinlat = sin($lat);
+  $radius = (GETLOCATIONS_EARTH_RADIUS_SEMIMAJOR / sqrt(1 - GETLOCATIONS_EARTH_ECCENTRICITY_SQ * $sinlat * $sinlat));
+  $x = ($radius + $height) * $coslat * $coslong;
+  $y = ($radius + $height) * $coslat * $sinlong;
+  $z = (($radius * (1 - GETLOCATIONS_EARTH_ECCENTRICITY_SQ ) + $height) * $sinlat);
+  return array($x, $y, $z);
+}
+
+function getlocations_earth_arclength($angle, $latitude=37.9) {
+  // Convert a given angle to earth-surface distance.
+  return deg2rad($angle) * getlocations_earth_radius($latitude);
+}
+
+function getlocations_get_exact_distance_sql($latitude, $longitude, $tbl_alias = '') {
+  $radius = getlocations_earth_radius($latitude);
+  $tbl_alias = empty($tbl_alias) ? $tbl_alias : ($tbl_alias . '.');
+  $latfield = $tbl_alias . 'latitude';
+  $lonfield = $tbl_alias . 'longitude';
+
+  // all calcs in mysql
+  #$sql = "(IFNULL(ACOS((SIN(RADIANS($latitude)) * SIN(RADIANS($latfield))) + (COS(RADIANS($latitude)) * COS(RADIANS($latfield)) * COS(RADIANS($longitude - $lonfield)))), 0.00000) * $radius)";
+  // some calcs predone in php
+  $lat = deg2rad($latitude);
+  $long = deg2rad($longitude);
+  #$coslong = cos($long);
+  $coslat = cos($lat);
+  #$sinlong = sin($long);
+  $sinlat = sin($lat);
+  $sql = "(IFNULL(ACOS(($sinlat * SIN(RADIANS($latfield))) + ($coslat * COS(RADIANS($latfield)) * COS(RADIANS($longitude - $lonfield)))), 0.00000) * $radius)";
+  return $sql;
+}
+

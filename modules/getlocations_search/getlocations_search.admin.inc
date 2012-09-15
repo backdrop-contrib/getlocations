@@ -86,7 +86,7 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     5,
     TRUE
   );
-  
+
 
   $form[$varname]['autocomplete_bias'] = array(
     '#type' => 'checkbox',
@@ -212,6 +212,11 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
   $form[$varname]['display_dms'] = getlocations_element_map_checkbox(
     t('Show Latitude/Longitude in Degrees, minutes, seconds'),
     $defaults['display_dms'],
+    ''
+  );
+  $form[$varname]['show_distance'] = getlocations_element_map_checkbox(
+    t('Show Distance in InfoBubble/InfoWindow'),
+    $defaults['show_distance'],
     ''
   );
 

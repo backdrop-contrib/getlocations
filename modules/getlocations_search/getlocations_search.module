@@ -289,6 +289,7 @@ function getlocations_search_js_settings_do($defaults, $mapid) {
       'autocomplete_bias' => $defaults['autocomplete_bias'],
       'restrict_by_country' => $defaults['restrict_by_country'],
       'country' => $defaults['country'],
+      'show_distance' => $defaults['show_distance'],
     ),
   );
 
@@ -380,6 +381,13 @@ function theme_getlocations_search_form($variables) {
   }
   $output .= '</div>';
   $output .= '</div>';
+  // hidden
+  $output .= '<div id="getlocations_search_data_' . $mapid . '" class="js-hide">';
+  $output .= '<div id="getlocations_search_slat_' . $mapid . '"></div>';
+  $output .= '<div id="getlocations_search_slon_' . $mapid . '"></div>';
+  $output .= '<div id="getlocations_search_sunit_' . $mapid . '"></div>';
+  $output .= '</div>';
+
   return $output;
 }
 
@@ -510,6 +518,7 @@ function getlocations_search_defaults() {
     'search_limits' => 0,
     'search_type' => 'all',
     'display_dms' => 0,
+    'show_distance' => 0,
     'display_search_distance' => 1,
     'display_search_units' => 1,
     'display_search_limits' => 1,

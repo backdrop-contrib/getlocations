@@ -18,6 +18,7 @@
         var gset = getlocations_settings[key];
         var method = searchsettings.method;
         gset.do_lookup = searchsettings.do_lookup;
+        gset.show_distance = searchsettings.show_distance;
         var autocomplete_bias = searchsettings.autocomplete_bias;
         var restrict_by_country = searchsettings.restrict_by_country;
         var country = searchsettings.country;
@@ -133,8 +134,17 @@
     geocoder.geocode(adrs, function (results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         var address = results[0].formatted_address;
+        var slat = results[0].geometry.location.lat();
+        var slon = results[0].geometry.location.lng();
         // go get the data
-        $.get(Drupal.settings.basePath + "getlocations_search/info", {'lat':results[0].geometry.location.lat(),'lon':results[0].geometry.location.lng(),'distance':distance,'units':units,'type':type,'limits':limits}, function(data) {
+        $.get(Drupal.settings.basePath + "getlocations_search/info", {
+          'lat':slat,
+          'lon':slon,
+          'distance':distance,
+          'units':units,
+          'type':type,
+          'limits':limits
+        }, function(data) {
           // in data, an array of locations, minmaxes and info
           var locations = data['locations'];
           var minmaxes = data['minmaxes'];
@@ -202,6 +212,12 @@
           }
           $("#getlocations_search_lat_" + mkey).html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
           $("#getlocations_search_lon_" + mkey).html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
+          if (gs.show_distance) {
+            $("#getlocations_search_slat_" + mkey).html(slat);
+            $("#getlocations_search_slon_" + mkey).html(slon);
+            $("#getlocations_search_sunit_" + mkey).html(units);
+          }
+
           // markermanagers add batchr
           if (gs.usemarkermanager) {
             gs.mgr.addMarkers(gs.batchr, gs.minzoom, gs.maxzoom);

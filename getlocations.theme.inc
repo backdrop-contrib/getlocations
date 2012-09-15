@@ -263,6 +263,15 @@ function theme_getlocations_info($variables) {
     $output .= '<div class="country-name">' . $location['country'] . '</div>';
   }
   $output .= '</div>';
+  if (isset($location['sdist'])) {
+    if($location['sdist'] <> 1) {
+      $unit_disp = getlocations_get_unit_names($location['sunit']);
+    }
+    else {
+      $unit_disp = getlocations_get_unit_names($location['sunit'], FALSE);
+    }
+    $output .= '<div class="search-distance">' . number_format(floatval($location['sdist']), 2) . ' ' . $unit_disp . '</div>';
+  }
   $output .= '</div>';
 
   return $output;

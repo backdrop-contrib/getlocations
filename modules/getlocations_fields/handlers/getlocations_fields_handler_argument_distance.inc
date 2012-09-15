@@ -37,19 +37,10 @@ class getlocations_fields_handler_argument_distance extends views_handler_argume
     );
 
     // Units used.
-    $form['search_units'] = array(
-      '#type' => 'select',
-      '#title' => t('Distance unit'),
-      '#options' => array(
-        'km'  => t('Kilometers'),
-        'm'   => t('Meters'),
-        'mi'  => t('Miles'),
-        'yd'  => t('Yards'),
-        'nmi' => t('Nautical miles'),
-        'dd'  => t('Decimal degrees'),
-      ),
-      '#default_value' => $this->options['search_units'],
-      '#description' => t('Select the unit of distance. Decimal degrees should be comma delimited.'),
+    $form['search_units'] = getlocations_element_distance_unit(
+      $this->options['search_units'],
+      t('Distance unit'),
+      t('Select the unit of distance. Decimal degrees should be comma delimited.')
     );
 
     $form['search_method'] = array(

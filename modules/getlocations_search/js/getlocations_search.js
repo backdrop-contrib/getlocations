@@ -10,6 +10,8 @@
 
   function getlocations_search_init() {
 
+    var searchmarker = {};
+
     // each map has its own settings
     $.each(Drupal.settings.getlocations_search, function (key, searchsettings) {
       // is there really a map?
@@ -214,11 +216,15 @@
           }
           $("#getlocations_search_lat_" + mkey).html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
           $("#getlocations_search_lon_" + mkey).html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
-          if (gs.show_distance) {
-            $("#getlocations_search_slat_" + mkey).html(slat);
-            $("#getlocations_search_slon_" + mkey).html(slon);
-            $("#getlocations_search_sunit_" + mkey).html(units);
+          oldslat = $("#getlocations_search_slat_" + mkey).html();
+          oldslon = $("#getlocations_search_slon_" + mkey).html();
+          if (oldslat) {
+            searchmarker.setMap();
           }
+          $("#getlocations_search_slat_" + mkey).html(slat);
+          $("#getlocations_search_slon_" + mkey).html(slon);
+          $("#getlocations_search_sunit_" + mkey).html(units);
+
 
           // markermanagers add batchr
           if (gs.usemarkermanager) {
@@ -286,7 +292,7 @@
   function makeSearchcenterMarker(slat, slon, smark, map) {
     smarkdone = Drupal.getlocations.getIcon(smark);
     var p = new google.maps.LatLng(slat, slon);
-    var m = new google.maps.Marker({
+    searchmarker = new google.maps.Marker({
       icon: smarkdone.image,
       shadow: smarkdone.shadow,
       shape: smarkdone.shape,

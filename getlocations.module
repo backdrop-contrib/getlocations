@@ -3183,7 +3183,7 @@ function getlocations_get_unit_names($unit = '', $plural = TRUE) {
   }
   else {
     // if $unit is supplied, return display name
-    if (! in_array($unit, array('km', 'm', 'mi', 'yd', 'nmi'))) {
+    if (! in_array($unit, array_keys($units))) {
       $unit = 'km';
     }
     if ($plural) {

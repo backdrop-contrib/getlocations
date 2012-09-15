@@ -173,10 +173,25 @@
             $("#wrap-getlocations-weather-cloud").hide();
           }
         });
-
-
       }
 
+      // search marker
+      if ($("#edit-getlocations-search-defaults-do-search-marker").is('input')) {
+        if ($("#edit-getlocations-search-defaults-do-search-marker").attr('checked')) {
+          $("#wrap-getlocations-search-marker").show();
+        }
+        else {
+          $("#wrap-getlocations-search-marker").hide();
+        }
+        $("#edit-getlocations-search-defaults-do-search-marker").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-search-marker").show();
+          }
+          else {
+            $("#wrap-getlocations-search-marker").hide();
+          }
+        });
+      }
 
     }
   };

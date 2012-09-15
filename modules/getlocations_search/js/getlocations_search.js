@@ -19,6 +19,8 @@
         var method = searchsettings.method;
         gset.do_lookup = searchsettings.do_lookup;
         gset.show_distance = searchsettings.show_distance;
+        gset.do_search_marker = searchsettings.do_search_marker;
+        gset.search_marker = searchsettings.search_marker;
         var autocomplete_bias = searchsettings.autocomplete_bias;
         var restrict_by_country = searchsettings.restrict_by_country;
         var country = searchsettings.country;
@@ -245,6 +247,11 @@
           else if (gs.useclustermanager) {
              gs.cmgr.repaint();
           }
+          // search marker
+          if (gs.do_search_marker) {
+            smark = gs.search_marker;
+            makeSearchcenterMarker(slat, slon, smark, map);
+          }
         });
       }
       else {
@@ -274,6 +281,20 @@
         $(statusdiv).html(statusmsg);
       }, {maximumAge:10000}
     );
+  }
+
+  function makeSearchcenterMarker(slat, slon, smark, map) {
+    smarkdone = Drupal.getlocations.getIcon(smark);
+    var p = new google.maps.LatLng(slat, slon);
+    var m = new google.maps.Marker({
+      icon: smarkdone.image,
+      shadow: smarkdone.shadow,
+      shape: smarkdone.shape,
+      map: map,
+      position: p,
+      title: Drupal.t('Search center'),
+      optimized: false
+    });
   }
 
   Drupal.behaviors.getlocations_search = {

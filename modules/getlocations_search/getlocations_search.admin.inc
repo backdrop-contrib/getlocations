@@ -219,6 +219,18 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     $defaults['show_distance'],
     ''
   );
+  $form[$varname]['do_search_marker'] = getlocations_element_map_checkbox(
+    t('Mark the search center on the map'),
+    $defaults['do_search_marker'],
+    ''
+  );
+  $markers = getlocations_get_marker_titles();
+  $form[$varname]['search_marker'] = getlocations_element_map_marker(
+    t('Search Map marker'),
+    $markers,
+    $defaults['search_marker'],
+    ''
+  );
 
   $form[$varname] += getlocations_map_display_basics_form($defaults);
 

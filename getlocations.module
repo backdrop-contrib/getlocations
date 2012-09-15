@@ -1268,8 +1268,8 @@ function getlocations_markerinfo() {
         $newpositions[] = $pos[0];
       }
     }
+    $adj = 0;
     foreach ($newpositions AS $pos) {
-      $adj = 0;
       // no shadow
       if ($pos < 1) {
         $adj = 1;

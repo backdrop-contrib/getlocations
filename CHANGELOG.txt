@@ -1,9 +1,70 @@
-commit bf61475
+commit a303bf2
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 18:53:42 2012 +0100
+
+    fixed a bug in markers with no shadow
+
+CHANGELOG.txt
+getlocations.module
+modules/getlocations_search/getlocations_search.module
+
+commit d4a2031
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 18:52:34 2012 +0100
+
+    added search marker option
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit d36d4b0
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 13:49:40 2012 +0100
+
+    improved units display
+
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit a2935a7
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 11:41:31 2012 +0100
+
+    fixed array_keys
+
+getlocations.module
+
+commit 0767de8
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 11:32:50 2012 +0100
+
+    added feature show distance in infobubble
+
+getlocations.css
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit b7020a5
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 11:32:06 2012 +0100
+
+    added getlocations_element_distance_unit()
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+
+commit 77e4691
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 8 09:13:33 2012 +0100
 
     added click on the map feature, #1763672
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.theme.inc
 modules/getlocations_fields/js/getlocations_fields.js
 

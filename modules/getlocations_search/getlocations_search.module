@@ -290,6 +290,8 @@ function getlocations_search_js_settings_do($defaults, $mapid) {
       'restrict_by_country' => $defaults['restrict_by_country'],
       'country' => $defaults['country'],
       'show_distance' => $defaults['show_distance'],
+      'search_marker' => $defaults['search_marker'],
+      'do_search_marker' => $defaults['do_search_marker'],
     ),
   );
 
@@ -411,13 +413,16 @@ function theme_getlocations_search_settings_form($variables) {
   $form['getlocations_search_defaults']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
   $form['getlocations_search_defaults']['markerclusterer_minsize']['#suffix'] = '</div>';
 
-#  if (module_exists('colorbox')) {
-#    $getlocations_colorbox = getlocations_colorbox_settings();
-#    if ($getlocations_colorbox['marker_enable']) {
-#      $link = getlocations_markerpicker_link($form['getlocations_search_defaults']['search_map_marker']['#id'], 's');
-#      $form['getlocations_search_defaults']['search_map_marker']['#field_suffix'] = '&nbsp;' . $link;
-#    }
-#  }
+  $form['getlocations_search_defaults']['do_search_marker']['#suffix'] = '<div id="wrap-getlocations-search-marker">';
+  $form['getlocations_search_defaults']['search_marker']['#suffix'] = '</div>';
+
+  if (module_exists('colorbox')) {
+    $getlocations_colorbox = getlocations_colorbox_settings();
+    if ($getlocations_colorbox['marker_enable']) {
+      $link = getlocations_markerpicker_link($form['getlocations_search_defaults']['search_marker']['#id'], 's');
+      $form['getlocations_search_defaults']['search_marker']['#field_suffix'] = '&nbsp;' . $link;
+    }
+  }
 
   $output .= drupal_render_children($form);
   return $output;
@@ -519,6 +524,8 @@ function getlocations_search_defaults() {
     'search_type' => 'all',
     'display_dms' => 0,
     'show_distance' => 0,
+    'search_marker' => 'drupal',
+    'do_search_marker' => 0,
     'display_search_distance' => 1,
     'display_search_units' => 1,
     'display_search_limits' => 1,

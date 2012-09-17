@@ -116,6 +116,14 @@
       }
       gs.batchr = [];
     }
+    // clear out search marker
+    if (gs.do_search_marker) {
+      oldslat = $("#getlocations_search_slat_" + mkey).html();
+      oldslon = $("#getlocations_search_slon_" + mkey).html();
+      if (oldslat) {
+        searchmarker.setMap();
+      }
+    }
     // clear the results box
     $("#getlocations_search_address_" + mkey).html();
     $("#getlocations_search_count_" + mkey).html();
@@ -216,15 +224,10 @@
           }
           $("#getlocations_search_lat_" + mkey).html('<span class="results-label">' + Drupal.t('Latitude') + ':</span><span class="results-value">' + latout + '</span>');
           $("#getlocations_search_lon_" + mkey).html('<span class="results-label">' + Drupal.t('Longitude') + ':</span><span class="results-value">' + lonout + '</span>');
-          oldslat = $("#getlocations_search_slat_" + mkey).html();
-          oldslon = $("#getlocations_search_slon_" + mkey).html();
-          if (oldslat) {
-            searchmarker.setMap();
-          }
+          // hidden stuff, used by search distance and search marker
           $("#getlocations_search_slat_" + mkey).html(slat);
           $("#getlocations_search_slon_" + mkey).html(slon);
           $("#getlocations_search_sunit_" + mkey).html(units);
-
 
           // markermanagers add batchr
           if (gs.usemarkermanager) {

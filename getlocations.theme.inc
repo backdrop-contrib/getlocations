@@ -448,16 +448,19 @@ function theme_getlocations_settings_form($variables) {
       }
 
       // term
-      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-      if ($getlocations_term_marker['vid']) {
+      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+      if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
         $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-        $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
-        foreach ($terms AS $term) {
-          $tid = $term->tid;
-          $name = $term->name;
-          if (isset($form['getlocations_term_marker']['term'][$tid]['map_marker'])) {
-            $link = getlocations_markerpicker_link($form['getlocations_term_marker']['term'][$tid]['map_marker']['#id'], 'n');
-            $form['getlocations_term_marker']['term'][$tid]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+        $vids = $getlocations_term_marker['vids'];
+        foreach ($vids AS $vid) {
+          $terms = taxonomy_get_tree($vid, 0, $depth);
+          foreach ($terms AS $term) {
+            $tid = $term->tid;
+            $name = $term->name;
+            if (isset($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker'])) {
+              $link = getlocations_markerpicker_link($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#id'], 'n');
+              $form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+            }
           }
         }
       }
@@ -515,11 +518,12 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
         $link = getlocations_markerpicker_link($form['term_map_marker']['#id'], 'v');
         $form['term_map_marker']['#field_suffix'] = '&nbsp;' . $link;
       }
-      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-      if ($getlocations_term_marker['enable']) {
-        if ($getlocations_term_marker['vid']) {
-          $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-          $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
+      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+      if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+        $vids = $getlocations_term_marker['vids'];
+        foreach ($vids AS $vid) {
+          $terms = taxonomy_get_tree($vid, 0, $depth);
           foreach ($terms AS $term) {
             $name = $term->name;
             $tid = $term->tid;

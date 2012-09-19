@@ -339,7 +339,7 @@ function getlocations_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
   $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
     t('Enable Markers for Terms'),
     $getlocations_term_marker['enable']
@@ -348,25 +348,30 @@ function getlocations_settings_form() {
   foreach (taxonomy_vocabulary_get_names() as $vocab) {
     $options[$vocab->vid] = $vocab->name;
   }
-  $form['getlocations_term_marker']['vid'] = getlocations_element_dd(
+  $vids = array_keys($getlocations_term_marker['vids']);
+  $form['getlocations_term_marker']['vids'] = getlocations_element_dd(
     t('Vocabulary to specify markers for'),
-    $getlocations_term_marker['vid'],
-    $options
+    $vids,
+    $options,
+    t('Select one or more vocabularies, then Save Configuration to set up the markers.'),
+    TRUE
   );
-  $form['getlocations_term_marker']['vid']['#prefix'] = '<div id="wrap-getlocations-term-markers">';
-  if ($getlocations_term_marker['vid']) {
-    $termct = 0;
+  $form['getlocations_term_marker']['vids']['#prefix'] = '<div id="wrap-getlocations-term-markers">';
+
+  if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
     $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-    $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
-    foreach ($terms AS $term) {
-      $tid = $term->tid;
-      $name = $term->name;
-      $form['getlocations_term_marker']['term'][$tid]['map_marker'] = getlocations_element_map_marker(
-        t('%name Map marker', array('%name' => $name)),
-        $markers,
-        (isset($getlocations_term_marker['term'][$tid]['map_marker']) ? $getlocations_term_marker['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker'])
-      );
-      $termct++;
+    $vids = $getlocations_term_marker['vids'];
+    foreach ($vids AS $vid) {
+      $terms = taxonomy_get_tree($vid, 0, $depth);
+      foreach ($terms AS $term) {
+        $tid = $term->tid;
+        $name = $term->name;
+        $form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker'] = getlocations_element_map_marker(
+          t('%name Map marker', array('%name' => $name)),
+          $markers,
+          (isset($getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker'])
+        );
+      }
     }
   }
   $form['getlocations_term_marker']['max_depth'] = getlocations_element_map_tf(
@@ -610,7 +615,7 @@ function getlocations_settings_validate($form, &$form_state) {
   if (isset($form_state['values']['getlocations_term_marker']) && ! $form_state['values']['getlocations_term_marker']['enable']) {
     unset($form_state['values']['getlocations_term_marker']);
     $form_state['values']['getlocations_term_marker']['enable'] = 0;
-    $form_state['values']['getlocations_term_marker']['vid'] = 0;
+    $form_state['values']['getlocations_term_marker']['vids'] = 0;
     $form_state['values']['getlocations_term_marker']['max_depth'] = '';
   }
 }

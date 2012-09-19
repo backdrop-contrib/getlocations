@@ -88,3 +88,25 @@ function getlocations_update_7100() {
     }
   }
 }
+
+function getlocations_update_7101() {
+  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
+  if ($getlocations_term_marker['enable']) {
+    if ($getlocations_term_marker['vid']) {
+      $vid = $getlocations_term_marker['vid'];
+      $terms = $getlocations_term_marker['term'];
+      $tmp_term_marker = array();
+      $tmp_term_marker['enable'] = $getlocations_term_marker['enable'];
+      $tmp_term_marker['vids'][$vid] = $vid;
+      foreach ($terms AS $tid => $term) {
+        $tmp_term_marker['vid'][$vid]['term'][$tid] = $term;
+      }
+      $tmp_term_marker['max_depth'] = $getlocations_term_marker['max_depth'];
+      variable_set('getlocations_term_marker', $tmp_term_marker);
+    }
+    else {
+      variable_set('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+    }
+  }
+}
+

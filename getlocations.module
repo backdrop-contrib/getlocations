@@ -1709,16 +1709,19 @@ function getlocations_get_markertypes($type) {
   }
   elseif ($type == 'term') {
     $default_marker = $getlocations_defaults['term_map_marker'];
-    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-    if ($getlocations_term_marker['vid']) {
+    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+    if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids'] ) {
       $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-      $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
-      foreach ($terms AS $term) {
-        if ($getlocations_term_marker['enable'] && isset($getlocations_term_marker['term'][$term->tid]['map_marker'])) {
-          $markertypes[$content_type] = $getlocations_term_marker['term'][$term->tid]['map_marker'];
-        }
-        else {
-          $markertypes[$content_type] = $default_marker;
+      $vids = $getlocations_term_marker['vids'];
+      foreach ($vids AS $vid) {
+        $terms = taxonomy_get_tree($vid, 0, $depth);
+        foreach ($terms AS $term) {
+          if (isset($getlocations_term_marker['vid'][$vid]['term'][$term->tid]['map_marker'])) {
+            $markertypes[$content_type] = $getlocations_term_marker['vid'][$vid]['term'][$term->tid]['map_marker'];
+          }
+          else {
+            $markertypes[$content_type] = $default_marker;
+          }
         }
       }
     }
@@ -3283,12 +3286,15 @@ function getlocations_ua_get() {
 function getlocations_get_term_marker($nid, $marker) {
   $getlocations_defaults = getlocations_defaults();
   // term markers
-  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-  if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vid']) {
-    $results = db_query('SELECT i.tid FROM {taxonomy_index} i JOIN {taxonomy_term_data} d ON i.tid=d.tid WHERE i.nid = :nid AND d.vid =:vid', array(':nid' => $nid, ':vid' => $getlocations_term_marker['vid']));
-    $record = $results->fetchObject();
-    if ($record) {
-      $marker = (isset($getlocations_term_marker['term'][$record->tid]['map_marker']) ? $getlocations_term_marker['term'][$record->tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
+  $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+  if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+    $vids = $getlocations_term_marker['vids'];
+    foreach ($vids AS $vid) {
+      $results = db_query('SELECT i.tid FROM {taxonomy_index} i JOIN {taxonomy_term_data} d ON i.tid=d.tid WHERE i.nid = :nid AND d.vid =:vid', array(':nid' => $nid, ':vid' => $vid));
+      $record = $results->fetchObject();
+      if ($record) {
+        $marker = (isset($getlocations_term_marker['vid'][$vid]['term'][$record->tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$record->tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
+      }
     }
   }
   return $marker;
@@ -3385,4 +3391,3 @@ function getlocations_get_exact_distance_sql($latitude, $longitude, $tbl_alias =
   $sql = "(IFNULL(ACOS(($sinlat * SIN(RADIANS($latfield))) + ($coslat * COS(RADIANS($latfield)) * COS(RADIANS($longitude - $lonfield)))), 0.00000) * $radius)";
   return $sql;
 }
-

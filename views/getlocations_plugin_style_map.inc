@@ -112,16 +112,17 @@ class getlocations_plugin_style_map extends views_plugin_style {
     }
 
     // term markers
-    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-    if ($getlocations_term_marker['enable']) {
-      if ($getlocations_term_marker['vid']) {
-        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-        $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
+    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+    if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+      $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+      $vids = $getlocations_term_marker['vids'];
+      foreach ($vids AS $vid) {
+        $terms = taxonomy_get_tree($vid, 0, $depth);
         foreach ($terms AS $term) {
           $name = $term->name;
           $tid = $term->tid;
           $mkey = 'term_marker_' . $tid;
-          $mmarker = (isset($getlocations_term_marker['term'][$tid]['map_marker']) ? $getlocations_term_marker['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
+          $mmarker = (isset($getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
           $options[$mkey] = array('default' => $mmarker);
         }
       }
@@ -135,7 +136,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
     parent::options_form($form, $form_state);
 
     $form['#theme'] = 'getlocations_plugin_style_map_options_form';
-
 
     $handlers = $this->display->handler->get_handlers('field');
     $source_options = array('' => t('None'));
@@ -216,11 +216,12 @@ class getlocations_plugin_style_map extends views_plugin_style {
     }
 
     // term markers
-    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vid' => 0, 'max_depth' => ''));
-    if ($getlocations_term_marker['enable']) {
-      if ($getlocations_term_marker['vid']) {
-        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-        $terms = taxonomy_get_tree($getlocations_term_marker['vid'], 0, $depth);
+    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+    if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+      $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+      $vids = $getlocations_term_marker['vids'];
+      foreach ($vids AS $vid) {
+        $terms = taxonomy_get_tree($vid, 0, $depth);
         foreach ($terms AS $term) {
           $name = $term->name;
           $tid = $term->tid;
@@ -232,6 +233,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
           );
         }
       }
+
     }
     else {
       $form['term_map_marker'] = getlocations_element_map_marker(

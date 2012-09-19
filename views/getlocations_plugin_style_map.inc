@@ -119,7 +119,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
       foreach ($vids AS $vid) {
         $terms = taxonomy_get_tree($vid, 0, $depth);
         foreach ($terms AS $term) {
-          $name = $term->name;
           $tid = $term->tid;
           $mkey = 'term_marker_' . $tid;
           $mmarker = (isset($getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
@@ -222,15 +221,22 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $vids = $getlocations_term_marker['vids'];
       foreach ($vids AS $vid) {
         $terms = taxonomy_get_tree($vid, 0, $depth);
+        $tct = 0;
         foreach ($terms AS $term) {
           $name = $term->name;
           $tid = $term->tid;
           $mkey = 'term_marker_' . $tid;
           $form[$mkey] = getlocations_element_map_marker(
-            t('%name Term Map Marker', array('%name' => $name)),
+            t('%name Map Marker', array('%name' => $name)),
             $markers,
             $this->options[$mkey]
           );
+          if (! $tct) {
+            $v = taxonomy_vocabulary_load($vid);
+            $vocab_name = $v->name;
+            $form[$mkey]['#prefix'] = t('Terms for %name', array('%name' => $vocab_name));
+          }
+          $tct++;
         }
       }
 

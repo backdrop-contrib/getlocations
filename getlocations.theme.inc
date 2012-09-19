@@ -454,13 +454,19 @@ function theme_getlocations_settings_form($variables) {
         $vids = $getlocations_term_marker['vids'];
         foreach ($vids AS $vid) {
           $terms = taxonomy_get_tree($vid, 0, $depth);
+          $tct = 0;
           foreach ($terms AS $term) {
             $tid = $term->tid;
-            $name = $term->name;
             if (isset($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker'])) {
               $link = getlocations_markerpicker_link($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#id'], 'n');
               $form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
+              if (! $tct) {
+                $v = taxonomy_vocabulary_load($vid);
+                $vocab_name = $v->name;
+                $form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#prefix'] = t('Terms for %name', array('%name' => $vocab_name));
+              }
             }
+            $tct++;
           }
         }
       }

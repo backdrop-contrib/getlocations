@@ -305,11 +305,13 @@ function getlocations_settings_form() {
 
   // vocabulary markers
   if ($types = getlocations_get_vocabularies()) {
+    $module = getlocations_get_current_supported_module();
     $form['getlocations_vocabulary_marker'] = array(
       '#type' => 'fieldset',
       '#title' => t('Taxonomy Vocabulary markers'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#description' => t('Vocabularies with a %module field.', array('%module' => $module)),
     );
     $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
     $form['getlocations_vocabulary_marker']['enable'] = getlocations_element_map_checkbox(
@@ -342,7 +344,8 @@ function getlocations_settings_form() {
   $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
   $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
     t('Enable Markers for Terms'),
-    $getlocations_term_marker['enable']
+    $getlocations_term_marker['enable'],
+    t('Select Vocabularies enabled in a %termref field', array('%termref' => 'Term reference'))
   );
   $options = array(0 => '- Select -');
   foreach (taxonomy_vocabulary_get_names() as $vocab) {

@@ -1,28 +1,97 @@
-<<<<<<< HEAD
-commit 68c430b
+commit 7de3a06
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 19 23:31:05 2012 +0100
+
+    fixed bug in getlocations_fields term marker, other gui improvements
+
+getlocations.admin.inc
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations_plugin_style_map.inc
+
+commit a9427a1
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 19 16:11:16 2012 +0100
+
+    fixed array_keys notice
+
+getlocations.admin.inc
+
+commit 2fb96d3
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 19 15:51:05 2012 +0100
+
+    fixed rebuild of getlocations_term_marker
+
+getlocations.install
+
+commit b7c8d10
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 19 09:07:41 2012 +0100
+
+    added multiple vocabularies to terms
+
+getlocations.admin.inc
+getlocations.install
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations.views.inc
+views/getlocations_plugin_style_map.inc
+
+commit 96e2a7e
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 17 10:36:52 2012 +0100
+
+    tidied up search marker
+
+modules/getlocations_search/js/getlocations_search.js
+
+commit dfbdcfd
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 23:38:12 2012 +0100
+
+    fixed bug in searchmarker
+
+modules/getlocations_search/js/getlocations_search.js
+
+commit 5739bd2
+Merge: e94159b 6d0e46a
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 21:52:46 2012 +0100
+
+    Merge remote-tracking branch 'origin/7.x-1.x' into 7.x-1.x
+    
+    Conflicts:
+    	CHANGELOG.txt
+
+commit e94159b
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 15 20:09:13 2012 +0100
 
     cleanup
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.admin.inc
 
 commit 47b236e
-=======
-commit 314997d
->>>>>>> origin/7.x-1.x
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 15 18:53:42 2012 +0100
 
     fixed a bug in markers with no shadow
 
-<<<<<<< HEAD
 CHANGELOG.txt
 getlocations.module
 modules/getlocations_search/getlocations_search.module
-=======
+
+commit 6d0e46a
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 15 18:53:42 2012 +0100
+
+    fixed a bug in markers with no shadow
+
+CHANGELOG.txt
 getlocations.module
->>>>>>> origin/7.x-1.x
 
 commit d4a2031
 Author: hutch <hutch@midwales.net>

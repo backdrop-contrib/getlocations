@@ -108,5 +108,8 @@ function getlocations_update_7101() {
       variable_set('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
     }
   }
+  else {
+    variable_set('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+  }
 }
 

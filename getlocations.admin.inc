@@ -348,7 +348,11 @@ function getlocations_settings_form() {
   foreach (taxonomy_vocabulary_get_names() as $vocab) {
     $options[$vocab->vid] = $vocab->name;
   }
-  $vids = array_keys($getlocations_term_marker['vids']);
+  $vids = array();
+  if (is_array($getlocations_term_marker['vids'])) {
+    $vids = array_keys($getlocations_term_marker['vids']);
+  }
+
   $form['getlocations_term_marker']['vids'] = getlocations_element_dd(
     t('Vocabulary to specify markers for'),
     $vids,

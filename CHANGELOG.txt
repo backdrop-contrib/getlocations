@@ -1,9 +1,18 @@
-commit 65b350a
+commit 911511b
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 24 20:01:38 2012 +0100
+
+    backported global vars
+
+js/getlocations.js
+
+commit 37f7dbd
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 8 00:13:48 2012 +0100
 
     fixed node_marker bug
 
+CHANGELOG.txt
 getlocations.module
 
 commit 8d40355

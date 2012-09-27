@@ -1,9 +1,18 @@
-commit fee53d3
+commit 6b0640a
+Author: hutch <hutch@midwales.net>
+Date:   Thu Sep 27 21:20:47 2012 +0100
+
+    updated $mapid
+
+getlocations.module
+
+commit ae2903c
 Author: hutch <hutch@midwales.net>
 Date:   Mon Sep 24 20:02:04 2012 +0100
 
     backported global vars
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit b3dc49f

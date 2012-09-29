@@ -1033,12 +1033,13 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
       if ($limits > 0) {
         $sql .= "LIMIT 0, $limits ";
       }
-
       $result = db_query($sql, $sqlarr);
       foreach ($result AS $row) {
         $locations[$location_ct]->latitude = $row->latitude;
         $locations[$location_ct]->longitude = $row->longitude;
-        $locations[$location_ct]->title = $row->title;
+        if (isset($row->title)) {
+          $locations[$location_ct]->title = $row->title;
+        }
         if ($row->entity_type == 'node') {
           $locations[$location_ct]->nid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];

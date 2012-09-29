@@ -1,9 +1,18 @@
-commit 7de3a06
+commit 59c92d4
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 29 17:35:14 2012 +0100
+
+    fixed duplication bug in getlocations_other_get_fieldname()
+
+getlocations.module
+
+commit c7e5ad6
 Author: hutch <hutch@midwales.net>
 Date:   Wed Sep 19 23:31:05 2012 +0100
 
     fixed bug in getlocations_fields term marker, other gui improvements
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.theme.inc
 modules/getlocations_fields/getlocations_fields.module

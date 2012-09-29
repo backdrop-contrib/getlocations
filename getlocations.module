@@ -2053,7 +2053,7 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
 function getlocations_other_get_fieldname($type, $module, $entity_type = '') {
 
   $query = db_select('field_config', 'fc');
-  $query->fields('fc', array('field_name'));
+  $query->fields('fc', array('field_name'))->distinct();
   $query->join('field_config_instance', 'i', 'fc.id = i.field_id');
   $query->condition('fc.module', $module);
   $query->condition('fc.type', $type);

@@ -185,7 +185,7 @@ function theme_getlocations_info($variables) {
       $node = node_load($location['nid']);
       $link = $node->title;
     }
-    $l = l($link, 'node/' . $location['nid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+    $l = l($link, 'node/' . $location['nid'], array('attributes' => array('class' => array('getlocations_infolink'), 'target' => '_parent')));
   }
   elseif (isset($location['uid']) && $location['uid'] > 0) {
     if (! empty($location['name'])) {
@@ -195,7 +195,7 @@ function theme_getlocations_info($variables) {
       $account = user_load($location['uid']);
       $link = $account->name;
     }
-    $l = l($link, 'user/' . $location['uid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+    $l = l($link, 'user/' . $location['uid'], array('attributes' => array('class' => array('getlocations_infolink'), 'target' => '_parent')));
   }
   elseif (isset($location['tid']) && $location['tid'] > 0 && module_exists('taxonomy')) {
     if (! empty($location['name'])) {
@@ -205,7 +205,7 @@ function theme_getlocations_info($variables) {
       $term = taxonomy_term_load($location['tid']);
       $link = $term->name;
     }
-    $l = l($link, 'taxonomy/term/' . $location['tid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+    $l = l($link, 'taxonomy/term/' . $location['tid'], array('attributes' => array('class' => array('getlocations_infolink'), 'target' => '_parent')));
   }
   elseif (isset($location['cid']) && $location['cid'] > 0 && module_exists('comment')) {
     if (! empty($location['name'])) {
@@ -215,7 +215,7 @@ function theme_getlocations_info($variables) {
       $comment = comment_load($location['cid']);
       $link = $comment->subject;
     }
-    $l = l($link, 'comment/' . $location['cid'], array('attributes' => array('class' => 'getlocations_infolink', 'target' => '_parent')));
+    $l = l($link, 'comment/' . $location['cid'], array('attributes' => array('class' => array('getlocations_infolink'), 'target' => '_parent')));
   }
   if ($l) {
     $output .= '<h4>' . $l . '</h4>';

@@ -1,9 +1,34 @@
-commit 59c92d4
+commit 05b62cd
+Author: hutch <hutch@midwales.net>
+Date:   Tue Oct 2 10:30:30 2012 +0100
+
+    put classes in array()
+
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit 6459304
+Author: hutch <hutch@midwales.net>
+Date:   Tue Oct 2 09:11:32 2012 +0100
+
+    changed path to getlocations_markers.js
+
+getlocations.module
+
+commit 2b9bcae
+Author: hutch <hutch@midwales.net>
+Date:   Sat Sep 29 19:14:10 2012 +0100
+
+    fixed error in sql fetch for geolocation/geifield
+
+modules/getlocations_search/getlocations_search.module
+
+commit a31af4e
 Author: hutch <hutch@midwales.net>
 Date:   Sat Sep 29 17:35:14 2012 +0100
 
     fixed duplication bug in getlocations_other_get_fieldname()
 
+CHANGELOG.txt
 getlocations.module
 
 commit c7e5ad6

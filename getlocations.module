@@ -1372,7 +1372,7 @@ function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
     }
   }
   else {
-    $markerpath = file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/js';
+    $markerpath = file_stream_wrapper_get_instance_by_scheme(file_default_scheme())->getDirectoryPath() . '/getlocations';
     $markerfile = '';
     if ($markerpath) {
       $markerfile = $markerpath . '/getlocations_markers.js';

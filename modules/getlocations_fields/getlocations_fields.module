@@ -722,7 +722,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
  *   The form elements for the formatter settings.
  */
 function getlocations_fields_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
-
+  drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_formatter.js');
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
   $getlocations_defaults = getlocations_defaults();

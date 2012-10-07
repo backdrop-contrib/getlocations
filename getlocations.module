@@ -1693,7 +1693,7 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
-  elseif ($type == 'vocabulary') {
+  elseif ($type == 'vocabulary' && module_exists('taxonomy')) {
     $default_marker = $getlocations_defaults['vocabulary_map_marker'];
     $vocabularies = getlocations_get_vocabularies();
     $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
@@ -1707,7 +1707,7 @@ function getlocations_get_markertypes($type) {
     }
     return $markertypes;
   }
-  elseif ($type == 'term') {
+  elseif ($type == 'term' && module_exists('taxonomy')) {
     $default_marker = $getlocations_defaults['term_map_marker'];
     $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
     if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids'] ) {

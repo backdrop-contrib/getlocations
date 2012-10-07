@@ -643,7 +643,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
       $settings['map_marker'] = getlocations_get_term_marker($entity->nid, $settings['map_marker']);
     }
   }
-  elseif ($entity_type == 'taxonomy_term') {
+  elseif ($entity_type == 'taxonomy_term' && module_exists('taxonomy')) {
     $locations = getlocations_fields_load_locations($entity->tid, 'tid', $field_name);
     if (count($locations)) {
       $settings['map_marker'] = $settings['vocabulary_map_marker'];

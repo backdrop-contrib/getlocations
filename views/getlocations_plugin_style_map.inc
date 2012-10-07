@@ -98,35 +98,36 @@ class getlocations_plugin_style_map extends views_plugin_style {
       }
     }
 
-    // vocabulary markers
-    if ($types = getlocations_get_vocabularies()) {
-      $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-      if ($getlocations_vocabulary_marker['enable']) {
-        foreach ($types AS $type => $name) {
-          $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
-          $mkey = 'vocabulary_marker_' . $field_name;
-          $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
-          $options[$mkey] = array('default' => $mmarker);
+    if (module_exists('taxonomy')) {
+      // vocabulary markers
+      if ($types = getlocations_get_vocabularies()) {
+        $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+        if ($getlocations_vocabulary_marker['enable']) {
+          foreach ($types AS $type => $name) {
+            $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+            $mkey = 'vocabulary_marker_' . $field_name;
+            $mmarker = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $getlocations_defaults['vocabulary_map_marker']);
+            $options[$mkey] = array('default' => $mmarker);
+          }
+        }
+      }
+
+      // term markers
+      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+      if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+        $vids = $getlocations_term_marker['vids'];
+        foreach ($vids AS $vid) {
+          $terms = taxonomy_get_tree($vid, 0, $depth);
+          foreach ($terms AS $term) {
+            $tid = $term->tid;
+            $mkey = 'term_marker_' . $tid;
+            $mmarker = (isset($getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
+            $options[$mkey] = array('default' => $mmarker);
+          }
         }
       }
     }
-
-    // term markers
-    $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-    if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-      $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-      $vids = $getlocations_term_marker['vids'];
-      foreach ($vids AS $vid) {
-        $terms = taxonomy_get_tree($vid, 0, $depth);
-        foreach ($terms AS $term) {
-          $tid = $term->tid;
-          $mkey = 'term_marker_' . $tid;
-          $mmarker = (isset($getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
-          $options[$mkey] = array('default' => $mmarker);
-        }
-      }
-    }
-
     return $options;
 
   } // end option_definition

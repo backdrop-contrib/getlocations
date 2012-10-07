@@ -1,9 +1,22 @@
-commit c32bba1
+commit c41ce2b
+Author: hutch <hutch@midwales.net>
+Date:   Sun Oct 7 13:31:47 2012 +0100
+
+    more taxonomy module checks
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations_plugin_style_map.inc
+
+commit a2b7b28
 Author: hutch <hutch@midwales.net>
 Date:   Sun Oct 7 13:06:44 2012 +0100
 
     added taxonomy module check to admin page, #1805672
 
+CHANGELOG.txt
 getlocations.admin.inc
 
 commit 394992b

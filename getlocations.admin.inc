@@ -233,19 +233,21 @@ function getlocations_settings_form() {
       );
     }
 
-    if (getlocations_get_vocabularies()) {
-      $form['getlocations_default']['returnlink_term_enable'] = getlocations_element_map_checkbox(
-        t('Show link back to term'),
-        $getlocations_defaults['returnlink_term_enable']
+    if (module_exists('taxonomy')) {
+      if (getlocations_get_vocabularies()) {
+        $form['getlocations_default']['returnlink_term_enable'] = getlocations_element_map_checkbox(
+          t('Show link back to term'),
+          $getlocations_defaults['returnlink_term_enable']
+        );
+      }
+      $form['getlocations_default']['returnlink_term_link'] = getlocations_element_map_tf(
+        t('Text of term return link'),
+        $getlocations_defaults['returnlink_term_link'],
+        t('Use %n to insert the term name'),
+        30,
+        64
       );
     }
-    $form['getlocations_default']['returnlink_term_link'] = getlocations_element_map_tf(
-      t('Text of term return link'),
-      $getlocations_defaults['returnlink_term_link'],
-      t('Use %n to insert the term name'),
-      30,
-      64
-    );
 
     if (getlocations_check_entity_type('comment')) {
       $form['getlocations_default']['returnlink_comment_enable'] = getlocations_element_map_checkbox(

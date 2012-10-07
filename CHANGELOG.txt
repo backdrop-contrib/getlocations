@@ -1,9 +1,35 @@
-commit 05b62cd
+commit c32bba1
+Author: hutch <hutch@midwales.net>
+Date:   Sun Oct 7 13:06:44 2012 +0100
+
+    added taxonomy module check to admin page, #1805672
+
+getlocations.admin.inc
+
+commit 394992b
+Author: hutch <hutch@midwales.net>
+Date:   Wed Oct 3 10:39:23 2012 +0100
+
+    added js to formatter form
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+
+commit b9fee9b
+Author: hutch <hutch@midwales.net>
+Date:   Tue Oct 2 10:47:15 2012 +0100
+
+    fixed class in array bug
+
+getlocations.theme.inc
+
+commit 3a54739
 Author: hutch <hutch@midwales.net>
 Date:   Tue Oct 2 10:30:30 2012 +0100
 
     put classes in array()
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.theme.inc
 
 commit 6459304

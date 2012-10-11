@@ -245,7 +245,7 @@ function getlocations_search_getmap($which = 'page') {
     'panoramio_use', 'panoramio_state', 'poi_show', 'transit_show',
     'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager',
     'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title',
-    'markeraction', 'markeractiontype', 'weather_show', 'weather_state', 'weather_cloud', 'weather_cloud_state');
+    'markeraction', 'markeractiontype', 'weather_show', 'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor');
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
@@ -588,6 +588,7 @@ function getlocations_search_defaults() {
     'weather_state'             => $getlocations_defaults['weather_state'],
     'weather_cloud'             => $getlocations_defaults['weather_cloud'],
     'weather_cloud_state'       => $getlocations_defaults['weather_cloud_state'],
+    'map_backgroundcolor'       => $getlocations_defaults['map_backgroundcolor'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);

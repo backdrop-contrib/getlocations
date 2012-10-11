@@ -888,6 +888,10 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       }
     }
 
+    if ($settings['map_backgroundcolor']) {
+      $summary[] = t('Map background color: @c', array('@c' => $settings['map_backgroundcolor']));
+    }
+
     if ($settings['markeraction'] > 0) {
       if ($settings['markeraction'] == 1) {
         $msg = t('InfoWindow');
@@ -1429,17 +1433,18 @@ function getlocations_fields_getmap($settings, $active) {
   if ($active) {
     $getlocations_defaults['places'] = 1;
   }
-  $getlocations_defaults['latlong']         = $settings['latlong'];
-  $getlocations_defaults['zoom']            = $settings['zoom'];
-  $getlocations_defaults['controltype']     = $settings['controltype'];
-  $getlocations_defaults['pancontrol']      = $settings['pancontrol'];
-  $getlocations_defaults['mtc']             = $settings['mtc'];
-  $getlocations_defaults['maptype']         = $settings['maptype'];
-  $getlocations_defaults['baselayers']      = $settings['baselayers'];
-  $getlocations_defaults['behavior']        = $settings['behavior'];
-  $getlocations_defaults['draggable']       = $settings['draggable'];
-  $getlocations_defaults['input_map_marker'] = $settings['input_map_marker'];
-  $getlocations_defaults['use_address']     = $settings['use_address'];
+  $getlocations_defaults['latlong']             = $settings['latlong'];
+  $getlocations_defaults['zoom']                = $settings['zoom'];
+  $getlocations_defaults['controltype']         = $settings['controltype'];
+  $getlocations_defaults['pancontrol']          = $settings['pancontrol'];
+  $getlocations_defaults['mtc']                 = $settings['mtc'];
+  $getlocations_defaults['maptype']             = $settings['maptype'];
+  $getlocations_defaults['baselayers']          = $settings['baselayers'];
+  $getlocations_defaults['behavior']            = $settings['behavior'];
+  $getlocations_defaults['draggable']           = $settings['draggable'];
+  $getlocations_defaults['input_map_marker']    = $settings['input_map_marker'];
+  $getlocations_defaults['use_address']         = $settings['use_address'];
+  $getlocations_defaults['map_backgroundcolor'] = $settings['map_backgroundcolor'];
   #$getlocations_defaults['use_jsapi']       = $settings['use_geolocation_button'];
 
   $mapid = getlocations_setup_map($getlocations_defaults);
@@ -1502,6 +1507,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['weather_state']         = $settings['weather_state'];
   $getlocations_defaults['weather_cloud']         = $settings['weather_cloud'];
   $getlocations_defaults['weather_cloud_state']   = $settings['weather_cloud_state'];
+  $getlocations_defaults['map_backgroundcolor']   = $settings['map_backgroundcolor'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -1950,6 +1956,7 @@ function getlocations_fields_defaults() {
     'display_mapwidth'             => $getlocations_defaults['width'],
     'display_mapheight'            => $getlocations_defaults['height'],
     'nodezoom'                     => $getlocations_defaults['nodezoom'],
+    'map_backgroundcolor'          => $getlocations_defaults['map_backgroundcolor'],
     'display_showmap'              => 1,
     'display_maplink'              => 1,
     'display_latlong'              => 1,
@@ -2098,6 +2105,7 @@ function getlocations_fields_field_info_defaults() {
         'autocomplete_bias'            => $getlocations_fields_defaults['autocomplete_bias'],
         'restrict_by_country'          => $getlocations_fields_defaults['restrict_by_country'],
         'search_country'               => $getlocations_fields_defaults['search_country'],
+        'map_backgroundcolor'          => $getlocations_fields_defaults['map_backgroundcolor'],
       ),
     ),
   );
@@ -2151,6 +2159,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'weather_state'         => $getlocations_defaults['weather_state'],
     'weather_cloud'         => $getlocations_defaults['weather_cloud'],
     'weather_cloud_state'   => $getlocations_defaults['weather_cloud_state'],
+    'map_backgroundcolor'   => $getlocations_defaults['map_backgroundcolor'],
     'display_name'          => $getlocations_fields_defaults['display_name'],
     'display_street'        => $getlocations_fields_defaults['display_street'],
     'display_additional'    => $getlocations_fields_defaults['display_additional'],

@@ -30,7 +30,7 @@
         var mapid = key;
         var mapid2 = key.replace("_", "-");
 
-        if (gset.markermanagertype == 1) {
+        if (gset.markermanagertype == 1 && gset.usemarkermanager == 1) {
           gset.usemarkermanager = true;
           gset.mgr = new MarkerManager(getlocations_map[key], {
             borderPadding: 50,
@@ -38,7 +38,7 @@
             trackMarkers: false
           });
         }
-        else if (gset.markermanagertype == 2) {
+        else if (gset.markermanagertype == 2 && gset.useclustermanager == 1) {
           gset.useclustermanager = true;
           gset.cmgr = new MarkerClusterer(
             getlocations_map[key],

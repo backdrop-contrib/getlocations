@@ -1229,7 +1229,13 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         }
         else {
           if ($settings['use_country_dropdown'] == 1) {
-            $countries = getlocations_get_countries_list();
+            $only_continents = '';
+            $only_countries = '';
+            if (module_exists('countries')) {
+              $only_continents = (isset($settings['only_continents']) ? $settings['only_continents'] : '');
+              $only_countries =  (isset($settings['only_countries']) ? $settings['only_countries'] : '');
+            }
+            $countries = getlocations_get_countries_list(TRUE, $only_continents, $only_countries);
             $countries = array_merge(array('' => t('---Please select a country---')), $countries);
             $element['country'] = array(
               '#type' => 'select',
@@ -2005,6 +2011,8 @@ function getlocations_fields_defaults() {
     'use_geolocation_button'       => 0,
     'input_geolocation_button_weight' => 0,
     'use_country_dropdown'         => 1,
+    'only_continents'              => '',
+    'only_countries'               => '',
     'province_autocomplete'        => 0,
     'city_autocomplete'            => 0,
     'per_item_marker'              => 0,
@@ -2095,6 +2103,8 @@ function getlocations_fields_field_info_defaults() {
         'use_smart_ip_button'          => $getlocations_fields_defaults['use_smart_ip_button'],
         'input_smart_ip_button_weight' => $getlocations_fields_defaults['input_smart_ip_button_weight'],
         'use_country_dropdown'         => $getlocations_fields_defaults['use_country_dropdown'],
+        'only_continents'              => $getlocations_fields_defaults['only_continents'],
+        'only_countries'               => $getlocations_fields_defaults['only_countries'],
         'province_autocomplete'        => $getlocations_fields_defaults['province_autocomplete'],
         'city_autocomplete'            => $getlocations_fields_defaults['city_autocomplete'],
         'country'                      => $getlocations_fields_defaults['country'],
@@ -2456,6 +2466,25 @@ function getlocations_fields_input_settings_form($defaults) {
       2 => t('Autocomplete'),
     )
   );
+
+  if (module_exists('countries')) {
+    $continents = variable_get('countries_continents', countries_get_default_continents());
+    unset($continents['UN']);
+    $form['only_continents'] = getlocations_element_dd(
+      t('Limit to Continents'),
+      $defaults['only_continents'],
+      $continents,
+      t('Limit to Continents only applies to Country dropdown.'),
+      TRUE
+    );
+    $form['only_countries'] = getlocations_element_map_tf(
+      t('Limit to Countries'),
+      $defaults['only_countries'],
+      t('Limit to Countries only applies to Country dropdown. This should be a comma delimited list of two letter ISO codes, no spaces.'),
+      30,
+      255
+    );
+  }
 
   // per_item_marker
   $form['per_item_marker'] = getlocations_element_map_checkbox(

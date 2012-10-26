@@ -356,7 +356,12 @@ function theme_getlocations_fields_field_settings_form($variables) {
   $prefix .= '<div class="fieldset-wrapper">';
   $prefix .= '<div class="fieldset-description">' . t('Configure the input form.') . '</div>';
   $form['use_address']['#prefix'] = $prefix;
-  $form['use_country_dropdown']['#suffix'] = '</div></fieldset>';
+  if (module_exists('countries')) {
+    $form['only_countries']['#suffix'] = '</div></fieldset>';
+  }
+  else {
+    $form['use_country_dropdown']['#suffix'] = '</div></fieldset>';
+  }
 
   $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Input map settings') . '</span></legend>';

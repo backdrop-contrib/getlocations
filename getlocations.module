@@ -2796,20 +2796,40 @@ function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getl
  *
  * @return array The countries array
  */
-function getlocations_get_countries_list($upper = TRUE) {
-  include_once DRUPAL_ROOT . '/includes/locale.inc';
+function getlocations_get_countries_list($upper = TRUE, $only_continents = '', $only_countries = '') {
 
-  // Statically cache a version of the core Drupal list of countries
-  $countries = &drupal_static(__FUNCTION__);
-
-  if (! isset($countries)) {
-    if ($upper) {
+  if (module_exists('countries')) {
+    $filter = array('enabled' => COUNTRIES_ENABLED);
+    if ($only_countries) {
+      $only_countries = strtoupper($only_countries);
+      $oc = explode(',', $only_countries);
+      if (! empty($oc)) {
+        $filter['countries'] = $oc;
+      }
+    }
+    elseif (is_array($only_continents)) {
+      $oc = array();
+      foreach($only_continents AS $v) {
+        $oc[] = $v;
+      }
+      if (! empty($oc)) {
+        $filter['continents'] = $oc;
+      }
+    }
+    $countries = countries_get_countries('name', $filter);
+  }
+  else {
+    include_once DRUPAL_ROOT . '/includes/locale.inc';
+    // Statically cache a version of the core Drupal list of countries
+    $countries = &drupal_static(__FUNCTION__);
+    if (! isset($countries) || empty($countries)) {
       $countries = country_get_list();
     }
-    else {
-      $countries = array_change_key_case(country_get_list(), CASE_LOWER);
-    }
   }
+  if (! $upper) {
+    $countries = array_change_key_case($countries, CASE_LOWER);
+  }
+
   return $countries;
 }
 

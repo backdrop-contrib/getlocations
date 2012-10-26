@@ -1,9 +1,30 @@
-commit e497775
+commit 90f76fc
+Author: hutch <hutch@midwales.net>
+Date:   Fri Oct 26 12:17:00 2012 +0100
+
+    added countries module support
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_location_taxonomize/README.txt
+
+commit d15f8fe
+Author: hutch <hutch@midwales.net>
+Date:   Thu Oct 11 21:02:11 2012 +0100
+
+    fixed bug in marker manager usage
+
+js/getlocations.js
+modules/getlocations_search/js/getlocations_search.js
+
+commit 4251584
 Author: hutch <hutch@midwales.net>
 Date:   Thu Oct 11 13:17:03 2012 +0100
 
     added new feature map background color
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 modules/getlocations_fields/getlocations_fields.module

@@ -746,6 +746,10 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
   $current_css = drupal_get_css();
 
   $js_weight = 1;
+  if (is_numeric($defaults['getlocations_js_weight']) && $defaults['getlocations_js_weight'] != 0) {
+    $js_weight = $defaults['getlocations_js_weight'];
+  }
+
   $key = variable_get('getlocations_api3_key', '');
 
   // v3 googlemaps API
@@ -868,19 +872,11 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
   }
 
   if (!stristr($current_js, $getlocations_paths['getlocations_path'])) {
-    if (is_numeric($defaults['getlocations_js_weight']) && $defaults['getlocations_js_weight'] != 0) {
-      $js_opts = array();
-      $js_opts['weight'] = $defaults['getlocations_js_weight'];
-      $js_opts['type'] = 'file';
-      drupal_add_js($getlocations_paths['getlocations_path'], $js_opts);
-    }
-    else {
-      $js_opts = array();
-      $js_opts['weight'] = $js_weight;
-      $js_opts['type'] = 'file';
-      drupal_add_js($getlocations_paths['getlocations_path'], $js_opts);
-      $js_weight++;
-    }
+    $js_opts = array();
+    $js_opts['weight'] = $js_weight;
+    $js_opts['type'] = 'file';
+    drupal_add_js($getlocations_paths['getlocations_path'], $js_opts);
+    $js_weight++;
   }
 }
 

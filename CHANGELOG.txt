@@ -1,9 +1,19 @@
-commit 16addac
+commit c1796a8
+Author: hutch <hutch@midwales.net>
+Date:   Sun Nov 4 18:48:56 2012 +0000
+
+    refactored 'getlocations_js_weight' to provide the starting weight for js loading of all the js.
+
+getlocations.admin.inc
+getlocations.module
+
+commit d24151a
 Author: hutch <hutch@midwales.net>
 Date:   Sun Nov 4 14:42:08 2012 +0000
 
     fixed aggregation weights bug
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 js/getlocations_admin.js

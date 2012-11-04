@@ -579,7 +579,7 @@ function getlocations_settings_validate($form, &$form_state) {
   }
 
   if ( ! is_numeric($form_state['values']['getlocations_default']['getlocations_js_weight'])) {
-    form_set_error('getlocations_default][getlocations_js_weight', t('Getlocations js must be a number'));
+    form_set_error('getlocations_default][getlocations_js_weight', t('Getlocations js weight must be a number'));
   }
 
   if (module_exists('colorbox') && isset($form_state['values']['getlocations_colorbox']['enable']) && $form_state['values']['getlocations_colorbox']['enable']) {

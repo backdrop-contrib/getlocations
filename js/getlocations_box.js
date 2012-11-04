@@ -14,6 +14,6 @@
       // hide the returnlinks in a box
       $(".getlocations_returnlink").hide();
     }
-  }
+  };
 
 })(jQuery);

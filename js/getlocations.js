@@ -628,7 +628,7 @@ var getlocations_settings = {};
     }
     return m;
 
-  }
+  };
 
   Drupal.getlocations.showPopup = function(map, m, gs, data) {
     var ver = Drupal.getlocations.msiedetect();
@@ -675,7 +675,7 @@ var getlocations_settings = {};
       }
     }
 
-  }
+  };
 
   Drupal.getlocations.doBounds = function(map, minlat, minlon, maxlat, maxlon, dopan) {
     if (minlat !== '' && minlon !== '' && maxlat !== '' && maxlon !== '') {
@@ -690,7 +690,7 @@ var getlocations_settings = {};
         map.fitBounds(bounds);
       }
     }
-  }
+  };
 
   Drupal.getlocations.msiedetect = function() {
     var ieversion = '';
@@ -698,7 +698,7 @@ var getlocations_settings = {};
      ieversion = new Number(RegExp.$1) // capture x.x portion and store as a number
     }
     return ieversion;
-  }
+  };
 
   Drupal.getlocations.getGeoErrCode = function(errcode) {
     var errstr;
@@ -721,7 +721,7 @@ var getlocations_settings = {};
       errstr = Drupal.t("No result was found for this GeocoderRequest.");
     }
     return errstr;
-  }
+  };
 
   Drupal.getlocations.geolocationErrorMessages = function(errcode) {
     var codes = [
@@ -730,7 +730,7 @@ var getlocations_settings = {};
       Drupal.t("because your browser couldn't determine your location"),
       Drupal.t("because it was taking too long to determine your location")];
     return codes[errcode];
-  }
+  };
 
   // gogogo
   Drupal.behaviors.getlocations = {

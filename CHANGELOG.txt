@@ -1,9 +1,27 @@
-commit 90f76fc
+commit 16addac
+Author: hutch <hutch@midwales.net>
+Date:   Sun Nov 4 14:42:08 2012 +0000
+
+    fixed aggregation weights bug
+
+getlocations.module
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_box.js
+js/getlocations_colorbox.js
+js/getlocations_marker_box.js
+js/getlocations_views.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_admin.js
+modules/getlocations_search/getlocations_search.module
+
+commit 7812b04
 Author: hutch <hutch@midwales.net>
 Date:   Fri Oct 26 12:17:00 2012 +0100
 
     added countries module support
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/getlocations_fields.theme.inc

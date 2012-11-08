@@ -1783,10 +1783,12 @@ function getlocations_get_nodetype($nid) {
 function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $inputmap = FALSE, $searchmap = FALSE) {
   global $language;
   $lla = explode(',', $defaults['latlong']);
+  $lat = $lla[0];
+  $lng = $lla[1];
   $settings = array(
     $mapid => array(
-      'lat'                     => $lla[0],
-      'lng'                     => $lla[1],
+      'lat'                     => trim($lat),
+      'lng'                     => trim($lng),
       'mylocale'                => $language->language,
       'zoom'                    => $defaults['zoom'],
       'maptype'                 => $defaults['maptype'],

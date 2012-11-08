@@ -1,9 +1,20 @@
-commit c1796a8
+commit 8028765
+Author: hutch <hutch@midwales.net>
+Date:   Thu Nov 8 21:30:18 2012 +0000
+
+    added trim to lat and lon, better js weights, added title to search
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+
+commit 2afbedd
 Author: hutch <hutch@midwales.net>
 Date:   Sun Nov 4 18:48:56 2012 +0000
 
     refactored 'getlocations_js_weight' to provide the starting weight for js loading of all the js.
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 

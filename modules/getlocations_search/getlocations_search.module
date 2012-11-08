@@ -259,7 +259,7 @@ function getlocations_search_getmap($which = 'page') {
   $getlocations_search_paths = variable_get('getlocations_search_paths', array('getlocations_search_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_search.js'));
   $jsfile = $getlocations_search_paths['getlocations_search_path'];
   $js_opts = array();
-  $js_opts['weight'] = 10;
+  $js_opts['weight'] = $getlocations_defaults['getlocations_js_weight'] + 10;
   $js_opts['type'] = 'file';
   drupal_add_js($jsfile, $js_opts);
 
@@ -886,6 +886,25 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         // just in case
         if (empty($locations[$k]->marker)) {
           $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
+        }
+      }
+      // ensure we always have a title
+      if (! isset($locations[$k]->title) || empty($locations[$k]->title)) {
+        if ($locations[$k]->nid > 0) {
+          $n = node_load($locations[$k]->nid);
+          $locations[$k]->title = $n->title;
+        }
+        elseif ($locations[$k]->uid > 0) {
+          $u = user_load($locations[$k]->uid);
+          $locations[$k]->title = $u->name;
+        }
+        elseif ($locations[$k]->tid > 0) {
+          $term = taxonomy_term_load($locations[$k]->tid);
+          $locations[$k]->title = $term->name;
+        }
+        elseif ($locations[$k]->cid > 0) {
+          $comment = comment_load($locations[$k]->cid);
+          $locations[$k]->title = $comment->subject;
         }
       }
     }

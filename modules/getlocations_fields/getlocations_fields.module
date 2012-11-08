@@ -1459,7 +1459,7 @@ function getlocations_fields_getmap($settings, $active) {
   if ($active) {
     $getlocations_fields_paths = variable_get('getlocations_fields_paths', array('getlocations_fields_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js'));
     $js_opts = array();
-    $js_opts['weight'] = 10;
+    $js_opts['weight'] = $getlocations_defaults['getlocations_js_weight'] + 10;
     $js_opts['type'] = 'file';
     drupal_add_js($getlocations_fields_paths['getlocations_fields_path'], $js_opts);
     $settings['nodezoom'] = $getlocations_defaults['nodezoom'];

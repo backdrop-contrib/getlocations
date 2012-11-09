@@ -46,32 +46,38 @@
         // markermanager
         $(".form-item-getlocations-search-defaults-usemarkermanager, .form-item-getlocations-search-block-defaults-usemarkermanager").show();
         $("#wrap-getlocations-clusteropts").hide();
+        $("#wrap-getlocations-markeropts").show();
       }
       else if ($("#edit-getlocations-search-defaults-markermanagertype, #edit-getlocations-search-block-defaults-markermanagertype").val() == 2) {
         // markerclusterer
         $(".form-item-getlocations-search-defaults-usemarkermanager, .form-item-getlocations-search-block-defaults-usemarkermanager").hide();
         $("#wrap-getlocations-clusteropts").show();
+        $("#wrap-getlocations-markeropts").hide();
       }
       else {
         // none
         $(".form-item-getlocations-search-defaults-usemarkermanager, .form-item-getlocations-search-block-defaults-usemarkermanager").hide();
         $("#wrap-getlocations-clusteropts").hide();
+        $("#wrap-getlocations-markeropts").hide();
       }
       $("#edit-getlocations-search-defaults-markermanagertype, #edit-getlocations-search-block-defaults-markermanagertype").change(function() {
         if ($(this).val() == 1) {
           // markermanager
           $(".form-item-getlocations-search-defaults-usemarkermanager, .form-item-getlocations-search-block-defaults-usemarkermanager").show();
           $("#wrap-getlocations-clusteropts").hide();
+          $("#wrap-getlocations-markeropts").show();
         }
         else if ($(this).val() == 2) {
           // markerclusterer
           $(".form-item-getlocations-search-defaults-usemarkermanager, .form-item-getlocations-search-block-defaults-usemarkermanager").hide();
           $("#wrap-getlocations-clusteropts").show();
+          $("#wrap-getlocations-markeropts").hide();
         }
         else {
           // none
           $(".form-item-getlocations-search-defaults-usemarkermanager, .form-item-getlocations-search-block-defaults-usemarkermanager").hide();
           $("#wrap-getlocations-clusteropts").hide();
+          $("#wrap-getlocations-markeropts").hide();
         }
       });
 

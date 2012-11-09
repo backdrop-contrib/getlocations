@@ -153,18 +153,6 @@ function getlocations_settings_form() {
     t('This will load all the data for InfoBubble/InfoWindow or link beforehand. This may result in slower initial page loads but faster marker click response.')
   );
 
-  $form['getlocations_default']['minzoom'] = getlocations_element_map_zoom(
-    t('Minimum Zoom'),
-    $getlocations_defaults['minzoom'],
-    t('The Minimum zoom level at which markers will be visible.')
-  );
-
-  $form['getlocations_default']['maxzoom'] = getlocations_element_map_zoom(
-    t('Maximum Zoom'),
-    $getlocations_defaults['maxzoom'],
-    t('The Maximum zoom level at which markers will be visible.')
-  );
-
   $form['getlocations_default']['nodezoom'] = getlocations_element_map_zoom(
     t('Default Zoom for Single location'),
     $getlocations_defaults['nodezoom'],
@@ -178,6 +166,19 @@ function getlocations_settings_form() {
     $getlocations_defaults['usemarkermanager'],
     t('Use Marker manager. Switching this off will use no manager.')
   );
+
+  $form['getlocations_default']['minzoom'] = getlocations_element_map_zoom(
+    t('Minimum Zoom'),
+    $getlocations_defaults['minzoom'],
+    t('The Minimum zoom level at which markers will be visible.')
+  );
+
+  $form['getlocations_default']['maxzoom'] = getlocations_element_map_zoom(
+    t('Maximum Zoom'),
+    $getlocations_defaults['maxzoom'],
+    t('The Maximum zoom level at which markers will be visible.')
+  );
+
   $form['getlocations_default']['useclustermanager'] = getlocations_element_map_checkbox(
     t('Use Cluster manager'),
     $getlocations_defaults['useclustermanager'],

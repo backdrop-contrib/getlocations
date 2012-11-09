@@ -478,6 +478,9 @@ function theme_getlocations_settings_form($variables) {
   $form['getlocations_default']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
   $form['getlocations_default']['markerclusterer_minsize']['#suffix'] = '</div>';
 
+  $form['getlocations_default']['usemarkermanager']['#prefix'] = '<div id="wrap-getlocations-markeropts">';
+  $form['getlocations_default']['maxzoom']['#suffix'] = '</div>';
+
   $output .= drupal_render_children($form);
   return $output;
 }

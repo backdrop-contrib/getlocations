@@ -416,6 +416,9 @@ function theme_getlocations_search_settings_form($variables) {
   $form['getlocations_search_defaults']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
   $form['getlocations_search_defaults']['markerclusterer_minsize']['#suffix'] = '</div>';
 
+  $form['getlocations_search_defaults']['usemarkermanager']['#prefix'] = '<div id="wrap-getlocations-markeropts">';
+  $form['getlocations_search_defaults']['maxzoom']['#suffix'] = '</div>';
+
   $form['getlocations_search_defaults']['do_search_marker']['#suffix'] = '<div id="wrap-getlocations-search-marker">';
   $form['getlocations_search_defaults']['search_marker']['#suffix'] = '</div>';
 
@@ -451,6 +454,9 @@ function theme_getlocations_search_block_settings_form($variables) {
   }
   $form['getlocations_search_block_defaults']['useclustermanager']['#prefix'] = '<div id="wrap-getlocations-clusteropts">';
   $form['getlocations_search_block_defaults']['markerclusterer_minsize']['#suffix'] = '</div>';
+
+  $form['getlocations_search_block_defaults']['usemarkermanager']['#prefix'] = '<div id="wrap-getlocations-markeropts">';
+  $form['getlocations_search_block_defaults']['maxzoom']['#suffix'] = '</div>';
 
   $output .= drupal_render_children($form);
   return $output;

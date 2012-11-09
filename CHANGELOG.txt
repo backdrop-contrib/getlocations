@@ -1,9 +1,32 @@
-commit 8028765
+commit 4a8d760
+Author: hutch <hutch@midwales.net>
+Date:   Fri Nov 9 11:01:20 2012 +0000
+
+    fixed markermanager options display
+
+getlocations.admin.inc
+getlocations.theme.inc
+js/getlocations_admin.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit c2e4280
+Author: hutch <hutch@midwales.net>
+Date:   Fri Nov 9 10:27:31 2012 +0000
+
+    added use_smart_ip_latlon feature
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit c09cadd
 Author: hutch <hutch@midwales.net>
 Date:   Thu Nov 8 21:30:18 2012 +0000
 
     added trim to lat and lon, better js weights, added title to search
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_search/getlocations_search.module

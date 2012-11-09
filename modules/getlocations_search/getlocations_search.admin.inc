@@ -242,18 +242,6 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     $defaults['markeraction']
   );
 
-  $form[$varname]['minzoom'] = getlocations_element_map_zoom(
-    t('Minimum Zoom'),
-    $defaults['minzoom'],
-    t('The Minimum zoom level at which markers will be visible.')
-  );
-
-  $form[$varname]['maxzoom'] = getlocations_element_map_zoom(
-    t('Maximum Zoom'),
-    $defaults['maxzoom'],
-    t('The Maximum zoom level at which markers will be visible.')
-  );
-
   $form[$varname]['nodezoom'] = getlocations_element_map_zoom(
     t('Default Zoom for Single location'),
     $defaults['nodezoom'],
@@ -267,6 +255,18 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     $defaults['usemarkermanager'],
     t('Use Marker manager. Switching this off will use no manager.')
   );
+  $form[$varname]['minzoom'] = getlocations_element_map_zoom(
+    t('Minimum Zoom'),
+    $defaults['minzoom'],
+    t('The Minimum zoom level at which markers will be visible.')
+  );
+
+  $form[$varname]['maxzoom'] = getlocations_element_map_zoom(
+    t('Maximum Zoom'),
+    $defaults['maxzoom'],
+    t('The Maximum zoom level at which markers will be visible.')
+  );
+
   $form[$varname]['useclustermanager'] = getlocations_element_map_checkbox(
     t('Use Cluster manager'),
     $defaults['useclustermanager'],

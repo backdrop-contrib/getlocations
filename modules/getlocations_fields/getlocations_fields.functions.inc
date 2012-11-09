@@ -509,16 +509,25 @@ function getlocations_fields_city_autocomplete($string = '') {
  *
  */
 function getlocations_fields_smart_ip() {
+  $location = getlocations_fields_smart_ip_get();
+  drupal_json_output($location);
+}
+
+/**
+ * @return
+ *   Returns location array
+ *
+ */
+function getlocations_fields_smart_ip_get() {
+  $location = FALSE;
   if (module_exists('smart_ip')) {
     global $user;
-    $location = FALSE;
     if ($user->uid > 0 && isset($user->data['geoip_location'])) {
       $location = $user->data['geoip_location'];
     }
     elseif (isset($_SESSION['smart_ip']['location'])) {
       $location = $_SESSION['smart_ip']['location'];
     }
-    drupal_json_output($location);
   }
-  exit;
+  return $location;
 }

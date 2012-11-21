@@ -780,14 +780,14 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
       $fields[] = 'n.title AS title';
       $fields[] = 'n.nid';
       $sqlsnip1 = "LEFT JOIN {node} n ON f.vid = n.vid ";
-      $sqlsnip2 = "AND n.nid > 0 ";
+      $sqlsnip2 = "AND n.nid > 0 AND n.status = 1 ";
       $marker = $getlocations_defaults['node_map_marker'];
     }
     elseif ($type == 'user' && getlocations_access_user_location()) {
       $fields[] = 'u.name AS title';
       $fields[] = 'u.uid';
       $sqlsnip1 = "LEFT JOIN {users} u ON f.uid = u.uid ";
-      $sqlsnip2 = "AND u.uid > 0 ";
+      $sqlsnip2 = "AND u.uid > 0 AND u.status = 1 ";
       $marker = $getlocations_defaults['user_map_marker'];
     }
     elseif ($type == 'term' && user_access('access getlocations')) {
@@ -801,7 +801,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
       $fields[] = 'c.subject AS title';
       $fields[] = 'c.cid';
       $sqlsnip1 = "LEFT JOIN {comment} c ON f.cid = c.cid ";
-      $sqlsnip2 = "AND c.cid > 0 ";
+      $sqlsnip2 = "AND c.cid > 0 AND c.status = 1 ";
       $marker = $getlocations_defaults['comment_map_marker'];
     }
     elseif ($type == 'all') {
@@ -899,10 +899,18 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         if ($locations[$k]->nid > 0) {
           $n = node_load($locations[$k]->nid);
           $locations[$k]->title = $n->title;
+          // sanity check
+          if ($n->status == 0) {
+            unset($locations[$k]);
+          }
         }
         elseif ($locations[$k]->uid > 0) {
           $u = user_load($locations[$k]->uid);
           $locations[$k]->title = $u->name;
+          // sanity check
+          if ($u->status == 0) {
+            unset($locations[$k]);
+          }
         }
         elseif ($locations[$k]->tid > 0) {
           $term = taxonomy_term_load($locations[$k]->tid);
@@ -911,6 +919,10 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         elseif ($locations[$k]->cid > 0) {
           $comment = comment_load($locations[$k]->cid);
           $locations[$k]->title = $comment->subject;
+          // sanity check
+          if ($comment->status == 0) {
+            unset($locations[$k]);
+          }
         }
       }
     }
@@ -976,7 +988,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         $fields[] = 'n.title AS title';
         $fields[] = 'n.nid';
         $sqlsnip1 = "LEFT JOIN {node} n ON g.entity_id = n.nid ";
-        $sqlsnip2 = "AND g.entity_type = :type AND n.nid > 0 ";
+        $sqlsnip2 = "AND g.entity_type = :type AND n.nid > 0 AND n.status = 1 ";
         $sqlarr[':type'] = $type;
         $marker = $getlocations_defaults['node_map_marker'];
       }
@@ -984,7 +996,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         $fields[] = 'u.name AS title';
         $fields[] = 'u.uid';
         $sqlsnip1 = "LEFT JOIN {users} u ON g.entity_id = u.uid ";
-        $sqlsnip2 = "AND g.entity_type = :type AND u.uid > 0 ";
+        $sqlsnip2 = "AND g.entity_type = :type AND u.uid > 0 AND u.status = 1 ";
         $sqlarr[':type'] = $type;
         $marker = $getlocations_defaults['user_map_marker'];
       }
@@ -1000,7 +1012,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         $fields[] = 'c.subject AS title';
         $fields[] = 'c.cid';
         $sqlsnip1 = "LEFT JOIN {comment} c ON g.entity_id = c.cid ";
-        $sqlsnip2 = "AND g.entity_type = :type AND c.cid > 0 ";
+        $sqlsnip2 = "AND g.entity_type = :type AND c.cid > 0 AND c.status = 1 ";
         $sqlarr[':type'] = $type;
         $marker = $getlocations_defaults['comment_map_marker'];
       }
@@ -1072,14 +1084,22 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         if ($row->entity_type == 'node') {
           $locations[$location_ct]->nid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
-
           // term markers
           $locations[$location_ct]->marker = getlocations_get_term_marker($row->entity_id, $locations[$location_ct]->marker);
-
+          $n = node_load($locations[$location_ct]->nid);
+          // sanity check
+          if ($n->status == 0) {
+            unset($locations[$location_ct]);
+          }
         }
         elseif ($row->entity_type == 'user') {
           $locations[$location_ct]->uid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['user_map_marker'];
+          $u = user_load($locations[$location_ct]->uid);
+          // sanity check
+          if ($u->status == 0) {
+            unset($locations[$location_ct]);
+          }
         }
         elseif ($row->entity_type == 'term') {
           $locations[$location_ct]->tid = $row->entity_id;
@@ -1088,9 +1108,14 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         elseif ($row->entity_type == 'comment') {
           $locations[$location_ct]->cid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['comment_map_marker'];
+          $comment = comment_load($locations[$location_ct]->cid);
+          // sanity check
+          if ($comment->status == 0) {
+            unset($locations[$location_ct]);
+          }
         }
         // just in case
-        if (empty($locations[$location_ct]->marker)) {
+        if (isset($locations[$location_ct]) && empty($locations[$location_ct]->marker)) {
           $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
         }
         $location_ct++;

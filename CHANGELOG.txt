@@ -1,9 +1,18 @@
-commit 4a8d760
+commit 346721c
+Author: hutch <hutch@midwales.net>
+Date:   Wed Nov 21 17:40:10 2012 +0000
+
+    fixed unpublished bug in getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit abfd30e
 Author: hutch <hutch@midwales.net>
 Date:   Fri Nov 9 11:01:20 2012 +0000
 
     fixed markermanager options display
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.theme.inc
 js/getlocations_admin.js

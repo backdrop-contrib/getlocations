@@ -8,6 +8,8 @@
 */
 (function ($) {
 
+  var search_markersArray = [];
+
   function getlocations_search_init() {
 
     var searchmarker = {};
@@ -101,12 +103,8 @@
   // cleans out any existing markers, sets up a new geocoder and runs it, filling in the results.
   function do_Geocode(map, gs, adrs, mkey) {
     // are there any markers already?
-    if (gs.batchr.length > 1) {
-      // clear out markers
-      for($i=0; $i <= gs.batchr.length; $i++) {
-        marker = gs.batchr.pop();
-        marker.setMap();
-      }
+    if (search_markersArray.length) {
+      getlocations_search_deleteOverlays();
       // clear out manager
       if (gs.usemarkermanager) {
         gs.mgr.clearMarkers();
@@ -114,23 +112,22 @@
       else if (gs.useclustermanager) {
         gs.cmgr.clearMarkers();
       }
-      gs.batchr = [];
     }
     // clear out search marker
     if (gs.do_search_marker) {
-      oldslat = $("#getlocations_search_slat_" + mkey).html();
-      oldslon = $("#getlocations_search_slon_" + mkey).html();
+      oldslat = $("#getlocations_search_slat_" + mkey).html('');
+      oldslon = $("#getlocations_search_slon_" + mkey).html('');
       if (oldslat) {
         searchmarker.setMap();
       }
     }
     // clear the results box
-    $("#getlocations_search_address_" + mkey).html();
-    $("#getlocations_search_count_" + mkey).html();
-    $("#getlocations_search_distance_" + mkey).html();
-    $("#getlocations_search_type_" + mkey).html();
-    $("#getlocations_search_lat_" + mkey).html();
-    $("#getlocations_search_lon_" + mkey).html();
+    $("#getlocations_search_address_" + mkey).html('');
+    $("#getlocations_search_count_" + mkey).html('');
+    $("#getlocations_search_distance_" + mkey).html('');
+    $("#getlocations_search_type_" + mkey).html('');
+    $("#getlocations_search_lat_" + mkey).html('');
+    $("#getlocations_search_lon_" + mkey).html('');
     // set up some display vars
     var unitsdisplay = {'km': Drupal.t('Kilometer'), 'm': Drupal.t('Meter'), 'mi': Drupal.t('Mile'), 'yd': Drupal.t('Yard'), 'nmi': Drupal.t('Nautical mile')};
     var unitsdisplaypl = {'km': Drupal.t('Kilometers'), 'm': Drupal.t('Meters'), 'mi': Drupal.t('Miles'), 'yd': Drupal.t('Yards'), 'nmi': Drupal.t('Nautical miles')};
@@ -212,7 +209,7 @@
             title = (locations[i].title ? locations[i].title : (locations[i].name ? locations[i].name : ''));
             // make a marker
             marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, lid, title, lidkey, '', mkey);
-            gs.batchr.push(marker);
+            search_markersArray.push(marker);
             locationct++;
           }
           // display results
@@ -231,10 +228,10 @@
 
           // markermanagers add batchr
           if (gs.usemarkermanager) {
-            gs.mgr.addMarkers(gs.batchr, gs.minzoom, gs.maxzoom);
+            gs.mgr.addMarkers(search_markersArray, gs.minzoom, gs.maxzoom);
           }
           else if (gs.useclustermanager) {
-            gs.cmgr.addMarkers(gs.batchr, 0);
+            gs.cmgr.addMarkers(search_markersArray, 0);
           }
           if (minlat !== '' && minlon !== '' && maxlat !== '' && maxlon !== '') {
             if (gs.pansetting == 1) {
@@ -304,6 +301,16 @@
       title: Drupal.t('Search center'),
       optimized: false
     });
+  }
+
+  // Deletes all markers in the array by removing references to them
+  function getlocations_search_deleteOverlays() {
+    if (search_markersArray) {
+      for (i in search_markersArray) {
+        search_markersArray[i].setMap(null);
+      }
+      search_markersArray.length = 0;
+    }
   }
 
   Drupal.behaviors.getlocations_search = {

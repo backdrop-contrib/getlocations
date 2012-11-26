@@ -362,28 +362,16 @@ function theme_getlocations_search_form($variables) {
 
   // $which can be page or block so we can change things accordingly
   $output .= "<!-- $which -->";
-  if ($which == 'block') {
-    $output .= '<div id="getlocations_search_block_result">';
-  }
-  else {
-    $output .= '<div id="getlocations_search_result">';
-  }
+  $output .= '<div id="getlocations_search' . ($which == 'block' ? '_block' : '') . '_result">';
 
   $output .= '<h4>' . t('Results') . '</h4>';
   $output .= '<div id="getlocations_search_address_' . $mapid . '"></div>';
   $output .= '<div id="getlocations_search_distance_' . $mapid . '"></div>';
   $output .= '<div id="getlocations_search_count_' . $mapid . '"></div>';
   $output .= '<div id="getlocations_search_type_' . $mapid . '"></div>';
-  if ($which == 'block') {
-    $output .= '<div id="getlocations_search_block_latlon_wrapper">';
-    $output .= '<div id="getlocations_search_lat_' . $mapid . '" class="getlocations_search_block_lat"></div>';
-    $output .= '<div id="getlocations_search_lon_' . $mapid . '" class="getlocations_search_block_lon"></div>';
-  }
-  else {
-    $output .= '<div id="getlocations_search_latlon_wrapper">';
-    $output .= '<div id="getlocations_search_lat_' . $mapid . '" class="getlocations_search_lat"></div>';
-    $output .= '<div id="getlocations_search_lon_' . $mapid . '" class="getlocations_search_lon"></div>';
-  }
+  $output .= '<div id="getlocations_search' . ($which == 'block' ? '_block' : '') . '_latlon_wrapper">';
+  $output .= '<div id="getlocations_search_lat_' . $mapid . '" class="getlocations_search' . ($which == 'block' ? '_block' : '') . '_lat"></div>';
+  $output .= '<div id="getlocations_search_lon_' . $mapid . '" class="getlocations_search' . ($which == 'block' ? '_block' : '') . '_lon"></div>';
   $output .= '</div>';
   $output .= '</div>';
   // hidden
@@ -847,84 +835,89 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
       $sql .= "LIMIT 0, $limits ";
     }
 
+    $location_ct = 0;
     $result = db_query($sql, $sqlarr);
-    foreach ($result AS $k => $row) {
-      $locations[$k] = $row;
-      if (empty($locations[$k]->marker)) {
+    foreach ($result AS $row) {
+      $locations[$location_ct] = $row;
+      if (empty($locations[$location_ct]->marker)) {
         if (! empty($marker)) {
-          $locations[$k]->marker = $marker;
-          if (isset($locations[$k]->nid) && $locations[$k]->nid > 0) {
-            $t = getlocations_get_nodetype($locations[$k]->nid);
+          $locations[$location_ct]->marker = $marker;
+          if (isset($locations[$location_ct]->nid) && $locations[$location_ct]->nid > 0) {
+            $t = getlocations_get_nodetype($locations[$location_ct]->nid);
             if ($t) {
               $typemarkers = getlocations_get_markertypes('node');
               if (isset($typemarkers[$t]) && $typemarkers[$t]) {
-                $locations[$k]->marker = $typemarkers[$t];
+                $locations[$location_ct]->marker = $typemarkers[$t];
               }
             }
           }
         }
         else {
           // must be an 'all' search so we have to figure out a marker
-          if ($locations[$k]->nid > 0) {
-            $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
-            $t = getlocations_get_nodetype($locations[$k]->nid);
+          if ($locations[$location_ct]->nid > 0) {
+            $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
+            $t = getlocations_get_nodetype($locations[$location_ct]->nid);
             if ($t) {
               $typemarkers = getlocations_get_markertypes('node');
               if (isset($typemarkers[$t]) && $typemarkers[$t]) {
-                $locations[$k]->marker = $typemarkers[$t];
+                $locations[$location_ct]->marker = $typemarkers[$t];
               }
             }
 
             // term markers
-            $locations[$k]->marker = getlocations_get_term_marker($locations[$k]->nid, $locations[$k]->marker);
+            $locations[$location_ct]->marker = getlocations_get_term_marker($locations[$location_ct]->nid, $locations[$location_ct]->marker);
 
           }
-          elseif ($locations[$k]->uid > 0) {
-            $locations[$k]->marker = $getlocations_defaults['user_map_marker'];
+          elseif ($locations[$location_ct]->uid > 0) {
+            $locations[$location_ct]->marker = $getlocations_defaults['user_map_marker'];
           }
-          elseif ($locations[$k]->tid > 0) {
-            $locations[$k]->marker = $getlocations_defaults['vocabulary_map_marker'];
+          elseif ($locations[$location_ct]->tid > 0) {
+            $locations[$location_ct]->marker = $getlocations_defaults['vocabulary_map_marker'];
           }
-          elseif ($locations[$k]->cid > 0) {
-            $locations[$k]->marker = $getlocations_defaults['comment_map_marker'];
+          elseif ($locations[$location_ct]->cid > 0) {
+            $locations[$location_ct]->marker = $getlocations_defaults['comment_map_marker'];
           }
         }
         // just in case
-        if (empty($locations[$k]->marker)) {
-          $locations[$k]->marker = $getlocations_defaults['node_map_marker'];
+        if (empty($locations[$location_ct]->marker)) {
+          $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
         }
       }
       // ensure we always have a title
-      if (! isset($locations[$k]->title) || empty($locations[$k]->title)) {
-        if ($locations[$k]->nid > 0) {
-          $n = node_load($locations[$k]->nid);
-          $locations[$k]->title = $n->title;
+      if (! isset($locations[$location_ct]->title) || empty($locations[$location_ct]->title)) {
+        if ($locations[$location_ct]->nid > 0) {
+          $n = node_load($locations[$location_ct]->nid);
+          $locations[$location_ct]->title = $n->title;
           // sanity check
           if ($n->status == 0) {
-            unset($locations[$k]);
+            unset($locations[$location_ct]);
+            continue;
           }
         }
-        elseif ($locations[$k]->uid > 0) {
-          $u = user_load($locations[$k]->uid);
-          $locations[$k]->title = $u->name;
+        elseif ($locations[$location_ct]->uid > 0) {
+          $u = user_load($locations[$location_ct]->uid);
+          $locations[$location_ct]->title = $u->name;
           // sanity check
           if ($u->status == 0) {
-            unset($locations[$k]);
+            unset($locations[$location_ct]);
+            continue;
           }
         }
-        elseif ($locations[$k]->tid > 0) {
-          $term = taxonomy_term_load($locations[$k]->tid);
-          $locations[$k]->title = $term->name;
+        elseif ($locations[$location_ct]->tid > 0) {
+          $term = taxonomy_term_load($locations[$location_ct]->tid);
+          $locations[$location_ct]->title = $term->name;
         }
-        elseif ($locations[$k]->cid > 0) {
-          $comment = comment_load($locations[$k]->cid);
-          $locations[$k]->title = $comment->subject;
+        elseif ($locations[$location_ct]->cid > 0) {
+          $comment = comment_load($locations[$location_ct]->cid);
+          $locations[$location_ct]->title = $comment->subject;
           // sanity check
           if ($comment->status == 0) {
-            unset($locations[$k]);
+            unset($locations[$location_ct]);
+            continue;
           }
         }
       }
+      $location_ct++;
     }
 
   } // getlocations_fields sql

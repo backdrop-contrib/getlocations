@@ -555,7 +555,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
     }
   }
 
-  $output .= drupal_render_children($form);
+  $output = drupal_render_children($form);
   return $output;
 
 }

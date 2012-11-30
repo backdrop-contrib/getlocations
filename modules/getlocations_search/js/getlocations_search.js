@@ -115,8 +115,8 @@
     }
     // clear out search marker
     if (gs.do_search_marker) {
-      oldslat = $("#getlocations_search_slat_" + mkey).html('');
-      oldslon = $("#getlocations_search_slon_" + mkey).html('');
+      oldslat = $("#getlocations_search_slat_" + mkey).html();
+      oldslon = $("#getlocations_search_slon_" + mkey).html();
       if (oldslat) {
         searchmarker.setMap();
       }

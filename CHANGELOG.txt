@@ -1,9 +1,18 @@
-commit 88a767f
+commit 168f61e
+Author: hutch <hutch@midwales.net>
+Date:   Fri Nov 30 20:04:13 2012 +0000
+
+    fixed search marker bug
+
+modules/getlocations_search/js/getlocations_search.js
+
+commit dc17a49
 Author: hutch <hutch@midwales.net>
 Date:   Fri Nov 30 08:26:10 2012 +0000
 
     added 'marker' to columns in getlocations_fields_defaults, #1849716
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 3bdb391

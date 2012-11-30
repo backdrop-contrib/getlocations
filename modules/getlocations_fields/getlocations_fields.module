@@ -2054,6 +2054,7 @@ function getlocations_fields_defaults() {
       'country'     => t('Country'),
       'latitude'    => t('Latitude'),
       'longitude'   => t('Longitude'),
+      'marker'      => t('Marker'),
     ),
   );
 

@@ -1077,6 +1077,14 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         if ($row->entity_type == 'node') {
           $locations[$location_ct]->nid = $row->entity_id;
           $locations[$location_ct]->marker = $getlocations_defaults['node_map_marker'];
+          $t = getlocations_get_nodetype($locations[$location_ct]->nid);
+          if ($t) {
+            $typemarkers = getlocations_get_markertypes('node');
+            if (isset($typemarkers[$t]) && $typemarkers[$t]) {
+              $locations[$location_ct]->marker = $typemarkers[$t];
+            }
+          }
+
           // term markers
           $locations[$location_ct]->marker = getlocations_get_term_marker($row->entity_id, $locations[$location_ct]->marker);
           $n = node_load($locations[$location_ct]->nid);

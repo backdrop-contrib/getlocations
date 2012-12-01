@@ -1,9 +1,18 @@
-commit 168f61e
+commit b47a053
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 1 10:50:41 2012 +0000
+
+    added per content type markers for geolocation and geofield to getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit 52fbc9e
 Author: hutch <hutch@midwales.net>
 Date:   Fri Nov 30 20:04:13 2012 +0000
 
     fixed search marker bug
 
+CHANGELOG.txt
 modules/getlocations_search/js/getlocations_search.js
 
 commit dc17a49

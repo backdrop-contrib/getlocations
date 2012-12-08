@@ -2083,7 +2083,7 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
             }
             $locations[$ct]['province_name'] = (count($admin_area) ? implode(", ", $admin_area) :'');
             $locations[$ct]['postal_code'] = drupal_strtoupper($a['postal_code']);
-            $locations[$ct]['country_name'] = $a['country_name'];
+            $locations[$ct]['country_name'] = (isset($a['country_name']) && $a['country_name'] ? $a['country_name'] : $a['country']);
             $locations[$ct]['country'] = $a['country'];
             $ct++;
           }

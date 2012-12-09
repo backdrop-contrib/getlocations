@@ -1,9 +1,29 @@
-commit b47a053
+commit 068df43
+Author: hutch <hutch@midwales.net>
+Date:   Sun Dec 9 22:09:13 2012 +0000
+
+    moved all theme functions into module file
+
+getlocations.module
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+
+commit ba67c31
+Author: hutch <hutch@midwales.net>
+Date:   Sat Dec 8 18:49:19 2012 +0000
+
+    fixed notice on country_name
+
+getlocations.module
+
+commit 86362d0
 Author: hutch <hutch@midwales.net>
 Date:   Sat Dec 1 10:50:41 2012 +0000
 
     added per content type markers for geolocation and geofield to getlocations_search
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.module
 
 commit 52fbc9e

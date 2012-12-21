@@ -121,6 +121,12 @@
         searchmarker.setMap();
       }
     }
+
+    // close any previous instances
+    for (var i in gs.infoBubbles) {
+      gs.infoBubbles[i].close();
+    }
+
     // clear the results box
     $("#getlocations_search_address_" + mkey).html('');
     $("#getlocations_search_count_" + mkey).html('');

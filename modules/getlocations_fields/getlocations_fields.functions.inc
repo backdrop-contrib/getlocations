@@ -422,7 +422,7 @@ function getlocations_fields_countryinfo() {
     $content = getlocations_get_country_id($country);
   }
   // fix 'The Netherlands' which is what google returns
-  if ($country == 'The Netherlands') {
+  if ($country == 'The Netherlands' || $country == 'Pays-Bas') {
     $content = 'NL';
   }
   drupal_json_output(array('content' => $content));

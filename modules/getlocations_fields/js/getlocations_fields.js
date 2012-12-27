@@ -309,13 +309,13 @@
         $("#" + countryfield + k).val(countryfield_value);
       }
       else if ($("#" + countryfield + k).is("select")) {
-        // country list is keyed on two letter codes so we need to get
-        // the code from the server in order to set the selectbox correctly
-        var path = Drupal.settings.basePath + "getlocations_fields/countryinfo";
-        var kk = k;
-        $.get(path, {'country': countryfield_value}, function (data) {
-          if (data.content) {
-            $("#" + countryfield + kk).val(data.content).attr('selected', 'selected');
+        $("#" + countryfield + k + " option").each( function(index) {
+          if ($(this).text() == countryfield_value) {
+            $("#" + countryfield + k).val($(this).val()).attr('selected', 'selected');
+          }
+          // fix 'The Netherlands' which is what google returns
+          if (countryfield_value == 'The Netherlands') {
+            $("#" + countryfield + k).val('NL').attr('selected', 'selected');
           }
         });
       }
@@ -402,12 +402,13 @@
                 $("#" + countryfield + kk).val(cc).attr('selected', 'selected');
               }
               else if (loc.country) {
-                // country list is keyed on two letter codes so we need to get
-                // the code from the server in order to set the selectbox correctly
-                var kkk = kk;
-                $.get(Drupal.settings.basePath + "getlocations_fields/countryinfo", {'country': loc.country}, function (data) {
-                  if (data) {
-                    $("#" + countryfield + kkk).val(data).attr('selected', 'selected');
+                $("#" + countryfield + kk + " option").each( function(index) {
+                  if ($(this).text() == loc.country) {
+                    $("#" + countryfield + kk).val($(this).val()).attr('selected', 'selected');
+                  }
+                  // fix 'The Netherlands' which is what google returns
+                  if (countryfield_value == 'The Netherlands') {
+                    $("#" + countryfield + kk).val('NL').attr('selected', 'selected');
                   }
                 });
               }

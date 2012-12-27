@@ -412,21 +412,21 @@ function getlocations_fields_element_opts($title, $default, $description='') {
  *   Returns country code
  *
  */
-function getlocations_fields_countryinfo() {
-  $country = $_GET['country'];
-  $content = FALSE;
-  if (drupal_strlen($country) == 2 ) {
-    $content = drupal_strtoupper($country);
-  }
-  else {
-    $content = getlocations_get_country_id($country);
-  }
-  // fix 'The Netherlands' which is what google returns
-  if ($country == 'The Netherlands' || $country == 'Pays-Bas') {
-    $content = 'NL';
-  }
-  drupal_json_output(array('content' => $content));
-}
+#function getlocations_fields_countryinfo() {
+#  $country = $_GET['country'];
+#  $content = FALSE;
+#  if (drupal_strlen($country) == 2 ) {
+#    $content = drupal_strtoupper($country);
+#  }
+#  else {
+#    $content = getlocations_get_country_id($country);
+#  }
+#  // fix 'The Netherlands' which is what google returns
+#  if ($country == 'The Netherlands' || $country == 'Pays-Bas') {
+#    $content = 'NL';
+#  }
+#  drupal_json_output(array('content' => $content));
+#}
 
 /**
  * autocomplete for country

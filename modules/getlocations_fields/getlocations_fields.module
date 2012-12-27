@@ -46,12 +46,12 @@ function getlocations_fields_menu() {
     'file' => 'getlocations_fields.admin.inc',
   );
 
-  // ajax callback to fetch country code from full name
-  $items['getlocations_fields/countryinfo'] = array(
-    'page callback' => 'getlocations_fields_countryinfo',
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-  );
+#  // ajax callback to fetch country code from full name
+#  $items['getlocations_fields/countryinfo'] = array(
+#    'page callback' => 'getlocations_fields_countryinfo',
+#    'access arguments' => array('access content'),
+#    'type' => MENU_CALLBACK,
+#  );
 
   // autocomplete paths
   $items['getlocations_fields/country_autocomplete'] = array(

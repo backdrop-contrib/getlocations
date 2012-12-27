@@ -310,7 +310,7 @@
       }
       else if ($("#" + countryfield + k).is("select")) {
         $("#" + countryfield + k + " option").each( function(index) {
-          if ($(this).text() == countryfield_value) {
+          if (countryfield_value == $(this).text()) {
             $("#" + countryfield + k).val($(this).val()).attr('selected', 'selected');
           }
           // fix 'The Netherlands' which is what google returns
@@ -403,11 +403,11 @@
               }
               else if (loc.country) {
                 $("#" + countryfield + kk + " option").each( function(index) {
-                  if ($(this).text() == loc.country) {
+                  if (loc.country == $(this).text()) {
                     $("#" + countryfield + kk).val($(this).val()).attr('selected', 'selected');
                   }
                   // fix 'The Netherlands' which is what google returns
-                  if (countryfield_value == 'The Netherlands') {
+                  if (loc.country == 'The Netherlands') {
                     $("#" + countryfield + kk).val('NL').attr('selected', 'selected');
                   }
                 });

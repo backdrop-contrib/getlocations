@@ -2486,10 +2486,11 @@ function getlocations_fields_input_settings_form($defaults) {
     t('Country input method'),
     $defaults['use_country_dropdown'],
     array(
-      0 => t('Normal textfield'),
       1 => t('Dropdown'),
+      0 => t('Normal textfield'),
       2 => t('Autocomplete'),
-    )
+    ),
+    t('Use Dropdown if you need Locale support.')
   );
 
   if (module_exists('countries')) {

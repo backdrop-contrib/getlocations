@@ -1,9 +1,52 @@
-commit 068df43
+commit 8ccadf4
+Author: hutch <hutch@midwales.net>
+Date:   Fri Dec 28 12:45:07 2012 +0000
+
+    added description to country element choice
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 942b4c4
+Author: hutch <hutch@midwales.net>
+Date:   Thu Dec 27 22:13:06 2012 +0000
+
+    fixed some bugs in getlocations_fields.js
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit fcb6998
+Author: hutch <hutch@midwales.net>
+Date:   Thu Dec 27 15:10:02 2012 +0000
+
+    multilanguage country dropdown fix
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 0f58d98
+Author: hutch <hutch@midwales.net>
+Date:   Mon Dec 24 10:49:10 2012 +0000
+
+    added country fix #1873356
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+
+commit 36666e2
+Author: hutch <hutch@midwales.net>
+Date:   Fri Dec 21 19:29:05 2012 +0000
+
+    fixed bubbles not closing bug
+
+modules/getlocations_search/js/getlocations_search.js
+
+commit a3dd1f4
 Author: hutch <hutch@midwales.net>
 Date:   Sun Dec 9 22:09:13 2012 +0000
 
     moved all theme functions into module file
 
+CHANGELOG.txt
 getlocations.module
 getlocations.theme.inc
 modules/getlocations_fields/getlocations_fields.module

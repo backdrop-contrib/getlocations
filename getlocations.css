@@ -27,6 +27,11 @@
 .getlocations_map_wrapper {
 }
 
+/* map links feature */
+.getlocations_map_links ul {
+  list-style: none;
+}
+
 /**
  * the infobubble, see function theme_getlocations_info().
  */

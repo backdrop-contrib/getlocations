@@ -241,11 +241,13 @@ function getlocations_search_getmap($which = 'page') {
   $keys = array(
     'width', 'height', 'styles', 'latlong', 'zoom', 'controltype', 'pancontrol',
     'mtc', 'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show',
-    'trafficinfo', 'trafficinfo_state', 'bicycleinfo', 'bicycleinfo_state', 'transitinfo', 'transitinfo_state',
-    'panoramio_use', 'panoramio_state', 'poi_show', 'transit_show',
-    'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype', 'usemarkermanager',
-    'useclustermanager', 'markerclusterer_style', 'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize', 'markerclusterer_title',
-    'markeraction', 'markeractiontype', 'weather_show', 'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor');
+    'trafficinfo', 'trafficinfo_state', 'bicycleinfo', 'bicycleinfo_state',
+    'transitinfo', 'transitinfo_state', 'panoramio_use', 'panoramio_state',
+    'poi_show', 'transit_show', 'minzoom', 'maxzoom', 'nodezoom', 'markermanagertype',
+    'usemarkermanager', 'useclustermanager', 'markerclusterer_style',
+    'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize',
+    'markerclusterer_title', 'markeraction', 'markeractiontype', 'weather_show',
+    'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor', 'show_maplinks');
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
@@ -586,6 +588,7 @@ function getlocations_search_defaults() {
     'weather_cloud'             => $getlocations_defaults['weather_cloud'],
     'weather_cloud_state'       => $getlocations_defaults['weather_cloud_state'],
     'map_backgroundcolor'       => $getlocations_defaults['map_backgroundcolor'],
+    'show_maplinks'             => $getlocations_defaults['show_maplinks'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);

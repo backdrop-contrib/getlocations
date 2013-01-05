@@ -134,6 +134,10 @@
     $("#getlocations_search_type_" + mkey).html('');
     $("#getlocations_search_lat_" + mkey).html('');
     $("#getlocations_search_lon_" + mkey).html('');
+    if (gs.show_maplinks) {
+      $("div#getlocations_map_links_" + mkey + " ul").html("");
+    }
+
     // set up some display vars
     var unitsdisplay = {'km': Drupal.t('Kilometer'), 'm': Drupal.t('Meter'), 'mi': Drupal.t('Mile'), 'yd': Drupal.t('Yard'), 'nmi': Drupal.t('Nautical mile')};
     var unitsdisplaypl = {'km': Drupal.t('Kilometers'), 'm': Drupal.t('Meters'), 'mi': Drupal.t('Miles'), 'yd': Drupal.t('Yards'), 'nmi': Drupal.t('Nautical miles')};

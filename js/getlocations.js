@@ -44,6 +44,7 @@ var getlocations_settings = {};
           useLink: false,
           markeraction: 0,
           markeractiontype: 1,
+          show_maplinks: false,
           infoBubbles: [],
           datanum: 0,
           trafficInfo: {},
@@ -98,6 +99,7 @@ var getlocations_settings = {};
         global_settings.pansetting = settings.pansetting;
         // mobiles
         global_settings.is_mobile = settings.is_mobile;
+        global_settings.show_maplinks = settings.show_maplinks;
 
         // prevent old msie from running markermanager
         var ver = Drupal.getlocations.msiedetect();
@@ -626,6 +628,17 @@ var getlocations_settings = {};
       map.setCenter(p);
       map.setZoom(gs.nodezoom);
     }
+
+    if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble)) {
+      // add link
+      $("div#getlocations_map_links_" + mkey + " ul").append('<li><a href="#" class="lid-' + lid + '">' + title + '</a></li>');
+      // Add listener
+      $("div#getlocations_map_links_" + mkey + " a.lid-" + lid).click(function(){
+        google.maps.event.trigger(m, 'click');
+        return false;
+      });
+    }
+
     return m;
 
   };

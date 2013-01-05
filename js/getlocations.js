@@ -629,12 +629,35 @@ var getlocations_settings = {};
       map.setZoom(gs.nodezoom);
     }
 
-    if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble)) {
+    if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble || gs.useLink )) {
       // add link
       $("div#getlocations_map_links_" + mkey + " ul").append('<li><a href="#" class="lid-' + lid + '">' + title + '</a></li>');
       // Add listener
       $("div#getlocations_map_links_" + mkey + " a.lid-" + lid).click(function(){
-        google.maps.event.trigger(m, 'click');
+        if (gs.useLink) {
+          if (gs.preload_data) {
+            arr = gs.getlocations_info;
+            for (var i = 0; i < arr.length; i++) {
+              data = arr[i];
+              if (lid == data.lid && lidkey == data.lidkey && data.content) {
+                window.location = data.content;
+              }
+            }
+          }
+          else {
+            // fetch link and relocate
+            var path = Drupal.settings.basePath + "getlocations/lidinfo";
+            $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+              if (data.content) {
+                window.location = data.content;
+              }
+            });
+          }
+        }
+        else {
+          google.maps.event.trigger(m, 'click');
+        }
+
         return false;
       });
     }

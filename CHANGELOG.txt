@@ -1,9 +1,18 @@
-commit 090d93b
+commit 54ae57e
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jan 5 22:15:46 2013 +0000
+
+    added useLinks to show_maplinks
+
+js/getlocations.js
+
+commit 3ce77f1
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 5 19:06:52 2013 +0000
 
     added show_maplinks feature
 
+CHANGELOG.txt
 getlocations.css
 getlocations.module
 js/getlocations.js

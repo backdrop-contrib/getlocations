@@ -1,9 +1,29 @@
-commit 54ae57e
+commit fb51959
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 6 09:07:36 2013 +0000
+
+    updated from google-maps-utility-library-v3
+
+js/markerclusterer.js
+js/markerclusterer_packed.js
+js/markermanager.js
+js/markermanager_packed.js
+
+commit 8ec8a56
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 6 09:06:24 2013 +0000
+
+    simplified code in getlocations.js
+
+js/getlocations.js
+
+commit 8c61488
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jan 5 22:15:46 2013 +0000
 
     added useLinks to show_maplinks
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit 3ce77f1

@@ -540,6 +540,28 @@ var getlocations_settings = {};
       }
     }
 
+    // relocate function
+    get_winlocation = function(gs, lid, lidkey) {
+      if (gs.preload_data) {
+        arr = gs.getlocations_info;
+        for (var i = 0; i < arr.length; i++) {
+          data = arr[i];
+          if (lid == data.lid && lidkey == data.lidkey && data.content) {
+            window.location = data.content;
+          }
+        }
+      }
+      else {
+        // fetch link and relocate
+        var path = Drupal.settings.basePath + "getlocations/lidinfo";
+        $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
+          if (data.content) {
+            window.location = data.content;
+          }
+        });
+      }
+    };
+
     var mouseoverTimeoutId = null;
     var mouseoverTimeout = (gs.markeractiontype == 'mouseover' ? 300 : 0);
     var p = new google.maps.LatLng(lat, lon);
@@ -557,24 +579,7 @@ var getlocations_settings = {};
       google.maps.event.addListener(m, gs.markeractiontype, function() {
         mouseoverTimeoutId = setTimeout(function() {
           if (gs.useLink) {
-            if (gs.preload_data) {
-              arr = gs.getlocations_info;
-              for (var i = 0; i < arr.length; i++) {
-                data = arr[i];
-                if (lid == data.lid && lidkey == data.lidkey && data.content) {
-                  window.location = data.content;
-                }
-              }
-            }
-            else {
-              // fetch link and relocate
-              var path = Drupal.settings.basePath + "getlocations/lidinfo";
-              $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-                if (data.content) {
-                  window.location = data.content;
-                }
-              });
-            }
+            get_winlocation(gs, lid, lidkey);
           }
           else {
             if(gs.useCustomContent) {
@@ -629,35 +634,18 @@ var getlocations_settings = {};
       map.setZoom(gs.nodezoom);
     }
 
+    // show_maplinks
     if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble || gs.useLink )) {
       // add link
       $("div#getlocations_map_links_" + mkey + " ul").append('<li><a href="#" class="lid-' + lid + '">' + title + '</a></li>');
       // Add listener
       $("div#getlocations_map_links_" + mkey + " a.lid-" + lid).click(function(){
         if (gs.useLink) {
-          if (gs.preload_data) {
-            arr = gs.getlocations_info;
-            for (var i = 0; i < arr.length; i++) {
-              data = arr[i];
-              if (lid == data.lid && lidkey == data.lidkey && data.content) {
-                window.location = data.content;
-              }
-            }
-          }
-          else {
-            // fetch link and relocate
-            var path = Drupal.settings.basePath + "getlocations/lidinfo";
-            $.get(path, {'lid': lid, 'key': lidkey}, function(data) {
-              if (data.content) {
-                window.location = data.content;
-              }
-            });
-          }
+          get_winlocation(gs, lid, lidkey);
         }
         else {
           google.maps.event.trigger(m, 'click');
         }
-
         return false;
       });
     }

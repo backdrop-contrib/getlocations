@@ -1,9 +1,19 @@
-commit fb51959
+commit 94354ef
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 8 14:13:37 2013 +0000
+
+    debugged show_maplinks
+
+getlocations.module
+js/getlocations.js
+
+commit 2829c60
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jan 6 09:07:36 2013 +0000
 
     updated from google-maps-utility-library-v3
 
+CHANGELOG.txt
 js/markerclusterer.js
 js/markerclusterer_packed.js
 js/markermanager.js

@@ -3588,6 +3588,9 @@ function theme_getlocations_show($variables) {
   }
 
   // do map
+  if ($defaults['show_maplinks']) {
+    $output .= '<a id="maptop_' . $mapid . '" name="maptop_' . $mapid . '"></a>';
+  }
   $output .= '<div class="getlocations_map_canvas" id="getlocations_map_canvas_' . $mapid . '" style="width: ' . $width . '; height: ' . $height . '" ></div>';
   // show maplinks if enabled
   if ($defaults['show_maplinks']) {

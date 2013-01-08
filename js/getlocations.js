@@ -637,16 +637,17 @@ var getlocations_settings = {};
     // show_maplinks
     if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble || gs.useLink )) {
       // add link
-      $("div#getlocations_map_links_" + mkey + " ul").append('<li><a href="#" class="lid-' + lid + '">' + title + '</a></li>');
+      $("div#getlocations_map_links_" + mkey + " ul").append('<li><a href="#maptop_' + mkey + '" class="lid-' + lid + '">' + title + '</a></li>');
       // Add listener
       $("div#getlocations_map_links_" + mkey + " a.lid-" + lid).click(function(){
+        $("div#getlocations_map_links_" + mkey + " a").removeClass('active');
+        $("div#getlocations_map_links_" + mkey + " a.lid-" + lid).addClass('active');
         if (gs.useLink) {
           get_winlocation(gs, lid, lidkey);
         }
         else {
           google.maps.event.trigger(m, 'click');
         }
-        return false;
       });
     }
 

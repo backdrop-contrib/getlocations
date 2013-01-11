@@ -1445,6 +1445,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['streetview_show'] = 0;
   $getlocations_defaults['weather_use']     = 0;
   $getlocations_defaults['weather_show']    = 0;
+  $getlocations_defaults['show_maplinks']   = 0;
 
   if ($active) {
     $getlocations_defaults['places'] = 1;
@@ -1536,6 +1537,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['weather_cloud']         = $settings['weather_cloud'];
   $getlocations_defaults['weather_cloud_state']   = $settings['weather_cloud_state'];
   $getlocations_defaults['map_backgroundcolor']   = $settings['map_backgroundcolor'];
+  $getlocations_defaults['show_maplinks']         = $settings['show_maplinks'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -1985,6 +1987,7 @@ function getlocations_fields_defaults() {
     'display_mapheight'               => $getlocations_defaults['height'],
     'nodezoom'                        => $getlocations_defaults['nodezoom'],
     'map_backgroundcolor'             => $getlocations_defaults['map_backgroundcolor'],
+    'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
     'display_showmap'                 => 1,
     'display_maplink'                 => 1,
     'display_latlong'                 => 1,
@@ -2141,6 +2144,7 @@ function getlocations_fields_field_info_defaults() {
         'search_country'                  => $getlocations_fields_defaults['search_country'],
         'map_backgroundcolor'             => $getlocations_fields_defaults['map_backgroundcolor'],
         'use_smart_ip_latlon'             => $getlocations_fields_defaults['use_smart_ip_latlon'],
+        'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
       ),
     ),
   );
@@ -2195,6 +2199,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'weather_cloud'         => $getlocations_defaults['weather_cloud'],
     'weather_cloud_state'   => $getlocations_defaults['weather_cloud_state'],
     'map_backgroundcolor'   => $getlocations_defaults['map_backgroundcolor'],
+    'show_maplinks'         => $getlocations_defaults['show_maplinks'],
     'display_name'          => $getlocations_fields_defaults['display_name'],
     'display_street'        => $getlocations_fields_defaults['display_street'],
     'display_additional'    => $getlocations_fields_defaults['display_additional'],

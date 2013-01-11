@@ -579,6 +579,7 @@ var getlocations_settings = {};
       google.maps.event.addListener(m, gs.markeractiontype, function() {
         mouseoverTimeoutId = setTimeout(function() {
           if (gs.useLink) {
+            // relocate
             get_winlocation(gs, lid, lidkey);
           }
           else {
@@ -635,7 +636,7 @@ var getlocations_settings = {};
     }
 
     // show_maplinks
-    if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble || gs.useLink )) {
+    if (gs.show_maplinks && (gs.useInfoWindow || gs.useInfoBubble || gs.useLink)) {
       // add link
       $("div#getlocations_map_links_" + mkey + " ul").append('<li><a href="#maptop_' + mkey + '" class="lid-' + lid + '">' + title + '</a></li>');
       // Add listener
@@ -643,9 +644,11 @@ var getlocations_settings = {};
         $("div#getlocations_map_links_" + mkey + " a").removeClass('active');
         $("div#getlocations_map_links_" + mkey + " a.lid-" + lid).addClass('active');
         if (gs.useLink) {
+          // relocate
           get_winlocation(gs, lid, lidkey);
         }
         else {
+          // emulate
           google.maps.event.trigger(m, 'click');
         }
       });

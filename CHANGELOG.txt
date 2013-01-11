@@ -1,9 +1,21 @@
-commit 94354ef
+commit bed42e8
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 11 09:07:39 2013 +0000
+
+    fixed show_maplinks in getlocations_fields, cleanup
+
+getlocations.css
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+
+commit 5a9e53a
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jan 8 14:13:37 2013 +0000
 
     debugged show_maplinks
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 

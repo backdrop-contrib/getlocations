@@ -18,6 +18,8 @@ function getlocations_uninstall() {
   variable_del('getlocations_vocabulary_marker');
   variable_del('getlocations_term_marker');
   variable_del('getlocations_colorbox');
+  variable_del('getlocations_api3_key');
+  variable_del('getlocations_ua');
 }
 
 /**

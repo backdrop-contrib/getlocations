@@ -1,9 +1,34 @@
-commit bed42e8
+commit 1033f70
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 15 09:13:37 2013 +0000
+
+    fixed issue 1888710
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 5f168b5
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 15 09:12:34 2013 +0000
+
+    fixed issue 1888794
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit b8ad1f0
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 15 09:10:38 2013 +0000
+
+    added missing vars to uninstall
+
+getlocations.install
+
+commit c54b478
 Author: hutch <hutch@midwales.net>
 Date:   Fri Jan 11 09:07:39 2013 +0000
 
     fixed show_maplinks in getlocations_fields, cleanup
 
+CHANGELOG.txt
 getlocations.css
 getlocations.module
 js/getlocations.js

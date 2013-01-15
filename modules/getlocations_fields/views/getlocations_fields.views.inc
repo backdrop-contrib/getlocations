@@ -546,17 +546,17 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
             $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempobj->$field_name)) {
+            if (isset($tempobj->{$field_name})) {
               if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
                 $lang = $tempobj->language;
-                if (! isset($tempobj->$field_name[$lang])) {
+                if (! isset($tempobj->{$field_name}[$lang])) {
                   $lang = 'und';
                 }
               }
-              $location = $tempobj->$field_name;
+              $location = $tempobj->{$field_name};
               if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
@@ -577,17 +577,17 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
             $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempobj->$field_name)) {
+            if (isset($tempobj->{$field_name})) {
               if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
                 $lang = $tempobj->language;
-                if (! isset($tempobj->$field_name[$lang])) {
+                if (! isset($tempobj->{$field_name}[$lang])) {
                   $lang = 'und';
                 }
               }
-              $location = $tempobj->$field_name;
+              $location = $tempobj->{$field_name};
               if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
@@ -608,17 +608,17 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
             $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempobj->$field_name)) {
+            if (isset($tempobj->{$field_name})) {
               if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
                 $lang = $tempobj->language;
-                if (! isset($tempobj->$field_name[$lang])) {
+                if (! isset($tempobj->{$field_name}[$lang])) {
                   $lang = 'und';
                 }
               }
-              $location = $tempobj->$field_name;
+              $location = $tempobj->{$field_name};
               if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];
@@ -640,17 +640,17 @@ function getlocations_fields_views_proximity_get_reference_location($view, $opti
             $coordinates['longitude'] = (float) $tempobj->location['longitude'];
           }
           else {
-            if (isset($tempobj->$field_name)) {
+            if (isset($tempobj->{$field_name})) {
               if (! isset($tempobj->language)) {
                 $lang = 'und';
               }
               else {
                 $lang = $tempobj->language;
-                if (! isset($tempobj->$field_name[$lang])) {
+                if (! isset($tempobj->{$field_name}[$lang])) {
                   $lang = 'und';
                 }
               }
-              $location = $tempobj->$field_name;
+              $location = $tempobj->{$field_name};
               if (isset($location[$lang][0]['latitude']) && isset($location[$lang][0]['longitude'])) {
                 $coordinates['latitude'] = (float) $location[$lang][0]['latitude'];
                 $coordinates['longitude'] = (float) $location[$lang][0]['longitude'];

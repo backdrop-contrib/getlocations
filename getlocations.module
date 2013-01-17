@@ -1978,27 +1978,25 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
       if ( empty($geofield)) {
         return $locations;
       }
-    }
-    // got one
-    $geo = $obj->$geofield;
-    $geo_keys = array_keys($geo);
-    foreach ($geo_keys AS $lang) {
-      if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
-        $ct = 0;
-        foreach ($geo[$lang] AS $g) {
-          $locations[$ct]['latitude']  = $g['lat'];
-          $locations[$ct]['longitude'] = $g['lon'];
-          $locations[$ct][$key] = $id;
-          if ($key == 'vid') {
-            $locations[$ct]['nid'] = getlocations_get_nid($id);
+      // got one
+      $geo = $obj->$geofield;
+      $geo_keys = array_keys($geo);
+      foreach ($geo_keys AS $lang) {
+        if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
+          $ct = 0;
+          foreach ($geo[$lang] AS $g) {
+            $locations[$ct]['latitude']  = $g['lat'];
+            $locations[$ct]['longitude'] = $g['lon'];
+            $locations[$ct][$key] = $id;
+            if ($key == 'vid') {
+              $locations[$ct]['nid'] = getlocations_get_nid($id);
+            }
+            $locations[$ct]['key'] = $key;
+            $ct++;
           }
-          $locations[$ct]['key'] = $key;
-          $ct++;
         }
       }
     }
-
-
   }
   elseif ($module == 'geolocation') {
     $type = 'geolocation_latlng';

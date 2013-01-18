@@ -1759,10 +1759,10 @@ function getlocations_get_markertypes($type) {
         $terms = taxonomy_get_tree($vid, 0, $depth);
         foreach ($terms AS $term) {
           if (isset($getlocations_term_marker['vid'][$vid]['term'][$term->tid]['map_marker'])) {
-            $markertypes[$content_type] = $getlocations_term_marker['vid'][$vid]['term'][$term->tid]['map_marker'];
+            $markertypes[$term->tid] = $getlocations_term_marker['vid'][$vid]['term'][$term->tid]['map_marker'];
           }
           else {
-            $markertypes[$content_type] = $default_marker;
+            $markertypes[$term->tid] = $default_marker;
           }
         }
       }

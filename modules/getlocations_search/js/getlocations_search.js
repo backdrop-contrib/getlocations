@@ -268,6 +268,9 @@
             smark = gs.search_marker;
             makeSearchcenterMarker(slat, slon, smark, map);
           }
+          if (locationct == 1) {
+            map.setZoom(gs.nodezoom);
+          }
         });
       }
       else {

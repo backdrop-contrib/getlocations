@@ -247,7 +247,8 @@ function getlocations_search_getmap($which = 'page') {
     'usemarkermanager', 'useclustermanager', 'markerclusterer_style',
     'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize',
     'markerclusterer_title', 'markeraction', 'markeractiontype', 'weather_show',
-    'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor', 'show_maplinks');
+    'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor',
+    'show_maplinks', 'minzoom_map', 'maxzoom_map');
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
@@ -538,6 +539,8 @@ function getlocations_search_defaults() {
     'styles'                    => $getlocations_defaults['styles'],
     'latlong'                   => $getlocations_defaults['latlong'],
     'zoom'                      => $getlocations_defaults['zoom'],
+    'minzoom_map'               => $getlocations_defaults['minzoom_map'],
+    'maxzoom_map'               => $getlocations_defaults['maxzoom_map'],
     'controltype'               => $getlocations_defaults['controltype'],
     'pancontrol'                => $getlocations_defaults['pancontrol'],
     'mtc'                       => $getlocations_defaults['mtc'],

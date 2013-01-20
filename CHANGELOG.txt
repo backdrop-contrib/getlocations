@@ -1,9 +1,40 @@
-commit 1033f70
+commit a0d5cd7
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jan 20 16:23:04 2013 +0000
+
+    added minzoom_map/maxzoom_map feature
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit b5e3a4b
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jan 18 23:38:00 2013 +0000
+
+    fixed nodezoom in fields and search
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 10512dc
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jan 17 10:41:35 2013 +0000
+
+    fixed bug in geofield support code
+
+getlocations.module
+
+commit 8da1708
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jan 15 09:13:37 2013 +0000
 
     fixed issue 1888710
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields.views.inc
 
 commit 5f168b5

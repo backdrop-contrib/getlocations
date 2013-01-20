@@ -891,6 +891,8 @@ function getlocations_defaults() {
     'width'                     => '300px',
     'height'                    => '200px',
     'zoom'                      => 3,
+    'minzoom_map'               => -1,
+    'maxzoom_map'               => -1,
     'controltype'               => 'small',
     'pancontrol'                => 1,
     'latlong'                   => '40,0',
@@ -1791,6 +1793,8 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'lng'                     => trim($lng),
       'mylocale'                => $language->language,
       'zoom'                    => $defaults['zoom'],
+      'minzoom_map'             => $defaults['minzoom_map'],
+      'maxzoom_map'             => $defaults['maxzoom_map'],
       'maptype'                 => $defaults['maptype'],
       'controltype'             => $defaults['controltype'],
       'mtc'                     => $defaults['mtc'],
@@ -2169,6 +2173,21 @@ function getlocations_element_map_zoom($title, $default, $description='') {
   return $element;
 }
 
+function getlocations_element_map_zoom_map($title, $default, $description='') {
+
+  $opts = array('-1' => t('Use map type settings')) + drupal_map_assoc(range(0, 20));
+  $element = array(
+    '#type' => 'select',
+    '#title' => $title,
+    '#default_value' => $default,
+    '#options' => $opts,
+  );
+  if (! empty($description)) {
+    $element['#description'] = $description;
+  }
+  return $element;
+}
+
 function getlocations_element_map_zoom_controltype($default) {
 
   $element = array(
@@ -2418,7 +2437,9 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
     'height' => t('Default height'),
     'styles' => t('Default styles'),
     'latlong' => t('Map center'),
-    'zoom' => t('Zoom')
+    'zoom' => t('Zoom'),
+    'minzoom_map' => t('Minimum Zoom'),
+    'maxzoom_map' => t('Maximum Zoom'),
   );
   if (isset($labels['width'])) {
     $label['width'] = $labels['width'];
@@ -2434,6 +2455,12 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
   }
   if (isset($labels['zoom'])) {
     $label['zoom'] = $labels['zoom'];
+  }
+  if (isset($labels['minzoom_map'])) {
+    $label['minzoom_map'] = $labels['minzoom_map'];
+  }
+  if (isset($labels['maxzoom_map'])) {
+    $label['maxzoom_map'] = $labels['maxzoom_map'];
   }
 
   $form = array();
@@ -2476,6 +2503,17 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
     $defaults['zoom'],
     t('The default zoom level of a Google map.')
   );
+  $form['minzoom_map'] = getlocations_element_map_zoom_map(
+    $label['minzoom_map'],
+    $defaults['minzoom_map'],
+    t('The default Minimum zoom level of a Google map.')
+  );
+  $form['maxzoom_map'] = getlocations_element_map_zoom_map(
+    $label['maxzoom_map'],
+    $defaults['maxzoom_map'],
+    t('The default Maximum zoom level of a Google map.')
+  );
+
   return $form;
 }
 

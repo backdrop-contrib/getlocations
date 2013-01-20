@@ -37,6 +37,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['comment_map_marker']    = array('default' => $getlocations_defaults['comment_map_marker']);
     $options['latlong']               = array('default' => $getlocations_defaults['latlong']);
     $options['zoom']                  = array('default' => $getlocations_defaults['zoom']);
+    $options['minzoom_map']           = array('default' => $getlocations_defaults['minzoom_map']);
+    $options['maxzoom_map']           = array('default' => $getlocations_defaults['maxzoom_map']);
     $options['controltype']           = array('default' => $getlocations_defaults['controltype']);
     $options['pancontrol']            = array('default' => $getlocations_defaults['pancontrol']);
     $options['mtc']                   = array('default' => $getlocations_defaults['mtc']);
@@ -148,7 +150,9 @@ class getlocations_plugin_style_map extends views_plugin_style {
       'height' => t('Height'),
       'styles' => t('Styles'),
       'latlong' => t('Map center'),
-      'zoom' => t('Zoom')
+      'zoom' => t('Zoom'),
+      'minzoom_map' => t('Minimum Zoom'),
+      'maxzoom_map' => t('Maximum Zoom'),
     );
 
     $form += getlocations_map_display_basics_form($this->options, $labels);

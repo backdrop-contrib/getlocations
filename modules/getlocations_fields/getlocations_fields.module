@@ -1446,6 +1446,8 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['weather_use']     = 0;
   $getlocations_defaults['weather_show']    = 0;
   $getlocations_defaults['show_maplinks']   = 0;
+  $getlocations_defaults['minzoom_map']     = -1;
+  $getlocations_defaults['maxzoom_map']     = -1;
 
   if ($active) {
     $getlocations_defaults['places'] = 1;
@@ -1538,6 +1540,9 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['weather_cloud_state']   = $settings['weather_cloud_state'];
   $getlocations_defaults['map_backgroundcolor']   = $settings['map_backgroundcolor'];
   $getlocations_defaults['show_maplinks']         = $settings['show_maplinks'];
+  $getlocations_defaults['minzoom_map']           = $settings['minzoom_map'];
+  $getlocations_defaults['maxzoom_map']           = $settings['maxzoom_map'];
+
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2084,6 +2089,8 @@ function getlocations_fields_field_info_defaults() {
         'mapheight'                       => $getlocations_defaults['height'],
         'latlong'                         => $getlocations_defaults['latlong'],
         'zoom'                            => $getlocations_defaults['zoom'],
+        'minzoom_map'                     => $getlocations_defaults['minzoom_map'],
+        'maxzoom_map'                     => $getlocations_defaults['maxzoom_map'],
         'controltype'                     => $getlocations_defaults['controltype'],
         'pancontrol'                      => $getlocations_defaults['pancontrol'],
         'mtc'                             => $getlocations_defaults['mtc'],
@@ -2212,6 +2219,8 @@ function getlocations_fields_field_formatter_info_defaults() {
     'country_full'          => $getlocations_fields_defaults['country_full'],
     'per_item_marker'       => $getlocations_fields_defaults['per_item_marker'],
     'nodezoom'              => $getlocations_fields_defaults['nodezoom'],
+    'minzoom_map'           => $getlocations_defaults['minzoom_map'],
+    'maxzoom_map'           => $getlocations_defaults['maxzoom_map'],
   );
   return $defaults;
 
@@ -2643,6 +2652,16 @@ function getlocations_fields_display_settings_form($defaults) {
     t('Zoom'),
     $defaults['nodezoom'],
     t('The zoom level for a display map.')
+  );
+  $form['minzoom_map'] = getlocations_element_map_zoom_map(
+    t('Minimum Zoom'),
+    $defaults['minzoom_map'],
+    t('The Minimum zoom level for a display map.')
+  );
+  $form['maxzoom_map'] = getlocations_element_map_zoom_map(
+    t('Maximum Zoom'),
+    $defaults['maxzoom_map'],
+    t('The Maximum zoom level for a display map.')
   );
 
   return $form;

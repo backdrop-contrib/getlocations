@@ -30,6 +30,8 @@ var getlocations_settings = {};
           maxzoom: 16,
           minzoom: 7,
           nodezoom: 12,
+          minzoom_map: -1,
+          maxzoom_map: -1,
           mgr: '',
           cmgr: '',
           cmgr_gridSize: null,
@@ -94,6 +96,20 @@ var getlocations_settings = {};
         global_settings.minzoom = parseInt(settings.minzoom);
         global_settings.maxzoom = parseInt(settings.maxzoom);
         global_settings.nodezoom = parseInt(settings.nodezoom);
+
+        if (settings.minzoom_map == -1) {
+          global_settings.minzoom_map = null;
+        }
+        else {
+          global_settings.minzoom_map = parseInt(settings.minzoom_map);
+        }
+        if (settings.maxzoom_map == -1) {
+          global_settings.maxzoom_map = null;
+        }
+        else {
+          global_settings.maxzoom_map = parseInt(settings.maxzoom_map);
+        }
+
         global_settings.datanum = settings.datanum;
         global_settings.markermanagertype = settings.markermanagertype;
         global_settings.pansetting = settings.pansetting;
@@ -222,6 +238,8 @@ var getlocations_settings = {};
 
         var mapOpts = {
           zoom: selzoom,
+          minZoom: global_settings.minzoom_map,
+          maxZoom: global_settings.maxzoom_map,
           center: new google.maps.LatLng(lat, lng),
           mapTypeControl: (mtc ? true : false),
           mapTypeControlOptions: {style: mtc,  mapTypeIds: maptypes},

@@ -1991,6 +1991,8 @@ function getlocations_fields_defaults() {
     'display_mapwidth'                => $getlocations_defaults['width'],
     'display_mapheight'               => $getlocations_defaults['height'],
     'nodezoom'                        => $getlocations_defaults['nodezoom'],
+    'minzoom_map'                     => $getlocations_defaults['minzoom_map'],
+    'maxzoom_map'                     => $getlocations_defaults['maxzoom_map'],
     'map_backgroundcolor'             => $getlocations_defaults['map_backgroundcolor'],
     'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
     'display_showmap'                 => 1,

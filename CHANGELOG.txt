@@ -1,9 +1,32 @@
-commit a0d5cd7
+commit 6a5e4a4
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jan 31 00:00:03 2013 +0000
+
+    added fullscreen feature
+
+getlocations.module
+js/getlocations.js
+js/images/fs-map-full.png
+js/images/fs-map-normal.png
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit 88c178d
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jan 29 18:00:51 2013 +0000
+
+    fixed minzoom/maxzoom notice
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 450cc1e
 Author: hutch <hutch@midwales.net>
 Date:   Sun Jan 20 16:23:04 2013 +0000
 
     added minzoom_map/maxzoom_map feature
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 modules/getlocations_fields/getlocations_fields.module

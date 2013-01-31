@@ -83,6 +83,8 @@ var getlocations_settings = {};
         var draggable = settings.draggable;
         var map_styles = settings.styles;
         var map_backgroundcolor = settings.map_backgroundcolor;
+        var fullscreen = (settings.fullscreen ? true : false);
+        var js_path = settings.js_path;
 
         global_settings.preload_data = settings.preload_data;
         if (settings.preload_data) {
@@ -481,11 +483,64 @@ var getlocations_settings = {};
           }
         }
 
+        // fullscreen
+        var fsdiv = '';
+        function FullScreenControl(fsd) {
+          fsd.style.margin = "5px";
+          fsd.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.4)";
+          fsdiv = document.createElement("DIV");
+          fsdiv.style.height = "22px";
+          fsdiv.style.backgroundColor = "white";
+          fsdiv.style.borderColor = "#717B87";
+          fsdiv.style.borderStyle = "solid";
+          fsdiv.style.borderWidth = "1px";
+          fsdiv.style.cursor = "pointer";
+          fsdiv.style.textAlign = "center";
+          fsdiv.title = Drupal.t('Full screen');
+          fsdiv.innerHTML = '<img id="btnFullScreen" src="' + js_path + '/images/fs-map-full.png"/>';
+          fsd.appendChild(fsdiv);
+          google.maps.event.addDomListener(fsdiv, "click", function() {
+            toggleFullScreen();
+          });
+        }
+        function toggleFullScreen() {
+          var cnt = getlocations_map[key].getCenter();
+          $("#getlocations_map_wrapper_" + key).toggleClass("fullscreen");
+          $("html,body").toggleClass("fullscreen-body");
+          $(document).scrollTop(0);
+          google.maps.event.trigger(getlocations_map[key], "resize");
+          getlocations_map[key].setCenter(cnt);
+          setTimeout( function() {
+            if($("#getlocations_map_wrapper_" + key).hasClass("fullscreen")) {
+              $("#btnFullScreen").attr("src", js_path + '/images/fs-map-normal.png');
+              fsdiv.title = Drupal.t('Normal screen');
+            }
+            else {
+              $("#btnFullScreen").attr("src", js_path + '/images/fs-map-full.png');
+              fsdiv.title = Drupal.t('Full screen');
+            }
+          },200);
+        }
+        $(document).keydown( function(kc) {
+          var cd = (kc.keyCode ? kc.keyCode : kc.which);
+          if(cd == 27){
+            if($("body").hasClass("fullscreen-body")){
+              toggleFullScreen();
+            }
+          }
+        });
+        if (fullscreen) {
+          var fsdoc = document.createElement("DIV");
+          var fs = new FullScreenControl(fsdoc);
+          fsdoc.index = 0;
+          getlocations_map[key].controls[google.maps.ControlPosition.TOP_RIGHT].setAt(0, fsdoc);
+        }
+
       }
     }); // end each setting loop
     $("body").addClass("getlocations-maps-processed");
 
-    function doAllMarkers (map, gs, mkey) {
+    function doAllMarkers(map, gs, mkey) {
 
       var arr = gs.latlons;
       for (var i = 0; i < arr.length; i++) {

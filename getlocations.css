@@ -52,3 +52,18 @@
 }
 .search-distance {
 }
+
+div.fullscreen {
+  width:100% !important;
+  height:100% !important;
+  /*position:absolute !important;*/
+  position:fixed !important;
+  top:0;
+  left:0;
+  z-index:500;
+  zoom: 1.0;
+}
+.fullscreen-body{
+  overflow: hidden !important;
+}
+

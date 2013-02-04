@@ -128,6 +128,22 @@ function getlocations_fields_views_data() {
     ),
   );
 
+  // additional
+  $data['getlocations_fields']['additional'] = array(
+    'title' => t('Additional'),
+    'help' => t('The additional address of the selected location.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
   // city
   $data['getlocations_fields']['city'] = array(
     'title' => t('City'),

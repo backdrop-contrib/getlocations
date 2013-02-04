@@ -1,9 +1,34 @@
-commit 6a5e4a4
+commit 53332b6
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 4 19:03:41 2013 +0000
+
+    added 'additional' field to views
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit e559a15
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jan 31 10:19:32 2013 +0000
+
+    improved fullscreen
+
+js/getlocations.js
+
+commit f185265
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jan 31 00:02:58 2013 +0000
+
+    added css for fullscreen
+
+getlocations.css
+
+commit 9f33cde
 Author: hutch <hutch@midwales.net>
 Date:   Thu Jan 31 00:00:03 2013 +0000
 
     added fullscreen feature
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 js/images/fs-map-full.png

@@ -3872,7 +3872,7 @@ function theme_getlocations_settings_form($variables) {
   $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
   $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">Select which maps you want to be available.</div>';
+  $prefix .= '<div class="fieldset-description">' . t('Select which maps you want to be available.') . '</div>';
   $form['getlocations_default']['baselayers']['Map']['#prefix'] = $prefix;
   $form['getlocations_default']['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
   $form['getlocations_default']['returnlink_page_link']['#prefix'] = '<div id="wrap-page-link">';

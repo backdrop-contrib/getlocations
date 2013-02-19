@@ -420,12 +420,6 @@ function theme_getlocations_search_settings_form($variables) {
       $form['getlocations_search_defaults']['search_marker']['#field_suffix'] = '&nbsp;' . $link;
     }
   }
-  $prefix = '<fieldset class="form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t('Select which maps you want to be available.') . '</div>';
-  $form['getlocations_search_defaults']['baselayers']['Map']['#prefix'] = $prefix;
-  $form['getlocations_search_defaults']['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
 
   $output .= drupal_render_children($form);
   return $output;

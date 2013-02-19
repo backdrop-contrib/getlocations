@@ -3089,13 +3089,6 @@ function theme_getlocations_fields_field_settings_form($variables) {
   unset($form['input_longitude_weight']);
 
   $prefix = '<fieldset class="form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t( 'Select which maps you want to be available.') . '</div>';
-  $form['baselayers']['Map']['#prefix'] = $prefix;
-  $form['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
-
-  $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Input form settings') . '</span></legend>';
   $prefix .= '<div class="fieldset-wrapper">';
   $prefix .= '<div class="fieldset-description">' . t('Configure the input form.') . '</div>';
@@ -3134,24 +3127,12 @@ function theme_getlocations_fields_field_settings_form($variables) {
  *
  */
 function theme_getlocations_fields_field_formatter_settings_form($variables) {
-
   $form = $variables['form'];
-
   $output = '';
-  $prefix = '<fieldset class="form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">Select which maps you want to be available.</div>';
-  $form['baselayers']['Map']['#prefix'] = $prefix;
-  $form['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
-
   $form['display_showmap']['#prefix'] = '<fieldset class="getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Address display settings') . '</span></legend><div class="fieldset-wrapper">';
   $form['country_full']['#suffix'] = '</div></fieldset>';
-
   $output .= drupal_render_children($form);
-
   return $output;
-
 }
 
 /**

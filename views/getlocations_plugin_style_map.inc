@@ -158,12 +158,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     $form += getlocations_map_display_basics_form($this->options, $labels);
     $form += getlocations_map_display_options_form($this->options, FALSE);
-    $prefix = '<fieldset class="form-wrapper">';
-    $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
-    $prefix .= '<div class="fieldset-wrapper">';
-    $prefix .= '<div class="fieldset-description">' . t('Select which maps you want to be available.') . '</div>';
-    $form['baselayers']['Map']['#prefix'] = $prefix;
-    $form['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
 
     // markers
     $markers = getlocations_get_marker_titles();

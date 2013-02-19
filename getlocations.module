@@ -2500,6 +2500,13 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
 
   $form['maptype'] = getlocations_element_map_maptype($defaults['maptype'], $defaults['baselayers']);
 
+  $form['baselayers'] =  array(
+    '#type' => 'fieldset',
+    '#title' => t('Enable map types'),
+    '#description' => t('Select which maps you want to be available.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
   foreach ($defaults['baselayers'] AS $key => $value) {
     $layer = getlocations_element_map_baselayers($key, $value);
     if ($layer) {
@@ -3869,12 +3876,6 @@ function theme_getlocations_settings_form($variables) {
   $form = $variables['form'];
 
   $output = '';
-  $prefix = '<fieldset class="form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Enable map types') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t('Select which maps you want to be available.') . '</div>';
-  $form['getlocations_default']['baselayers']['Map']['#prefix'] = $prefix;
-  $form['getlocations_default']['baselayers']['Physical']['#suffix'] = '</div></fieldset>';
   $form['getlocations_default']['returnlink_page_link']['#prefix'] = '<div id="wrap-page-link">';
   $form['getlocations_default']['returnlink_page_link']['#suffix'] = '</div>';
   if (isset($form['getlocations_default']['returnlink_user_link'])) {

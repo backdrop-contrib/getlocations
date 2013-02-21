@@ -1,9 +1,47 @@
-commit 53332b6
+commit 5a0278f
+Author: hutch <hutch@midwales.net>
+Date:   Thu Feb 21 12:19:02 2013 +0000
+
+    fixed  bug #1923378
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 2f0926f
+Author: hutch <hutch@midwales.net>
+Date:   Tue Feb 19 10:03:46 2013 +0000
+
+    better fieldset around baselayers
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit 7344da5
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 18 21:01:22 2013 +0000
+
+    added fieldset around baselayers
+
+getlocations.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit e8d5895
+Author: hutch <hutch@midwales.net>
+Date:   Mon Feb 18 12:28:46 2013 +0000
+
+    addressfield convert themed
+
+getlocations.module
+
+commit 53c1ecd
 Author: hutch <hutch@midwales.net>
 Date:   Mon Feb 4 19:03:41 2013 +0000
 
     added 'additional' field to views
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields.views.inc
 
 commit e559a15

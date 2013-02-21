@@ -200,7 +200,7 @@
             }
           }
           else {
-            var prm = {'!a': input_adrstmp, '!b': getGeoErrCode(status) };
+            var prm = {'!a': input_adrstmp, '!b': Drupal.getlocations.getGeoErrCode(status) };
             var msg = Drupal.t('Geocode for (!a) was not successful for the following reason: !b', prm);
             alert(msg);
           }

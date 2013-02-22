@@ -1626,22 +1626,24 @@ function getlocations_get_fieldname2($bundle, $entity_type='node') {
 }
 
 // is an entity_type location enabled?
-function getlocations_check_entity_type($entity_type) {
-
-  $module = getlocations_get_current_supported_module();
-  if ($module) {
+function getlocations_check_entity_type($entity_type = '', $bundle = '') {
+  if ($entity_type == 'term') {
+    $entity_type = 'taxonomy_term';
+  }
+  if ($module = getlocations_get_current_supported_module()) {
     $query = db_select('field_config', 'f');
     $query->fields('f', array('id'));
     $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-    $query->condition('f.module', $module)
-      ->condition('i.entity_type', $entity_type)
-      ->condition('f.active', 1);
-    $rows = $query->execute();
-    $ct = 0;
-    foreach ($rows AS $row) {
-      $ct++;
+    $query->condition('f.module', $module);
+    if ($entity_type) {
+       $query->condition('i.entity_type', $entity_type);
     }
-    if ($ct) {
+    if ($bundle) {
+      $query->condition('i.bundle', $bundle);
+    }
+    $query->condition('f.active', 1);
+    $number_of_rows = $query->countQuery()->execute()->fetchField();
+    if ($number_of_rows) {
       return TRUE;
     }
   }
@@ -1682,20 +1684,7 @@ function getlocations_get_machine_vocabularies() {
 
 function getlocations_check_vocabulary($machine_name) {
   if (module_exists('taxonomy')) {
-    $module = getlocations_get_current_supported_module();
-    if ($module) {
-      $query = db_select('field_config', 'f');
-      $query->fields('f', array('id'));
-      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-      $query->condition('i.bundle', $machine_name)
-        ->condition('f.module', $module )
-        ->condition('i.entity_type', 'taxonomy_term')
-        ->condition('f.active', 1);
-      $number_of_rows = $query->countQuery()->execute()->fetchField();
-      if ($number_of_rows) {
-        return TRUE;
-      }
-    }
+    return getlocations_check_entity_type('taxonomy_term', $machine_name);
   }
   return FALSE;
 }

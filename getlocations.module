@@ -1654,7 +1654,7 @@ function getlocations_get_vocabularies() {
     $options = array();
     if (count($vocabularies)) {
       foreach ($vocabularies as $vid => $vocabulary) {
-        if (getlocations_check_vocabulary($vocabulary->name)) {
+        if (getlocations_check_vocabulary($vocabulary->machine_name)) {
           $options[$vid] = $vocabulary->name;
         }
       }
@@ -1670,7 +1670,7 @@ function getlocations_get_machine_vocabularies() {
     $options = array();
     if (count($vocabularies)) {
       foreach ($vocabularies as $vid => $vocabulary) {
-        if (getlocations_check_vocabulary($vocabulary->name)) {
+        if (getlocations_check_vocabulary($vocabulary->machine_name)) {
           $options[$vid] = $vocabulary->machine_name;
         }
       }
@@ -1680,33 +1680,20 @@ function getlocations_get_machine_vocabularies() {
   return FALSE;
 }
 
-
-function getlocations_check_vocabulary($vocab_name) {
+function getlocations_check_vocabulary($machine_name) {
   if (module_exists('taxonomy')) {
     $module = getlocations_get_current_supported_module();
     if ($module) {
-      // first we need to get the machine name of the vocab.
-      $query = db_select('taxonomy_vocabulary', 'v');
-      $query->fields('v', array('machine_name'));
-      $query->condition('v.name', $vocab_name);
-      $row = $query->execute()->fetchObject();
-      if ($row) {
-        $machine_name = $row->machine_name;
-        $query = db_select('field_config', 'f');
-        $query->fields('f', array('id'));
-        $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-        $query->condition('i.bundle', $machine_name)
-          ->condition('f.module', $module )
-          ->condition('i.entity_type', 'taxonomy_term')
-          ->condition('f.active', 1);
-        $rows = $query->execute();
-        $ct = 0;
-        foreach ($rows AS $row) {
-          $ct++;
-        }
-        if ($ct) {
-          return TRUE;
-        }
+      $query = db_select('field_config', 'f');
+      $query->fields('f', array('id'));
+      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+      $query->condition('i.bundle', $machine_name)
+        ->condition('f.module', $module )
+        ->condition('i.entity_type', 'taxonomy_term')
+        ->condition('f.active', 1);
+      $number_of_rows = $query->countQuery()->execute()->fetchField();
+      if ($number_of_rows) {
+        return TRUE;
       }
     }
   }

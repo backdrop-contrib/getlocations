@@ -248,7 +248,10 @@ function getlocations_search_getmap($which = 'page') {
     'markerclusterer_zoom', 'markerclusterer_size', 'markerclusterer_minsize',
     'markerclusterer_title', 'markeraction', 'markeractiontype', 'weather_show',
     'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor',
-    'show_maplinks', 'minzoom_map', 'maxzoom_map', 'fullscreen');
+    'show_maplinks', 'minzoom_map', 'maxzoom_map', 'fullscreen',
+    'polygons_enable', 'polygons_strokecolor', 'polygons_strokeopacity', 'polygons_strokeweight',
+    'polygons_fillcolor', 'polygons_fillopacity', 'polygons_coords'
+  );
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
   }
@@ -593,6 +596,13 @@ function getlocations_search_defaults() {
     'map_backgroundcolor'       => $getlocations_defaults['map_backgroundcolor'],
     'show_maplinks'             => $getlocations_defaults['show_maplinks'],
     'fullscreen'                => $getlocations_defaults['fullscreen'],
+    'polygons_enable'           => $getlocations_defaults['polygons_enable'],
+    'polygons_strokecolor'      => $getlocations_defaults['polygons_strokecolor'],
+    'polygons_strokeopacity'    => $getlocations_defaults['polygons_strokeopacity'],
+    'polygons_strokeweight'     => $getlocations_defaults['polygons_strokeweight'],
+    'polygons_fillcolor'        => $getlocations_defaults['polygons_fillcolor'],
+    'polygons_fillopacity'      => $getlocations_defaults['polygons_fillopacity'],
+    'polygons_coords'           => $getlocations_defaults['polygons_coords'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);

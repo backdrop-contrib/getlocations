@@ -784,6 +784,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
  *   A string containing a short summary of the formatter settings.
  */
 function getlocations_fields_field_formatter_settings_summary($field, $instance, $view_mode) {
+  drupal_add_js(GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_formatter.js');
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
   $entity_type = $instance['entity_type'];
@@ -924,6 +925,12 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       $summary[] = t('Marker action: @a on @b', array('@a' => $msg, '@b' => $msg2));
     }
     $summary[] = t('Zoom level: @z', array('@z' => $settings['nodezoom']));
+    if ($settings['polygons_enable']) {
+      $summary[] = t('Enable polygons: Yes');
+      if ($settings['polygons_clickable']) {
+        $summary[] = t('Polygons clickable: Yes');
+      }
+    }
   }
   else {
     $summary[] = t('Show map: No');
@@ -1452,6 +1459,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['minzoom_map']     = -1;
   $getlocations_defaults['maxzoom_map']     = -1;
   $getlocations_defaults['fullscreen']      = 0;
+  $getlocations_defaults['polygons_enable'] = 0;
 
   if ($active) {
     $getlocations_defaults['places'] = 1;
@@ -1547,7 +1555,15 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['minzoom_map']           = $settings['minzoom_map'];
   $getlocations_defaults['maxzoom_map']           = $settings['maxzoom_map'];
   $getlocations_defaults['fullscreen']            = $settings['fullscreen'];
-
+  $getlocations_defaults['polygons_enable']       = $settings['polygons_enable'];
+  $getlocations_defaults['polygons_strokecolor']  = $settings['polygons_strokecolor'];
+  $getlocations_defaults['polygons_strokeopacity'] = $settings['polygons_strokeopacity'];
+  $getlocations_defaults['polygons_strokeweight'] = $settings['polygons_strokeweight'];
+  $getlocations_defaults['polygons_fillcolor']    = $settings['polygons_fillcolor'];
+  $getlocations_defaults['polygons_fillopacity']  = $settings['polygons_fillopacity'];
+  $getlocations_defaults['polygons_coords']       = $settings['polygons_coords'];
+  $getlocations_defaults['polygons_clickable']    = $settings['polygons_clickable'];
+  $getlocations_defaults['polygons_message']      = $settings['polygons_message'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2072,6 +2088,15 @@ function getlocations_fields_defaults() {
       'longitude'   => t('Longitude'),
       'marker'      => t('Marker'),
     ),
+    'polygons_enable'       => $getlocations_defaults['polygons_enable'],
+    'polygons_strokecolor'  => $getlocations_defaults['polygons_strokecolor'],
+    'polygons_strokeopacity' => $getlocations_defaults['polygons_strokeopacity'],
+    'polygons_strokeweight' => $getlocations_defaults['polygons_strokeweight'],
+    'polygons_fillcolor'    => $getlocations_defaults['polygons_fillcolor'],
+    'polygons_fillopacity'  => $getlocations_defaults['polygons_fillopacity'],
+    'polygons_coords'       => $getlocations_defaults['polygons_coords'],
+    'polygons_clickable'    => $getlocations_defaults['polygons_clickable'],
+    'polygons_message'      => $getlocations_defaults['polygons_message'],
   );
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
@@ -2161,6 +2186,15 @@ function getlocations_fields_field_info_defaults() {
         'use_smart_ip_latlon'             => $getlocations_fields_defaults['use_smart_ip_latlon'],
         'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
         'fullscreen'                      => $getlocations_defaults['fullscreen'],
+        'polygons_enable'       => $getlocations_fields_defaults['polygons_enable'],
+        'polygons_strokecolor'  => $getlocations_fields_defaults['polygons_strokecolor'],
+        'polygons_strokeopacity' => $getlocations_fields_defaults['polygons_strokeopacity'],
+        'polygons_strokeweight' => $getlocations_fields_defaults['polygons_strokeweight'],
+        'polygons_fillcolor'    => $getlocations_fields_defaults['polygons_fillcolor'],
+        'polygons_fillopacity'  => $getlocations_fields_defaults['polygons_fillopacity'],
+        'polygons_coords'       => $getlocations_fields_defaults['polygons_coords'],
+        'polygons_clickable'    => $getlocations_fields_defaults['polygons_clickable'],
+        'polygons_message'      => $getlocations_fields_defaults['polygons_message'],
       ),
     ),
   );
@@ -2231,6 +2265,15 @@ function getlocations_fields_field_formatter_info_defaults() {
     'minzoom_map'           => $getlocations_defaults['minzoom_map'],
     'maxzoom_map'           => $getlocations_defaults['maxzoom_map'],
     'fullscreen'            => $getlocations_defaults['fullscreen'],
+    'polygons_enable'       => $getlocations_defaults['polygons_enable'],
+    'polygons_strokecolor'  => $getlocations_defaults['polygons_strokecolor'],
+    'polygons_strokeopacity' => $getlocations_defaults['polygons_strokeopacity'],
+    'polygons_strokeweight' => $getlocations_defaults['polygons_strokeweight'],
+    'polygons_fillcolor'    => $getlocations_defaults['polygons_fillcolor'],
+    'polygons_fillopacity'  => $getlocations_defaults['polygons_fillopacity'],
+    'polygons_coords'       => $getlocations_defaults['polygons_coords'],
+    'polygons_clickable'    => $getlocations_defaults['polygons_clickable'],
+    'polygons_message'      => $getlocations_defaults['polygons_message'],
   );
   return $defaults;
 

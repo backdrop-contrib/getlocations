@@ -181,6 +181,21 @@
         });
       }
 
+      if ($("#edit-getlocations-search-defaults-polygons-enable").attr('checked')) {
+        $("#wrap-getlocations-polygons").show();
+      }
+      else {
+        $("#wrap-getlocations-polygons").hide();
+      }
+      $("#edit-getlocations-search-defaults-polygons-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polygons").show();
+        }
+        else {
+          $("#wrap-getlocations-polygons").hide();
+        }
+      });
+
       // search marker
       if ($("#edit-getlocations-search-defaults-do-search-marker").is('input')) {
         if ($("#edit-getlocations-search-defaults-do-search-marker").attr('checked')) {

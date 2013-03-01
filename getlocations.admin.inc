@@ -522,6 +522,13 @@ function getlocations_settings_form() {
     128,
     t('Where the markerclusterer javascript file is located.')
   );
+  $form['getlocations_paths']['getlocations_polygons_path'] = getlocations_element_path(
+    t('Path to getlocations Polygons javascript file'),
+    $getlocations_paths['getlocations_polygons_path'],
+    60,
+    128,
+    t('Where the getlocations polygons javascript file is located.')
+  );
   $form['getlocations_paths']['getlocations_path'] = getlocations_element_path(
     t('Path to getlocations javascript file'),
     $getlocations_paths['getlocations_path'],

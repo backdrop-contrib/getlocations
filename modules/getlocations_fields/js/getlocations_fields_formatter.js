@@ -111,6 +111,23 @@
         });
       }
 
+      if ($("#edit-fields-field-location-settings-edit-form-settings-polygons-enable, #edit-style-options-polygons-enable").attr('checked')) {
+        $("#wrap-getlocations-polygons").show();
+      }
+      else {
+        $("#wrap-getlocations-polygons").hide();
+      }
+      $("#edit-fields-field-location-settings-edit-form-settings-polygons-enable, #edit-style-options-polygons-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polygons").show();
+        }
+        else {
+          $("#wrap-getlocations-polygons").hide();
+        }
+      });
+
+
+
     }
   };
 })(jQuery);

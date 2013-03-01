@@ -319,9 +319,20 @@
 
       }
 
-
-
-
+      if ($("#edit-getlocations-default-polygons-enable").attr('checked')) {
+        $("#wrap-getlocations-polygons").show();
+      }
+      else {
+        $("#wrap-getlocations-polygons").hide();
+      }
+      $("#edit-getlocations-default-polygons-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polygons").show();
+        }
+        else {
+          $("#wrap-getlocations-polygons").hide();
+        }
+      });
 
     }
   };

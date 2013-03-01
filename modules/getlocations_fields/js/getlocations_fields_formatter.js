@@ -126,6 +126,20 @@
         }
       });
 
+      if ($("#edit-fields-field-location-settings-edit-form-settings-rectangles-enable, #edit-style-options-rectangles-enable").attr('checked')) {
+        $("#wrap-getlocations-rectangles").show();
+      }
+      else {
+        $("#wrap-getlocations-rectangles").hide();
+      }
+      $("#edit-fields-field-location-settings-edit-form-settings-rectangles-enable, #edit-style-options-rectangles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-rectangles").show();
+        }
+        else {
+          $("#wrap-getlocations-rectangles").hide();
+        }
+      });
 
 
     }

@@ -333,6 +333,20 @@
           $("#wrap-getlocations-polygons").hide();
         }
       });
+      if ($("#edit-getlocations-default-rectangles-enable").attr('checked')) {
+        $("#wrap-getlocations-rectangles").show();
+      }
+      else {
+        $("#wrap-getlocations-rectangles").hide();
+      }
+      $("#edit-getlocations-default-rectangles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-rectangles").show();
+        }
+        else {
+          $("#wrap-getlocations-rectangles").hide();
+        }
+      });
 
     }
   };

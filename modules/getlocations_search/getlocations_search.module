@@ -250,7 +250,9 @@ function getlocations_search_getmap($which = 'page') {
     'weather_state', 'weather_cloud', 'weather_cloud_state', 'map_backgroundcolor',
     'show_maplinks', 'minzoom_map', 'maxzoom_map', 'fullscreen',
     'polygons_enable', 'polygons_strokecolor', 'polygons_strokeopacity', 'polygons_strokeweight',
-    'polygons_fillcolor', 'polygons_fillopacity', 'polygons_coords'
+    'polygons_fillcolor', 'polygons_fillopacity', 'polygons_coords',
+    'rectangles_enable', 'rectangles_strokecolor', 'rectangles_strokeopacity', 'rectangles_strokeweight',
+    'rectangles_fillcolor', 'rectangles_fillopacity', 'rectangles_coords'
   );
   foreach ($keys AS $key) {
     $getlocations_defaults[$key] = $getlocations_search_defaults[$key];
@@ -603,6 +605,13 @@ function getlocations_search_defaults() {
     'polygons_fillcolor'        => $getlocations_defaults['polygons_fillcolor'],
     'polygons_fillopacity'      => $getlocations_defaults['polygons_fillopacity'],
     'polygons_coords'           => $getlocations_defaults['polygons_coords'],
+    'rectangles_enable'         => $getlocations_defaults['rectangles_enable'],
+    'rectangles_strokecolor'    => $getlocations_defaults['rectangles_strokecolor'],
+    'rectangles_strokeopacity'  => $getlocations_defaults['rectangles_strokeopacity'],
+    'rectangles_strokeweight'   => $getlocations_defaults['rectangles_strokeweight'],
+    'rectangles_fillcolor'      => $getlocations_defaults['rectangles_fillcolor'],
+    'rectangles_fillopacity'    => $getlocations_defaults['rectangles_fillopacity'],
+    'rectangles_coords'         => $getlocations_defaults['rectangles_coords'],
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);

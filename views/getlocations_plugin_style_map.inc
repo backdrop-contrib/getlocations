@@ -94,6 +94,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['polygons_fillcolor']    = array('default' => $getlocations_defaults['polygons_fillcolor']);
     $options['polygons_fillopacity']  = array('default' => $getlocations_defaults['polygons_fillopacity']);
     $options['polygons_coords']       = array('default' => $getlocations_defaults['polygons_coords']);
+    $options['rectangles_enable']       = array('default' => $getlocations_defaults['rectangles_enable']);
+    $options['rectangles_strokecolor']  = array('default' => $getlocations_defaults['rectangles_strokecolor']);
+    $options['rectangles_strokeopacity'] = array('default' => $getlocations_defaults['rectangles_strokeopacity']);
+    $options['rectangles_strokeweight'] = array('default' => $getlocations_defaults['rectangles_strokeweight']);
+    $options['rectangles_fillcolor']    = array('default' => $getlocations_defaults['rectangles_fillcolor']);
+    $options['rectangles_fillopacity']  = array('default' => $getlocations_defaults['rectangles_fillopacity']);
+    $options['rectangles_coords']       = array('default' => $getlocations_defaults['rectangles_coords']);
 
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));

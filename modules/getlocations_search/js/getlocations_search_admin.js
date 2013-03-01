@@ -196,6 +196,23 @@
         }
       });
 
+      if ($("#edit-getlocations-search-defaults-rectangles-enable").attr('checked')) {
+        $("#wrap-getlocations-rectangles").show();
+      }
+      else {
+        $("#wrap-getlocations-rectangles").hide();
+      }
+      $("#edit-getlocations-search-defaults-rectangles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-rectangles").show();
+        }
+        else {
+          $("#wrap-getlocations-rectangles").hide();
+        }
+      });
+
+
+
       // search marker
       if ($("#edit-getlocations-search-defaults-do-search-marker").is('input')) {
         if ($("#edit-getlocations-search-defaults-do-search-marker").attr('checked')) {

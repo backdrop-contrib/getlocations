@@ -931,6 +931,13 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
         $summary[] = t('Polygons clickable: Yes');
       }
     }
+    if ($settings['rectangles_enable']) {
+      $summary[] = t('Enable rectangles: Yes');
+      if ($settings['rectangles_clickable']) {
+        $summary[] = t('Rectangles clickable: Yes');
+      }
+    }
+
   }
   else {
     $summary[] = t('Show map: No');
@@ -1460,6 +1467,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['maxzoom_map']     = -1;
   $getlocations_defaults['fullscreen']      = 0;
   $getlocations_defaults['polygons_enable'] = 0;
+  $getlocations_defaults['rectangles_enable'] = 0;
 
   if ($active) {
     $getlocations_defaults['places'] = 1;
@@ -1564,6 +1572,16 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['polygons_coords']       = $settings['polygons_coords'];
   $getlocations_defaults['polygons_clickable']    = $settings['polygons_clickable'];
   $getlocations_defaults['polygons_message']      = $settings['polygons_message'];
+
+  $getlocations_defaults['rectangles_enable']       = $settings['rectangles_enable'];
+  $getlocations_defaults['rectangles_strokecolor']  = $settings['rectangles_strokecolor'];
+  $getlocations_defaults['rectangles_strokeopacity'] = $settings['rectangles_strokeopacity'];
+  $getlocations_defaults['rectangles_strokeweight'] = $settings['rectangles_strokeweight'];
+  $getlocations_defaults['rectangles_fillcolor']    = $settings['rectangles_fillcolor'];
+  $getlocations_defaults['rectangles_fillopacity']  = $settings['rectangles_fillopacity'];
+  $getlocations_defaults['rectangles_coords']       = $settings['rectangles_coords'];
+  $getlocations_defaults['rectangles_clickable']    = $settings['rectangles_clickable'];
+  $getlocations_defaults['rectangles_message']      = $settings['rectangles_message'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2097,6 +2115,17 @@ function getlocations_fields_defaults() {
     'polygons_coords'       => $getlocations_defaults['polygons_coords'],
     'polygons_clickable'    => $getlocations_defaults['polygons_clickable'],
     'polygons_message'      => $getlocations_defaults['polygons_message'],
+    'rectangles_enable'       => $getlocations_defaults['rectangles_enable'],
+    'rectangles_strokecolor'  => $getlocations_defaults['rectangles_strokecolor'],
+    'rectangles_strokeopacity' => $getlocations_defaults['rectangles_strokeopacity'],
+    'rectangles_strokeweight' => $getlocations_defaults['rectangles_strokeweight'],
+    'rectangles_fillcolor'    => $getlocations_defaults['rectangles_fillcolor'],
+    'rectangles_fillopacity'  => $getlocations_defaults['rectangles_fillopacity'],
+    'rectangles_coords'       => $getlocations_defaults['rectangles_coords'],
+    'rectangles_clickable'    => $getlocations_defaults['rectangles_clickable'],
+    'rectangles_message'      => $getlocations_defaults['rectangles_message'],
+
+
   );
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
@@ -2195,6 +2224,15 @@ function getlocations_fields_field_info_defaults() {
         'polygons_coords'       => $getlocations_fields_defaults['polygons_coords'],
         'polygons_clickable'    => $getlocations_fields_defaults['polygons_clickable'],
         'polygons_message'      => $getlocations_fields_defaults['polygons_message'],
+        'rectangles_enable'       => $getlocations_fields_defaults['rectangles_enable'],
+        'rectangles_strokecolor'  => $getlocations_fields_defaults['rectangles_strokecolor'],
+        'rectangles_strokeopacity' => $getlocations_fields_defaults['rectangles_strokeopacity'],
+        'rectangles_strokeweight' => $getlocations_fields_defaults['rectangles_strokeweight'],
+        'rectangles_fillcolor'    => $getlocations_fields_defaults['rectangles_fillcolor'],
+        'rectangles_fillopacity'  => $getlocations_fields_defaults['rectangles_fillopacity'],
+        'rectangles_coords'       => $getlocations_fields_defaults['rectangles_coords'],
+        'rectangles_clickable'    => $getlocations_fields_defaults['rectangles_clickable'],
+        'rectangles_message'      => $getlocations_fields_defaults['rectangles_message'],
       ),
     ),
   );
@@ -2274,6 +2312,15 @@ function getlocations_fields_field_formatter_info_defaults() {
     'polygons_coords'       => $getlocations_defaults['polygons_coords'],
     'polygons_clickable'    => $getlocations_defaults['polygons_clickable'],
     'polygons_message'      => $getlocations_defaults['polygons_message'],
+    'rectangles_enable'       => $getlocations_defaults['rectangles_enable'],
+    'rectangles_strokecolor'  => $getlocations_defaults['rectangles_strokecolor'],
+    'rectangles_strokeopacity' => $getlocations_defaults['rectangles_strokeopacity'],
+    'rectangles_strokeweight' => $getlocations_defaults['rectangles_strokeweight'],
+    'rectangles_fillcolor'    => $getlocations_defaults['rectangles_fillcolor'],
+    'rectangles_fillopacity'  => $getlocations_defaults['rectangles_fillopacity'],
+    'rectangles_coords'       => $getlocations_defaults['rectangles_coords'],
+    'rectangles_clickable'    => $getlocations_defaults['rectangles_clickable'],
+    'rectangles_message'      => $getlocations_defaults['rectangles_message'],
   );
   return $defaults;
 

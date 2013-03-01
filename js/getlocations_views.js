@@ -155,6 +155,37 @@
         });
       }
 
+      if ($("#edit-fields-field-address-settings-edit-form-settings-polygons-enable, #edit-style-options-polygons-enable").attr('checked')) {
+        $("#wrap-getlocations-polygons").show();
+      }
+      else {
+        $("#wrap-getlocations-polygons").hide();
+      }
+      $("#edit-fields-field-address-settings-edit-form-settings-polygons-enable, #edit-style-options-polygons-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polygons").show();
+        }
+        else {
+          $("#wrap-getlocations-polygons").hide();
+        }
+      });
+
+      if ($("#edit-fields-field-address-settings-edit-form-settings-rectangles-enable, #edit-style-options-rectangles-enable").attr('checked')) {
+        $("#wrap-getlocations-rectangles").show();
+      }
+      else {
+        $("#wrap-getlocations-rectangles").hide();
+      }
+      $("#edit-fields-field-address-settings-edit-form-settings-rectangles-enable, #edit-style-options-rectangles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-rectangles").show();
+        }
+        else {
+          $("#wrap-getlocations-rectangles").hide();
+        }
+      });
+
+
 
     }
   };

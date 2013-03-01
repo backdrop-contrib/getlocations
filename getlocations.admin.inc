@@ -529,6 +529,14 @@ function getlocations_settings_form() {
     128,
     t('Where the getlocations polygons javascript file is located.')
   );
+  $form['getlocations_paths']['getlocations_rectangles_path'] = getlocations_element_path(
+    t('Path to getlocations Rectangles javascript file'),
+    $getlocations_paths['getlocations_rectangles_path'],
+    60,
+    128,
+    t('Where the getlocations rectangles javascript file is located.')
+  );
+
   $form['getlocations_paths']['getlocations_path'] = getlocations_element_path(
     t('Path to getlocations javascript file'),
     $getlocations_paths['getlocations_path'],

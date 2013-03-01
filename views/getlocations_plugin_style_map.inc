@@ -45,6 +45,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['maptype']               = array('default' => $getlocations_defaults['maptype']);
     $options['baselayers']            = array('default' => $getlocations_defaults['baselayers']);
     $options['behavior']              = array('default' => $getlocations_defaults['behavior']);
+    $options['show_maplinks']         = array('default' => $getlocations_defaults['show_maplinks']);
     $options['streetview_show']       = array('default' => $getlocations_defaults['streetview_show']);
     $options['fullscreen']            = array('default' => $getlocations_defaults['fullscreen']);
     $options['trafficinfo']           = array('default' => $getlocations_defaults['trafficinfo']);

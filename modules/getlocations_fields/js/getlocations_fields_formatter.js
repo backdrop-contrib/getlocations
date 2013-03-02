@@ -156,6 +156,21 @@
         }
       });
 
+      if ($("#edit-fields-field-location-settings-edit-form-settings-polylines-enable, #edit-style-options-polylines-enable").attr('checked')) {
+        $("#wrap-getlocations-polylines").show();
+      }
+      else {
+        $("#wrap-getlocations-polylines").hide();
+      }
+      $("#edit-fields-field-location-settings-edit-form-settings-polylines-enable, #edit-style-options-polylines-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polylines").show();
+        }
+        else {
+          $("#wrap-getlocations-polylines").hide();
+        }
+      });
+
     }
   };
 })(jQuery);

@@ -1,9 +1,85 @@
-commit 2be88f8
+commit f3a2fe0
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 2 10:34:52 2013 +0000
+
+    added polylines feature
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations_admin.js
+js/getlocations_polylines.js
+js/getlocations_views.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit 4a73025
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 2 00:15:25 2013 +0000
+
+    added circles feature
+
+getlocations.module
+js/getlocations_admin.js
+js/getlocations_circles.js
+js/getlocations_views.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit c0dbdfa
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 1 21:57:24 2013 +0000
+
+    added rectangles feature
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations_admin.js
+js/getlocations_rectangles.js
+js/getlocations_views.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit a643aa4
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 1 20:11:52 2013 +0000
+
+    added polygons feature
+
+README.txt
+getlocations.admin.inc
+getlocations.module
+js/getlocations_admin.js
+js/getlocations_polygons.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit b4d3819
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 1 19:23:06 2013 +0000
+
+    fixed show_maplinks
+
+views/getlocations_plugin_style_map.inc
+
+commit 5228d56
 Author: hutch <hutch@midwales.net>
 Date:   Fri Feb 22 22:07:44 2013 +0000
 
     more fixes get_vocabularies
 
+CHANGELOG.txt
 getlocations.module
 
 commit d406ee4

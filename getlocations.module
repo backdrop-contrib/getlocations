@@ -905,6 +905,15 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
       $js_weight++;
     }
   }
+  if ($defaults['polylines_enable']) {
+    if (!stristr($current_js, $getlocations_paths['getlocations_polylines_path'])) {
+      $js_opts = array();
+      $js_opts['weight'] = $js_weight;
+      $js_opts['type'] = 'file';
+      drupal_add_js($getlocations_paths['getlocations_polylines_path'], $js_opts);
+      $js_weight++;
+    }
+  }
 
 }
 
@@ -1030,6 +1039,13 @@ function getlocations_defaults() {
     'circles_clickable'        => 0,
     'circles_message'          => "",
     'circles_radius'           => 0,
+    'polylines_enable'           => 0,
+    'polylines_strokecolor'      => "#FF0000",
+    'polylines_strokeopacity'    => "0.8",
+    'polylines_strokeweight'     => "3",
+    'polylines_coords'           => "",
+    'polylines_clickable'        => 0,
+    'polylines_message'          => "",
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -1951,6 +1967,16 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
         $mapid => $circles,
       );
       drupal_add_js(array('getlocations_circles' => $circle_settings), 'setting');
+    }
+  }
+  // polylines
+  if ($defaults['polylines_enable'] && ! empty($defaults['polylines_coords'])) {
+    $polylines = getlocations_get_polyline_settings($defaults);
+    if ($polylines) {
+      $polyline_settings = array(
+        $mapid => $polylines,
+      );
+      drupal_add_js(array('getlocations_polylines' => $polyline_settings), 'setting');
     }
   }
 
@@ -2963,6 +2989,51 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     );
     $form['circles_coords']['#suffix'] = '</div>';
 
+    $form['polylines_enable'] = getlocations_element_map_checkbox(
+      t('Enable polylines'),
+      $defaults['polylines_enable'],
+      t('Show polylines if defined.')
+    );
+    $form['polylines_enable']['#suffix'] = '<div id="wrap-getlocations-polylines">';
+
+    $form['polylines_strokecolor'] = getlocations_element_map_tf(
+      t('Polyline line color'),
+      $defaults['polylines_strokecolor'],
+      t('Any CSS3 color such as HTML hex, eg #FF0000.'),
+      10
+    );
+    $form['polylines_strokeopacity'] = getlocations_element_map_tf(
+      t('Polyline line opacity'),
+      $defaults['polylines_strokeopacity'],
+      t('Must be between 0 and 1.'),
+      10
+    );
+    $form['polylines_strokeweight'] = getlocations_element_map_tf(
+      t('Polyline line thickness'),
+      $defaults['polylines_strokeweight'],
+      t('Must be an integer.'),
+      10
+    );
+    $form['polylines_clickable'] = getlocations_element_map_checkbox(
+      t('Clickable'),
+      $defaults['polylines_clickable'],
+      t('Show Popup on clicking on the polyline.')
+    );
+    $form['polylines_message'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Popup message'),
+      '#default_value' => $defaults['polylines_message'],
+      '#description' => t('The content of the popup.'),
+    );
+
+    $form['polylines_coords'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Polyline Coordinates'),
+      '#default_value' => $defaults['polylines_coords'],
+      '#description' => t('A pipe delimited list of latitude,longitude pairs, one set of polylines per line. You must have at least 2 pairs for each set.'),
+    );
+    $form['polylines_coords']['#suffix'] = '</div>';
+
   }
 
   return $form;
@@ -2981,6 +3052,7 @@ function getlocations_paths_get() {
     'getlocations_polygons_path' => GETLOCATIONS_PATH . '/js/getlocations_polygons.js',
     'getlocations_rectangles_path' => GETLOCATIONS_PATH . '/js/getlocations_rectangles.js',
     'getlocations_circles_path' => GETLOCATIONS_PATH . '/js/getlocations_circles.js',
+    'getlocations_polylines_path' => GETLOCATIONS_PATH . '/js/getlocations_polylines.js',
   );
   $settings = variable_get('getlocations_paths', $defaults);
   $getlocations_paths = getlocations_adjust_vars($defaults, $settings);
@@ -3219,6 +3291,60 @@ function getlocations_get_circle_settings($defaults) {
     $ct++;
   }
   return $circles;
+}
+
+function getlocations_get_polyline_settings($defaults) {
+  $coords = preg_replace("/\r/", '', $defaults['polylines_coords']);
+  $coords_arr = preg_split("/\n/", $coords);
+  $regex = "/[-+]{0,1}[0-9]{1,}\.{1}[0-9]{1,}\,[-+]{0,1}[0-9]{1,}\.{1}[0-9]{1,}/";
+  $lla = array();
+  $polylines = array();
+  $ct = 0;
+
+  foreach ($coords_arr AS $line) {
+    $lla = array();
+    // set defaults
+    $polylines['polylines'][$ct]['strokeColor']   = $defaults['polylines_strokecolor'];
+    $polylines['polylines'][$ct]['strokeOpacity'] = $defaults['polylines_strokeopacity'];
+    $polylines['polylines'][$ct]['strokeWeight']  = $defaults['polylines_strokeweight'];
+    $polylines['polylines'][$ct]['clickable']     = $defaults['polylines_clickable'];
+    $polylines['polylines'][$ct]['message']       = $defaults['polylines_message'];
+
+    $linebits = explode("|", $line);
+    foreach ($linebits AS $linebit) {
+      if (preg_match($regex, $linebit)) {
+        $lla[] = $linebit;
+      }
+      else {
+        // not a latlon so could be a setting
+        if (preg_match("/strokeColor:(.*)/", $linebit, $match)) {
+          $m = $match[1];
+          $polylines['polylines'][$ct]['strokeColor'] = trim($m);
+        }
+        elseif (preg_match("/strokeOpacity:(.*)/", $linebit, $match)) {
+          $m = $match[1];
+          $polylines['polylines'][$ct]['strokeOpacity'] = trim($m);
+        }
+        elseif (preg_match("/strokeWeight:(.*)/", $linebit, $match)) {
+          $m = $match[1];
+          $polylines['polylines'][$ct]['strokeWeight'] = trim($m);
+        }
+        elseif (preg_match("/clickable:(.*)/", $linebit, $match)) {
+          $m = $match[1];
+          $polylines['polylines'][$ct]['clickable'] = trim($m);
+        }
+        elseif (preg_match("/message:(.*)/", $linebit, $match)) {
+          $m = $match[1];
+          $polylines['polylines'][$ct]['message'] = trim($m);
+        }
+      }
+    }
+    if (count($lla) > 1) {
+      $polylines['polylines'][$ct]['coords'] = implode("|", $lla);
+    }
+    $ct++;
+  }
+  return $polylines;
 }
 
 // run string through check_plain but then restore apostrophes

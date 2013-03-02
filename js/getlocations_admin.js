@@ -363,6 +363,20 @@
         }
       });
 
+      if ($("#edit-getlocations-default-polylines-enable").attr('checked')) {
+        $("#wrap-getlocations-polylines").show();
+      }
+      else {
+        $("#wrap-getlocations-polylines").hide();
+      }
+      $("#edit-getlocations-default-polylines-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polylines").show();
+        }
+        else {
+          $("#wrap-getlocations-polylines").hide();
+        }
+      });
 
 
 

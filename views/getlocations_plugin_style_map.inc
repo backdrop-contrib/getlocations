@@ -115,6 +115,13 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['circles_clickable']        = array('default' => $getlocations_defaults['circles_clickable']);
     $options['circles_message']          = array('default' => $getlocations_defaults['circles_message']);
     $options['circles_radius']           = array('default' => $getlocations_defaults['circles_radius']);
+    $options['polylines_enable']         = array('default' => $getlocations_defaults['polylines_enable']);
+    $options['polylines_strokecolor']    = array('default' => $getlocations_defaults['polylines_strokecolor']);
+    $options['polylines_strokeopacity']  = array('default' => $getlocations_defaults['polylines_strokeopacity']);
+    $options['polylines_strokeweight']   = array('default' => $getlocations_defaults['polylines_strokeweight']);
+    $options['polylines_coords']         = array('default' => $getlocations_defaults['polylines_coords']);
+    $options['polylines_clickable']      = array('default' => $getlocations_defaults['polylines_clickable']);
+    $options['polylines_message']        = array('default' => $getlocations_defaults['polylines_message']);
 
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));

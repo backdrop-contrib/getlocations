@@ -27,7 +27,6 @@ function getlocations_fields_help($path, $arg) {
  */
 function getlocations_fields_init() {
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
-#  module_load_include('inc', 'getlocations_fields', 'getlocations_fields.theme');
 }
 
 /**
@@ -943,6 +942,12 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
         $summary[] = t('Circles clickable: Yes');
       }
     }
+    if ($settings['polylines_enable']) {
+      $summary[] = t('Enable polylines: Yes');
+      if ($settings['polylines_clickable']) {
+        $summary[] = t('Polylines clickable: Yes');
+      }
+    }
 
   }
   else {
@@ -1598,6 +1603,13 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['circles_clickable']        = $settings['circles_clickable'];
   $getlocations_defaults['circles_message']          = $settings['circles_message'];
   $getlocations_defaults['circles_radius']           = $settings['circles_radius'];
+  $getlocations_defaults['polylines_enable']          = $settings['polylines_enable'];
+  $getlocations_defaults['polylines_strokecolor']     = $settings['polylines_strokecolor'];
+  $getlocations_defaults['polylines_strokeopacity']   = $settings['polylines_strokeopacity'];
+  $getlocations_defaults['polylines_strokeweight']    = $settings['polylines_strokeweight'];
+  $getlocations_defaults['polylines_coords']          = $settings['polylines_coords'];
+  $getlocations_defaults['polylines_clickable']       = $settings['polylines_clickable'];
+  $getlocations_defaults['polylines_message']         = $settings['polylines_message'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2150,6 +2162,13 @@ function getlocations_fields_defaults() {
     'circles_clickable'        => $getlocations_defaults['circles_clickable'],
     'circles_message'          => $getlocations_defaults['circles_message'],
     'circles_radius'           => $getlocations_defaults['circles_radius'],
+    'polylines_enable'          => $getlocations_defaults['polylines_enable'],
+    'polylines_strokecolor'     => $getlocations_defaults['polylines_strokecolor'],
+    'polylines_strokeopacity'   => $getlocations_defaults['polylines_strokeopacity'],
+    'polylines_strokeweight'    => $getlocations_defaults['polylines_strokeweight'],
+    'polylines_coords'          => $getlocations_defaults['polylines_coords'],
+    'polylines_clickable'       => $getlocations_defaults['polylines_clickable'],
+    'polylines_message'         => $getlocations_defaults['polylines_message'],
   );
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
@@ -2267,6 +2286,13 @@ function getlocations_fields_field_info_defaults() {
         'circles_clickable'    => $getlocations_fields_defaults['circles_clickable'],
         'circles_message'      => $getlocations_fields_defaults['circles_message'],
         'circles_radius'       => $getlocations_fields_defaults['circles_radius'],
+        'polylines_enable'       => $getlocations_fields_defaults['polylines_enable'],
+        'polylines_strokecolor'  => $getlocations_fields_defaults['polylines_strokecolor'],
+        'polylines_strokeopacity' => $getlocations_fields_defaults['polylines_strokeopacity'],
+        'polylines_strokeweight' => $getlocations_fields_defaults['polylines_strokeweight'],
+        'polylines_coords'       => $getlocations_fields_defaults['polylines_coords'],
+        'polylines_clickable'    => $getlocations_fields_defaults['polylines_clickable'],
+        'polylines_message'      => $getlocations_fields_defaults['polylines_message'],
       ),
     ),
   );
@@ -2365,6 +2391,13 @@ function getlocations_fields_field_formatter_info_defaults() {
     'circles_clickable'    => $getlocations_defaults['circles_clickable'],
     'circles_message'      => $getlocations_defaults['circles_message'],
     'circles_radius'       => $getlocations_defaults['circles_radius'],
+    'polylines_enable'       => $getlocations_defaults['polylines_enable'],
+    'polylines_strokecolor'  => $getlocations_defaults['polylines_strokecolor'],
+    'polylines_strokeopacity' => $getlocations_defaults['polylines_strokeopacity'],
+    'polylines_strokeweight' => $getlocations_defaults['polylines_strokeweight'],
+    'polylines_coords'       => $getlocations_defaults['polylines_coords'],
+    'polylines_clickable'    => $getlocations_defaults['polylines_clickable'],
+    'polylines_message'      => $getlocations_defaults['polylines_message'],
   );
   return $defaults;
 

@@ -226,6 +226,21 @@
         }
       });
 
+      if ($("#edit-getlocations-search-defaults-polylines-enable").attr('checked')) {
+        $("#wrap-getlocations-polylines").show();
+      }
+      else {
+        $("#wrap-getlocations-polylines").hide();
+      }
+      $("#edit-getlocations-search-defaults-polylines-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-polylines").show();
+        }
+        else {
+          $("#wrap-getlocations-polylines").hide();
+        }
+      });
+
 
       // search marker
       if ($("#edit-getlocations-search-defaults-do-search-marker").is('input')) {

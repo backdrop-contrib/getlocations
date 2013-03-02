@@ -211,6 +211,20 @@
         }
       });
 
+      if ($("#edit-getlocations-search-defaults-circles-enable").attr('checked')) {
+        $("#wrap-getlocations-circles").show();
+      }
+      else {
+        $("#wrap-getlocations-circles").hide();
+      }
+      $("#edit-getlocations-search-defaults-circles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-circles").show();
+        }
+        else {
+          $("#wrap-getlocations-circles").hide();
+        }
+      });
 
 
       // search marker

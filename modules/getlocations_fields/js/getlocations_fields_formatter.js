@@ -141,6 +141,20 @@
         }
       });
 
+      if ($("#edit-fields-field-location-settings-edit-form-settings-circles-enable, #edit-style-options-circles-enable").attr('checked')) {
+        $("#wrap-getlocations-circles").show();
+      }
+      else {
+        $("#wrap-getlocations-circles").hide();
+      }
+      $("#edit-fields-field-location-settings-edit-form-settings-circles-enable, #edit-style-options-circles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-circles").show();
+        }
+        else {
+          $("#wrap-getlocations-circles").hide();
+        }
+      });
 
     }
   };

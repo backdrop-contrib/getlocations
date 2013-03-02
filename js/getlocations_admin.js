@@ -348,6 +348,24 @@
         }
       });
 
+      if ($("#edit-getlocations-default-circles-enable").attr('checked')) {
+        $("#wrap-getlocations-circles").show();
+      }
+      else {
+        $("#wrap-getlocations-circles").hide();
+      }
+      $("#edit-getlocations-default-circles-enable").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-circles").show();
+        }
+        else {
+          $("#wrap-getlocations-circles").hide();
+        }
+      });
+
+
+
+
     }
   };
 

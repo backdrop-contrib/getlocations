@@ -94,6 +94,7 @@ var getlocations_settings = {};
         getlocations_markers[key] = {};
         getlocations_markers[key].coords = {};
         getlocations_markers[key].lids = {};
+        getlocations_markers[key].cat = {};
 
         global_settings.minzoom = parseInt(settings.minzoom);
         global_settings.maxzoom = parseInt(settings.maxzoom);
@@ -556,13 +557,15 @@ var getlocations_settings = {};
         mark = arr2[4];
         lidkey = arr2[5];
         customContent = arr2[6];
+        cat = arr2[7];
+
         if (mark === '') {
           gs.markdone = gs.defaultIcon;
         }
         else {
           gs.markdone = Drupal.getlocations.getIcon(mark);
         }
-        m = Drupal.getlocations.makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent, mkey);
+        m = Drupal.getlocations.makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent, cat, mkey);
         // still experimental
         getlocations_markers[mkey].lids[lid] = m;
         if (gs.usemarkermanager || gs.useclustermanager) {
@@ -580,11 +583,16 @@ var getlocations_settings = {};
     }
   } // end getlocations_init
 
-  Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, mkey) {
+  Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, cat, mkey) {
 
     //if (! gs.markdone) {
     //  return;
     //}
+
+    // categories
+    if (cat) {
+      getlocations_markers[mkey].cat[lid] = cat;
+    }
 
     // check for duplicates
     var hash = lat + lon;

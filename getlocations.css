@@ -38,6 +38,10 @@
 }
 .vcard h4 {
 }
+/* stop long titles from creeping in under the close button */
+.location.vcard {
+  margin-top: 8px;
+}
 .adr {
 }
 .street-address {

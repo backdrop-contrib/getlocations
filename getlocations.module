@@ -4245,7 +4245,6 @@ function theme_getlocations_info($variables) {
   $output = '';
 
   $output .= '<div class="location vcard">';
-  $output .= '<br />';
 
   // this logic gives the location name field precedence over the node title
   // similarly for users, terms and comments

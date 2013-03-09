@@ -1,9 +1,41 @@
-commit 78f05e7
+commit 65fbe4f
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 9 16:40:50 2013 +0000
+
+    added show_bubble_on_one_marker feature
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+views/getlocations_plugin_style_map.inc
+
+commit 898c5f5
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 9 14:21:29 2013 +0000
+
+    removed break from theme_getlocations_info
+
+getlocations.css
+getlocations.module
+
+commit 200ef6e
+Author: hutch <hutch@midwales.net>
+Date:   Thu Mar 7 11:48:16 2013 +0000
+
+    added fix locale_prefix
+
+getlocations.module
+js/getlocations.js
+
+commit ff8b1da
 Author: hutch <hutch@midwales.net>
 Date:   Tue Mar 5 13:00:40 2013 +0000
 
     updated README.
 
+CHANGELOG.txt
 README.txt
 
 commit 6b903c0

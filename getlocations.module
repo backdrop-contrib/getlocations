@@ -2084,14 +2084,18 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
         if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
           $ct = 0;
           foreach ($geo[$lang] AS $g) {
-            $locations[$ct]['latitude']  = $g['lat'];
-            $locations[$ct]['longitude'] = $g['lon'];
-            $locations[$ct][$key] = $id;
-            if ($key == 'vid') {
-              $locations[$ct]['nid'] = getlocations_get_nid($id);
+            if (isset($g['lat']) && isset($g['lon'])) {
+              if (getlocations_latlon_check($g['lat'] . ',' . $g['lon'])) {
+                $locations[$ct]['latitude']  = $g['lat'];
+                $locations[$ct]['longitude'] = $g['lon'];
+                $locations[$ct][$key] = $id;
+                if ($key == 'vid') {
+                  $locations[$ct]['nid'] = getlocations_get_nid($id);
+                }
+                $locations[$ct]['key'] = $key;
+                $ct++;
+              }
             }
-            $locations[$ct]['key'] = $key;
-            $ct++;
           }
         }
       }
@@ -2118,15 +2122,19 @@ function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
         if ($lang == $language->language || (isset($obj->language) && $lang == $obj->language) || $lang == 'und') {
           $ct = 0;
           foreach ($geo[$lang] AS $g) {
-            $locations[$ct]['latitude']  = $g['lat'];
-            $locations[$ct]['longitude'] = $g['lng'];
-            $locations[$ct][$key] = $id;
-            if ($key == 'vid') {
-              $locations[$ct]['nid'] = getlocations_get_nid($id);
+            if (isset($g['lat']) && isset($g['lng'])) {
+              if (getlocations_latlon_check($g['lat'] . ',' . $g['lng'])) {
+                $locations[$ct]['latitude']  = $g['lat'];
+                $locations[$ct]['longitude'] = $g['lng'];
+                $locations[$ct][$key] = $id;
+                if ($key == 'vid') {
+                  $locations[$ct]['nid'] = getlocations_get_nid($id);
+                }
+                $locations[$ct]['key'] = $key;
+                $locations[$ct]['name'] = $location_name;
+                $ct++;
+              }
             }
-            $locations[$ct]['key'] = $key;
-            $locations[$ct]['name'] = $location_name;
-            $ct++;
           }
         }
       }

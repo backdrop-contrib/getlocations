@@ -1,9 +1,26 @@
-commit 65fbe4f
+commit 9f744d4
+Author: hutch <hutch@midwales.net>
+Date:   Tue Mar 19 13:26:55 2013 +0000
+
+    better checking for geofields and geolocation modules
+
+getlocations.module
+
+commit 3326f50
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 16 09:36:15 2013 +0000
+
+    better maths in getlocations_earth_longitude_range
+
+getlocations.module
+
+commit 5ddbc2b
 Author: hutch <hutch@midwales.net>
 Date:   Sat Mar 9 16:40:50 2013 +0000
 
     added show_bubble_on_one_marker feature
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 modules/getlocations_fields/getlocations_fields.module

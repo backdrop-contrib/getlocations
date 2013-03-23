@@ -308,24 +308,21 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $this->options['markeraction']
     );
 
-    $form['custom_content_enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Replace default content'),
-      '#default_value' =>  $this->options['custom_content_enable'],
-      '#return_value' => 1,
-      '#prefix' => '<div id="wrap-custom-content-enable">',
-      '#suffix' => '</div>',
+    // custom content
+    $form['custom_content_enable'] = getlocations_element_map_checkbox(
+      t('Replace default content'),
+      $this->options['custom_content_enable']
     );
-
-    $form['custom_content_source'] = array(
-      '#type' => 'select',
-      '#title' => t('Popup Data'),
-      '#options' => $source_options,
-      '#default_value' => $this->options['custom_content_source'],
-      '#description' => t('The field to use as a data source for the marker popup.'),
-      '#prefix' => '<div id="wrap-custom-content-source">',
-      '#suffix' => '</div>',
+    $form['custom_content_enable']['#prefix'] = '<div id="wrap-custom-content-enable">';
+    $form['custom_content_enable'][ '#suffix'] = '</div>';
+    $form['custom_content_source'] = getlocations_element_dd(
+      t('Popup Data'),
+      $this->options['custom_content_source'],
+      $source_options,
+      t('The field to use as a data source for the marker popup.')
     );
+    $form['custom_content_source']['#prefix'] = '<div id="wrap-custom-content-source">';
+    $form['custom_content_source']['#suffix'] = '</div>';
 
     // markermanager option
     if ($this->options['markermanagertype'] == 1) {

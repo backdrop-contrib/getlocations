@@ -1,9 +1,31 @@
-commit 9f744d4
+commit b04c8b7
+Author: hutch <hutch@midwales.net>
+Date:   Mon Mar 25 20:30:04 2013 +0000
+
+    added categories feature
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations_categories.js
+js/getlocations_views.js
+views/getlocations.views.inc
+views/getlocations_plugin_style_map.inc
+
+commit 6245691
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 23 19:16:32 2013 +0000
+
+    functionalised custom content form elements
+
+views/getlocations_plugin_style_map.inc
+
+commit 3190eac
 Author: hutch <hutch@midwales.net>
 Date:   Tue Mar 19 13:26:55 2013 +0000
 
     better checking for geofields and geolocation modules
 
+CHANGELOG.txt
 getlocations.module
 
 commit 3326f50

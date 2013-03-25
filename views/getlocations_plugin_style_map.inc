@@ -124,6 +124,11 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['polylines_clickable']      = array('default' => $getlocations_defaults['polylines_clickable']);
     $options['polylines_message']        = array('default' => $getlocations_defaults['polylines_message']);
 
+    // categories
+    $options['category_method']               = array('default' => $getlocations_defaults['category_method']);
+    $options['category_term_reference_field'] = array('default' => $getlocations_defaults['category_term_reference_field']);
+    $options['category_showhide_buttons']     = array('default' => $getlocations_defaults['category_showhide_buttons']);
+
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
@@ -307,6 +312,36 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $form['markeraction'] = getlocations_element_map_markeraction(
       $this->options['markeraction']
     );
+
+    // categories
+    $term_reference_fields = getlocations_get_term_reference_fields();
+    $opts = array(0 => t('None'), 1 => t('Content Type'));
+    if ($term_reference_fields) {
+      $opts += array(2 => t('Term reference'));
+    }
+    $form['category_method'] = getlocations_element_dd(
+      t('Category method'),
+      $this->options['category_method'],
+      $opts,
+      t('To ensure that this works you will need to add either a Content type or a Term reference field to the Field list in your View.')
+    );
+    $form['category_method']['#suffix'] = '<div id="wrap-category1">';
+    if ($term_reference_fields) {
+      $form['category_term_reference_field'] = getlocations_element_dd(
+        t('Term reference field name'),
+        $this->options['category_term_reference_field'],
+        $term_reference_fields,
+        t('Select the field on which you are categorising.')
+      );
+      $form['category_term_reference_field']['#prefix'] = '<div id="wrap-category2">';
+      $form['category_term_reference_field']['#suffix'] = '</div>';
+    }
+    $form['category_showhide_buttons'] = getlocations_element_map_checkbox(
+      t('Enable category show/hide buttons'),
+      $this->options['category_showhide_buttons'],
+      t('This option will place toggle buttons on the map.')
+    );
+    $form['category_showhide_buttons']['#suffix'] = '</div>';
 
     // custom content
     $form['custom_content_enable'] = getlocations_element_map_checkbox(

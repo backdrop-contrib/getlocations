@@ -915,6 +915,17 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
     }
   }
 
+  // categories
+  if ($defaults['category_method'] && $defaults['category_showhide_buttons']) {
+    if (!stristr($current_js, $getlocations_paths['getlocations_categories_path'])) {
+      $js_opts = array();
+      $js_opts['weight'] = $js_weight;
+      $js_opts['type'] = 'file';
+      drupal_add_js($getlocations_paths['getlocations_categories_path'], $js_opts);
+      $js_weight++;
+    }
+  }
+
 }
 
 /**
@@ -1030,23 +1041,27 @@ function getlocations_defaults() {
     'rectangles_coords'         => "",
     'rectangles_clickable'      => 0,
     'rectangles_message'        => "",
-    'circles_enable'           => 0,
-    'circles_strokecolor'      => "#FF0000",
-    'circles_strokeopacity'    => "0.8",
-    'circles_strokeweight'     => "3",
-    'circles_fillcolor'        => "#FF0000",
-    'circles_fillopacity'      => "0.35",
-    'circles_coords'           => "",
-    'circles_clickable'        => 0,
-    'circles_message'          => "",
-    'circles_radius'           => 0,
-    'polylines_enable'           => 0,
-    'polylines_strokecolor'      => "#FF0000",
-    'polylines_strokeopacity'    => "0.8",
-    'polylines_strokeweight'     => "3",
-    'polylines_coords'           => "",
-    'polylines_clickable'        => 0,
-    'polylines_message'          => "",
+    'circles_enable'            => 0,
+    'circles_strokecolor'       => "#FF0000",
+    'circles_strokeopacity'     => "0.8",
+    'circles_strokeweight'      => "3",
+    'circles_fillcolor'         => "#FF0000",
+    'circles_fillopacity'       => "0.35",
+    'circles_coords'            => "",
+    'circles_clickable'         => 0,
+    'circles_message'           => "",
+    'circles_radius'            => 0,
+    'polylines_enable'          => 0,
+    'polylines_strokecolor'     => "#FF0000",
+    'polylines_strokeopacity'   => "0.8",
+    'polylines_strokeweight'    => "3",
+    'polylines_coords'          => "",
+    'polylines_clickable'       => 0,
+    'polylines_message'         => "",
+    'category_method'               => 0,
+    'category_term_reference_field' => '',
+    'category_showhide_buttons'     => 0,
+    'categories'                    => '',
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -1763,6 +1778,23 @@ function getlocations_check_vocabulary($machine_name) {
   return FALSE;
 }
 
+function getlocations_get_term_reference_fields() {
+  $module = 'taxonomy';
+  $type = 'taxonomy_term_reference';
+  $query = db_select('field_config', 'f');
+  $query->fields('f', array('field_name'));
+  $query->condition('f.module', $module)
+    ->condition('f.type', $type)
+    ->condition('f.active', 1);
+  $rows = $query->execute();
+  $data = array();
+  foreach ($rows AS $row) {
+    $data[$row->field_name] = $row->field_name;
+  }
+  return $data;
+
+}
+
 function getlocations_get_markertypes($type) {
 
   $getlocations_defaults = getlocations_defaults();
@@ -1911,6 +1943,14 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     $settings[$mapid]['weather_clickable'] = $defaults['weather_clickable'];
     $settings[$mapid]['weather_info'] = $defaults['weather_info'];
   }
+  // categories
+  if (isset($defaults['categories'])) {
+    $settings[$mapid]['categories'] = $defaults['categories'];
+  }
+  else {
+    $settings[$mapid]['categories'] = array();
+  }
+
   drupal_add_js(array('getlocations' => $settings), 'setting');
 
   if ($defaults['preload_data']) {
@@ -3059,16 +3099,17 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
 function getlocations_paths_get() {
 
   $defaults = array(
-    'infobubble_path' => GETLOCATIONS_PATH . '/js/infobubble.js',
-    'infobubble_options_path' => GETLOCATIONS_PATH . '/js/infobubble_options.js',
-    'markermanager_path' => GETLOCATIONS_PATH . '/js/markermanager.js',
-    'markerclusterer_path' => GETLOCATIONS_PATH . '/js/markerclusterer.js',
-    'infowindow_options_path' => GETLOCATIONS_PATH . '/js/infowindow_options.js',
-    'getlocations_path' => GETLOCATIONS_PATH . '/js/getlocations.js',
-    'getlocations_polygons_path' => GETLOCATIONS_PATH . '/js/getlocations_polygons.js',
+    'infobubble_path'              => GETLOCATIONS_PATH . '/js/infobubble.js',
+    'infobubble_options_path'      => GETLOCATIONS_PATH . '/js/infobubble_options.js',
+    'markermanager_path'           => GETLOCATIONS_PATH . '/js/markermanager.js',
+    'markerclusterer_path'         => GETLOCATIONS_PATH . '/js/markerclusterer.js',
+    'infowindow_options_path'      => GETLOCATIONS_PATH . '/js/infowindow_options.js',
+    'getlocations_path'            => GETLOCATIONS_PATH . '/js/getlocations.js',
+    'getlocations_polygons_path'   => GETLOCATIONS_PATH . '/js/getlocations_polygons.js',
     'getlocations_rectangles_path' => GETLOCATIONS_PATH . '/js/getlocations_rectangles.js',
-    'getlocations_circles_path' => GETLOCATIONS_PATH . '/js/getlocations_circles.js',
-    'getlocations_polylines_path' => GETLOCATIONS_PATH . '/js/getlocations_polylines.js',
+    'getlocations_circles_path'    => GETLOCATIONS_PATH . '/js/getlocations_circles.js',
+    'getlocations_polylines_path'  => GETLOCATIONS_PATH . '/js/getlocations_polylines.js',
+    'getlocations_categories_path' => GETLOCATIONS_PATH . '/js/getlocations_categories.js',
   );
   $settings = variable_get('getlocations_paths', $defaults);
   $getlocations_paths = getlocations_adjust_vars($defaults, $settings);
@@ -4245,6 +4286,16 @@ function theme_getlocations_show($variables) {
       $buttons[] = '<input type="submit" value="' . t('Toggle clouds') . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
     }
   }
+
+  // categories
+  if (isset($defaults['category_showhide_buttons']) && $defaults['category_showhide_buttons']) {
+    if (isset($defaults['categories']) && $defaults['categories']) {
+      foreach ($defaults['categories'] AS $cat => $label) {
+        $buttons[] = '<input type="button" value="' . t('!cat Off', array('!cat' => $label)) . '" id="getlocations_toggle_' . $cat .  '_' . $mapid . '" class="form-submit" />';
+      }
+    }
+  }
+
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons container-inline">';
     $output .= implode('&nbsp;', $buttons);

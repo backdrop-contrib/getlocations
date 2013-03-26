@@ -4269,21 +4269,21 @@ function theme_getlocations_show($variables) {
   // buttons
   $buttons = array();
   if ($defaults['trafficinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle traffic info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Traffic Info !t', array('!t' => ($defaults['trafficinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTraffic_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['bicycleinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle bicycle info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Bicycle Info !t', array('!t' => ($defaults['bicycleinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getlocations_toggleBicycle_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['transitinfo']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle transit info') . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTransit_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Transit Info !t', array('!t' => ($defaults['transitinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTransit_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['panoramio_use'] && $defaults['panoramio_show']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle panoramio') . '" id="getlocations_togglePanoramio_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Panoramio !t', array('!t' => ($defaults['panoramio_state'] ? t('Off') : t('On')))) . '" id="getlocations_togglePanoramio_' . $mapid . '" class="form-submit" />';
   }
   if ($defaults['weather_use'] && $defaults['weather_show']) {
-    $buttons[] = '<input type="submit" value="' . t('Toggle weather') . '" id="getlocations_toggleWeather_' . $mapid . '" class="form-submit" />';
+    $buttons[] = '<input type="button" value="' . t('Weather !t', array('!t' => ($defaults['weather_state'] ? t('Off') : t('On')))) . '" id="getlocations_toggleWeather_' . $mapid . '" class="form-submit" />';
     if ($defaults['weather_cloud']) {
-      $buttons[] = '<input type="submit" value="' . t('Toggle clouds') . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
+      $buttons[] = '<input type="button" value="' . t('Clouds !t', array('!t' => ($defaults['weather_cloud_state'] ? t('Off') : t('On')))) . '" id="getlocations_toggleCloud_' . $mapid . '" class="form-submit" />';
     }
   }
 

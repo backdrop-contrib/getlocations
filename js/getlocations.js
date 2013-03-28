@@ -169,6 +169,7 @@ var getlocations_settings = {};
         var fullscreen = (settings.fullscreen ? true : false);
         var js_path = settings.js_path;
 
+        global_settings.info_path = settings.info_path;
         global_settings.preload_data = settings.preload_data;
         if (settings.preload_data) {
           global_settings.getlocations_info = Drupal.settings.getlocations_info[key];
@@ -699,7 +700,7 @@ var getlocations_settings = {};
                 }
               }
               else {
-                var path = Drupal.settings.basePath + gs.locale_prefix + "getlocations/info";
+                var path = gs.info_path;
                 var qs = {'lid': lid, 'key': lidkey};
                 if (gs.show_distance) {
                   if ($("#getlocations_search_slat_" + mkey).is('div')) {

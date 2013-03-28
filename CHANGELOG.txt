@@ -1,9 +1,28 @@
-commit b04c8b7
+commit df61203
+Author: hutch <hutch@midwales.net>
+Date:   Thu Mar 28 00:15:17 2013 +0000
+
+    added info_path to js
+
+getlocations.module
+js/getlocations.js
+
+commit 20d52dd
+Author: hutch <hutch@midwales.net>
+Date:   Tue Mar 26 20:19:46 2013 +0000
+
+    moved and removed some js functions, better toggle buttons
+
+getlocations.module
+js/getlocations.js
+
+commit b431fc2
 Author: hutch <hutch@midwales.net>
 Date:   Mon Mar 25 20:30:04 2013 +0000
 
     added categories feature
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 js/getlocations_categories.js

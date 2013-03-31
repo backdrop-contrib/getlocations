@@ -1,9 +1,45 @@
-commit df61203
+commit db89f59
+Author: hutch <hutch@midwales.net>
+Date:   Sun Mar 31 09:55:16 2013 +0100
+
+    fixed layers bug
+
+js/getlocations.js
+
+commit bf1deca
+Author: hutch <hutch@midwales.net>
+Date:   Sat Mar 30 10:14:48 2013 +0000
+
+    better js_weight in js setup
+
+getlocations.module
+
+commit 5984a10
+Author: hutch <hutch@midwales.net>
+Date:   Fri Mar 29 20:18:59 2013 +0000
+
+    deployed $is_https global variable
+
+getlocations.module
+
+commit 2d8a5d4
+Author: hutch <hutch@midwales.net>
+Date:   Thu Mar 28 11:46:41 2013 +0000
+
+    better ajax pathing
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit cf5481e
 Author: hutch <hutch@midwales.net>
 Date:   Thu Mar 28 00:15:17 2013 +0000
 
     added info_path to js
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 

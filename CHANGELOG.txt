@@ -1,9 +1,36 @@
-commit db89f59
+commit f59b231
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 2 19:10:41 2013 +0100
+
+    added street_num_pos feature
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit 61001be
+Author: hutch <hutch@midwales.net>
+Date:   Tue Apr 2 10:30:41 2013 +0100
+
+    added callback url
+
+getlocations.module
+js/getlocations.js
+
+commit debf3ea
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 1 13:47:37 2013 +0100
+
+    added comments
+
+js/getlocations.js
+
+commit 6e94bfd
 Author: hutch <hutch@midwales.net>
 Date:   Sun Mar 31 09:55:16 2013 +0100
 
     fixed layers bug
 
+CHANGELOG.txt
 js/getlocations.js
 
 commit bf1deca

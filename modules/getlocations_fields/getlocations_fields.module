@@ -1355,6 +1355,12 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
           '#value' => $mapid,
         );
       }
+
+      $element['use_address'] = array(
+        '#type' => 'value',
+         '#value' => $settings['use_address'],
+      );
+
       // map
       $element['map'] = array(
         '#markup' => $map,
@@ -3366,9 +3372,13 @@ function theme_getlocations_fields_field_widget_form($variables) {
     $mapid = $form['mapid']['#value'];
     unset($form['mapid']);
   }
+  $use_address = $form['use_address']['#value'];
+  unset($form['use_address']);
   if ($mapid !== NULL && isset($form['geobutton']) ) {
     $geobutton = '<p><input type="submit" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton_' . $mapid . '" class="form-submit" /></p>';
+    if ($use_address < 1) {
     $geobutton .= '<p>' . t('If you leave the address empty you can Geocode by moving the marker on the map') . '</p>';
+    }
     $form['geobutton']['#markup'] = $geobutton;
   }
 

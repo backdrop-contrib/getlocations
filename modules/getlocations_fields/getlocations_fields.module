@@ -2203,14 +2203,17 @@ function getlocations_fields_defaults() {
     'circles_clickable'        => $getlocations_defaults['circles_clickable'],
     'circles_message'          => $getlocations_defaults['circles_message'],
     'circles_radius'           => $getlocations_defaults['circles_radius'],
-    'polylines_enable'          => $getlocations_defaults['polylines_enable'],
-    'polylines_strokecolor'     => $getlocations_defaults['polylines_strokecolor'],
-    'polylines_strokeopacity'   => $getlocations_defaults['polylines_strokeopacity'],
-    'polylines_strokeweight'    => $getlocations_defaults['polylines_strokeweight'],
-    'polylines_coords'          => $getlocations_defaults['polylines_coords'],
-    'polylines_clickable'       => $getlocations_defaults['polylines_clickable'],
-    'polylines_message'         => $getlocations_defaults['polylines_message'],
+    'polylines_enable'         => $getlocations_defaults['polylines_enable'],
+    'polylines_strokecolor'    => $getlocations_defaults['polylines_strokecolor'],
+    'polylines_strokeopacity'  => $getlocations_defaults['polylines_strokeopacity'],
+    'polylines_strokeweight'   => $getlocations_defaults['polylines_strokeweight'],
+    'polylines_coords'         => $getlocations_defaults['polylines_coords'],
+    'polylines_clickable'      => $getlocations_defaults['polylines_clickable'],
+    'polylines_message'        => $getlocations_defaults['polylines_message'],
   );
+  foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
+    $defaults['baselayers'][$key] = $layer;
+  }
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
   $newdefaults = getlocations_adjust_vars($defaults, $getlocations_fields_defaults);
@@ -2241,7 +2244,6 @@ function getlocations_fields_field_info_defaults() {
         'pancontrol'                      => $getlocations_defaults['pancontrol'],
         'mtc'                             => $getlocations_defaults['mtc'],
         'maptype'                         => $getlocations_defaults['maptype'],
-        'baselayers'                      => $getlocations_defaults['baselayers'],
         'behavior'                        => $getlocations_defaults['behavior'],
         'draggable'                       => $getlocations_defaults['draggable'],
         'map_marker'                      => $getlocations_defaults['node_map_marker'],
@@ -2301,47 +2303,49 @@ function getlocations_fields_field_info_defaults() {
         'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
         'fullscreen'                      => $getlocations_defaults['fullscreen'],
         'show_bubble_on_one_marker'       => $getlocations_defaults['show_bubble_on_one_marker'],
-        'polygons_enable'       => $getlocations_fields_defaults['polygons_enable'],
-        'polygons_strokecolor'  => $getlocations_fields_defaults['polygons_strokecolor'],
-        'polygons_strokeopacity' => $getlocations_fields_defaults['polygons_strokeopacity'],
-        'polygons_strokeweight' => $getlocations_fields_defaults['polygons_strokeweight'],
-        'polygons_fillcolor'    => $getlocations_fields_defaults['polygons_fillcolor'],
-        'polygons_fillopacity'  => $getlocations_fields_defaults['polygons_fillopacity'],
-        'polygons_coords'       => $getlocations_fields_defaults['polygons_coords'],
-        'polygons_clickable'    => $getlocations_fields_defaults['polygons_clickable'],
-        'polygons_message'      => $getlocations_fields_defaults['polygons_message'],
-        'rectangles_enable'       => $getlocations_fields_defaults['rectangles_enable'],
-        'rectangles_strokecolor'  => $getlocations_fields_defaults['rectangles_strokecolor'],
+        'polygons_enable'          => $getlocations_fields_defaults['polygons_enable'],
+        'polygons_strokecolor'     => $getlocations_fields_defaults['polygons_strokecolor'],
+        'polygons_strokeopacity'   => $getlocations_fields_defaults['polygons_strokeopacity'],
+        'polygons_strokeweight'    => $getlocations_fields_defaults['polygons_strokeweight'],
+        'polygons_fillcolor'       => $getlocations_fields_defaults['polygons_fillcolor'],
+        'polygons_fillopacity'     => $getlocations_fields_defaults['polygons_fillopacity'],
+        'polygons_coords'          => $getlocations_fields_defaults['polygons_coords'],
+        'polygons_clickable'       => $getlocations_fields_defaults['polygons_clickable'],
+        'polygons_message'         => $getlocations_fields_defaults['polygons_message'],
+        'rectangles_enable'        => $getlocations_fields_defaults['rectangles_enable'],
+        'rectangles_strokecolor'   => $getlocations_fields_defaults['rectangles_strokecolor'],
         'rectangles_strokeopacity' => $getlocations_fields_defaults['rectangles_strokeopacity'],
-        'rectangles_strokeweight' => $getlocations_fields_defaults['rectangles_strokeweight'],
-        'rectangles_fillcolor'    => $getlocations_fields_defaults['rectangles_fillcolor'],
-        'rectangles_fillopacity'  => $getlocations_fields_defaults['rectangles_fillopacity'],
-        'rectangles_coords'       => $getlocations_fields_defaults['rectangles_coords'],
-        'rectangles_clickable'    => $getlocations_fields_defaults['rectangles_clickable'],
-        'rectangles_message'      => $getlocations_fields_defaults['rectangles_message'],
-        'circles_enable'       => $getlocations_fields_defaults['circles_enable'],
-        'circles_strokecolor'  => $getlocations_fields_defaults['circles_strokecolor'],
-        'circles_strokeopacity' => $getlocations_fields_defaults['circles_strokeopacity'],
-        'circles_strokeweight' => $getlocations_fields_defaults['circles_strokeweight'],
-        'circles_fillcolor'    => $getlocations_fields_defaults['circles_fillcolor'],
-        'circles_fillopacity'  => $getlocations_fields_defaults['circles_fillopacity'],
-        'circles_coords'       => $getlocations_fields_defaults['circles_coords'],
-        'circles_clickable'    => $getlocations_fields_defaults['circles_clickable'],
-        'circles_message'      => $getlocations_fields_defaults['circles_message'],
-        'circles_radius'       => $getlocations_fields_defaults['circles_radius'],
-        'polylines_enable'       => $getlocations_fields_defaults['polylines_enable'],
-        'polylines_strokecolor'  => $getlocations_fields_defaults['polylines_strokecolor'],
-        'polylines_strokeopacity' => $getlocations_fields_defaults['polylines_strokeopacity'],
-        'polylines_strokeweight' => $getlocations_fields_defaults['polylines_strokeweight'],
-        'polylines_coords'       => $getlocations_fields_defaults['polylines_coords'],
-        'polylines_clickable'    => $getlocations_fields_defaults['polylines_clickable'],
-        'polylines_message'      => $getlocations_fields_defaults['polylines_message'],
+        'rectangles_strokeweight'  => $getlocations_fields_defaults['rectangles_strokeweight'],
+        'rectangles_fillcolor'     => $getlocations_fields_defaults['rectangles_fillcolor'],
+        'rectangles_fillopacity'   => $getlocations_fields_defaults['rectangles_fillopacity'],
+        'rectangles_coords'        => $getlocations_fields_defaults['rectangles_coords'],
+        'rectangles_clickable'     => $getlocations_fields_defaults['rectangles_clickable'],
+        'rectangles_message'       => $getlocations_fields_defaults['rectangles_message'],
+        'circles_enable'           => $getlocations_fields_defaults['circles_enable'],
+        'circles_strokecolor'      => $getlocations_fields_defaults['circles_strokecolor'],
+        'circles_strokeopacity'    => $getlocations_fields_defaults['circles_strokeopacity'],
+        'circles_strokeweight'     => $getlocations_fields_defaults['circles_strokeweight'],
+        'circles_fillcolor'        => $getlocations_fields_defaults['circles_fillcolor'],
+        'circles_fillopacity'      => $getlocations_fields_defaults['circles_fillopacity'],
+        'circles_coords'           => $getlocations_fields_defaults['circles_coords'],
+        'circles_clickable'        => $getlocations_fields_defaults['circles_clickable'],
+        'circles_message'          => $getlocations_fields_defaults['circles_message'],
+        'circles_radius'           => $getlocations_fields_defaults['circles_radius'],
+        'polylines_enable'         => $getlocations_fields_defaults['polylines_enable'],
+        'polylines_strokecolor'    => $getlocations_fields_defaults['polylines_strokecolor'],
+        'polylines_strokeopacity'  => $getlocations_fields_defaults['polylines_strokeopacity'],
+        'polylines_strokeweight'   => $getlocations_fields_defaults['polylines_strokeweight'],
+        'polylines_coords'         => $getlocations_fields_defaults['polylines_coords'],
+        'polylines_clickable'      => $getlocations_fields_defaults['polylines_clickable'],
+        'polylines_message'        => $getlocations_fields_defaults['polylines_message'],
       ),
     ),
   );
+  foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
+    $defaults['getlocations_fields']['settings']['baselayers'][$key] = $layer;
+  }
 
   return $defaults;
-
 }
 
 /**
@@ -2364,7 +2368,6 @@ function getlocations_fields_field_formatter_info_defaults() {
     'pancontrol'            => $getlocations_defaults['pancontrol'],
     'mtc'                   => $getlocations_defaults['mtc'],
     'maptype'               => $getlocations_defaults['maptype'],
-    'baselayers'            => $getlocations_defaults['baselayers'],
     'behavior'              => $getlocations_defaults['behavior'],
     'draggable'             => $getlocations_defaults['draggable'],
     'streetview_show'       => $getlocations_defaults['streetview_show'],
@@ -2443,8 +2446,11 @@ function getlocations_fields_field_formatter_info_defaults() {
     'polylines_clickable'    => $getlocations_defaults['polylines_clickable'],
     'polylines_message'      => $getlocations_defaults['polylines_message'],
   );
-  return $defaults;
+  foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
+    $defaults['baselayers'][$key] = $layer;
+  }
 
+  return $defaults;
 }
 
 /**

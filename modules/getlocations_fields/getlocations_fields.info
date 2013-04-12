@@ -1,3 +1,4 @@
+; getlocation_fields-7.x-1.x
 name = Getlocations Fields
 description = Defines a Getlocations Geocoding Field type.
 core = 7.x

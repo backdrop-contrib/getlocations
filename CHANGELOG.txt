@@ -1,9 +1,68 @@
-commit 912f950
+commit d5f58fa
+Author: hutch <hutch@midwales.net>
+Date:   Sat Apr 13 21:47:57 2013 +0100
+
+    more kml
+
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit 0775d94
+Author: hutch <hutch@midwales.net>
+Date:   Sat Apr 13 00:21:37 2013 +0100
+
+    kml layers
+
+getlocations.module
+js/getlocations.js
+
+commit 584b53d
+Author: hutch <hutch@midwales.net>
+Date:   Sat Apr 13 00:20:34 2013 +0100
+
+    better baselayers
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 6489c49
+Author: hutch <hutch@midwales.net>
+Date:   Sat Apr 13 00:19:41 2013 +0100
+
+    added version label
+
+modules/getlocations_fields/getlocations_fields.info
+
+commit f44bb33
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 12 23:56:33 2013 +0100
+
+    fixes for openstreetmap
+
+getlocations.module
+
+commit c00eb7d
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 12 23:51:37 2013 +0100
+
+    added version label
+
+getlocations.info
+
+commit 50d6e0e
+Author: hutch <hutch@midwales.net>
+Date:   Fri Apr 12 23:51:06 2013 +0100
+
+    supplied use_address to theme
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 0d5d9c9
 Author: hutch <hutch@midwales.net>
 Date:   Fri Apr 12 08:19:34 2013 +0100
 
     added openstreetmap
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 

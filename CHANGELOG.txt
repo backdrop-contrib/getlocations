@@ -1,9 +1,21 @@
-commit d5f58fa
+commit 2443e99
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 18 15:20:30 2013 +0100
+
+    more kml features
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit b5a9294
 Author: hutch <hutch@midwales.net>
 Date:   Sat Apr 13 21:47:57 2013 +0100
 
     more kml
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.module
 views/getlocations_plugin_style_map.inc
 

@@ -1,9 +1,61 @@
-commit 2443e99
+commit 1b7a63d
+Author: hutch <hutch@midwales.net>
+Date:   Thu Apr 25 19:56:22 2013 +0100
+
+    fixed jquery sig
+
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_box.js
+js/getlocations_categories.js
+js/getlocations_circles.js
+js/getlocations_colorbox.js
+js/getlocations_marker_box.js
+js/getlocations_polygons.js
+js/getlocations_polylines.js
+js/getlocations_rectangles.js
+js/getlocations_views.js
+js/icons.js
+modules/getlocations_blocks/js/getlocations_blocks.js
+modules/getlocations_blocks/js/getlocations_blocks_admin.js
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields_admin.js
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit ce9354f
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 22 20:41:17 2013 +0100
+
+    smal kml bug
+
+getlocations.module
+
+commit cd5a1e0
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 22 20:40:45 2013 +0100
+
+    better jquery selectors
+
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+
+commit 2f90394
+Author: hutch <hutch@midwales.net>
+Date:   Mon Apr 22 20:40:16 2013 +0100
+
+    simpler doctype
+
+getlocations_marker_box.tpl.php
+modules/getlocations_search/getlocations_search_box.tpl.php
+
+commit 1481582
 Author: hutch <hutch@midwales.net>
 Date:   Thu Apr 18 15:20:30 2013 +0100
 
     more kml features
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 modules/getlocations_search/getlocations_search.module

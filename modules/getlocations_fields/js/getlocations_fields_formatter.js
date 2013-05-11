@@ -57,32 +57,32 @@
       });
 
       if ($("input[id$=settings-panoramio-show], input[id$=options-panoramio-show]").attr('checked')) {
-        $("#wrap-getlocations-panoramio-show").show();
+        $("#wrap-getlocations-panoramio").show();
       }
       else {
-        $("#wrap-getlocations-panoramio-show").hide();
+        $("#wrap-getlocations-panoramio").hide();
       }
       $("input[id$=settings-panoramio-show], input[id$=options-panoramio-show]").change(function() {
         if ($(this).attr('checked')) {
-          $("#wrap-getlocations-panoramio-show").show();
+          $("#wrap-getlocations-panoramio").show();
         }
         else {
-          $("#wrap-getlocations-panoramio-show").hide();
+          $("#wrap-getlocations-panoramio").hide();
         }
       });
 
       if ($("input[id$=settings-weather-show], input[id$=options-weather-show]").attr('checked')) {
-        $("#wrap-getlocations-weather-show").show();
+        $("#wrap-getlocations-weather").show();
       }
       else {
-        $("#wrap-getlocations-weather-show").hide();
+        $("#wrap-getlocations-weather").hide();
       }
       $("input[id$=settings-weather-show], input[id$=options-weather-show]").change(function() {
         if ($(this).attr('checked')) {
-          $("#wrap-getlocations-weather-show").show();
+          $("#wrap-getlocations-weather").show();
         }
         else {
-          $("#wrap-getlocations-weather-show").hide();
+          $("#wrap-getlocations-weather").hide();
         }
       });
 

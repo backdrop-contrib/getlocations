@@ -222,8 +222,8 @@ function getlocations_settings_form() {
   if (module_exists('getlocations_fields')) {
     if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
       $form['getlocations_default']['returnlink_user_enable'] = getlocations_element_map_checkbox(
-         t('Show link back to user'),
-         $getlocations_defaults['returnlink_user_enable']
+        t('Show link back to user'),
+        $getlocations_defaults['returnlink_user_enable']
       );
       $form['getlocations_default']['returnlink_user_link'] = getlocations_element_map_tf(
         t('Text of user return link'),

@@ -696,8 +696,8 @@ function getlocations_search_term_autocomplete($string) {
   if ($vid) {
     $query = db_select('taxonomy_term_data', 't');
     $query->fields('t', array('name'))
-     ->where("LOWER(name) LIKE LOWER(:st)", array(':st' => $string . '%'))
-     ->condition('t.vid', $vid, '=')
+      ->where("LOWER(name) LIKE LOWER(:st)", array(':st' => $string . '%'))
+      ->condition('t.vid', $vid, '=')
       ->range(0, 15);
     $result = $query->execute();
     foreach ($result AS $row) {
@@ -724,7 +724,7 @@ function getlocations_search_term_get() {
   if ($vid) {
     $query = db_select('taxonomy_term_data', 't');
     $query->fields('t', array('name'))
-     ->condition('t.vid', $vid, '=');
+      ->condition('t.vid', $vid, '=');
     $result = $query->execute();
     foreach ($result AS $row) {
       $matches[$row->name] = getlocations_apoclean($row->name);

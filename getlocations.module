@@ -1112,6 +1112,7 @@ function getlocations_defaults() {
     'visual_refresh'                => 0,
     'map_resize'                    => 0,
     'region_bias'                   => variable_get('site_default_country', ''),
+    'fullscreen_disable'            => 0,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
@@ -2183,6 +2184,8 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'kml_url_button_label'    => $defaults['kml_url_button_label'],
       'kml_url_button_state'    => $defaults['kml_url_button_state'],
       'visual_refresh'          => $defaults['visual_refresh'],
+      'fullscreen_disable'      => $defaults['fullscreen_disable'],
+      'places'                  => $defaults['places'],
     ),
   );
   if ($defaults['weather_use']) {
@@ -3052,6 +3055,12 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
     t('Automatic map resize'),
     $defaults['map_resize'],
     t('Set the map dimensions to 100% if the browser is on a mobile device.')
+  );
+  // fullscreen_disable
+  $form['fullscreen_disable'] = getlocations_element_map_checkbox(
+    t('Disable Fullscreen'),
+    $defaults['fullscreen_disable'],
+    t('Disable the Fullscreen button if the browser is on a mobile device.')
   );
 
   $form['styles'] = array(

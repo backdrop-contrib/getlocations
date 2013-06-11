@@ -559,6 +559,14 @@ function getlocations_settings_form() {
     128,
     t('Where the getlocations categories javascript file is located.')
   );
+  // search_places
+  $form['getlocations_paths']['getlocations_search_places_path'] = getlocations_element_path(
+    t('Path to getlocations Search Places javascript file'),
+    $getlocations_paths['getlocations_search_places_path'],
+    60,
+    128,
+    t('Where the getlocations search places javascript file is located.')
+  );
 
   $form['getlocations_paths']['getlocations_path'] = getlocations_element_path(
     t('Path to getlocations javascript file'),
@@ -671,6 +679,11 @@ function getlocations_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_term_marker']['vids'] = 0;
     $form_state['values']['getlocations_term_marker']['max_depth'] = '';
   }
+  // search_places
+  if ($form_state['values']['getlocations_default']['search_places']) {
+    $form_state['values']['getlocations_default']['places'] = 1;
+  }
+
 }
 
 /**

@@ -1631,6 +1631,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['search_places_position']    = $settings['search_places_position'];
   $getlocations_defaults['search_places_label']       = $settings['search_places_label'];
   $getlocations_defaults['search_places_placeholder'] = $settings['search_places_placeholder'];
+  $getlocations_defaults['visual_refresh']            = $settings['visual_refresh'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2225,6 +2226,7 @@ function getlocations_fields_defaults() {
     'search_places_position'    => $getlocations_defaults['search_places_position'],
     'search_places_label'       => $getlocations_defaults['search_places_label'],
     'search_places_placeholder' => $getlocations_defaults['search_places_placeholder'],
+    'visual_refresh'            => $getlocations_defaults['visual_refresh'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -2358,6 +2360,7 @@ function getlocations_fields_field_info_defaults() {
         'search_places_position'          => $getlocations_fields_defaults['search_places_position'],
         'search_places_label'             => $getlocations_fields_defaults['search_places_label'],
         'search_places_placeholder'       => $getlocations_fields_defaults['search_places_placeholder'],
+        'visual_refresh'                  => $getlocations_fields_defaults['visual_refresh'],
       ),
     ),
   );
@@ -2470,6 +2473,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'search_places_position'    => $getlocations_defaults['search_places_position'],
     'search_places_label'       => $getlocations_defaults['search_places_label'],
     'search_places_placeholder' => $getlocations_defaults['search_places_placeholder'],
+    'visual_refresh'            => $getlocations_defaults['visual_refresh'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;

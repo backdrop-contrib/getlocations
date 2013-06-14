@@ -41,6 +41,7 @@
 /* stop long titles from creeping in under the close button */
 .location.vcard {
   margin-top: 8px;
+  min-height: 120px;
 }
 .adr {
 }
@@ -102,5 +103,27 @@ div.fullscreen {
   width: 225px;
 }
 .sp_picture {
+}
+
+.sp_listing_wrapper {
+  border: 1px solid #CCCCCC;
+  width: 494px;
+  padding: 4px;
+  margin-bottom: 8px;
+}
+.sp_listing {
+  max-height: 200px;
+  overflow: auto;
+  cursor: pointer;
+}
+.sp_ul {
+  list-style-type: none;
+  margin-left: 0px;
+}
+.sp_link {
+  vertical-align: middle;
+}
+.sp_link:hover {
+  background: #F0F0F0;
 }
 

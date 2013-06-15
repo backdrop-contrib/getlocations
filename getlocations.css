@@ -29,6 +29,8 @@
 
 /* map links feature */
 .getlocations_map_links ul {
+  list-style-type: none;
+  margin-left: 0px;
 }
 
 /**
@@ -41,7 +43,6 @@
 /* stop long titles from creeping in under the close button */
 .location.vcard {
   margin-top: 8px;
-  min-height: 120px;
 }
 .adr {
 }
@@ -127,3 +128,9 @@ div.fullscreen {
   background: #F0F0F0;
 }
 
+.sp_address {
+}
+.sp_phone {
+}
+.sp_web {
+}

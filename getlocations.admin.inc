@@ -575,6 +575,11 @@ function getlocations_settings_form() {
     128,
     t('Where the getlocations javascript file is located.')
   );
+  $form['getlocations_paths']['reset'] = getlocations_element_map_checkbox(
+    t('Reset'),
+    0,
+    t('Reset the paths to the defaults.')
+  );
 
   unset($form['#theme']);
   $form['#theme'] = 'getlocations_settings_form';
@@ -682,6 +687,12 @@ function getlocations_settings_validate($form, &$form_state) {
   // search_places
   if ($form_state['values']['getlocations_default']['search_places']) {
     $form_state['values']['getlocations_default']['places'] = 1;
+  }
+
+  $reset = $form_state['values']['getlocations_paths']['reset'];
+  unset($form_state['values']['getlocations_paths']['reset']);
+  if ($reset) {
+    $form_state['values']['getlocations_paths'] = getlocations_paths_get(TRUE);
   }
 
 }

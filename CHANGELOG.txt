@@ -1,9 +1,27 @@
-commit 4ab825d
+commit 8154598
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jun 23 18:57:31 2013 +0100
+
+    better navigator geolocation
+
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 79a1baa
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jun 22 23:55:47 2013 +0100
+
+    added namefield fill, see #2025759
+
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit a8000d4
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jun 22 05:37:58 2013 +0100
 
     improved geolocation button
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.module
 modules/getlocations_search/js/getlocations_search.js
 

@@ -2231,6 +2231,7 @@ function getlocations_fields_defaults() {
     'search_places_dd'          => $getlocations_defaults['search_places_dd'],
     'search_places_list'        => $getlocations_defaults['search_places_list'],
     'visual_refresh'            => $getlocations_defaults['visual_refresh'],
+    'jquery_colorpicker_enabled' => $getlocations_defaults['jquery_colorpicker_enabled'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -2367,6 +2368,7 @@ function getlocations_fields_field_info_defaults() {
         'search_places_dd'                => $getlocations_fields_defaults['search_places_dd'],
         'search_places_list'              => $getlocations_fields_defaults['search_places_list'],
         'visual_refresh'                  => $getlocations_fields_defaults['visual_refresh'],
+        'jquery_colorpicker_enabled'      => $getlocations_fields_defaults['jquery_colorpicker_enabled'],
       ),
     ),
   );
@@ -2482,6 +2484,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'search_places_dd'          => $getlocations_defaults['search_places_dd'],
     'search_places_list'        => $getlocations_defaults['search_places_list'],
     'visual_refresh'            => $getlocations_defaults['visual_refresh'],
+    'jquery_colorpicker_enabled' => $getlocations_defaults['jquery_colorpicker_enabled'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;

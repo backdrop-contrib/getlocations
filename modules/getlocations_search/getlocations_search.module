@@ -264,6 +264,7 @@ function getlocations_search_getmap($which = 'page') {
     'visual_refresh', 'map_resize', 'region_bias', 'fullscreen_disable',
     'search_places', 'search_places_size', 'search_places_position', 'search_places_label',
     'search_places_placeholder', 'search_places_dd', 'search_places_list',
+    'search_radcircle_toggle', 'search_radcircle_toggle_active', 'search_radcircle_enable',
   );
 
   foreach ($keys AS $key) {
@@ -306,16 +307,24 @@ function getlocations_search_js_settings_do($defaults, $mapid) {
   $do_lookup = getlocations_search_do_types();
   $settings = array(
     $mapid => array(
-      'method' => $defaults['method'],
-      'maxzoom' => $defaults['maxzoom'],
-      'do_lookup' => ($do_lookup ? 1 : 0),
-      'autocomplete_bias' => $defaults['autocomplete_bias'],
-      'restrict_by_country' => $defaults['restrict_by_country'],
-      'country' => $defaults['country'],
-      'show_distance' => $defaults['show_distance'],
-      'search_marker' => $defaults['search_marker'],
-      'do_search_marker' => $defaults['do_search_marker'],
-      'search_info_path' => url("getlocations_search/info"),
+      'method'                         => $defaults['method'],
+      'maxzoom'                        => $defaults['maxzoom'],
+      'do_lookup'                      => ($do_lookup ? 1 : 0),
+      'autocomplete_bias'              => $defaults['autocomplete_bias'],
+      'restrict_by_country'            => $defaults['restrict_by_country'],
+      'country'                        => $defaults['country'],
+      'show_distance'                  => $defaults['show_distance'],
+      'search_marker'                  => $defaults['search_marker'],
+      'do_search_marker'               => $defaults['do_search_marker'],
+      'search_info_path'               => url("getlocations_search/info"),
+      'search_radcircle_enable'        => $defaults['search_radcircle_enable'],
+      'search_radcircle_strokecolor'   => $defaults['search_radcircle_strokecolor'],
+      'search_radcircle_strokeopacity' => $defaults['search_radcircle_strokeopacity'],
+      'search_radcircle_strokeweight'  => $defaults['search_radcircle_strokeweight'],
+      'search_radcircle_fillcolor'     => $defaults['search_radcircle_fillcolor'],
+      'search_radcircle_fillopacity'   => $defaults['search_radcircle_fillopacity'],
+      'search_radcircle_toggle'        => $defaults['search_radcircle_toggle'],
+      'search_radcircle_toggle_active' => $defaults['search_radcircle_toggle_active'],
     ),
   );
 
@@ -666,6 +675,14 @@ function getlocations_search_defaults() {
     'search_places_placeholder' => $getlocations_defaults['search_places_placeholder'],
     'search_places_dd'          => $getlocations_defaults['search_places_dd'],
     'search_places_list'        => $getlocations_defaults['search_places_list'],
+    'search_radcircle_enable'        => 0,
+    'search_radcircle_strokecolor'   => $getlocations_defaults['circles_strokecolor'],
+    'search_radcircle_strokeopacity' => $getlocations_defaults['circles_strokeopacity'],
+    'search_radcircle_strokeweight'  => $getlocations_defaults['circles_strokeweight'],
+    'search_radcircle_fillcolor'     => $getlocations_defaults['circles_fillcolor'],
+    'search_radcircle_fillopacity'   => $getlocations_defaults['circles_fillopacity'],
+    'search_radcircle_toggle'        => 0,
+    'search_radcircle_toggle_active' => 1,
   );
 
   $settings = variable_get('getlocations_search_defaults', $defaults);
@@ -1216,7 +1233,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
     $latout = round($lat, 6);
     $lonout = round($lon, 6);
   }
-  $infoarr = array($distance, $units, ($type ? $type : 'all'), $latout, $lonout);
+  $infoarr = array($distance, $units, ($type ? $type : 'all'), $latout, $lonout, $distance_meters);
   $info = implode(",", $infoarr);
   $ret = array('locations' => $locations, 'minmaxes' => $minmaxes, 'info' => $info);
 

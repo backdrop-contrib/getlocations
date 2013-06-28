@@ -297,6 +297,11 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
       '#value' => 0,
     );
   }
+  $form[$varname]['display_latlon'] = getlocations_element_map_checkbox(
+    t('Show Latitude/Longitude'),
+    $defaults['display_latlon'],
+    ''
+  );
   $form[$varname]['display_dms'] = getlocations_element_map_checkbox(
     t('Show Latitude/Longitude in Degrees, minutes, seconds'),
     $defaults['display_dms'],

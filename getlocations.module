@@ -871,6 +871,14 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
 
   $getlocations_paths = getlocations_paths_get();
 
+  if ( isset($defaults['load_geo']) && $defaults['load_geo'] && !stristr($current_js, $getlocations_paths['getlocations_geo_path'])) {
+    $js_opts = array();
+    $js_opts['weight'] = $getlocations_js_weight;
+    $js_opts['type'] = 'file';
+    drupal_add_js(GETLOCATIONS_PATH . '/js/getlocations_geo.js', $js_opts);
+    $getlocations_js_weight++;
+  }
+
   if ($defaults['markermanagertype'] == 1 && !stristr($current_js, $getlocations_paths['markermanager_path'])) {
     $js_opts = array();
     $js_opts['weight'] = $getlocations_js_weight;
@@ -3903,6 +3911,7 @@ function getlocations_paths_get($reset = FALSE) {
     'getlocations_polylines_path'  => GETLOCATIONS_PATH . '/js/getlocations_polylines.js',
     'getlocations_categories_path' => GETLOCATIONS_PATH . '/js/getlocations_categories.js',
     'getlocations_search_places_path' => GETLOCATIONS_PATH . '/js/getlocations_search_places.js',
+    'getlocations_geo_path'        => GETLOCATIONS_PATH . '/js/getlocations_geo.js',
   );
   if ($reset) {
     $getlocations_paths = $defaults;
@@ -4760,7 +4769,7 @@ function getlocations_get_search_distance_sql($latitude, $longitude, $searchdist
  *   A floating point number where the number in meters after the initially passed scalar has been round()'d
  */
 function getlocations_convert_distance_to_meters($distance, $distance_unit = 'km') {
-  if (!is_numeric($distance) || $distance == 0) {
+  if (!is_numeric($distance) || ! $distance > 0) {
     return NULL;
   }
   $units = array(
@@ -4790,7 +4799,7 @@ function getlocations_convert_distance_to_meters($distance, $distance_unit = 'km
  *   A floating point number where the converted number has been round()'d
  */
 function getlocations_convert_meters_to_distance($meters, $distance_unit = 'km') {
-  if (!is_numeric($meters) || $meters == 0) {
+  if (!is_numeric($meters) || ! $meters > 0) {
     return NULL;
   }
   $units = array(

@@ -278,7 +278,7 @@ function getlocations_search_getmap($which = 'page') {
   #$lla = explode(',', $getlocations_search_defaults['latlong']);
   #$latlons[] = array($lla[0], $lla[1], 0, '', $getlocations_search_defaults['search_map_marker'], '');
   $latlons = array();
-  getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid, FALSE, TRUE);
+  getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid, FALSE, 'getlocations_search');
 
   $map = theme('getlocations_show', array('width' => $getlocations_defaults['width'] , 'height' => $getlocations_defaults['height'] , 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'type' => '', 'node' => ''));
   return array('map' => $map, 'mapid' => $mapid);

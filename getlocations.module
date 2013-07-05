@@ -871,7 +871,7 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
 
   $getlocations_paths = getlocations_paths_get();
 
-  if ( isset($defaults['load_geo']) && $defaults['load_geo'] && !stristr($current_js, $getlocations_paths['getlocations_geo_path'])) {
+  if ($defaults['geo_enable'] && !stristr($current_js, $getlocations_paths['getlocations_geo_path'])) {
     $js_opts = array();
     $js_opts['weight'] = $getlocations_js_weight;
     $js_opts['type'] = 'file';
@@ -1140,6 +1140,7 @@ function getlocations_defaults() {
     'search_places_list'            => 0,
     'getdirections_enabled'         => (module_exists('getdirections') ? 1 : 0),
     'jquery_colorpicker_enabled'    => (module_exists('jquery_colorpicker') ? 1 : 0),
+    'geo_enable'                    => 0,
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);

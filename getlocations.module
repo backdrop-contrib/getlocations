@@ -1153,6 +1153,7 @@ function getlocations_defaults() {
     'getdirections_enabled'         => (module_exists('getdirections') ? 1 : 0),
     'jquery_colorpicker_enabled'    => (module_exists('jquery_colorpicker') ? 1 : 0),
     'geo_enable'                    => 0,
+    'extcontrol'                    => '',
   );
 
   $getlocations_defaults = variable_get('getlocations_default', $defaults);

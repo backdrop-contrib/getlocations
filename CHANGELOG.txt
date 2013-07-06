@@ -1,9 +1,21 @@
-commit 3c602c3
+commit 0d4c588
+Author: hutch <hutch@midwales.net>
+Date:   Sat Jul 6 19:31:25 2013 +0100
+
+    fixed bug in shapes js
+
+js/getlocations_circles.js
+js/getlocations_polygons.js
+js/getlocations_polylines.js
+js/getlocations_rectangles.js
+
+commit 1c061ac
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jul 6 09:20:26 2013 +0100
 
     various cleanups
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations_preview.js
 modules/getlocations_search/getlocations_search.module

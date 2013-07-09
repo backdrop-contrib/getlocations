@@ -41,7 +41,7 @@
         sp_do_places(places, key);
       });
     }
-  }
+  };
 
   function do_sp_bubble(marker, p, key) {
     var ver = Drupal.getlocations.msiedetect();
@@ -205,6 +205,6 @@
       $("#search_places_input_" + key).val('');
     }
     $("#search_places_results_" + key).html('');
-  }
+  };
 
 }(jQuery));

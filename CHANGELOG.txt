@@ -1,9 +1,18 @@
-commit 7db0342
+commit ec54325
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 16 11:30:50 2013 +0100
+
+    fixed shadow in markerinfo
+
+getlocations.module
+
+commit afada75
 Author: hutch <hutch@midwales.net>
 Date:   Tue Jul 16 08:53:05 2013 +0100
 
     better geolocation button
 
+CHANGELOG.txt
 getlocations.module
 images/error.png
 images/help.png

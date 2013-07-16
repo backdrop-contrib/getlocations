@@ -1,9 +1,109 @@
-commit 0d4c588
+commit 7db0342
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 16 08:53:05 2013 +0100
+
+    better geolocation button
+
+getlocations.module
+images/error.png
+images/help.png
+images/info.png
+images/ok.png
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 06dba3e
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 11 13:46:25 2013 +0100
+
+    better settings
+
+views/getlocations.views.inc
+
+commit 3b11518
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 11 13:45:49 2013 +0100
+
+    fixed nodezoom
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 20ca774
+Author: hutch <hutch@midwales.net>
+Date:   Thu Jul 11 10:01:10 2013 +0100
+
+    added another views handler
+
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_glid.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit e270ebe
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 10 20:14:28 2013 +0100
+
+    fixed form management js in views
+
+js/getlocations_views.js
+views/getlocations_plugin_style_map.inc
+
+commit 31c4834
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 10 09:41:25 2013 +0100
+
+    improved geojson and search_places js
+
+js/getlocations_geojson.js
+js/getlocations_search_places.js
+
+commit 2345e05
+Author: hutch <hutch@midwales.net>
+Date:   Tue Jul 9 18:53:38 2013 +0100
+
+    added geojson support
+
+README.txt
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_geojson.js
+js/getlocations_search_places.js
+js/getlocations_views.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit 181513a
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 8 19:42:33 2013 +0100
+
+    added infobubble_extended
+
+getlocations.admin.inc
+getlocations.module
+js/infobubble_extended.js
+js/infobubble_options.txt
+
+commit ba11a6f
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 8 19:42:03 2013 +0100
+
+    tidy up
+
+js/getlocations_geo.js
+modules/getlocations_search/getlocations_search.module
+
+commit 15abac8
 Author: hutch <hutch@midwales.net>
 Date:   Sat Jul 6 19:31:25 2013 +0100
 
     fixed bug in shapes js
 
+CHANGELOG.txt
 js/getlocations_circles.js
 js/getlocations_polygons.js
 js/getlocations_polylines.js

@@ -5850,8 +5850,10 @@ function theme_getlocations_settings_form($variables) {
         $link = getlocations_markerpicker_link($form['getlocations_default']['comment_map_marker']['#id'], 'c');
         $form['getlocations_default']['comment_map_marker']['#field_suffix'] = '&nbsp;' . $link;
       }
-      $link = getlocations_markerpicker_link($form['getlocations_default']['input_map_marker']['#id'], 'i');
-      $form['getlocations_default']['input_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      if (module_exists('getlocations_fields')) {
+        $link = getlocations_markerpicker_link($form['getlocations_default']['input_map_marker']['#id'], 'i');
+        $form['getlocations_default']['input_map_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
 
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {

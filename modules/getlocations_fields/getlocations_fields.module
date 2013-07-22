@@ -1634,6 +1634,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['search_places_dd']          = $settings['search_places_dd'];
   $getlocations_defaults['search_places_list']        = $settings['search_places_list'];
   $getlocations_defaults['visual_refresh']            = $settings['visual_refresh'];
+  $getlocations_defaults['kml_group']                 = $settings['kml_group'];
   $getlocations_defaults['geojson_enable']            = $settings['geojson_enable'];
   $getlocations_defaults['geojson_data']              = $settings['geojson_data'];
   $getlocations_defaults['geojson_options']           = $settings['geojson_options'];
@@ -1722,9 +1723,11 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
         }
       }
       elseif ($mode == 'update') {
-        $result = getlocations_fields_update_record($locations[$key], $criteria);
-        if ($result && ! isset($locations[$key]['glid'])) {
-          $locations[$key]['glid'] = $result;
+        if (isset($locations[$key]['active']) && $locations[$key]['active']) {
+          $result = getlocations_fields_update_record($locations[$key], $criteria);
+          if ($result && ! isset($locations[$key]['glid'])) {
+            $locations[$key]['glid'] = $result;
+          }
         }
       }
       elseif ($mode == 'delete') {
@@ -2242,6 +2245,9 @@ function getlocations_fields_defaults() {
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
   }
+  foreach ($getlocations_defaults['kml_group'] AS $key => $layer) {
+    $defaults['kml_group'][$key] = $layer;
+  }
 
   $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
   $newdefaults = getlocations_adjust_vars($defaults, $getlocations_fields_defaults);
@@ -2374,6 +2380,7 @@ function getlocations_fields_field_info_defaults() {
         'search_places_dd'                => $getlocations_fields_defaults['search_places_dd'],
         'search_places_list'              => $getlocations_fields_defaults['search_places_list'],
         'visual_refresh'                  => $getlocations_fields_defaults['visual_refresh'],
+        'kml_group'                       => $getlocations_fields_defaults['kml_group'],
         'jquery_colorpicker_enabled'      => $getlocations_fields_defaults['jquery_colorpicker_enabled'],
         'geojson_enable'                  => $getlocations_fields_defaults['geojson_enable'],
         'geojson_data'                    => $getlocations_fields_defaults['geojson_data'],
@@ -2493,6 +2500,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'search_places_dd'          => $getlocations_defaults['search_places_dd'],
     'search_places_list'        => $getlocations_defaults['search_places_list'],
     'visual_refresh'            => $getlocations_defaults['visual_refresh'],
+    'kml_group'                 => $getlocations_defaults['kml_group'],
     'jquery_colorpicker_enabled' => $getlocations_defaults['jquery_colorpicker_enabled'],
     'geojson_enable'            => $getlocations_defaults['geojson_enable'],
     'geojson_data'              => $getlocations_defaults['geojson_data'],

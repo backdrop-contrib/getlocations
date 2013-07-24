@@ -632,7 +632,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
             $field_names = getlocations_get_fieldname2($type, $entity_type);
             foreach ($field_names AS $f_name) {
               if ( $field_name && $f_name == $field_name) {
-                $mkey = 'node_marker__' . $type . '__' . $field_name;
+                $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
                 if (isset($settings[$mkey])) {
                   $settings['map_marker'] = $settings[$mkey];
                 }

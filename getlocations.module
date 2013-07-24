@@ -5925,7 +5925,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
           foreach ($types AS $type => $name) {
             $field_names = getlocations_get_fieldname2($type, 'node');
             foreach ($field_names AS $field_name) {
-              $mkey = 'node_marker__' . $type . '__' . $field_name;
+              $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
               $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
               $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
             }

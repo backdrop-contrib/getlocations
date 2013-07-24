@@ -161,7 +161,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
         foreach ($types AS $type => $name) {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
-            $mkey = 'node_marker__' . $type . '__' . $field_name;
+            $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
             $mmarker = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $getlocations_defaults['node_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }
@@ -236,7 +236,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
             if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
-              $mkey = 'node_marker__' . $type . '__' . $field_name;
+              $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
               $form[$mkey] = getlocations_element_map_marker(
                 t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
                 $markers,

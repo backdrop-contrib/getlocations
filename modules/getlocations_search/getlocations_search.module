@@ -1250,7 +1250,7 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
         $sqlarr[':type'] = $type;
         $marker = $getlocations_defaults['user_map_marker'];
       }
-      elseif ($type == 'term' && user_access('access getlocations')) {
+      elseif (($type == 'term' || $type == 'taxonomy_term') && user_access('access getlocations')) {
         $fields[] = 't.name AS title';
         $fields[] = 't.tid';
         $sqlsnip1 = "LEFT JOIN {taxonomy_term_data} t ON g.entity_id = t.tid ";

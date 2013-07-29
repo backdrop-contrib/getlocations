@@ -1,9 +1,99 @@
-commit b502253
+commit 83b44f1
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 29 12:27:05 2013 +0100
+
+    added access rule for getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit 88869b6
+Author: hutch <hutch@midwales.net>
+Date:   Mon Jul 29 09:35:07 2013 +0100
+
+    improved getlocations_search
+
+getlocations.css
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit 120a853
+Author: hutch <hutch@midwales.net>
+Date:   Sun Jul 28 03:10:28 2013 +0100
+
+    added drush
+
+README.txt
+drush/getlocations.drush.inc
+
+commit b40d855
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 26 18:54:05 2013 +0100
+
+    Coder review
+
+modules/getlocations_search/getlocations_search.module
+
+commit 3180e23
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 26 18:45:58 2013 +0100
+
+    fixed bug in 'type'
+
+modules/getlocations_search/getlocations_search.module
+
+commit e93d8d8
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 26 18:45:08 2013 +0100
+
+    added header
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+
+commit 3a5397a
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 26 14:34:30 2013 +0100
+
+    added support for location_cck to getlocations_search
+
+modules/getlocations_search/getlocations_search.module
+
+commit 4905f18
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 26 09:45:50 2013 +0100
+
+    added getlocations_map module
+
+modules/getlocations_map/README.txt
+modules/getlocations_map/getlocations_map.info
+modules/getlocations_map/getlocations_map.install
+modules/getlocations_map/getlocations_map.module
+modules/getlocations_map/js/getlocations_map_formatter.js
+
+commit 58cb84d
+Author: hutch <hutch@midwales.net>
+Date:   Fri Jul 26 09:45:09 2013 +0100
+
+    more extended infobubble
+
+js/infobubble_extended.js
+js/infobubble_options.txt
+
+commit 0a19300
+Author: hutch <hutch@midwales.net>
+Date:   Wed Jul 24 21:29:23 2013 +0100
+
+    better addressfield_convert
+
+getlocations.module
+
+commit c9faa0e
 Author: hutch <hutch@midwales.net>
 Date:   Wed Jul 24 14:34:10 2013 +0100
 
     marker fix, see #1450132
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 views/getlocations.views.inc

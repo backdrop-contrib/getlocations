@@ -29,13 +29,18 @@ function getlocations_search_settings_form() {
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
   );
-  $getlocations_search_paths = variable_get('getlocations_search_paths', array('getlocations_search_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_search.js'));
+  $getlocations_search_paths = getlocations_search_paths_get();
   $form['getlocations_search_paths']['getlocations_search_path'] = getlocations_element_path(
     t('Path to getlocations_search javascript file'),
     $getlocations_search_paths['getlocations_search_path'],
     70,
     128,
     t('Where the getlocations_search javascript file is located.')
+  );
+  $form['getlocations_search_paths']['reset'] = getlocations_element_map_checkbox(
+    t('Reset'),
+    0,
+    t('Reset the paths to the defaults.')
   );
 
   $form = system_settings_form($form);
@@ -441,6 +446,10 @@ function getlocations_search_settings_validate($form, &$form_state) {
     }
 
   }
-
+  $reset = $form_state['values']['getlocations_search_paths']['reset'];
+  unset($form_state['values']['getlocations_search_paths']['reset']);
+  if ($reset) {
+    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(TRUE);
+  }
 }
 

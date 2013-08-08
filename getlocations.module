@@ -3247,14 +3247,15 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     10
   );
 
-  // Enable the visual refresh feature
-  $form['visual_refresh'] = getlocations_element_map_checkbox(
-    t('Google Visual Refresh'),
-    $defaults['visual_refresh'],
-    t('Enable the Visual Refresh feature.')
-  );
-
   if ($config) {
+
+    // Enable the visual refresh feature
+    $form['visual_refresh'] = getlocations_element_map_checkbox(
+      t('Google Visual Refresh'),
+      $defaults['visual_refresh'],
+      t('Enable the Visual Refresh feature.')
+    );
+
     $form['region_bias'] = getlocations_element_dd(
       t('Regional bias'),
       $defaults['region_bias'],
@@ -3662,7 +3663,7 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
         t("The distance from the center of the rectangle to the edge in meters on the Earth's surface. This will only be used if Apply a rectangle is enabled."),
         10,
         10,
-        TRUE
+        FALSE
       );
     }
 

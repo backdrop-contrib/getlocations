@@ -1215,7 +1215,7 @@ function getlocations_defaults_check() {
  * @param string $latlon
  *
  * @return
- *   Returns true or false
+ *   Returns normalized string or false
  */
 function getlocations_latlon_check($latlon) {
 
@@ -4398,12 +4398,12 @@ function getlocations_get_polyline_settings($defaults) {
 }
 
 /**
- * Function
+ * Function to get the path to the GeoJSON library
  *
  * @param
  *
  * @return
- *   Returns
+ *   Returns string or false
  *
  */
 function getlocations_get_geojson_path() {
@@ -4413,14 +4413,13 @@ function getlocations_get_geojson_path() {
   return FALSE;
 }
 
-// run string through check_plain but then restore apostrophes
 /**
- * Function
+ * Function to run string through check_plain but then restore apostrophes
  *
  * @param
  *
  * @return
- *   Returns
+ *   Returns string
  *
  */
 function getlocations_apoclean($string) {

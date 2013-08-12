@@ -1,9 +1,98 @@
-commit dda9f5d
+commit 5342f01
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 12 18:38:06 2013 +0100
+
+    fixed getlocations_map notices
+
+modules/getlocations_map/getlocations_map.module
+
+commit 7be8887
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 11 23:03:40 2013 +0100
+
+    added markers
+
+modules/getlocations_map/getlocations_map.module
+
+commit 0484ff9
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 11 23:02:37 2013 +0100
+
+    added css
+
+modules/getlocations_map/getlocations_map.css
+
+commit b0d81b5
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 11 18:49:46 2013 +0100
+
+    fixed minmaxes
+
+getlocations.module
+
+commit fe7adc9
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 11 08:17:49 2013 +0100
+
+    fixed default value bug in field modules
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_map/getlocations_map.module
+
+commit 80103ad
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 11 08:16:06 2013 +0100
+
+    improved comments
+
+getlocations.module
+
+commit 6a53dbf
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 8 17:21:07 2013 +0100
+
+    fixed Input form Map center
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit da83677
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 8 12:21:23 2013 +0100
+
+    fixed jquery bug
+
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_map/js/getlocations_map_formatter.js
+
+commit a1a62fe
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 8 09:30:46 2013 +0100
+
+    fixed visual_refresh bug, no longer per map
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+
+commit d51c5fb
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 7 14:35:57 2013 +0100
+
+    added rectangles_apply feature
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_map/getlocations_map.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit 320f117
 Author: hutch <hutch@midwales.net>
 Date:   Wed Aug 7 08:30:05 2013 +0100
 
     more circles_apply
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_map/getlocations_map.module

@@ -104,6 +104,7 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
   global $language;
   $lang = ($langcode ? $langcode : ($entity->language ? $entity->language : $language->language));
   $settings = $display['settings'];
+  $element = array();
 
   switch ($display['type']) {
     case 'getlocations_map_default':
@@ -190,10 +191,9 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
         }
 
         // fetch lats and lons
-        $element = array();
         $ct = 0;
         foreach (array_keys($locative_fields) AS $delta) {
-
+          $title = '';
           if ($module == 'getlocations_fields') {
             if (isset($entity->{$locative_field_name}[$lang][$delta])) {
               if ($location = $entity->{$locative_field_name}[$lang][$delta]) {
@@ -203,6 +203,9 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
                 if (isset($location['marker']) && ! empty($location['marker'])) {
                   $marker = $location['marker'];
                 }
+                if (isset($location['name']) && ! empty($location['name'])) {
+                  $title = $location['name'];
+                }
               }
             }
           }
@@ -211,6 +214,9 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
               if ($location = $entity->{$locative_field_name}[$lang][$delta]) {
                 $lat = $location['latitude'];
                 $lon = $location['longitude'];
+                if (isset($location['name']) && ! empty($location['name'])) {
+                  $title = $location['name'];
+                }
               }
             }
           }
@@ -235,7 +241,9 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
             $entity_get_info = entity_get_info($entity_type);
             $entity_key = $entity_get_info['entity keys']['id']; // nid, cid, uid etc
             $entity_id = $entity->{$entity_key};
-            $title = (isset($entity->title) ? $entity->title : '');
+            if (empty($title)) {
+              $title = (isset($entity->title) ? $entity->title : '');
+            }
             $title = htmlspecialchars_decode(strip_tags($title), ENT_QUOTES);
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $latlons[] = array($lat, $lon, $entity_id, $title, $marker, $entity_key, '', '');
@@ -261,35 +269,44 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
           '#type' => '',
           '#node' => '',
         );
-        break;
 
       } // end if ($locative_field_name)
-
+      break;
 
     case 'getlocations_map_link':
-      $entity_get_info = entity_get_info($entity_type);
-      $entity_key = $entity_get_info['entity keys']['id']; // nid, cid, uid etc
-      $entity_id = $entity->{$entity_key};
-      $link_text = $settings['text'];
-      if ($settings['text_opt'] == 'page') {
-        $entity_title = '';
-        if (isset($entity_get_info['entity keys']['label'])) {
-          $entity_title = $entity_get_info['entity keys']['label'];
-        }
-        elseif ($entity_type == 'user') {
-          $entity_title = 'name';
-        }
-        if ($entity_title && isset($entity->{$entity_title})) {
-          $link_text = $entity->{$entity_title};
-        }
+
+      if (empty($settings) || ! isset($settings['text'])) {
+        $settings = getlocations_map_link_formatter_defaults();
       }
-      $link_text = check_plain($link_text);
-      $element[$delta] = array(
-        '#theme' => 'getlocations_map_link',
-        '#link_text' => $link_text,
-        '#entity_type' => $entity_type,
-        '#entity_id' => $entity_id,
-      );
+      $locative_field_name = (isset($items[0]['locative_field_name']) ? $items[0]['locative_field_name'] : '');
+      if ($locative_field_name) {
+        $locative_fields = $entity->{$locative_field_name}[$lang];
+        foreach (array_keys($locative_fields) AS $delta) {
+          $entity_get_info = entity_get_info($entity_type);
+          $entity_key = $entity_get_info['entity keys']['id']; // nid, cid, uid etc
+          $entity_id = $entity->{$entity_key};
+          $link_text = $settings['text'];
+          if ($settings['text_opt'] == 'page') {
+            $entity_title = '';
+            if (isset($entity_get_info['entity keys']['label'])) {
+              $entity_title = $entity_get_info['entity keys']['label'];
+            }
+            elseif ($entity_type == 'user') {
+              $entity_title = 'name';
+            }
+            if ($entity_title && isset($entity->{$entity_title})) {
+              $link_text = $entity->{$entity_title};
+            }
+          }
+          $link_text = check_plain($link_text);
+          $element[$delta] = array(
+            '#theme' => 'getlocations_map_link',
+            '#link_text' => $link_text,
+            '#entity_type' => $entity_type,
+            '#entity_id' => $entity_id,
+          );
+        }
+      } // end if ($locative_field_name)
       break;
   } // end switch
   return $element;

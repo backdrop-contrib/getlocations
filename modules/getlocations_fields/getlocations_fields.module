@@ -1640,6 +1640,8 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['geojson_enable']            = $settings['geojson_enable'];
   $getlocations_defaults['geojson_data']              = $settings['geojson_data'];
   $getlocations_defaults['geojson_options']           = $settings['geojson_options'];
+  $getlocations_defaults['nokeyboard']                = $settings['nokeyboard'];
+  $getlocations_defaults['nodoubleclickzoom']         = $settings['nodoubleclickzoom'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2246,6 +2248,8 @@ function getlocations_fields_defaults() {
     'geojson_enable'            => $getlocations_defaults['geojson_enable'],
     'geojson_data'              => $getlocations_defaults['geojson_data'],
     'geojson_options'           => $getlocations_defaults['geojson_options'],
+    'nokeyboard'                => $getlocations_defaults['nokeyboard'],
+    'nodoubleclickzoom'         => $getlocations_defaults['nodoubleclickzoom'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -2393,6 +2397,8 @@ function getlocations_fields_field_info_defaults() {
         'geojson_enable'                  => $getlocations_fields_defaults['geojson_enable'],
         'geojson_data'                    => $getlocations_fields_defaults['geojson_data'],
         'geojson_options'                 => $getlocations_fields_defaults['geojson_options'],
+        'nokeyboard'                      => $getlocations_fields_defaults['nokeyboard'],
+        'nodoubleclickzoom'               => $getlocations_fields_defaults['nodoubleclickzoom'],
       ),
     ),
   );
@@ -2516,6 +2522,8 @@ function getlocations_fields_field_formatter_info_defaults() {
     'geojson_enable'            => $getlocations_defaults['geojson_enable'],
     'geojson_data'              => $getlocations_defaults['geojson_data'],
     'geojson_options'           => $getlocations_defaults['geojson_options'],
+    'nokeyboard'                => $getlocations_defaults['nokeyboard'],
+    'nodoubleclickzoom'         => $getlocations_defaults['nodoubleclickzoom'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;

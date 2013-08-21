@@ -718,6 +718,15 @@ function getlocations_nids($nidlist) {
 
 /**
  * Set up javascript settings and map
+ *
+ * @param array $latlons
+ * @param array $minmaxes
+ * @param string $type
+ * @param object $node
+ * @param string $width
+ * @param string $height
+ *
+ * @return string themed map html
  */
 function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
   if (! getlocations_defaults_check()) {
@@ -742,7 +751,7 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
 /**
  * Function to setup the map scripts
  *
- * @param $defaults
+ * @param array $defaults
  *   Required. the current settings.
  * Sets up the call to googlemaps, css and the relevant getlocations js in html head
  */
@@ -758,7 +767,7 @@ function getlocations_setup_map($defaults) {
 /**
  * Function to setup the map scripts
  *
- * @param $defaults
+ * @param array $defaults
  *   Required. the current settings.
  * Sets up the call to googlemaps, css and the relevant getlocations js in html head
  */
@@ -1047,7 +1056,7 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
  * @return
  *   Returns the current settings
  */
-function getlocations_defaults() {
+function getlocations_defaults($reset = FALSE) {
   $defaults = array(
     'api_version'                   => 3,
     'width'                         => '300px',
@@ -1209,7 +1218,9 @@ function getlocations_defaults() {
     'nokeyboard'                    => 0,
     'nodoubleclickzoom'             => 0,
   );
-
+  if ($reset) {
+    return $defaults;
+  }
   $getlocations_defaults = variable_get('getlocations_default', $defaults);
   $newdefaults = getlocations_adjust_vars($defaults, $getlocations_defaults);
   return $newdefaults;
@@ -1810,7 +1821,6 @@ function getlocations_box() {
   elseif ($a1 == 'user' && $a2) {
     $content .= getlocations_usermap($a2);
   }
-
   elseif ($a1 == 'term' && $a2) {
     $content .= getlocations_termmap($a2);
   }

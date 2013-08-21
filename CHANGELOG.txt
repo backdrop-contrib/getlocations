@@ -1,9 +1,99 @@
-commit 5342f01
+commit 6c22774
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 21 15:13:19 2013 +0100
+
+    fields preview map
+
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_preview.js
+
+commit cfad81f
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 21 14:08:21 2013 +0100
+
+    moved call to getlocations_fields_getmap to theme, this fixes validate error bug
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 74e472b
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 21 14:06:13 2013 +0100
+
+    some cleanup
+
+getlocations.module
+
+commit 8686037
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 19 17:46:49 2013 +0100
+
+    reorganised translation strings
+
+getlocations.admin.inc
+getlocations.module
+
+commit f51abcf
+Author: hutch <hutch@midwales.net>
+Date:   Mon Aug 19 17:46:10 2013 +0100
+
+    added info to summary
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 0d2608a
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 18 22:43:34 2013 +0100
+
+    moved getlocations_markerclusterer into getlocations_setup_js
+
+getlocations.module
+
+commit 1da842b
+Author: hutch <hutch@midwales.net>
+Date:   Sun Aug 18 16:41:03 2013 +0100
+
+    added nodoubleclickzoom and nokeyboard features
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_map/getlocations_map.module
+modules/getlocations_search/getlocations_search.module
+
+commit a1add6b
+Author: hutch <hutch@midwales.net>
+Date:   Sat Aug 17 15:24:04 2013 +0100
+
+    google libraries compat with getdirections
+
+getlocations.module
+
+commit 7a07fe9
+Author: hutch <hutch@midwales.net>
+Date:   Fri Aug 16 15:34:09 2013 +0100
+
+    fixed weather bug
+
+getlocations.module
+js/getlocations.js
+
+commit 249f79d
+Author: hutch <hutch@midwales.net>
+Date:   Thu Aug 15 10:05:34 2013 +0100
+
+    added flush cache option
+
+getlocations.admin.inc
+getlocations.module
+
+commit 16a4d50
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 12 18:38:06 2013 +0100
 
     fixed getlocations_map notices
 
+CHANGELOG.txt
 modules/getlocations_map/getlocations_map.module
 
 commit 7be8887

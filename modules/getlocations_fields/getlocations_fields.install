@@ -98,6 +98,12 @@ function getlocations_fields_schema() {
         'default' => '',
         'not null' => TRUE,
       ),
+      'data' => array(
+        'description' => 'Data.',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
     ),
     'primary key' => array('glid'),
   );
@@ -227,3 +233,21 @@ function getlocations_fields_update_7100() {
   );
   db_add_field('getlocations_fields', 'marker', $spec);
 }
+
+function getlocations_fields_update_7101() {
+  $result = db_query("DESCRIBE {getlocations_fields}");
+  foreach ($result as $record) {
+    if ($record->Field == 'data') {
+      return;
+    }
+  }
+  $spec = array(
+    'description' => 'Data.',
+    'type' => 'text',
+    'size' => 'medium',
+    'not null' => TRUE,
+    'initial' => '',
+  );
+  db_add_field('getlocations_fields', 'data', $spec);
+}
+

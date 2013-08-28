@@ -15,7 +15,7 @@
 }
 /* see issue #1577634 #6 */
 .getlocations_map_canvas img {
-  max-width: none;
+  max-width: none !important;
 }
 
 .getlocations_map_buttons {
@@ -142,4 +142,6 @@ div.fullscreen {
 .sp_phone {
 }
 .sp_web {
+}
+.search_places_input_wrapper {
 }

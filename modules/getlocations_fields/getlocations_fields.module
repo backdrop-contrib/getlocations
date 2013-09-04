@@ -463,6 +463,18 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form = array();
 
   $form += getlocations_fields_input_settings_form($settings);
+  // validation for getlocations_fields_input_settings_form
+  $form['input_address_width']['#element_validate']     = array('element_validate_integer_positive');
+  $form['input_name_width']['#element_validate']        = array('element_validate_integer_positive');
+  $form['input_street_width']['#element_validate']      = array('element_validate_integer_positive');
+  $form['input_additional_width']['#element_validate']  = array('element_validate_integer_positive');
+  $form['input_city_width']['#element_validate']        = array('element_validate_integer_positive');
+  $form['input_province_width']['#element_validate']    = array('element_validate_integer_positive');
+  $form['input_postal_code_width']['#element_validate'] = array('element_validate_integer_positive');
+  $form['input_latitude_width']['#element_validate']    = array('element_validate_integer_positive');
+  $form['input_longitude_width']['#element_validate']   = array('element_validate_integer_positive');
+  $form['input_country_width']['#element_validate']     = array('element_validate_integer_positive');
+
 
   $form['mapwidth'] = getlocations_element_map_tf(
     t('Input form Map width'),
@@ -472,6 +484,8 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     10,
     TRUE
   );
+  $form['mapwidth']['#element_validate'] = array('getlocations_fields_element_validate_dim');
+
   $form['mapheight'] = getlocations_element_map_tf(
     t('Input form Map height'),
     $settings['mapheight'],
@@ -480,6 +494,8 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     10,
     TRUE
   );
+  $form['mapheight']['#element_validate'] = array('getlocations_fields_element_validate_dim');
+
   $form['latlong'] = getlocations_element_map_tf(
     t('Input form Map center'),
     $settings['latlong'],
@@ -488,6 +504,8 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     50,
     TRUE
   );
+  $form['latlong']['#element_validate'] = array('getlocations_fields_element_validate_latlon');
+
   // smart_ip latlon option
   if (module_exists('smart_ip')) {
     $form['use_smart_ip_latlon'] = getlocations_element_map_checkbox(
@@ -750,6 +768,8 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
 
   // address display options
   $element += getlocations_fields_display_settings_form($settings);
+  $element['display_mapwidth']['#element_validate'] = array('getlocations_fields_element_validate_dim');
+  $element['display_mapheight']['#element_validate'] = array('getlocations_fields_element_validate_dim');
 
   $element += getlocations_map_display_options_form($settings, FALSE);
 
@@ -1771,7 +1791,7 @@ function getlocations_fields_insert_record($location, $relations) {
     'latitude' => (float) $location['latitude'],
     'longitude' => (float) $location['longitude'],
     'marker' => ($location['marker'] ? $location['marker'] : ''),
-    'data' => ''
+    'data' => '',
   ));
   $result = $query->execute();
   // $result should contain glid
@@ -1832,7 +1852,7 @@ function getlocations_fields_update_record($location, $relations) {
       'latitude' => (float) $location['latitude'],
       'longitude' => (float) $location['longitude'],
       'marker' => ($location['marker'] ? $location['marker'] : ''),
-      'data' => ''
+      'data' => '',
     ))
     ->condition('glid', $location['glid'])
     ->execute();
@@ -3080,6 +3100,44 @@ function getlocations_fields_column_check($field) {
     }
   }
   return $found;
+}
+
+function getlocations_fields_element_validate_dim($element, &$form_state) {
+
+  $value = FALSE;
+  if (isset($element['#value'])) {
+    $value = $element['#value'];
+  }
+  elseif (isset($element['#default_value'])) {
+    $value = $element['#default_value'];
+  }
+  $check = getlocations_dim_check($value);
+  if (! $check) {
+    form_error($element, t('%name must be valid css.', array('%name' => $element['#title'])));
+  }
+  else {
+    $parents = $element['#parents'];
+    // not a good solution
+    $tot = count($parents);
+    if ($tot == 3) {
+      $form_state['values'][$parents[0]][$parents[1]][$parents[2]] = $check;
+    }
+    elseif ($tot == 5) {
+      $form_state['values'][$parents[0]][$parents[1]][$parents[2]][$parents[3]][$parents[4]] = $check;
+    }
+  }
+}
+
+function getlocations_fields_element_validate_latlon($element, &$form_state) {
+  $value = $element['#value'];
+  $check = getlocations_latlon_check($value);
+  if (! $check) {
+    form_error($element, t('%name must be expressed as a decimal latitude and longitude, separated by a comma.', array('%name' => $element['#title'])));
+  }
+  else {
+    $parents = $element['#parents'];
+    $form_state['values'][$parents[0]][$parents[1]][$parents[2]] = $check;
+  }
 }
 
 // Theming functions

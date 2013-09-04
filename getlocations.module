@@ -1271,7 +1271,7 @@ function getlocations_latlon_check($latlon) {
         // Normalize coordinates.
         $lat = getlocations_normalizelat($lat);
         $lon = getlocations_normalizelng($lon);
-        return "$lat" . "," . "$lon";
+        return $lat . "," . $lon;
       }
     }
   }
@@ -4751,6 +4751,23 @@ function getlocations_dms_to_dd($dms) {
 function getlocations_addressfield_convert($address) {
   $location = theme('getlocations_addressfield_convert', array('address' => $address));
   return $location;
+}
+
+/**
+ * Make sure a string is a valid css dimension.
+ */
+function getlocations_dim_check($string) {
+  if (!is_string($string) || empty($string)) {
+    return FALSE;
+  }
+  $s = strtolower(trim($string));
+  $matches = array();
+  if (preg_match('/^([\d.]+)\s*(em|ex|px|in|cm|mm|pt|pc|%)$/', $s, $matches)) {
+    return $matches[1] . $matches[2];
+  }
+  else {
+    return FALSE;
+  }
 }
 
 

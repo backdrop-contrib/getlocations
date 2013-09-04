@@ -71,14 +71,14 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['alter']['alter_text'] = 1;
-  $handler->display->display_options['fields']['nid']['alter']['text'] = 'See [title] on a map';
+  $handler->display->display_options['fields']['nid']['alter']['text'] = 'View [title] on a map';
   $handler->display->display_options['fields']['nid']['alter']['make_link'] = 1;
   $handler->display->display_options['fields']['nid']['alter']['path'] = 'getlocations/node/[nid]';
   $handler->display->display_options['fields']['nid']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['alt'] = 'See [title] on a map';
+  $handler->display->display_options['fields']['nid']['alter']['alt'] = 'View on a map';
   $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
@@ -1138,14 +1138,14 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['uid']['label'] = '';
 
   $handler->display->display_options['fields']['uid']['alter']['alter_text'] = 1;
-  $handler->display->display_options['fields']['uid']['alter']['text'] = 'See [name] on a map';
+  $handler->display->display_options['fields']['uid']['alter']['text'] = 'View [name] on a map';
   $handler->display->display_options['fields']['uid']['alter']['make_link'] = 1;
   $handler->display->display_options['fields']['uid']['alter']['path'] = 'getlocations/user/[uid]';
   $handler->display->display_options['fields']['uid']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['uid']['alter']['external'] = 0;
   $handler->display->display_options['fields']['uid']['alter']['replace_spaces'] = 0;
   $handler->display->display_options['fields']['uid']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['uid']['alter']['alt'] = 'See [name] on a map';
+  $handler->display->display_options['fields']['uid']['alter']['alt'] = 'View on a map';
   $handler->display->display_options['fields']['uid']['link_to_user'] = 0;
   /* Contextual filter: User: Uid */
   $handler->display->display_options['arguments']['uid']['id'] = 'uid';
@@ -1801,6 +1801,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['name']['alter']['text'] = 'View [name] on a large map';
   $handler->display->display_options['fields']['name']['alter']['make_link'] = 1;
   $handler->display->display_options['fields']['name']['alter']['path'] = 'getlocations/term/!1';
+  $handler->display->display_options['fields']['name']['alter']['alt'] = 'View on a large map';
   $handler->display->display_options['fields']['name']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['name']['alter']['external'] = 0;
   $handler->display->display_options['fields']['name']['alter']['replace_spaces'] = 0;
@@ -2310,7 +2311,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['alt'] = 'View [title] on a map';
+  $handler->display->display_options['fields']['nid']['alter']['alt'] = 'View on a map';
   $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
@@ -2517,7 +2518,7 @@ function getlocations_fields_views_default_views() {
   $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['nid']['alter']['alt'] = 'View [title] on a map';
+  $handler->display->display_options['fields']['nid']['alter']['alt'] = 'View on a map';
   $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;

@@ -1699,6 +1699,9 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
       if (! isset($locations[$key]['marker'])) {
         $locations[$key]['marker'] = '';
       }
+      if (! isset($locations[$key]['data'])) {
+        $locations[$key]['data'] = '';
+      }
 
       if ($mode == 'insert') {
         if ( $locations[$key]['latitude'] && $locations[$key]['longitude']) {
@@ -1767,7 +1770,8 @@ function getlocations_fields_insert_record($location, $relations) {
     'address' => getlocations_apoclean($location['address']),
     'latitude' => (float) $location['latitude'],
     'longitude' => (float) $location['longitude'],
-    'marker' => ($location['marker'] ? $location['marker'] : '')
+    'marker' => ($location['marker'] ? $location['marker'] : ''),
+    'data' => ''
   ));
   $result = $query->execute();
   // $result should contain glid
@@ -1827,7 +1831,8 @@ function getlocations_fields_update_record($location, $relations) {
       'address' => getlocations_apoclean($location['address']),
       'latitude' => (float) $location['latitude'],
       'longitude' => (float) $location['longitude'],
-      'marker' => ($location['marker'] ? $location['marker'] : '')
+      'marker' => ($location['marker'] ? $location['marker'] : ''),
+      'data' => ''
     ))
     ->condition('glid', $location['glid'])
     ->execute();
@@ -2187,6 +2192,7 @@ function getlocations_fields_defaults() {
       'latitude'    => t('Latitude'),
       'longitude'   => t('Longitude'),
       'marker'      => t('Marker'),
+      'data'        => t('Data'),
     ),
     'polygons_enable'           => $getlocations_defaults['polygons_enable'],
     'polygons_strokecolor'      => $getlocations_defaults['polygons_strokecolor'],

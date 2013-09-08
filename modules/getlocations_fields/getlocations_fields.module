@@ -1797,7 +1797,7 @@ function getlocations_fields_insert_record($location, $relations) {
     'latitude' => (float) $location['latitude'],
     'longitude' => (float) $location['longitude'],
     'marker' => ($location['marker'] ? $location['marker'] : ''),
-    'data' => '',
+    'data' => (! empty($location['data']) ? serialize($location['data']) : ''),
   ));
   $result = $query->execute();
   // $result should contain glid
@@ -1858,7 +1858,7 @@ function getlocations_fields_update_record($location, $relations) {
       'latitude' => (float) $location['latitude'],
       'longitude' => (float) $location['longitude'],
       'marker' => ($location['marker'] ? $location['marker'] : ''),
-      'data' => '',
+      'data' => (! empty($location['data']) ? serialize($location['data']) : ''),
     ))
     ->condition('glid', $location['glid'])
     ->execute();
@@ -1989,8 +1989,12 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
   if ($id) {
     module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
+    $fields = array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker');
+    if (getlocations_fields_column_check('data')) {
+      $fields[] = 'data';
+    }
     $query = db_select('getlocations_fields', 'f');
-    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker'));
+    $query->fields('f', $fields);
     $query->fields('e', array('nid', 'uid', 'tid', 'cid', 'field_name'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
     if ($field_name) {
@@ -2011,16 +2015,17 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       $locations[$ct]['province_name'] = $row->province;
       $locations[$ct]['postal_code'] = $row->postal_code;
       if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
-        $location[$ct]['country_name'] = getlocations_get_country_name($row->country);
+        $locations[$ct]['country_name'] = getlocations_get_country_name($row->country);
       }
       else {
-        $location[$ct]['country_name'] = $row->country;
+        $locations[$ct]['country_name'] = $row->country;
       }
       $locations[$ct]['country'] = $row->country;
       $locations[$ct]['address'] = $row->address;
       $locations[$ct]['latitude'] = $row->latitude;
       $locations[$ct]['longitude'] = $row->longitude;
       $locations[$ct]['marker'] = $row->marker;
+      $locations[$ct]['data'] = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
       $locations[$ct]['nid'] = $row->nid;
       $locations[$ct]['uid'] = $row->uid;
       $locations[$ct]['tid'] = $row->tid;
@@ -2054,8 +2059,12 @@ function getlocations_fields_load_location($glid) {
   if ($glid) {
     module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
+    $fields = array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker');
+    if (getlocations_fields_column_check('data')) {
+      $fields[] = 'data';
+    }
     $query = db_select('getlocations_fields', 'f');
-    $query->fields('f', array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker'));
+    $query->fields('f', $fields);
     $query->fields('e', array('nid', 'uid', 'tid', 'cid'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
     $query->condition('f.glid', $glid);
@@ -2081,6 +2090,7 @@ function getlocations_fields_load_location($glid) {
       $location['latitude'] = $row->latitude;
       $location['longitude'] = $row->longitude;
       $location['marker'] = $row->marker;
+      $location['data'] = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
       $location['nid'] = $row->nid;
       $location['uid'] = $row->uid;
       $location['tid'] = $row->tid;

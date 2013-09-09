@@ -141,13 +141,16 @@ function getlocations_fields_field_validate($entity_type, $entity, $field, $inst
     $cardinality = $field['cardinality'];
     $count_items = count($items);
     $fieldnames = array(
-      'name' => t('Name'),
-      'street' => t('Street'),
-      'additional' => t('Additional'),
-      'city' => t('City/Town'),
-      'province' => t('Province/State/County'),
+      'name'        => t('Name'),
+      'street'      => t('Street'),
+      'additional'  => t('Additional'),
+      'city'        => t('City/Town'),
+      'province'    => t('Province/State/County'),
       'postal_code' => t('Post code/Zip code'),
-      'country' => t('Country'),
+      'country'     => t('Country'),
+      'phone'       => t('Phone'),
+      'mobile'      => t('Mobile'),
+      'fax'         => t('Fax'),
     );
     $item_count = 0;
     foreach ($items AS $delta => $item) {
@@ -475,7 +478,9 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['input_latitude_width']['#element_validate']    = array('element_validate_integer_positive');
   $form['input_longitude_width']['#element_validate']   = array('element_validate_integer_positive');
   $form['input_country_width']['#element_validate']     = array('element_validate_integer_positive');
-
+  $form['input_phone_width']['#element_validate']       = array('element_validate_integer_positive');
+  $form['input_mobile_width']['#element_validate']      = array('element_validate_integer_positive');
+  $form['input_fax_width']['#element_validate']         = array('element_validate_integer_positive');
 
   $form['mapwidth'] = getlocations_element_map_tf(
     t('Input form Map width'),
@@ -485,7 +490,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     10,
     TRUE
   );
-  $form['mapwidth']['#element_validate'] = array('getlocations_fields_element_validate_dim');
+  $form['mapwidth']['#element_validate'] = array('getlocations_element_validate_dim');
 
   $form['mapheight'] = getlocations_element_map_tf(
     t('Input form Map height'),
@@ -495,7 +500,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     10,
     TRUE
   );
-  $form['mapheight']['#element_validate'] = array('getlocations_fields_element_validate_dim');
+  $form['mapheight']['#element_validate'] = array('getlocations_element_validate_dim');
 
   $form['latlong'] = getlocations_element_map_tf(
     t('Input form Map center'),
@@ -505,7 +510,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     50,
     TRUE
   );
-  $form['latlong']['#element_validate'] = array('getlocations_fields_element_validate_latlon');
+  $form['latlong']['#element_validate'] = array('getlocations_element_validate_latlon');
 
   // smart_ip latlon option
   if (module_exists('smart_ip')) {
@@ -769,8 +774,8 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
 
   // address display options
   $element += getlocations_fields_display_settings_form($settings);
-  $element['display_mapwidth']['#element_validate'] = array('getlocations_fields_element_validate_dim');
-  $element['display_mapheight']['#element_validate'] = array('getlocations_fields_element_validate_dim');
+  $element['display_mapwidth']['#element_validate'] = array('getlocations_element_validate_dim');
+  $element['display_mapheight']['#element_validate'] = array('getlocations_element_validate_dim');
 
   $element += getlocations_map_display_options_form($settings, FALSE);
 
@@ -1018,6 +1023,16 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
   if ($settings['display_country']) {
     $address_display[] = t("Country");
   }
+  if ($settings['display_phone']) {
+    $address_display[] = t("Phone");
+  }
+  if ($settings['display_mobile']) {
+    $address_display[] = t("Mobile");
+  }
+  if ($settings['display_fax']) {
+    $address_display[] = t("Fax");
+  }
+
   if (count($address_display)) {
     $summary[] = t("Show in Address:") . '<br />' . implode(', ', $address_display);
   }
@@ -1058,6 +1073,9 @@ function getlocations_fields_field_widget_info() {
         'input_province_width'       => $getlocations_fields_defaults['input_province_width'],
         'input_postal_code_width'    => $getlocations_fields_defaults['input_postal_code_width'],
         'input_country_width'        => $getlocations_fields_defaults['input_country_width'],
+        'input_phone_width'          => $getlocations_fields_defaults['input_phone_width'],
+        'input_mobile_width'         => $getlocations_fields_defaults['input_mobile_width'],
+        'input_fax_width'            => $getlocations_fields_defaults['input_fax_width'],
         'input_latitude_width'       => $getlocations_fields_defaults['input_latitude_width'],
         'input_longitude_width'      => $getlocations_fields_defaults['input_longitude_width'],
         'input_name_weight'          => $getlocations_fields_defaults['input_name_weight'],
@@ -1067,6 +1085,9 @@ function getlocations_fields_field_widget_info() {
         'input_province_weight'      => $getlocations_fields_defaults['input_province_weight'],
         'input_postal_code_weight'   => $getlocations_fields_defaults['input_postal_code_weight'],
         'input_country_weight'       => $getlocations_fields_defaults['input_country_weight'],
+        'input_phone_weight'         => $getlocations_fields_defaults['input_phone_weight'],
+        'input_mobile_weight'        => $getlocations_fields_defaults['input_mobile_weight'],
+        'input_fax_weight'           => $getlocations_fields_defaults['input_fax_weight'],
         'input_latitude_weight'      => $getlocations_fields_defaults['input_latitude_weight'],
         'input_longitude_weight'     => $getlocations_fields_defaults['input_longitude_weight'],
         'input_name_required'        => $getlocations_fields_defaults['input_name_required'],
@@ -1076,6 +1097,9 @@ function getlocations_fields_field_widget_info() {
         'input_province_required'    => $getlocations_fields_defaults['input_province_required'],
         'input_postal_code_required' => $getlocations_fields_defaults['input_postal_code_required'],
         'input_country_required'     => $getlocations_fields_defaults['input_country_required'],
+        'input_phone_required'       => $getlocations_fields_defaults['input_phone_required'],
+        'input_mobile_required'      => $getlocations_fields_defaults['input_mobile_required'],
+        'input_fax_required'         => $getlocations_fields_defaults['input_fax_required'],
         'per_item_marker'            => $getlocations_fields_defaults['per_item_marker'],
       ),
 #      'behaviour' => array(
@@ -1196,11 +1220,11 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       // loop over these as they are all the same
       $required = array();
       $inputarr = array(
-        'name' => t('Name'),
-        'street' => t('Street'),
-        'additional' => t('Additional'),
-        'city' => t('City/Town'),
-        'province' => t('Province/State/County'),
+        'name'        => t('Name'),
+        'street'      => t('Street'),
+        'additional'  => t('Additional'),
+        'city'        => t('City/Town'),
+        'province'    => t('Province/State/County'),
         'postal_code' => t('Post code/Zip code'),
       );
       foreach ($inputarr AS $id => $title) {
@@ -1404,6 +1428,59 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         $element['longitude']['#weight'] = $settings['input_longitude_weight'];
       }
 
+      $inputarr = array(
+        'phone'       => t('Phone'),
+        'mobile'      => t('Mobile'),
+        'fax'         => t('Fax'),
+      );
+      foreach ($inputarr AS $id => $title) {
+        if ($settings['input_' . $id . '_required'] == 4) {
+          // hidden form
+          $element[$id] = array(
+            '#type' => 'hidden',
+            '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : (isset($instance['default_value'][$delta][$id]) ? $instance['default_value'][$delta][$id] : '')),
+          );
+        }
+        elseif ($settings['input_' . $id . '_required'] == 3) {
+          $element[$id] = array(
+            '#type' => 'hidden',
+            '#value' => (isset($items[$delta][$id]) ? $items[$delta][$id] : (isset($instance['default_value'][$delta][$id]) ? $instance['default_value'][$delta][$id] : '')),
+          );
+          $element[$id . '_display'] = array(
+            '#markup' => (isset($items[$delta][$id]) ? $items[$delta][$id] : (isset($instance['default_value'][$delta][$id]) ? $instance['default_value'][$delta][$id] : '')),
+          );
+        }
+        else {
+          $element[$id] = array(
+            '#type' => 'textfield',
+            '#default_value' => (isset($items[$delta][$id]) ? htmlspecialchars_decode($items[$delta][$id], ENT_QUOTES) : (isset($instance['default_value'][$delta][$id]) ? htmlspecialchars_decode($instance['default_value'][$delta][$id], ENT_QUOTES) : '')),
+           '#size' => $settings['input_' . $id . '_width'],
+            '#title' => $title,
+            '#maxlength' => 255,
+          );
+        }
+        if ($settings['input_' . $id . '_required'] == 2) {
+          $element[$id]['#disabled'] = TRUE;
+        }
+        elseif ($settings['input_' . $id . '_required'] == 1) {
+          if ($active) {
+            if ($cardinality == -1) {
+              # needs to be replaced with a 'fake'
+              $required[] = $id;
+            }
+            else {
+              $element[$id]['#required'] = TRUE;
+            }
+          }
+          else {
+            $element[$id]['#field_suffix'] = t('(Required)');
+          }
+        }
+        if (! empty($settings['input_' . $id . '_weight'])) {
+          $element[$id]['#weight'] = $settings['input_' . $id . '_weight'];
+        }
+      }
+
       $element['active'] = array(
         '#type' => 'value',
         '#value' => $active,
@@ -1471,6 +1548,15 @@ function getlocations_fields_field_widget_error($element, $error, $form, &$form_
       break;
     case 'field_required_country':
       form_error($element['country'], $error['message']);
+      break;
+    case 'field_required_phone':
+      form_error($element['phone'], $error['message']);
+      break;
+    case 'field_required_mobile':
+      form_error($element['mobile'], $error['message']);
+      break;
+    case 'field_required_fax':
+      form_error($element['fax'], $error['message']);
       break;
 
   }
@@ -1727,6 +1813,23 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
       }
       if (! isset($locations[$key]['data'])) {
         $locations[$key]['data'] = '';
+      }
+
+      $data = array();
+      if (isset($locations[$key]['phone'])) {
+        $locations[$key]['phone'] = check_plain($locations[$key]['phone']);
+        $data['data']['phone'] = trim($locations[$key]['phone']);
+      }
+      if (isset($locations[$key]['mobile'])) {
+        $locations[$key]['mobile'] = check_plain($locations[$key]['mobile']);
+        $data['data']['mobile'] = trim($locations[$key]['mobile']);
+      }
+      if (isset($locations[$key]['fax'])) {
+        $locations[$key]['fax'] = check_plain($locations[$key]['fax']);
+        $data['data']['fax'] = trim($locations[$key]['fax']);
+      }
+      if (count($data)) {
+        $locations[$key]['data'] = $data;
       }
 
       if ($mode == 'insert') {
@@ -2025,7 +2128,21 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       $locations[$ct]['latitude'] = $row->latitude;
       $locations[$ct]['longitude'] = $row->longitude;
       $locations[$ct]['marker'] = $row->marker;
-      $locations[$ct]['data'] = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
+      $data = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
+      $locations[$ct]['phone'] = '';
+      $locations[$ct]['mobile'] = '';
+      $locations[$ct]['fax'] = '';
+      if ($data) {
+        if (isset($data['data']['phone'] )) {
+          $locations[$ct]['phone'] = $data['data']['phone'];
+        }
+        if (isset($data['data']['mobile'] )) {
+          $locations[$ct]['mobile'] = $data['data']['mobile'];
+        }
+        if (isset($data['data']['fax'] )) {
+          $locations[$ct]['fax'] = $data['data']['fax'];
+        }
+      }
       $locations[$ct]['nid'] = $row->nid;
       $locations[$ct]['uid'] = $row->uid;
       $locations[$ct]['tid'] = $row->tid;
@@ -2090,7 +2207,22 @@ function getlocations_fields_load_location($glid) {
       $location['latitude'] = $row->latitude;
       $location['longitude'] = $row->longitude;
       $location['marker'] = $row->marker;
-      $location['data'] = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
+      $data = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
+      $location['phone'] = '';
+      $location['mobile'] = '';
+      $location['fax'] = '';
+      if ($data) {
+        if (isset($data['data']['phone'] )) {
+          $location['phone'] = $data['data']['phone'];
+        }
+        if (isset($data['data']['mobile'] )) {
+          $location['mobile'] = $data['data']['mobile'];
+        }
+        if (isset($data['data']['fax'] )) {
+          $location['fax'] = $data['data']['fax'];
+        }
+      }
+
       $location['nid'] = $row->nid;
       $location['uid'] = $row->uid;
       $location['tid'] = $row->tid;
@@ -2169,6 +2301,9 @@ function getlocations_fields_defaults() {
     'display_province'                => 1,
     'display_postal_code'             => 1,
     'display_country'                 => 1,
+    'display_phone'                   => 1,
+    'display_mobile'                  => 1,
+    'display_fax'                     => 1,
     'country_full'                    => 1,
     'use_address'                     => 1,
     'input_address_width'             => 40,
@@ -2179,6 +2314,9 @@ function getlocations_fields_defaults() {
     'input_province_width'            => 40,
     'input_postal_code_width'         => 40,
     'input_country_width'             => 40,
+    'input_phone_width'               => 20,
+    'input_mobile_width'              => 20,
+    'input_fax_width'                 => 20,
     'input_latitude_width'            => 20,
     'input_longitude_width'           => 20,
     'input_name_required'             => 0,
@@ -2188,6 +2326,9 @@ function getlocations_fields_defaults() {
     'input_province_required'         => 0,
     'input_postal_code_required'      => 0,
     'input_country_required'          => 0,
+    'input_phone_required'            => 0,
+    'input_mobile_required'           => 0,
+    'input_fax_required'              => 0,
     'input_name_weight'               => 0,
     'input_street_weight'             => 0,
     'input_additional_weight'         => 0,
@@ -2195,6 +2336,9 @@ function getlocations_fields_defaults() {
     'input_province_weight'           => 0,
     'input_postal_code_weight'        => 0,
     'input_country_weight'            => 0,
+    'input_phone_weight'              => 0,
+    'input_mobile_weight'             => 0,
+    'input_fax_weight'                => 0,
     'input_latitude_weight'           => 0,
     'input_longitude_weight'          => 0,
     'input_map_weight'                => 0,
@@ -2336,6 +2480,9 @@ function getlocations_fields_field_info_defaults() {
         'input_province_width'            => $getlocations_fields_defaults['input_province_width'],
         'input_postal_code_width'         => $getlocations_fields_defaults['input_postal_code_width'],
         'input_country_width'             => $getlocations_fields_defaults['input_country_width'],
+        'input_phone_width'               => $getlocations_fields_defaults['input_phone_width'],
+        'input_mobile_width'              => $getlocations_fields_defaults['input_mobile_width'],
+        'input_fax_width'                 => $getlocations_fields_defaults['input_fax_width'],
         'input_latitude_width'            => $getlocations_fields_defaults['input_latitude_width'],
         'input_longitude_width'           => $getlocations_fields_defaults['input_longitude_width'],
         'input_name_required'             => $getlocations_fields_defaults['input_name_required'],
@@ -2345,6 +2492,9 @@ function getlocations_fields_field_info_defaults() {
         'input_province_required'         => $getlocations_fields_defaults['input_province_required'],
         'input_postal_code_required'      => $getlocations_fields_defaults['input_postal_code_required'],
         'input_country_required'          => $getlocations_fields_defaults['input_country_required'],
+        'input_phone_required'            => $getlocations_fields_defaults['input_phone_required'],
+        'input_mobile_required'           => $getlocations_fields_defaults['input_mobile_required'],
+        'input_fax_required'              => $getlocations_fields_defaults['input_fax_required'],
         'input_name_weight'               => $getlocations_fields_defaults['input_name_weight'],
         'input_street_weight'             => $getlocations_fields_defaults['input_street_weight'],
         'input_additional_weight'         => $getlocations_fields_defaults['input_additional_weight'],
@@ -2352,6 +2502,9 @@ function getlocations_fields_field_info_defaults() {
         'input_province_weight'           => $getlocations_fields_defaults['input_province_weight'],
         'input_postal_code_weight'        => $getlocations_fields_defaults['input_postal_code_weight'],
         'input_country_weight'            => $getlocations_fields_defaults['input_country_weight'],
+        'input_phone_weight'              => $getlocations_fields_defaults['input_phone_weight'],
+        'input_mobile_weight'             => $getlocations_fields_defaults['input_mobile_weight'],
+        'input_fax_weight'                => $getlocations_fields_defaults['input_fax_weight'],
         'input_map_weight'                => $getlocations_fields_defaults['input_map_weight'],
         'input_marker_weight'             => $getlocations_fields_defaults['input_marker_weight'],
         'input_latitude_weight'           => $getlocations_fields_defaults['input_latitude_weight'],
@@ -2496,6 +2649,9 @@ function getlocations_fields_field_formatter_info_defaults() {
     'display_province'          => $getlocations_fields_defaults['display_province'],
     'display_postal_code'       => $getlocations_fields_defaults['display_postal_code'],
     'display_country'           => $getlocations_fields_defaults['display_country'],
+    'display_phone'             => $getlocations_fields_defaults['display_phone'],
+    'display_mobile'            => $getlocations_fields_defaults['display_mobile'],
+    'display_fax'               => $getlocations_fields_defaults['display_fax'],
     'country_full'              => $getlocations_fields_defaults['country_full'],
     'per_item_marker'           => $getlocations_fields_defaults['per_item_marker'],
     'nodezoom'                  => $getlocations_fields_defaults['nodezoom'],
@@ -2738,6 +2894,63 @@ function getlocations_fields_input_settings_form($defaults) {
   $form['input_postal_code_weight'] = getlocations_fields_element_weight(
     t('Post code box position'),
     $defaults['input_postal_code_weight'],
+    ''
+  );
+
+  $form['input_phone_width'] = getlocations_element_map_tf(
+    t('Phone box width'),
+    $defaults['input_phone_width'],
+    t('The width of the phone textbox. Must be a positive number.'),
+    10,
+    10,
+    TRUE
+  );
+  $form['input_phone_required'] = getlocations_fields_element_opts(
+    t('Phone box settings'),
+    $defaults['input_phone_required'],
+    ''
+  );
+  $form['input_phone_weight'] = getlocations_fields_element_weight(
+    t('Phone box position'),
+    $defaults['input_phone_weight'],
+    ''
+  );
+
+  $form['input_mobile_width'] = getlocations_element_map_tf(
+    t('Mobile box width'),
+    $defaults['input_mobile_width'],
+    t('The width of the mobile textbox. Must be a positive number.'),
+    10,
+    10,
+    TRUE
+  );
+  $form['input_mobile_required'] = getlocations_fields_element_opts(
+    t('Mobile box settings'),
+    $defaults['input_mobile_required'],
+    ''
+  );
+  $form['input_mobile_weight'] = getlocations_fields_element_weight(
+    t('Mobile box position'),
+    $defaults['input_mobile_weight'],
+    ''
+  );
+
+  $form['input_fax_width'] = getlocations_element_map_tf(
+    t('Fax box width'),
+    $defaults['input_fax_width'],
+    t('The width of the fax textbox. Must be a positive number.'),
+    10,
+    10,
+    TRUE
+  );
+  $form['input_fax_required'] = getlocations_fields_element_opts(
+    t('Fax box settings'),
+    $defaults['input_fax_required'],
+    ''
+  );
+  $form['input_fax_weight'] = getlocations_fields_element_weight(
+    t('Fax box position'),
+    $defaults['input_fax_weight'],
     ''
   );
 
@@ -2994,6 +3207,23 @@ function getlocations_fields_display_settings_form($defaults) {
     $defaults['country_full'],
     ''
   );
+
+  $form['display_phone'] = getlocations_element_map_checkbox(
+    t('Show Phone in display'),
+    $defaults['display_phone'],
+    ''
+  );
+  $form['display_mobile'] = getlocations_element_map_checkbox(
+    t('Show Mobile in display'),
+    $defaults['display_mobile'],
+    ''
+  );
+  $form['display_fax'] = getlocations_element_map_checkbox(
+    t('Show Fax in display'),
+    $defaults['display_fax'],
+    ''
+  );
+
   $form['nodezoom'] = getlocations_element_map_zoom(
     t('Zoom'),
     $defaults['nodezoom'],
@@ -3118,44 +3348,6 @@ function getlocations_fields_column_check($field) {
   return $found;
 }
 
-function getlocations_fields_element_validate_dim($element, &$form_state) {
-
-  $value = FALSE;
-  if (isset($element['#value'])) {
-    $value = $element['#value'];
-  }
-  elseif (isset($element['#default_value'])) {
-    $value = $element['#default_value'];
-  }
-  $check = getlocations_dim_check($value);
-  if (! $check) {
-    form_error($element, t('%name must be valid css.', array('%name' => $element['#title'])));
-  }
-  else {
-    $parents = $element['#parents'];
-    // not a good solution
-    $tot = count($parents);
-    if ($tot == 3) {
-      $form_state['values'][$parents[0]][$parents[1]][$parents[2]] = $check;
-    }
-    elseif ($tot == 5) {
-      $form_state['values'][$parents[0]][$parents[1]][$parents[2]][$parents[3]][$parents[4]] = $check;
-    }
-  }
-}
-
-function getlocations_fields_element_validate_latlon($element, &$form_state) {
-  $value = $element['#value'];
-  $check = getlocations_latlon_check($value);
-  if (! $check) {
-    form_error($element, t('%name must be expressed as a decimal latitude and longitude, separated by a comma.', array('%name' => $element['#title'])));
-  }
-  else {
-    $parents = $element['#parents'];
-    $form_state['values'][$parents[0]][$parents[1]][$parents[2]] = $check;
-  }
-}
-
 // Theming functions
 
 /**
@@ -3260,6 +3452,21 @@ function theme_getlocations_fields_show($variables) {
       $output .= '<div class="country-name">' . $country . '</div>';
     }
     $output .= '</div>';
+
+    if (($location['phone'] && $settings['display_phone']) || ($location['mobile'] && $settings['display_mobile']) || ($location['fax'] && $settings['display_fax'])) {
+      $output .= '<div class="phones">';
+      if ($location['phone'] && $settings['display_phone']) {
+        $output .= '<div class="phone"><span class="phone_label">' . t('Phone') . '</span>' . $location['phone'] . '</div>';
+      }
+      if ($location['mobile'] && $settings['display_mobile']) {
+        $output .= '<div class="mobile"><span class="mobile_label">' . t('Mobile') . '</span>' . $location['mobile'] . '</div>';
+      }
+      if ($location['fax'] && $settings['display_fax']) {
+        $output .= '<div class="fax"><span class="fax_label">' . t('Fax') . '</span>' . $location['fax'] . '</div>';
+      }
+      $output .= '</div>';
+    }
+
     $output .= '</div>';
 
     if ($settings['display_latlong']) {
@@ -3443,6 +3650,31 @@ function theme_getlocations_fields_field_settings_form($variables) {
 
     array('data' =>
       array(
+        array('data' => $form['input_phone_width'], 'class' => array('getlocations_fields_input_cell1')),
+        array('data' => $form['input_phone_weight'], 'class' => array('getlocations_fields_input_cell2')),
+        array('data' => $form['input_phone_required'], 'class' => array('getlocations_fields_input_cell3')),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_mobile_width'], 'class' => array('getlocations_fields_input_cell1')),
+        array('data' => $form['input_mobile_weight'], 'class' => array('getlocations_fields_input_cell2')),
+        array('data' => $form['input_mobile_required'], 'class' => array('getlocations_fields_input_cell3')),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['input_fax_width'], 'class' => array('getlocations_fields_input_cell1')),
+        array('data' => $form['input_fax_weight'], 'class' => array('getlocations_fields_input_cell2')),
+        array('data' => $form['input_fax_required'], 'class' => array('getlocations_fields_input_cell3')),
+      ),
+      'no_striping' => $no_striping,
+    ),
+
+    array('data' =>
+      array(
         array('data' => $form['input_latitude_width'], 'class' => array('getlocations_fields_input_cell1')),
         array('data' => $form['input_latitude_weight'], 'class' => array('getlocations_fields_input_cell2')),
         array('data' => '', 'class' => array('getlocations_fields_input_cell3')),
@@ -3491,6 +3723,15 @@ function theme_getlocations_fields_field_settings_form($variables) {
   unset($form['input_latitude_weight']);
   unset($form['input_longitude_width']);
   unset($form['input_longitude_weight']);
+  unset($form['input_phone_width']);
+  unset($form['input_phone_required']);
+  unset($form['input_phone_weight']);
+  unset($form['input_mobile_width']);
+  unset($form['input_mobile_required']);
+  unset($form['input_mobile_weight']);
+  unset($form['input_fax_width']);
+  unset($form['input_fax_required']);
+  unset($form['input_fax_weight']);
 
   $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Input form settings') . '</span></legend>';
@@ -3534,7 +3775,7 @@ function theme_getlocations_fields_field_formatter_settings_form($variables) {
   $form = $variables['form'];
   $output = '';
   $form['display_showmap']['#prefix'] = '<fieldset class="getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Address display settings') . '</span></legend><div class="fieldset-wrapper">';
-  $form['country_full']['#suffix'] = '</div></fieldset>';
+  $form['display_fax']['#suffix'] = '</div></fieldset>';
   $output .= drupal_render_children($form);
   return $output;
 }
@@ -3614,6 +3855,7 @@ function theme_getlocations_fields_field_widget_form($variables) {
   else {
     $form['country']['#suffix'] = '</div>';
   }
+
 
   $msg = t('To use the map to find a location, drag the marker or click on the map.');
   if (! $active) {
@@ -3715,6 +3957,31 @@ function theme_getlocations_fields_settings_form($variables) {
 
     array('data' =>
       array(
+        array('data' => $form['getlocations_fields_defaults']['input_phone_width'], 'class' => array('getlocations_fields_input_cell1')),
+        array('data' => $form['getlocations_fields_defaults']['input_phone_weight'], 'class' => array('getlocations_fields_input_cell2')),
+        array('data' => $form['getlocations_fields_defaults']['input_phone_required'], 'class' => array('getlocations_fields_input_cell3')),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_mobile_width'], 'class' => array('getlocations_fields_input_cell1')),
+        array('data' => $form['getlocations_fields_defaults']['input_mobile_weight'], 'class' => array('getlocations_fields_input_cell2')),
+        array('data' => $form['getlocations_fields_defaults']['input_mobile_required'], 'class' => array('getlocations_fields_input_cell3')),
+      ),
+      'no_striping' => $no_striping,
+    ),
+    array('data' =>
+      array(
+        array('data' => $form['getlocations_fields_defaults']['input_fax_width'], 'class' => array('getlocations_fields_input_cell1')),
+        array('data' => $form['getlocations_fields_defaults']['input_fax_weight'], 'class' => array('getlocations_fields_input_cell2')),
+        array('data' => $form['getlocations_fields_defaults']['input_fax_required'], 'class' => array('getlocations_fields_input_cell3')),
+      ),
+      'no_striping' => $no_striping,
+    ),
+
+    array('data' =>
+      array(
         array('data' => $form['getlocations_fields_defaults']['input_latitude_width'], 'class' => array('getlocations_fields_input_cell1')),
         array('data' => $form['getlocations_fields_defaults']['input_latitude_weight'], 'class' => array('getlocations_fields_input_cell2')),
         array('data' => '', 'class' => array('getlocations_fields_input_cell3')),
@@ -3763,6 +4030,15 @@ function theme_getlocations_fields_settings_form($variables) {
   unset($form['getlocations_fields_defaults']['input_latitude_weight']);
   unset($form['getlocations_fields_defaults']['input_longitude_width']);
   unset($form['getlocations_fields_defaults']['input_longitude_weight']);
+  unset($form['getlocations_fields_defaults']['input_phone_width']);
+  unset($form['getlocations_fields_defaults']['input_phone_required']);
+  unset($form['getlocations_fields_defaults']['input_phone_weight']);
+  unset($form['getlocations_fields_defaults']['input_mobile_width']);
+  unset($form['getlocations_fields_defaults']['input_mobile_required']);
+  unset($form['getlocations_fields_defaults']['input_mobile_weight']);
+  unset($form['getlocations_fields_defaults']['input_fax_width']);
+  unset($form['getlocations_fields_defaults']['input_fax_required']);
+  unset($form['getlocations_fields_defaults']['input_fax_weight']);
 
   $prefix = '<fieldset class="form-wrapper">';
   $prefix .= '<legend><span class="fieldset-legend">' . t('Default Input form settings') . '</span></legend>';
@@ -3776,7 +4052,7 @@ function theme_getlocations_fields_settings_form($variables) {
   $prefix .= '<div class="fieldset-wrapper">';
   $prefix .= '<div class="fieldset-description">' . t('Configure the default address display.') . '</div>';
   $form['getlocations_fields_defaults']['display_showmap']['#prefix'] = $prefix;
-  $form['getlocations_fields_defaults']['country_full']['#suffix'] = '</div></fieldset>';
+  $form['getlocations_fields_defaults']['display_fax']['#suffix'] = '</div></fieldset>';
 
   $output .= drupal_render_children($form);
   return $output;

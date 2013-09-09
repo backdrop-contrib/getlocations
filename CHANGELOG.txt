@@ -1,9 +1,138 @@
-commit e9a41df
+commit 6bf9805
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 9 22:34:19 2013 +0100
+
+    added css checks
+
+modules/getlocations_search/getlocations_search.admin.inc
+
+commit 84cfe3a
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 9 22:01:43 2013 +0100
+
+    added data fields
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit c095600
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 9 22:01:20 2013 +0100
+
+    added element validate
+
+modules/getlocations_map/getlocations_map.module
+
+commit b44922f
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 9 22:00:10 2013 +0100
+
+    added css check
+
+views/getlocations_plugin_style_map.inc
+
+commit ac1e166
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 9 21:59:36 2013 +0100
+
+    added css for data fields
+
+modules/getlocations_fields/getlocations_fields.css
+
+commit 345fe42
+Author: hutch <hutch@midwales.net>
+Date:   Mon Sep 9 21:57:03 2013 +0100
+
+    moved element validate functions
+
+getlocations.module
+
+commit 11ccb09
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 8 16:46:44 2013 +0100
+
+    more code relating to the new data field
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields_entity/getlocations_fields_entity.module
+modules/getlocations_search/getlocations_search.module
+
+commit 9f6d737
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 8 13:41:09 2013 +0100
+
+    added user check to update warning, added normalize check to insert/update
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 7a190fe
+Author: hutch <hutch@midwales.net>
+Date:   Sun Sep 8 13:40:02 2013 +0100
+
+    convert from float to decimal
+
+modules/getlocations_fields/getlocations_fields.install
+
+commit 09bf46c
+Author: hutch <hutch@midwales.net>
+Date:   Fri Sep 6 18:38:18 2013 +0100
+
+    added link to update
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit c603b08
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 4 23:54:58 2013 +0100
+
+    fixed tooltips in views defaults
+
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+views/getlocations.views_default.inc
+
+commit 5a37f30
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 4 17:01:57 2013 +0100
+
+    added validation functions
+
+getlocations.admin.inc
+getlocations.module
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.module
+
+commit f813bce
+Author: hutch <hutch@midwales.net>
+Date:   Wed Sep 4 16:58:40 2013 +0100
+
+    added 'data' to insert and update functions, added descriptions to some menu items
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.module
+
+commit 0e35e22
+Author: hutch <hutch@midwales.net>
+Date:   Wed Aug 28 11:11:23 2013 +0100
+
+    fixed map glitch in responsive themes
+
+getlocations.css
+
+commit 02ab864
+Author: hutch <hutch@midwales.net>
+Date:   Tue Aug 27 15:53:56 2013 +0100
+
+    added data field
+
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+
+commit 7cbeefc
 Author: hutch <hutch@midwales.net>
 Date:   Mon Aug 26 11:04:48 2013 +0100
 
     added google places check
 
+CHANGELOG.txt
 getlocations.module
 
 commit 09442b2

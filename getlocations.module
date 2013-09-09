@@ -4770,6 +4770,57 @@ function getlocations_dim_check($string) {
   }
 }
 
+function getlocations_element_validate_dim($element, &$form_state) {
+
+  $value = FALSE;
+  if (isset($element['#value'])) {
+    $value = $element['#value'];
+  }
+  elseif (isset($element['#default_value'])) {
+    $value = $element['#default_value'];
+  }
+  $check = getlocations_dim_check($value);
+  if (! $check) {
+    form_error($element, t('%name must be valid css.', array('%name' => $element['#title'])));
+  }
+  else {
+    $parents = $element['#parents'];
+    // not a good solution
+    $tot = count($parents);
+    if ($tot == 3) {
+      $form_state['values'][$parents[0]][$parents[1]][$parents[2]] = $check;
+    }
+    elseif ($tot == 5) {
+      $form_state['values'][$parents[0]][$parents[1]][$parents[2]][$parents[3]][$parents[4]] = $check;
+    }
+  }
+}
+
+function getlocations_element_validate_latlon($element, &$form_state) {
+
+  $value = FALSE;
+  if (isset($element['#value'])) {
+    $value = $element['#value'];
+  }
+  elseif (isset($element['#default_value'])) {
+    $value = $element['#default_value'];
+  }
+  $check = getlocations_latlon_check($value);
+  if (! $check) {
+    form_error($element, t('%name must be expressed as a decimal latitude and longitude, separated by a comma.', array('%name' => $element['#title'])));
+  }
+  else {
+    $parents = $element['#parents'];
+    // not a good solution
+    $tot = count($parents);
+    if ($tot == 3) {
+      $form_state['values'][$parents[0]][$parents[1]][$parents[2]] = $check;
+    }
+    elseif ($tot == 5) {
+      $form_state['values'][$parents[0]][$parents[1]][$parents[2]][$parents[3]][$parents[4]] = $check;
+    }
+  }
+}
 
 /**
  * Calculations functions.

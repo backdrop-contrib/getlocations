@@ -244,7 +244,7 @@ function getlocations_search_getmap($which = 'page') {
   $keys = array(
     'width', 'height', 'styles', 'latlong',
     'zoom', 'minzoom_map', 'maxzoom_map', 'controltype', 'pancontrol', 'mtc',
-    'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show',
+    'maptype', 'baselayers', 'behavior', 'draggable', 'streetview_show', 'streetview_showfirst', 'streetview_heading',
     'trafficinfo', 'trafficinfo_state', 'bicycleinfo', 'bicycleinfo_state',
     'transitinfo', 'transitinfo_state', 'panoramio_show', 'panoramio_state',
     'poi_show', 'transit_show', 'markeraction', 'markeractiontype', 'minzoom',
@@ -617,6 +617,8 @@ function getlocations_search_defaults() {
     'behavior'                      => $getlocations_defaults['behavior'],
     'draggable'                     => $getlocations_defaults['draggable'],
     'streetview_show'               => $getlocations_defaults['streetview_show'],
+    'streetview_showfirst'          => $getlocations_defaults['streetview_showfirst'],
+    'streetview_heading'            => $getlocations_defaults['streetview_heading'],
     'trafficinfo'                   => $getlocations_defaults['trafficinfo'],
     'trafficinfo_state'             => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'                   => $getlocations_defaults['bicycleinfo'],

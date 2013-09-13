@@ -191,6 +191,20 @@
           $("#wrap-getlocations-geojson-enable").hide();
         }
       });
+      if ($("input[id$=settings-streetview-show], input[id$=options-streetview-show]").attr('checked')) {
+        $("#wrap-getlocations-streetview").show();
+      }
+      else {
+        $("#wrap-getlocations-streetview").hide();
+      }
+      $("input[id$=settings-streetview-show], input[id$=options-streetview-show]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-streetview").show();
+        }
+        else {
+          $("#wrap-getlocations-streetview").hide();
+        }
+      });
 
     }
   };

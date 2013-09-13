@@ -886,9 +886,11 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if ($settings['nodoubleclickzoom']) {
       $summary[] = t('Disable doubleclick zoom: Yes');
     }
-
     if ($settings['streetview_show']) {
-      $summary[] = t('Show streetview button: Yes');
+      $summary[] = t('Show streetview pegman: Yes');
+    }
+    if ($settings['streetview_showfirst']) {
+      $summary[] = t('Show streetview first: Yes');
     }
     if ($settings['fullscreen']) {
       $summary[] = t('Show Fullscreen button: Yes');
@@ -1582,6 +1584,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['transitinfo']               = 0;
   $getlocations_defaults['markeraction']              = 0;
   $getlocations_defaults['streetview_show']           = 0;
+  $getlocations_defaults['streetview_showfirst']      = 0;
   $getlocations_defaults['weather_use']               = 0;
   $getlocations_defaults['weather_show']              = 0;
   $getlocations_defaults['show_maplinks']             = 0;
@@ -1661,6 +1664,8 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['behavior']                  = $settings['behavior'];
   $getlocations_defaults['draggable']                 = $settings['draggable'];
   $getlocations_defaults['streetview_show']           = $settings['streetview_show'];
+  $getlocations_defaults['streetview_showfirst']      = $settings['streetview_showfirst'];
+  $getlocations_defaults['streetview_heading']        = $settings['streetview_heading'];
   $getlocations_defaults['trafficinfo']               = $settings['trafficinfo'];
   $getlocations_defaults['trafficinfo_state']         = $settings['trafficinfo_state'];
   $getlocations_defaults['bicycleinfo']               = $settings['bicycleinfo'];
@@ -2617,6 +2622,8 @@ function getlocations_fields_field_formatter_info_defaults() {
     'behavior'                  => $getlocations_defaults['behavior'],
     'draggable'                 => $getlocations_defaults['draggable'],
     'streetview_show'           => $getlocations_defaults['streetview_show'],
+    'streetview_showfirst'      => $getlocations_defaults['streetview_showfirst'],
+    'streetview_heading'        => $getlocations_defaults['streetview_heading'],
     'trafficinfo'               => $getlocations_defaults['trafficinfo'],
     'trafficinfo_state'         => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'               => $getlocations_defaults['bicycleinfo'],

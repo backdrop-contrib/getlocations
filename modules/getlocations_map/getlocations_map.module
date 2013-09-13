@@ -384,7 +384,10 @@ function getlocations_map_field_formatter_settings_summary($field, $instance, $v
         $summary[] = t('Enable dragging the map: Yes');
       }
       if ($settings['streetview_show']) {
-        $summary[] = t('Show streetview button: Yes');
+        $summary[] = t('Show streetview pegman: Yes');
+      }
+      if ($settings['streetview_showfirst']) {
+        $summary[] = t('Show streetview first: Yes');
       }
       if ($settings['fullscreen']) {
         $summary[] = t('Show Fullscreen button: Yes');
@@ -697,6 +700,8 @@ function getlocations_map_defaults() {
     'show_bubble_on_one_marker'     => $getlocations_defaults['show_bubble_on_one_marker'],
     'fullscreen'                    => $getlocations_defaults['fullscreen'],
     'streetview_show'               => $getlocations_defaults['streetview_show'],
+    'streetview_showfirst'          => $getlocations_defaults['streetview_showfirst'],
+    'streetview_heading'            => $getlocations_defaults['streetview_heading'],
     'trafficinfo'                   => $getlocations_defaults['trafficinfo'],
     'trafficinfo_state'             => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'                   => $getlocations_defaults['bicycleinfo'],

@@ -12,6 +12,7 @@ var getlocations_inputmap = [];
 var getlocations_map = [];
 var getlocations_markers = [];
 var getlocations_settings = {};
+var getlocations_pano = [];
 
 (function ($) {
 
@@ -190,7 +191,7 @@ var getlocations_settings = {};
         var nokeyboard = (settings.nokeyboard ? true : false);
         var nodoubleclickzoom = (settings.nodoubleclickzoom ? true : false);
         // Enable the visual refresh
-        google.maps.visualRefresh = (settings.visual_refresh ?  true : false);
+        google.maps.visualRefresh = (settings.visual_refresh ? true : false);
 
         global_settings.info_path = settings.info_path;
         global_settings.lidinfo_path = settings.lidinfo_path;
@@ -224,6 +225,9 @@ var getlocations_settings = {};
         }
 
         global_settings.datanum = settings.datanum;
+        global_settings.streetview_show = settings.streetview_show;
+        global_settings.streetview_showfirst = settings.streetview_showfirst;
+        global_settings.streetview_heading = settings.streetview_heading;
         global_settings.markermanagertype = settings.markermanagertype;
         global_settings.pansetting = settings.pansetting;
         // mobiles
@@ -853,6 +857,20 @@ var getlocations_settings = {};
       // show_bubble_on_one_marker
       if (gs.show_bubble_on_one_marker && (gs.useInfoWindow || gs.useInfoBubble)) {
         google.maps.event.trigger(m, 'click');
+      }
+      // streetview first feature
+      if (gs.streetview_show && gs.streetview_showfirst) {
+        var popt = {
+          position: p,
+          pov: {
+            heading: parseInt(gs.streetview_heading),
+            pitch: 0
+          },
+          enableCloseButton: true,
+          zoom: 1
+        };
+        getlocations_pano[mkey] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_map_canvas_" + mkey), popt);
+        getlocations_pano[mkey].setVisible(true);
       }
     }
 

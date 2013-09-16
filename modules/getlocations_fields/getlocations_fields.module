@@ -267,7 +267,6 @@ function getlocations_fields_field_insert($entity_type, $entity, $field, $instan
 function getlocations_fields_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
 
   if (!empty($items)) {
-
     $criteria = array();
     if ($entity_type == 'node') {
       $criteria = array(
@@ -543,11 +542,6 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['#theme'] = 'getlocations_fields_field_settings_form';
 
   return $form;
-
-# where to put it?
-#      if ( empty($field['width']) || is_int($field['width']) || $field['width'] < 1 ) {
-#        form_set_error($field['width'], t('Must be a positive number.'));
-#      }
 
 }
 
@@ -1483,6 +1477,26 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
         }
       }
 
+      // hidden fields, these are filled in by jQuery
+      $element['mapzoom'] = array(
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['mapzoom']) ? $items[$delta]['mapzoom'] : (isset($instance['default_value'][$delta]['mapzoom']) ? $instance['default_value'][$delta]['mapzoom'] : '')),
+        '#prefix' => '<div class="js-hide">',
+      );
+      $element['streetview_heading'] = array(
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['streetview_heading']) ? $items[$delta]['streetview_heading'] : (isset($instance['default_value'][$delta]['streetview_heading']) ? $instance['default_value'][$delta]['streetview_heading'] : '')),
+      );
+      $element['streetview_zoom'] = array(
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['streetview_zoom']) ? $items[$delta]['streetview_zoom'] : (isset($instance['default_value'][$delta]['streetview_zoom']) ? $instance['default_value'][$delta]['streetview_zoom'] : '')),
+      );
+      $element['streetview_pitch'] = array(
+        '#type' => 'textfield',
+        '#default_value' => (isset($items[$delta]['streetview_pitch']) ? $items[$delta]['streetview_pitch'] : (isset($instance['default_value'][$delta]['streetview_pitch']) ? $instance['default_value'][$delta]['streetview_pitch'] : '')),
+        '#suffix' => '</div>',
+      );
+
       $element['active'] = array(
         '#type' => 'value',
         '#value' => $active,
@@ -1666,6 +1680,8 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['streetview_show']           = $settings['streetview_show'];
   $getlocations_defaults['streetview_showfirst']      = $settings['streetview_showfirst'];
   $getlocations_defaults['streetview_heading']        = $settings['streetview_heading'];
+  $getlocations_defaults['streetview_zoom']           = $settings['streetview_zoom'];
+  $getlocations_defaults['streetview_pitch']          = $settings['streetview_pitch'];
   $getlocations_defaults['trafficinfo']               = $settings['trafficinfo'];
   $getlocations_defaults['trafficinfo_state']         = $settings['trafficinfo_state'];
   $getlocations_defaults['bicycleinfo']               = $settings['bicycleinfo'];
@@ -1822,17 +1838,58 @@ function getlocations_fields_save_locations($locations, $criteria, $mode) {
 
       $data = array();
       if (isset($locations[$key]['phone'])) {
-        $locations[$key]['phone'] = check_plain($locations[$key]['phone']);
-        $data['data']['phone'] = trim($locations[$key]['phone']);
+        $locations[$key]['phone'] = trim($locations[$key]['phone']);
+        $data['data']['phone'] = check_plain($locations[$key]['phone']);
       }
       if (isset($locations[$key]['mobile'])) {
-        $locations[$key]['mobile'] = check_plain($locations[$key]['mobile']);
-        $data['data']['mobile'] = trim($locations[$key]['mobile']);
+        $locations[$key]['mobile'] = trim($locations[$key]['mobile']);
+        $data['data']['mobile'] = check_plain($locations[$key]['mobile']);
       }
       if (isset($locations[$key]['fax'])) {
-        $locations[$key]['fax'] = check_plain($locations[$key]['fax']);
-        $data['data']['fax'] = trim($locations[$key]['fax']);
+        $locations[$key]['fax'] = trim($locations[$key]['fax']);
+        $data['data']['fax'] = check_plain($locations[$key]['fax']);
       }
+
+      if (isset($locations[$key]['streetview_heading']) && is_numeric($locations[$key]['streetview_heading'])) {
+        $ph = trim($locations[$key]['streetview_heading']);
+        // sanity check
+        while ($ph < 0) {
+          $ph = $ph + 360;
+        }
+        while ($ph > 360) {
+          $ph = $ph - 360;
+        }
+        $data['data']['streetview_heading'] = intval($ph);
+      }
+      if (isset($locations[$key]['streetview_zoom']) && is_numeric($locations[$key]['streetview_zoom'])) {
+        $locations[$key]['streetview_zoom'] = trim($locations[$key]['streetview_zoom']);
+        // sanity check
+        if ($locations[$key]['streetview_zoom'] > 5) {
+          $locations[$key]['streetview_zoom'] = 5;
+        }
+        if ($locations[$key]['streetview_zoom'] < 0) {
+          $locations[$key]['streetview_zoom'] = 0;
+        }
+        $data['data']['streetview_zoom'] = intval($locations[$key]['streetview_zoom']);
+      }
+      if (isset($locations[$key]['streetview_pitch']) && is_numeric($locations[$key]['streetview_pitch'])) {
+        $locations[$key]['streetview_pitch'] = trim($locations[$key]['streetview_pitch']);
+        // sanity check
+        $locations[$key]['streetview_pitch'] = getlocations_normalizelat($locations[$key]['streetview_pitch']);
+        $data['data']['streetview_pitch'] = intval($locations[$key]['streetview_pitch']);
+      }
+      if (isset($locations[$key]['mapzoom'])  && is_numeric($locations[$key]['mapzoom'])) {
+        $locations[$key]['mapzoom'] = trim($locations[$key]['mapzoom']);
+        // sanity check
+        if ($locations[$key]['mapzoom'] > 21) {
+          $locations[$key]['mapzoom'] = 21;
+        }
+        if ($locations[$key]['mapzoom'] < 0) {
+          $locations[$key]['mapzoom'] = 0;
+        }
+        $data['data']['mapzoom'] = intval($locations[$key]['mapzoom']);
+      }
+
       if (count($data)) {
         $locations[$key]['data'] = $data;
       }
@@ -2137,6 +2194,10 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       $locations[$ct]['phone'] = '';
       $locations[$ct]['mobile'] = '';
       $locations[$ct]['fax'] = '';
+      $locations[$ct]['streetview_heading'] = '';
+      $locations[$ct]['streetview_zoom'] = '';
+      $locations[$ct]['streetview_pitch'] = '';
+      $locations[$ct]['mapzoom'] = '';
       if ($data) {
         if (isset($data['data']['phone'] )) {
           $locations[$ct]['phone'] = $data['data']['phone'];
@@ -2146,6 +2207,18 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
         }
         if (isset($data['data']['fax'] )) {
           $locations[$ct]['fax'] = $data['data']['fax'];
+        }
+        if (isset($data['data']['streetview_heading'] )) {
+          $locations[$ct]['streetview_heading'] = $data['data']['streetview_heading'];
+        }
+        if (isset($data['data']['streetview_zoom'] )) {
+          $locations[$ct]['streetview_zoom'] = $data['data']['streetview_zoom'];
+        }
+        if (isset($data['data']['streetview_pitch'] )) {
+          $locations[$ct]['streetview_pitch'] = $data['data']['streetview_pitch'];
+        }
+        if (isset($data['data']['mapzoom'] )) {
+          $locations[$ct]['mapzoom'] = $data['data']['mapzoom'];
         }
       }
       $locations[$ct]['nid'] = $row->nid;
@@ -2216,6 +2289,10 @@ function getlocations_fields_load_location($glid) {
       $location['phone'] = '';
       $location['mobile'] = '';
       $location['fax'] = '';
+      $location['streetview_heading'] = '';
+      $location['streetview_zoom'] = '';
+      $location['streetview_pitch'] = '';
+      $location['mapzoom'] = '';
       if ($data) {
         if (isset($data['data']['phone'] )) {
           $location['phone'] = $data['data']['phone'];
@@ -2225,6 +2302,18 @@ function getlocations_fields_load_location($glid) {
         }
         if (isset($data['data']['fax'] )) {
           $location['fax'] = $data['data']['fax'];
+        }
+        if (isset($data['data']['streetview_heading'] )) {
+          $location['streetview_heading'] = $data['data']['streetview_heading'];
+        }
+        if (isset($data['data']['streetview_zoom'] )) {
+          $location['streetview_zoom'] = $data['data']['streetview_zoom'];
+        }
+        if (isset($data['data']['streetview_pitch'] )) {
+          $location['streetview_pitch'] = $data['data']['streetview_pitch'];
+        }
+        if (isset($data['data']['mapzoom'] )) {
+          $location['mapzoom'] = $data['data']['mapzoom'];
         }
       }
 
@@ -2261,15 +2350,19 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
 
   $settings = array(
     $mapid => array(
-      'nodezoom' => $defaults['nodezoom'],
-      'map_marker' => $defaults['input_map_marker'],
-      'use_address' => $defaults['use_address'],
-      'latlon_warning' => $defaults['latlon_warning'],
-      'autocomplete_bias' => $defaults['autocomplete_bias'],
+      'nodezoom'            => $defaults['nodezoom'],
+      'map_marker'          => $defaults['input_map_marker'],
+      'use_address'         => $defaults['use_address'],
+      'latlon_warning'      => $defaults['latlon_warning'],
+      'autocomplete_bias'   => $defaults['autocomplete_bias'],
       'restrict_by_country' => $defaults['restrict_by_country'],
-      'search_country' => $defaults['search_country'],
-      'smart_ip_path' => url("getlocations_fields/smart_ip"),
-      'street_num_pos' => $defaults['street_num_pos'],
+      'search_country'      => $defaults['search_country'],
+      'smart_ip_path'       => url("getlocations_fields/smart_ip"),
+      'street_num_pos'      => $defaults['street_num_pos'],
+      'streetview_setup'    => $defaults['streetview_setup'],
+      'streetview_heading'  => $defaults['streetview_heading'],
+      'streetview_zoom'     => $defaults['streetview_zoom'],
+      'streetview_pitch'    => $defaults['streetview_pitch'],
     ),
   );
 
@@ -2361,6 +2454,10 @@ function getlocations_fields_defaults() {
     'per_item_marker'                 => 0,
     'street_num_pos'                  => 1,
     'latlon_warning'                  => 0,
+    'streetview_setup'                => 0,
+    'streetview_heading'              => $getlocations_defaults['streetview_heading'],
+    'streetview_zoom'                 => $getlocations_defaults['streetview_zoom'],
+    'streetview_pitch'                => $getlocations_defaults['streetview_pitch'],
     'autocomplete_bias'               => 0,
     'restrict_by_country'             => 0,
     'search_country'                  => variable_get('site_default_country', ''),
@@ -2527,6 +2624,10 @@ function getlocations_fields_field_info_defaults() {
         'per_item_marker'                 => $getlocations_fields_defaults['per_item_marker'],
         'street_num_pos'                  => $getlocations_fields_defaults['street_num_pos'],
         'latlon_warning'                  => $getlocations_fields_defaults['latlon_warning'],
+        'streetview_setup'                => $getlocations_fields_defaults['streetview_setup'],
+        'streetview_heading'              => $getlocations_fields_defaults['streetview_heading'],
+        'streetview_zoom'                 => $getlocations_fields_defaults['streetview_zoom'],
+        'streetview_pitch'                => $getlocations_fields_defaults['streetview_pitch'],
         'use_geolocation_button'          => $getlocations_fields_defaults['use_geolocation_button'],
         'autocomplete_bias'               => $getlocations_fields_defaults['autocomplete_bias'],
         'restrict_by_country'             => $getlocations_fields_defaults['restrict_by_country'],
@@ -2624,6 +2725,8 @@ function getlocations_fields_field_formatter_info_defaults() {
     'streetview_show'           => $getlocations_defaults['streetview_show'],
     'streetview_showfirst'      => $getlocations_defaults['streetview_showfirst'],
     'streetview_heading'        => $getlocations_defaults['streetview_heading'],
+    'streetview_zoom'           => $getlocations_defaults['streetview_zoom'],
+    'streetview_pitch'          => $getlocations_defaults['streetview_pitch'],
     'trafficinfo'               => $getlocations_defaults['trafficinfo'],
     'trafficinfo_state'         => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'               => $getlocations_defaults['bicycleinfo'],
@@ -2960,7 +3063,6 @@ function getlocations_fields_input_settings_form($defaults) {
     $defaults['input_fax_weight'],
     ''
   );
-
   $form['input_latitude_width'] = getlocations_element_map_tf(
     t('Latitude box width'),
     $defaults['input_latitude_width'],
@@ -3111,6 +3213,13 @@ function getlocations_fields_input_settings_form($defaults) {
     t('Enable empty lat/lon popup warning'),
     $defaults['latlon_warning'],
     t('Enables a javascript popup that warns users that they have not geocoded the address. Only use this if you have a fixed number of addresses.')
+  );
+
+  // enable streetview setup feature
+  $form['streetview_setup'] = getlocations_element_map_checkbox(
+    t('Enable Streetview Setup'),
+    $defaults['streetview_setup'],
+    t('Enables streetview configuration when set up to appear on top of the initial map in display settings.')
   );
 
   return $form;
@@ -3403,7 +3512,6 @@ function getlocations_fields_theme() {
 function theme_getlocations_fields_show($variables) {
   $locations = $variables['locations'];
   $settings = $variables['settings'];
-
   if ($settings['display_onemap']) {
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   }
@@ -3501,6 +3609,20 @@ function theme_getlocations_fields_show($variables) {
       $output .= '</div>';
       $output .= '<br />';
       }
+    }
+
+    // smuggle these in from location data
+    if (isset($location['streetview_heading']) && is_numeric($location['streetview_heading'])) {
+      $settings['streetview_heading'] = $location['streetview_heading'];
+    }
+    if (isset($location['streetview_zoom']) && is_numeric($location['streetview_zoom'])) {
+      $settings['streetview_zoom'] = $location['streetview_zoom'];
+    }
+    if (isset($location['streetview_pitch']) && is_numeric($location['streetview_pitch'])) {
+      $settings['streetview_pitch'] = $location['streetview_pitch'];
+    }
+    if (isset($location['mapzoom']) && is_numeric($location['mapzoom'])) {
+      $settings['nodezoom'] = $location['mapzoom'];
     }
 
     if ($location['longitude'] && $location['latitude']) {
@@ -3679,7 +3801,6 @@ function theme_getlocations_fields_field_settings_form($variables) {
       ),
       'no_striping' => $no_striping,
     ),
-
     array('data' =>
       array(
         array('data' => $form['input_latitude_width'], 'class' => array('getlocations_fields_input_cell1')),
@@ -3809,7 +3930,7 @@ function theme_getlocations_fields_field_widget_form($variables) {
   list($map, $mapid) = getlocations_fields_getmap($settings, $active);
 
   // attributes
-  $fieldlist = array('name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'latitude', 'longitude');
+  $fieldlist = array('name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'latitude', 'longitude', 'mapzoom', 'streetview_heading', 'streetview_zoom', 'streetview_pitch');
   foreach ($fieldlist AS $field) {
     if (isset($form[$field])) {
       $form[$field]['#attributes'] = array('id' => 'getlocations_' . $field . '_' . $mapid);
@@ -3871,6 +3992,11 @@ function theme_getlocations_fields_field_widget_form($variables) {
   $form['map']['#prefix'] = '<div class="getlocations_fields_map_wrapper">';
   $form['map']['#suffix'] = '</div>';
   $form['map']['#markup'] = '<p>' . $msg . '</p><div class="getlocations_fields_map">' . $map . '</div>';
+  if ($active && $settings['streetview_setup']) {
+    $form['map']['#markup'] .= '<div id="getlocations_streetview_setup_' . $mapid . '">';
+    $form['map']['#markup'] .= '<input type="button" value="' . t('Streetview Setup') . '" title="' . t('Configure streetview heading, zoom and pitch for this map.') . '" id="getlocations_streetview_setupbutton_' . $mapid . '" class="form-submit" />';
+    $form['map']['#markup'] .= '</div>';
+  }
 
   // wrap 'fake' required in a div
   if ($mapid !== NULL && isset($form['getlocations_required'])) {
@@ -3986,7 +4112,6 @@ function theme_getlocations_fields_settings_form($variables) {
       ),
       'no_striping' => $no_striping,
     ),
-
     array('data' =>
       array(
         array('data' => $form['getlocations_fields_defaults']['input_latitude_width'], 'class' => array('getlocations_fields_input_cell1')),

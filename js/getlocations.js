@@ -228,6 +228,8 @@ var getlocations_pano = [];
         global_settings.streetview_show = settings.streetview_show;
         global_settings.streetview_showfirst = settings.streetview_showfirst;
         global_settings.streetview_heading = settings.streetview_heading;
+        global_settings.streetview_zoom = settings.streetview_zoom;
+        global_settings.streetview_pitch = settings.streetview_pitch;
         global_settings.markermanagertype = settings.markermanagertype;
         global_settings.pansetting = settings.pansetting;
         // mobiles
@@ -859,15 +861,15 @@ var getlocations_pano = [];
         google.maps.event.trigger(m, 'click');
       }
       // streetview first feature
-      if (gs.streetview_show && gs.streetview_showfirst) {
+      if (gs.streetview_showfirst) {
         var popt = {
           position: p,
           pov: {
             heading: parseInt(gs.streetview_heading),
-            pitch: 0
+            pitch: parseInt(gs.streetview_pitch)
           },
           enableCloseButton: true,
-          zoom: 1
+          zoom: parseInt(gs.streetview_zoom)
         };
         getlocations_pano[mkey] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_map_canvas_" + mkey), popt);
         getlocations_pano[mkey].setVisible(true);

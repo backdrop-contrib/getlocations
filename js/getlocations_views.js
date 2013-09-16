@@ -310,22 +310,6 @@
         });
       }
 
-      if ($("#edit-fields-field-address-settings-edit-form-settings-streetview-show, #edit-style-options-streetview-show").is('input')) {
-        if ($("#edit-fields-field-address-settings-edit-form-settings-streetview-show, #edit-style-options-streetview-show").attr('checked')) {
-          $("#wrap-getlocations-streetview").show();
-        }
-        else {
-          $("#wrap-getlocations-streetview").hide();
-        }
-        $("#edit-fields-field-address-settings-edit-form-settings-streetview-show, #edit-style-options-streetview-show").change(function() {
-          if ($(this).attr('checked')) {
-            $("#wrap-getlocations-streetview").show();
-          }
-          else {
-            $("#wrap-getlocations-streetview").hide();
-          }
-        });
-      }
 
     }
   };

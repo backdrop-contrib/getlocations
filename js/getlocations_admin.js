@@ -408,22 +408,6 @@
         }
       });
 
-      if ($("#edit-getlocations-default-streetview-show").is('input')) {
-        if ($("#edit-getlocations-default-streetview-show").attr('checked')) {
-          $("#wrap-getlocations-streetview").show();
-        }
-        else {
-          $("#wrap-getlocations-streetview").hide();
-        }
-        $("#edit-getlocations-default-streetview-show").change(function() {
-          if ($(this).attr('checked')) {
-            $("#wrap-getlocations-streetview").show();
-          }
-          else {
-            $("#wrap-getlocations-streetview").hide();
-          }
-        });
-      }
 
     }
   };

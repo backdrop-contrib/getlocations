@@ -210,19 +210,27 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
             }
 
             // smuggle these in from location data
-            if (isset($location['streetview_heading']) && is_numeric($location['streetview_heading'])) {
-              $default['streetview_heading'] = $location['streetview_heading'];
+            if (isset($location['sv_heading']) && is_numeric($location['sv_heading'])) {
+              $default['sv_heading'] = $location['sv_heading'];
             }
-            if (isset($location['streetview_zoom']) && is_numeric($location['streetview_zoom'])) {
-              $default['streetview_zoom'] = $location['streetview_zoom'];
+            if (isset($location['sv_zoom']) && is_numeric($location['sv_zoom'])) {
+              $default['sv_zoom'] = $location['sv_zoom'];
             }
-            if (isset($location['streetview_pitch']) && is_numeric($location['streetview_pitch'])) {
-              $default['streetview_pitch'] = $location['streetview_pitch'];
+            if (isset($location['sv_pitch']) && is_numeric($location['sv_pitch'])) {
+              $default['sv_pitch'] = $location['sv_pitch'];
+            }
+            if (isset($location['sv_enable']) && is_numeric($location['sv_enable'])) {
+              $default['sv_enable'] = $location['sv_enable'];
+            }
+            if (isset($location['sv_showfirst_enable']) && is_numeric($location['sv_showfirst_enable'])) {
+              $default['sv_showfirst'] = $location['sv_showfirst_enable'];
             }
             if (isset($location['mapzoom']) && is_numeric($location['mapzoom'])) {
               $default['nodezoom'] = $location['mapzoom'];
             }
-
+            if (isset($location['map_maptype']) && $location['map_maptype']) {
+              $default['maptype'] = $location['map_maptype'];
+            }
           }
           elseif ($module == 'location_cck') {
             if (isset($entity->{$locative_field_name}[$lang][$delta])) {
@@ -249,6 +257,13 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
           }
           # elseif other modules here
 
+          // streetview killswitch
+          if (! getlocations_sv_global()) {
+            $default['sv_enable'] = 0;
+            $default['sv_showfirst'] = 0;
+            $default['sv_showfirst_enable'] = 0;
+          }
+
           if (isset($lat) && ! empty($lat) && isset($lon) && ! empty($lon)  && $latlon = getlocations_latlon_check($lat . ',' . $lon)) {
             $ll = explode(',', $latlon);
             $location['latitude'] = $ll[0];
@@ -263,7 +278,6 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
             $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
             $latlons[] = array($lat, $lon, $entity_id, $title, $marker, $entity_key, '', '');
             $ct++;
-
           } // end lat lon check
         } // end foreach
 
@@ -375,33 +389,23 @@ function getlocations_map_field_formatter_settings_summary($field, $instance, $v
         $summary[] = t('Enabled map types: @m', array('@m' => $m));
       }
 
-      $types = array();
-      foreach ($settings['behavior'] AS $key => $value) {
-        if ($value) {
-          $types[] = $key;
-        }
+      if ($settings['scale']) {
+        $summary[] = t('Show scale: Yes');
       }
-      if (count($types)) {
-        foreach ($types AS $type) {
-          if ($type == 'scale') {
-            $summary[] = t('Show scale: Yes');
-          }
-          elseif ($type == 'overview') {
-            $summary[] = t('Show overview map: Yes');
-          }
-          elseif ($type == 'scrollwheel') {
-            $summary[] = t('Enable scrollwheel zooming: Yes');
-          }
-        }
+      if ($settings['overview']) {
+        $summary[] = t('Show overview map: Yes');
+      }
+      if ($settings['scrollwheel']) {
+        $summary[] = t('Enable scrollwheel zooming: Yes');
       }
 
       if ($settings['draggable']) {
         $summary[] = t('Enable dragging the map: Yes');
       }
-      if ($settings['streetview_show']) {
+      if ($settings['sv_show']) {
         $summary[] = t('Show streetview pegman: Yes');
       }
-      if ($settings['streetview_showfirst']) {
+      if ($settings['sv_showfirst']) {
         $summary[] = t('Show streetview first: Yes');
       }
       if ($settings['fullscreen']) {
@@ -707,18 +711,22 @@ function getlocations_map_defaults() {
     'maptype'                       => $getlocations_defaults['maptype'],
     'mtc'                           => $getlocations_defaults['mtc'],
     'baselayers'                    => $getlocations_defaults['baselayers'],
-    'behavior'                      => $getlocations_defaults['behavior'],
+    'scale'                         => $getlocations_defaults['scale'],
+    'overview'                      => $getlocations_defaults['overview'],
+    'overview_opened'               => $getlocations_defaults['overview_opened'],
+    'scrollwheel'                   => $getlocations_defaults['scrollwheel'],
     'draggable'                     => $getlocations_defaults['draggable'],
     'map_backgroundcolor'           => $getlocations_defaults['map_backgroundcolor'],
     'visual_refresh'                => $getlocations_defaults['visual_refresh'],
     'show_maplinks'                 => $getlocations_defaults['show_maplinks'],
     'show_bubble_on_one_marker'     => $getlocations_defaults['show_bubble_on_one_marker'],
     'fullscreen'                    => $getlocations_defaults['fullscreen'],
-    'streetview_show'               => $getlocations_defaults['streetview_show'],
-    'streetview_showfirst'          => $getlocations_defaults['streetview_showfirst'],
-    'streetview_heading'            => $getlocations_defaults['streetview_heading'],
-    'streetview_zoom'               => $getlocations_defaults['streetview_zoom'],
-    'streetview_pitch'              => $getlocations_defaults['streetview_pitch'],
+    'sv_global'                     => $getlocations_defaults['sv_global'],
+    'sv_show'                       => $getlocations_defaults['sv_show'],
+    'sv_showfirst'                  => $getlocations_defaults['sv_showfirst'],
+    'sv_heading'                    => $getlocations_defaults['sv_heading'],
+    'sv_zoom'                       => $getlocations_defaults['sv_zoom'],
+    'sv_pitch'                      => $getlocations_defaults['sv_pitch'],
     'trafficinfo'                   => $getlocations_defaults['trafficinfo'],
     'trafficinfo_state'             => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'                   => $getlocations_defaults['bicycleinfo'],

@@ -40,8 +40,6 @@
             $("#edit-getlocations-default-maptype").val(maptype);
           });
 
-
-
         }
       });
     }

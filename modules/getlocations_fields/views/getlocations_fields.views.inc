@@ -293,6 +293,19 @@ function getlocations_fields_views_data() {
     ),
   );
 
+  // data
+  $data['getlocations_fields']['data'] = array(
+    'title' => t('Data'),
+    'help' => t('Serialized data of the selected location.'),
+    'field' => array(
+      'handler' => 'getlocations_fields_handler_field_data',
+    ),
+    #'filter' => array(
+    #  'handler' => 'getlocations_fields_handler_filter_data',
+    #),
+
+  );
+
 /*
   // address
   $data['getlocations_fields']['address'] = array(

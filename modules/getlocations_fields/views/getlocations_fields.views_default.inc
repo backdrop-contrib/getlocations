@@ -3984,5 +3984,139 @@ function getlocations_fields_views_default_views() {
   $views[$view->name] = $view;
 
 
+  /*
+   * Getlocations streetview for a node
+   *
+   */
+  $view = new view();
+  $view->name = 'getlocations_streetview';
+  $view->description = 'Provides a streetview of a locations_fields enabled node.';
+  $view->tag = 'getlocations view';
+  $view->base_table = 'node';
+  $view->human_name = 'Getlocations Streetview';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Defaults */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->display->display_options['title'] = 'View Streetview';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* Field: Getlocations Fields: Glid */
+  $handler->display->display_options['fields']['glid']['id'] = 'glid';
+  $handler->display->display_options['fields']['glid']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['glid']['field'] = 'glid';
+  $handler->display->display_options['fields']['glid']['label'] = '';
+  $handler->display->display_options['fields']['glid']['exclude'] = TRUE;
+  /* Field: Getlocations Fields: Latitude */
+  $handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['fields']['latitude']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['fields']['latitude']['label'] = '';
+  $handler->display->display_options['fields']['latitude']['exclude'] = TRUE;
+  /* Field: Getlocations Fields: Longitude */
+  $handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['fields']['longitude']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['fields']['longitude']['label'] = '';
+  $handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['type']['id'] = 'type';
+  $handler->display->display_options['fields']['type']['table'] = 'node';
+  $handler->display->display_options['fields']['type']['field'] = 'type';
+  $handler->display->display_options['fields']['type']['label'] = '';
+  $handler->display->display_options['fields']['type']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['type']['machine_name'] = TRUE;
+  /* Field: Getlocations Fields: Data */
+  $handler->display->display_options['fields']['data']['id'] = 'data';
+  $handler->display->display_options['fields']['data']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['data']['field'] = 'data';
+  $handler->display->display_options['fields']['data']['label'] = 'Data Heading';
+  $handler->display->display_options['fields']['data']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['data']['key'] = 'sv_heading';
+  /* Field: Getlocations Fields: Data */
+  $handler->display->display_options['fields']['data_1']['id'] = 'data_1';
+  $handler->display->display_options['fields']['data_1']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['data_1']['field'] = 'data';
+  $handler->display->display_options['fields']['data_1']['label'] = 'Data Zoom';
+  $handler->display->display_options['fields']['data_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['data_1']['key'] = 'sv_zoom';
+  /* Field: Getlocations Fields: Data */
+  $handler->display->display_options['fields']['data_2']['id'] = 'data_2';
+  $handler->display->display_options['fields']['data_2']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['data_2']['field'] = 'data';
+  $handler->display->display_options['fields']['data_2']['label'] = 'Data Pitch';
+  $handler->display->display_options['fields']['data_2']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['data_2']['key'] = 'sv_pitch';
+  /* Field: Getlocations Fields: Data */
+  $handler->display->display_options['fields']['data_3']['id'] = 'data_3';
+  $handler->display->display_options['fields']['data_3']['table'] = 'getlocations_fields';
+  $handler->display->display_options['fields']['data_3']['field'] = 'data';
+  $handler->display->display_options['fields']['data_3']['label'] = 'Data Streetview enable';
+  $handler->display->display_options['fields']['data_3']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['data_3']['key'] = 'sv_enable';
+  /* Contextual filter: Content: Nid */
+  $handler->display->display_options['arguments']['nid']['id'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['table'] = 'node';
+  $handler->display->display_options['arguments']['nid']['field'] = 'nid';
+  $handler->display->display_options['arguments']['nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Getlocations Fields: Glid */
+  $handler->display->display_options['filters']['glid']['id'] = 'glid';
+  $handler->display->display_options['filters']['glid']['table'] = 'getlocations_fields';
+  $handler->display->display_options['filters']['glid']['field'] = 'glid';
+  $handler->display->display_options['filters']['glid']['operator'] = 'not empty';
+  $handler->display->display_options['filters']['glid']['expose']['operator'] = FALSE;
+  /* Filter criterion: Getlocations Fields: Latitude */
+  $handler->display->display_options['filters']['latitude']['id'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['table'] = 'getlocations_fields';
+  $handler->display->display_options['filters']['latitude']['field'] = 'latitude';
+  $handler->display->display_options['filters']['latitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['latitude']['value']['value'] = '0';
+  /* Filter criterion: Getlocations Fields: Longitude */
+  $handler->display->display_options['filters']['longitude']['id'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['table'] = 'getlocations_fields';
+  $handler->display->display_options['filters']['longitude']['field'] = 'longitude';
+  $handler->display->display_options['filters']['longitude']['operator'] = '!=';
+  $handler->display->display_options['filters']['longitude']['value']['value'] = '0';
+
+  /* Display: Block 2 */
+  $handler = $view->new_display('block', 'Block 2', 'block_2');
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'getlocations_streetview';
+  $handler->display->display_options['style_options']['width'] = '100%';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['block_description'] = 'View: Getlocations streetview of a location';
+
+  $views[$view->name] = $view;
+
+
+
   return $views;
 }

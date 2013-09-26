@@ -303,6 +303,19 @@ function getlocations_nodemap($nid) {
         }
         $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($node->title), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
+
+        $sv_info = '';
+        if (getlocations_sv_global()) {
+          $sv_info = array(
+            'sv_heading' => $location['sv_heading'],
+            'sv_zoom' => $location['sv_zoom'],
+            'sv_pitch' => $location['sv_pitch'],
+            'sv_showfirst_enable' => $location['sv_showfirst_enable'],
+            'mapzoom' => $location['mapzoom'],
+            'map_maptype' => $location['map_maptype'],
+          );
+        }
+
         $ct++;
       }
     }
@@ -313,6 +326,10 @@ function getlocations_nodemap($nid) {
   }
 
   drupal_set_title(t('View !t locations', array('!t' => $node->title)));
+
+  if ($sv_info) {
+    $node->sv_info = $sv_info;
+  }
 
   return getlocations_setlocations($latlons, $minmaxes, 'node', $node);
 
@@ -357,6 +374,19 @@ function getlocations_usermap($uid) {
         }
         $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
+
+        $sv_info = '';
+        if (getlocations_sv_global()) {
+          $sv_info = array(
+            'sv_heading' => $location['sv_heading'],
+            'sv_zoom' => $location['sv_zoom'],
+            'sv_pitch' => $location['sv_pitch'],
+            'sv_showfirst_enable' => $location['sv_showfirst_enable'],
+            'mapzoom' => $location['mapzoom'],
+            'map_maptype' => $location['map_maptype'],
+          );
+        }
+
         $ct++;
       }
     }
@@ -367,6 +397,10 @@ function getlocations_usermap($uid) {
   }
 
   drupal_set_title(t('View user !t locations', array('!t' => $account->name)));
+
+  if ($sv_info) {
+    $account->sv_info = $sv_info;
+  }
 
   return getlocations_setlocations($latlons, $minmaxes, 'user', $account);
 
@@ -468,6 +502,19 @@ function getlocations_termmap($tid) {
           }
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($term->name), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
+
+          $sv_info = '';
+          if (getlocations_sv_global()) {
+            $sv_info = array(
+              'sv_heading' => $location['sv_heading'],
+              'sv_zoom' => $location['sv_zoom'],
+              'sv_pitch' => $location['sv_pitch'],
+              'sv_showfirst_enable' => $location['sv_showfirst_enable'],
+              'mapzoom' => $location['mapzoom'],
+              'map_maptype' => $location['map_maptype'],
+            );
+          }
+
           $ct++;
         }
       }
@@ -478,6 +525,10 @@ function getlocations_termmap($tid) {
     }
 
     drupal_set_title(t('View term !t locations', array('!t' => $term->name)));
+
+    if ($sv_info) {
+      $term->sv_info = $sv_info;
+    }
 
     return getlocations_setlocations($latlons, $minmaxes, 'term', $term);
 
@@ -522,6 +573,19 @@ function getlocations_commentmap($cid) {
           }
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($comment->subject), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
+
+          $sv_info = '';
+          if (getlocations_sv_global()) {
+            $sv_info = array(
+              'sv_heading' => $location['sv_heading'],
+              'sv_zoom' => $location['sv_zoom'],
+              'sv_pitch' => $location['sv_pitch'],
+              'sv_showfirst_enable' => $location['sv_showfirst_enable'],
+              'mapzoom' => $location['mapzoom'],
+              'map_maptype' => $location['map_maptype'],
+            );
+          }
+
           $ct++;
         }
       }
@@ -532,6 +596,10 @@ function getlocations_commentmap($cid) {
     }
 
     drupal_set_title(t('View comment !t locations', array('!t' => $comment->subject)));
+
+    if ($sv_info) {
+      $comment->sv_info = $sv_info;
+    }
 
     return getlocations_setlocations($latlons, $minmaxes, 'comment', $comment);
 
@@ -734,6 +802,23 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
   }
 
   $getlocations_defaults = getlocations_defaults();
+
+  // sv
+  if (getlocations_sv_global()) {
+    if ($node && isset($node->sv_info)) {
+      $sv_info = $node->sv_info;
+      unset($node->sv_info);
+      $getlocations_defaults['sv_heading'] = $sv_info['sv_heading'];
+      $getlocations_defaults['sv_zoom'] = $sv_info['sv_zoom'];
+      $getlocations_defaults['sv_pitch'] = $sv_info['sv_pitch'];
+      $getlocations_defaults['sv_showfirst'] = $sv_info['sv_showfirst_enable'];
+      $getlocations_defaults['nodezoom'] = $sv_info['mapzoom'];
+      $getlocations_defaults['maptype'] = $sv_info['map_maptype'];
+      // update baselayers
+      $getlocations_defaults['baselayers'][$sv_info['map_maptype']] = 1;
+    }
+  }
+
   $mapid = getlocations_setup_map($getlocations_defaults);
   getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid);
 
@@ -776,6 +861,11 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
 
   $current_js = drupal_get_js();
   $current_css = drupal_get_css();
+
+  $sv = FALSE;
+  if (isset($defaults['sv_enable']) && $defaults['sv_enable']) {
+    $sv = TRUE;
+  }
 
   static $getlocations_js_weight = 0;
   $getlocations_js_weight++;
@@ -951,12 +1041,14 @@ function getlocations_setup_js($defaults, $googleonly = FALSE) {
     $getlocations_js_weight++;
   }
 
-  if (!stristr($current_js, $getlocations_paths['getlocations_path'])) {
-    $js_opts = array();
-    $js_opts['weight'] = $getlocations_js_weight;
-    $js_opts['type'] = 'file';
-    drupal_add_js($getlocations_paths['getlocations_path'], $js_opts);
-    $getlocations_js_weight++;
+  if (! $sv) {
+    if (!stristr($current_js, $getlocations_paths['getlocations_path'])) {
+      $js_opts = array();
+      $js_opts['weight'] = $getlocations_js_weight;
+      $js_opts['type'] = 'file';
+      drupal_add_js($getlocations_paths['getlocations_path'], $js_opts);
+      $getlocations_js_weight++;
+    }
   }
 
   if ($defaults['polygons_enable']) {
@@ -3479,9 +3571,9 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     // streetview killswitch
     if (getlocations_sv_global()) {
       $form['sv_showfirst'] = getlocations_element_map_checkbox(
-        t('Show streetview Overlay'),
+        t('Enable streetview Overlay'),
         $defaults['sv_showfirst'],
-        t('Show streetview overlay on initial view of the map. This only occurs if there is one location.')
+        t('Enable streetview overlay on initial view of the map. This only occurs if there is one location.')
       );
     }
     else {

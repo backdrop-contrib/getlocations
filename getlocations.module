@@ -304,16 +304,9 @@ function getlocations_nodemap($nid) {
         $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($node->title), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
-        $sv_info = '';
-        if (getlocations_sv_global()) {
-          $sv_info = array(
-            'sv_heading' => $location['sv_heading'],
-            'sv_zoom' => $location['sv_zoom'],
-            'sv_pitch' => $location['sv_pitch'],
-            'sv_showfirst_enable' => $location['sv_showfirst_enable'],
-            'mapzoom' => $location['mapzoom'],
-            'map_maptype' => $location['map_maptype'],
-          );
+        $sv_info = FALSE;
+        if (module_exists('getlocations_fields') && getlocations_sv_global()) {
+          $sv_info = getlocations_fields_svinfo($location);
         }
 
         $ct++;
@@ -375,16 +368,9 @@ function getlocations_usermap($uid) {
         $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
-        $sv_info = '';
-        if (getlocations_sv_global()) {
-          $sv_info = array(
-            'sv_heading' => $location['sv_heading'],
-            'sv_zoom' => $location['sv_zoom'],
-            'sv_pitch' => $location['sv_pitch'],
-            'sv_showfirst_enable' => $location['sv_showfirst_enable'],
-            'mapzoom' => $location['mapzoom'],
-            'map_maptype' => $location['map_maptype'],
-          );
+        $sv_info = FALSE;
+        if (module_exists('getlocations_fields') && getlocations_sv_global()) {
+          $sv_info = getlocations_fields_svinfo($location);
         }
 
         $ct++;
@@ -503,16 +489,9 @@ function getlocations_termmap($tid) {
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($term->name), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
-          $sv_info = '';
-          if (getlocations_sv_global()) {
-            $sv_info = array(
-              'sv_heading' => $location['sv_heading'],
-              'sv_zoom' => $location['sv_zoom'],
-              'sv_pitch' => $location['sv_pitch'],
-              'sv_showfirst_enable' => $location['sv_showfirst_enable'],
-              'mapzoom' => $location['mapzoom'],
-              'map_maptype' => $location['map_maptype'],
-            );
+          $sv_info = FALSE;
+          if (module_exists('getlocations_fields') && getlocations_sv_global()) {
+            $sv_info = getlocations_fields_svinfo($location);
           }
 
           $ct++;
@@ -574,16 +553,9 @@ function getlocations_commentmap($cid) {
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($comment->subject), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
-          $sv_info = '';
-          if (getlocations_sv_global()) {
-            $sv_info = array(
-              'sv_heading' => $location['sv_heading'],
-              'sv_zoom' => $location['sv_zoom'],
-              'sv_pitch' => $location['sv_pitch'],
-              'sv_showfirst_enable' => $location['sv_showfirst_enable'],
-              'mapzoom' => $location['mapzoom'],
-              'map_maptype' => $location['map_maptype'],
-            );
+          $sv_info = FALSE;
+          if (module_exists('getlocations_fields') && getlocations_sv_global()) {
+            $sv_info = getlocations_fields_svinfo($location);
           }
 
           $ct++;
@@ -808,12 +780,12 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
     if ($node && isset($node->sv_info)) {
       $sv_info = $node->sv_info;
       unset($node->sv_info);
-      $getlocations_defaults['sv_heading'] = $sv_info['sv_heading'];
-      $getlocations_defaults['sv_zoom'] = $sv_info['sv_zoom'];
-      $getlocations_defaults['sv_pitch'] = $sv_info['sv_pitch'];
+      $getlocations_defaults['sv_heading']   = $sv_info['sv_heading'];
+      $getlocations_defaults['sv_zoom']      = $sv_info['sv_zoom'];
+      $getlocations_defaults['sv_pitch']     = $sv_info['sv_pitch'];
       $getlocations_defaults['sv_showfirst'] = $sv_info['sv_showfirst_enable'];
-      $getlocations_defaults['nodezoom'] = $sv_info['mapzoom'];
-      $getlocations_defaults['maptype'] = $sv_info['map_maptype'];
+      $getlocations_defaults['nodezoom']     = $sv_info['mapzoom'];
+      $getlocations_defaults['maptype']      = $sv_info['map_maptype'];
       // update baselayers
       $getlocations_defaults['baselayers'][$sv_info['map_maptype']] = 1;
     }

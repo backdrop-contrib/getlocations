@@ -18,6 +18,11 @@ var getlocations_pano = [];
 
   function getlocations_init() {
 
+    // bail out
+    if (typeof Drupal.settings.getlocations === 'undefined') {
+      return;
+    }
+
     // in icons.js
     Drupal.getlocations.iconSetup();
 
@@ -79,6 +84,7 @@ var getlocations_pano = [];
           var lidkey = arr2[5];
           var customContent = arr2[6];
           var cat = arr2[7];
+
           if (mark === '') {
             gs.markdone = gs.defaultIcon;
           }

@@ -219,11 +219,13 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
             if (isset($location['sv_pitch']) && is_numeric($location['sv_pitch'])) {
               $default['sv_pitch'] = $location['sv_pitch'];
             }
-            if (isset($location['sv_enable']) && is_numeric($location['sv_enable'])) {
-              $default['sv_enable'] = $location['sv_enable'];
-            }
+            #if (isset($location['sv_enable']) && is_numeric($location['sv_enable'])) {
+            #  $default['sv_enable'] = $location['sv_enable'];
+            #}
+            $default['sv_enable'] = 0;
             if (isset($location['sv_showfirst_enable']) && is_numeric($location['sv_showfirst_enable'])) {
               $default['sv_showfirst'] = $location['sv_showfirst_enable'];
+              $default['sv_showfirst_enable'] = $location['sv_showfirst_enable'];
             }
             if (isset($location['mapzoom']) && is_numeric($location['mapzoom'])) {
               $default['nodezoom'] = $location['mapzoom'];
@@ -398,7 +400,6 @@ function getlocations_map_field_formatter_settings_summary($field, $instance, $v
       if ($settings['scrollwheel']) {
         $summary[] = t('Enable scrollwheel zooming: Yes');
       }
-
       if ($settings['draggable']) {
         $summary[] = t('Enable dragging the map: Yes');
       }

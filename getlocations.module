@@ -274,6 +274,10 @@ function getlocations_nodemap($nid) {
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
+  $extra_info = array();
+  $sv_info = FALSE;
+  $map_info = FALSE;
+
   if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
@@ -305,8 +309,11 @@ function getlocations_nodemap($nid) {
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
         $sv_info = FALSE;
-        if (module_exists('getlocations_fields') && getlocations_sv_global()) {
-          $sv_info = getlocations_fields_svinfo($location);
+        if (module_exists('getlocations_fields') && count($locations) == 1) {
+          if (getlocations_sv_global()) {
+            $sv_info = getlocations_fields_svinfo($location);
+          }
+          // TODO map_info
         }
 
         $ct++;
@@ -321,10 +328,10 @@ function getlocations_nodemap($nid) {
   drupal_set_title(t('View !t locations', array('!t' => $node->title)));
 
   if ($sv_info) {
-    $node->sv_info = $sv_info;
+    $extra_info = array_merge($extra_info, $sv_info);
   }
 
-  return getlocations_setlocations($latlons, $minmaxes, 'node', $node);
+  return getlocations_setlocations($latlons, $minmaxes, 'node', $node, $extra_info);
 
 }
 
@@ -347,6 +354,10 @@ function getlocations_usermap($uid) {
   $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $ct = 0;
+  $extra_info = array();
+  $sv_info = FALSE;
+  $map_info = FALSE;
+
   if (count($locations)) {
     // we should loop over them and dump bummers with no lat/lon
     foreach ($locations AS $key => $location) {
@@ -369,8 +380,11 @@ function getlocations_usermap($uid) {
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
         $sv_info = FALSE;
-        if (module_exists('getlocations_fields') && getlocations_sv_global()) {
-          $sv_info = getlocations_fields_svinfo($location);
+        if (module_exists('getlocations_fields') && count($locations) == 1) {
+          if (getlocations_sv_global()) {
+            $sv_info = getlocations_fields_svinfo($location);
+          }
+          // TODO map_info
         }
 
         $ct++;
@@ -385,10 +399,10 @@ function getlocations_usermap($uid) {
   drupal_set_title(t('View user !t locations', array('!t' => $account->name)));
 
   if ($sv_info) {
-    $account->sv_info = $sv_info;
+    $extra_info = array_merge($extra_info, $sv_info);
   }
 
-  return getlocations_setlocations($latlons, $minmaxes, 'user', $account);
+  return getlocations_setlocations($latlons, $minmaxes, 'user', $account, $extra_info);
 
 }
 
@@ -468,6 +482,10 @@ function getlocations_termmap($tid) {
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $ct = 0;
+    $extra_info = array();
+    $sv_info = FALSE;
+    $map_info = FALSE;
+
     if (count($locations)) {
       // we should loop over them and dump bummers with no lat/lon
       foreach ($locations AS $key => $location) {
@@ -490,8 +508,11 @@ function getlocations_termmap($tid) {
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
           $sv_info = FALSE;
-          if (module_exists('getlocations_fields') && getlocations_sv_global()) {
-            $sv_info = getlocations_fields_svinfo($location);
+          if (module_exists('getlocations_fields') && count($locations) == 1) {
+            if (getlocations_sv_global()) {
+              $sv_info = getlocations_fields_svinfo($location);
+            }
+            // TODO map_info
           }
 
           $ct++;
@@ -506,10 +527,10 @@ function getlocations_termmap($tid) {
     drupal_set_title(t('View term !t locations', array('!t' => $term->name)));
 
     if ($sv_info) {
-      $term->sv_info = $sv_info;
+      $extra_info = array_merge($extra_info, $sv_info);
     }
 
-    return getlocations_setlocations($latlons, $minmaxes, 'term', $term);
+    return getlocations_setlocations($latlons, $minmaxes, 'term', $term, $extra_info);
 
   }
 }
@@ -532,6 +553,10 @@ function getlocations_commentmap($cid) {
     $latlons = array();
     $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
     $ct = 0;
+    $extra_info = array();
+    $sv_info = FALSE;
+    $map_info = FALSE;
+
     if (count($locations)) {
       // we should loop over them and dump bummers with no lat/lon
       foreach ($locations AS $key => $location) {
@@ -554,8 +579,11 @@ function getlocations_commentmap($cid) {
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
           $sv_info = FALSE;
-          if (module_exists('getlocations_fields') && getlocations_sv_global()) {
-            $sv_info = getlocations_fields_svinfo($location);
+          if (module_exists('getlocations_fields') && count($locations) == 1) {
+            if (getlocations_sv_global()) {
+              $sv_info = getlocations_fields_svinfo($location);
+            }
+            // TODO map_info
           }
 
           $ct++;
@@ -570,10 +598,10 @@ function getlocations_commentmap($cid) {
     drupal_set_title(t('View comment !t locations', array('!t' => $comment->subject)));
 
     if ($sv_info) {
-      $comment->sv_info = $sv_info;
+      $extra_info = array_merge($extra_info, $sv_info);
     }
 
-    return getlocations_setlocations($latlons, $minmaxes, 'comment', $comment);
+    return getlocations_setlocations($latlons, $minmaxes, 'comment', $comment, $extra_info);
 
   }
 }
@@ -601,6 +629,10 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
   $query = db_select('node', 'n')->fields('n', array('nid', 'title'))->condition('n.type', $type);
   $rows = $query->execute();
   $ct = 0;
+  $extra_info = array();
+  $sv_info = FALSE;
+  $map_info = FALSE;
+
   foreach ($rows AS $row) {
     $nid = $row->nid;
     $vid = getlocations_get_vid($nid);
@@ -639,6 +671,15 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
           }
           $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->title), ENT_QUOTES);
           $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
+
+          $sv_info = FALSE;
+          if (module_exists('getlocations_fields') && count($locations) == 1) {
+            if (getlocations_sv_global()) {
+              $sv_info = getlocations_fields_svinfo($location);
+            }
+            // TODO map_info
+          }
+
           $ct++;
         }
       }
@@ -648,7 +689,12 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
     unset($minmaxes);
     $minmaxes = '';
   }
-  return getlocations_setlocations($latlons, $minmaxes, $type);
+
+  if ($sv_info) {
+    $extra_info = array_merge($extra_info, $sv_info);
+  }
+
+  return getlocations_setlocations($latlons, $minmaxes, $type, '', $extra_info);
 }
 
 /**
@@ -668,7 +714,9 @@ function getlocations_lids($lidlist) {
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $marker = '';
   $ct = 0;
+  $extra_info = array();
   $sv_info = FALSE;
+  $map_info = FALSE;
 
   foreach ($lidarr AS $lid) {
     $locations[] = getlocations_load_location($lid);
@@ -684,11 +732,15 @@ function getlocations_lids($lidlist) {
         $location['key'] = '';
         $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key'], '', '');
+
         $sv_info = FALSE;
-        if (module_exists('getlocations_fields') && getlocations_sv_global() && count($locations) == 1) {
-          $sv_info = new StdClass;
-          $sv_info->sv_info = getlocations_fields_svinfo($location);
+        if (module_exists('getlocations_fields') && count($locations) == 1) {
+          if (getlocations_sv_global()) {
+            $sv_info = getlocations_fields_svinfo($location);
+          }
+          // TODO map_info
         }
+
         $ct++;
       }
     }
@@ -697,7 +749,12 @@ function getlocations_lids($lidlist) {
     unset($minmaxes);
     $minmaxes = '';
   }
-  return getlocations_setlocations($latlons, $minmaxes, 'lids', $sv_info);
+
+  if ($sv_info) {
+    $extra_info = array_merge($extra_info, $sv_info);
+  }
+
+  return getlocations_setlocations($latlons, $minmaxes, 'lids', '', $extra_info);
 
 }
 
@@ -718,7 +775,9 @@ function getlocations_nids($nidlist) {
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
   $typemarkers = getlocations_get_markertypes('node');
   $ct = 0;
+  $extra_info = array();
   $sv_info = FALSE;
+  $map_info = FALSE;
 
   foreach ($nidarr AS $nid) {
     $vid = getlocations_get_vid($nid);
@@ -754,11 +813,15 @@ function getlocations_nids($nidlist) {
         }
         $name = htmlspecialchars_decode(strip_tags($location['name']), ENT_QUOTES);
         $latlons[] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $location['marker'], $location['key'], '', '');
+
         $sv_info = FALSE;
-        if (module_exists('getlocations_fields') && getlocations_sv_global() && count($locations) == 1) {
-          $sv_info = new StdClass;
-          $sv_info->sv_info = getlocations_fields_svinfo($location);
+        if (module_exists('getlocations_fields') && count($locations) == 1) {
+          if (getlocations_sv_global()) {
+            $sv_info = getlocations_fields_svinfo($location);
+          }
+          // TODO map_info
         }
+
         $ct++;
       }
     }
@@ -767,7 +830,12 @@ function getlocations_nids($nidlist) {
     unset($minmaxes);
     $minmaxes = '';
   }
-  return getlocations_setlocations($latlons, $minmaxes, 'nids', $sv_info);
+
+  if ($sv_info) {
+    $extra_info = array_merge($extra_info, $sv_info);
+  }
+
+  return getlocations_setlocations($latlons, $minmaxes, 'nids', '', $extra_info);
 }
 
 /**
@@ -782,7 +850,7 @@ function getlocations_nids($nidlist) {
  *
  * @return string themed map html
  */
-function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node = '', $width='', $height='') {
+function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node = '', $extras = '', $width='', $height='') {
   if (! getlocations_defaults_check()) {
     return t('You need to !c first.', array('!c' => l('Configure Getlocations', 'admin/config/services/getlocations')));
   }
@@ -790,18 +858,16 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
   $getlocations_defaults = getlocations_defaults();
 
   // sv
-  if (getlocations_sv_global()) {
-    if ($node && isset($node->sv_info)) {
-      $sv_info = $node->sv_info;
-      unset($node->sv_info);
-      $getlocations_defaults['sv_heading']   = $sv_info['sv_heading'];
-      $getlocations_defaults['sv_zoom']      = $sv_info['sv_zoom'];
-      $getlocations_defaults['sv_pitch']     = $sv_info['sv_pitch'];
-      $getlocations_defaults['sv_showfirst'] = $sv_info['sv_showfirst_enable'];
-      $getlocations_defaults['nodezoom']     = $sv_info['mapzoom'];
-      $getlocations_defaults['maptype']      = $sv_info['map_maptype'];
+  if ($extras) {
+    if (getlocations_sv_global()) {
+      $getlocations_defaults['sv_heading']   = $extras['sv_heading'];
+      $getlocations_defaults['sv_zoom']      = $extras['sv_zoom'];
+      $getlocations_defaults['sv_pitch']     = $extras['sv_pitch'];
+      $getlocations_defaults['sv_showfirst'] = $extras['sv_showfirst_enable'];
+      $getlocations_defaults['nodezoom']     = $extras['mapzoom'];
+      $getlocations_defaults['maptype']      = $extras['map_maptype'];
       // update baselayers
-      $getlocations_defaults['baselayers'][$sv_info['map_maptype']] = 1;
+      $getlocations_defaults['baselayers'][$extras['map_maptype']] = 1;
     }
   }
 

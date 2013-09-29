@@ -224,7 +224,10 @@ function getlocations_cdints_load($arg) {
 }
 
 /**
- * menu access functions
+ * Access callback: Checks for access permission and if there is a supported locative module installed
+ *
+ * @return bool
+ *
  */
 function getlocations_access_location() {
   if (user_access('access getlocations')) {
@@ -238,6 +241,12 @@ function getlocations_access_location() {
   return FALSE;
 }
 
+/**
+ * Access callback: Checks for access permission and if there is a supported locative module installed
+ *
+ * @return bool
+ *
+ */
 function getlocations_access_user_location() {
   if (user_access('access user getlocations') && user_access('access user profiles')) {
     $modules = getlocations_supported_modules();
@@ -251,7 +260,7 @@ function getlocations_access_user_location() {
 }
 
 /**
- * Menu callback
+ * Page callback: displays a map.
  *
  * @param int $nid
  *
@@ -336,7 +345,7 @@ function getlocations_nodemap($nid) {
 }
 
 /**
- * Menu callback
+ * Page callback: Displays a map.
  *
  * @param int $uid
  *
@@ -407,8 +416,7 @@ function getlocations_usermap($uid) {
 }
 
 /**
- * Menu callback
- *
+ * Page callback: Displays a map.
  *
  * @return
  *   Returns a map of locations of all the users
@@ -461,7 +469,7 @@ function getlocations_usersmap() {
 }
 
 /**
- * Menu callback
+ * Page callback: Displays a map.
  *
  * @param int $tid
  *
@@ -536,7 +544,7 @@ function getlocations_termmap($tid) {
 }
 
 /**
- * Menu callback
+ * Page callback: Displays a map.
  *
  * @param int $cid
  *
@@ -607,7 +615,7 @@ function getlocations_commentmap($cid) {
 }
 
 /**
- * Menu callback
+ * Page callback: Displays a map.
  *
  * @param string $type
  * A location enabled content type
@@ -698,7 +706,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
 }
 
 /**
- * Menu callback
+ * Page callback: Displays a map.
  *
  * @param string $lidlist
  * A comma-delimited list of location ids
@@ -759,7 +767,7 @@ function getlocations_lids($lidlist) {
 }
 
 /**
- * Menu callback
+ * Page callback: Displays a map.
  *
  * @param string $nidlist
  * A comma-delimited list of node ids
@@ -1679,7 +1687,12 @@ function getlocations_get_path_from_lid($lid) {
   return FALSE;
 }
 
-// ajax callback to fill infobubble
+/**
+ * Ajax callback
+ * Fetches bubble content
+ *
+ * @see theme_getlocations_adinfo().
+ */
 function getlocations_adinfo() {
 
   $lid = $_GET['lid'];
@@ -1756,15 +1769,20 @@ function getlocations_getinfo($lid, $lidkey, $extra=FALSE) {
 
 }
 
-// ajax callback to provide a link
+/**
+ * Ajax callback
+ * Provides a link
+ *
+ * @see theme_getlocations_lidinfo()
+ *
+ */
 function getlocations_lidinfo() {
-
   $lid = $_GET['lid'];
   $lidkey = $_GET['key'];
   $content = getlocations_getlidinfo($lid, $lidkey);
   drupal_json_output(array('content' => $content));
-
 }
+
 /**
  * @param int $lid location id
  * @param string entity id
@@ -1775,7 +1793,13 @@ function getlocations_getlidinfo($lid, $lidkey) {
   return $content;
 }
 
-// provides data for marker colorbox
+/**
+ * Ajax callback
+ * provides data for marker colorbox
+ *
+ * @see template_preprocess_getlocations_marker_box()
+ * @see getlocations_marker_box.tpl.php
+ */
 function getlocations_markerinfo() {
   $linktype = $_GET['lt'];
   $cat =  $_GET['cat'];
@@ -1854,6 +1878,7 @@ function getlocations_get_marker_titles($reset = FALSE) {
 
 /**
  * Get the JSON icon data for all the default markers.
+ * adapted from gmap
  */
 function getlocations_get_icondata($reset = FALSE) {
   static $icons;
@@ -1878,6 +1903,7 @@ function getlocations_get_icondata($reset = FALSE) {
 
 /**
  * Regenerate the markerdata file.
+ * adapted from gmap
  */
 function getlocations_regenerate_markers() {
   // This often fails in cli mode, so bail.
@@ -1916,6 +1942,10 @@ function getlocations_regenerate_markers() {
   return TRUE;
 }
 
+/**
+ * Function to find and return the filesystem path and filename of the markers definition javascript file
+ *
+ */
 function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
 
   if (file_default_scheme() != 'public') {
@@ -1957,8 +1987,10 @@ function getlocations_get_markerfile($dir=FALSE, $check=TRUE) {
 }
 
 /**
- * hook_getlocations_markerdir
+ * hook_getlocations_markerdir()
  * from jhm http://drupal.org/user/15946
+ *
+ * This hook allows modules or themes to add their own markers
  */
 function getlocations_getlocations_markerdir() {
   $markerdir = libraries_get_path('getlocations') . '/markers';
@@ -2371,12 +2403,12 @@ function getlocations_get_markertypes($type) {
 }
 
 /**
- * Function
+ * Function to fetch a node type or bundle
  *
- * @param
+ * @param int $nid The node Identifier
  *
  * @return
- *   Returns
+ *   Returns the bundle name or false
  *
  */
 function getlocations_get_nodetype($nid) {
@@ -2623,12 +2655,11 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
 }
 
 /**
- * Function
+ * Function to fetch locations
  *
- * @param
+ * @param int $id The entity identifier
  *
- * @return
- *   Returns
+ * @return array $locations
  *
  */
 function getlocations_load_locations($id, $key = 'vid') {
@@ -2649,12 +2680,11 @@ function getlocations_load_locations($id, $key = 'vid') {
 }
 
 /**
- * Function
+ * Function to fetch a location
  *
- * @param
+ * @param int $lid Location Identifier
  *
- * @return
- *   Returns
+ * @return array $location
  *
  */
 function getlocations_load_location($lid) {
@@ -2676,12 +2706,13 @@ function getlocations_load_location($lid) {
 }
 
 /**
- * Function
+ * Function to fetch locations. Supports Geofield and Geolocation modules
  *
- * @param
+ * @param int $id Entity identifier
+ * @param string $key Entity key
+ * @param string $module Module name
  *
- * @return
- *   Returns
+ * @return array $locations
  *
  */
 function getlocations_other_load_locations($id, $key = 'vid', $module = '') {
@@ -5782,12 +5813,22 @@ function getlocations_theme() {
 }
 
 /**
+ * Returns HTML for a map.
+ *
  * All the map displays pass through here.
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - width: The width of the map.
+ *   - height: The height of the map.
+ *   - defaults: The settings to be applied to the map, links, buttons and form elements.
+ *   - mapid: The unique identifier for the map.
+ *   - type: The entity type, eg node, user, term or comment.
+ *   - node: The entity object.
  *
- * @return
- *   Returns $output
+ * @return string $output
+ *
+ * @ingroup themeable
  *
  */
 function theme_getlocations_show($variables) {
@@ -6071,12 +6112,15 @@ function theme_getlocations_show($variables) {
 }
 
 /**
- * returns a location's vcard, requested by ajax
+ * Returns HTML of a location's vcard, requested by ajax.
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - location: The information pertaining to the address to be formatted.
  *
- * @return
- *   Returns $output
+ * @return string $output
+ *
+ * @ingroup themeable
  *
  */
 function theme_getlocations_adinfo($variables) {
@@ -6190,10 +6234,11 @@ function theme_getlocations_adinfo($variables) {
 }
 
 /**
- * @param array $variables
+ * Prepares variables for getlocations_box.tpl.php
  *
- * @return
- *   Modifies $variables in situ
+ * @param array $variables
+ *   An associative array containing all the elements to construct an HTML document
+ *   suitable for use in a colorbox.
  *
  */
 function template_preprocess_getlocations_box(&$variables) {
@@ -6238,10 +6283,11 @@ function template_preprocess_getlocations_box(&$variables) {
 }
 
 /**
- * @param array $variables
+ * Prepares variables for getlocations_marker_box.tpl.php
  *
- * @return
- *   Modifies $variables in situ
+ * @param array $variables
+ *   An associative array containing all the elements to construct an HTML document
+ *   suitable for use in a colorbox.
  *
  */
 function template_preprocess_getlocations_marker_box(&$variables) {
@@ -6278,12 +6324,15 @@ function template_preprocess_getlocations_marker_box(&$variables) {
 }
 
 /**
- * Function
+ * Returns HTML of the getlocations settings form.
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - form: The form array.
  *
- * @return
- *   Returns $output
+ * @return string The rendered form
+ *
+ * @ingroup themeable
  *
  */
 function theme_getlocations_settings_form($variables) {
@@ -6413,12 +6462,15 @@ function theme_getlocations_settings_form($variables) {
 }
 
 /**
- * Function
+ * Returns HTML of the getlocations plugin_style_map_options form.
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - form: The form array.
  *
- * @return
- *   Returns $output
+ * @return string The rendered form
+ *
+ * @ingroup themeable
  *
  */
 function theme_getlocations_plugin_style_map_options_form($variables) {
@@ -6497,12 +6549,15 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
 }
 
 /**
- * Function
+ * Returns HTML of the getlocations plugin_style_streetview_options form.
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - form: The form array.
  *
- * @return
- *   Returns $output
+ * @return string The rendered form
+ *
+ * @ingroup themeable
  *
  */
 function theme_getlocations_plugin_style_streetview_options_form($variables) {
@@ -6514,13 +6569,15 @@ function theme_getlocations_plugin_style_streetview_options_form($variables) {
 }
 
 /**
- * Display a coordinate.
+ * Returns HTML of a latitude in decimal degress expressed in degrees, minutes and seconds.
+ *
  * from location module
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - latitude: A latitude in decimal degrees.
  *
- * @return
- *   Returns $output
+ * @ingroup themeable
  *
  */
 function theme_getlocations_latitude_dms($variables) {
@@ -6538,10 +6595,15 @@ function theme_getlocations_latitude_dms($variables) {
 }
 
 /**
- * @param array $variables
+ * Returns HTML of a longitude in decimal degress expressed in degrees, minutes and seconds.
  *
- * @return
- *   Returns $output
+ * from location module
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - longitude: A longitude in decimal degrees.
+ *
+ * @ingroup themeable
  *
  */
 function theme_getlocations_longitude_dms($variables) {
@@ -6559,12 +6621,15 @@ function theme_getlocations_longitude_dms($variables) {
 }
 
 /**
- * Function
+ * Returns an array of an address from the addressfield module converted for use in getlocations.
+ *
+ * from location module
  *
  * @param array $variables
+ *   An associative array containing:
+ *   - address: an array of address components.
  *
- * @return
- *   Returns $output
+ * @ingroup themeable
  *
  */
 function theme_getlocations_addressfield_convert($variables) {
@@ -6624,16 +6689,29 @@ function theme_getlocations_addressfield_convert($variables) {
 
 }
 
+/**
+ * Returns HTML of a url, requested by ajax.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - lid: The location identifier or glid.
+ *   - lidkey: The entity identifier type
+ *
+ * @return string $output
+ *
+ * @ingroup themeable
+ *
+ */
 function theme_getlocations_lidinfo($variables) {
   $lid = $variables['lid'];
   $lidkey = $variables['lidkey'];
 
-  $content = FALSE;
+  $output = FALSE;
   if ($lid > 0) {
     if (module_exists('getlocations_fields') || module_exists('location')) {
       $path = getlocations_get_path_from_lid($lid);
       if ($path) {
-        $content = $path;
+        $output = $path;
       }
     }
     elseif (module_exists('geofield') || module_exists('geolocation') ) {
@@ -6654,11 +6732,11 @@ function theme_getlocations_lidinfo($variables) {
         $path = url('comment/' . $lid);
       }
       if ($path) {
-        $content = $path;
+        $output = $path;
       }
     }
   }
-  return $content;
+  return $output;
 
 }
 

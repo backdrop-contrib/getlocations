@@ -283,12 +283,6 @@ function template_preprocess_getlocations_view_streetview(&$variables) {
         $options['sv_zoom']    = (isset($location['data_1']) && is_numeric($location['data_1']) ? $location['data_1'] : 1);
         $options['sv_pitch']   = (isset($location['data_2']) && is_numeric($location['data_2']) ? $location['data_2'] : 0);
         $options['sv_enable']  = (isset($location['data_3']) && is_numeric($location['data_3']) ? $location['data_3'] : 1);
-        // streetview killswitch
-        #if (! getlocations_sv_global()) {
-        #  $options['sv_enable'] = 0;
-        #  $options['sv_showfirst'] = 0;
-        #  $options['sv_showfirst_enable'] = 0;
-        #}
 
         $getlocations_defaults = getlocations_defaults();
         $newdefaults = getlocations_adjust_vars($getlocations_defaults, $options);

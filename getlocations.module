@@ -322,7 +322,7 @@ function getlocations_nodemap($nid) {
           if (getlocations_sv_global()) {
             $sv_info = getlocations_fields_svinfo($location);
           }
-          // TODO map_info
+          $map_info = getlocations_fields_mapinfo($location);
         }
 
         $ct++;
@@ -338,6 +338,9 @@ function getlocations_nodemap($nid) {
 
   if ($sv_info) {
     $extra_info = array_merge($extra_info, $sv_info);
+  }
+  if ($map_info) {
+    $extra_info = array_merge($extra_info, $map_info);
   }
 
   return getlocations_setlocations($latlons, $minmaxes, 'node', $node, $extra_info);
@@ -393,7 +396,7 @@ function getlocations_usermap($uid) {
           if (getlocations_sv_global()) {
             $sv_info = getlocations_fields_svinfo($location);
           }
-          // TODO map_info
+          $map_info = getlocations_fields_mapinfo($location);
         }
 
         $ct++;
@@ -409,6 +412,9 @@ function getlocations_usermap($uid) {
 
   if ($sv_info) {
     $extra_info = array_merge($extra_info, $sv_info);
+  }
+  if ($map_info) {
+    $extra_info = array_merge($extra_info, $map_info);
   }
 
   return getlocations_setlocations($latlons, $minmaxes, 'user', $account, $extra_info);
@@ -520,7 +526,7 @@ function getlocations_termmap($tid) {
             if (getlocations_sv_global()) {
               $sv_info = getlocations_fields_svinfo($location);
             }
-            // TODO map_info
+            $map_info = getlocations_fields_mapinfo($location);
           }
 
           $ct++;
@@ -536,6 +542,9 @@ function getlocations_termmap($tid) {
 
     if ($sv_info) {
       $extra_info = array_merge($extra_info, $sv_info);
+    }
+    if ($map_info) {
+      $extra_info = array_merge($extra_info, $map_info);
     }
 
     return getlocations_setlocations($latlons, $minmaxes, 'term', $term, $extra_info);
@@ -591,7 +600,7 @@ function getlocations_commentmap($cid) {
             if (getlocations_sv_global()) {
               $sv_info = getlocations_fields_svinfo($location);
             }
-            // TODO map_info
+            $map_info = getlocations_fields_mapinfo($location);
           }
 
           $ct++;
@@ -607,6 +616,9 @@ function getlocations_commentmap($cid) {
 
     if ($sv_info) {
       $extra_info = array_merge($extra_info, $sv_info);
+    }
+    if ($map_info) {
+      $extra_info = array_merge($extra_info, $map_info);
     }
 
     return getlocations_setlocations($latlons, $minmaxes, 'comment', $comment, $extra_info);
@@ -685,7 +697,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
             if (getlocations_sv_global()) {
               $sv_info = getlocations_fields_svinfo($location);
             }
-            // TODO map_info
+            $map_info = getlocations_fields_mapinfo($location);
           }
 
           $ct++;
@@ -700,6 +712,9 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
 
   if ($sv_info) {
     $extra_info = array_merge($extra_info, $sv_info);
+  }
+  if ($map_info) {
+    $extra_info = array_merge($extra_info, $map_info);
   }
 
   return getlocations_setlocations($latlons, $minmaxes, $type, '', $extra_info);
@@ -746,7 +761,7 @@ function getlocations_lids($lidlist) {
           if (getlocations_sv_global()) {
             $sv_info = getlocations_fields_svinfo($location);
           }
-          // TODO map_info
+          $map_info = getlocations_fields_mapinfo($location);
         }
 
         $ct++;
@@ -760,6 +775,9 @@ function getlocations_lids($lidlist) {
 
   if ($sv_info) {
     $extra_info = array_merge($extra_info, $sv_info);
+  }
+  if ($map_info) {
+    $extra_info = array_merge($extra_info, $map_info);
   }
 
   return getlocations_setlocations($latlons, $minmaxes, 'lids', '', $extra_info);
@@ -827,7 +845,7 @@ function getlocations_nids($nidlist) {
           if (getlocations_sv_global()) {
             $sv_info = getlocations_fields_svinfo($location);
           }
-          // TODO map_info
+          $map_info = getlocations_fields_mapinfo($location);
         }
 
         $ct++;
@@ -841,6 +859,9 @@ function getlocations_nids($nidlist) {
 
   if ($sv_info) {
     $extra_info = array_merge($extra_info, $sv_info);
+  }
+  if ($map_info) {
+    $extra_info = array_merge($extra_info, $map_info);
   }
 
   return getlocations_setlocations($latlons, $minmaxes, 'nids', '', $extra_info);
@@ -872,6 +893,8 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
       $getlocations_defaults['sv_zoom']      = $extras['sv_zoom'];
       $getlocations_defaults['sv_pitch']     = $extras['sv_pitch'];
       $getlocations_defaults['sv_showfirst'] = $extras['sv_showfirst_enable'];
+    }
+    if (getlocations_map_settings_allow()) {
       $getlocations_defaults['nodezoom']     = $extras['mapzoom'];
       $getlocations_defaults['maptype']      = $extras['map_maptype'];
       // update baselayers
@@ -1246,6 +1269,7 @@ function getlocations_defaults($reset = FALSE) {
     'overview_opened'               => 0,
     'scrollwheel'                   => 0,
     'scalecontrolposition'          => '',
+    'map_settings_allow'            => 1,
     'sv_global'                     => 1, // global killswitch
     'sv_show'                       => 0, // Pegman
     'svcontrolposition'             => '',
@@ -2516,6 +2540,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'pancontrolposition'        => $defaults['pancontrolposition'],
       'scalecontrolposition'      => $defaults['scalecontrolposition'],
       'svcontrolposition'         => $defaults['svcontrolposition'],
+      'map_settings_allow'        => $defaults['map_settings_allow'],
     ),
   );
   // only set these if wanted
@@ -2973,7 +2998,7 @@ function getlocations_element_map_zoom($title, $default, $description='') {
     '#type' => 'select',
     '#title' => $title,
     '#default_value' => $default,
-    '#options' => drupal_map_assoc(range(0, 20)),
+    '#options' => drupal_map_assoc(range(0, 21)),
   );
   if (! empty($description)) {
     $element['#description'] = $description;
@@ -2992,7 +3017,7 @@ function getlocations_element_map_zoom($title, $default, $description='') {
  */
 function getlocations_element_map_zoom_map($title, $default, $description='') {
 
-  $opts = array('-1' => t('Use map type settings')) + drupal_map_assoc(range(0, 20));
+  $opts = array('-1' => t('Use map type settings')) + drupal_map_assoc(range(0, 21));
   $element = array(
     '#type' => 'select',
     '#title' => $title,
@@ -3599,6 +3624,13 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
   );
 
   if ($config) {
+
+    // per location map settings
+    $form['map_settings_allow'] = getlocations_element_map_checkbox(
+      t('Per location map settings'),
+      $defaults['map_settings_allow'],
+      t('Allow zoom and map type set per location. Disabling this will use the defaults instead.')
+    );
 
     // Enable the visual refresh feature
     $form['visual_refresh'] = getlocations_element_map_checkbox(
@@ -5637,6 +5669,15 @@ function getlocations_get_current_supported_module() {
   return FALSE;
 }
 
+/**
+ * Function
+ *
+ * @param
+ *
+ * @return
+ *   Returns
+ *
+ */
 function getlocations_controlpositions($dd = TRUE) {
     if ($dd) {
       $controlpositions = array(
@@ -5661,9 +5702,35 @@ function getlocations_controlpositions($dd = TRUE) {
     return $controlpositions;
 }
 
+/**
+ * Function
+ *
+ * @param
+ *
+ * @return
+ *   Returns
+ *
+ */
 function getlocations_sv_global() {
   $getlocations_defaults = getlocations_defaults();
   if ($getlocations_defaults['sv_global']) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Function
+ *
+ * @param
+ *
+ * @return
+ *   Returns
+ *
+ */
+function getlocations_map_settings_allow() {
+  $getlocations_defaults = getlocations_defaults();
+  if ($getlocations_defaults['map_settings_allow']) {
     return TRUE;
   }
   return FALSE;

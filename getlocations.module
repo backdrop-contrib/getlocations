@@ -2895,10 +2895,9 @@ function getlocations_other_get_fieldname($type, $module, $entity_type = '') {
   $rows = $query->execute();
   $field_names = array();
   foreach ($rows AS $row) {
-    $field_names[] = $row->field_name;
+    $field_names[$row->field_name] = $row->field_name;
   }
   return $field_names;
-
 }
 
 /**

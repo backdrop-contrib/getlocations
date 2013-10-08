@@ -164,14 +164,15 @@ function getlocations_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  // ajax callbacks
   // getlocations/info?lid     # ajax callback to fetch an address
-  $items['getlocations/info'] = array(
+  $items['getlocations_cb/info'] = array(
     'page callback' => 'getlocations_adinfo',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
   // getlocations/lidinfo?lid    # ajax callback to fetch a link to the 'owner'
-  $items['getlocations/lidinfo'] = array(
+  $items['getlocations_cb/lidinfo'] = array(
     'page callback' => 'getlocations_lidinfo',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
@@ -193,7 +194,11 @@ function getlocations_menu() {
 }
 
 /**
- * menu placeholder functions
+ * check that the argument is numeric
+ *
+ * @param int $arg
+ *
+ * @return argument or FALSE
  */
 function getlocations_id_load($arg) {
   return (is_numeric($arg) && $arg > 0 ? $arg : FALSE);
@@ -202,6 +207,9 @@ function getlocations_id_load($arg) {
 /**
  * Check that the node type exists
  *
+ * @param string $arg Node type.
+ *
+ * @return argument or FALSE
  */
 function getlocations_type_load($arg) {
   $query = db_select('node_type', 'n')->fields('n', array('type'))->condition('n.type', $arg);
@@ -211,6 +219,10 @@ function getlocations_type_load($arg) {
 
 /**
  * sanity check on list of nids
+ *
+ * @param int $arg
+ *
+ * @return argument or FALSE
  *
  */
 function getlocations_cdints_load($arg) {
@@ -1526,6 +1538,9 @@ function getlocations_latlon_check($latlon) {
 /**
  * Function to check wether the google places library should be enabled.
  *
+ * @return bool
+ *
+ *
  */
 function getlocations_places_check() {
   $found = FALSE;
@@ -2565,8 +2580,8 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'show_maplinks'             => $defaults['show_maplinks'],
       'js_path'                   => base_path() . GETLOCATIONS_PATH . '/js/',
       'images_path'               => base_path() . GETLOCATIONS_PATH . '/images/',
-      'info_path'                 => url("getlocations/info"),
-      'lidinfo_path'              => url("getlocations/lidinfo"),
+      'info_path'                 => url("getlocations_cb/info"),
+      'lidinfo_path'              => url("getlocations_cb/lidinfo"),
       'fullscreen'                => $defaults['fullscreen'],
       'show_bubble_on_one_marker' => $defaults['show_bubble_on_one_marker'],
       'kml_url'                   => $defaults['kml_group']['kml_url'],
@@ -2988,7 +3003,7 @@ function getlocations_other_get_fieldname($type, $module, $entity_type = '') {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_marker($title, $options, $default, $description='') {
@@ -3011,7 +3026,7 @@ function getlocations_element_map_marker($title, $options, $default, $descriptio
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_tf($title, $default, $description='', $size=60, $maxlength=255, $required=FALSE, $weight='') {
@@ -3042,7 +3057,7 @@ function getlocations_element_map_tf($title, $default, $description='', $size=60
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_zoom($title, $default, $description='') {
@@ -3065,7 +3080,7 @@ function getlocations_element_map_zoom($title, $default, $description='') {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_zoom_map($title, $default, $description='') {
@@ -3089,7 +3104,7 @@ function getlocations_element_map_zoom_map($title, $default, $description='') {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_zoom_controltype($default, $title = '') {
@@ -3117,7 +3132,7 @@ function getlocations_element_map_zoom_controltype($default, $title = '') {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_checkbox($title, $default, $description='') {
@@ -3140,7 +3155,7 @@ function getlocations_element_map_checkbox($title, $default, $description='') {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_mtc($default) {
@@ -3164,7 +3179,7 @@ function getlocations_element_map_mtc($default) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_maptype($default, $baselayers) {
@@ -3196,7 +3211,7 @@ function getlocations_element_map_maptype($default, $baselayers) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_baselayers($view, $default) {
@@ -3235,7 +3250,7 @@ function getlocations_element_map_baselayers($view, $default) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_pansetting($default) {
@@ -3256,7 +3271,7 @@ function getlocations_element_map_pansetting($default) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_markeraction($default) {
@@ -3281,7 +3296,7 @@ function getlocations_element_map_markeraction($default) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_markeractiontype($default) {
@@ -3304,7 +3319,7 @@ function getlocations_element_map_markeractiontype($default) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_markermanagertype($default) {
@@ -3330,7 +3345,7 @@ function getlocations_element_markermanagertype($default) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_path($title, $default, $size, $maxlength, $description) {
@@ -3351,41 +3366,7 @@ function getlocations_element_path($title, $default, $size, $maxlength, $descrip
  * @param
  *
  * @return
- *   Returns
- *
- */
-function getlocations_element_map_behavior($type, $default) {
-  // scale  overview overview_opened scrollwheel
-  if ($type == 'scale') {
-    $title = t('Scale');
-    $description = t('Show scale');
-  }
-  elseif ($type == 'overview') {
-    $title = t('Overview map');
-    $description = t('Show overview map');
-  }
-  elseif ($type == 'overview_opened') {
-    $title = t('Overview map state');
-    $description = t('Show overview map as open by default.');
-  }
-  elseif ($type == 'scrollwheel') {
-    $title = t('Scrollwheel');
-    $description = t('Enable scrollwheel zooming');
-  }
-  if ($title) {
-    $element = getlocations_element_map_checkbox($title, $default, $description);
-    return $element;
-  }
-  return FALSE;
-}
-
-/**
- * Function
- *
- * @param
- *
- * @return
- *   Returns
+ *   Returns form element
  *
  */
 function getlocations_element_map_limits($default, $title = '', $description = '') {
@@ -3449,7 +3430,7 @@ function getlocations_element_dd($title, $default, $options, $description = '', 
  * @param
  *
  * @return
- *   Returns
+ *   Returns form
  *
  */
 function getlocations_map_display_basics_form($defaults, $labels = array()) {
@@ -3557,7 +3538,7 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
  * @param
  *
  * @return
- *   Returns
+ *   Returns form
  *
  */
 function getlocations_map_display_options_form($defaults, $config = TRUE, $extras = TRUE, $source = '') {
@@ -3706,7 +3687,6 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     else {
       $form['jquery_colorpicker_enabled'] = array('#type' => 'value', '#value' => 0);
     }
-
 
   }
 
@@ -4443,7 +4423,7 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
  * @param
  *
  * @return
- *   Returns
+ *   Returns array of javascript paths
  *
  */
 function getlocations_paths_get($reset = FALSE) {
@@ -5107,6 +5087,15 @@ function getlocations_addressfield_convert($address) {
 /**
  * Make sure a string is a valid css dimension.
  */
+/**
+ * Function
+ *
+ * @param
+ *
+ * @return
+ *   Returns
+ *
+ */
 function getlocations_dim_check($string) {
   if (!is_string($string) || empty($string)) {
     return FALSE;
@@ -5121,6 +5110,15 @@ function getlocations_dim_check($string) {
   }
 }
 
+/**
+ * Function
+ *
+ * @param
+ *
+ * @return
+ *   Returns
+ *
+ */
 function getlocations_element_validate_dim($element, &$form_state) {
 
   $value = FALSE;
@@ -5147,6 +5145,15 @@ function getlocations_element_validate_dim($element, &$form_state) {
   }
 }
 
+/**
+ * Function
+ *
+ * @param
+ *
+ * @return
+ *   Returns
+ *
+ */
 function getlocations_element_validate_latlon($element, &$form_state) {
 
   $value = FALSE;

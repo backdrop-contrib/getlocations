@@ -1,9 +1,50 @@
-commit 6054194
+commit f056137
+Author: hutch <hutch@midwales.net>
+Date:   Fri Oct 11 19:11:32 2013 +0100
+
+    improved widget
+
+modules/getlocations_map/getlocations_map.module
+
+commit f86d25a
+Author: hutch <hutch@midwales.net>
+Date:   Tue Oct 8 11:50:44 2013 +0100
+
+    cleaned up
+
+getlocations.module
+js/getlocations.js
+
+commit 25fadb6
+Author: hutch <hutch@midwales.net>
+Date:   Tue Oct 8 11:50:26 2013 +0100
+
+    controlpositions rationalized
+
+js/getlocations.js
+
+commit 1d5ff76
+Author: hutch <hutch@midwales.net>
+Date:   Mon Oct 7 15:24:34 2013 +0100
+
+    better settings for streetview overlay
+
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_fields/js/getlocations_fields_streetview.js
+modules/getlocations_fields/js/getlocations_fields_views.js
+modules/getlocations_fields/views/getlocations_fields_plugin_style_streetview.inc
+modules/getlocations_map/getlocations_map.module
+
+commit 186b95a
 Author: hutch <hutch@midwales.net>
 Date:   Fri Oct 4 21:08:02 2013 +0100
 
     fixed streetview setup button
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields.js
 
 commit 02045a8

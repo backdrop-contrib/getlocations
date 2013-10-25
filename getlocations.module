@@ -6250,7 +6250,7 @@ function theme_getlocations_adinfo($variables) {
   if (! empty($location['street'])) {
     $output .= '<div class="street-address">' . $location['street'];
     if (! empty($location['additional'])) {
-      $output .= ' ' . $location['additional'];
+      $output .= "&nbsp;" . '<span class="extended-address">' . $location['additional'] . '</span>';
     }
     $output .= '</div>';
   }
@@ -6295,7 +6295,7 @@ function theme_getlocations_adinfo($variables) {
     else {
       $unit_disp = getlocations_get_unit_names($location['sunit'], 'single');
     }
-    $output .= '<div class="search-distance">' . number_format(floatval($location['sdist']), 2) . ' ' . $unit_disp . '</div>';
+    $output .= '<div class="search-distance">' . number_format(floatval($location['sdist']), 2) . "&nbsp;" . $unit_disp . '</div>';
   }
   $output .= '</div>';
 
@@ -6808,4 +6808,3 @@ function theme_getlocations_lidinfo($variables) {
   return $output;
 
 }
-

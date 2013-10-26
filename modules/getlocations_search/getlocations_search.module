@@ -699,7 +699,6 @@ function getlocations_search_defaults() {
     'polylines_clickable'           => $getlocations_defaults['polylines_clickable'],
     'polylines_message'             => $getlocations_defaults['polylines_message'],
     'kml_group'                     => $getlocations_defaults['kml_group'],
-    'visual_refresh'                => $getlocations_defaults['visual_refresh'],
     'map_resize'                    => $getlocations_defaults['map_resize'],
     'region_bias'                   => $getlocations_defaults['region_bias'],
     'fullscreen_disable'            => $getlocations_defaults['fullscreen_disable'],

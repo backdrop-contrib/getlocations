@@ -163,6 +163,12 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['geojson_options'] = array('default' => $getlocations_defaults['geojson_options']);
     $options['geojson_data']    = array('default' => $getlocations_defaults['geojson_data']);
 
+    $options['zoomcontrolposition']  = array('default' => $getlocations_defaults['zoomcontrolposition']);
+    $options['pancontrolposition']   = array('default' => $getlocations_defaults['pancontrolposition']);
+    $options['mapcontrolposition']   = array('default' => $getlocations_defaults['mapcontrolposition']);
+    $options['scalecontrolposition'] = array('default' => $getlocations_defaults['scalecontrolposition']);
+    $options['svcontrolposition']    = array('default' => $getlocations_defaults['svcontrolposition']);
+
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {

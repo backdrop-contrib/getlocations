@@ -378,6 +378,41 @@
         });
       }
 
+      if ($("#edit-style-options-overview").is('input')) {
+        if ($("#edit-style-options-overview").attr('checked')) {
+          $("#wrap-getlocations-overview").show();
+        }
+        else {
+          $("#wrap-getlocations-overview").hide();
+        }
+        $("#edit-style-options-overview").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-overview").show();
+          }
+          else {
+            $("#wrap-getlocations-overview").hide();
+          }
+        });
+      }
+
+      if ($("#edit-style-options-sv-show").is('input')) {
+        if ($("#edit-style-options-sv-show").attr('checked')) {
+          $("#wrap-getlocations-sv-show").show();
+        }
+        else {
+          $("#wrap-getlocations-sv-show").hide();
+        }
+        $("#edit-style-options-sv-show").change(function() {
+          if ($(this).attr('checked')) {
+            $("#wrap-getlocations-sv-show").show();
+          }
+          else {
+            $("#wrap-getlocations-sv-show").hide();
+          }
+        });
+      }
+
+
     }
   };
 

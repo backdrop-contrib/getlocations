@@ -169,7 +169,6 @@
         }
 
         if (settings.map_settings_allow) {
-
           // monitor zoom
           if ($("#getlocations_mapzoom_" + key).is('input')) {
             if ( $("#getlocations_mapzoom_" + key).val() == '') {
@@ -198,7 +197,6 @@
               $("#getlocations_map_maptype_" + key).val(maptype);
             });
           }
-
         }
 
       }

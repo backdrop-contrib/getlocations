@@ -1,9 +1,18 @@
-commit 45a1584
+commit 1c61b46
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Nov 14 15:33:40 2013 +0000
+
+    removed commented out section
+
+getlocations.module
+
+commit 6272af2
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Thu Nov 14 12:44:21 2013 +0000
 
     changed add js to #attached
 
+CHANGELOG.txt
 modules/getlocations_fields/views/getlocations_fields_plugin_style_streetview.inc
 views/getlocations_plugin_style_map.inc
 

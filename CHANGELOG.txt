@@ -1,9 +1,18 @@
-commit 1c61b46
+commit 4fc5ed7
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Nov 17 17:44:52 2013 +0000
+
+    prevent notices #2137427
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 0efcf24
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Thu Nov 14 15:33:40 2013 +0000
 
     removed commented out section
 
+CHANGELOG.txt
 getlocations.module
 
 commit 6272af2

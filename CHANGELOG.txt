@@ -1,9 +1,37 @@
-commit 4fc5ed7
+commit ce68215
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Nov 21 23:15:31 2013 +0000
+
+    fixed sql see #2141517
+
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+
+commit f3f3edd
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Nov 21 18:13:29 2013 +0000
+
+    added some functions for use in the future
+
+getlocations.module
+
+commit cb3e919
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Nov 21 18:12:23 2013 +0000
+
+    added show all markers feature to getlocations_search
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+
+commit 7fcc402
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sun Nov 17 17:44:52 2013 +0000
 
     prevent notices #2137427
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 0efcf24

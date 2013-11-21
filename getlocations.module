@@ -237,6 +237,21 @@ function getlocations_cdints_load($arg) {
 }
 
 /**
+ * sanity check on entity type
+ *
+ * @param string $arg Entity type.
+ *
+ * @return argument or FALSE
+ *
+ */
+function getlocations_entity_type_load($arg) {
+  if (getlocations_check_entity_type($arg)) {
+    return $arg;
+  }
+  return FALSE;
+}
+
+/**
  * Access callback: Checks for access permission and if there is a supported locative module installed
  *
  * @return bool
@@ -5751,6 +5766,23 @@ function getlocations_controlpositions($dd = TRUE) {
       $controlpositions = array('tl', 'tc', 'tr', 'rt', 'rc', 'rb', 'br', 'bc', 'bl', 'lb', 'lc', 'lt');
     }
     return $controlpositions;
+}
+
+/**
+ * Allows for aliases in entity types
+ *
+ */
+function getlocations_get_entity_type_from_path($path) {
+  $entity_type = $path;
+  // getlocations path => entity_type
+  $aliases = array(
+    'term' => 'taxonomy_term',
+  );
+  if (isset($aliases[$path])) {
+    $entity_type = $aliases[$path];
+  }
+
+  return $entity_type;
 }
 
 /**

@@ -1495,6 +1495,7 @@ function getlocations_defaults($reset = FALSE) {
     'geojson_options'               => '',
     'nokeyboard'                    => 0,
     'nodoubleclickzoom'             => 0,
+    'input_map_show'                => 1,
   );
   if ($reset) {
     return $defaults;
@@ -2635,6 +2636,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'sv_imagedatecontrol'       => $defaults['sv_imagedatecontrol'],
       'sv_scrollwheel'            => $defaults['sv_scrollwheel'],
       'sv_clicktogo'              => $defaults['sv_clicktogo'],
+      'input_map_show'            => $defaults['input_map_show'],
     ),
   );
   // only set these if wanted

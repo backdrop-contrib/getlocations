@@ -131,8 +131,22 @@
           $("#wrap-getlocations-polylines").hide();
         }
       });
-/////
-//input.form-checkbox#edit-getlocations-leaflet-page-settings-returnlink-page-enable | #FEE6E1
+
+      if ($("input[id$=geojson-enable]").attr('checked')) {
+       $("#wrap-getlocations-geojson-enable").show();
+      }
+      else {
+        $("#wrap-getlocations-geojson-enable").hide();
+      }
+      $("input[id$=geojson-enable]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-geojson-enable").show();
+        }
+        else {
+          $("#wrap-getlocations-geojson-enable").hide();
+        }
+      });
+
       if ($("input[id$=returnlink-page-enable]").attr('checked')) {
         $("#wrap-page-link").show();
       }
@@ -193,7 +207,6 @@
         }
       });
 
-/////
       // categories
       if ($("#edit-style-options-category-method").val() > 0) {
         $("#wrap-category1").show();

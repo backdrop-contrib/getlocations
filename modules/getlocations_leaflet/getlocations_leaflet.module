@@ -68,13 +68,8 @@ function getlocations_leaflet_library() {
   $libraries['leaflet'] = array(
     'title' => 'Leaflet',
     'website' => 'http://leafletjs.com',
-    'version' => '0.6',
+    'version' => '0.7',
     'js' => array(
-      'L_ROOT_URL = "' . base_path() . libraries_get_path('leaflet') . '/";' => array(
-        'type' => 'inline',
-        'group' => JS_LIBRARY,
-        'preprocess' => FALSE
-      ),
       libraries_get_path('leaflet') . '/leaflet.js' => array(
         'type' => 'file',
         'group' => JS_LIBRARY,
@@ -85,12 +80,6 @@ function getlocations_leaflet_library() {
       libraries_get_path('leaflet') . '/leaflet.css' => array(
         'type' => 'file',
         'media' => 'all',
-      ),
-      libraries_get_path('leaflet') . '/leaflet.ie.css' => array(
-        'browsers' => array(
-          'IE' => 'lte IE 8',
-          '!IE' => FALSE,
-        ),
       ),
     ),
   );
@@ -922,6 +911,7 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
     $map_settings['map_opts']['maxZoom'] = $defaults['maxzoom_map'];
   }
 
+  $getlocations_leaflet_paths = getlocations_leaflet_paths_get();
   // shapes
   // polygons
   if ($defaults['polygons_enable'] && ! empty($defaults['polygons_coords'])) {
@@ -931,8 +921,8 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
         $mapid => $polygons,
       );
       drupal_add_js(array('getlocations_leaflet_polygons' => $polygon_settings), 'setting');
-      drupal_add_js(GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_polygons.js');
-    }
+      drupal_add_js($getlocations_leaflet_paths['getlocations_leaflet_polygons_path']);
+}
   }
 
   // rectangles
@@ -955,7 +945,7 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
         $mapid => $rectangles,
       );
       drupal_add_js(array('getlocations_leaflet_rectangles' => $rectangle_settings), 'setting');
-      drupal_add_js(GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_rectangles.js');
+      drupal_add_js($getlocations_leaflet_paths['getlocations_leaflet_rectangles_path']);
     }
   }
 
@@ -977,7 +967,7 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
         $mapid => $circles,
       );
       drupal_add_js(array('getlocations_leaflet_circles' => $circle_settings), 'setting');
-      drupal_add_js(GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_circles.js');
+      drupal_add_js($getlocations_leaflet_paths['getlocations_leaflet_circles_path']);
     }
   }
 
@@ -989,8 +979,21 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
         $mapid => $polylines,
       );
       drupal_add_js(array('getlocations_leaflet_polylines' => $polyline_settings), 'setting');
-      drupal_add_js(GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_polylines.js');
+      drupal_add_js($getlocations_leaflet_paths['getlocations_leaflet_polylines_path']);
     }
+  }
+
+  // geojson
+  if ($defaults['geojson_enable'] && !empty($defaults['geojson_data']) && $geojson_path = getlocations_get_geojson_path() ) {
+    drupal_add_js($geojson_path);
+    $geojson_settings = array(
+      $mapid => array(
+        'geojson_data' => $defaults['geojson_data'],
+        'geojson_options' => $defaults['geojson_options'],
+      )
+    );
+    drupal_add_js(array('getlocations_leaflet_geojson' => $geojson_settings), 'setting');
+    drupal_add_js($getlocations_leaflet_paths['getlocations_leaflet_geojson_path']);
   }
 
   return $map_settings;
@@ -1165,67 +1168,70 @@ function getlocations_leaflet_getlocations_leaflet_map_info() {
 
 function getlocations_leaflet_defaults() {
   $getlocations_defaults = getlocations_defaults();
-    $defaults = array(
-      'width'                      => $getlocations_defaults['width'],
-      'height'                     => $getlocations_defaults['height'],
-      'zoom'                       => $getlocations_defaults['zoom'],
-      'minzoom_map'                => $getlocations_defaults['minzoom_map'],
-      'maxzoom_map'                => $getlocations_defaults['maxzoom_map'],
-      'latlong'                    => $getlocations_defaults['latlong'],
-      'nodezoom'                   => $getlocations_defaults['nodezoom'],
-      'polygons_enable'            => $getlocations_defaults['polygons_enable'],
-      'polygons_strokecolor'       => $getlocations_defaults['polygons_strokecolor'],
-      'polygons_strokeopacity'     => $getlocations_defaults['polygons_strokeopacity'],
-      'polygons_strokeweight'      => $getlocations_defaults['polygons_strokeweight'],
-      'polygons_fillcolor'         => $getlocations_defaults['polygons_fillcolor'],
-      'polygons_fillopacity'       => $getlocations_defaults['polygons_fillopacity'],
-      'polygons_coords'            => $getlocations_defaults['polygons_coords'],
-      'polygons_clickable'         => $getlocations_defaults['polygons_clickable'],
-      'polygons_message'           => $getlocations_defaults['polygons_message'],
-      'rectangles_enable'          => $getlocations_defaults['rectangles_enable'],
-      'rectangles_strokecolor'     => $getlocations_defaults['rectangles_strokecolor'],
-      'rectangles_strokeopacity'   => $getlocations_defaults['rectangles_strokeopacity'],
-      'rectangles_strokeweight'    => $getlocations_defaults['rectangles_strokeweight'],
-      'rectangles_fillcolor'       => $getlocations_defaults['rectangles_fillcolor'],
-      'rectangles_fillopacity'     => $getlocations_defaults['rectangles_fillopacity'],
-      'rectangles_coords'          => $getlocations_defaults['rectangles_coords'],
-      'rectangles_clickable'       => $getlocations_defaults['rectangles_clickable'],
-      'rectangles_message'         => $getlocations_defaults['rectangles_message'],
-      'rectangles_apply'           => $getlocations_defaults['rectangles_apply'],
-      'rectangles_dist'            => $getlocations_defaults['rectangles_dist'],
-      'circles_enable'             => $getlocations_defaults['circles_enable'],
-      'circles_strokecolor'        => $getlocations_defaults['circles_strokecolor'],
-      'circles_strokeopacity'      => $getlocations_defaults['circles_strokeopacity'],
-      'circles_strokeweight'       => $getlocations_defaults['circles_strokeweight'],
-      'circles_fillcolor'          => $getlocations_defaults['circles_fillcolor'],
-      'circles_fillopacity'        => $getlocations_defaults['circles_fillopacity'],
-      'circles_coords'             => $getlocations_defaults['circles_coords'],
-      'circles_clickable'          => $getlocations_defaults['circles_clickable'],
-      'circles_message'            => $getlocations_defaults['circles_message'],
-      'circles_radius'             => $getlocations_defaults['circles_radius'],
-      'circles_apply'              => $getlocations_defaults['circles_apply'],
-      'polylines_enable'           => $getlocations_defaults['polylines_enable'],
-      'polylines_strokecolor'      => $getlocations_defaults['polylines_strokecolor'],
-      'polylines_strokeopacity'    => $getlocations_defaults['polylines_strokeopacity'],
-      'polylines_strokeweight'     => $getlocations_defaults['polylines_strokeweight'],
-      'polylines_coords'           => $getlocations_defaults['polylines_coords'],
-      'polylines_clickable'        => $getlocations_defaults['polylines_clickable'],
-      'polylines_message'          => $getlocations_defaults['polylines_message'],
-      // categories
-      'category_method'            => $getlocations_defaults['category_method'],
-      'category_term_reference_field' => $getlocations_defaults['category_term_reference_field'],
-      'category_showhide_buttons'  => $getlocations_defaults['category_showhide_buttons'],
-      'categories'                 => $getlocations_defaults['categories'],
-      'returnlink_page_enable'     => $getlocations_defaults['returnlink_page_enable'],
-      'returnlink_page_link'       => $getlocations_defaults['returnlink_page_link'],
-      'returnlink_user_enable'     => $getlocations_defaults['returnlink_user_enable'],
-      'returnlink_user_link'       => $getlocations_defaults['returnlink_user_link'],
-      'returnlink_term_enable'     => $getlocations_defaults['returnlink_term_enable'],
-      'returnlink_term_link'       => $getlocations_defaults['returnlink_term_link'],
-      'returnlink_comment_enable'  => $getlocations_defaults['returnlink_comment_enable'],
-      'returnlink_comment_link'    => $getlocations_defaults['returnlink_comment_link'],
+  $defaults = array(
+    'width'                      => $getlocations_defaults['width'],
+    'height'                     => $getlocations_defaults['height'],
+    'zoom'                       => $getlocations_defaults['zoom'],
+    'minzoom_map'                => $getlocations_defaults['minzoom_map'],
+    'maxzoom_map'                => $getlocations_defaults['maxzoom_map'],
+    'latlong'                    => $getlocations_defaults['latlong'],
+    'nodezoom'                   => $getlocations_defaults['nodezoom'],
+    'polygons_enable'            => $getlocations_defaults['polygons_enable'],
+    'polygons_strokecolor'       => $getlocations_defaults['polygons_strokecolor'],
+    'polygons_strokeopacity'     => $getlocations_defaults['polygons_strokeopacity'],
+    'polygons_strokeweight'      => $getlocations_defaults['polygons_strokeweight'],
+    'polygons_fillcolor'         => $getlocations_defaults['polygons_fillcolor'],
+    'polygons_fillopacity'       => $getlocations_defaults['polygons_fillopacity'],
+    'polygons_coords'            => $getlocations_defaults['polygons_coords'],
+    'polygons_clickable'         => $getlocations_defaults['polygons_clickable'],
+    'polygons_message'           => $getlocations_defaults['polygons_message'],
+    'rectangles_enable'          => $getlocations_defaults['rectangles_enable'],
+    'rectangles_strokecolor'     => $getlocations_defaults['rectangles_strokecolor'],
+    'rectangles_strokeopacity'   => $getlocations_defaults['rectangles_strokeopacity'],
+    'rectangles_strokeweight'    => $getlocations_defaults['rectangles_strokeweight'],
+    'rectangles_fillcolor'       => $getlocations_defaults['rectangles_fillcolor'],
+    'rectangles_fillopacity'     => $getlocations_defaults['rectangles_fillopacity'],
+    'rectangles_coords'          => $getlocations_defaults['rectangles_coords'],
+    'rectangles_clickable'       => $getlocations_defaults['rectangles_clickable'],
+    'rectangles_message'         => $getlocations_defaults['rectangles_message'],
+    'rectangles_apply'           => $getlocations_defaults['rectangles_apply'],
+    'rectangles_dist'            => $getlocations_defaults['rectangles_dist'],
+    'circles_enable'             => $getlocations_defaults['circles_enable'],
+    'circles_strokecolor'        => $getlocations_defaults['circles_strokecolor'],
+    'circles_strokeopacity'      => $getlocations_defaults['circles_strokeopacity'],
+    'circles_strokeweight'       => $getlocations_defaults['circles_strokeweight'],
+    'circles_fillcolor'          => $getlocations_defaults['circles_fillcolor'],
+    'circles_fillopacity'        => $getlocations_defaults['circles_fillopacity'],
+    'circles_coords'             => $getlocations_defaults['circles_coords'],
+    'circles_clickable'          => $getlocations_defaults['circles_clickable'],
+    'circles_message'            => $getlocations_defaults['circles_message'],
+    'circles_radius'             => $getlocations_defaults['circles_radius'],
+    'circles_apply'              => $getlocations_defaults['circles_apply'],
+    'polylines_enable'           => $getlocations_defaults['polylines_enable'],
+    'polylines_strokecolor'      => $getlocations_defaults['polylines_strokecolor'],
+    'polylines_strokeopacity'    => $getlocations_defaults['polylines_strokeopacity'],
+    'polylines_strokeweight'     => $getlocations_defaults['polylines_strokeweight'],
+    'polylines_coords'           => $getlocations_defaults['polylines_coords'],
+    'polylines_clickable'        => $getlocations_defaults['polylines_clickable'],
+    'polylines_message'          => $getlocations_defaults['polylines_message'],
+    // categories
+    'category_method'            => $getlocations_defaults['category_method'],
+    'category_term_reference_field' => $getlocations_defaults['category_term_reference_field'],
+    'category_showhide_buttons'  => $getlocations_defaults['category_showhide_buttons'],
+    'categories'                 => $getlocations_defaults['categories'],
+    'returnlink_page_enable'     => $getlocations_defaults['returnlink_page_enable'],
+    'returnlink_page_link'       => $getlocations_defaults['returnlink_page_link'],
+    'returnlink_user_enable'     => $getlocations_defaults['returnlink_user_enable'],
+    'returnlink_user_link'       => $getlocations_defaults['returnlink_user_link'],
+    'returnlink_term_enable'     => $getlocations_defaults['returnlink_term_enable'],
+    'returnlink_term_link'       => $getlocations_defaults['returnlink_term_link'],
+    'returnlink_comment_enable'  => $getlocations_defaults['returnlink_comment_enable'],
+    'returnlink_comment_link'    => $getlocations_defaults['returnlink_comment_link'],
+    'geojson_enable'             => $getlocations_defaults['geojson_enable'],
+    'geojson_data'               => $getlocations_defaults['geojson_data'],
+    'geojson_options'            => $getlocations_defaults['geojson_options'],
 
-    );
+  );
 
   $newdefaults = getlocations_adjust_vars($getlocations_defaults, $defaults);
   $newdefaults['dragging']           = $getlocations_defaults['draggable'];
@@ -1542,6 +1548,9 @@ function getlocations_leaflet_display_options_form($defaults) {
   // shapes
   $form += getlocations_shapes_form($defaults, '');
 
+  // geojson
+  $form += getlocations_geojson_form($defaults);
+  $form['geojson_options']['#type'] = 'hidden';
 
   return $form;
 }
@@ -1557,6 +1566,7 @@ function getlocations_leaflet_paths_get($reset = FALSE) {
     'getlocations_leaflet_polygons_path'   => GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_polygons.js',
     'getlocations_leaflet_polylines_path'  => GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_polylines.js',
     'getlocations_leaflet_rectangles_path' => GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_rectangles.js',
+    'getlocations_leaflet_geojson_path'    => GETLOCATIONS_LEAFLET_PATH . '/js/getlocations_leaflet_geojson.js',
   );
   if ($reset) {
     $getlocations_leaflet_paths = $defaults;
@@ -1784,6 +1794,14 @@ function getlocations_leaflet_settings_form() {
     128,
     t('Where the Getlocations leaflet rectangles javascript file is located.')
   );
+  $form['getlocations_leaflet_paths']['getlocations_leaflet_geojson_path'] = getlocations_element_path(
+    t('Path to Getlocations leaflet geojson javascript file'),
+    $getlocations_leaflet_paths['getlocations_leaflet_geojson_path'],
+    80,
+    128,
+    t('Where the Getlocations leaflet geojson javascript file is located.')
+  );
+
   $form['getlocations_leaflet_paths']['reset'] = getlocations_element_map_checkbox(
     t('Reset'),
     0,

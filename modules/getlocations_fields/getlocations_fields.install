@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file
+ * @file getlocations_fields.install
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -273,4 +273,3 @@ function getlocations_fields_update_7102() {
   db_change_field('getlocations_fields', 'latitude', 'latitude', $spec);
   db_change_field('getlocations_fields', 'longitude', 'longitude', $spec);
 }
-

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file
+ * @file getlocations_fields.views.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -922,4 +922,3 @@ function getlocations_fields_views_pre_render(&$view) {
     }
   }
 }
-

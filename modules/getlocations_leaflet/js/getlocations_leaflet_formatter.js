@@ -147,6 +147,22 @@
         }
       });
 
+      if ($("input[id$=fullscreen]").attr('checked')) {
+       $("#wrap-getlocations-fullscreen").show();
+      }
+      else {
+        $("#wrap-getlocations-fullscreen").hide();
+      }
+      $("input[id$=fullscreen]").change(function() {
+        if ($(this).attr('checked')) {
+          $("#wrap-getlocations-fullscreen").show();
+        }
+        else {
+          $("#wrap-getlocations-fullscreen").hide();
+        }
+      });
+
+
       if ($("input[id$=returnlink-page-enable]").attr('checked')) {
         $("#wrap-page-link").show();
       }

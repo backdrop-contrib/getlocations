@@ -2321,7 +2321,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       $data = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
 
       $keys = getlocations_fields_data_keys('d');
-      if (isset($data['data']['map_settings_allow'])) {
+      if (is_array($data) && isset($data['data']['map_settings_allow'])) {
         $map_settings_allow = $data['data']['map_settings_allow'];
       }
       else {
@@ -2409,7 +2409,7 @@ function getlocations_fields_load_location($glid) {
       $data = (isset($row->data) && ! empty($row->data) ? unserialize($row->data) : '');
 
       $keys = getlocations_fields_data_keys('d');
-      if (isset($data['data']['map_settings_allow'])) {
+      if (is_array($data) && isset($data['data']['map_settings_allow'])) {
         $map_settings_allow = $data['data']['map_settings_allow'];
       }
       else {
@@ -2418,14 +2418,10 @@ function getlocations_fields_load_location($glid) {
       foreach ($keys AS $key => $dval) {
         $location[$key] = $dval;
         if (is_array($data) && isset($data['data'][$key])) {
-          #$do = TRUE;
           if (! $map_settings_allow && ($key == 'mapzoom' || $key == 'map_maptype')) {
-            #$do = FALSE;
             continue;
           }
-          #if ($do) {
-            $location[$key] = $data['data'][$key];
-          #}
+          $location[$key] = $data['data'][$key];
         }
       }
 

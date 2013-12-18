@@ -137,109 +137,220 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     unset($form['nodezoom']['#options']['19']);
 
     // markers
-    $markers = getlocations_get_marker_titles();
-    // node markers
-    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-    if ($getlocations_node_marker['enable']) {
+    if ($this->options['awesome'] && $this->options['marker_type'] == 'fa') {
+      // do awesome markers
+      // nodes
+      $labels = array(
+        'awesome_icon' => t('Node Awesome icon'),
+        'awesome_icon_color' => t('Node Awesome icon color'),
+        'awesome_marker_color' => t('Node Awesome marker color'),
+        'awesome_title' => t('Node Awesome Fonts icon settings'),
+        'awesome_icon_spin' => t('Node Awesome icon spin'),
+        'awesome_icon_size' => t('Node Awesome icon size'),
+        'awesome_icon_type' => t('Node Awesome icon type'),
+        'awesome_icon_flip' => t('Node Awesome icon flip and rotate'),
+      );
+      $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, "node");
+      // TODO per content type fieldname etc
+/////////////////
+      // node type markers
       if ($types = getlocations_get_types()) {
-        foreach ($types AS $type => $name) {
-          $field_names = getlocations_get_fieldname2($type, 'node');
-          foreach ($field_names AS $field_name) {
-            if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
+        $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+        if ($getlocations_node_marker['enable']) {
+          $typect = 0;
+          foreach ($types AS $type => $name) {
+            $field_names = getlocations_get_fieldname2($type, 'node');
+            foreach ($field_names AS $field_name) {
+              $label = t('%name Map marker, field %field' , array('%name' => $name, '%field' => $field_name));
               $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
-              $form[$mkey] = getlocations_element_map_marker(
-                t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
-                $markers,
-                (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'])
+              $labels = array(
+                'awesome_icon'         => t($label . ' Awesome icon'),
+                'awesome_icon_color'   => t($label . ' Awesome icon color'),
+                'awesome_marker_color' => t($label . ' Awesome marker color'),
+                'awesome_title'        => t($label . ' Awesome Fonts icon settings'),
+                'awesome_icon_spin'    => t($label . ' Awesome icon spin'),
+                'awesome_icon_size'    => t($label . ' Awesome icon size'),
+                'awesome_icon_type'    => t($label . ' Awesome icon type'),
+                'awesome_icon_flip'    => t($label . ' Awesome icon flip and rotate'),
               );
+              $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, $mkey);
             }
           }
         }
       }
-    }
-    else {
-      $form['node_map_marker'] = getlocations_element_map_marker(
-        t('Content Map marker'),
-        $markers,
-        $this->options['node_map_marker']
-      );
-    }
-    // user markers
-    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
-      $form['user_map_marker'] = getlocations_element_map_marker(
-        t('User Map Marker'),
-        $markers,
-        $this->options['user_map_marker']
-      );
-    }
-    // vocabulary markers
-    if (module_exists('taxonomy')) {
-      if ($types = getlocations_get_machine_vocabularies()) {
-        $types2 = getlocations_get_vocabularies();
-        $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-        if ($getlocations_vocabulary_marker['enable']) {
-          foreach ($types AS $type => $name) {
-            $field_name = getlocations_get_fieldname($name, 'taxonomy_term');
-            $mkey = 'vocabulary_marker_' . $field_name;
-            $form[$mkey] = getlocations_element_map_marker(
-              t('%name Vocabulary Marker', array('%name' => $types2[$type])),
-              $markers,
-              (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'])
-            );
-          }
-        }
-        else {
-          $form['vocabulary_map_marker'] = getlocations_element_map_marker(
-            t('Vocabulary Map Marker'),
-            $markers,
-            $this->options['vocabulary_map_marker']
-          );
-        }
+/////////////////
+      // users
+      if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+        $labels = array(
+          'awesome_icon' => t('User Awesome icon'),
+          'awesome_icon_color' => t('User Awesome icon color'),
+          'awesome_marker_color' => t('User Awesome marker color'),
+          'awesome_title' => t('User Awesome Fonts icon settings'),
+          'awesome_icon_spin' => t('User Awesome icon spin'),
+          'awesome_icon_size' => t('User Awesome icon size'),
+          'awesome_icon_type' => t('User Awesome icon type'),
+          'awesome_icon_flip' => t('User Awesome icon flip and rotate'),
+        );
+        $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'user');
       }
 
-      // term markers
-      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-      if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-        $vids = $getlocations_term_marker['vids'];
-        foreach ($vids AS $vid) {
-          $terms = taxonomy_get_tree($vid, 0, $depth);
-          $tct = 0;
-          foreach ($terms AS $term) {
-            $name = $term->name;
-            $tid = $term->tid;
-            $mkey = 'term_marker_' . $tid;
-            $form[$mkey] = getlocations_element_map_marker(
-              t('%name Map Marker', array('%name' => $name)),
-              $markers,
-              $this->options[$mkey]
-            );
-            if (! $tct) {
-              $v = taxonomy_vocabulary_load($vid);
-              $vocab_name = $v->name;
-              $form[$mkey]['#prefix'] = t('Terms for %name', array('%name' => $vocab_name));
+      if (module_exists('taxonomy')) {
+        if ($types = getlocations_get_machine_vocabularies()) {
+          // vocabulary
+          // TODO per vocab
+          $labels = array(
+            'awesome_icon' => t('Vocabulary Awesome icon'),
+            'awesome_icon_color' => t('Vocabulary Awesome icon color'),
+            'awesome_marker_color' => t('Vocabulary Awesome marker color'),
+            'awesome_title' => t('Vocabulary Awesome Fonts icon settings'),
+            'awesome_icon_spin' => t('Vocabulary Awesome icon spin'),
+            'awesome_icon_size' => t('Vocabulary Awesome icon size'),
+            'awesome_icon_type' => t('Vocabulary Awesome icon type'),
+            'awesome_icon_flip' => t('Vocabulary Awesome icon flip and rotate'),
+          );
+          $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'vocabulary');
+
+        }
+        // terms
+        // TODO per term
+        $labels = array(
+          'awesome_icon' => t('Term Awesome icon'),
+          'awesome_icon_color' => t('Term Awesome icon color'),
+          'awesome_marker_color' => t('Term Awesome marker color'),
+          'awesome_title' => t('Term Awesome Fonts icon settings'),
+          'awesome_icon_spin' => t('Term Awesome icon spin'),
+          'awesome_icon_size' => t('Term Awesome icon size'),
+          'awesome_icon_type' => t('Term Awesome icon type'),
+          'awesome_icon_flip' => t('Term Awesome icon flip and rotate'),
+        );
+        $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'term');
+      }
+      if (getlocations_check_entity_type('comment')) {
+        // comment
+        $labels = array(
+          'awesome_icon' => t('Comment Awesome icon'),
+          'awesome_icon_color' => t('Comment Awesome icon color'),
+          'awesome_marker_color' => t('Comment Awesome marker color'),
+          'awesome_title' => t('Comment Awesome Fonts icon settings'),
+          'awesome_icon_spin' => t('Comment Awesome icon spin'),
+          'awesome_icon_size' => t('Comment Awesome icon size'),
+          'awesome_icon_type' => t('Comment Awesome icon type'),
+          'awesome_icon_flip' => t('Comment Awesome icon flip and rotate'),
+        );
+        $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'comment');
+
+      }
+
+    }
+    else {
+      // do getlocations markers
+      $markers = getlocations_get_marker_titles();
+      // node markers
+      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      if ($getlocations_node_marker['enable']) {
+        if ($types = getlocations_get_types()) {
+          foreach ($types AS $type => $name) {
+            $field_names = getlocations_get_fieldname2($type, 'node');
+            foreach ($field_names AS $field_name) {
+              if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
+                $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+                $form[$mkey] = getlocations_element_map_marker(
+                  t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
+                  $markers,
+                  (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'])
+                );
+              }
             }
-            $tct++;
           }
         }
       }
       else {
-        $form['term_map_marker'] = getlocations_element_map_marker(
-          t('Term Map marker'),
+        $form['node_map_marker'] = getlocations_element_map_marker(
+          t('Content Map marker'),
           $markers,
-          $this->options['term_map_marker']
+          $this->options['node_map_marker']
         );
       }
+      // user markers
+      if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+        $form['user_map_marker'] = getlocations_element_map_marker(
+          t('User Map Marker'),
+          $markers,
+          $this->options['user_map_marker']
+        );
+      }
+      // vocabulary markers
+      if (module_exists('taxonomy')) {
+        if ($types = getlocations_get_machine_vocabularies()) {
+          $types2 = getlocations_get_vocabularies();
+          $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+          if ($getlocations_vocabulary_marker['enable']) {
+            foreach ($types AS $type => $name) {
+              $field_name = getlocations_get_fieldname($name, 'taxonomy_term');
+              $mkey = 'vocabulary_marker_' . $field_name;
+              $form[$mkey] = getlocations_element_map_marker(
+                t('%name Vocabulary Marker', array('%name' => $types2[$type])),
+                $markers,
+                (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'])
+              );
+            }
+          }
+          else {
+            $form['vocabulary_map_marker'] = getlocations_element_map_marker(
+              t('Vocabulary Map Marker'),
+              $markers,
+              $this->options['vocabulary_map_marker']
+            );
+          }
+        }
+
+        // term markers
+        $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+        if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+          $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+          $vids = $getlocations_term_marker['vids'];
+          foreach ($vids AS $vid) {
+            $terms = taxonomy_get_tree($vid, 0, $depth);
+            $tct = 0;
+            foreach ($terms AS $term) {
+              $name = $term->name;
+              $tid = $term->tid;
+              $mkey = 'term_marker_' . $tid;
+              $form[$mkey] = getlocations_element_map_marker(
+                t('%name Map Marker', array('%name' => $name)),
+                $markers,
+                $this->options[$mkey]
+              );
+              if (! $tct) {
+                $v = taxonomy_vocabulary_load($vid);
+                $vocab_name = $v->name;
+                $form[$mkey]['#prefix'] = t('Terms for %name', array('%name' => $vocab_name));
+              }
+              $tct++;
+            }
+          }
+        }
+        else {
+          $form['term_map_marker'] = getlocations_element_map_marker(
+            t('Term Map marker'),
+            $markers,
+            $this->options['term_map_marker']
+          );
+        }
+      }
+      // comments
+      if (getlocations_check_entity_type('comment')) {
+        // default comment marker
+        $form['comment_map_marker'] = getlocations_element_map_marker(
+          t('Comment Map marker'),
+          $markers,
+          $this->options['comment_map_marker']
+        );
+      }
+
     }
-    // comments
-    if (getlocations_check_entity_type('comment')) {
-      // default comment marker
-      $form['comment_map_marker'] = getlocations_element_map_marker(
-        t('Comment Map marker'),
-        $markers,
-        $this->options['comment_map_marker']
-      );
-    }
+
+    // end markers
 
     // categories
     $term_reference_fields = getlocations_get_term_reference_fields();

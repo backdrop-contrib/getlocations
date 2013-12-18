@@ -294,6 +294,20 @@
         }
       });
 
+      if ($("select[id$=marker-type]").val() == 'fa') {
+        $('#getlocations-awesome-wrap').show();
+      }
+      else {
+        $('#getlocations-awesome-wrap').hide();
+      }
+      $("select[id$=marker-type]").change(function() {
+        if ($("select[id$=marker-type]").val() == 'fa') {
+          $('#getlocations-awesome-wrap').show();
+        }
+        else {
+          $('#getlocations-awesome-wrap').hide();
+        }
+      });
 
     }
   };

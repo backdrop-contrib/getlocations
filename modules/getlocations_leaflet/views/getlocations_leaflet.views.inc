@@ -94,46 +94,85 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
         $location['longitude'] = $location[$location['field_name'] . '_1'];
       }
       if ($lid > 0) {
-        if ($entity_type == 'node') {
-          $marker = $options['node_map_marker'];
-          if (isset($location['type']) && isset($location['field_name']) ) {
-            if (isset($options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']])) {
-              $marker = $options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']];
+
+        $marker = '';
+        $vector = '';
+        // awesome
+        if ($options['awesome'] && $options['marker_type'] == 'fa') {
+          if ($entity_type == 'node') {
+            $per_field_markers = FALSE;
+            $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+            if ($getlocations_node_marker['enable']) {
+              if (isset($location['type']) && isset($location['field_name'])) {
+                $mkey = 'node_marker__' . strtolower($location['type']) . '__' . $location['field_name'];
+                $vicon = getlocations_leaflet_awesome_marker_get($options, $mkey);
+                $per_field_markers = TRUE;
+              }
             }
+            if (! $per_field_markers) {
+              $vicon = getlocations_leaflet_awesome_marker_get($options, 'node');
+            }
+            // TODO per tid marker
           }
-          // term marker
-          $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-          if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-            $vids = $getlocations_term_marker['vids'];
-            foreach ($vids AS $vid) {
-              if ($nid = getlocations_get_nid_from_lid($lid)) {
-                $query = db_select('taxonomy_index', 't');
-                $query->fields('t', array('tid'));
-                $query->join('taxonomy_term_data', 'd', 't.tid=d.tid');
-                $query->condition('t.nid', $nid);
-                $query->condition('d.vid', $vid);
-                $result = $query->execute()->fetchObject();
-                if (isset($result->tid) && $result->tid > 0 && isset($options['term_marker_' . $result->tid])) {
-                  $marker = $options['term_marker_' . $result->tid];
+          elseif ($entity_type == 'taxonomy_term') {
+            $vicon = getlocations_leaflet_awesome_marker_get($options, 'vocabulary');
+          }
+          elseif ($entity_type == 'user') {
+            $vicon = getlocations_leaflet_awesome_marker_get($options, 'user');
+          }
+          elseif ($entity_type == 'comment') {
+            $vicon = getlocations_leaflet_awesome_marker_get($options, 'comment');
+          }
+          else {
+            $vicon = getlocations_leaflet_awesome_marker_get($options);
+          }
+          $vector = $vicon;
+        }
+        else {
+          if ($entity_type == 'node') {
+            $marker = $options['node_map_marker'];
+            if (isset($location['type']) && isset($location['field_name']) ) {
+              if (isset($options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']])) {
+                $marker = $options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']];
+              }
+            }
+            // term marker
+            $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+            if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+              $vids = $getlocations_term_marker['vids'];
+              foreach ($vids AS $vid) {
+                if ($nid = getlocations_get_nid_from_lid($lid)) {
+                  $query = db_select('taxonomy_index', 't');
+                  $query->fields('t', array('tid'));
+                  $query->join('taxonomy_term_data', 'd', 't.tid=d.tid');
+                  $query->condition('t.nid', $nid);
+                  $query->condition('d.vid', $vid);
+                  $result = $query->execute()->fetchObject();
+                  if (isset($result->tid) && $result->tid > 0 && isset($options['term_marker_' . $result->tid])) {
+                    $marker = $options['term_marker_' . $result->tid];
+                  }
                 }
               }
             }
           }
-        }
-        elseif ($entity_type == 'taxonomy_term') {
-          $marker = $options['vocabulary_map_marker'];
-          if (isset($location['field_name'])) {
-            if (isset($options['vocabulary_marker_' . $location['field_name']])) {
-              $marker = $options['vocabulary_marker_' . $location['field_name']];
+          elseif ($entity_type == 'taxonomy_term') {
+            $marker = $options['vocabulary_map_marker'];
+            if (isset($location['field_name'])) {
+              if (isset($options['vocabulary_marker_' . $location['field_name']])) {
+                $marker = $options['vocabulary_marker_' . $location['field_name']];
+              }
             }
           }
+          elseif ($entity_type == 'user') {
+            $marker = $options['user_map_marker'];
+          }
+          elseif ($entity_type == 'comment') {
+            $marker = $options['comment_map_marker'];
+          }
         }
-        elseif ($entity_type == 'user') {
-          $marker = $options['user_map_marker'];
-        }
-        elseif ($entity_type == 'comment') {
-          $marker = $options['comment_map_marker'];
-        }
+
+
+///////
         // dump bummers with no lat/lon
         if ($latlon = getlocations_latlon_check($location['latitude'] . ',' . $location['longitude'])) {
           $ll = explode(',', $latlon);
@@ -195,7 +234,8 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
 
           $iconlist[$marker] = getlocations_leaflet_get_marker($marker);
 
-          $latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $markeraction, $cat);
+          #$latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $markeraction, $cat);
+          $latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $vector, $markeraction, $cat);
 
           $ct++;
         }

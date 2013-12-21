@@ -21,13 +21,15 @@ function getlocations_settings_form() {
 
   $form = array();
 
-  $pagetitle = '<div><h4>' . t('Getlocations base settings') . '</h4><p>' . t('The setting selected here will be used as the starting point for all other Google maps.') . '</p></div>';
+  $pagetitle = '<div><h4>' . t('Getlocations base settings') . '</h4><p>' . t('The settings selected here will be used as the starting point for all other Google maps.') . '</p></div>';
   $form['pagetitle'] = array('#markup' => $pagetitle);
 
   $form['rebuild'] = array(
     '#type' => 'fieldset',
     '#title' => t('Regenerate Getlocations marker cache'),
     '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
   if (file_default_scheme() != 'public') {
     $form['rebuild']['getlocations_private_markerfile'] = getlocations_element_map_tf(
@@ -90,6 +92,8 @@ function getlocations_settings_form() {
     '#title' => t('Getlocations Default map settings'),
     // This will store all the defaults in one variable.
     '#tree' => TRUE,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
 
   $form['getlocations_default'] += getlocations_map_display_basics_form($getlocations_defaults);
@@ -300,6 +304,8 @@ function getlocations_settings_form() {
       '#title' => t('Content type markers'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     $form['getlocations_node_marker']['enable'] = getlocations_element_map_checkbox(
@@ -335,6 +341,8 @@ function getlocations_settings_form() {
         // This will store all the defaults in one variable.
         '#tree' => TRUE,
         '#description' => t('Vocabularies with a %module field.', array('%module' => $module)),
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
       );
       $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
       $form['getlocations_vocabulary_marker']['enable'] = getlocations_element_map_checkbox(
@@ -363,6 +371,8 @@ function getlocations_settings_form() {
       '#title' => t('Term markers'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
     $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
     $form['getlocations_term_marker']['enable'] = getlocations_element_map_checkbox(
@@ -421,6 +431,8 @@ function getlocations_settings_form() {
       '#title' => t('Colorbox settings'),
       // This will store all the defaults in one variable.
       '#tree' => TRUE,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
     $form['getlocations_colorbox']['enable'] = getlocations_element_map_checkbox(
       t('Enable Colorbox'),

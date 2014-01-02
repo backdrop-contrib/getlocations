@@ -24,11 +24,13 @@ function getlocations_leaflet_views_plugins() {
         'handler' => 'getlocations_leaflet_plugin_style',
         'theme' => 'getlocations_leaflet_view_map',
         'theme path' => GETLOCATIONS_LEAFLET_PATH . '/views',
-        'uses row plugin' => TRUE,
+        #'uses row plugin' => TRUE,
+        'uses row plugin' => FALSE,
         'uses grouping' => FALSE,
         'uses options' => TRUE,
         'type' => 'normal',
-        #'even empty' => TRUE,
+        'even empty' => TRUE,
+        'uses fields' => TRUE,
       ),
     ),
   );
@@ -171,8 +173,6 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
           }
         }
 
-
-///////
         // dump bummers with no lat/lon
         if ($latlon = getlocations_latlon_check($location['latitude'] . ',' . $location['longitude'])) {
           $ll = explode(',', $latlon);
@@ -237,6 +237,12 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
           #$latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $markeraction, $cat);
           $latlons[$ct] = array($location['latitude'], $location['longitude'], $base_field, 0, $lid, $title, $marker, $vector, $markeraction, $cat);
 
+          // special case for ajax, a custom content field containing the key of the map associated with an exposed form
+          $thiskey = FALSE;
+          if (isset($location['nothing']) && preg_match("/^key_/", $location['nothing'])) {
+            $thiskey = trim($location['nothing']);
+          }
+
           $ct++;
         }
       }
@@ -249,11 +255,10 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
 
     $map_settings = getlocations_leaflet_map_get_info('Getlocations OSM');
     $map_settings = getlocations_leaflet_get_map_layers($map_settings);
-
     if (! empty($options['baselayers'])) {
       $map_layers = array();
       foreach ($options['baselayers'] AS $k => $v) {
-        if ($options['baselayers'][$k]) {
+        if ($options['baselayers'][$k] && isset($map_settings['map_layers'][$k])) {
           $map_layers[$k] = $map_settings['map_layers'][$k];
         }
       }
@@ -269,7 +274,11 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
       $map_settings['map_opts']['zoom'] = $nodezoom;
     }
 
+
     $mapid = getlocations_setup_map('', FALSE, FALSE, TRUE);
+    if ($thiskey) {
+      $mapid = $thiskey;
+    }
     // add in some more
     $map_settings = getlocations_leaflet_map_settings_do($map_settings, $options, $latlons, $mapid);
 
@@ -284,8 +293,6 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
 
     drupal_add_library('getlocations_leaflet', 'getlocations-leaflet');
 
-    getlocations_leaflet_js_settings_do($map_settings, $mapid);
-
     $variables['map'] = theme('getlocations_leaflet_map', array(
       'width' => $options['width'],
       'height' => $options['height'],
@@ -294,6 +301,6 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
       'links' => '',
     ));
 
-  }
+  } // end count locations
 
 }

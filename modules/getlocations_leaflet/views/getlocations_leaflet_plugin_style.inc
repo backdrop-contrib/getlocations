@@ -32,6 +32,9 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $options = parent::option_definition();
 
     $getlocations_leaflet_defaults = getlocations_leaflet_defaults();
+    // fallback
+    $getlocations_defaults = getlocations_defaults();
+
     foreach ($getlocations_leaflet_defaults AS $key => $value) {
       $options[$key] = array('default' => $value);
     }
@@ -408,11 +411,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 #    );
 
 
-    $form['empty_result'] = getlocations_element_map_checkbox(
-      t('Show map even if view has no results'),
-      $this->options['empty_result']
-    );
-
+#    $form['empty_result'] = getlocations_element_map_checkbox(
+#      t('Show map even if view has no results'),
+#      $this->options['empty_result']
+#    );
+      $form['empty_result'] = array('#type' => 'value', '#value' => 0);
 
   } // end options_form
 
@@ -452,6 +455,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
   }
 
 
+  // not working AFAICT
   function even_empty() {
     return parent::even_empty() || !empty($this->options['empty_result']);
   }

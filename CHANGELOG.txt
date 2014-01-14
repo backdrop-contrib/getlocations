@@ -1,9 +1,43 @@
-commit 3a6209d
+commit 68d696f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Jan 14 09:09:33 2014 +0000
+
+    updated README
+
+modules/getlocations_leaflet/README.txt
+
+commit 75939f9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jan 5 14:16:27 2014 +0000
+
+    updated leaflet.markercluster
+
+modules/getlocations_leaflet/plugins/markercluster/leaflet.markercluster-src.js
+modules/getlocations_leaflet/plugins/markercluster/leaflet.markercluster.js
+
+commit 30dafdf
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jan 4 12:02:18 2014 +0000
+
+    fixed thiskey notice
+
+views/getlocations.views.inc
+
+commit caa42dc
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jan 4 09:40:39 2014 +0000
+
+    added drush getlocations-leaflet
+
+drush/getlocations.drush.inc
+
+commit 81f215f
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Thu Jan 2 10:47:58 2014 +0000
 
     reworked js to get ajax working
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 js/getlocations.min.js

@@ -1,9 +1,42 @@
-commit 68d696f
+commit fc64cc9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jan 17 19:48:18 2014 +0000
+
+    updated leaflet version
+
+drush/getlocations.drush.inc
+
+commit e4738b9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jan 17 19:47:47 2014 +0000
+
+    fixed bug in summary
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit fc678f3
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Jan 15 13:39:16 2014 +0000
+
+    fixed sv_show
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit cdae94c
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Jan 14 22:57:47 2014 +0000
+
+    fixed bug in leaflet attribution control
+
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+
+commit f13ad18
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Tue Jan 14 09:09:33 2014 +0000
 
     updated README
 
+CHANGELOG.txt
 modules/getlocations_leaflet/README.txt
 
 commit 75939f9

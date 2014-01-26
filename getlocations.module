@@ -99,6 +99,7 @@ function getlocations_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'file' => 'getlocations.admin.inc',
+    'weight' => 1,
   );
 
   // getlocations/node/$nid    # show all location on one node

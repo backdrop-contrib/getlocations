@@ -1696,7 +1696,7 @@ function getlocations_leaflet_getlocations_leaflet_map_info() {
  */
 function getlocations_leaflet_defaults() {
   $getlocations_defaults = getlocations_defaults();
-  $defaults = array(
+  $newdefaults = array(
     'width'                      => $getlocations_defaults['width'],
     'height'                     => $getlocations_defaults['height'],
     'zoom'                       => $getlocations_defaults['zoom'],
@@ -1759,59 +1759,57 @@ function getlocations_leaflet_defaults() {
     'geojson_data'               => $getlocations_defaults['geojson_data'],
     'geojson_options'            => $getlocations_defaults['geojson_options'],
     'fullscreen'                 => $getlocations_defaults['fullscreen'],
+    'node_map_marker'            => $getlocations_defaults['node_map_marker'],
+    'user_map_marker'            => $getlocations_defaults['user_map_marker'],
+    'vocabulary_map_marker'      => $getlocations_defaults['vocabulary_map_marker'],
+    'term_map_marker'            => $getlocations_defaults['term_map_marker'],
+    'comment_map_marker'         => $getlocations_defaults['comment_map_marker'],
+    'dragging'                   => $getlocations_defaults['draggable'],
+    'scrollWheelZoom'            => $getlocations_defaults['scrollwheel'],
+    'doubleClickZoom'            => ($getlocations_defaults['nodoubleclickzoom'] ? 0 : 1),
+    'zoomControl'                => ($getlocations_defaults['controltype'] == 'none' ? 0 : 1),
+    'scaleControl'               => $getlocations_defaults['scale'],
+    'jquery_colorpicker_enabled' => $getlocations_defaults['jquery_colorpicker_enabled'],
   );
 
-  $newdefaults = getlocations_adjust_vars($getlocations_defaults, $defaults);
-  $newdefaults['dragging']           = $getlocations_defaults['draggable'];
-  $newdefaults['scrollWheelZoom']    = $getlocations_defaults['scrollwheel'];
-  $newdefaults['doubleClickZoom']    = ($getlocations_defaults['nodoubleclickzoom'] ? 0 : 1);
-  $newdefaults['zoomControl']        = ($getlocations_defaults['controltype'] == 'none' ? 0 : 1);
-  $newdefaults['touchZoom']          = 1;
-  $newdefaults['attributionControl'] = 1;
-  $newdefaults['trackResize']        = 1;
-  $newdefaults['fadeAnimation']      = 1;
-  $newdefaults['zoomAnimation']      = 1;
-  $newdefaults['closePopupOnClick']  = 1;
-  $newdefaults['layerControl']       = 0;
-
-  $newdefaults['scaleControl']       = $getlocations_defaults['scale'];
-  $newdefaults['scalecontrolposition']       = '';
-  $newdefaults['scalecontrolunits']          = '';
-  $newdefaults['zoomcontrolposition']        = '';
-  $newdefaults['attributioncontrolposition'] = '';
-  $newdefaults['layercontrolposition']       = '';
-  $newdefaults['layercontrol_mark_ov']       = 9;
-  $newdefaults['layercontrol_mark_ov_label'] = t('Locations');
-
-  $newdefaults['layercontrol_circ_ov']       = 9;
-  $newdefaults['layercontrol_circ_ov_label'] = t('Circles');
-
+  $newdefaults['touchZoom']                   = 1;
+  $newdefaults['attributionControl']          = 1;
+  $newdefaults['trackResize']                 = 1;
+  $newdefaults['fadeAnimation']               = 1;
+  $newdefaults['zoomAnimation']               = 1;
+  $newdefaults['closePopupOnClick']           = 1;
+  $newdefaults['layerControl']                = 0;
+  $newdefaults['scalecontrolposition']        = '';
+  $newdefaults['scalecontrolunits']           = '';
+  $newdefaults['zoomcontrolposition']         = '';
+  $newdefaults['attributioncontrolposition']  = '';
+  $newdefaults['layercontrolposition']        = '';
+  $newdefaults['layercontrol_mark_ov']        = 9;
+  $newdefaults['layercontrol_mark_ov_label']  = t('Locations');
+  $newdefaults['layercontrol_circ_ov']        = 9;
+  $newdefaults['layercontrol_circ_ov_label']  = t('Circles');
   $newdefaults['layercontrol_polyl_ov']       = 9;
   $newdefaults['layercontrol_polyl_ov_label'] = t('Lines');
-
   $newdefaults['layercontrol_polyg_ov']       = 9;
   $newdefaults['layercontrol_polyg_ov_label'] = t('Polygons');
-
-  $newdefaults['layercontrol_rect_ov']       = 9;
-  $newdefaults['layercontrol_rect_ov_label'] = t('Rectangles');
-
-  $newdefaults['fullscreenposition']         = '';
-  $newdefaults['markeraction']               = '';
-  $newdefaults['markercluster']              = 0;
-  $newdefaults['graticule']                  = 0;
-  $newdefaults['graticule_color']            = '#333';
-  $newdefaults['graticule_opacity']          = 1;
-  $newdefaults['graticule_weight']           = 1;
-  $newdefaults['graticule_interval']         = 20;
-  $newdefaults['pancontrol']                 = 0;
-  $newdefaults['pancontrolposition']         = '';
-  $newdefaults['zoomslider']                 = 0;
-  $newdefaults['zoomsliderposition']         = '';
-  $newdefaults['mouseposition']              = 0;
-  $newdefaults['mouseposition_position']     = '';
-  $newdefaults['mouseposition_display_dms']  = 0;
-  $newdefaults['minimap']                    = 0;
-
+  $newdefaults['layercontrol_rect_ov']        = 9;
+  $newdefaults['layercontrol_rect_ov_label']  = t('Rectangles');
+  $newdefaults['fullscreenposition']          = '';
+  $newdefaults['markeraction']                = '';
+  $newdefaults['markercluster']               = 0;
+  $newdefaults['graticule']                   = 0;
+  $newdefaults['graticule_color']             = '#333';
+  $newdefaults['graticule_opacity']           = 1;
+  $newdefaults['graticule_weight']            = 1;
+  $newdefaults['graticule_interval']          = 20;
+  $newdefaults['pancontrol']                  = 0;
+  $newdefaults['pancontrolposition']          = '';
+  $newdefaults['zoomslider']                  = 0;
+  $newdefaults['zoomsliderposition']          = '';
+  $newdefaults['mouseposition']               = 0;
+  $newdefaults['mouseposition_position']      = '';
+  $newdefaults['mouseposition_display_dms']   = 0;
+  $newdefaults['minimap']                     = 0;
   $newdefaults['awesome']                     = 0;
   $newdefaults['awesome_icon']                = 'fa-home';
   $newdefaults['awesome_icon_color_selector'] = 'white';
@@ -1870,6 +1868,10 @@ function getlocations_leaflet_defaults() {
   $newdefaults['marker_type'] = 'gg'; // or 'fa'
 
   $newdefaults['default_baselayer'] = 'OpenStreetMap.Mapnik';
+
+  $newdefaults['map_resize'] = 0;
+  $newdefaults['fullscreen_disable'] = 0;
+  $newdefaults['styles'] = '';
 
   $settings = variable_get('getlocations_leaflet_defaults', '');
 

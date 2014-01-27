@@ -42,6 +42,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $options['map_resize']            = array('default' =>  0);
     $options['fullscreen_disable']    = array('default' =>  0);
     $options['styles']                = array('default' => '');
+    $options['jquery_colorpicker_enabled'] = array('default' => 0);
 
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));

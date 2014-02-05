@@ -804,6 +804,14 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
     $settings['markeraction']
   );
 
+  if (module_exists('getdirections')) {
+    $element['getdirections_link'] = getlocations_element_map_checkbox(
+      t('Link to Getdirections in bubble'),
+      $settings['getdirections_link'],
+      t('Include a link to the Getdirections page in InfoBubble/InfoWindow.')
+    );
+  }
+
   // streetview overlay settings
   $element += getlocations_fields_sv_control_form($settings);
 
@@ -1852,6 +1860,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['highlight_fillcolor']       = $settings['highlight_fillcolor'];
   $getlocations_defaults['highlight_fillopacity']     = $settings['highlight_fillopacity'];
   $getlocations_defaults['highlight_radius']          = $settings['highlight_radius'];
+  $getlocations_defaults['getdirections_link']        = $settings['getdirections_link'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2673,6 +2682,7 @@ function getlocations_fields_defaults() {
     'highlight_fillcolor'       => $getlocations_defaults['highlight_fillcolor'],
     'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
     'highlight_radius'          => $getlocations_defaults['highlight_radius'],
+    'getdirections_link'        => $getlocations_defaults['getdirections_link'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -2863,6 +2873,7 @@ function getlocations_fields_field_info_defaults() {
         'highlight_fillcolor'             => $getlocations_fields_defaults['highlight_fillcolor'],
         'highlight_fillopacity'           => $getlocations_fields_defaults['highlight_fillopacity'],
         'highlight_radius'                => $getlocations_fields_defaults['highlight_radius'],
+        'getdirections_link'              => $getlocations_fields_defaults['getdirections_link'],
       ),
     ),
   );
@@ -3020,6 +3031,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'highlight_fillcolor'       => $getlocations_defaults['highlight_fillcolor'],
     'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
     'highlight_radius'          => $getlocations_defaults['highlight_radius'],
+    'getdirections_link'        => $getlocations_defaults['getdirections_link'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;

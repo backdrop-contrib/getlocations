@@ -1786,6 +1786,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['minzoom_map']               = $settings['minzoom_map'];
   $getlocations_defaults['maxzoom_map']               = $settings['maxzoom_map'];
   $getlocations_defaults['fullscreen']                = $settings['fullscreen'];
+  $getlocations_defaults['fullscreen_controlposition'] = $settings['fullscreen_controlposition'];
   $getlocations_defaults['show_bubble_on_one_marker'] = $settings['show_bubble_on_one_marker'];
   $getlocations_defaults['polygons_enable']           = $settings['polygons_enable'];
   $getlocations_defaults['polygons_strokecolor']      = $settings['polygons_strokecolor'];
@@ -2514,6 +2515,7 @@ function getlocations_fields_defaults() {
     'map_backgroundcolor'             => $getlocations_defaults['map_backgroundcolor'],
     'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
     'fullscreen'                      => $getlocations_defaults['fullscreen'],
+    'fullscreen_controlposition'      => $getlocations_defaults['fullscreen_controlposition'],
     'show_bubble_on_one_marker'       => $getlocations_defaults['show_bubble_on_one_marker'],
     'display_showmap'                 => 1,
     'display_maplink'                 => 1,
@@ -2797,6 +2799,7 @@ function getlocations_fields_field_info_defaults() {
         'use_smart_ip_latlon'             => $getlocations_fields_defaults['use_smart_ip_latlon'],
         'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
         'fullscreen'                      => $getlocations_defaults['fullscreen'],
+        'fullscreen_controlposition'      => $getlocations_defaults['fullscreen_controlposition'],
         'show_bubble_on_one_marker'       => $getlocations_defaults['show_bubble_on_one_marker'],
         'polygons_enable'                 => $getlocations_fields_defaults['polygons_enable'],
         'polygons_strokecolor'            => $getlocations_fields_defaults['polygons_strokecolor'],
@@ -2956,6 +2959,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'minzoom_map'               => $getlocations_defaults['minzoom_map'],
     'maxzoom_map'               => $getlocations_defaults['maxzoom_map'],
     'fullscreen'                => $getlocations_defaults['fullscreen'],
+    'fullscreen_controlposition' => $getlocations_defaults['fullscreen_controlposition'],
     'show_bubble_on_one_marker' => $getlocations_defaults['show_bubble_on_one_marker'],
     'polygons_enable'           => $getlocations_defaults['polygons_enable'],
     'polygons_strokecolor'      => $getlocations_defaults['polygons_strokecolor'],

@@ -1,9 +1,18 @@
-commit 11ac3ac
+commit ee30fdf
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Feb 21 09:12:17 2014 +0000
+
+    added missing min.js
+
+modules/getlocations_fields/js/getlocations_fields.min.js
+
+commit 40f7dab
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Fri Feb 21 02:58:40 2014 +0000
 
     updated README
 
+CHANGELOG.txt
 modules/getlocations_fields/README.txt
 
 commit 654737f

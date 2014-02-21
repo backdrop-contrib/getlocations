@@ -1,9 +1,64 @@
-commit 031c3ad
+commit 11ac3ac
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Feb 21 02:58:40 2014 +0000
+
+    updated README
+
+modules/getlocations_fields/README.txt
+
+commit 654737f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Feb 20 20:42:36 2014 +0000
+
+    added geo_microformat option
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search.min.js
+
+commit 8eff6c7
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Feb 20 10:01:18 2014 +0000
+
+    added clear button
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+
+commit eabbdb9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Feb 19 15:18:47 2014 +0000
+
+    added class "getlocations_map_wrapper_inner" to map output
+
+getlocations.css
+getlocations.module
+
+commit a0e9271
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Feb 18 10:31:39 2014 +0000
+
+    updated markerclusterer
+
+js/markerclusterer.js
+js/markerclusterer_packed.js
+
+commit 02f767a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Feb 17 13:07:23 2014 +0000
+
+    better description of show_maplinks
+
+getlocations.module
+
+commit 240efa2
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Wed Feb 12 23:12:52 2014 +0000
 
     fixed map_resize height bug, #2193953
 
+CHANGELOG.txt
 getlocations.module
 
 commit 9b99de0

@@ -238,6 +238,10 @@ class getlocations_plugin_style_map extends views_plugin_style {
         }
       }
     }
+
+    // empty_result
+    $options['empty_result'] = array('default' => FALSE);
+
     return $options;
 
   } // end option_definition

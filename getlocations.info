@@ -6,3 +6,4 @@ core = 7.x
 php = 5
 dependencies[] = libraries
 files[] = "views/getlocations_plugin_style_map.inc"
+configure = admin/config/services/getlocations

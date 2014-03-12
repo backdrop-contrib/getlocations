@@ -1,9 +1,89 @@
-commit 4aa0f3d
+commit c023825
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Mar 12 10:47:07 2014 +0000
+
+    added configure key to info files
+
+getlocations.info
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_leaflet/getlocations_leaflet.info
+modules/getlocations_search/getlocations_search.info
+
+commit 7114e40
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 22:41:50 2014 +0000
+
+    cleanup
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+
+commit cb2ac16
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 18:05:56 2014 +0000
+
+    added search views js to paths
+
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+
+commit 5eb6d2c
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 16:59:09 2014 +0000
+
+    added minified js
+
+modules/getlocations_fields/js/getlocations_fields_search_views.min.js
+
+commit 45ef42e
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Mar 10 14:29:50 2014 +0000
+
+    fixed path in install
+
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_leaflet/getlocations_leaflet.install
+modules/getlocations_search/getlocations_search.install
+
+commit ccb51e9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Mar 9 23:32:36 2014 +0000
+
+    added geocode and reset buttons to getlocations_search
+
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search.min.js
+
+commit a3358af
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Mar 6 12:26:52 2014 +0000
+
+    updated getlocations_fields README
+
+modules/getlocations_fields/README.txt
+
+commit 91b7088
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Mar 5 20:22:43 2014 +0000
+
+    added Google autocomplete to distance filter
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit 594b736
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Tue Mar 4 21:35:57 2014 +0000
 
     fixed bug #2210537
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit f0b4402

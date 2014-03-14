@@ -1237,9 +1237,9 @@ function getlocations_search_info_sql($lat, $lon, $distance, $units, $type, $dos
     $fields[] = 'g.latitude';
     $fields[] = 'g.longitude';
     $fields[] = 'g.marker';
-#    if (getlocations_fields_column_check('data')) {
+    if (getlocations_fields_column_check('data')) {
       $fields[] = 'g.data';
-#    }
+    }
     $fields[] = 'f.nid';
     $fields[] = 'f.uid';
     $fields[] = 'f.tid';

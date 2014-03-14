@@ -28,6 +28,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
   /**
    * Set default options
    */
+  function options(&$options) {
+    parent::options($options);
+    $options['empty_result'] = FALSE;
+  }
+
   function option_definition() {
     $options = parent::option_definition();
 
@@ -88,6 +93,9 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         }
       }
     }
+
+    // empty_result
+    $options['empty_result'] = array('default' => FALSE);
 
     return $options;
   }
@@ -412,11 +420,12 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 #    );
 
 
-#    $form['empty_result'] = getlocations_element_map_checkbox(
-#      t('Show map even if view has no results'),
-#      $this->options['empty_result']
-#    );
-      $form['empty_result'] = array('#type' => 'value', '#value' => 0);
+    // not working AFAICT
+    #$form['empty_result'] = getlocations_element_map_checkbox(
+    #  t('Show map even if view has no results'),
+    #  $this->options['empty_result']
+    #);
+    $form['empty_result'] = array('#type' => 'value', '#value' => 0);
 
     // munge the title and description
     $form['category_showhide_buttons']['#title'] = t('Enable category show/hide checkboxes');

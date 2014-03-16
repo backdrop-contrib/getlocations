@@ -24,12 +24,10 @@ function getlocations_leaflet_views_plugins() {
         'handler' => 'getlocations_leaflet_plugin_style',
         'theme' => 'getlocations_leaflet_view_map',
         'theme path' => GETLOCATIONS_LEAFLET_PATH . '/views',
-        #'uses row plugin' => TRUE,
         'uses row plugin' => FALSE,
         'uses grouping' => FALSE,
         'uses options' => TRUE,
         'type' => 'normal',
-        'even empty' => TRUE,
         'uses fields' => TRUE,
       ),
     ),
@@ -47,8 +45,12 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
   $locations = $variables['view']->style_plugin->rendered_fields;
   $options = $variables['view']->style_plugin->options;
   $base_field = $variables['view']->style_plugin->view->base_field;
-  $iconlist = array();
+  $thiskey = FALSE;
+  $latlons = array();
   $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
+  $iconlist = array();
+  $cat = FALSE;
+  $cats = array();
   $ct = 0;
   $entity_type = 'node';
   if ($base_field == 'uid') {
@@ -252,60 +254,63 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
         }
       }
     } // end foreach locations
+  }
 
-    if ($ct < 2 || $lid == 0) {
-      unset($minmaxes);
-      $minmaxes = '';
-    }
+  if ($ct < 2 || $lid == 0) {
+    unset($minmaxes);
+    $minmaxes = '';
+  }
 
-    $map_settings = getlocations_leaflet_map_get_info('Getlocations OSM');
-    $map_settings = getlocations_leaflet_get_map_layers($map_settings);
-    if (! empty($options['baselayers'])) {
-      $map_layers = array();
-      foreach ($options['baselayers'] AS $k => $v) {
-        if ($options['baselayers'][$k] && isset($map_settings['map_layers'][$k])) {
-          $map_layers[$k] = $map_settings['map_layers'][$k];
-        }
-      }
-      if (! empty($map_layers)) {
-        $map_settings['map_layers'] = $map_layers;
+  $map_settings = getlocations_leaflet_map_get_info('Getlocations OSM');
+  $map_settings = getlocations_leaflet_get_map_layers($map_settings);
+  if (! empty($options['baselayers'])) {
+    $map_layers = array();
+    foreach ($options['baselayers'] AS $k => $v) {
+      if ($options['baselayers'][$k] && isset($map_settings['map_layers'][$k])) {
+        $map_layers[$k] = $map_settings['map_layers'][$k];
       }
     }
-
-    $nodezoom = FALSE;
-    if ($ct == 1 && $options['nodezoom']) {
-      $nodezoom = $options['nodezoom'];
-      $map_settings['map_opts']['center'] = array($location['latitude'], $location['longitude']);
-      $map_settings['map_opts']['zoom'] = $nodezoom;
+    if (! empty($map_layers)) {
+      $map_settings['map_layers'] = $map_layers;
     }
+  }
 
+  $nodezoom = FALSE;
+  if ($ct == 1 && $options['nodezoom']) {
+    $nodezoom = $options['nodezoom'];
+    $map_settings['map_opts']['center'] = array($location['latitude'], $location['longitude']);
+    $map_settings['map_opts']['zoom'] = $nodezoom;
+  }
+  elseif ($ct < 1) {
+    $ll = explode(',', $options['latlong']);
+    $map_settings['map_opts']['center'] = array($ll[0], $ll[1]);
+    $map_settings['map_opts']['zoom'] = $options['zoom'];
+  }
 
-    $mapid = getlocations_setup_map('', FALSE, FALSE, TRUE);
-    if ($thiskey) {
-      $mapid = $thiskey;
-    }
-    // add in some more
-    $map_settings = getlocations_leaflet_map_settings_do($map_settings, $options, $latlons, $mapid);
+  $mapid = getlocations_setup_map('', FALSE, FALSE, TRUE);
+  if ($thiskey) {
+    $mapid = $thiskey;
+  }
+  // add in some more
+  $map_settings = getlocations_leaflet_map_settings_do($map_settings, $options, $latlons, $mapid);
 
-    $map_settings['map_settings']['nodezoom'] = ($nodezoom ? $nodezoom : FALSE);
-    $map_settings['map_settings']['minmaxes'] = (empty($minmaxes) ? FALSE : implode(',', $minmaxes));
+  $map_settings['map_settings']['nodezoom'] = ($nodezoom ? $nodezoom : FALSE);
+  $map_settings['map_settings']['minmaxes'] = (empty($minmaxes) ? FALSE : implode(',', $minmaxes));
 
-    $map_settings['icons'] = $iconlist;
-    $map_settings['datanum'] = $ct;
-    $map_settings['latlons'] = $latlons;
-    $map_settings['map_settings']['categories'] = $cats;
-    $map_settings['map_settings']['category_showhide_buttons'] = $options['category_showhide_buttons'];
+  $map_settings['icons'] = $iconlist;
+  $map_settings['datanum'] = $ct;
+  $map_settings['latlons'] = $latlons;
+  $map_settings['map_settings']['categories'] = $cats;
+  $map_settings['map_settings']['category_showhide_buttons'] = $options['category_showhide_buttons'];
 
-    drupal_add_library('getlocations_leaflet', 'getlocations-leaflet');
+  drupal_add_library('getlocations_leaflet', 'getlocations-leaflet');
 
-    $variables['map'] = theme('getlocations_leaflet_map', array(
-      'width' => $options['width'],
-      'height' => $options['height'],
-      'map_settings' => $map_settings,
-      'mapid' => $mapid,
-      'links' => '',
-    ));
-
-  } // end count locations
+  $variables['map'] = theme('getlocations_leaflet_map', array(
+    'width' => $options['width'],
+    'height' => $options['height'],
+    'map_settings' => $map_settings,
+    'mapid' => $mapid,
+    'links' => '',
+  ));
 
 }

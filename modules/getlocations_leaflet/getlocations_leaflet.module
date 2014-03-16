@@ -604,6 +604,7 @@ function getlocations_leaflet_field_formatter_view($entity_type, $entity, $field
         elseif ($ct < 1) {
           $ll = explode(',', $default['latlong']);
           $map_settings['map_opts']['center'] = array($ll[0], $ll[1]);
+          $map_settings['map_opts']['zoom'] = $default['zoom'];
         }
 
         $mapid = getlocations_setup_map('', FALSE, FALSE, TRUE);
@@ -3224,7 +3225,7 @@ function getlocations_leaflet_entity_type_map($type, $entity_id) {
       }
 
     } // end foreach
-
+#  }
     if ($ct < 2 ) {
       unset($minmaxes);
       $minmaxes = '';
@@ -3254,6 +3255,7 @@ function getlocations_leaflet_entity_type_map($type, $entity_id) {
     elseif ($ct < 1) {
       $ll = explode(',', $getlocations_leaflet_defaults['latlong']);
       $map_settings['map_opts']['center'] = array($ll[0], $ll[1]);
+      $map_settings['map_opts']['zoom'] = $getlocations_leaflet_defaults['zoom'];
     }
 
     $mapid = getlocations_setup_map('', FALSE, FALSE, TRUE);

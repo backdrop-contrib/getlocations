@@ -419,13 +419,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 #      t('The Default zoom level for a single marker.')
 #    );
 
-
-    // not working AFAICT
-    #$form['empty_result'] = getlocations_element_map_checkbox(
-    #  t('Show map even if view has no results'),
-    #  $this->options['empty_result']
-    #);
-    $form['empty_result'] = array('#type' => 'value', '#value' => 0);
+    $form['empty_result'] = getlocations_element_map_checkbox(
+      t('Show map even if view has no results'),
+      $this->options['empty_result']
+    );
+    #$form['empty_result'] = array('#type' => 'value', '#value' => 0);
 
     // munge the title and description
     $form['category_showhide_buttons']['#title'] = t('Enable category show/hide checkboxes');
@@ -468,8 +466,6 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 
   }
 
-
-  // not working AFAICT
   function even_empty() {
     return parent::even_empty() || !empty($this->options['empty_result']);
   }

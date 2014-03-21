@@ -356,7 +356,7 @@ function getlocations_nodemap($nid) {
         if (isset($location['marker']) && ! empty($location['marker'])) {
           $marker = $location['marker'];
         }
-        $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($node->title), ENT_QUOTES);
+        $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($node->title), ENT_QUOTES);
         $latlons[$ct] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
         $sv_info = FALSE;
@@ -433,7 +433,7 @@ function getlocations_usermap($uid) {
         if (isset($location['marker']) && ! empty($location['marker'])) {
           $marker = $location['marker'];
         }
-        $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
+        $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($account->name), ENT_QUOTES);
         $latlons[$ct] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
         $sv_info = FALSE;
@@ -505,7 +505,7 @@ function getlocations_usersmap() {
           if (isset($location['marker']) && ! empty($location['marker'])) {
             $marker = $location['marker'];
           }
-          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->name), ENT_QUOTES);
+          $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($row->name), ENT_QUOTES);
           $latlons[$ct] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
           $ct++;
         }
@@ -566,7 +566,7 @@ function getlocations_termmap($tid) {
           if (isset($location['marker']) && ! empty($location['marker'])) {
             $marker = $location['marker'];
           }
-          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($term->name), ENT_QUOTES);
+          $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($term->name), ENT_QUOTES);
           $latlons[$ct] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
           $sv_info = FALSE;
@@ -643,7 +643,7 @@ function getlocations_commentmap($cid) {
           if (isset($location['marker']) && ! empty($location['marker'])) {
             $marker = $location['marker'];
           }
-          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($comment->subject), ENT_QUOTES);
+          $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($comment->subject), ENT_QUOTES);
           $latlons[$ct] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
           $sv_info = FALSE;
@@ -743,7 +743,7 @@ function getlocations_typemap($type, $loc_key='', $loc_val = '') {
           if (isset($location['marker']) && ! empty($location['marker'])) {
             $marker = $location['marker'];
           }
-          $name = htmlspecialchars_decode($location['name'] ? strip_tags($location['name']) : strip_tags($row->title), ENT_QUOTES);
+          $name = htmlspecialchars_decode(isset($location['name']) ? strip_tags($location['name']) : strip_tags($row->title), ENT_QUOTES);
           $latlons[$ct] = array($location['latitude'], $location['longitude'], $location['lid'], $name, $marker, $location['key'], '', '');
 
           $sv_info = FALSE;

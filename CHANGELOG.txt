@@ -1,9 +1,22 @@
-commit ec4b546
+commit 52c02f1
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Apr 3 03:31:43 2014 +0100
+
+    moved mapbox into own module
+
+modules/getlocations_cloudmade/getlocations_cloudmade.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_mapbox/getlocations_mapbox.info
+modules/getlocations_mapbox/getlocations_mapbox.install
+modules/getlocations_mapbox/getlocations_mapbox.module
+
+commit d15207f
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Wed Apr 2 15:19:30 2014 +0100
 
     moved cloudmade to its own module
 
+CHANGELOG.txt
 modules/getlocations_cloudmade/getlocations_cloudmade.info
 modules/getlocations_cloudmade/getlocations_cloudmade.install
 modules/getlocations_cloudmade/getlocations_cloudmade.module

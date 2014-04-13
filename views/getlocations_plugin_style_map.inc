@@ -194,6 +194,14 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['highlight_radius']         = array('default' => $getlocations_defaults['highlight_radius']);
     $options['getdirections_link']       = array('default' => $getlocations_defaults['getdirections_link']);
 
+    $options['gps_button']       = array('default' => 0);
+    $options['gps_button_label'] = array('default' => $getlocations_defaults['gps_button_label']);
+    $options['gps_marker']       = array('default' => $getlocations_defaults['gps_marker']);
+    $options['gps_marker_title'] = array('default' => $getlocations_defaults['gps_marker_title']);
+    $options['gps_bubble']       = array('default' => $getlocations_defaults['gps_bubble']);
+    $options['gps_geocode']      = array('default' => $getlocations_defaults['gps_geocode']);
+    $options['gps_center']       = array('default' => $getlocations_defaults['gps_center']);
+
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {

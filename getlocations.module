@@ -1539,6 +1539,13 @@ function getlocations_defaults($reset = FALSE) {
     'highlight_fillopacity'         => "0.35",
     'highlight_radius'              => 10,
     'getdirections_link'            => 0,
+    'gps_button'                    => 0,
+    'gps_button_label'              => '',
+    'gps_marker_title'              => '',
+    'gps_marker'                    => '',
+    'gps_bubble'                    => 0,
+    'gps_geocode'                   => 0,
+    'gps_center'                    => 0,
   );
   if ($reset) {
     return $defaults;

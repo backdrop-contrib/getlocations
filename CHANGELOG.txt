@@ -1,9 +1,26 @@
-commit 9264de7
+commit 7c63146
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Jun 24 22:09:04 2014 +0100
+
+    updated leaflet version
+
+drush/getlocations.drush.inc
+
+commit 21413ef
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Jun 24 14:58:31 2014 +0100
+
+    improved defaults for hidden fields
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 3a7a5eb
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sun May 11 23:23:23 2014 +0100
 
     better geolocation availability
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 js/getlocations.min.js

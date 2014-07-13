@@ -1,9 +1,35 @@
-commit 7c63146
+commit 264fa5f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jul 13 11:20:20 2014 +0100
+
+    added force https option
+
+getlocations.module
+
+commit 8736d8e
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jul 13 11:19:12 2014 +0100
+
+    only show installed message when using ui
+
+getlocations.install
+
+commit aae8191
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jun 28 10:13:22 2014 +0100
+
+    set clickable option on markers, fixed pansettings when 0
+
+js/getlocations.js
+js/getlocations.min.js
+
+commit 7ffc672
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Tue Jun 24 22:09:04 2014 +0100
 
     updated leaflet version
 
+CHANGELOG.txt
 drush/getlocations.drush.inc
 
 commit 21413ef

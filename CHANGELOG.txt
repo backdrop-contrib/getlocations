@@ -1,9 +1,80 @@
-commit 264fa5f
+commit f544a4e
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Jul 23 09:14:19 2014 +0100
+
+    added revisions support for nodes, issue #2219939
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit d842f53
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jul 20 22:23:09 2014 +0100
+
+    added wkt to getlocations_fields
+
+modules/getlocations_fields/getlocations_fields.info
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_wkt.inc
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit fb6cf35
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jul 20 07:31:52 2014 +0100
+
+    added marker export for openlayers
+
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_tools/getlocations_tools.module
+
+commit 784a819
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jul 18 15:36:29 2014 +0100
+
+    added leaflet preview
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet_preview.js
+modules/getlocations_leaflet/js/getlocations_leaflet_preview.min.js
+
+commit 77334fa
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jul 18 09:24:30 2014 +0100
+
+    fixed geojson download in drush
+
+drush/getlocations.drush.inc
+
+commit 429e7f2
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jul 13 22:42:21 2014 +0100
+
+    added leaflet plugin bouncemarker
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+modules/getlocations_leaflet/plugins/bouncemarker/bouncemarker.js
+modules/getlocations_leaflet/plugins/bouncemarker/bouncemarker.min.js
+
+commit 7ed30e4
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Jul 13 19:00:45 2014 +0100
+
+    added more map options to leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 1316d66
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sun Jul 13 11:20:20 2014 +0100
 
     added force https option
 
+CHANGELOG.txt
 getlocations.module
 
 commit 8736d8e

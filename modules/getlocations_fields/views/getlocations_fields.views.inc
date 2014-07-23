@@ -345,8 +345,8 @@ function getlocations_fields_views_data() {
       'field' => 'uid',
     ),
     'node' => array(
-      'left_field' => 'nid',
-      'field' => 'nid',
+      'left_field' => 'vid',
+      'field' => 'vid',
     ),
     'node_revision' => array(
       'left_field' => 'vid',

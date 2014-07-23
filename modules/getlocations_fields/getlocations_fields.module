@@ -278,6 +278,11 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
     $settings = $field['settings'];
   }
 
+  $mode = 'update';
+  if ($entity->revision && ($entity->nid !== $entity->vid) ) {
+    $mode = 'insert';
+  }
+
   $settings['display_settings'] = getlocations_fields_get_display_settings($instance['display']['default']['settings']);
 
   if (!empty($items)) {
@@ -317,7 +322,7 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
           }
         }
       }
-      $items = getlocations_fields_save_locations($items, $criteria, $settings, 'update');
+      $items = getlocations_fields_save_locations($items, $criteria, $settings, $mode);
     }
   }
 
@@ -2336,7 +2341,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
     }
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', $fields);
-    $query->fields('e', array('nid', 'uid', 'tid', 'cid', 'field_name'));
+    $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid', 'field_name'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
     if ($field_name) {
       $query->join('field_config', 'c', 'e.field_name = c.field_name');
@@ -2391,6 +2396,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       }
 
       $locations[$ct]['nid'] = $row->nid;
+      $locations[$ct]['vid'] = $row->vid;
       $locations[$ct]['uid'] = $row->uid;
       $locations[$ct]['tid'] = $row->tid;
       $locations[$ct]['cid'] = $row->cid;
@@ -2429,7 +2435,7 @@ function getlocations_fields_load_location($glid) {
     }
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', $fields);
-    $query->fields('e', array('nid', 'uid', 'tid', 'cid'));
+    $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
     $query->condition('f.glid', $glid);
     $row = $query->execute()->fetchObject();
@@ -2474,6 +2480,7 @@ function getlocations_fields_load_location($glid) {
       }
 
       $location['nid'] = $row->nid;
+      $location['vid'] = $row->vid;
       $location['uid'] = $row->uid;
       $location['tid'] = $row->tid;
       $location['cid'] = $row->cid;

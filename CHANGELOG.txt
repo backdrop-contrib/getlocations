@@ -1,9 +1,60 @@
-commit f544a4e
+commit 88f2531
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Aug 9 11:11:53 2014 +0100
+
+    fixed nomap issue #2316875
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+
+commit 52877ff
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jul 26 08:48:25 2014 +0100
+
+    added leaflet cdn option
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 5babddb
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jul 25 22:21:20 2014 +0100
+
+    added leaflet version detection
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 9cda0b8
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jul 25 14:45:09 2014 +0100
+
+    added leaflet cdn option
+
+modules/getlocations_leaflet/README.txt
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 5566d77
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Jul 25 08:50:13 2014 +0100
+
+    added map_version option
+
+getlocations.admin.inc
+getlocations.module
+
+commit f26ac2a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Jul 24 16:09:22 2014 +0100
+
+    some notice avoidance
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 63a3a72
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Wed Jul 23 09:14:19 2014 +0100
 
     added revisions support for nodes, issue #2219939
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/views/getlocations_fields.views.inc
 

@@ -113,7 +113,12 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $form['#theme'] = 'getlocations_leaflet_plugin_style_options_form';
 
     $getlocations_leaflet_paths = getlocations_leaflet_paths_get();
-    $form['#attached']['js'] = array($getlocations_leaflet_paths['getlocations_leaflet_formatter_path']);
+    $getlocations_paths = getlocations_paths_get();
+
+    $form['#attached']['js'] = array(
+      $getlocations_leaflet_paths['getlocations_leaflet_formatter_path'],
+      $getlocations_paths['getlocations_views_path'],
+    );
 
     $handlers = $this->display->handler->get_handlers('field');
     $source_options = array('' => t('None'));
@@ -362,6 +367,9 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       }
 
     }
+
+    // search markers
+    $form += getlocations_fields_views_search_form($this->options, TRUE);
 
     // end markers
 

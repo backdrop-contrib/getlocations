@@ -1,9 +1,116 @@
-commit 88f2531
+commit dd5cb80
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Aug 23 09:25:23 2014 +0100
+
+    cleanup code
+
+js/getlocations_geo.js
+js/getlocations_geo.min.js
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/js/getlocations_fields_search_views.min.js
+
+commit 0488495
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Aug 21 22:22:24 2014 +0100
+
+    added search distance marker and shape to leaflet
+
+getlocations.module
+js/getlocations_geo.js
+js/getlocations_geo.min.js
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/js/getlocations_fields_search_views.min.js
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+modules/getlocations_leaflet/views/getlocations_leaflet.views.inc
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+
+commit 1b2ab3a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Aug 16 08:24:16 2014 +0100
+
+    added marker and shape to distance filter
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations_admin.js
+js/getlocations_admin.min.js
+js/getlocations_views.js
+js/getlocations_views.min.js
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/js/getlocations_fields_search_views.min.js
+views/getlocations_plugin_style_map.inc
+
+commit 50c3097
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Aug 13 12:15:30 2014 +0100
+
+    fixed deactive bug
+
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit fd0d3d5
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Aug 13 09:53:27 2014 +0100
+
+    fixed geolocation_mobile_check bug
+
+modules/getlocations_search/getlocations_search.module
+
+commit 35afccc
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Aug 13 08:46:12 2014 +0100
+
+    added js min
+
+js/getlocations.min.js
+
+commit 6736d8c
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Aug 12 09:42:47 2014 +0100
+
+    added show_search_distance option
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+modules/getlocations_fields/getlocations_fields.module
+views/getlocations.views.inc
+views/getlocations_plugin_style_map.inc
+
+commit 79f032a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Aug 11 11:52:16 2014 +0100
+
+    better Google autocomplete #2316875
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_sort_distance.inc
+
+commit cab93cc
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Aug 10 11:36:06 2014 +0100
+
+    fixed coordinates checking #2316875
+
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+
+commit 17ab402
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sat Aug 9 11:11:53 2014 +0100
 
     fixed nomap issue #2316875
 
+CHANGELOG.txt
 modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
 
 commit 52877ff

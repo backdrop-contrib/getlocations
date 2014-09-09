@@ -2911,6 +2911,17 @@ function getlocations_leaflet_display_options_form($defaults, $admin = FALSE) {
   );
 
   // plugins
+  if ($getlocations_leaflet_plugins['markercluster_enable']) {
+    $form['markercluster'] = getlocations_element_map_checkbox(
+      t('Marker Cluster'),
+      $defaults['markercluster'],
+      t('Enable markercluster on the map.')
+    );
+  }
+  else {
+    $form['markercluster'] = array('#type' => 'value', '#value' => 0);
+  }
+
   if ($getlocations_leaflet_plugins['fullscreen_enable']) {
     // fullscreen
     $form['fullscreen'] = getlocations_element_map_checkbox(
@@ -2931,16 +2942,6 @@ function getlocations_leaflet_display_options_form($defaults, $admin = FALSE) {
     $form['fullscreenposition'] = array('#type' => 'value', '#value' => $defaults['fullscreenposition']);
   }
 
-  if ($getlocations_leaflet_plugins['markercluster_enable']) {
-    $form['markercluster'] = getlocations_element_map_checkbox(
-      t('Marker Cluster'),
-      $defaults['markercluster'],
-      t('Enable markercluster on the map.')
-    );
-  }
-  else {
-    $form['markercluster'] = array('#type' => 'value', '#value' => 0);
-  }
   if ($getlocations_leaflet_plugins['graticule_enable']) {
     $form['graticule'] = getlocations_element_map_checkbox(
       t('Graticule'),
@@ -4721,8 +4722,8 @@ function theme_getlocations_leaflet_map($variables) {
  */
 function theme_getlocations_leaflet_plugin_style_options_form($variables) {
   $form = $variables['form'];
+  $form = getlocations_leaflet_display_options_fieldsets($form);
   $output = '';
-
   $output .= drupal_render_children($form);
   return $output;
 }
@@ -4819,7 +4820,98 @@ function theme_getlocations_leaflet_settings_form($variables) {
 
 function theme_getlocations_leaflet_display_options_form($variables) {
   $form = $variables['form'];
+  $form = getlocations_leaflet_display_options_fieldsets($form);
   $output = '';
   $output .= drupal_render_children($form);
   return $output;
 }
+
+function getlocations_leaflet_display_options_fieldsets($form) {
+
+  if (isset($form['zoomControl']) && $form['zoomControl']['#type'] !== 'value') {
+    $form['zoomControl']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Zoom Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['zoomcontrolposition']['#suffix'];
+    $form['zoomcontrolposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['scaleControl']) && $form['scaleControl']['#type'] !== 'value') {
+    $form['scaleControl']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Scale Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['scalecontrolposition']['#suffix'];
+    $form['scalecontrolposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['attributionControl']) && $form['attributionControl']['#type'] !== 'value') {
+    $form['attributionControl']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Attribution Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['attributioncontrolposition']['#suffix'];
+    $form['attributioncontrolposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['geocoder']) && $form['geocoder']['#type'] !== 'value') {
+    $form['geocoder']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Geocoder') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['geocodercollapsed']['#suffix'];
+    $form['geocodercollapsed']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['usermarker']) && $form['usermarker']['#type'] !== 'value') {
+    $form['usermarker']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('User marker') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['usermarker_circle_fillopacity']['#suffix'];
+    $form['usermarker_circle_fillopacity']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['bouncemarker']) && $form['bouncemarker']['#type'] !== 'value') {
+    $form['bouncemarker']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Bounce marker') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['bouncemarker_height']['#suffix'];
+    $form['bouncemarker_height']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['magnifyingglass']) && $form['magnifyingglass']['#type'] !== 'value') {
+    $form['magnifyingglass']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Magnifying Glass') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['magnifyingglasszoomoffset']['#suffix'];
+    $form['magnifyingglasszoomoffset']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['terminator']) && $form['terminator']['#type'] !== 'value' ) {
+    $form['terminator']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Day/Night Layer') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['terminator_label']['#suffix'];
+    $form['terminator_label']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['layerControl']) && $form['layerControl']['#type'] !== 'value' ) {
+    $form['layerControl']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Layer Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['layercontrolposition']['#suffix'];
+    $form['layercontrolposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['fullscreen']) && $form['fullscreen']['#type'] !== 'value' ) {
+    $form['fullscreen']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Fullscreen Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['fullscreenposition']['#suffix'];
+    $form['fullscreenposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['graticule']) && $form['graticule']['#type'] !== 'value' ) {
+    $form['graticule']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Graticule Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['graticule_ov_label']['#suffix'];
+    $form['graticule_ov_label']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['mouseposition']) && $form['mouseposition']['#type'] !== 'value' ) {
+    $form['mouseposition']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Mouse position Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['mouseposition_display_dms']['#suffix'];
+    $form['mouseposition_display_dms']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['pancontrol']) && $form['pancontrol']['#type'] !== 'value' ) {
+    $form['pancontrol']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Pan Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['pancontrolposition']['#suffix'];
+    $form['pancontrolposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['zoomslider']) && $form['zoomslider']['#type'] !== 'value' ) {
+    $form['zoomslider']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Zoom Slider Control') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['zoomsliderposition']['#suffix'];
+    $form['zoomsliderposition']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  return $form;
+}
+

@@ -1,9 +1,122 @@
-commit a85f127
+commit 410b8cc
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Sep 20 18:48:29 2014 +0100
+
+    fixed skip map issue #2341985
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_map/getlocations_map.module
+
+commit c9522a9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Sep 9 14:04:38 2014 +0100
+
+    updated font awesome
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/plugins/font-awesome/css/font-awesome.css
+modules/getlocations_leaflet/plugins/font-awesome/css/font-awesome.min.css
+modules/getlocations_leaflet/plugins/font-awesome/fonts/FontAwesome.otf
+modules/getlocations_leaflet/plugins/font-awesome/fonts/fontawesome-webfont.eot
+modules/getlocations_leaflet/plugins/font-awesome/fonts/fontawesome-webfont.svg
+modules/getlocations_leaflet/plugins/font-awesome/fonts/fontawesome-webfont.ttf
+modules/getlocations_leaflet/plugins/font-awesome/fonts/fontawesome-webfont.woff
+modules/getlocations_leaflet/plugins/font-awesome/less/core.less
+modules/getlocations_leaflet/plugins/font-awesome/less/extras.less
+modules/getlocations_leaflet/plugins/font-awesome/less/font-awesome.less
+modules/getlocations_leaflet/plugins/font-awesome/less/icons.less
+modules/getlocations_leaflet/plugins/font-awesome/less/list.less
+modules/getlocations_leaflet/plugins/font-awesome/less/mixins.less
+modules/getlocations_leaflet/plugins/font-awesome/less/rotated-flipped.less
+modules/getlocations_leaflet/plugins/font-awesome/less/spinning.less
+modules/getlocations_leaflet/plugins/font-awesome/less/variables.less
+modules/getlocations_leaflet/plugins/font-awesome/scss/_core.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/_extras.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/_icons.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/_mixins.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/_rotated-flipped.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/_spinning.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/_variables.scss
+modules/getlocations_leaflet/plugins/font-awesome/scss/font-awesome.scss
+
+commit 6f012ff
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Sep 9 09:44:37 2014 +0100
+
+    some wording fixes
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit e6a39d9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Sep 9 09:09:11 2014 +0100
+
+    better leaflet plugin display options
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 0257876
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Sep 9 09:07:53 2014 +0100
+
+    added some fieldsets
+
+getlocations.module
+modules/getlocations_gps/getlocations_gps.module
+views/getlocations_plugin_style_map.inc
+
+commit 3de3efa
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Sep 8 18:23:23 2014 +0100
+
+    better leaflet plugin display options
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/plugins/graticule/Control.Graticule.js
+modules/getlocations_leaflet/plugins/graticule/Control.Graticule.min.js
+modules/getlocations_leaflet/plugins/graticule/graticule-icon.png
+modules/getlocations_leaflet/plugins/graticule/graticule.css
+modules/getlocations_leaflet/plugins/graticule/graticule.min.css
+
+commit 69d307b
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Sep 7 14:08:53 2014 +0100
+
+    added layers switch option to graticule
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+
+commit cf80ac3
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Sep 3 19:49:01 2014 +0100
+
+    better mobile detection
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit 5ea201f
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Sep 3 10:06:00 2014 +0100
+
+    added show/hide to getlocations_gps
+
+js/getlocations_admin.js
+js/getlocations_admin.min.js
+js/getlocations_views.js
+js/getlocations_views.min.js
+modules/getlocations_gps/getlocations_gps.module
+
+commit 6d3baaf
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Tue Sep 2 15:02:12 2014 +0100
 
     added README
 
+CHANGELOG.txt
 modules/getlocations_leaflet/plugins/README.txt
 
 commit efd075c

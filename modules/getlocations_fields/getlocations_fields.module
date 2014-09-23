@@ -279,7 +279,7 @@ function getlocations_fields_field_update($entity_type, $entity, $field, $instan
   }
 
   $mode = 'update';
-  if ($entity->revision && ($entity->nid !== $entity->vid) ) {
+  if ((isset($entity->revision) && $entity->revision) && ($entity->nid !== $entity->vid) ) {
     $mode = 'insert';
   }
 

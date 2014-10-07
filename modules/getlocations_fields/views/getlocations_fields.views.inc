@@ -266,6 +266,14 @@ function getlocations_fields_views_data() {
       'click sortable' => FALSE,
     ),
   );
+  // bbox
+  $data['getlocations_fields']['bbox'] = array(
+    'title' => t('Bounding box'),
+    'help' => t('Filter locations within a bounding box.'),
+    'argument' => array(
+      'handler' => 'getlocations_fields_handler_argument_bbox',
+    ),
+  );
   // distance
   $data['getlocations_fields']['distance'] = array(
     'title' => t('Distance'),
@@ -801,6 +809,12 @@ function getlocations_fields_views_plugins() {
         'uses grouping' => FALSE,
         'uses options' => TRUE,
         'type' => 'normal',
+      ),
+    ),
+    'argument default' => array(
+      'querystring' => array(
+        'title' => t('Bounding box from query string'),
+        'handler' => 'getlocations_fields_plugin_argument_default_bboxquery',
       ),
     ),
   );

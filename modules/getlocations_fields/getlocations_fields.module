@@ -1754,6 +1754,8 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['input_map_show']      = $settings['input_map_show'];
   #$getlocations_defaults['use_jsapi']       = $settings['use_geolocation_button'];
 
+  $getlocations_defaults['geocoder_enable']      = $settings['geocoder_enable'];
+
   $mapid = getlocations_setup_map($getlocations_defaults);
   drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
@@ -2785,6 +2787,7 @@ function getlocations_fields_defaults() {
     'gps_bubble'                => $getlocations_defaults['gps_bubble'],
     'gps_geocode'               => $getlocations_defaults['gps_geocode'],
     'gps_center'                => $getlocations_defaults['gps_center'],
+    'geocoder_enable' => $getlocations_defaults['geocoder_enable'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -3000,6 +3003,7 @@ function getlocations_fields_field_info_defaults() {
         'gps_bubble'                      => $getlocations_fields_defaults['gps_bubble'],
         'gps_geocode'                     => $getlocations_fields_defaults['gps_geocode'],
         'gps_center'                      => $getlocations_fields_defaults['gps_center'],
+        'geocoder_enable'                 => $getlocations_fields_defaults['geocoder_enable'],
       ),
     ),
   );
@@ -3180,6 +3184,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'gps_bubble'                => $getlocations_defaults['gps_bubble'],
     'gps_geocode'               => $getlocations_defaults['gps_geocode'],
     'gps_center'                => $getlocations_defaults['gps_center'],
+    'geocoder_enable' => $getlocations_defaults['geocoder_enable'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -3251,6 +3256,9 @@ function getlocations_fields_input_settings_form($defaults) {
     $defaults['use_geolocation_button'],
     t('Use the browser to find a location.')
   );
+
+  // geocoder-js
+  $form += getlocations_geocoder_form($defaults);
 
   $form['use_clear_button'] = getlocations_element_map_checkbox(
     t('Provide Clear button'),

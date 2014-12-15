@@ -106,6 +106,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['markerclusterer_zoom']     = array('default' => $getlocations_defaults['markerclusterer_zoom']);
     $options['markerclusterer_size']     = array('default' => $getlocations_defaults['markerclusterer_size']);
     $options['markerclusterer_minsize']  = array('default' => $getlocations_defaults['markerclusterer_minsize']);
+    $options['markerclusterer_title']    = array('default' => $getlocations_defaults['markerclusterer_title']);
+    $options['markerclusterer_imgpath']  = array('default' => $getlocations_defaults['markerclusterer_imgpath']);
     $options['pansetting']               = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']                = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                   = array('default' => $getlocations_defaults['styles']);
@@ -489,22 +491,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     }
     elseif ($this->options['markermanagertype'] == 2)  {
       $form['usemarkermanager'] = array('#type' => 'hidden', '#value' => 0);
-      if (file_exists(GETLOCATIONS_PATH . '/getlocations.markercluster_override.inc')) {
-        module_load_include('inc', 'getlocations', 'getlocations.markercluster_override');
-      }
-      else {
-        module_load_include('inc', 'getlocations', 'getlocations.markercluster');
-      }
-
-      $form['useclustermanager'] = getlocations_element_map_checkbox(
-        t('Use Cluster manager for this map'),
-        $this->options['useclustermanager']
-      );
+      $form += getlocations_markercluster_form($this->options);
       $form['useclustermanager']['#suffix'] = '<div id="wrap-useclustermanager">';
-      $form['markerclusterer_style'] = getlocations_element_markerclusterer_style($this->options['markerclusterer_style']);
-      $form['markerclusterer_zoom'] = getlocations_element_markerclusterer_zoom($this->options['markerclusterer_zoom']);
-      $form['markerclusterer_size'] = getlocations_element_markerclusterer_size($this->options['markerclusterer_size']);
-      $form['markerclusterer_minsize'] = getlocations_element_markerclusterer_minsize($this->options['markerclusterer_minsize']);
       $form['markerclusterer_minsize']['#suffix'] = '</div>';
     }
     else {

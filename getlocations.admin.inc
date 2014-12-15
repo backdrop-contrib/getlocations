@@ -262,6 +262,13 @@ function getlocations_settings_form() {
     module_load_include('inc', 'getlocations', 'getlocations.markercluster');
   }
   $form['getlocations_default']['markerclusterer_style'] = getlocations_element_markerclusterer_style($getlocations_defaults['markerclusterer_style']);
+  $form['getlocations_default']['markerclusterer_imgpath'] = getlocations_element_map_tf(
+    t('Markerclusterer image path'),
+    $getlocations_defaults['markerclusterer_imgpath'],
+    '',
+    40,
+    255
+  );
   $form['getlocations_default']['markerclusterer_title'] = getlocations_element_map_tf(
     t('Markerclusterer tooltip'),
     $getlocations_defaults['markerclusterer_title'],

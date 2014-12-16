@@ -1,4 +1,7 @@
 for Drupal 7
+
+Getlocations 1.x
+
 Getlocations will provide a Google maps API version 3 enabled map on which to
 display markers of locations found in location-enabled content-types.
 
@@ -328,3 +331,11 @@ If you want the library installed somewhere other than sites/all/libraries then 
 Other map tiles.
 Getlocations supports the use of other sources of maps besides Google, you can show maps from OpenStreetMap, OpenCycleMap, Stamen and Esri.
 Developers can add their own maps using hook_getlocations_map_providers(), see the function getlocations_getlocations_map_providers() for examples.
+
+The Google Places Search service can be enabled for any map. It can be configured to provide an Autocomplete textfield or a dropdown.
+If you want to preselect a particular item in the dropdown you can add something like this to your theme's javascript:
+
+var key = 'key_1';
+var tp = 'grocery_or_supermarket';
+$("#search_places_select_" + key).val(tp);
+

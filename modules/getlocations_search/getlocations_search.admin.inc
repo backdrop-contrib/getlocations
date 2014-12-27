@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_search.admin.inc
+ * @file
+ * getlocations_search.admin.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -512,7 +513,7 @@ function getlocations_search_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(TRUE);
   }
   elseif ($reset == 2) {
-    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(FALSE ,TRUE);
+    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(FALSE, TRUE);
   }
 
 }

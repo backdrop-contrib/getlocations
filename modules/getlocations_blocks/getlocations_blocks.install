@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_blocks.install
+ * @file
+ * getlocations_blocks.install
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *

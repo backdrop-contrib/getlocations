@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields_handler_field_data.inc
+ * @file
+ * getlocations_fields_handler_field_data.inc
  * Definition of views_handler_field_serialized.
  */
 

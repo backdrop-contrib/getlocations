@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields_handler_filter_distance.inc
+ * @file
+ * getlocations_fields_handler_filter_distance.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -185,7 +186,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $form['value']['longitude'] = getlocations_fields_element_longitude($this->value['longitude']);
     if ($this->options['origin'] == 'search') {
       $form['value']['latitude']['#prefix'] = '<div class="js-hide">';
-       $form['value']['longitude']['#suffix'] = '</div>';
+      $form['value']['longitude']['#suffix'] = '</div>';
     }
     #$form['value']['postal_code'] = getlocations_fields_element_postal_code($this->value['postal_code']);
     #$form['value']['country'] = getlocations_fields_element_country($this->value['country']);

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields_handler_field_distance.inc
+ * @file
+ * getlocations_fields_handler_field_distance.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *

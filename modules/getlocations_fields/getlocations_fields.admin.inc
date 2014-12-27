@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields.admin.inc
+ * @file
+ * getlocations_fields.admin.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -193,7 +194,7 @@ function getlocations_fields_settings_validate($form, &$form_state) {
     $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(TRUE);
   }
   elseif ($reset == 2) {
-    $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(FALSE ,TRUE);
+    $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(FALSE, TRUE);
   }
 
 }

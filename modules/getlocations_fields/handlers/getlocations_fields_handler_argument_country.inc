@@ -1,7 +1,8 @@
 <?php
 // NEEDS TESTING
 /**
- * @file getlocations_fields_handler_argument_country.inc
+ * @file
+ * getlocations_fields_handler_argument_country.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *

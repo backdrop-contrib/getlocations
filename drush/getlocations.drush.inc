@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * getlocations.drush.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -17,7 +18,7 @@ define('GETLOCATIONS_LEAFLET_DOWNLOAD_URI', 'http://leaflet-cdn.s3.amazonaws.com
 define('GETLOCATIONS_GEOCODER_DOWNLOAD_URI', 'https://github.com/geocoder-php/geocoder-js/archive/master.zip');
 
 /**
- * Implementation of hook_drush_command().
+ * Implements hook_drush_command().
  *
  * In this hook, you specify which commands your
  * drush module makes available, what it does and
@@ -76,7 +77,7 @@ function getlocations_drush_command() {
 }
 
 /**
- * Implementation of hook_drush_help().
+ * Implements hook_drush_help().
  *
  * This function is called whenever a drush user calls
  * 'drush help <name-of-your-command>'

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_leaflet.markerinfo.inc
+ * @file
+ * getlocations_leaflet.markerinfo.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -64,12 +65,12 @@ function _getlocations_leaflet_get_icondata() {
           // shadow
           $data[$key]['shadowUrl'] = '';
           if (isset($values['shadow'])) {
-            $data[$key]['shadowUrl'] = base_path() .  $path . $values['shadow'];
+            $data[$key]['shadowUrl'] = base_path() . $path . $values['shadow'];
             $size = getimagesize($path . $values['shadow']);
             $data[$key]['shadowSize'] =  array('x' => $size[0], 'y' => $size[1]);
           }
           elseif (isset($defaults['shadow'])) {
-            $data[$key]['shadowUrl'] = base_path() .  $path . $defaults['shadow'];
+            $data[$key]['shadowUrl'] = base_path() . $path . $defaults['shadow'];
             $size = getimagesize($path . $defaults['shadow']);
             $data[$key]['shadowSize'] =  array('x' => $size[0], 'y' => $size[1]);
           }

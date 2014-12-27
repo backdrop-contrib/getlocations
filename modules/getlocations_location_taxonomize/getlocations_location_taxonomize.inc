@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_location_taxonomize.inc
+ * @file
+ * getlocations_location_taxonomize.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *

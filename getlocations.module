@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations.module
+ * @file
+ * getlocations.module
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -872,7 +873,7 @@ function getlocations_nids($nidlist) {
       foreach ($locs AS $key => $loc) {
         $type = getlocations_get_nodetype($nid);
         if (isset($typemarkers[$type])) {
-           $loc['marker'] = $typemarkers[$type];
+          $loc['marker'] = $typemarkers[$type];
         }
         $locations[] = $loc;
       }
@@ -1040,7 +1041,7 @@ function getlocations_setup_js($defaults, $googleonly = FALSE, $sv = FALSE) {
   $query['sensor'] = (getlocations_is_mobile() ? 'true' : 'false');
 
   $map_version = variable_get('getlocations_map_version', '');
-  if($map_version) {
+  if ($map_version) {
     $query['v'] = $map_version;
   }
 
@@ -1894,7 +1895,7 @@ function getlocations_get_path_from_lid($lid) {
  * Ajax callback
  * Fetches bubble content
  *
- * @see theme_getlocations_adinfo().
+ * @see theme_getlocations_adinfo()
  */
 function getlocations_adinfo() {
 
@@ -4090,7 +4091,7 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
   // backward compat
   if (isset($defaults['baselayers']['OpenStreetMap'])) {
     $defaults['baselayers']['OSM'] = $defaults['baselayers']['OpenStreetMap'];
-    unset ($defaults['baselayers']['OpenStreetMap']);
+    unset($defaults['baselayers']['OpenStreetMap']);
   }
 
   $form['maptype'] = getlocations_element_map_maptype($defaults['maptype'], $defaults['baselayers']);
@@ -5872,7 +5873,7 @@ function getlocations_dim_check($string) {
   if (!is_string($string) || empty($string)) {
     return FALSE;
   }
-  $s = strtolower(trim($string));
+  $s = drupal_strtolower(trim($string));
   $matches = array();
   if (preg_match('/^([\d.]+)\s*(em|ex|px|in|cm|mm|pt|pc|%)$/', $s, $matches)) {
     return $matches[1] . $matches[2];
@@ -6681,7 +6682,7 @@ function getlocations_theme() {
       ),
     ),
     'getlocations_lidinfo' => array(
-      'variables' =>array(
+      'variables' => array(
         'lid' => '',
         'lidkey' => '',
       ),
@@ -7438,7 +7439,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
           foreach ($types AS $type => $name) {
             $field_names = getlocations_get_fieldname2($type, 'node');
             foreach ($field_names AS $field_name) {
-              $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+              $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
               $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
               $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
             }

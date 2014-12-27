@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_leaflet.views.inc
+ * @file
+ * getlocations_leaflet.views.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -123,7 +124,7 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
             $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
             if ($getlocations_node_marker['enable']) {
               if (isset($location['type']) && isset($location['field_name'])) {
-                $mkey = 'node_marker__' . strtolower($location['type']) . '__' . $location['field_name'];
+                $mkey = 'node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name'];
                 $vicon = getlocations_leaflet_awesome_marker_get($options, $mkey);
                 $per_field_markers = TRUE;
               }
@@ -151,8 +152,8 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
           if ($entity_type == 'node') {
             $marker = $options['node_map_marker'];
             if (isset($location['type']) && isset($location['field_name']) ) {
-              if (isset($options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']])) {
-                $marker = $options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']];
+              if (isset($options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']])) {
+                $marker = $options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']];
               }
             }
             // term marker

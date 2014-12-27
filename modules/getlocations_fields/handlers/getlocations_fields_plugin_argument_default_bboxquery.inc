@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields_plugin_argument_default_bboxquery.inc
+ * @file
+ * getlocations_fields_plugin_argument_default_bboxquery.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -36,8 +37,8 @@ class getlocations_fields_plugin_argument_default_bboxquery extends views_plugin
       '#size' => 60,
       '#maxlength' => 64,
       '#default_value'  => $this->options['arg_id'] ? $this->options['arg_id'] : t('bbox'),
-      '#description'  => t('The ID of the query argument.<br />Use <em>bbox</em>, (as in "<em>?bbox=left,bottom,right,top</em>".)<br>
-        <b>mapping logic:</b><br>
+      '#description'  => t('The ID of the query argument.<br />Use <em>bbox</em>, (as in "<em>?bbox=left,bottom,right,top</em>".)<br />
+        <b>mapping logic:</b><br />
         southWest.lng = left,
         southWest.lat = bottom,
         northEast.lng = right,
@@ -52,7 +53,8 @@ class getlocations_fields_plugin_argument_default_bboxquery extends views_plugin
   function get_argument() {
     if (isset($_GET[$this->options['arg_id']])) {
       return $_GET[$this->options['arg_id']];
-    } else {
+    }
+    else {
       return TRUE; // Return all values if arg not present
     }
   }

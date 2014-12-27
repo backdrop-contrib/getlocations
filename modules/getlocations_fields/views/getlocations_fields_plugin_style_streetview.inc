@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file getlocations_fields_plugin_style_streetview.inc
+ * @file
+ * getlocations_fields_plugin_style_streetview.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
@@ -108,7 +109,7 @@ class getlocations_fields_plugin_style_streetview extends views_plugin_style {
 
     $form['sv_fullscreen'] = getlocations_element_map_checkbox(
       t('Show Fullscreen button'),
-       $this->options['sv_fullscreen']
+      $this->options['sv_fullscreen']
     );
 
 

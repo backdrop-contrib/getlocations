@@ -95,8 +95,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
         if ($entity_type == 'node') {
           $marker = $options['node_map_marker'];
           if (isset($location['type']) && isset($location['field_name']) ) {
-            if (isset($options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']])) {
-              $marker = $options['node_marker__' . strtolower($location['type']) . '__' . $location['field_name']];
+            if (isset($options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']])) {
+              $marker = $options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']];
             }
           }
           // term marker

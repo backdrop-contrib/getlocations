@@ -1,9 +1,202 @@
-commit d8529f2
+commit 96ec8ea
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Jan 5 09:23:10 2015 +0000
+
+    tidyup
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+views/getlocations_plugin_style_map.inc
+
+commit 9831d59
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Dec 27 18:54:02 2014 +0000
+
+    run through coder review
+
+drush/getlocations.drush.inc
+getlocations.admin.inc
+getlocations.css
+getlocations.install
+getlocations.markercluster.inc
+getlocations.markerinfo.inc
+getlocations.module
+getlocations_box.tpl.php
+getlocations_marker_box.tpl.php
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_box.js
+js/getlocations_categories.js
+js/getlocations_circles.js
+js/getlocations_colorbox.js
+js/getlocations_geo.js
+js/getlocations_geojson.js
+js/getlocations_marker_box.js
+js/getlocations_polygons.js
+js/getlocations_polylines.js
+js/getlocations_preview.js
+js/getlocations_rectangles.js
+js/getlocations_search_places.js
+js/getlocations_views.js
+js/icons.js
+modules/getlocations_blocks/getlocations_blocks.css
+modules/getlocations_blocks/getlocations_blocks.install
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_blocks/js/getlocations_blocks.js
+modules/getlocations_blocks/js/getlocations_blocks.min.js
+modules/getlocations_blocks/js/getlocations_blocks_admin.js
+modules/getlocations_blocks/js/getlocations_blocks_admin.min.js
+modules/getlocations_cloudmade/getlocations_cloudmade.install
+modules/getlocations_cloudmade/getlocations_cloudmade.module
+modules/getlocations_feeds/getlocations_feeds.install
+modules/getlocations_feeds/getlocations_feeds.module
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_fields/getlocations_fields.install
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_bbox.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_city.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_glid.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_postcode.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_argument_province.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_coordinates.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_data.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_latitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_longitude.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_field_wkt.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_country.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_handler_sort_distance.inc
+modules/getlocations_fields/handlers/getlocations_fields_plugin_argument_default_bboxquery.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields_admin.js
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_fields/js/getlocations_fields_preview.js
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/js/getlocations_fields_streetview.js
+modules/getlocations_fields/js/getlocations_fields_views.js
+modules/getlocations_fields/views/getlocations-fields-view-streetview.tpl.php
+modules/getlocations_fields/views/getlocations_fields.views.inc
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+modules/getlocations_fields/views/getlocations_fields_plugin_style_streetview.inc
+modules/getlocations_fields_entity/getlocations_fields_entity.module
+modules/getlocations_gps/getlocations_gps.css
+modules/getlocations_gps/getlocations_gps.install
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.install
+modules/getlocations_leaflet/getlocations_leaflet.markerinfo.inc
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_circles.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_geojson.js
+modules/getlocations_leaflet/js/getlocations_leaflet_polygons.js
+modules/getlocations_leaflet/js/getlocations_leaflet_polylines.js
+modules/getlocations_leaflet/js/getlocations_leaflet_preview.js
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.js
+modules/getlocations_leaflet/js/getlocations_leaflet_rectangles.js
+modules/getlocations_leaflet/views/getlocations-leaflet-view-map.tpl.php
+modules/getlocations_leaflet/views/getlocations_leaflet.views.inc
+modules/getlocations_leaflet/views/getlocations_leaflet.views_default.inc
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.inc
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.install
+modules/getlocations_location_taxonomize/getlocations_location_taxonomize.module
+modules/getlocations_map/getlocations_map.css
+modules/getlocations_map/getlocations_map.install
+modules/getlocations_map/getlocations_map.module
+modules/getlocations_mapbox/getlocations_mapbox.install
+modules/getlocations_mapbox/getlocations_mapbox.module
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.css
+modules/getlocations_search/getlocations_search.install
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/getlocations_search_box.tpl.php
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search_admin.js
+modules/getlocations_tools/getlocations_tools.module
+views/getlocations-view-map.tpl.php
+views/getlocations.views.inc
+views/getlocations.views_default.inc
+views/getlocations_plugin_style_map.inc
+
+commit 0768953
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Dec 16 12:23:04 2014 +0000
+
+    updated README
+
+README.txt
+
+commit b51aed5
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Dec 15 18:01:04 2014 +0000
+
+    moved some form elements into getlocations_markermanager_form
+
+getlocations.admin.inc
+getlocations.module
+js/markerclusterer.js
+js/markerclusterer_packed.js
+modules/getlocations_search/getlocations_search.admin.inc
+views/getlocations_plugin_style_map.inc
+
+commit d042f6a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Dec 15 15:13:24 2014 +0000
+
+    moved some form elements into getlocations_markercluster_form
+
+getlocations.admin.inc
+getlocations.markercluster.inc
+getlocations.module
+js/getlocations.js
+js/getlocations.min.js
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit f7ca8e9
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Dec 15 12:23:52 2014 +0000
+
+    fixed geolocation_mobile_check notice
+
+getlocations.module
+
+commit cc03c38
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Dec 14 17:48:37 2014 +0000
+
+    fixed issue #2393069
+
+js/markerclusterer.js
+js/markerclusterer_packed.js
+
+commit c5737a4
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Dec 12 21:34:54 2014 +0000
+
+    bugfixes
+
+getlocations.module
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+
+commit aa59c43
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Fri Dec 12 15:02:21 2014 +0000
 
     fixed js bug
 
+CHANGELOG.txt
 modules/getlocations_search/js/getlocations_search.js
 modules/getlocations_search/js/getlocations_search.min.js
 

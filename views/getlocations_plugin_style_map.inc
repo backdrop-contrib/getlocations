@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * getlocations_plugin_style_map.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *

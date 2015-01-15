@@ -24,26 +24,16 @@ function getlocations_gps_help($path, $arg) {
 }
 
 /**
- * Implements hook_init().
- */
-#function getlocations_gps_init() {
-  #drupal_add_js(GETLOCATIONS_GPS_PATH . '/js/getlocations_gps.js', array('weight' => 50));
-  #drupal_add_css(GETLOCATIONS_GPS_PATH . '/getlocations_gps.css');
-#}
-
-
-/**
  * Implements hook_permission().
  */
 function getlocations_gps_permission() {
   $perms = array();
   $perms['access getlocations gps'] = array(
-    'title' => t('Access Getlocations Search'),
+    'title' => t('Access Getlocations GPS'),
     'description' => t('View and use the Getlocations_gps module.')
   );
   return $perms;
 }
-
 
 /**
  * Implements hook_menu().
@@ -102,7 +92,6 @@ function getlocations_gps_settings_form() {
   $getlocations_gps_defaults = getlocations_gps_defaults();
 
   $getlocations_gps_paths = getlocations_gps_paths_get();
-  #drupal_add_js($getlocations_gps_paths['getlocations_gps_admin_path']);
 
   $form = array();
 
@@ -135,13 +124,13 @@ function getlocations_gps_settings_form() {
     128,
     t('Where the getlocations_gps javascript file is located.')
   );
-  #$form['getlocations_gps_paths']['getlocations_gps_admin_path'] = getlocations_element_path(
-  #  t('Path to getlocations_gps admin javascript file'),
-  #  $getlocations_gps_paths['getlocations_gps_admin_path'],
-  #  70,
-  #  128,
-  #  t('Where the getlocations_gps admin javascript file is located.')
-  #);
+  $form['getlocations_gps_paths']['getlocations_gps_admin_path'] = getlocations_element_path(
+    t('Path to getlocations_gps_admin javascript file'),
+    $getlocations_gps_paths['getlocations_gps_admin_path'],
+    70,
+    128,
+    t('Where the getlocations_gps_admin javascript file is located.')
+  );
 
   $form['getlocations_gps_paths']['reset'] = getlocations_element_dd(
     t('Reset'),
@@ -176,14 +165,14 @@ function getlocations_gps_settings_validate($form, &$form_state) {
 function getlocations_gps_paths_get($reset = FALSE, $min = FALSE) {
   if ($min) {
     $defaults = array(
-      'getlocations_gps_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_gps.min.js',
-      #'getlocations_gps_admin_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_gps_admin.min.js',
+      'getlocations_gps_path'       => GETLOCATIONS_GPS_PATH . '/js/getlocations_gps.min.js',
+      'getlocations_gps_admin_path' => GETLOCATIONS_GPS_PATH . '/js/getlocations_gps_admin.min.js',
     );
   }
   else {
     $defaults = array(
-      'getlocations_gps_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_gps.js',
-      #'getlocations_gps_admin_path' => GETLOCATIONS_SEARCH_PATH . '/js/getlocations_gps_admin.js',
+      'getlocations_gps_path'       => GETLOCATIONS_GPS_PATH . '/js/getlocations_gps.js',
+      'getlocations_gps_admin_path' => GETLOCATIONS_GPS_PATH . '/js/getlocations_gps_admin.js',
     );
   }
   if ($reset || $min) {
@@ -223,7 +212,8 @@ function getlocations_gps_js_settings_do($defaults, $mapid) {
 function getlocations_gps_js_do() {
   static $getlocations_gps_js_done = FALSE;
   if (! $getlocations_gps_js_done) {
-    drupal_add_js(GETLOCATIONS_GPS_PATH . '/js/getlocations_gps.js', array('weight' => 50));
+    $getlocations_gps_paths = getlocations_gps_paths_get();
+    drupal_add_js($getlocations_gps_paths['getlocations_gps_path'], array('weight' => 50));
     drupal_add_css(GETLOCATIONS_GPS_PATH . '/getlocations_gps.css');
   }
   $getlocations_gps_js_done = TRUE;
@@ -239,6 +229,8 @@ function getlocations_gps_js_do() {
 function getlocations_gps_map_display_options_form($defaults) {
   $form = array();
   $form['#theme'][] = 'getlocations_gps_map_display_options_form';
+  $getlocations_gps_paths = getlocations_gps_paths_get();
+  drupal_add_js($getlocations_gps_paths['getlocations_gps_admin_path']);
 
   if (empty($defaults['gps_button_label'])) {
     $getlocations_gps_defaults = getlocations_gps_defaults();

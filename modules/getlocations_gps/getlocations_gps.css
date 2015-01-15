@@ -8,8 +8,7 @@
  *
  */
 .getlocations_gps_throbber {
-  margin-left: 4px;
-  background-image: url('images/throbber.gif');
+  background-image: url('/misc/throbber.gif');
   background-position: 100% 2px;
   background-repeat: repeat-y;
 }

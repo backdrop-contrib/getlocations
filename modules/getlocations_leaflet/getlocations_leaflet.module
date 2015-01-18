@@ -3915,7 +3915,7 @@ function getlocations_leaflet_entity_type_map($type, $entity_id) {
       }
 
     } // end foreach
-#  }
+
     if ($ct < 2 ) {
       unset($minmaxes);
       $minmaxes = '';

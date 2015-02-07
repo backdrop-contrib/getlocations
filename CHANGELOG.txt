@@ -1,9 +1,73 @@
-commit d772dee
+commit bca94c0
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Feb 7 15:34:00 2015 +0000
+
+    added mapquest support
+
+getlocations.admin.inc
+getlocations.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+
+commit 3301736
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Feb 7 15:32:42 2015 +0000
+
+    debugged gps
+
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit faf745b
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Feb 4 13:57:30 2015 +0000
+
+    added gps_in_dom
+
+getlocations.module
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit b947e3e
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Feb 2 17:25:15 2015 +0000
+
+    removed unused code
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 5d7b7cd
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jan 31 09:40:17 2015 +0000
+
+    moved drupal_add_library to theme
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/views/getlocations_leaflet.views.inc
+
+commit f461e6c
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Jan 27 15:45:46 2015 +0000
+
+    more field_group support
+
+getlocations.module
+js/getlocations.js
+js/getlocations.min.js
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+
+commit 8e97f6d
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sun Jan 25 16:53:26 2015 +0000
 
     added support for field group multipage
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields.js
 modules/getlocations_fields/js/getlocations_fields.min.js
 

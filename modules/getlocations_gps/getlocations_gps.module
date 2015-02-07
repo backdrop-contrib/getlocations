@@ -307,6 +307,12 @@ function getlocations_gps_theme() {
     'getlocations_gps_map_display_options_form' => array(
       'render element' => 'form',
     ),
+    'getlocations_gps_button' => array(
+      'variables' => array(
+        'defaults' => array(),
+        'mapid' => ''
+      ),
+    ),
   );
 }
 
@@ -324,5 +330,19 @@ function theme_getlocations_gps_map_display_options_form($variables) {
   $form['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
   $output = '';
   $output .= drupal_render_children($form);
+  return $output;
+}
+
+function theme_getlocations_gps_button($variables) {
+  $defaults = $variables['defaults'];
+  $mapid = $variables['mapid'];
+  $output = '';
+
+  $geolocation_mobile_check = ($defaults['geolocation_mobile_check'] ? FALSE : TRUE);
+  if (getlocations_is_mobile($geolocation_mobile_check) && isset($defaults['gps_button']) && $defaults['gps_button']) {
+    $gpsbtn = '<input type="button" value="' . $defaults['gps_button_label'] . '" id="getlocations_gps_show_' . $mapid . '" class="form-submit"  />';
+    $gpsbtn .= '<div class="getlocations_gps_throbber getlocations_gps_throbber_inactive" id="getlocations_gps_throbber_' . $mapid . '">&nbsp;&nbsp;&nbsp;&nbsp;</div>';
+    $output .= $gpsbtn;
+  }
   return $output;
 }

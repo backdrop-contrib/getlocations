@@ -371,7 +371,13 @@ function getlocations_leaflet_library() {
   // mapquest
   $mapquest_lic =  variable_get('getlocations_mapquest_lic', array('key' => '', 'type' => 'l'));
   if ($mapquest_lic['key']) {
-    global $is_https;
+    $defaults = getlocations_defaults();
+    if (! isset($defaults['is_https']) || ! $defaults['is_https']) {
+      global $is_https;
+    }
+    else {
+      $is_https = $defaults['is_https'];
+    }
     $scheme = ($is_https ? 'https' : 'http');
     if ($mapquest_lic['type'] == 'o') {
       $dom = 'open.mapquestapi.com/sdk/leaflet/v1.s';
@@ -2423,6 +2429,7 @@ function getlocations_leaflet_display_options_form($defaults, $admin = FALSE) {
 
   $controlpositions = getlocations_leaflet_controlpositions();
   $getlocations_leaflet_plugins = getlocations_leaflet_plugins();
+  $mapquest_lic = variable_get('getlocations_mapquest_lic', array('key' => '', 'type' => 'l'));
 
   $form['nodezoom'] = getlocations_element_map_zoom(
     t('Default Zoom for Single location'),
@@ -2528,7 +2535,7 @@ function getlocations_leaflet_display_options_form($defaults, $admin = FALSE) {
     $form['mapquest_maps_hybridlayer'] = array('#type' => 'value', '#value' => 1);
   }
 
-  if ($getlocations_leaflet_plugins['mapquest_traffic_enable']) {
+  if ($getlocations_leaflet_plugins['mapquest_traffic_enable'] && $mapquest_lic['type'] == 'l') {
     $form['mapquest_traffic_flow'] = getlocations_element_map_checkbox(
       t('Enable traffic flow'),
       $defaults['mapquest_traffic_flow'],
@@ -3753,7 +3760,7 @@ function getlocations_leaflet_settings_form() {
 
     // search markers
     if (module_exists('getlocations_fields') && module_exists('views')) {
-      $form['getlocations_leaflet_defaults'] += getlocations_fields_views_search_form($settings, TRUE);
+      $form['getlocations_leaflet_defaults'] += getlocations_fields_views_search_form($settings, 'leaflet');
     }
   }
 

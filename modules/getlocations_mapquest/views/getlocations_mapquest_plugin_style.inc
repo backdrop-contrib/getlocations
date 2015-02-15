@@ -2,14 +2,14 @@
 
 /**
  * @file
- * getlocations_leaflet_plugin_style.inc
+ * getlocations_mapquest_plugin_style.inc
  * @author Bob Hutchinson http://drupal.org/user/52366
  * @copyright GNU GPL
  *
- * Extension of the Views Plugin Style for Leaflet Map
+ * Extension of the Views Plugin Style for Mapquest Map
  * Adapted from the GeoField Map views module and the OpenLayers Views module.
  */
-class getlocations_leaflet_plugin_style extends views_plugin_style {
+class getlocations_mapquest_plugin_style extends views_plugin_style {
 
   /**
    * If this view is displaying an entity, save the entity type and info.
@@ -37,11 +37,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
   function option_definition() {
     $options = parent::option_definition();
 
-    $getlocations_leaflet_defaults = getlocations_leaflet_defaults();
+    $getlocations_mapquest_defaults = getlocations_mapquest_defaults();
     // fallback
     $getlocations_defaults = getlocations_defaults();
 
-    foreach ($getlocations_leaflet_defaults AS $key => $value) {
+    foreach ($getlocations_mapquest_defaults AS $key => $value) {
       $options[$key] = array('default' => $value);
     }
 
@@ -111,13 +111,13 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     #  return;
     #}
 
-    $form['#theme'] = 'getlocations_leaflet_plugin_style_options_form';
+    $form['#theme'] = 'getlocations_mapquest_plugin_style_options_form';
 
-    $getlocations_leaflet_paths = getlocations_leaflet_paths_get();
+    $getlocations_mapquest_paths = getlocations_mapquest_paths_get();
     $getlocations_paths = getlocations_paths_get();
 
     $form['#attached']['js'] = array(
-      $getlocations_leaflet_paths['getlocations_leaflet_formatter_path'],
+      $getlocations_mapquest_paths['getlocations_mapquest_formatter_path'],
       $getlocations_paths['getlocations_views_path'],
     );
 
@@ -149,13 +149,14 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     unset($form['maxzoom_map']['#options']['20']);
     unset($form['maxzoom_map']['#options']['19']);
 
-    $form += getlocations_leaflet_display_options_form($this->options);
+    $form += getlocations_mapquest_display_options_form($this->options);
 
     unset($form['nodezoom']['#options']['21']);
     unset($form['nodezoom']['#options']['20']);
     unset($form['nodezoom']['#options']['19']);
 
     // markers
+/*
     if ($this->options['awesome'] && $this->options['marker_type'] == 'fa') {
       // do awesome markers
       // nodes
@@ -169,7 +170,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         'awesome_icon_type' => t('Node Awesome icon type'),
         'awesome_icon_flip' => t('Node Awesome icon flip and rotate'),
       );
-      $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, "node");
+      $form += getlocations_mapquest_awesome_markers_elements_get($this->options, $labels, "node");
       // TODO per content type fieldname etc
 /////////////////
       // node type markers
@@ -192,7 +193,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
                 'awesome_icon_type'    => t($label . ' Awesome icon type'),
                 'awesome_icon_flip'    => t($label . ' Awesome icon flip and rotate'),
               );
-              $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, $mkey);
+              $form += getlocations_mapquest_awesome_markers_elements_get($this->options, $labels, $mkey);
             }
           }
         }
@@ -210,7 +211,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_type' => t('User Awesome icon type'),
           'awesome_icon_flip' => t('User Awesome icon flip and rotate'),
         );
-        $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'user');
+        $form += getlocations_mapquest_awesome_markers_elements_get($this->options, $labels, 'user');
       }
 
       if (module_exists('taxonomy')) {
@@ -227,7 +228,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
             'awesome_icon_type' => t('Vocabulary Awesome icon type'),
             'awesome_icon_flip' => t('Vocabulary Awesome icon flip and rotate'),
           );
-          $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'vocabulary');
+          $form += getlocations_mapquest_awesome_markers_elements_get($this->options, $labels, 'vocabulary');
 
         }
         // terms
@@ -242,7 +243,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_type' => t('Term Awesome icon type'),
           'awesome_icon_flip' => t('Term Awesome icon flip and rotate'),
         );
-        $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'term');
+        $form += getlocations_mapquest_awesome_markers_elements_get($this->options, $labels, 'term');
       }
       if (getlocations_check_entity_type('comment')) {
         // comment
@@ -256,12 +257,13 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_type' => t('Comment Awesome icon type'),
           'awesome_icon_flip' => t('Comment Awesome icon flip and rotate'),
         );
-        $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'comment');
+        $form += getlocations_mapquest_awesome_markers_elements_get($this->options, $labels, 'comment');
 
       }
 
     }
     else {
+*/
       // do getlocations markers
       $markers = getlocations_get_marker_titles();
       // node markers
@@ -367,11 +369,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         );
       }
 
-    }
+/*    } */
 
     // search markers
     if (module_exists('getlocations_fields') && module_exists('views')) {
-      $form += getlocations_fields_views_search_form($this->options, 'leaflet');
+      $form += getlocations_fields_views_search_form($this->options, 'mapquest');
     }
 
     // end markers
@@ -483,7 +485,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 
   function render() {
     if (isset($this->view->live_preview) && $this->view->live_preview) {
-      return t('Getlocations Leaflet views are not compatible with live preview.');
+      return t('Getlocations Mapquest views are not compatible with live preview.');
     }
     return parent::render();
   }

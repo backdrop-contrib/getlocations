@@ -408,21 +408,6 @@ function getlocations_mapquest_field_formatter_view($entity_type, $entity, $fiel
         $minmaxes = '';
       }
 
-#      $map_settings = getlocations_mapquest_map_get_info('Getlocations OSM');
-#      $map_settings = getlocations_mapquest_get_map_layers($map_settings);
-#
-#      if (! empty($settings['baselayers'])) {
-#        $map_layers = array();
-#        foreach ($settings['baselayers'] AS $k => $v) {
-#          if (isset($map_settings['map_layers'][$k]) && $settings['baselayers'][$k]) {
-#            $map_layers[$k] = $map_settings['map_layers'][$k];
-#          }
-#        }
-#        if (! empty($map_layers)) {
-#          $map_settings['map_layers'] = $map_layers;
-#        }
-#      }
-
       $nodezoom = FALSE;
       if ($ct == 1 && $settings['nodezoom']) {
         $nodezoom = $settings['nodezoom'];

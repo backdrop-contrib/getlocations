@@ -16,6 +16,7 @@ define('GETLOCATIONS_MARKERS_DOWNLOAD_URI', 'http://dl.dropboxusercontent.com/u/
 define('GETLOCATIONS_GEOJSON_DOWNLOAD_URI', 'https://github.com/JasonSanford/GeoJSON-to-Google-Maps/archive/master.zip');
 define('GETLOCATIONS_LEAFLET_DOWNLOAD_URI', 'http://leaflet-cdn.s3.amazonaws.com/build/leaflet-0.7.3.zip');
 define('GETLOCATIONS_GEOCODER_DOWNLOAD_URI', 'https://github.com/geocoder-php/geocoder-js/archive/master.zip');
+define('GETLOCATIONS_LEAFLET_HASH_DOWNLOAD_URI', 'https://github.com/mlevans/leaflet-hash/archive/master.zip');
 
 /**
  * Implements hook_drush_command().
@@ -72,6 +73,15 @@ function getlocations_drush_command() {
     ),
     'aliases' => array('getlocationsleaflet'),
   );
+  $items['getlocations-leaflet-hash'] = array(
+    'callback' => 'drush_getlocations_leaflet_hash',
+    'description' => dt('Download and install the Leaflet-hash library.'),
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUSH, // No bootstrap.
+    'arguments' => array(
+      'path' => dt('Optional. A path where to install the Leaflet-hash library. If omitted Drush will use the default location.'),
+    ),
+    'aliases' => array('getlocationsleaflethash'),
+  );
 
   return $items;
 }
@@ -98,6 +108,8 @@ function getlocations_drush_help($section) {
       return dt('Download and install the geocoder-js javascript library from Github, default location is sites/all/libraries.');
     case 'drush:getlocations-leaflet':
       return dt('Download and install the Leafletjs library from http://leafletjs.com, default location is sites/all/libraries.');
+    case 'drush:getlocations-leaflet-hash':
+      return dt('Download and install the Leaflet-hash library from Github, default location is sites/all/libraries.');
   }
 }
 
@@ -313,4 +325,62 @@ function drush_getlocations_leaflet() {
   // Set working directory back to the previous working directory.
   chdir($olddir);
 
+}
+
+/**
+ * Command to download the Leaflet-hash javascript library.
+ */
+function drush_getlocations_leaflet_hash() {
+  $args = func_get_args();
+  if (!empty($args[0])) {
+    $path = $args[0];
+  }
+  else {
+    $path = 'sites/all/libraries';
+  }
+
+  // Create the path if it does not exist.
+  if (!is_dir($path)) {
+    drush_op('mkdir', $path);
+    drush_log(dt('Directory @path was created', array('@path' => $path)), 'notice');
+  }
+
+  // Set the directory to the download location.
+  $olddir = getcwd();
+  chdir($path);
+
+  $zip = GETLOCATIONS_LEAFLET_HASH_DOWNLOAD_URI;
+  $dirname = 'leaflet-hash';
+  // Download the zip archive
+  if ($filepath = drush_download_file($zip)) {
+    $filename = basename($filepath);
+
+     // Remove any existing directory
+    if (is_dir($dirname)) {
+      drush_delete_dir($dirname, TRUE);
+      drush_log(dt('An existing Leaflet-hash library was deleted from @path', array('@path' => $path)), 'notice');
+    }
+
+    // Decompress the zip archive
+    drush_tarball_extract($filename);
+
+    // Copy the file into place.
+    $src = 'leaflet-hash-master';
+    if (is_dir($src)) {
+      if (drush_mkdir($dirname)) {
+        drush_copy_dir($src . '/leaflet-hash.js', $dirname . '/leaflet-hash.js');
+        drush_delete_dir($src);
+      }
+    }
+  }
+
+  if ($filepath && is_dir($dirname)) {
+    drush_log(dt('Leaflet-hash javascript library has been installed in @path', array('@path' => $path)), 'success');
+  }
+  else {
+    drush_log(dt('Drush was unable to install the Leaflet-hash javascript library to @path', array('@path' => $path)), 'error');
+  }
+
+  // Set working directory back to the previous working directory.
+  chdir($olddir);
 }

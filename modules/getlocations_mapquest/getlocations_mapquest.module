@@ -1543,14 +1543,14 @@ function getlocations_mapquest_display_options_form($defaults, $admin = FALSE) {
     );
   }
 
-#  $form['bestfitmargin'] = getlocations_element_map_tf(
-#    t('Best fit margin'),
-#    $defaults['bestfitmargin'],
-#    '',
-#    5,
-#    255,
-#    TRUE
-#  );
+  $form['bestfitmargin'] = getlocations_element_map_tf(
+    t('Best fit margin'),
+    $defaults['bestfitmargin'],
+    '',
+    5,
+    255,
+    TRUE
+  );
 
   return $form;
 }
@@ -1819,54 +1819,14 @@ function getlocations_mapquest_entity_type_map($type, $entity_id) {
   $bundle = $object->type;
   $marker = '';
   $vector = '';
-  // awesome
-  if ($getlocations_mapquest_defaults['awesome'] && $getlocations_mapquest_defaults['marker_type'] == 'fa') {
-    if ($entity_type == 'node') {
-      $per_field_markers = FALSE;
-      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-      if ($getlocations_node_marker['enable']) {
-        if ($types = getlocations_get_types()) {
-          foreach ($types AS $type => $name) {
-            if ($type == $bundle) {
-              $field_names = getlocations_get_fieldname2($type, 'node');
-              foreach ($field_names AS $field_name) {
-                if ($field_name == $locative_field_name) {
-                  $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
-                  $vicon = getlocations_mapquest_awesome_marker_get($getlocations_mapquest_defaults, $mkey);
-                  $per_field_markers = TRUE;
-                }
-              }
-            }
-          }
-        }
-      }
-      if (! $per_field_markers) {
-        $vicon = getlocations_mapquest_awesome_marker_get($getlocations_mapquest_defaults, 'node');
-      }
-    }
-    elseif ($entity_type == 'taxonomy_term') {
-      $vicon = getlocations_mapquest_awesome_marker_get($getlocations_mapquest_defaults, 'vocabulary');
-    }
-    elseif ($entity_type == 'user') {
-      $vicon = getlocations_mapquest_awesome_marker_get($getlocations_mapquest_defaults, 'user');
-    }
-    elseif ($entity_type == 'comment') {
-      $vicon = getlocations_mapquest_awesome_marker_get($getlocations_mapquest_defaults, 'comment');
-    }
-    else {
-      $vicon = getlocations_mapquest_awesome_marker_get($getlocations_mapquest_defaults);
-    }
-    $vector = $vicon;
+
+  // marker
+  $marker = $getlocations_mapquest_defaults['node_map_marker'];
+  if (isset($getlocations_mapquest_defaults[$entity_type . '_map_marker'])) {
+    $marker = $getlocations_mapquest_defaults[$entity_type . '_map_marker'];
   }
-  else {
-    // marker
-    $marker = $getlocations_mapquest_defaults['node_map_marker'];
-    if (isset($getlocations_mapquest_defaults[$entity_type . '_map_marker'])) {
-      $marker = $getlocations_mapquest_defaults[$entity_type . '_map_marker'];
-    }
-    if (isset($typemarkers[$object->type]) && $typemarkers[$object->type]) {
-      $marker = $typemarkers[$object->type];
-    }
+  if (isset($typemarkers[$object->type]) && $typemarkers[$object->type]) {
+    $marker = $typemarkers[$object->type];
   }
 
   $entity_title = '';

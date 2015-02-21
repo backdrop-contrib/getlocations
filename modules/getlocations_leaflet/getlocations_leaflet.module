@@ -2243,6 +2243,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['awesome_icon_type']           = 'b';
   $newdefaults['awesome_icon_size']           = '';
   $newdefaults['awesome_icon_flip']           = '';
+  $newdefaults['awesome_icon_html']           = '';
+  $newdefaults['awesome_icon_class']          = 'getlocations-leaflet-div-icon';
 
   $newdefaults['node_marker_awesome_icon']                = '';
   $newdefaults['node_marker_awesome_icon_color_selector'] = '';
@@ -2252,6 +2254,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['node_marker_awesome_icon_type']           = 'b';
   $newdefaults['node_marker_awesome_icon_size']           = '';
   $newdefaults['node_marker_awesome_icon_flip']           = '';
+  $newdefaults['node_marker_awesome_icon_html']           = '';
+  $newdefaults['node_marker_awesome_icon_class']          = 'getlocations-leaflet-div-icon';
 
   $newdefaults['user_marker_awesome_icon']                = '';
   $newdefaults['user_marker_awesome_icon_color_selector'] = '';
@@ -2261,6 +2265,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['user_marker_awesome_icon_type']           = 'b';
   $newdefaults['user_marker_awesome_icon_size']           = '';
   $newdefaults['user_marker_awesome_icon_flip']           = '';
+  $newdefaults['user_marker_awesome_icon_html']           = '';
+  $newdefaults['user_marker_awesome_icon_class']          = 'getlocations-leaflet-div-icon';
 
   $newdefaults['term_marker_awesome_icon']                = '';
   $newdefaults['term_marker_awesome_icon_color_selector'] = '';
@@ -2270,6 +2276,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['term_marker_awesome_icon_type']           = 'b';
   $newdefaults['term_marker_awesome_icon_size']           = '';
   $newdefaults['term_marker_awesome_icon_flip']           = '';
+  $newdefaults['term_marker_awesome_icon_html']           = '';
+  $newdefaults['term_marker_awesome_icon_class']          = 'getlocations-leaflet-div-icon';
 
   $newdefaults['vocabulary_marker_awesome_icon']                = '';
   $newdefaults['vocabulary_marker_awesome_icon_color_selector'] = '';
@@ -2279,6 +2287,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['vocabulary_marker_awesome_icon_type']           = 'b';
   $newdefaults['vocabulary_marker_awesome_icon_size']           = '';
   $newdefaults['vocabulary_marker_awesome_icon_flip']           = '';
+  $newdefaults['vocabulary_marker_awesome_icon_html']           = '';
+  $newdefaults['vocabulary_marker_awesome_icon_class']          = 'getlocations-leaflet-div-icon';
 
   $newdefaults['comment_marker_awesome_icon']                = '';
   $newdefaults['comment_marker_awesome_icon_color_selector'] = '';
@@ -2288,6 +2298,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['comment_marker_awesome_icon_type']           = 'b';
   $newdefaults['comment_marker_awesome_icon_size']           = '';
   $newdefaults['comment_marker_awesome_icon_flip']           = '';
+  $newdefaults['comment_marker_awesome_icon_html']           = '';
+  $newdefaults['comment_marker_awesome_icon_class']          = 'getlocations-leaflet-div-icon';
 
   $newdefaults['marker_type'] = 'gg'; // or 'fa'
 
@@ -3319,6 +3331,8 @@ function getlocations_leaflet_display_options_form($defaults, $admin = FALSE) {
     $form['awesome_icon_type']           = array('#type' => 'value', '#value' => $defaults['awesome_icon_type']);
     $form['awesome_icon_size']           = array('#type' => 'value', '#value' => $defaults['awesome_icon_size']);
     $form['awesome_icon_flip']           = array('#type' => 'value', '#value' => $defaults['awesome_icon_flip']);
+    $form['awesome_icon_html']           = array('#type' => 'value', '#value' => $defaults['awesome_icon_html']);
+    $form['awesome_icon_class']          = array('#type' => 'value', '#value' => $defaults['awesome_icon_class']);
     $form['awesome']                     = array('#type' => 'value', '#value' => 0);
   }
 
@@ -3656,6 +3670,8 @@ function getlocations_leaflet_settings_form() {
       'awesome_icon_size' => t('Node Awesome icon size'),
       'awesome_icon_type' => t('Node Awesome icon type'),
       'awesome_icon_flip' => t('Node Awesome icon flip and rotate'),
+      'awesome_icon_html' => t('Node Awesome icon HTML'),
+      'awesome_icon_class' => t('Node Awesome icon class'),
     );
     $form['getlocations_leaflet_defaults'] += getlocations_leaflet_awesome_markers_elements_get($settings, $labels, "node");
 
@@ -3678,6 +3694,8 @@ function getlocations_leaflet_settings_form() {
               'awesome_icon_size'    => t($label . ' Awesome icon size'),
               'awesome_icon_type'    => t($label . ' Awesome icon type'),
               'awesome_icon_flip'    => t($label . ' Awesome icon flip and rotate'),
+              'awesome_icon_html'    => t($label . ' Awesome icon HTML'),
+              'awesome_icon_class'   => t($label . ' Awesome icon class'),
             );
             $form['getlocations_leaflet_defaults'] += getlocations_leaflet_awesome_markers_elements_get($settings, $labels, $mkey);
           }
@@ -3696,6 +3714,8 @@ function getlocations_leaflet_settings_form() {
         'awesome_icon_size' => t('User Awesome icon size'),
         'awesome_icon_type' => t('User Awesome icon type'),
         'awesome_icon_flip' => t('User Awesome icon flip and rotate'),
+        'awesome_icon_html' => t('User Awesome icon HTML'),
+        'awesome_icon_class' => t('User Awesome icon class'),
       );
       $form['getlocations_leaflet_defaults'] += getlocations_leaflet_awesome_markers_elements_get($settings, $labels, 'user');
     }
@@ -3713,6 +3733,8 @@ function getlocations_leaflet_settings_form() {
           'awesome_icon_size' => t('Vocabulary Awesome icon size'),
           'awesome_icon_type' => t('Vocabulary Awesome icon type'),
           'awesome_icon_flip' => t('Vocabulary Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Vocabulary Awesome icon HTML'),
+          'awesome_icon_class' => t('Vocabulary Awesome icon class'),
         );
         $form['getlocations_leaflet_defaults'] += getlocations_leaflet_awesome_markers_elements_get($settings, $labels, 'vocabulary');
 
@@ -3728,6 +3750,8 @@ function getlocations_leaflet_settings_form() {
         'awesome_icon_size' => t('Term Awesome icon size'),
         'awesome_icon_type' => t('Term Awesome icon type'),
         'awesome_icon_flip' => t('Term Awesome icon flip and rotate'),
+        'awesome_icon_html' => t('Term Awesome icon HTML'),
+        'awesome_icon_class' => t('Term Awesome icon class'),
       );
       $form['getlocations_leaflet_defaults'] += getlocations_leaflet_awesome_markers_elements_get($settings, $labels, 'term');
     }
@@ -3742,6 +3766,8 @@ function getlocations_leaflet_settings_form() {
         'awesome_icon_size' => t('Comment Awesome icon size'),
         'awesome_icon_type' => t('Comment Awesome icon type'),
         'awesome_icon_flip' => t('Comment Awesome icon flip and rotate'),
+        'awesome_icon_html' => t('Comment Awesome icon HTML'),
+        'awesome_icon_class' => t('Comment Awesome icon class'),
       );
       $form['getlocations_leaflet_defaults'] += getlocations_leaflet_awesome_markers_elements_get($settings, $labels, 'comment');
 
@@ -4764,6 +4790,8 @@ function getlocations_leaflet_awesome_markers_elements_get($defaults, $labels = 
       'awesome_icon_size' => t('Awesome icon size'),
       'awesome_icon_type' => t('Awesome icon type'),
       'awesome_icon_flip' => t('Awesome icon flip and rotate'),
+      'awesome_icon_html' => t('Awesome icon HTML'),
+      'awesome_icon_class' => t('Awesome icon class'),
     );
   }
 
@@ -4799,6 +4827,19 @@ function getlocations_leaflet_awesome_markers_elements_get($defaults, $labels = 
     (isset($defaults[$prefix . 'awesome_icon_size']) && $defaults[$prefix . 'awesome_icon_size'] ? $defaults[$prefix . 'awesome_icon_size'] : $defaults['awesome_icon_size']),
     array('' => t('Default'), 'fa-lg' => t('Large'), 'fa-2x' => t('2x large'), 'fa-3x' => t('3x large'), 'fa-4x' => t('4x large'), 'fa-5x' => t('5x large')),
     t('Icon size is only applied when "Icon only" has been selected in Awesome icon type.')
+  );
+
+  $form[$prefix . 'awesome_icon_html'] = getlocations_element_map_tf(
+    $labels['awesome_icon_html'],
+    (isset($defaults[$prefix . 'awesome_icon_html']) && $defaults[$prefix . 'awesome_icon_html'] ? $defaults[$prefix . 'awesome_icon_html'] : $defaults['awesome_icon_html']),
+    t('Icon HTML will override any other icon HTML. This is only applied when "Icon only" has been selected in Awesome icon type.'),
+    40
+  );
+  $form[$prefix . 'awesome_icon_class'] = getlocations_element_map_tf(
+    $labels['awesome_icon_class'],
+    (isset($defaults[$prefix . 'awesome_icon_class']) && $defaults[$prefix . 'awesome_icon_class'] ? $defaults[$prefix . 'awesome_icon_class'] : $defaults['awesome_icon_class']),
+    t('Icon Class will override any other icon class. This is only applied when "Icon only" has been selected in Awesome icon type.'),
+    40
   );
 
   $form[$prefix . 'awesome_icon_flip'] = getlocations_element_dd(
@@ -4847,6 +4888,8 @@ function getlocations_leaflet_awesome_marker_get($defaults, $prefix = '') {
     $spin = (isset($defaults[$prefix . 'awesome_icon_spin']) ? $defaults[$prefix . 'awesome_icon_spin'] : $defaults['awesome_icon_spin']);
     $flip = (isset($defaults[$prefix . 'awesome_icon_flip']) ? $defaults[$prefix . 'awesome_icon_flip'] : $defaults['awesome_icon_flip']);
     $iconsize = (isset($defaults[$prefix . 'awesome_icon_size']) ? $defaults[$prefix . 'awesome_icon_size'] : $defaults['awesome_icon_size']);
+    $html = (isset($defaults[$prefix . 'awesome_icon_html']) ? $defaults[$prefix . 'awesome_icon_html'] : $defaults['awesome_icon_html']);
+    $classname = (isset($defaults[$prefix . 'awesome_icon_class']) ? $defaults[$prefix . 'awesome_icon_class'] : $defaults['awesome_icon_class']);
     $px = 12;
     if ($iconsize == 'fa-lg') {
       $px = 16;
@@ -4884,8 +4927,12 @@ function getlocations_leaflet_awesome_marker_get($defaults, $prefix = '') {
     }
 
     $classes = implode(' ', $class);
-    $html = '<i class="' . $classes . '" ' . $style . '></i>';
-    $vicon = array('px' => $px, 'html' => $html);
+
+    if (empty($html)) {
+      $html = '<i class="' . $classes . '" ' . $style . '></i>';
+    }
+
+    $vicon = array('px' => $px, 'html' => $html, 'classname' => $classname);
   }
   elseif ($awesome_icon_type == 'm' ) {
     // marker only, do it by providing a nonexistent icon

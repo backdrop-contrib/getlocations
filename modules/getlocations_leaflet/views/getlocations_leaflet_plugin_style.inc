@@ -168,10 +168,11 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         'awesome_icon_size' => t('Node Awesome icon size'),
         'awesome_icon_type' => t('Node Awesome icon type'),
         'awesome_icon_flip' => t('Node Awesome icon flip and rotate'),
+        'awesome_icon_html' => t('Node Awesome icon HTML'),
+        'awesome_icon_class' => t('Node Awesome icon class'),
       );
       $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, "node");
-      // TODO per content type fieldname etc
-/////////////////
+
       // node type markers
       if ($types = getlocations_get_types()) {
         $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
@@ -191,13 +192,15 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
                 'awesome_icon_size'    => t($label . ' Awesome icon size'),
                 'awesome_icon_type'    => t($label . ' Awesome icon type'),
                 'awesome_icon_flip'    => t($label . ' Awesome icon flip and rotate'),
+                'awesome_icon_html'    => t($label . ' Awesome icon HTML'),
+                'awesome_icon_class'   => t($label . ' Awesome icon class'),
               );
               $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, $mkey);
             }
           }
         }
       }
-/////////////////
+
       // users
       if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
         $labels = array(
@@ -209,6 +212,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_size' => t('User Awesome icon size'),
           'awesome_icon_type' => t('User Awesome icon type'),
           'awesome_icon_flip' => t('User Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('User Awesome icon HTML'),
+          'awesome_icon_class' => t('User Awesome icon class'),
         );
         $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'user');
       }
@@ -226,6 +231,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
             'awesome_icon_size' => t('Vocabulary Awesome icon size'),
             'awesome_icon_type' => t('Vocabulary Awesome icon type'),
             'awesome_icon_flip' => t('Vocabulary Awesome icon flip and rotate'),
+            'awesome_icon_html' => t('Vocabulary Awesome icon HTML'),
+            'awesome_icon_class' => t('Vocabulary Awesome icon class'),
           );
           $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'vocabulary');
 
@@ -241,6 +248,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_size' => t('Term Awesome icon size'),
           'awesome_icon_type' => t('Term Awesome icon type'),
           'awesome_icon_flip' => t('Term Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Term Awesome icon HTML'),
+          'awesome_icon_class' => t('Term Awesome icon class'),
         );
         $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'term');
       }
@@ -255,6 +264,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
           'awesome_icon_size' => t('Comment Awesome icon size'),
           'awesome_icon_type' => t('Comment Awesome icon type'),
           'awesome_icon_flip' => t('Comment Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Comment Awesome icon HTML'),
+          'awesome_icon_class' => t('Comment Awesome icon class'),
         );
         $form += getlocations_leaflet_awesome_markers_elements_get($this->options, $labels, 'comment');
 

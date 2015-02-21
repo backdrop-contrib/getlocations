@@ -577,6 +577,8 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
           'awesome_icon_size' => t('Search Awesome icon size'),
           'awesome_icon_type' => t('Search Awesome icon type'),
           'awesome_icon_flip' => t('Search Awesome icon flip and rotate'),
+          'awesome_icon_html' => t('Search Awesome icon HTML'),
+          'awesome_icon_class' => t('Search Awesome icon class'),
         );
         $prefix = 'search';
         $form += getlocations_leaflet_awesome_markers_elements_get($defaults, $labels, $prefix);
@@ -705,6 +707,3 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
 
   return $form;
 }
-
-
-

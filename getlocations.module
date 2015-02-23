@@ -30,15 +30,15 @@ function getlocations_help($path, $arg) {
  * Implements hook_init().
  */
 function getlocations_init() {
-
   if (module_exists('colorbox')) {
     $getlocations_colorbox = getlocations_colorbox_settings();
-    $settings = array('getlocations_colorbox' => $getlocations_colorbox);
-    drupal_add_js($settings, 'setting');
-    $getlocations_paths = getlocations_paths_get();
-    drupal_add_js($getlocations_paths['getlocations_colorbox_path']);
+    if ($getlocations_colorbox['enable']) {
+      $settings = array('getlocations_colorbox' => $getlocations_colorbox);
+      drupal_add_js($settings, 'setting');
+      $getlocations_paths = getlocations_paths_get();
+      drupal_add_js($getlocations_paths['getlocations_colorbox_path']);
+    }
   }
-
 }
 
 /**
@@ -5280,6 +5280,10 @@ function getlocations_colorbox_settings() {
   );
   $colorbox_settings =  variable_get('getlocations_colorbox', $colorbox_defaults);
   $getlocations_colorbox = getlocations_adjust_vars($colorbox_defaults, $colorbox_settings);
+  if (! module_exists('colorbox')) {
+    $getlocations_colorbox['enable'] = 0;
+    $getlocations_colorbox['marker_enable'] = 0;
+  }
   return $getlocations_colorbox;
 }
 

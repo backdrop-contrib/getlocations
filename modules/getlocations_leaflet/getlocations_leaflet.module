@@ -2249,7 +2249,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['awesome_icon']                = 'fa-home';
   $newdefaults['awesome_icon_color_selector'] = 'white';
   $newdefaults['awesome_icon_color']          = '';
-  $newdefaults['awesome_icon_spin']           = FALSE;
+  $newdefaults['awesome_icon_spin']           = '';
+  $newdefaults['awesome_icon_pulse']          = '';
   $newdefaults['awesome_marker_color']        = 'blue';
   $newdefaults['awesome_icon_type']           = 'b';
   $newdefaults['awesome_icon_size']           = '';
@@ -2260,7 +2261,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['node_marker_awesome_icon']                = '';
   $newdefaults['node_marker_awesome_icon_color_selector'] = '';
   $newdefaults['node_marker_awesome_icon_color']          = '';
-  $newdefaults['node_marker_awesome_icon_spin']           = FALSE;
+  $newdefaults['node_marker_awesome_icon_spin']           = '';
+  $newdefaults['node_marker_awesome_icon_pulse']          = '';
   $newdefaults['node_marker_awesome_marker_color']        = '';
   $newdefaults['node_marker_awesome_icon_type']           = 'b';
   $newdefaults['node_marker_awesome_icon_size']           = '';
@@ -2271,7 +2273,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['user_marker_awesome_icon']                = '';
   $newdefaults['user_marker_awesome_icon_color_selector'] = '';
   $newdefaults['user_marker_awesome_icon_color']          = '';
-  $newdefaults['user_marker_awesome_icon_spin']           = FALSE;
+  $newdefaults['user_marker_awesome_icon_spin']           = '';
+  $newdefaults['user_marker_awesome_icon_pulse']          = '';
   $newdefaults['user_marker_awesome_marker_color']        = '';
   $newdefaults['user_marker_awesome_icon_type']           = 'b';
   $newdefaults['user_marker_awesome_icon_size']           = '';
@@ -2282,7 +2285,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['term_marker_awesome_icon']                = '';
   $newdefaults['term_marker_awesome_icon_color_selector'] = '';
   $newdefaults['term_marker_awesome_icon_color']          = '';
-  $newdefaults['term_marker_awesome_icon_spin']           = FALSE;
+  $newdefaults['term_marker_awesome_icon_spin']           = '';
+  $newdefaults['term_marker_awesome_icon_pulse']          = '';
   $newdefaults['term_marker_awesome_marker_color']        = '';
   $newdefaults['term_marker_awesome_icon_type']           = 'b';
   $newdefaults['term_marker_awesome_icon_size']           = '';
@@ -2293,7 +2297,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['vocabulary_marker_awesome_icon']                = '';
   $newdefaults['vocabulary_marker_awesome_icon_color_selector'] = '';
   $newdefaults['vocabulary_marker_awesome_icon_color']          = '';
-  $newdefaults['vocabulary_marker_awesome_icon_spin']           = FALSE;
+  $newdefaults['vocabulary_marker_awesome_icon_spin']           = '';
+  $newdefaults['vocabulary_marker_awesome_icon_pulse']          = '';
   $newdefaults['vocabulary_marker_awesome_marker_color']        = '';
   $newdefaults['vocabulary_marker_awesome_icon_type']           = 'b';
   $newdefaults['vocabulary_marker_awesome_icon_size']           = '';
@@ -2304,7 +2309,8 @@ function getlocations_leaflet_defaults() {
   $newdefaults['comment_marker_awesome_icon']                = '';
   $newdefaults['comment_marker_awesome_icon_color_selector'] = '';
   $newdefaults['comment_marker_awesome_icon_color']          = '';
-  $newdefaults['comment_marker_awesome_icon_spin']           = FALSE;
+  $newdefaults['comment_marker_awesome_icon_spin']           = '';
+  $newdefaults['comment_marker_awesome_icon_pulse']          = '';
   $newdefaults['comment_marker_awesome_marker_color']        = '';
   $newdefaults['comment_marker_awesome_icon_type']           = 'b';
   $newdefaults['comment_marker_awesome_icon_size']           = '';
@@ -4902,9 +4908,10 @@ function getlocations_leaflet_awesome_markers_elements_get($defaults, $labels = 
     t('These Icon modifiers are only applied when "Icon only" has been selected in Awesome icon type.')
   );
 
-  $form[$prefix . 'awesome_icon_spin'] = getlocations_element_map_checkbox(
+  $form[$prefix . 'awesome_icon_spin'] = getlocations_element_dd(
     $labels['awesome_icon_spin'],
-    (isset($defaults[$prefix . 'awesome_icon_spin']) ? $defaults[$prefix . 'awesome_icon_spin'] : $defaults['awesome_icon_spin'])
+    (isset($defaults[$prefix . 'awesome_icon_spin']) ? $defaults[$prefix . 'awesome_icon_spin'] : $defaults['awesome_icon_spin']),
+    array('' => t('Normal'), 'fa-spin' => t('Spin'), 'fa-pulse' => t('Pulse'))
   );
 
   $form[$prefix . 'awesome_marker_color'] = getlocations_element_dd(
@@ -4967,7 +4974,7 @@ function getlocations_leaflet_awesome_marker_get($defaults, $prefix = '') {
       $class[] = $iconsize;
     }
     if ($spin) {
-      $class[] = 'fa-spin';
+      $class[] = $spin;
     }
     if ($flip) {
       $class[] = $flip;

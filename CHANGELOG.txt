@@ -1,9 +1,52 @@
-commit 1af91bb
+commit 50e5c78
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Apr 23 19:22:17 2015 +0100
+
+    fix misplaced message, see #2142689
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 8ab8464
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 15 20:50:21 2015 +0100
+
+    tidy up
+
+js/getlocations_geo.js
+
+commit 784fde3
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Apr 15 20:50:07 2015 +0100
+
+    added language variable
+
+modules/getlocations_feeds/getlocations_feeds.module
+
+commit 70ae551
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Apr 5 14:35:17 2015 +0100
+
+    make gps available to other modules
+
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit abe5720
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Apr 5 14:32:31 2015 +0100
+
+    edit README
+
+README.txt
+
+commit fc68b65
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sun Mar 15 18:26:57 2015 +0000
 
     added loading gif
 
+CHANGELOG.txt
 modules/getlocations_search/getlocations_search.module
 modules/getlocations_search/js/getlocations_search.js
 modules/getlocations_search/js/getlocations_search.min.js

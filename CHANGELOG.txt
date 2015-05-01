@@ -1,9 +1,19 @@
-commit 50e5c78
+commit f285925
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri May 1 08:50:36 2015 +0100
+
+    fixed bug in function setupNewMap in getlocations.js
+
+js/getlocations.js
+js/getlocations.min.js
+
+commit ba40bf5
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Thu Apr 23 19:22:17 2015 +0100
 
     fix misplaced message, see #2142689
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 8ab8464

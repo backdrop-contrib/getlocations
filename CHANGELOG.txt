@@ -1,9 +1,28 @@
-commit 15c2709
+commit fc809ec
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jun 13 13:40:54 2015 +0100
+
+    more gps fixes
+
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit 8f8d6ed
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jun 13 09:22:37 2015 +0100
+
+    fixed empty bubble bug
+
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit 7474b8e
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Fri Jun 12 14:46:59 2015 +0100
 
     fixed gps detect bug
 
+CHANGELOG.txt
 modules/getlocations_gps/js/getlocations_gps.js
 modules/getlocations_gps/js/getlocations_gps.min.js
 

@@ -90,6 +90,8 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['nodezoom']              = array('default' => $getlocations_defaults['nodezoom']);
     $options['markeraction']          = array('default' => $getlocations_defaults['markeraction']);
     $options['markeractiontype']      = array('default' => $getlocations_defaults['markeractiontype']);
+    $options['markeraction_click_zoom']   = array('default' => $getlocations_defaults['markeraction_click_zoom']);
+    $options['markeraction_click_center'] = array('default' => $getlocations_defaults['markeraction_click_center']);
     $options['markermanagertype']     = array('default' => $getlocations_defaults['markermanagertype']);
     $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
     $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
@@ -403,12 +405,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       );
     }
 
-    $form['markeractiontype'] = getlocations_element_map_markeractiontype(
-      $this->options['markeractiontype']
-    );
-    $form['markeraction'] = getlocations_element_map_markeraction(
-      $this->options['markeraction']
-    );
+    $form += getlocations_markeraction_form($this->options);
 
     if (module_exists('getdirections')) {
       $form['getdirections_link'] = getlocations_element_map_checkbox(

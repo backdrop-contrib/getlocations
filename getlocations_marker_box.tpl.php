@@ -41,22 +41,16 @@
 </style>
 <?php
   $title = t('Getlocations marker');
-  if (isset($content['cat'])) {
-    if ($content['cat'] == 'n') {
-      $title = t('Getlocations Node marker');
-    }
-    elseif ($content['cat'] == 'u') {
-      $title = t('Getlocations User marker');
-    }
-    elseif ($content['cat'] == 'v') {
-      $title = t('Getlocations Vocabulary marker');
-    }
-    elseif ($content['cat'] == 'c') {
-      $title = t('Getlocations Comment marker');
-    }
-    elseif ($content['cat'] == 'i') {
-      $title = t('Getlocations Input marker');
-    }
+  $titles = array(
+    'n' => t('Getlocations Node marker'),
+    'u' => t('Getlocations User marker'),
+    'v' => t('Getlocations Vocabulary marker'),
+    'c' => t('Getlocations Comment marker'),
+    'i' => t('Getlocations Input marker'),
+    'g' => t('Getlocations GPS marker')
+  );
+  if (isset($content['cat']) && isset($titles[$content['cat']])) {
+    $title = $titles[$content['cat']];
   }
 ?>
 </head>

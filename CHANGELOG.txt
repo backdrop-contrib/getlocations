@@ -1,9 +1,169 @@
-commit fc809ec
+commit 69a9785
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Jun 24 10:15:17 2015 +0100
+
+    js tidyup
+
+js/getlocations.js
+js/getlocations.min.js
+js/getlocations_admin.js
+js/getlocations_admin.min.js
+js/getlocations_box.js
+js/getlocations_box.min.js
+js/getlocations_categories.js
+js/getlocations_categories.min.js
+js/getlocations_circles.js
+js/getlocations_circles.min.js
+js/getlocations_colorbox.js
+js/getlocations_colorbox.min.js
+js/getlocations_geo.js
+js/getlocations_geo.min.js
+js/getlocations_marker_box.js
+js/getlocations_marker_box.min.js
+js/getlocations_polygons.js
+js/getlocations_polygons.min.js
+js/getlocations_polylines.js
+js/getlocations_polylines.min.js
+js/getlocations_preview.js
+js/getlocations_preview.min.js
+js/getlocations_rectangles.js
+js/getlocations_rectangles.min.js
+js/getlocations_search_places.js
+js/getlocations_search_places.min.js
+js/getlocations_views.js
+js/getlocations_views.min.js
+js/icons.js
+js/icons.min.js
+modules/getlocations_blocks/js/getlocations_blocks.js
+modules/getlocations_blocks/js/getlocations_blocks.min.js
+modules/getlocations_blocks/js/getlocations_blocks_admin.js
+modules/getlocations_blocks/js/getlocations_blocks_admin.min.js
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+modules/getlocations_fields/js/getlocations_fields_admin.js
+modules/getlocations_fields/js/getlocations_fields_admin.min.js
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+modules/getlocations_fields/js/getlocations_fields_formatter.min.js
+modules/getlocations_fields/js/getlocations_fields_preview.js
+modules/getlocations_fields/js/getlocations_fields_preview.min.js
+modules/getlocations_fields/js/getlocations_fields_search_views.js
+modules/getlocations_fields/js/getlocations_fields_search_views.min.js
+modules/getlocations_fields/js/getlocations_fields_streetview.js
+modules/getlocations_fields/js/getlocations_fields_streetview.min.js
+modules/getlocations_fields/js/getlocations_fields_views.js
+modules/getlocations_fields/js/getlocations_fields_views.min.js
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_circles.js
+modules/getlocations_leaflet/js/getlocations_leaflet_circles.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_geojson.js
+modules/getlocations_leaflet/js/getlocations_leaflet_geojson.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_polygons.js
+modules/getlocations_leaflet/js/getlocations_leaflet_polygons.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_polylines.js
+modules/getlocations_leaflet/js/getlocations_leaflet_polylines.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_preview.js
+modules/getlocations_leaflet/js/getlocations_leaflet_preview.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.js
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_rectangles.js
+modules/getlocations_leaflet/js/getlocations_leaflet_rectangles.min.js
+modules/getlocations_map/js/getlocations_map_formatter.js
+modules/getlocations_mapquest/js/getlocations_mapquest_formatter.js
+modules/getlocations_mapquest/js/getlocations_mapquest_formatter.min.js
+modules/getlocations_mapquest/js/getlocations_mapquest_preview.js
+modules/getlocations_mapquest/js/getlocations_mapquest_preview.min.js
+modules/getlocations_search/js/getlocations_search.js
+modules/getlocations_search/js/getlocations_search.min.js
+modules/getlocations_search/js/getlocations_search_admin.js
+modules/getlocations_search/js/getlocations_search_admin.min.js
+
+commit 3fd862b
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Jun 22 20:56:46 2015 +0100
+
+    improved gps
+
+getlocations.module
+getlocations_marker_box.tpl.php
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+modules/getlocations_search/getlocations_search.module
+
+commit 4e683b5
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sat Jun 20 09:05:45 2015 +0100
+
+    added center and zoom to gps
+
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_gps/getlocations_gps.module
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+modules/getlocations_map/getlocations_map.module
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit c5a70b8
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Jun 18 20:27:59 2015 +0100
+
+    improved markeraction
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations.js
+js/getlocations.min.js
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+views/getlocations_plugin_style_map.inc
+
+commit 8804bc2
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Jun 18 20:26:15 2015 +0100
+
+    fixed bug in getlocations_gps
+
+modules/getlocations_gps/js/getlocations_gps.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+
+commit ac79783
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Jun 18 20:24:42 2015 +0100
+
+    added support for div format
+
+js/getlocations_field_group.js
+js/getlocations_field_group.min.js
+
+commit e6ce777
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Jun 15 12:03:36 2015 +0100
+
+    added get_marker_from_latlon
+
+js/getlocations.js
+
+commit 4b61c46
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Jun 15 12:03:08 2015 +0100
+
+    tidyup
+
+modules/getlocations_gps/getlocations_gps.module
+
+commit 547211c
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sat Jun 13 13:40:54 2015 +0100
 
     more gps fixes
 
+CHANGELOG.txt
 modules/getlocations_gps/js/getlocations_gps.js
 modules/getlocations_gps/js/getlocations_gps.min.js
 

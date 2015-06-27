@@ -620,6 +620,7 @@
       lonout = infoarr[4];
       distance_meters = infoarr[5];
       locationct = 0;
+      markerdata = [];
       for (var i = 0; i < locations.length; i++) {
         lidkey = 'nid';
         lid = 0;
@@ -655,6 +656,7 @@
           // make a marker
           marker = Drupal.getlocations.makeMarker(map, gs, locations[i].latitude, locations[i].longitude, lid, title, lidkey, '', '', mkey);
           search_markersArray.push(marker);
+          markerdata.push(locations[i].latitude + ',' + locations[i].longitude + ',' + lid);
         }
         locationct++;
       }
@@ -684,6 +686,7 @@
       $("#getlocations_search_slat_" + mkey).html(slat);
       $("#getlocations_search_slon_" + mkey).html(slon);
       $("#getlocations_search_sunit_" + mkey).html(units);
+      $("#getlocations_search_markerdata_" + mkey).html(markerdata.join('|'));
 
       if (! gs.showall) {
         // markermanagers add batchr
@@ -738,6 +741,32 @@
       // search area shape
       if (gs.search_radshape_enable) {
         makeRadShape(slat, slon, distance_meters, gs, mkey);
+      }
+
+      // show_maplinks
+      if (gs.show_maplinks && gs.show_maplinks_viewport && (gs.useInfoWindow || gs.useInfoBubble || gs.useLink)) {
+        google.maps.event.addListener(map, 'bounds_changed', function() {
+          var b = map.getBounds();
+          var md1 = $("#getlocations_search_markerdata_" + mkey).html();
+          if (md1 !== '') {
+            var md2 = md1.split("|");
+            for (var i = 0; i < md2.length; i++) {
+              var md3 = md2[i].split(',');
+              var lat = md3[0];
+              var lon = md3[1];
+              var lid = md3[2];
+              var p = new google.maps.LatLng(lat, lon);
+              // is this point within the bounds?
+              if (b.contains(p)) {
+                // hide and show the links for markers in the current viewport
+                $("li a.lid-" + lid).show();
+              }
+              else {
+                $("li a.lid-" + lid).hide();
+              }
+            }
+          }
+        });
       }
 
     });

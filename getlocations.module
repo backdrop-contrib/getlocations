@@ -1579,6 +1579,14 @@ function getlocations_defaults($reset = FALSE) {
     'gps_center'                    => 0,
     'gps_type'                      => 0,
     'gps_zoom'                      => -1,
+    'smartip_button'                => 0,
+    'smartip_button_label'          => '',
+    'smartip_marker_title'          => '',
+    'smartip_marker'                => '',
+    'smartip_bubble'                => 0,
+    'smartip_center'                => 0,
+    'smartip_zoom'                  => -1,
+    'smartip_callback'              => 'getlocations_smartip/callback',
     'geolocation_mobile_check'      => 1,
     'is_https'                      => ($is_https ? 1 : 0),
     'show_search_distance'          => 0,
@@ -2951,6 +2959,11 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     $getlocations_gps_defaults = getlocations_gps_defaults($defaults);
     getlocations_gps_js_settings_do($getlocations_gps_defaults, $mapid);
   }
+  // getlocations_smartip
+  if (module_exists('getlocations_smartip') && isset($defaults['smartip_button']) && $defaults['smartip_button']) {
+    $getlocations_smartip_defaults = getlocations_smartip_defaults($defaults);
+    getlocations_smartip_js_settings_do($getlocations_smartip_defaults, $mapid);
+  }
 
 }
 
@@ -4232,6 +4245,12 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     else {
       $form['geolocation_mobile_check'] = array('#type' => 'value', '#value' => 0);
     }
+
+    // getlocations_smartip
+    if (module_exists('getlocations_smartip')) {
+      $form += getlocations_smartip_map_display_options_form($defaults);
+    }
+
 
     $form['sv_show'] = getlocations_element_map_checkbox(
       t('Show streetview Pegman'),
@@ -7078,6 +7097,11 @@ function theme_getlocations_show($variables) {
     $buttons[] = theme('getlocations_gps_button', array('defaults' => $defaults, 'mapid' => $mapid));
   }
 
+  // getlocations_smartip
+  if (module_exists('getlocations_smartip')) {
+    $buttons[] = theme('getlocations_smartip_button', array('defaults' => $defaults, 'mapid' => $mapid));
+  }
+
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons container-inline">';
     $output .= implode('&nbsp;', $buttons);
@@ -7384,7 +7408,7 @@ function theme_getlocations_settings_form($variables) {
           $form['getlocations_default']['vocabulary_map_marker']['#field_suffix'] = '&nbsp;' . $link;
         }
         if (isset($form['getlocations_default']['term_map_marker'])) {
-          $link = getlocations_markerpicker_link($form['getlocations_default']['term_map_marker']['#id'], 'v');
+          $link = getlocations_markerpicker_link($form['getlocations_default']['term_map_marker']['#id'], 't');
           $form['getlocations_default']['term_map_marker']['#field_suffix'] = '&nbsp;' . $link;
         }
       }
@@ -7429,7 +7453,7 @@ function theme_getlocations_settings_form($variables) {
             foreach ($terms AS $term) {
               $tid = $term->tid;
               if (isset($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker'])) {
-                $link = getlocations_markerpicker_link($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#id'], 'n');
+                $link = getlocations_markerpicker_link($form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#id'], 't');
                 $form['getlocations_term_marker']['vid'][$vid]['term'][$tid]['map_marker']['#field_suffix'] = '&nbsp;' . $link;
                 if (! $tct) {
                   $v = taxonomy_vocabulary_load($vid);
@@ -7450,6 +7474,21 @@ function theme_getlocations_settings_form($variables) {
 
   $form['getlocations_default']['usemarkermanager']['#prefix'] = '<div id="wrap-getlocations-markeropts">';
   $form['getlocations_default']['maxzoom']['#suffix'] = '</div>';
+
+
+  if (isset($form['getlocations_default']['gps_button']) && $form['getlocations_default']['gps_button']['#type'] !== 'value' ) {
+    $form['getlocations_default']['gps_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['gps_center']['#suffix'];
+    $form['getlocations_default']['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['getlocations_default']['smartip_button']) && $form['getlocations_default']['smartip_button']['#type'] !== 'value' ) {
+   $form['getlocations_default']['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['smartip_center']['#suffix'];
+    $form['getlocations_default']['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+
 
   // preview
   $getlocations_defaults = getlocations_defaults();
@@ -7501,7 +7540,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
         }
       }
       if (isset($form['user_map_marker'])) {
-        $link = getlocations_markerpicker_link($form['user_map_marker']['#id'], 'n');
+        $link = getlocations_markerpicker_link($form['user_map_marker']['#id'], 'u');
         $form['user_map_marker']['#field_suffix'] = '&nbsp;' . $link;
       }
 
@@ -7515,12 +7554,12 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
           foreach ($types AS $type => $name) {
             $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
             $mkey = 'vocabulary_marker_' . $field_name;
-            $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
+            $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'v');
             $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
           }
         }
         if (isset($form['term_map_marker'])) {
-          $link = getlocations_markerpicker_link($form['term_map_marker']['#id'], 'v');
+          $link = getlocations_markerpicker_link($form['term_map_marker']['#id'], 't');
           $form['term_map_marker']['#field_suffix'] = '&nbsp;' . $link;
         }
         $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
@@ -7533,7 +7572,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
               $name = $term->name;
               $tid = $term->tid;
               $mkey = 'term_marker_' . $tid;
-              $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
+              $link = getlocations_markerpicker_link($form[$mkey]['#id'], 't');
               $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
             }
           }
@@ -7541,13 +7580,18 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
       }
 
       if (isset($form['comment_map_marker'])) {
-        $link = getlocations_markerpicker_link($form['comment_map_marker']['#id'], 'n');
+        $link = getlocations_markerpicker_link($form['comment_map_marker']['#id'], 'c');
         $form['comment_map_marker']['#field_suffix'] = '&nbsp;' . $link;
       }
 
       if (isset($form['gps_marker'])) {
         $link = getlocations_markerpicker_link($form['gps_marker']['#id'], 'g');
         $form['gps_marker']['#field_suffix'] = '&nbsp;' . $link;
+      }
+
+      if (isset($form['smartip_marker'])) {
+        $link = getlocations_markerpicker_link($form['smartip_marker']['#id'], 'm');
+        $form['smartip_marker']['#field_suffix'] = '&nbsp;' . $link;
       }
 
     }
@@ -7557,6 +7601,12 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
     $form['gps_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
     $tsuf = $form['gps_center']['#suffix'];
     $form['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['smartip_button']) && $form['smartip_button']['#type'] !== 'value' ) {
+   $form['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['smartip_center']['#suffix'];
+    $form['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
   }
 
   $output = drupal_render_children($form);

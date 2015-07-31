@@ -35,6 +35,9 @@ function getlocations_fields_element_origin($default, $distance=FALSE) {
   if ($distance) {
     $options += array('distance_arg' => t("Lat/Lon from views argument"));
   }
+  if (module_exists('getlocations_gps')) {
+    $options += array('gps' => t("Lat/Lon from Getlocations GPS"));
+  }
   $options += array(
     'user' => t("User's Lat/Lon (blank if unset)"),
     'hybrid' => t("User's Lat/Lon (fall back to Static if unset)"),

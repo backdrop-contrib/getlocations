@@ -1,9 +1,111 @@
-commit fe45e5b
+commit ea58b6a
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Aug 18 11:14:23 2015 +0100
+
+    codereview fixes
+
+getlocations.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit ac0fb70
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Aug 18 09:38:58 2015 +0100
+
+    added what3words support
+
+getlocations.admin.inc
+getlocations.module
+js/getlocations_admin.js
+js/getlocations_admin.min.js
+js/getlocations_views.js
+js/getlocations_views.min.js
+js/getlocations_what3words.js
+js/getlocations_what3words.min.js
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_what3words.js
+modules/getlocations_leaflet/js/getlocations_leaflet_what3words.min.js
+views/getlocations_plugin_style_map.inc
+
+commit bab8a71
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Aug 12 15:49:56 2015 +0100
+
+    fixed geocoder
+
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+
+commit a0b4481
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Wed Aug 12 12:18:05 2015 +0100
+
+    added show_maplinks_viewport
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet.min.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.min.js
+
+commit 8defd07
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Aug 9 21:31:22 2015 +0100
+
+    updated leaflet plugins
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/plugins/bouncemarker/bouncemarker.js
+modules/getlocations_leaflet/plugins/bouncemarker/bouncemarker.min.js
+modules/getlocations_leaflet/plugins/fullscreen/Control.FullScreen.css
+modules/getlocations_leaflet/plugins/fullscreen/Control.FullScreen.js
+modules/getlocations_leaflet/plugins/fullscreen/Control.FullScreen.min.css
+modules/getlocations_leaflet/plugins/fullscreen/Control.FullScreen.min.js
+modules/getlocations_leaflet/plugins/fullscreen/icon-fullscreen-2x.png
+modules/getlocations_leaflet/plugins/fullscreen/icon-fullscreen.png
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.css
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.js
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.min.css
+modules/getlocations_leaflet/plugins/geocoder/Control.Geocoder.min.js
+modules/getlocations_leaflet/plugins/geocoder/images/geocoder.png
+modules/getlocations_leaflet/plugins/graticule/L.Graticule.js
+modules/getlocations_leaflet/plugins/markercluster/leaflet.markercluster-src.js
+modules/getlocations_leaflet/plugins/markercluster/leaflet.markercluster.js
+modules/getlocations_leaflet/plugins/minimap/L.Control.Layers.Minimap.js
+modules/getlocations_leaflet/plugins/minimap/L.Control.Layers.Minimap.min.js
+modules/getlocations_leaflet/plugins/minimap/control.layers.minimap.css
+modules/getlocations_leaflet/plugins/minimap/control.layers.minimap.min.css
+modules/getlocations_leaflet/plugins/pancontrol/L.Control.Pan.css
+modules/getlocations_leaflet/plugins/pancontrol/L.Control.Pan.ie.css
+modules/getlocations_leaflet/plugins/pancontrol/L.Control.Pan.ie.min.css
+modules/getlocations_leaflet/plugins/pancontrol/L.Control.Pan.js
+modules/getlocations_leaflet/plugins/pancontrol/L.Control.Pan.min.css
+modules/getlocations_leaflet/plugins/pancontrol/L.Control.Pan.min.js
+modules/getlocations_leaflet/plugins/terminator/L.Terminator.js
+modules/getlocations_leaflet/plugins/terminator/L.Terminator.min.js
+modules/getlocations_leaflet/plugins/zoomslider/L.Control.Zoomslider.css
+modules/getlocations_leaflet/plugins/zoomslider/L.Control.Zoomslider.js
+modules/getlocations_leaflet/plugins/zoomslider/L.Control.Zoomslider.min.css
+modules/getlocations_leaflet/plugins/zoomslider/L.Control.Zoomslider.min.js
+
+commit ffc87b7
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Fri Aug 7 11:10:06 2015 +0100
+
+    new cdn for leafletjs
+
+drush/getlocations.drush.inc
+
+commit d9d64c5
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Wed Aug 5 15:58:34 2015 +0100
 
     fixed namefield
 
+CHANGELOG.txt
 modules/getlocations_fields/js/getlocations_fields.js
 modules/getlocations_fields/js/getlocations_fields.min.js
 

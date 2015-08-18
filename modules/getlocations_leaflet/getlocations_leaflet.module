@@ -574,7 +574,7 @@ function getlocations_leaflet_field_formatter_view($entity_type, $entity, $field
                   $field_names = getlocations_get_fieldname2($type, 'node');
                   foreach ($field_names AS $field_name) {
                     if ($field_name == $locative_field_name) {
-                      $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+                      $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
                       $vicon = getlocations_leaflet_awesome_marker_get($settings, $mkey);
                       $per_field_markers = TRUE;
                     }
@@ -3550,7 +3550,7 @@ function getlocations_leaflet_settings_form() {
       $desc .= '&nbsp;' . t('Using version !v', array('!v' => $leaflet_version));
     }
   }
-  elseif( $getlocations_leaflet_cdn['enable']) {
+  elseif ( $getlocations_leaflet_cdn['enable']) {
     $desc = t('The Leaflet library is being hosted on CDN.');
   }
   else {
@@ -3789,7 +3789,7 @@ function getlocations_leaflet_settings_form() {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
             $label = t('%name Map marker, field %field' , array('%name' => $name, '%field' => $field_name));
-            $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+            $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
             $labels = array(
               'awesome_icon'         => t($label . ' Awesome icon'),
               'awesome_icon_color'   => t($label . ' Awesome icon color'),
@@ -4150,7 +4150,7 @@ function getlocations_leaflet_entity_type_map($type, $entity_id) {
               $field_names = getlocations_get_fieldname2($type, 'node');
               foreach ($field_names AS $field_name) {
                 if ($field_name == $locative_field_name) {
-                  $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+                  $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
                   $vicon = getlocations_leaflet_awesome_marker_get($getlocations_leaflet_defaults, $mkey);
                   $per_field_markers = TRUE;
                 }

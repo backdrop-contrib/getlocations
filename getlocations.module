@@ -7699,7 +7699,7 @@ function theme_getlocations_settings_form($variables) {
   }
 
   if (isset($form['getlocations_default']['smartip_button']) && $form['getlocations_default']['smartip_button']['#type'] !== 'value' ) {
-   $form['getlocations_default']['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
+    $form['getlocations_default']['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
     $tsuf = $form['getlocations_default']['smartip_center']['#suffix'];
     $form['getlocations_default']['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
   }
@@ -7818,7 +7818,7 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
   }
 
   if (isset($form['smartip_button']) && $form['smartip_button']['#type'] !== 'value' ) {
-   $form['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
+    $form['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
     $tsuf = $form['smartip_center']['#suffix'];
     $form['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
   }

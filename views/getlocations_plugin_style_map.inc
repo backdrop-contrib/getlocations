@@ -234,6 +234,21 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['views_search_radshape_toggle_active'] = array('default' => $getlocations_defaults['views_search_radshape_toggle_active']);
     $options['views_search_center']                 = array('default' => $getlocations_defaults['views_search_center']);
 
+    // what3words
+    $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => ''));
+    if ($what3words_lic['key'] ) {
+      $options['what3words_key']         = array('default' =>  $what3words_lic['key']);
+      $options['what3words_enable']      = array('default' =>  $getlocations_defaults['what3words_enable']);
+      $options['what3words_search']      = array('default' =>  $getlocations_defaults['what3words_search']);
+      $options['what3words_map_marker']  = array('default' =>  $getlocations_defaults['what3words_map_marker']);
+      $options['what3words_center']      = array('default' =>  $getlocations_defaults['what3words_center']);
+      $options['what3words_zoom']        = array('default' =>  $getlocations_defaults['what3words_zoom']);
+      $options['what3words_show']        = array('default' =>  $getlocations_defaults['what3words_show']);
+      $options['what3words_marker_show'] = array('default' =>  $getlocations_defaults['what3words_marker_show']);
+      $options['what3words_click']       = array('default' =>  $getlocations_defaults['what3words_click']);
+      $options['what3words_size']        = array('default' =>  $getlocations_defaults['what3words_size']);
+    }
+
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {

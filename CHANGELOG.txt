@@ -1,9 +1,26 @@
-commit 0642750
+commit 7f12656
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Aug 25 08:33:00 2015 +0100
+
+    added marker to available columns for token
+
+modules/getlocations_fields/getlocations_fields.functions.inc
+
+commit 41e5141
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Tue Aug 25 08:31:27 2015 +0100
+
+    fix table name bug, see #2546110
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit ce3b213
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Sun Aug 23 16:32:18 2015 +0100
 
     fixed current-user in tokens
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.functions.inc
 
 commit 696246f

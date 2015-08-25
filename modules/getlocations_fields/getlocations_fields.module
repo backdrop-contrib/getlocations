@@ -2409,7 +2409,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
         $query->condition('e.vid', $id)->condition('n.status', 0, '>');
       }
       elseif ($key == 'uid') {
-        $query->join('user', 'n', 'n.uid = e.uid');
+        $query->join('users', 'n', 'n.uid = e.uid');
         $query->condition('e.uid', $id)->condition('n.status', 0, '>');
       }
       elseif (module_exists('comment') && $key == 'cid') {
@@ -2525,7 +2525,7 @@ function getlocations_fields_load_location($glid) {
         $query->condition('e.vid', $id)->condition('n.status', 0, '>');
       }
       elseif ($key == 'uid') {
-        $query->join('user', 'n', 'n.uid = e.uid');
+        $query->join('users', 'n', 'n.uid = e.uid');
         $query->condition('e.uid', $id)->condition('n.status', 0, '>');
       }
       elseif (module_exists('comment') && $key == 'cid') {

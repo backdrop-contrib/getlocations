@@ -2515,24 +2515,24 @@ function getlocations_fields_load_location($glid) {
     $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
 
-    if (! in_array('administrator', $roles)) {
-      if ($key == 'nid') {
-        $query->join('node', 'n', 'n.nid = e.nid');
-        $query->condition('e.nid', $id)->condition('n.status', 0, '>');
-      }
-      elseif ($key == 'vid') {
-        $query->join('node_revision', 'n', 'n.vid = e.vid');
-        $query->condition('e.vid', $id)->condition('n.status', 0, '>');
-      }
-      elseif ($key == 'uid') {
-        $query->join('users', 'n', 'n.uid = e.uid');
-        $query->condition('e.uid', $id)->condition('n.status', 0, '>');
-      }
-      elseif (module_exists('comment') && $key == 'cid') {
-        $query->join('comment', 'n', 'n.cid = e.cid');
-        $query->condition('e.cid', $id)->condition('n.status', 0, '>');
-      }
-    }
+#    if (! in_array('administrator', $roles)) {
+#      if ($key == 'nid') {
+#        $query->join('node', 'n', 'n.nid = e.nid');
+#        $query->condition('e.nid', $id)->condition('n.status', 0, '>');
+#      }
+#      elseif ($key == 'vid') {
+#        $query->join('node_revision', 'n', 'n.vid = e.vid');
+#        $query->condition('e.vid', $id)->condition('n.status', 0, '>');
+#      }
+#      elseif ($key == 'uid') {
+#        $query->join('users', 'n', 'n.uid = e.uid');
+#        $query->condition('e.uid', $id)->condition('n.status', 0, '>');
+#      }
+#      elseif (module_exists('comment') && $key == 'cid') {
+#        $query->join('comment', 'n', 'n.cid = e.cid');
+#        $query->condition('e.cid', $id)->condition('n.status', 0, '>');
+#      }
+#    }
 
     $query->condition('f.glid', $glid);
     $row = $query->execute()->fetchObject();

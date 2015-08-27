@@ -1,9 +1,20 @@
-commit 7f12656
+commit 2d0826d
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Thu Aug 27 08:56:47 2015 +0100
+
+    fixed drupal updatye bug #2556379
+
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields.min.js
+
+commit 17973f1
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Tue Aug 25 08:33:00 2015 +0100
 
     added marker to available columns for token
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.functions.inc
 
 commit 41e5141

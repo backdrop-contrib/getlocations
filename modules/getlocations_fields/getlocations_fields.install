@@ -230,6 +230,9 @@ function getlocations_fields_enable() {
  * Add marker field.
  */
 function getlocations_fields_update_7100() {
+  if ($result = db_field_exists('getlocations_fields', 'marker')) {
+    return;
+  }
   $spec = array(
     'description' => 'Marker.',
     'type' => 'varchar',

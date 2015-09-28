@@ -1,9 +1,49 @@
-commit 7f6280b
+commit ec9d6ef
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Sep 28 19:03:01 2015 +0100
+
+    added old_controlstyle option
+
+getlocations.module
+js/getlocations.js
+js/getlocations.min.js
+
+commit 5fb78ff
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Mon Sep 28 19:01:58 2015 +0100
+
+    edited some descriptions
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 3a26266
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Sep 13 09:15:39 2015 +0100
+
+    more w3w
+
+getlocations.admin.inc
+getlocations.module
+modules/getlocations_fields/getlocations_fields.css
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+views/getlocations_plugin_style_map.inc
+
+commit b379d24
+Author: hutch <hutch@52366.no-reply.drupal.org>
+Date:   Sun Sep 13 09:15:17 2015 +0100
+
+    update fix
+
+modules/getlocations_fields/getlocations_fields.install
+
+commit f6182bc
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Tue Sep 1 09:53:32 2015 +0100
 
     fix bug #2560885
 
+CHANGELOG.txt
 js/getlocations.js
 js/getlocations.min.js
 

@@ -520,7 +520,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['mapwidth'] = getlocations_element_map_tf(
     t('Input form Map width'),
     $settings['mapwidth'],
-    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
+    t('The width of a map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
     TRUE
@@ -530,7 +530,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['mapheight'] = getlocations_element_map_tf(
     t('Input form Map height'),
     $settings['mapheight'],
-    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
+    t('The height of a map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
     TRUE
@@ -540,7 +540,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['latlong'] = getlocations_element_map_tf(
     t('Input form Map center'),
     $settings['latlong'],
-    t('The default center coordinates of a Google map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0'),
+    t('The default center coordinates of a map, expressed as a decimal latitude and longitude, separated by a comma. This must not be 0,0'),
     40,
     50,
     TRUE
@@ -580,7 +580,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   $form['zoom'] = getlocations_element_map_zoom(
     t('Zoom'),
     $settings['zoom'],
-    t('The default zoom level of a Google map.')
+    t('The default zoom level of a map.')
   );
 
   $form += getlocations_map_display_options_form($settings, FALSE, FALSE);
@@ -3742,7 +3742,7 @@ function getlocations_fields_display_settings_form($defaults) {
   $form['display_mapwidth'] = getlocations_element_map_tf(
     t('Map width'),
     $defaults['display_mapwidth'],
-    t('The width of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
+    t('The width of a map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
     TRUE
@@ -3750,7 +3750,7 @@ function getlocations_fields_display_settings_form($defaults) {
   $form['display_mapheight'] = getlocations_element_map_tf(
     t('Map height'),
     $defaults['display_mapheight'],
-    t('The height of a Google map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
+    t('The height of a map, as a CSS length or percentage. Examples: <em>50px</em>, <em>5em</em>, <em>2.5in</em>, <em>95%</em>'),
     10,
     10,
     TRUE

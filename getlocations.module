@@ -4133,7 +4133,7 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
     10,
     TRUE
   );
-////////
+
   if ( isset($defaults['google_old_controlstyle_show']) && $defaults['google_old_controlstyle_show']) {
     $form['google_old_controlstyle'] = getlocations_element_map_checkbox(
       t('Use the old style of controls on the map'),
@@ -4146,7 +4146,7 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
     $form['google_old_controlstyle'] = array('#type' => 'value', '#value' => 0);
     $form['google_old_controlstyle_show'] = array('#type' => 'value', '#value' => 0);
   }
-////////
+
   // map_resize
   $form['map_resize'] = getlocations_element_map_checkbox(
     t('Automatic map resize'),

@@ -297,12 +297,13 @@ function getlocations_map_field_formatter_view($entity_type, $entity, $field, $i
           $entity_get_info = entity_get_info($entity_type);
           $entity_key = $entity_get_info['entity keys']['id']; // nid, cid, uid etc
           $entity_id = $entity->{$entity_key};
+
           if (empty($title)) {
             $title = (isset($entity->title) ? $entity->title : '');
           }
           $title = htmlspecialchars_decode(strip_tags($title), ENT_QUOTES);
           $minmaxes = getlocations_do_minmaxes($ct, $location, $minmaxes);
-          $latlons[] = array($lat, $lon, $entity_id, $title, $marker, $entity_key, '', '');
+          $latlons[] = array($lat, $lon, (isset($location['lid']) ? $location['lid'] : $entity_id), $title, $marker, $entity_key, '', '');
           $ct++;
         } // end lat lon check
       } // end foreach
@@ -564,6 +565,26 @@ function getlocations_map_field_formatter_settings_form($field, $instance, $view
       );
 
       $element += getlocations_map_display_options_form($settings, FALSE, TRUE);
+////
+      // markeraction
+      $element += getlocations_markeraction_form($settings);
+
+      if (module_exists('getdirections')) {
+        $element['getdirections_link'] = getlocations_element_map_checkbox(
+          t('Link to Getdirections in bubble'),
+          $settings['getdirections_link'],
+          t('Include a link to the Getdirections page in InfoBubble/InfoWindow.')
+        );
+      }
+
+      // views_search_marker etc
+      if (module_exists('views')) {
+        $element += getlocations_fields_views_search_form($settings);
+      }
+
+      // streetview overlay settings
+      $element += getlocations_fields_sv_control_form($settings);
+////
       break;
     case 'getlocations_map_link':
       $element['text'] = array(

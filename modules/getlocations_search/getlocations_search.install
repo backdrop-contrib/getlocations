@@ -15,6 +15,7 @@
 function getlocations_search_uninstall() {
   variable_del('getlocations_search_defaults');
   variable_del('getlocations_search_paths');
+  variable_del('getlocations_search_block');
 }
 
 /**

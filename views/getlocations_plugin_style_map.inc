@@ -80,9 +80,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['bicycleinfo_state']     = array('default' => $getlocations_defaults['bicycleinfo_state']);
     $options['transitinfo']           = array('default' => $getlocations_defaults['transitinfo']);
     $options['transitinfo_state']     = array('default' => $getlocations_defaults['transitinfo_state']);
-    $options['panoramio_use']         = array('default' => $getlocations_defaults['panoramio_use']);
-    $options['panoramio_show']        = array('default' => $getlocations_defaults['panoramio_show']);
-    $options['panoramio_state']       = array('default' => $getlocations_defaults['panoramio_state']);
     $options['places']                = array('default' => $getlocations_defaults['places']);
     $options['poi_show']              = array('default' => $getlocations_defaults['poi_show']);
     $options['transit_show']          = array('default' => $getlocations_defaults['transit_show']);
@@ -96,11 +93,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['markermanagertype']     = array('default' => $getlocations_defaults['markermanagertype']);
     $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
     $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
-    $options['weather_use']           = array('default' => $getlocations_defaults['weather_use']);
-    $options['weather_show']          = array('default' => $getlocations_defaults['weather_show']);
-    $options['weather_state']         = array('default' => $getlocations_defaults['weather_state']);
-    $options['weather_cloud']         = array('default' => $getlocations_defaults['weather_cloud']);
-    $options['weather_cloud_state']   = array('default' => $getlocations_defaults['weather_cloud_state']);
     $options['map_backgroundcolor']   = array('default' => $getlocations_defaults['map_backgroundcolor']);
     if (! $getlocations_defaults['markermanagertype']) {
       $options['usemarkermanager'] = 0;
@@ -248,6 +240,10 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $options['what3words_click']       = array('default' =>  $getlocations_defaults['what3words_click']);
       $options['what3words_size']        = array('default' =>  $getlocations_defaults['what3words_size']);
     }
+
+    // google_old_controlstyle
+    $options['google_old_controlstyle'] = array('default' =>  $getlocations_defaults['google_old_controlstyle']);
+    $options['google_old_controlstyle_show'] = array('default' =>  $getlocations_defaults['google_old_controlstyle_show']);
 
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));

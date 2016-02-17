@@ -241,10 +241,6 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $options['what3words_size']        = array('default' =>  $getlocations_defaults['what3words_size']);
     }
 
-    // google_old_controlstyle
-    $options['google_old_controlstyle'] = array('default' =>  $getlocations_defaults['google_old_controlstyle']);
-    $options['google_old_controlstyle_show'] = array('default' =>  $getlocations_defaults['google_old_controlstyle_show']);
-
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {

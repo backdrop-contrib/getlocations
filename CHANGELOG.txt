@@ -1,9 +1,39 @@
-commit 41a420d
+commit a959f15
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Mar 1 16:16:23 2016 +0000
+
+    added LICENSE.txt
+
+LICENSE.txt
+
+commit 177654a
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Mar 1 16:15:51 2016 +0000
+
+    re-instated google_old_controlstyle
+
+getlocations.module
+js/getlocations.js
+js/getlocations.min.js
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+views/getlocations_plugin_style_map.inc
+
+commit 4c2f138
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Mar 1 16:14:16 2016 +0000
+
+    updated getlocations drush
+
+drush/getlocations.drush.inc
+
+commit c37a5d6
 Author: hutch <hutch@52366.no-reply.drupal.org>
 Date:   Wed Feb 17 14:41:08 2016 +0000
 
     removed old_controlstyle
 
+CHANGELOG.txt
 getlocations.module
 js/getlocations.js
 js/getlocations.min.js

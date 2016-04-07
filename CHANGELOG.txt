@@ -1,9 +1,18 @@
-commit a959f15
+commit 876d466
+Author: hutch <hutch@arwystli.net>
+Date:   Thu Apr 7 14:14:12 2016 +0100
+
+    added lang to w3w function
+
+getlocations.module
+
+commit 8067d3a
 Author: hutch <hutch@arwystli.net>
 Date:   Tue Mar 1 16:16:23 2016 +0000
 
     added LICENSE.txt
 
+CHANGELOG.txt
 LICENSE.txt
 
 commit 177654a

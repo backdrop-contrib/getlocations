@@ -1005,7 +1005,7 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
  * Sets up the call to googlemaps, css and the relevant getlocations js in html head
  */
 function getlocations_setup_map($defaults, $googleonly = FALSE, $sv = FALSE, $keyonly = FALSE) {
-  static $getlocations_mapid = 0;
+  $getlocations_mapid = &drupal_static('getlocations_mapid', 0);
   // Generate unique Map ID.
   $getlocations_mapid++;
   $mapid = 'key_' . $getlocations_mapid;
@@ -2132,10 +2132,11 @@ function getlocations_cb_w3w_get($data, $type) {
     $key = $what3words_lic['key'];
     if ($key) {
       $url = $what3words_lic['url'] . '/' . $type;
-      $opts = array(
-        'method' => 'POST',
-        'headers' => array('Content-Type' => 'application/x-www-form-urlencoded')
-      );
+      #$opts = array(
+      #  'method' => 'POST',
+      #  'headers' => array('Content-Type' => 'application/x-www-form-urlencoded')
+      #);
+
       $datastr = 'key=' . $key;
       if ($type == 'position') {
         $datastr .= '&position=' . $data;
@@ -2144,8 +2145,9 @@ function getlocations_cb_w3w_get($data, $type) {
         $datastr .= '&string=' . $data;
       }
       $datastr .= '&lang=' . (isset($language->language ) ? $language->language : 'en');
-      $opts['data'] = $datastr;
-      $response = drupal_http_request($url, $opts);
+      #$opts['data'] = $datastr;
+      #$response = drupal_http_request($url, $opts);
+      $response = drupal_http_request($url . '?' . $datastr);
       if ($response->code == '200') {
         return $response->data;
       }

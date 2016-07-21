@@ -50,9 +50,6 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $options['styles']                = array('default' => '');
     $options['jquery_colorpicker_enabled'] = array('default' => 0);
 
-    $options['google_old_controlstyle_show'] = array('default' => 0);
-    $options['google_old_controlstyle'] = array('default' => 0);
-
     // node markers
     $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
@@ -134,10 +131,6 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       'width' => t('Width'),
       'height' => t('Height'),
     );
-
-    // force it
-    $this->options['google_old_controlstyle_show'] = 0;
-    $this->options['google_old_controlstyle'] = 0;
 
     $form += getlocations_map_display_basics_form($this->options, $labels);
     unset($form['map_resize']);

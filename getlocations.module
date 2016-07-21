@@ -1619,8 +1619,6 @@ function getlocations_defaults($reset = FALSE) {
     'what3words_show'        => 1,
     'what3words_click'       => 1,
     'what3words_path'        => 'getlocations/cb_w3w',
-    'google_old_controlstyle' => 0,
-    'google_old_controlstyle_show' => 1,
   );
 
   $providers = getlocations_get_map_providers();
@@ -2863,7 +2861,6 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'sv_scrollwheel'            => $defaults['sv_scrollwheel'],
       'sv_clicktogo'              => $defaults['sv_clicktogo'],
       'input_map_show'            => $defaults['input_map_show'],
-      'google_old_controlstyle'   => $defaults['google_old_controlstyle'],
      ),
   );
   // only set these if wanted
@@ -4112,19 +4109,6 @@ function getlocations_map_display_basics_form($defaults, $labels = array()) {
     10,
     TRUE
   );
-
-  if ( (isset($defaults['google_old_controlstyle_show']) && ! $defaults['google_old_controlstyle_show']) || ! isset($defaults['google_old_controlstyle_show'])) {
-    $form['google_old_controlstyle'] = array('#type' => 'value', '#value' => 0);
-    $form['google_old_controlstyle_show'] = array('#type' => 'value', '#value' => 0);
-  }
-  else {
-      $form['google_old_controlstyle'] = getlocations_element_map_checkbox(
-      t('Use the old style of controls on the map'),
-      (isset($defaults['google_old_controlstyle']) ? $defaults['google_old_controlstyle'] : 0),
-      t('Check this to retain the old style google map controls, this will no longer work after August 2016.')
-    );
-    $form['google_old_controlstyle_show'] = array('#type' => 'value', '#value' => 1);
-  }
 
   // map_resize
   $form['map_resize'] = getlocations_element_map_checkbox(
@@ -7593,6 +7577,54 @@ function theme_getlocations_settings_form($variables) {
     $form['getlocations_default']['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
     $tsuf = $form['getlocations_default']['smartip_center']['#suffix'];
     $form['getlocations_default']['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['getlocations_default']['highlight_enable']) && $form['getlocations_default']['highlight_enable']['#type'] !== 'value' ) {
+    $form['getlocations_default']['highlight_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Marker Highlighting') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['highlight_radius']['#suffix'];
+    $form['getlocations_default']['highlight_radius']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // google search places
+  if (isset($form['getlocations_default']['search_places']) && $form['getlocations_default']['search_places']['#type'] !== 'value' ) {
+    $form['getlocations_default']['search_places']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Google Search Places') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['search_places_dd']['#suffix'];
+    $form['getlocations_default']['search_places_dd']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // polygons
+  if (isset($form['getlocations_default']['polygons_enable']) && $form['getlocations_default']['polygons_enable']['#type'] !== 'value' ) {
+    $form['getlocations_default']['polygons_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['polygons_coords']['#suffix'];
+    $form['getlocations_default']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // rectangles
+  if (isset($form['getlocations_default']['rectangles_enable']) && $form['getlocations_default']['rectangles_enable']['#type'] !== 'value' ) {
+    $form['getlocations_default']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['rectangles_coords']['#suffix'];
+    $form['getlocations_default']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // circles
+  if (isset($form['getlocations_default']['circles_enable']) && $form['getlocations_default']['circles_enable']['#type'] !== 'value' ) {
+    $form['getlocations_default']['circles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['circles_coords']['#suffix'];
+    $form['getlocations_default']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // polylines
+  if (isset($form['getlocations_default']['polylines_enable']) && $form['getlocations_default']['polylines_enable']['#type'] !== 'value' ) {
+    $form['getlocations_default']['polylines_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['polylines_coords']['#suffix'];
+    $form['getlocations_default']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // what3words
+  if (isset($form['getlocations_default']['what3words_enable']) && $form['getlocations_default']['what3words_enable']['#type'] !== 'value' ) {
+    $form['getlocations_default']['what3words_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('What3words') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_default']['what3words_show']['#suffix'];
+    $form['getlocations_default']['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
   }
 
   // preview

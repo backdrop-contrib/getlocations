@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields_handler_filter_distance.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Views 3 support for getlocations_fields.
@@ -25,7 +25,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
     $options['origin']              = array('default' => 'nid_arg');
     $options['settings']['searchbox_size']          = array('default' => '60');
     $options['settings']['restrict_by_country']     = array('default' => 0);
-    $options['settings']['country']                 = array('default' => variable_get('site_default_country', ''));
+    $options['settings']['country']                 = array('default' => '');
     $options['settings']['display_search_distance'] = array('default' => 1);
     $options['settings']['display_search_units']    = array('default' => 1);
     $options['settings']['geocoder_enable']         = array('default' => 0);
@@ -134,7 +134,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       $countries = getlocations_get_countries_list();
       $form['settings']['country'] = getlocations_element_dd(
         t('Search country'),
-        (isset($this->options['settings']['country']) ? $this->options['settings']['country'] : variable_get('site_default_country', '')),
+        (isset($this->options['settings']['country']) ? $this->options['settings']['country'] : ''),
         $countries
       );
       $form['settings']['country']['#dependency'] = array('edit-options-origin' => array('search'));
@@ -153,11 +153,11 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
           $settings = array(
             'getlocations_fields_search_views' => array(
               'restrict_by_country' => (isset($this->options['settings']['restrict_by_country']) ? $this->options['settings']['restrict_by_country'] : 0),
-              'country' => (isset($this->options['settings']['country']) ? $this->options['settings']['country'] : variable_get('site_default_country', '')),
+              'country' => (isset($this->options['settings']['country']) ? $this->options['settings']['country'] : ''),
               'geocoder_enable' => $geocoder_default['geocoder_enable'],
             )
           );
-          drupal_add_js($settings, 'setting');
+          backdrop_add_js($settings, 'setting');
         }
         $getlocations_defaults = getlocations_defaults();
         $getlocations_defaults['geocoder_enable'] = $geocoder_default['geocoder_enable'];

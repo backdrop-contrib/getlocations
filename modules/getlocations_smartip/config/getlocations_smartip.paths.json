@@ -1,0 +1,7 @@
+{
+  "_config_name": "getlocations_smartip.paths",
+  "paths": {
+    "getlocations_smartip_path": "modules/getlocations/modules/getlocations_smartip/js/getlocations_smartip.js",
+    "getlocations_smartip_admin_path": "modules/getlocations/modules/getlocations_smartip/js/getlocations_smartip_admin.js"
+  }
+}

@@ -3,11 +3,11 @@
 /**
  * @file
  * getlocations_fields_handler_argument_bbox.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Location bbox argument handler.
- * code derived from https://www.drupal.org/project/views_geofield_bbox.
+ * code derived from https://www.backdrop.org/project/views_geofield_bbox.
  *
  */
 
@@ -28,7 +28,7 @@ class getlocations_fields_handler_argument_bbox extends views_handler_argument {
     parent::default_argument_form($form, $form_state);
     // Clarify this, since we're treating pulling from the query string as
     // different than a normal arg.
-    $form['no_argument']['#title'] = 'When the filter value is NOT in the URL <em>as a normal Drupal argument</em>';
+    $form['no_argument']['#title'] = 'When the filter value is NOT in the URL <em>as a normal Backdrop argument</em>';
   }
 
   /**

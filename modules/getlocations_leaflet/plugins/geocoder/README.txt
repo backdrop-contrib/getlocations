@@ -9,7 +9,7 @@ makes a polygon that describes the bounds of the search result.
 Replace 'mytheme' with the name of your theme and add it to your theme's javascript
 
 (function ($) {
-  Drupal.behaviors.mytheme = {
+  Backdrop.behaviors.mytheme = {
     attach: function() {
 
       // edit this line to suit your use case
@@ -39,4 +39,3 @@ Replace 'mytheme' with the name of your theme and add it to your theme's javascr
     }
   };
 })(jQuery);
-

@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_plugin_style_map.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Contains the getlocations style plugin.
@@ -45,6 +45,23 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     $getlocations_defaults = getlocations_defaults();
 
+    if (module_exists('getlocations_fields')) {
+      $getlocations_fields_defaults = getlocations_fields_defaults();
+      $getlocations_defaults['sv_show'] = $getlocations_fields_defaults['sv_show'];
+      $getlocations_defaults['sv_showfirst'] = $getlocations_fields_defaults['sv_showfirst'];
+      $getlocations_defaults['sv_heading'] = $getlocations_fields_defaults['sv_heading'];
+      $getlocations_defaults['sv_zoom'] = $getlocations_fields_defaults['sv_zoom'];
+      $getlocations_defaults['sv_pitch'] = $getlocations_fields_defaults['sv_pitch'];
+    }
+    else {
+      $getlocations_defaults['sv_show'] = 0;
+      $getlocations_defaults['sv_showfirst'] = 0;
+      $getlocations_defaults['sv_heading'] = 0;
+      $getlocations_defaults['sv_zoom'] = 1;
+      $getlocations_defaults['sv_pitch'] = 0;
+
+    }
+
     $options['width']                 = array('default' => $getlocations_defaults['width']);
     $options['height']                = array('default' => $getlocations_defaults['height']);
     $options['node_map_marker']       = array('default' => $getlocations_defaults['node_map_marker']);
@@ -57,13 +74,10 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['minzoom_map']           = array('default' => $getlocations_defaults['minzoom_map']);
     $options['maxzoom_map']           = array('default' => $getlocations_defaults['maxzoom_map']);
     $options['controltype']           = array('default' => $getlocations_defaults['controltype']);
-    $options['pancontrol']            = array('default' => $getlocations_defaults['pancontrol']);
     $options['mtc']                   = array('default' => $getlocations_defaults['mtc']);
     $options['maptype']               = array('default' => $getlocations_defaults['maptype']);
     $options['baselayers']            = array('default' => $getlocations_defaults['baselayers']);
     $options['scale']                 = array('default' => $getlocations_defaults['scale']) ;
-    $options['overview']              = array('default' => $getlocations_defaults['overview']);
-    $options['overview_opened']       = array('default' => $getlocations_defaults['overview_opened']);
     $options['scrollwheel']           = array('default' => $getlocations_defaults['scrollwheel']);
     $options['show_maplinks']         = array('default' => $getlocations_defaults['show_maplinks']);
     $options['show_maplinks_viewport'] = array('default' => $getlocations_defaults['show_maplinks_viewport']);
@@ -94,78 +108,29 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['usemarkermanager']      = array('default' => $getlocations_defaults['usemarkermanager']);
     $options['useclustermanager']     = array('default' => $getlocations_defaults['useclustermanager']);
     $options['map_backgroundcolor']   = array('default' => $getlocations_defaults['map_backgroundcolor']);
+    $options['geolocation_mobile_check']   = array('default' => $getlocations_defaults['geolocation_mobile_check']);
     if (! $getlocations_defaults['markermanagertype']) {
       $options['usemarkermanager'] = 0;
       $options['useclustermanager'] = 0;
     }
-    $options['markerclusterer_style']    = array('default' => $getlocations_defaults['markerclusterer_style']);
-    $options['markerclusterer_zoom']     = array('default' => $getlocations_defaults['markerclusterer_zoom']);
-    $options['markerclusterer_size']     = array('default' => $getlocations_defaults['markerclusterer_size']);
-    $options['markerclusterer_minsize']  = array('default' => $getlocations_defaults['markerclusterer_minsize']);
-    $options['markerclusterer_title']    = array('default' => $getlocations_defaults['markerclusterer_title']);
-    $options['markerclusterer_imgpath']  = array('default' => $getlocations_defaults['markerclusterer_imgpath']);
+    $options['markerclusterer_group'] = array('default' => $getlocations_defaults['markerclusterer_group']);
+
     $options['pansetting']               = array('default' => $getlocations_defaults['pansetting']);
     $options['draggable']                = array('default' => $getlocations_defaults['draggable']);
     $options['styles']                   = array('default' => $getlocations_defaults['styles']);
     $options['custom_content_enable']    = array('default' => $getlocations_defaults['custom_content_enable']);
     $options['custom_content_source']    = array('default' => $getlocations_defaults['custom_content_source']);
-    $options['polygons_enable']          = array('default' => $getlocations_defaults['polygons_enable']);
-    $options['polygons_strokecolor']     = array('default' => $getlocations_defaults['polygons_strokecolor']);
-    $options['polygons_strokeopacity']   = array('default' => $getlocations_defaults['polygons_strokeopacity']);
-    $options['polygons_strokeweight']    = array('default' => $getlocations_defaults['polygons_strokeweight']);
-    $options['polygons_fillcolor']       = array('default' => $getlocations_defaults['polygons_fillcolor']);
-    $options['polygons_fillopacity']     = array('default' => $getlocations_defaults['polygons_fillopacity']);
-    $options['polygons_coords']          = array('default' => $getlocations_defaults['polygons_coords']);
-    $options['polygons_clickable']       = array('default' => $getlocations_defaults['polygons_clickable']);
-    $options['polygons_message']         = array('default' => $getlocations_defaults['polygons_message']);
-    $options['rectangles_enable']        = array('default' => $getlocations_defaults['rectangles_enable']);
-    $options['rectangles_strokecolor']   = array('default' => $getlocations_defaults['rectangles_strokecolor']);
-    $options['rectangles_strokeopacity'] = array('default' => $getlocations_defaults['rectangles_strokeopacity']);
-    $options['rectangles_strokeweight']  = array('default' => $getlocations_defaults['rectangles_strokeweight']);
-    $options['rectangles_fillcolor']     = array('default' => $getlocations_defaults['rectangles_fillcolor']);
-    $options['rectangles_fillopacity']   = array('default' => $getlocations_defaults['rectangles_fillopacity']);
-    $options['rectangles_coords']        = array('default' => $getlocations_defaults['rectangles_coords']);
-    $options['rectangles_clickable']     = array('default' => $getlocations_defaults['rectangles_clickable']);
-    $options['rectangles_message']       = array('default' => $getlocations_defaults['rectangles_message']);
-    $options['rectangles_apply']         = array('default' => $getlocations_defaults['rectangles_apply']);
-    $options['rectangles_dist']          = array('default' => $getlocations_defaults['rectangles_dist']);
-    $options['circles_enable']           = array('default' => $getlocations_defaults['circles_enable']);
-    $options['circles_strokecolor']      = array('default' => $getlocations_defaults['circles_strokecolor']);
-    $options['circles_strokeopacity']    = array('default' => $getlocations_defaults['circles_strokeopacity']);
-    $options['circles_strokeweight']     = array('default' => $getlocations_defaults['circles_strokeweight']);
-    $options['circles_fillcolor']        = array('default' => $getlocations_defaults['circles_fillcolor']);
-    $options['circles_fillopacity']      = array('default' => $getlocations_defaults['circles_fillopacity']);
-    $options['circles_coords']           = array('default' => $getlocations_defaults['circles_coords']);
-    $options['circles_clickable']        = array('default' => $getlocations_defaults['circles_clickable']);
-    $options['circles_message']          = array('default' => $getlocations_defaults['circles_message']);
-    $options['circles_radius']           = array('default' => $getlocations_defaults['circles_radius']);
-    $options['circles_apply']            = array('default' => $getlocations_defaults['circles_apply']);
-    $options['polylines_enable']         = array('default' => $getlocations_defaults['polylines_enable']);
-    $options['polylines_strokecolor']    = array('default' => $getlocations_defaults['polylines_strokecolor']);
-    $options['polylines_strokeopacity']  = array('default' => $getlocations_defaults['polylines_strokeopacity']);
-    $options['polylines_strokeweight']   = array('default' => $getlocations_defaults['polylines_strokeweight']);
-    $options['polylines_coords']         = array('default' => $getlocations_defaults['polylines_coords']);
-    $options['polylines_clickable']      = array('default' => $getlocations_defaults['polylines_clickable']);
-    $options['polylines_message']        = array('default' => $getlocations_defaults['polylines_message']);
-    $options['kml_url']                  = array('default' => $getlocations_defaults['kml_group']['kml_url']);
-    $options['kml_url_click']            = array('default' => $getlocations_defaults['kml_group']['kml_url_click']);
-    $options['kml_url_infowindow']       = array('default' => $getlocations_defaults['kml_group']['kml_url_infowindow']);
-    $options['kml_url_viewport']         = array('default' => $getlocations_defaults['kml_group']['kml_url_viewport']);
-    $options['kml_url_button']           = array('default' => $getlocations_defaults['kml_group']['kml_url_button']);
-    $options['kml_url_button_label']     = array('default' => $getlocations_defaults['kml_group']['kml_url_button_label']);
-    $options['kml_url_button_state']     = array('default' => $getlocations_defaults['kml_group']['kml_url_button_state']);
+
+    $shapes = config_get('getlocations.shapes', 'shapes');
+    $options['polygons_group']   = array('default' => $shapes['polygons_group']);
+    $options['rectangles_group'] = array('default' => $shapes['rectangles_group']);
+    $options['circles_group']    = array('default' => $shapes['circles_group']);
+    $options['polylines_group']  = array('default' => $shapes['polylines_group']);
+
+    $options['kml_group']                = array('default' => $getlocations_defaults['kml_group']);
     $options['region_bias']              = array('default' => $getlocations_defaults['region_bias']);
     $options['fullscreen_disable']       = array('default' => $getlocations_defaults['fullscreen_disable']);
-    $options['search_places']            = array('default' => $getlocations_defaults['search_places']);
-    $options['search_places_size']       = array('default' => $getlocations_defaults['search_places_size']);
-    $options['search_places_position']   = array('default' => $getlocations_defaults['search_places_position']);
-    $options['search_places_label']      = array('default' => $getlocations_defaults['search_places_label']);
-    $options['search_places_placeholder'] = array('default' => $getlocations_defaults['search_places_placeholder']);
-    $options['search_places_dd']         = array('default' => $getlocations_defaults['search_places_dd']);
-    $options['search_places_list']       = array('default' => $getlocations_defaults['search_places_list']);
-    // jquery_colorpicker TODO does not work in Views Getlocations | settings
-    $options['jquery_colorpicker_enabled'] = array('default' => 0);
-    #$options['jquery_colorpicker_enabled'] = array('default' => $getlocations_defaults['jquery_colorpicker_enabled']);
+    $options['search_places_group']      = array('default' => $getlocations_defaults['search_places_group']);
 
     // categories
     $options['category_method']               = array('default' => $getlocations_defaults['category_method']);
@@ -178,87 +143,105 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['geojson_data']    = array('default' => $getlocations_defaults['geojson_data']);
 
     $options['zoomcontrolposition']  = array('default' => $getlocations_defaults['zoomcontrolposition']);
-    $options['pancontrolposition']   = array('default' => $getlocations_defaults['pancontrolposition']);
     $options['mapcontrolposition']   = array('default' => $getlocations_defaults['mapcontrolposition']);
     $options['scalecontrolposition'] = array('default' => $getlocations_defaults['scalecontrolposition']);
     $options['svcontrolposition']    = array('default' => $getlocations_defaults['svcontrolposition']);
 
-    $options['highlight_enable']         = array('default' => $getlocations_defaults['highlight_enable']);
-    $options['highlight_strokecolor']    = array('default' => $getlocations_defaults['highlight_strokecolor']);
-    $options['highlight_strokeopacity']  = array('default' => $getlocations_defaults['highlight_strokeopacity']);
-    $options['highlight_strokeweight']   = array('default' => $getlocations_defaults['highlight_strokeweight']);
-    $options['highlight_fillcolor']      = array('default' => $getlocations_defaults['highlight_fillcolor']);
-    $options['highlight_fillopacity']    = array('default' => $getlocations_defaults['highlight_fillopacity']);
-    $options['highlight_radius']         = array('default' => $getlocations_defaults['highlight_radius']);
+    $options['highlight_group']         = array('default' => $getlocations_defaults['highlight_group']);
+
     $options['getdirections_link']       = array('default' => $getlocations_defaults['getdirections_link']);
 
-    $options['gps_button']       = array('default' => 0);
-    $options['gps_button_label'] = array('default' => $getlocations_defaults['gps_button_label']);
-    $options['gps_marker']       = array('default' => $getlocations_defaults['gps_marker']);
-    $options['gps_marker_title'] = array('default' => $getlocations_defaults['gps_marker_title']);
-    $options['gps_bubble']       = array('default' => $getlocations_defaults['gps_bubble']);
-    $options['gps_geocode']      = array('default' => $getlocations_defaults['gps_geocode']);
-    $options['gps_center']       = array('default' => $getlocations_defaults['gps_center']);
-    $options['gps_type']         = array('default' => $getlocations_defaults['gps_type']);
-    $options['gps_zoom']         = array('default' => $getlocations_defaults['gps_zoom']);
-
-    $options['smartip_button']       = array('default' => 0);
-    $options['smartip_button_label'] = array('default' => $getlocations_defaults['smartip_button_label']);
-    $options['smartip_marker']       = array('default' => $getlocations_defaults['smartip_marker']);
-    $options['smartip_marker_title'] = array('default' => $getlocations_defaults['smartip_marker_title']);
-    $options['smartip_bubble']       = array('default' => $getlocations_defaults['smartip_bubble']);
-    $options['smartip_center']       = array('default' => $getlocations_defaults['smartip_center']);
-    $options['smartip_zoom']         = array('default' => $getlocations_defaults['smartip_zoom']);
-    $options['smartip_callback']     = array('default' => $getlocations_defaults['smartip_callback']);
-
-    $options['show_search_distance']                = array('default' => $getlocations_defaults['show_search_distance']);
-    $options['views_search_marker_enable']          = array('default' => $getlocations_defaults['views_search_marker_enable']);
-    $options['views_search_marker']                 = array('default' => $getlocations_defaults['views_search_marker']);
-    $options['views_search_marker_toggle']          = array('default' => $getlocations_defaults['views_search_marker_toggle']);
-    $options['views_search_marker_toggle_active']   = array('default' => $getlocations_defaults['views_search_marker_toggle_active']);
-    $options['views_search_radshape_enable']        = array('default' => $getlocations_defaults['views_search_radshape_enable']);
-    $options['views_search_radshape_strokecolor']   = array('default' => $getlocations_defaults['views_search_radshape_strokecolor']);
-    $options['views_search_radshape_strokeopacity'] = array('default' => $getlocations_defaults['views_search_radshape_strokeopacity']);
-    $options['views_search_radshape_strokeweight']  = array('default' => $getlocations_defaults['views_search_radshape_strokeweight']);
-    $options['views_search_radshape_fillcolor']     = array('default' => $getlocations_defaults['views_search_radshape_fillcolor']);
-    $options['views_search_radshape_fillopacity']   = array('default' => $getlocations_defaults['views_search_radshape_fillopacity']);
-    $options['views_search_radshape_toggle']        = array('default' => $getlocations_defaults['views_search_radshape_toggle']);
-    $options['views_search_radshape_toggle_active'] = array('default' => $getlocations_defaults['views_search_radshape_toggle_active']);
-    $options['views_search_center']                 = array('default' => $getlocations_defaults['views_search_center']);
-
-    // what3words
-    $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
-    if ($what3words_lic['key'] ) {
-      $options['what3words_key']         = array('default' =>  $what3words_lic['key']);
-      $options['what3words_enable']      = array('default' =>  $getlocations_defaults['what3words_enable']);
-      $options['what3words_search']      = array('default' =>  $getlocations_defaults['what3words_search']);
-      $options['what3words_map_marker']  = array('default' =>  $getlocations_defaults['what3words_map_marker']);
-      $options['what3words_center']      = array('default' =>  $getlocations_defaults['what3words_center']);
-      $options['what3words_zoom']        = array('default' =>  $getlocations_defaults['what3words_zoom']);
-      $options['what3words_show']        = array('default' =>  $getlocations_defaults['what3words_show']);
-      $options['what3words_marker_show'] = array('default' =>  $getlocations_defaults['what3words_marker_show']);
-      $options['what3words_click']       = array('default' =>  $getlocations_defaults['what3words_click']);
-      $options['what3words_size']        = array('default' =>  $getlocations_defaults['what3words_size']);
+    if (module_exists('getlocations_gps')) {
+      $gps_settings = config_get('getlocations_gps.settings', 'settings');
+      $options['gps_button']       = array('default' => 0);
+      $options['gps_button_label'] = array('default' => $gps_settings['gps_button_label']);
+      $options['gps_marker']       = array('default' => $gps_settings['gps_marker']);
+      $options['gps_marker_title'] = array('default' => $gps_settings['gps_marker_title']);
+      $options['gps_bubble']       = array('default' => $gps_settings['gps_bubble']);
+      $options['gps_geocode']      = array('default' => $gps_settings['gps_geocode']);
+      $options['gps_center']       = array('default' => $gps_settings['gps_center']);
+      $options['gps_type']         = array('default' => $gps_settings['gps_type']);
+      $options['gps_zoom']         = array('default' => $gps_settings['gps_zoom']);
     }
 
+    if (module_exists('getlocations_smartip')) {
+      $smartip_settings = config_get('getlocations_smartip.settings', 'settings');
+      $options['smartip_button']       = array('default' => 0);
+      $options['smartip_button_label'] = array('default' => $smartip_settings['smartip_button_label']);
+      $options['smartip_marker']       = array('default' => $smartip_settings['smartip_marker']);
+      $options['smartip_marker_title'] = array('default' => $smartip_settings['smartip_marker_title']);
+      $options['smartip_bubble']       = array('default' => $smartip_settings['smartip_bubble']);
+      $options['smartip_center']       = array('default' => $smartip_settings['smartip_center']);
+      $options['smartip_zoom']         = array('default' => $smartip_settings['smartip_zoom']);
+      $options['smartip_callback']     = array('default' => $smartip_settings['smartip_callback']);
+    }
+
+    $options['show_search_distance']                = array('default' => $getlocations_defaults['show_search_distance']);
+
+    $options['views_search_marker_enable']          = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_enable']);
+    $options['views_search_marker']                 = array('default' => $getlocations_defaults['views_search_group']['views_search_marker']);
+    $options['views_search_marker_toggle']          = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_toggle']);
+    $options['views_search_marker_toggle_active']   = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_toggle_active']);
+    $options['views_search_radshape_enable']        = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_enable']);
+    $options['views_search_radshape_strokecolor']   = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokecolor']);
+    $options['views_search_radshape_strokeopacity'] = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeopacity']);
+    $options['views_search_radshape_strokeweight']  = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeweight']);
+    $options['views_search_radshape_fillcolor']     = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_fillcolor']);
+    $options['views_search_radshape_fillopacity']   = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_fillopacity']);
+    $options['views_search_radshape_toggle']        = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle']);
+    $options['views_search_radshape_toggle_active'] = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle_active']);
+    $options['views_search_center']                 = array('default' => $getlocations_defaults['views_search_group']['views_search_center']);
+
+    // views_search_group
+    $options['views_search_group']       = array('default' => $getlocations_defaults['views_search_group']);
+
+    // what3words
+    $what3words_lic = getlocations_w3w_get_lic();
+    $options['what3words_lic'] = $what3words_lic;
+    $what3words_group = getlocations_w3w_get_group();
+    if ($what3words_lic['key'] ) {
+      $options['what3words_key']         = array('default' =>  $what3words_lic['key']);
+      $options['what3words_enable']      = array('default' =>  $what3words_group['what3words_enable']);
+      $options['what3words_search']      = array('default' =>  $what3words_group['what3words_search']);
+      $options['what3words_map_marker']  = array('default' =>  $what3words_group['what3words_map_marker']);
+      $options['what3words_center']      = array('default' =>  $what3words_group['what3words_center']);
+      $options['what3words_zoom']        = array('default' =>  $what3words_group['what3words_zoom']);
+      $options['what3words_show']        = array('default' =>  $what3words_group['what3words_show']);
+      $options['what3words_marker_show'] = array('default' =>  $what3words_group['what3words_marker_show']);
+      $options['what3words_click']       = array('default' =>  $what3words_group['what3words_click']);
+      $options['what3words_size']        = array('default' =>  $what3words_group['what3words_size']);
+    }
+
+
+    $options['map_resize']       = array('default' => $getlocations_defaults['map_resize']);
+    $options['nokeyboard']       = array('default' => $getlocations_defaults['nokeyboard']);
+    $options['nodoubleclickzoom']       = array('default' => $getlocations_defaults['nodoubleclickzoom']);
+    $options['fullscreen_controlposition']       = array('default' => $getlocations_defaults['fullscreen_controlposition']);
+
+        #$options['']       = array('default' => $getlocations_defaults['']);
+
+/*
     // node markers
-    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    $getlocations_node_marker = config_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
-            $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
+            $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
             $mmarker = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $getlocations_defaults['node_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }
         }
       }
     }
+*/
+
+/*
     if (module_exists('taxonomy')) {
       // vocabulary markers
       if ($types = getlocations_get_vocabularies()) {
-        $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+        $getlocations_vocabulary_marker = config_get('getlocations_vocabulary_marker', array('enable' => 0));
         if ($getlocations_vocabulary_marker['enable']) {
           foreach ($types AS $type => $name) {
             $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
@@ -270,7 +253,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
       }
 
       // term markers
-      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+      $getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
       if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
         $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
         $vids = $getlocations_term_marker['vids'];
@@ -285,6 +268,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
         }
       }
     }
+*/
 
     // empty_result
     $options['empty_result'] = array('default' => FALSE);
@@ -297,7 +281,7 @@ class getlocations_plugin_style_map extends views_plugin_style {
     parent::options_form($form, $form_state);
 
     $form['#theme'][] = 'getlocations_plugin_style_map_options_form';
-    $getlocations_paths = getlocations_paths_get();
+    $getlocations_paths = getlocations_paths_get_all();
     $form['#attached']['js'] = array($getlocations_paths['getlocations_views_path']);
 
     $handlers = $this->display->handler->get_handlers('field');
@@ -322,31 +306,31 @@ class getlocations_plugin_style_map extends views_plugin_style {
     // markers
     $markers = getlocations_get_marker_titles();
     // node markers
-    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-    if ($getlocations_node_marker['enable']) {
-      if ($types = getlocations_get_types()) {
-        foreach ($types AS $type => $name) {
-          $field_names = getlocations_get_fieldname2($type, 'node');
-          foreach ($field_names AS $field_name) {
-            if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
-              $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
-              $form[$mkey] = getlocations_element_map_marker(
-                t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
-                $markers,
-                (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'])
-              );
-            }
-          }
-        }
-      }
-    }
-    else {
+#    $getlocations_node_marker = config_get('getlocations_node_marker', array('enable' => 0));
+#    if ($getlocations_node_marker['enable']) {
+#      if ($types = getlocations_get_types()) {
+#        foreach ($types AS $type => $name) {
+#          $field_names = getlocations_get_fieldname2($type, 'node');
+#          foreach ($field_names AS $field_name) {
+#            if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
+#              $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
+#              $form[$mkey] = getlocations_element_map_marker(
+#                t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
+#                $markers,
+#                (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'])
+#              );
+#            }
+#          }
+#        }
+#      }
+#    }
+#    else {
       $form['node_map_marker'] = getlocations_element_map_marker(
         t('Content Map marker'),
         $markers,
         $this->options['node_map_marker']
       );
-    }
+#    }
     // user markers
     if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
       $form['user_map_marker'] = getlocations_element_map_marker(
@@ -359,60 +343,60 @@ class getlocations_plugin_style_map extends views_plugin_style {
     if (module_exists('taxonomy')) {
       if ($types = getlocations_get_machine_vocabularies()) {
         $types2 = getlocations_get_vocabularies();
-        $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-        if ($getlocations_vocabulary_marker['enable']) {
-          foreach ($types AS $type => $name) {
-            $field_name = getlocations_get_fieldname($name, 'taxonomy_term');
-            $mkey = 'vocabulary_marker_' . $field_name;
-            $form[$mkey] = getlocations_element_map_marker(
-              t('%name Vocabulary Marker', array('%name' => $types2[$type])),
-              $markers,
-              (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'])
-            );
-          }
-        }
-        else {
+        #$getlocations_vocabulary_marker = config_get('getlocations_vocabulary_marker', array('enable' => 0));
+        #if ($getlocations_vocabulary_marker['enable']) {
+        #  foreach ($types AS $type => $name) {
+        #    $field_name = getlocations_get_fieldname($name, 'taxonomy_term');
+        #    $mkey = 'vocabulary_marker_' . $field_name;
+        #    $form[$mkey] = getlocations_element_map_marker(
+        #      t('%name Vocabulary Marker', array('%name' => $types2[$type])),
+        #      $markers,
+        #      (isset($this->options[$mkey]) ? $this->options[$mkey] : $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'])
+        #    );
+        #  }
+        #}
+        #else {
           $form['vocabulary_map_marker'] = getlocations_element_map_marker(
             t('Vocabulary Map Marker'),
             $markers,
             $this->options['vocabulary_map_marker']
           );
-        }
+        #}
       }
 
       // term markers
-      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-      if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-        $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-        $vids = $getlocations_term_marker['vids'];
-        foreach ($vids AS $vid) {
-          $terms = taxonomy_get_tree($vid, 0, $depth);
-          $tct = 0;
-          foreach ($terms AS $term) {
-            $name = $term->name;
-            $tid = $term->tid;
-            $mkey = 'term_marker_' . $tid;
-            $form[$mkey] = getlocations_element_map_marker(
-              t('%name Map Marker', array('%name' => $name)),
-              $markers,
-              $this->options[$mkey]
-            );
-            if (! $tct) {
-              $v = taxonomy_vocabulary_load($vid);
-              $vocab_name = $v->name;
-              $form[$mkey]['#prefix'] = t('Terms for %name', array('%name' => $vocab_name));
-            }
-            $tct++;
-          }
-        }
-      }
-      else {
+      #$getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+      #if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+      #  $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+      #  $vids = $getlocations_term_marker['vids'];
+      #  foreach ($vids AS $vid) {
+      #    $terms = taxonomy_get_tree($vid, 0, $depth);
+      #    $tct = 0;
+      #    foreach ($terms AS $term) {
+      #      $name = $term->name;
+      #      $tid = $term->tid;
+      #      $mkey = 'term_marker_' . $tid;
+      #      $form[$mkey] = getlocations_element_map_marker(
+      #        t('%name Map Marker', array('%name' => $name)),
+      #        $markers,
+      #        $this->options[$mkey]
+      #      );
+      #      if (! $tct) {
+      #        $v = taxonomy_vocabulary_load($vid);
+      #        $vocab_name = $v->name;
+      #        $form[$mkey]['#prefix'] = t('Terms for %name', array('%name' => $vocab_name));
+      #      }
+      #      $tct++;
+      #    }
+      #  }
+      #}
+      #else {
         $form['term_map_marker'] = getlocations_element_map_marker(
           t('Term Map marker'),
           $markers,
           $this->options['term_map_marker']
         );
-      }
+      #}
     }
     // comments
     if (getlocations_check_entity_type('comment')) {
@@ -563,7 +547,49 @@ class getlocations_plugin_style_map extends views_plugin_style {
         form_set_error('style_options][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
       }
     }
+################################
+    //highlight
+    $highlight_keys = array('highlight_enable','highlight_strokecolor','highlight_strokeopacity','highlight_strokeweight','highlight_fillcolor','highlight_fillopacity','highlight_radius');
+    foreach ($highlight_keys AS $k) {
+      if (isset($form_state['values']['style_options'][$k])) {
+        $form_state['values']['style_options']['highlight_group'][$k] = $form_state['values']['style_options'][$k];
+        unset($form_state['values']['style_options'][$k]);
+      }
+    }
 
+    // polygons_group
+    $polygons_group = array("polygons_enable","polygons_strokecolor","polygons_strokeopacity","polygons_strokeweight","polygons_fillcolor","polygons_fillopacity","polygons_coords","polygons_clickable","polygons_message");
+    foreach ($polygons_group AS $item) {
+      $form_state['values']['style_options']['polygons_group'][$item] = $form_state['values']['style_options'][$item];
+      unset($form_state['values']['style_options'][$item]);
+    }
+
+    $rectangles_group = array("rectangles_enable","rectangles_strokecolor","rectangles_strokeopacity","rectangles_strokeweight","rectangles_fillcolor","rectangles_fillopacity","rectangles_coords","rectangles_clickable","rectangles_message","rectangles_apply","rectangles_dist");
+    foreach ($rectangles_group AS $item) {
+      $form_state['values']['style_options']['rectangles_group'][$item] = $form_state['values']['style_options'][$item];
+      unset($form_state['values']['style_options'][$item]);
+    }
+
+    $circles_group = array("circles_enable","circles_strokecolor","circles_strokeopacity","circles_strokeweight","circles_fillcolor","circles_fillopacity","circles_coords","circles_clickable","circles_message","circles_radius","circles_apply");
+    foreach ($circles_group AS $item) {
+      $form_state['values']['style_options']['circles_group'][$item] = $form_state['values']['style_options'][$item];
+      unset($form_state['values']['style_options'][$item]);
+    }
+
+    $polylines_group = array("polylines_enable","polylines_strokecolor","polylines_strokeopacity","polylines_strokeweight","polylines_coords","polylines_clickable","polylines_message");
+    foreach ($polylines_group AS $item) {
+      $form_state['values']['style_options']['polylines_group'][$item] = $form_state['values']['style_options'][$item];
+      unset($form_state['values']['style_options'][$item]);
+    }
+
+    $search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
+    foreach ($search_places_group AS $item) {
+      $form_state['values']['style_options']['search_places_group'][$item] = $form_state['values']['style_options'][$item];
+      unset($form_state['values']['style_options'][$item]);
+    }
+
+
+################################
   }
 
   function even_empty() {

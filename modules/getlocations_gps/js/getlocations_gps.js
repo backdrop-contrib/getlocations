@@ -2,20 +2,20 @@
 /**
  * @file
  * getlocations_gps.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations_gps module for Drupal 7
+ * Javascript functions for getlocations_gps module for Backdrop
  */
 
 (function ($) {
-  Drupal.getlocations_gps = {};
+  Backdrop.getlocations_gps = {};
   var watchID = '';
-  Drupal.getlocations_gps.dolocation = function(key, settings) {
+  Backdrop.getlocations_gps.dolocation = function(key, settings) {
 
     $("#getlocations_gps_lat_" + key).html('');
     $("#getlocations_gps_lon_" + key).html('');
-    var gps_marker = Drupal.getlocations.getIcon(settings.gps_marker);
+    var gps_marker = Backdrop.getlocations.getIcon(settings.gps_marker);
     var gps_marker_title = settings.gps_marker_title;
     var gps_bubble = settings.gps_bubble;
     var gps_geocode = settings.gps_geocode;
@@ -23,20 +23,20 @@
     var gps_type = settings.gps_type;
     var gps_zoom = settings.gps_zoom;
     var gps_latlon_path = settings.gps_latlon_path;
-    var gs = Drupal.getlocations_settings[key];
+    var gs = Backdrop.getlocations_settings[key];
     gs.show_maplinks = false;
     var accuracies = [];
-    accuracies['APPROXIMATE'] = Drupal.t('Approximate');
-    accuracies['GEOMETRIC_CENTER'] = Drupal.t('Center');
-    accuracies['RANGE_INTERPOLATED'] = Drupal.t('Interpolated');
-    accuracies['ROOFTOP'] = Drupal.t('Exact');
+    accuracies['APPROXIMATE'] = Backdrop.t('Approximate');
+    accuracies['GEOMETRIC_CENTER'] = Backdrop.t('Center');
+    accuracies['RANGE_INTERPOLATED'] = Backdrop.t('Interpolated');
+    accuracies['ROOFTOP'] = Backdrop.t('Exact');
     gs.markdone = gps_marker;
     var result = [];
     result['lat'] = '';
     result['lon'] = '';
     gps_in_dom(key, '', '');
     result['formatted_address'] = '';
-    Drupal.getlocations_gps.marker = Drupal.getlocations_gps.marker || [];
+    Backdrop.getlocations_gps.marker = Backdrop.getlocations_gps.marker || [];
     gps_marker_kill();
 
     if (navigator && navigator.geolocation) {
@@ -57,7 +57,7 @@
       }
     } // end if navigator
     else {
-      msg = Drupal.t('Sorry, no browser navigator available.');
+      msg = Backdrop.t('Sorry, no browser navigator available.');
       alert(msg);
     }
 
@@ -90,12 +90,12 @@
                 customContent += '<h4>' + gps_marker_title + '</h4>';
                 customContent += '<div class="adr">' + result['formatted_address'].replace(/[,]/g, ',<br />');
                 if (results[0].geometry.location_type) {
-                  customContent += '<br />' + Drupal.t('Accuracy') + ' : ' + accuracies[results[0].geometry.location_type];
+                  customContent += '<br />' + Backdrop.t('Accuracy') + ' : ' + accuracies[results[0].geometry.location_type];
                 }
                 customContent += '</div></div>';
                 gs.useCustomContent = true;
-                gs.useInfoBubble = (Drupal.settings.getlocations[key].markeraction == 2 ? true : false);
-                gs.markeraction = (Drupal.settings.getlocations[key].markeraction == 2 ? 2 : 1);
+                gs.useInfoBubble = (Backdrop.settings.getlocations[key].markeraction == 2 ? true : false);
+                gs.markeraction = (Backdrop.settings.getlocations[key].markeraction == 2 ? 2 : 1);
               }
               else {
                 gs.useCustomContent = false;
@@ -104,8 +104,8 @@
               }
 
               var ll = new google.maps.LatLng(result['lat'], result['lon']);
-              var m = Drupal.getlocations.makeMarker(Drupal.getlocations_map[key], gs, result['lat'], result['lon'], 0, gps_marker_title, '', customContent, '', key);
-              Drupal.getlocations_gps.marker[key].push(m);
+              var m = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], gs, result['lat'], result['lon'], 0, gps_marker_title, '', customContent, '', key);
+              Backdrop.getlocations_gps.marker[key].push(m);
 
               // is this a distance View using gps as the origin
               if ( $("input[name='distance[gps]']").is('input')) {
@@ -113,15 +113,15 @@
               }
 
               if (gps_center) {
-                Drupal.getlocations_map[key].setCenter(ll);
+                Backdrop.getlocations_map[key].setCenter(ll);
               }
 
               if (gps_zoom > -1) {
-                Drupal.getlocations_map[key].setZoom(parseInt(gps_zoom));
+                Backdrop.getlocations_map[key].setZoom(parseInt(gps_zoom));
               }
 
               // getlocations_search
-              if (typeof(Drupal.getlocations_search) !== 'undefined') {
+              if (typeof(Backdrop.getlocations_search) !== 'undefined') {
                 var mapid2 = key.replace("_", "-");
                 var distance = $("#edit-getlocations-search-distance-" + mapid2).val();
                 var units = $("#edit-getlocations-search-units-" + mapid2).val();
@@ -129,8 +129,8 @@
                 var limits = $("#edit-getlocations-search-limits-" + mapid2).val();
                 var accuracy = accuracies[results[0].geometry.location_type];
                 var address = result['formatted_address'];
-                Drupal.getlocations_search.getlocations_search_clear_results(key, gs);
-                Drupal.getlocations_search.getlocations_search_get_data(result['lat'], result['lon'], distance, units, type, limits, accuracy, address, gs, Drupal.getlocations_map[key], key);
+                Backdrop.getlocations_search.getlocations_search_clear_results(key, gs);
+                Backdrop.getlocations_search.getlocations_search_get_data(result['lat'], result['lon'], distance, units, type, limits, accuracy, address, gs, Backdrop.getlocations_map[key], key);
               }
               deactive_throbber();
             }
@@ -138,8 +138,8 @@
               // remove any old markers
               gps_marker_kill();
               deactive_throbber();
-              var prm = {'!b': Drupal.getlocations.getGeoErrCode(status) };
-              var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
+              var prm = {'!b': Backdrop.getlocations.getGeoErrCode(status) };
+              var msg = Backdrop.t('Geocode was not successful for the following reason: !b', prm);
               alert(msg);
             }
           });
@@ -151,8 +151,8 @@
           gs.useCustomContent = false;
           gs.markeraction = 0;
           gs.useInfoBubble = false;
-          var m = Drupal.getlocations.makeMarker(Drupal.getlocations_map[key], gs, result['lat'], result['lon'], 0, gps_marker_title, '', '', '', key);
-          Drupal.getlocations_gps.marker[key].push(m);
+          var m = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], gs, result['lat'], result['lon'], 0, gps_marker_title, '', '', '', key);
+          Backdrop.getlocations_gps.marker[key].push(m);
 
           // is this a distance View using gps as the origin
           if ( $("input[name='distance[gps]']").is('input')) {
@@ -160,10 +160,10 @@
           }
 
           if (gps_center) {
-            Drupal.getlocations_map[key].setCenter(p);
+            Backdrop.getlocations_map[key].setCenter(p);
           }
           if (gps_zoom > -1) {
-            Drupal.getlocations_map[key].setZoom(parseInt(gps_zoom));
+            Backdrop.getlocations_map[key].setZoom(parseInt(gps_zoom));
           }
           deactive_throbber();
         }
@@ -180,7 +180,7 @@
       // remove any old markers
       gps_marker_kill();
       deactive_throbber();
-      msg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error) + ".";
+      msg = Backdrop.t("Sorry, I couldn't find your location using the browser") + ' ' + Backdrop.getlocations.geolocationErrorMessages(error) + ".";
       alert(msg);
     }
 
@@ -209,20 +209,20 @@
 
     function gps_marker_kill() {
       // remove any old markers
-      if (Drupal.getlocations_gps.marker[key] !== undefined ) {
-        for (var mct = 0; mct < Drupal.getlocations_gps.marker[key].length; mct++) {
-          Drupal.getlocations_gps.marker[key][mct].setMap();
+      if (Backdrop.getlocations_gps.marker[key] !== undefined ) {
+        for (var mct = 0; mct < Backdrop.getlocations_gps.marker[key].length; mct++) {
+          Backdrop.getlocations_gps.marker[key][mct].setMap();
         }
       }
       else {
-        Drupal.getlocations_gps.marker[key] = [];
+        Backdrop.getlocations_gps.marker[key] = [];
       }
     }
 
     function gps_dobounds(r) {
       // a View with exposed filter distance form with gps selected as origin
       if ( $("input[name='distance[gps]']").is('input')) {
-        var data = Drupal.getlocations_data[key];
+        var data = Backdrop.getlocations_data[key];
         if (data.datanum > 0) {
           // add the origin to minmaxes
           var minmaxes = data.minmaxes;
@@ -238,14 +238,14 @@
           if ( r['lon'] > minmaxes.maxlon ) {
             minmaxes.maxlon = r['lon'];
           }
-          Drupal.getlocations.doBounds(Drupal.getlocations_map[key], minmaxes.minlat, minmaxes.minlon, minmaxes.maxlat, minmaxes.maxlon, false);
+          Backdrop.getlocations.doBounds(Backdrop.getlocations_map[key], minmaxes.minlat, minmaxes.minlon, minmaxes.maxlat, minmaxes.maxlon, false);
         }
       }
     }
     // end functions
   };
 
-  Drupal.behaviors.getlocations_gps = {
+  Backdrop.behaviors.getlocations_gps = {
     attach: function (context, settings) {
 
       // doh
@@ -262,7 +262,7 @@
           $("#getlocations_map_wrapper_" + key).append(lladd);
           // gps button
           $("#getlocations_gps_show_" + key).click( function() {
-            Drupal.getlocations_gps.dolocation(key, settings.getlocations_gps[key]);
+            Backdrop.getlocations_gps.dolocation(key, settings.getlocations_gps[key]);
           }); // end button click
         } //  end is there really a map?
       }); // end once

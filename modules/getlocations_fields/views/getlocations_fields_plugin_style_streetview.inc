@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields_plugin_style_streetview.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Contains the getlocations_fields_streetview style plugin.

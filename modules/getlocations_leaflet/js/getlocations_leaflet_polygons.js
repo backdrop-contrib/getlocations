@@ -2,18 +2,18 @@
 /**
  * @file
  * getlocations_leaflet_polygons.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations polygons support
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations_leaflet_polygons = {
+  Backdrop.behaviors.getlocations_leaflet_polygons = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_leaflet_polygons === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_leaflet_polygons === 'undefined') {
         return;
       }
 
@@ -25,7 +25,7 @@
         fillOpacity: 0.35
       };
 
-      $.each(Drupal.settings.getlocations_leaflet_polygons, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_leaflet_polygons, function (key, settings) {
 
         var strokeColor = (settings.strokeColor ? settings.strokeColor : default_polygon_settings.strokeColor);
         if (! strokeColor.match(/^#/)) {
@@ -109,9 +109,9 @@
         }
 
         if (polygons.length) {
-          PolyG.addTo(Drupal.getlocations_leaflet_map[key]);
-          if (Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_polyg_ov) {
-            Drupal.getlocations_leaflet_layerscontrol[key].addOverlay(PolyG, Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_polyg_ov_label);
+          PolyG.addTo(Backdrop.getlocations_leaflet_map[key]);
+          if (Backdrop.getlocations_leaflet_settings[key].map_settings.layercontrol_polyg_ov) {
+            Backdrop.getlocations_leaflet_layerscontrol[key].addOverlay(PolyG, Backdrop.getlocations_leaflet_settings[key].map_settings.layercontrol_polyg_ov_label);
           }
         }
 

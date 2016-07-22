@@ -2,14 +2,14 @@
 /**
  * @file
  * getlocations_fields_admin.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations_fields module admin
  * jquery gee whizzery
 */
 (function ($) {
-  Drupal.behaviors.getlocations_fields_admin = {
+  Backdrop.behaviors.getlocations_fields_admin = {
     attach: function() {
 
       if ($("#edit-getlocations-fields-defaults-use-address,#edit-field-settings-use-address").is('select')) {
@@ -30,14 +30,14 @@
       }
 
       if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").is('input')) {
-        if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").attr('checked')) {
+        if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").prop('checked')) {
           $("#getlocations_fields_search_country").show();
         }
         else {
           $("#getlocations_fields_search_country").hide();
         }
         $("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").change( function() {
-          if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").attr('checked')) {
+          if ($("#edit-getlocations-fields-defaults-restrict-by-country,#edit-field-settings-restrict-by-country").prop('checked')) {
             $("#getlocations_fields_search_country").show();
           }
           else {
@@ -47,14 +47,14 @@
       }
 
       if ($("#edit-getlocations-fields-defaults-pancontrol,#edit-field-settings-pancontrol").is('input')) {
-        if ($("#edit-getlocations-fields-defaults-pancontrol,#edit-field-settings-pancontrol").attr('checked')) {
+        if ($("#edit-getlocations-fields-defaults-pancontrol,#edit-field-settings-pancontrol").prop('checked')) {
           $("#wrap-getlocations-pancontrol").show();
         }
         else {
           $("#wrap-getlocations-pancontrol").hide();
         }
         $("#edit-getlocations-fields-defaults-pancontrol,#edit-field-settings-pancontrol").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-pancontrol").show();
           }
           else {
@@ -98,14 +98,14 @@
       }
 
       if ($("#edit-getlocations-fields-defaults-scale,#edit-field-settings-scale").is('input')) {
-        if ($("#edit-getlocations-fields-defaults-scale,#edit-field-settings-scale").attr('checked')) {
+        if ($("#edit-getlocations-fields-defaults-scale,#edit-field-settings-scale").prop('checked')) {
           $("#wrap-getlocations-scale").show();
         }
         else {
           $("#wrap-getlocations-scale").hide();
         }
         $("#edit-getlocations-fields-defaults-scale,#edit-field-settings-scale").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-scale").show();
           }
           else {
@@ -115,14 +115,14 @@
       }
 
       if ($("#edit-getlocations-fields-defaults-overview,#edit-field-settings-overview").is('input')) {
-        if ($("#edit-getlocations-fields-defaults-overview,#edit-field-settings-overview").attr('checked')) {
+        if ($("#edit-getlocations-fields-defaults-overview,#edit-field-settings-overview").prop('checked')) {
           $("#wrap-getlocations-overview").show();
         }
         else {
           $("#wrap-getlocations-overview").hide();
         }
         $("#edit-getlocations-fields-defaults-overview,#edit-field-settings-overview").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-overview").show();
           }
           else {
@@ -132,14 +132,14 @@
       }
 
       if ($("#edit-getlocations-fields-defaults-sv-show,#edit-field-settings-sv-show").is('input')) {
-        if ($("#edit-getlocations-fields-defaults-sv-show,#edit-field-settings-sv-show").attr('checked')) {
+        if ($("#edit-getlocations-fields-defaults-sv-show,#edit-field-settings-sv-show").prop('checked')) {
           $("#wrap-getlocations-sv-show").show();
         }
         else {
           $("#wrap-getlocations-sv-show").hide();
         }
         $("#edit-getlocations-fields-defaults-sv-show,#edit-field-settings-sv-show").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-sv-show").show();
           }
           else {
@@ -149,14 +149,14 @@
       }
 
       if ($("#edit-getlocations-fields-defaults-fullscreen,#edit-field-settings-fullscreen").is('input')) {
-        if ($("#edit-getlocations-fields-defaults-fullscreen,#edit-field-settings-fullscreen").attr('checked')) {
+        if ($("#edit-getlocations-fields-defaults-fullscreen,#edit-field-settings-fullscreen").prop('checked')) {
           $("#wrap-getlocations-fs-show").show();
         }
         else {
           $("#wrap-getlocations-fs-show").hide();
         }
         $("#edit-getlocations-fields-defaults-fullscreen,#edit-field-settings-fullscreen").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-fs-show").show();
           }
           else {

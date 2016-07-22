@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields_handler_argument_country.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Location country argument handler.
@@ -37,7 +37,7 @@ class getlocations_fields_handler_argument_country extends views_handler_argumen
     $value = FALSE;
 
     if ($this->options['type'] == 'country' && isset($this->argument)) {
-      $value = drupal_strtolower($this->argument);
+      $value = backdrop_strtolower($this->argument);
       // check this
       if (! getlocations_get_country_name($value)) {
         $value = FALSE;

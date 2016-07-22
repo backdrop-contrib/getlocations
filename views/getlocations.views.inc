@@ -2,7 +2,7 @@
 
 /**
  * @file
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Getlocations Map Views support.
@@ -73,54 +73,36 @@ function template_preprocess_getlocations_view_map(&$variables) {
       if (module_exists('getlocations_fields') && isset($location['glid']) && $location['glid'] > 0) {
         $lid = $location['glid'];
       }
-      elseif (module_exists('location') && isset($location['lid']) && $location['lid'] > 0) {
-        $lid = $location['lid'];
-        if (isset($location['type'])) {
-          $location['field_name'] = getlocations_get_fieldname($location['type'], $entity_type);
-        }
-      }
-      elseif (module_exists('geofield') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
-        $lid = $location[$base_field];
-        $location['field_name'] = getlocations_get_fieldname($location['type'], $entity_type);
-        $location['latitude'] = $location[$location['field_name']];
-        $location['longitude'] = $location[$location['field_name'] . '_1'];
-      }
-      elseif (module_exists('geolocation') && isset($location[$base_field]) && $location[$base_field] > 0 ) {
-        $lid = $location[$base_field];
-        $location['field_name'] = getlocations_get_fieldname($location['type'], $entity_type);
-        $location['latitude'] = $location[$location['field_name']];
-        $location['longitude'] = $location[$location['field_name'] . '_1'];
-      }
       if ($lid > 0) {
         if ($entity_type == 'node') {
           $marker = $options['node_map_marker'];
-          if (isset($location['type']) && isset($location['field_name']) ) {
-            if (isset($options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']])) {
-              $marker = $options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']];
-            }
-          }
+          #if (isset($location['type']) && isset($location['field_name']) ) {
+          #  if (isset($options['node_marker__' . backdrop_strtolower($location['type']) . '__' . $location['field_name']])) {
+          #    $marker = $options['node_marker__' . backdrop_strtolower($location['type']) . '__' . $location['field_name']];
+          #  }
+          #}
           // term marker
-          $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-          if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-            $vids = $getlocations_term_marker['vids'];
-            foreach ($vids AS $vid) {
-              if ($nid = getlocations_get_nid_from_lid($lid)) {
-                $query = db_select('taxonomy_index', 't');
-                $query->fields('t', array('tid'));
-                $query->join('taxonomy_term_data', 'd', 't.tid=d.tid');
-                $query->condition('t.nid', $nid);
-                $query->condition('d.vid', $vid);
-                $result = $query->execute()->fetchObject();
-                if (isset($result->tid) && $result->tid > 0 && isset($options['term_marker_' . $result->tid])) {
-                  $marker = $options['term_marker_' . $result->tid];
-                }
-              }
-            }
-          }
+          #$getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+          #if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+          #  $vids = $getlocations_term_marker['vids'];
+          #  foreach ($vids AS $vid) {
+          #    if ($nid = getlocations_get_nid_from_lid($lid)) {
+          #      $query = db_select('taxonomy_index', 't');
+          #      $query->fields('t', array('tid'));
+          #      $query->join('taxonomy_term_data', 'd', 't.tid=d.tid');
+          #      $query->condition('t.nid', $nid);
+          #      $query->condition('d.vid', $vid);
+          #      $result = $query->execute()->fetchObject();
+          #      if (isset($result->tid) && $result->tid > 0 && isset($options['term_marker_' . $result->tid])) {
+          #        $marker = $options['term_marker_' . $result->tid];
+          #      }
+          #    }
+          #  }
+          #}
         }
         elseif ($entity_type == 'taxonomy_term') {
           $marker = $options['vocabulary_map_marker'];
-          if (isset($location['field_name'])) {
+          if (isset($location['field_name']) && ! empty($location['field_name']) ) {
             if (isset($options['vocabulary_marker_' . $location['field_name']])) {
               $marker = $options['vocabulary_marker_' . $location['field_name']];
             }
@@ -169,7 +151,7 @@ function template_preprocess_getlocations_view_map(&$variables) {
                 $label = $location[$options['category_term_reference_field']];
                 $cat = preg_replace("/\s+/", "_", $label);
                 $cat = preg_replace("/'/", "", $cat);
-                $cat = drupal_strtolower($cat);
+                $cat = backdrop_strtolower($cat);
                 $cats[$cat] = $label;
               }
             }

@@ -3,13 +3,13 @@
 /**
  * @file
  * getlocations_fields.module
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Defines getlocations fields type.
  */
 
-define('GETLOCATIONS_FIELDS_PATH', drupal_get_path('module', 'getlocations_fields'));
+define('GETLOCATIONS_FIELDS_PATH', backdrop_get_path('module', 'getlocations_fields'));
 
 /**
  * Implements hook_help().
@@ -30,7 +30,7 @@ function getlocations_fields_init() {
   module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
   global $user;
   if ($user->uid > 0 && ! getlocations_fields_column_check('data')) {
-    drupal_set_message(t('You need to run update <a href="@url">now</a>.', array('@url' => url('update.php') )), 'error');
+    backdrop_set_message(t('You need to run update <a href="@url">now</a>.', array('@url' => url('update.php') )), 'error');
   }
 }
 
@@ -43,7 +43,7 @@ function getlocations_fields_menu() {
   $items[GETLOCATIONS_ADMIN_PATH . '/fields'] = array(
     'title' => 'Fields',
     'description' => 'Configure Getlocations fields',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('getlocations_fields_settings_form'),
     'access arguments' => array('administer site configuration'),
     'type' => MENU_LOCAL_TASK,
@@ -96,6 +96,62 @@ function getlocations_fields_views_api() {
     'path' => GETLOCATIONS_FIELDS_PATH . '/views',
   );
 }
+
+/**
+ * Implements hook_autoload_info().
+ */
+function getlocations_fields_autoload_info() {
+  return array(
+    'getlocations_fields_handler_argument_distance' => 'handlers/getlocations_fields_handler_argument_distance.inc',
+    'getlocations_fields_handler_argument_country' => 'handlers/getlocations_fields_handler_argument_country.inc',
+    'getlocations_fields_handler_argument_postcode' => 'handlers/getlocations_fields_handler_argument_postcode.inc',
+    'getlocations_fields_handler_argument_province' => 'handlers/getlocations_fields_handler_argument_province.inc',
+    'getlocations_fields_handler_argument_city' => 'handlers/getlocations_fields_handler_argument_city.inc',
+    'getlocations_fields_handler_argument_glid' => 'handlers/getlocations_fields_handler_argument_glid.inc',
+    'getlocations_fields_handler_argument_bbox' => 'handlers/getlocations_fields_handler_argument_bbox.inc',
+    'getlocations_fields_plugin_argument_default_bboxquery' => 'handlers/getlocations_fields_plugin_argument_default_bboxquery.inc',
+    'getlocations_fields_handler_field_coordinates' => 'handlers/getlocations_fields_handler_field_coordinates.inc',
+    'getlocations_fields_handler_field_wkt' => 'handlers/getlocations_fields_handler_field_wkt.inc',
+    'getlocations_fields_handler_field_country' => 'handlers/getlocations_fields_handler_field_country.inc',
+    'getlocations_fields_handler_field_distance' => 'handlers/getlocations_fields_handler_field_distance.inc',
+    'getlocations_fields_handler_field_latitude' => 'handlers/getlocations_fields_handler_field_latitude.inc',
+    'getlocations_fields_handler_field_longitude' => 'handlers/getlocations_fields_handler_field_longitude.inc',
+    'getlocations_fields_handler_field_data' => 'handlers/getlocations_fields_handler_field_data.inc',
+    'getlocations_fields_handler_filter_country' => 'handlers/getlocations_fields_handler_filter_country.inc',
+    'getlocations_fields_handler_filter_distance' => 'handlers/getlocations_fields_handler_filter_distance.inc',
+    'getlocations_fields_handler_sort_distance' => 'handlers/getlocations_fields_handler_sort_distance.inc',
+    'getlocations_fields_plugin_style_streetview' => 'views/getlocations_fields_plugin_style_streetview.inc',
+  );
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function getlocations_fields_config_info() {
+  $info['getlocations_fields.settings'] = array(
+    'label' => t('Getlocations fields settings'),
+    'group' => t('Configuration'),
+  );
+  $info['getlocations_fields.paths'] = array(
+    'label' => t('Getlocations fields paths'),
+    'group' => t('Configuration'),
+  );
+  $info['getlocations_fields.shapes'] = array(
+    'label' => t('Getlocations fields shapes'),
+    'group' => t('Configuration'),
+  );
+  $info['getlocations_fields.what3words'] = array(
+    'label' => t('Getlocations fields what3words'),
+    'group' => t('Configuration'),
+  );
+  $info['getlocations_fields.sv'] = array(
+    'label' => t('Getlocations fields sv'),
+    'group' => t('Configuration'),
+  );
+
+  return $info;
+}
+
 
 /**
  * Implements hook_field_info().
@@ -425,7 +481,7 @@ function getlocations_fields_field_delete_revision($entity_type, $entity, $field
 /**
  * Implements hook_field_load().
  * Define custom load behavior for this module's field types.
- * http://api.drupal.org/api/drupal/modules--field--field.api.php/function/hook_field_load/7
+ * http://api.backdrop.org/api/backdrop/modules--field--field.api.php/function/hook_field_load/7
  *
  * @param $entity_type
  *   The type of $entity.
@@ -494,23 +550,19 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
     $settings = getlocations_fields_field_info();
   }
 
+  // get the getlocations defaults
+  $getlocations_defaults = getlocations_defaults();
+
   $form = array();
 
   $form += getlocations_fields_input_settings_form($settings);
   // validation for getlocations_fields_input_settings_form
-  $form['input_address_width']['#element_validate']     = array('element_validate_integer_positive');
-  $form['input_name_width']['#element_validate']        = array('element_validate_integer_positive');
-  $form['input_street_width']['#element_validate']      = array('element_validate_integer_positive');
-  $form['input_additional_width']['#element_validate']  = array('element_validate_integer_positive');
-  $form['input_city_width']['#element_validate']        = array('element_validate_integer_positive');
-  $form['input_province_width']['#element_validate']    = array('element_validate_integer_positive');
-  $form['input_postal_code_width']['#element_validate'] = array('element_validate_integer_positive');
-  $form['input_latitude_width']['#element_validate']    = array('element_validate_integer_positive');
-  $form['input_longitude_width']['#element_validate']   = array('element_validate_integer_positive');
-  $form['input_country_width']['#element_validate']     = array('element_validate_integer_positive');
-  $form['input_phone_width']['#element_validate']       = array('element_validate_integer_positive');
-  $form['input_mobile_width']['#element_validate']      = array('element_validate_integer_positive');
-  $form['input_fax_width']['#element_validate']         = array('element_validate_integer_positive');
+  $input_keys = array('input_address_width','input_name_width','input_street_width','input_additional_width','input_city_width','input_province_width','input_postal_code_width','input_latitude_width','input_longitude_width','input_country_width','input_phone_width','input_mobile_width','input_fax_width');
+  foreach ($input_keys AS $k) {
+    $form[$k]['#element_validate'] = array('form_validate_number');
+    $form[$k]['#min'] = 1;
+    $form[$k]['#max'] = 200;
+  }
 
   $form['input_map_show'] = getlocations_element_map_checkbox(
     t('Show map on input form'),
@@ -560,7 +612,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
   }
 
   // what3words
-  $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
+  $what3words_lic = $getlocations_defaults['what3words_lic'];
   if ($what3words_lic['key']) {
     $form['what3words_collect'] = getlocations_element_map_checkbox(
       t('Collect what3words'),
@@ -595,7 +647,7 @@ function getlocations_fields_field_settings_form($field, $instance, $has_data) {
 /**
  * Implements hook_field_is_empty().
  * Define what constitutes an empty item for a field type.
- * hook_field_is_emtpy() is where Drupal asks us if this field is empty.
+ * hook_field_is_emtpy() is where Backdrop asks us if this field is empty.
  * Return TRUE if it does not contain data, FALSE if it does. This lets
  * the form API flag an error when required fields are empty.
  *
@@ -661,7 +713,7 @@ function getlocations_fields_field_formatter_info() {
  * @see getlocations_fields_field_formatter_info()
  */
 function getlocations_fields_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
+  backdrop_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   $settings = $display['settings'];
   if (empty($settings)) {
@@ -696,28 +748,28 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     $locations = getlocations_fields_load_locations($entity->vid, 'vid', $field_name);
     if (count($locations)) {
 
-      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-      if ($getlocations_node_marker['enable']) {
-        if ($types = getlocations_get_types()) {
-          foreach ($types AS $type => $name) {
-            $field_names = getlocations_get_fieldname2($type, $entity_type);
-            foreach ($field_names AS $f_name) {
-              if ( $field_name && $f_name == $field_name) {
-                $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
-                if (isset($settings[$mkey])) {
-                  $settings['map_marker'] = $settings[$mkey];
-                }
-                else {
-                  $settings['map_marker'] = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $settings['node_map_marker']);
-                }
-              }
-            }
-          }
-        }
-      }
-      else {
+      #$getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      #if ($getlocations_node_marker['enable']) {
+      #  if ($types = getlocations_get_types()) {
+      #    foreach ($types AS $type => $name) {
+      #      $field_names = getlocations_get_fieldname2($type, $entity_type);
+      #      foreach ($field_names AS $f_name) {
+      #        if ( $field_name && $f_name == $field_name) {
+      #          $mkey = 'node_marker__' . strtolower($type) . '__' . $field_name;
+      #          if (isset($settings[$mkey])) {
+      #            $settings['map_marker'] = $settings[$mkey];
+      #          }
+      #          else {
+      #            $settings['map_marker'] = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $settings['node_map_marker']);
+      #          }
+      #        }
+      #      }
+      #    }
+      #  }
+      #}
+      #else {
         $settings['map_marker'] = $settings['node_map_marker'];
-      }
+      #}
 
       // term marker. this will override node marker if there is one
       $settings['map_marker'] = getlocations_get_term_marker($entity->nid, $settings['map_marker']);
@@ -727,26 +779,26 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     $locations = getlocations_fields_load_locations($entity->tid, 'tid', $field_name);
     if (count($locations)) {
       $settings['map_marker'] = $settings['vocabulary_map_marker'];
-      $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
-      if ($getlocations_vocabulary_marker['enable']) {
-        if ($types = getlocations_get_vocabularies()) {
-          foreach ($types AS $type => $name) {
-            $f_name = getlocations_get_fieldname($type, $entity_type);
-            if ($f_name == $field_name) {
-              $mkey = 'vocabulary_marker_' . $field_name;
-              if (isset($settings[$mkey])) {
-                $settings['map_marker'] = $settings[$mkey];
-              }
-              else {
-                $settings['map_marker'] = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $settings['vocabulary_map_marker']);
-              }
-            }
-          }
-        }
-      }
-      else {
-        $settings['map_marker'] = $settings['vocabulary_map_marker'];
-      }
+      #$getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+      #if ($getlocations_vocabulary_marker['enable']) {
+      #  if ($types = getlocations_get_vocabularies()) {
+      #    foreach ($types AS $type => $name) {
+      #      $f_name = getlocations_get_fieldname($type, $entity_type);
+      #      if ($f_name == $field_name) {
+      #        $mkey = 'vocabulary_marker_' . $field_name;
+      #        if (isset($settings[$mkey])) {
+      #          $settings['map_marker'] = $settings[$mkey];
+      #        }
+      #        else {
+      #          $settings['map_marker'] = (isset($getlocations_vocabulary_marker['vocabulary'][$type]['map_marker']) ? $getlocations_vocabulary_marker['vocabulary'][$type]['map_marker'] : $settings['vocabulary_map_marker']);
+      #        }
+      #      }
+      #    }
+      #  }
+      #}
+      #else {
+      #  $settings['map_marker'] = $settings['vocabulary_map_marker'];
+      #}
     }
   }
   elseif ($entity_type == 'user' || $entity_type == 'profile2') {
@@ -761,6 +813,22 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
       $settings['map_marker'] = $settings['comment_map_marker'];
     }
   }
+
+  // TODO add shapes and what3words and sv using config()
+  $w3w_lic = getlocations_w3w_get_lic();
+  if ($w3w_lic['key']) {
+    $w3w_search = config_get('getlocations_search.what3words', 'settings');
+    $w3w_search['what3words_lic'] = $w3w_lic;
+    $settings += $w3w_search;
+  }
+
+  // shapes
+  $shapes = config_get('getlocations_fields.shapes', 'shapes');
+  $settings += $shapes;
+
+  // sv
+  $sv = config_get('getlocations_fields.sv', 'settings');
+  $settings += $sv;
 
   switch ($display['type']) {
     case 'getlocations_fields_default':
@@ -803,7 +871,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
  */
 function getlocations_fields_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
   $getlocations_fields_paths = getlocations_fields_paths_get();
-  drupal_add_js($getlocations_fields_paths['getlocations_fields_formatter_path']);
+  backdrop_add_js($getlocations_fields_paths['getlocations_fields_formatter_path']);
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
   $getlocations_fields_defaults = getlocations_fields_defaults();
@@ -841,6 +909,8 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   }
 
   // streetview overlay settings
+  $sv = config_get('getlocations_fields.sv', 'settings');
+  $settings += $sv;
   $element += getlocations_fields_sv_control_form($settings);
 
   unset($element['#theme']);
@@ -869,7 +939,7 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
  */
 function getlocations_fields_field_formatter_settings_summary($field, $instance, $view_mode) {
   $getlocations_fields_paths = getlocations_fields_paths_get();
-  drupal_add_js($getlocations_fields_paths['getlocations_fields_formatter_path']);
+  backdrop_add_js($getlocations_fields_paths['getlocations_fields_formatter_path']);
 
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
@@ -888,9 +958,9 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if ($settings['controltype']) {
       $summary[] = t('Zoom control type: @c', array('@c' => $settings['controltype']));
     }
-    if ($settings['pancontrol']) {
-      $summary[] = t('Show Pan control: Yes');
-    }
+    #if ($settings['pancontrol']) {
+    #  $summary[] = t('Show Pan control: Yes');
+    #}
     if ($settings['mtc']) {
       $summary[] = t('Map control type: @c', array('@c' => $settings['mtc']));
     }
@@ -911,9 +981,9 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if ($settings['scale']) {
       $summary[] = t('Show scale: Yes');
     }
-    if ($settings['overview']) {
-      $summary[] = t('Show overview map: Yes');
-    }
+    #if ($settings['overview']) {
+    #  $summary[] = t('Show overview map: Yes');
+    #}
     if ($settings['scrollwheel']) {
       $summary[] = t('Enable scrollwheel zooming: Yes');
     }
@@ -928,7 +998,7 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     if ($settings['nodoubleclickzoom']) {
       $summary[] = t('Disable doubleclick zoom: Yes');
     }
-    if ($settings['sv_show']) {
+    if (isset($settings['sv_show']) && $settings['sv_show']) {
       $summary[] = t('Show streetview pegman: Yes');
     }
     if ($settings['sv_showfirst']) {
@@ -959,6 +1029,12 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
     }
     if (count($info_display)) {
       $summary[] = t("Enabled information layers:") . '<br />' . implode(', ', $info_display);
+    }
+    if ($settings['highlight_group']['highlight_enable']) {
+      $summary[] = t('Enable Highlight: Yes');
+      #if ($settings['polygons_group']['polygons_clickable']) {
+      #  $summary[] = t('Polygons clickable: Yes');
+      #}
     }
 
     if ($entity_type == 'user' || $entity_type == 'profile2') {
@@ -1014,27 +1090,27 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       }
     }
     $summary[] = t('Zoom level: @z', array('@z' => $settings['nodezoom']));
-    if ($settings['polygons_enable']) {
+    if ($settings['polygons_group']['polygons_enable']) {
       $summary[] = t('Enable polygons: Yes');
-      if ($settings['polygons_clickable']) {
+      if ($settings['polygons_group']['polygons_clickable']) {
         $summary[] = t('Polygons clickable: Yes');
       }
     }
-    if ($settings['rectangles_enable']) {
+    if ($settings['rectangles_group']['rectangles_enable']) {
       $summary[] = t('Enable rectangles: Yes');
-      if ($settings['rectangles_clickable']) {
+      if ($settings['rectangles_group']['rectangles_clickable']) {
         $summary[] = t('Rectangles clickable: Yes');
       }
     }
-    if ($settings['circles_enable']) {
+    if ($settings['circles_group']['circles_enable']) {
       $summary[] = t('Enable circles: Yes');
-      if ($settings['circles_clickable']) {
+      if ($settings['circles_group']['circles_clickable']) {
         $summary[] = t('Circles clickable: Yes');
       }
     }
-    if ($settings['polylines_enable']) {
+    if ($settings['polylines_group']['polylines_enable']) {
       $summary[] = t('Enable polylines: Yes');
-      if ($settings['polylines_clickable']) {
+      if ($settings['polylines_group']['polylines_clickable']) {
         $summary[] = t('Polylines clickable: Yes');
       }
     }
@@ -1362,7 +1438,7 @@ function getlocations_fields_field_widget_form(&$form, &$form_state, $field, $in
       else {
         $default_country_value = (isset($items[$delta]['country']) && $items[$delta]['country'] ? $items[$delta]['country'] : (isset($instance['default_value'][$delta]['country']) ? $instance['default_value'][$delta]['country'] : $settings['country']));
         $default_country_value_long = $default_country_value;
-        if ($default_country_value && drupal_strlen($default_country_value) == 2) {
+        if ($default_country_value && backdrop_strlen($default_country_value) == 2) {
           $default_country_value_long = getlocations_get_country_name($default_country_value);
         }
         if ($settings['input_country_required'] == 4) {
@@ -1725,10 +1801,10 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['minzoom_map']               = -1;
   $getlocations_defaults['maxzoom_map']               = -1;
   $getlocations_defaults['fullscreen']                = 0;
-  $getlocations_defaults['polygons_enable']           = 0;
-  $getlocations_defaults['rectangles_enable']         = 0;
-  $getlocations_defaults['circles_enable']            = 0;
-  $getlocations_defaults['polylines_enable']          = 0;
+  $getlocations_defaults['polygons_group']['polygons_enable']     = 0;
+  $getlocations_defaults['rectangles_group']['rectangles_enable'] = 0;
+  $getlocations_defaults['circles_group']['circles_enable']       = 0;
+  $getlocations_defaults['polylines_group']['polylines_enable']   = 0;
   $getlocations_defaults['show_bubble_on_one_marker'] = 0;
   $getlocations_defaults['search_places']             = 0;
 
@@ -1747,16 +1823,12 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['zoom']                = $settings['zoom'];
   $getlocations_defaults['controltype']         = $settings['controltype'];
   $getlocations_defaults['zoomcontrolposition'] = $settings['zoomcontrolposition'];
-  $getlocations_defaults['pancontrol']          = $settings['pancontrol'];
-  $getlocations_defaults['pancontrolposition']  = $settings['pancontrolposition'];
   $getlocations_defaults['mtc']                 = $settings['mtc'];
   $getlocations_defaults['maptype']             = $settings['maptype'];
   $getlocations_defaults['mapcontrolposition']  = $settings['mapcontrolposition'];
   $getlocations_defaults['baselayers']          = $settings['baselayers'];
   $getlocations_defaults['scale']               = $settings['scale'];
   $getlocations_defaults['scalecontrolposition'] = $settings['scalecontrolposition'];
-  $getlocations_defaults['overview']            = $settings['overview'];
-  $getlocations_defaults['overview_opened']     = $settings['overview_opened'];
   $getlocations_defaults['scrollwheel']         = $settings['scrollwheel'];
   $getlocations_defaults['draggable']           = $settings['draggable'];
   $getlocations_defaults['input_map_marker']    = $settings['input_map_marker'];
@@ -1768,7 +1840,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['geocoder_enable']      = $settings['geocoder_enable'];
 
   $mapid = getlocations_setup_map($getlocations_defaults);
-  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
+  backdrop_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   $aggr = (getlocations_aggr_get() ? TRUE : FALSE);
 
@@ -1779,13 +1851,13 @@ function getlocations_fields_getmap($settings, $active) {
   $js_opts['preprocess'] = $aggr;
   $latlons = array();
   if ($active) {
-    drupal_add_js($getlocations_fields_paths['getlocations_fields_path'], $js_opts);
+    backdrop_add_js($getlocations_fields_paths['getlocations_fields_path'], $js_opts);
     $settings['nodezoom'] = $getlocations_defaults['nodezoom'];
     getlocations_fields_js_settings_do($settings, $mapid);
   }
   else {
     // demo mode
-    drupal_add_js($getlocations_fields_paths['getlocations_fields_preview_path'], $js_opts);
+    backdrop_add_js($getlocations_fields_paths['getlocations_fields_preview_path'], $js_opts);
     $getlocations_defaults['nodezoom'] = $getlocations_defaults['zoom'];
   }
 
@@ -1804,13 +1876,10 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
 
   $getlocations_defaults = getlocations_defaults();
   $getlocations_defaults['controltype']               = $settings['controltype'];
-  $getlocations_defaults['pancontrol']                = $settings['pancontrol'];
   $getlocations_defaults['mtc']                       = $settings['mtc'];
   $getlocations_defaults['maptype']                   = $settings['maptype'];
   $getlocations_defaults['baselayers']                = $settings['baselayers'];
   $getlocations_defaults['scale']                     = $settings['scale'];
-  $getlocations_defaults['overview']                  = $settings['overview'];
-  $getlocations_defaults['overview_opened']           = $settings['overview_opened'];
   $getlocations_defaults['scrollwheel']               = $settings['scrollwheel'];
   $getlocations_defaults['draggable']                 = $settings['draggable'];
   $getlocations_defaults['sv_show']                   = $settings['sv_show'];
@@ -1842,51 +1911,11 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['fullscreen']                = $settings['fullscreen'];
   $getlocations_defaults['fullscreen_controlposition'] = $settings['fullscreen_controlposition'];
   $getlocations_defaults['show_bubble_on_one_marker'] = $settings['show_bubble_on_one_marker'];
-  $getlocations_defaults['polygons_enable']           = $settings['polygons_enable'];
-  $getlocations_defaults['polygons_strokecolor']      = $settings['polygons_strokecolor'];
-  $getlocations_defaults['polygons_strokeopacity']    = $settings['polygons_strokeopacity'];
-  $getlocations_defaults['polygons_strokeweight']     = $settings['polygons_strokeweight'];
-  $getlocations_defaults['polygons_fillcolor']        = $settings['polygons_fillcolor'];
-  $getlocations_defaults['polygons_fillopacity']      = $settings['polygons_fillopacity'];
-  $getlocations_defaults['polygons_coords']           = $settings['polygons_coords'];
-  $getlocations_defaults['polygons_clickable']        = $settings['polygons_clickable'];
-  $getlocations_defaults['polygons_message']          = $settings['polygons_message'];
-  $getlocations_defaults['rectangles_enable']         = $settings['rectangles_enable'];
-  $getlocations_defaults['rectangles_strokecolor']    = $settings['rectangles_strokecolor'];
-  $getlocations_defaults['rectangles_strokeopacity']  = $settings['rectangles_strokeopacity'];
-  $getlocations_defaults['rectangles_strokeweight']   = $settings['rectangles_strokeweight'];
-  $getlocations_defaults['rectangles_fillcolor']      = $settings['rectangles_fillcolor'];
-  $getlocations_defaults['rectangles_fillopacity']    = $settings['rectangles_fillopacity'];
-  $getlocations_defaults['rectangles_coords']         = $settings['rectangles_coords'];
-  $getlocations_defaults['rectangles_clickable']      = $settings['rectangles_clickable'];
-  $getlocations_defaults['rectangles_message']        = $settings['rectangles_message'];
-  $getlocations_defaults['rectangles_apply']          = $settings['rectangles_apply'];
-  $getlocations_defaults['rectangles_dist']           = $settings['rectangles_dist'];
-  $getlocations_defaults['circles_enable']            = $settings['circles_enable'];
-  $getlocations_defaults['circles_strokecolor']       = $settings['circles_strokecolor'];
-  $getlocations_defaults['circles_strokeopacity']     = $settings['circles_strokeopacity'];
-  $getlocations_defaults['circles_strokeweight']      = $settings['circles_strokeweight'];
-  $getlocations_defaults['circles_fillcolor']         = $settings['circles_fillcolor'];
-  $getlocations_defaults['circles_fillopacity']       = $settings['circles_fillopacity'];
-  $getlocations_defaults['circles_coords']            = $settings['circles_coords'];
-  $getlocations_defaults['circles_clickable']         = $settings['circles_clickable'];
-  $getlocations_defaults['circles_message']           = $settings['circles_message'];
-  $getlocations_defaults['circles_radius']            = $settings['circles_radius'];
-  $getlocations_defaults['circles_apply']             = $settings['circles_apply'];
-  $getlocations_defaults['polylines_enable']          = $settings['polylines_enable'];
-  $getlocations_defaults['polylines_strokecolor']     = $settings['polylines_strokecolor'];
-  $getlocations_defaults['polylines_strokeopacity']   = $settings['polylines_strokeopacity'];
-  $getlocations_defaults['polylines_strokeweight']    = $settings['polylines_strokeweight'];
-  $getlocations_defaults['polylines_coords']          = $settings['polylines_coords'];
-  $getlocations_defaults['polylines_clickable']       = $settings['polylines_clickable'];
-  $getlocations_defaults['polylines_message']         = $settings['polylines_message'];
-  $getlocations_defaults['search_places']             = $settings['search_places'];
-  $getlocations_defaults['search_places_size']        = $settings['search_places_size'];
-  $getlocations_defaults['search_places_position']    = $settings['search_places_position'];
-  $getlocations_defaults['search_places_label']       = $settings['search_places_label'];
-  $getlocations_defaults['search_places_placeholder'] = $settings['search_places_placeholder'];
-  $getlocations_defaults['search_places_dd']          = $settings['search_places_dd'];
-  $getlocations_defaults['search_places_list']        = $settings['search_places_list'];
+  $getlocations_defaults['polygons_group']           = $settings['polygons_group'];
+  $getlocations_defaults['rectangles_group']         = $settings['rectangles_group'];
+  $getlocations_defaults['circles_group']            = $settings['circles_group'];
+  $getlocations_defaults['polylines_group']          = $settings['polylines_group'];
+  $getlocations_defaults['search_places_group']    = $settings['search_places_group'];
   $getlocations_defaults['kml_group']                 = $settings['kml_group'];
   $getlocations_defaults['geojson_enable']            = $settings['geojson_enable'];
   $getlocations_defaults['geojson_data']              = $settings['geojson_data'];
@@ -1895,51 +1924,14 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['nodoubleclickzoom']         = $settings['nodoubleclickzoom'];
   $getlocations_defaults['zoomcontrolposition']       = $settings['zoomcontrolposition'];
   $getlocations_defaults['mapcontrolposition']        = $settings['mapcontrolposition'];
-  $getlocations_defaults['pancontrolposition']        = $settings['pancontrolposition'];
   $getlocations_defaults['scalecontrolposition']      = $settings['scalecontrolposition'];
   $getlocations_defaults['svcontrolposition']         = $settings['svcontrolposition'];
-  $getlocations_defaults['sv_addresscontrol']         = $settings['sv_addresscontrol']; // sv overlay controls
-  $getlocations_defaults['sv_addresscontrolposition'] = $settings['sv_addresscontrolposition'];
-  $getlocations_defaults['sv_pancontrol']             = $settings['sv_pancontrol'];
-  $getlocations_defaults['sv_pancontrolposition']     = $settings['sv_pancontrolposition'];
-  $getlocations_defaults['sv_zoomcontrol']            = $settings['sv_zoomcontrol'];
-  $getlocations_defaults['sv_zoomcontrolposition']    = $settings['sv_zoomcontrolposition'];
-  $getlocations_defaults['sv_linkscontrol']           = $settings['sv_linkscontrol'];
-  $getlocations_defaults['sv_imagedatecontrol']       = $settings['sv_imagedatecontrol'];
-  $getlocations_defaults['sv_scrollwheel']            = $settings['sv_scrollwheel'];
-  $getlocations_defaults['sv_clicktogo']              = $settings['sv_clicktogo'];
-  $getlocations_defaults['highlight_enable']          = $settings['highlight_enable'];
-  $getlocations_defaults['highlight_strokecolor']     = $settings['highlight_strokecolor'];
-  $getlocations_defaults['highlight_strokeopacity']   = $settings['highlight_strokeopacity'];
-  $getlocations_defaults['highlight_strokeweight']    = $settings['highlight_strokeweight'];
-  $getlocations_defaults['highlight_fillcolor']       = $settings['highlight_fillcolor'];
-  $getlocations_defaults['highlight_fillopacity']     = $settings['highlight_fillopacity'];
-  $getlocations_defaults['highlight_radius']          = $settings['highlight_radius'];
+  $getlocations_defaults['sv_group']         = $settings['sv_group']; // sv overlay controls
+  $getlocations_defaults['highlight_group']          = $settings['highlight_group'];
   $getlocations_defaults['getdirections_link']        = $settings['getdirections_link'];
   $getlocations_defaults['show_search_distance']      = $settings['show_search_distance'];
-  $getlocations_defaults['views_search_marker_enable']          = $settings['views_search_marker_enable'];
-  $getlocations_defaults['views_search_marker']                 = $settings['views_search_marker'];
-  $getlocations_defaults['views_search_marker_toggle']          = $settings['views_search_marker_toggle'];
-  $getlocations_defaults['views_search_marker_toggle_active']   = $settings['views_search_marker_toggle_active'];
-  $getlocations_defaults['views_search_radshape_enable']        = $settings['views_search_radshape_enable'];
-  $getlocations_defaults['views_search_radshape_strokecolor']   = $settings['views_search_radshape_strokecolor'];
-  $getlocations_defaults['views_search_radshape_strokeopacity'] = $settings['views_search_radshape_strokeopacity'];
-  $getlocations_defaults['views_search_radshape_strokeweight']  = $settings['views_search_radshape_strokeweight'];
-  $getlocations_defaults['views_search_radshape_fillcolor']     = $settings['views_search_radshape_fillcolor'];
-  $getlocations_defaults['views_search_radshape_fillopacity']   = $settings['views_search_radshape_fillopacity'];
-  $getlocations_defaults['views_search_radshape_toggle']        = $settings['views_search_radshape_toggle'];
-  $getlocations_defaults['views_search_radshape_toggle_active'] = $settings['views_search_radshape_toggle_active'];
-  $getlocations_defaults['views_search_center']                 = $settings['views_search_center'];
-
-  $getlocations_defaults['gps_button']                = $settings['gps_button'];
-  $getlocations_defaults['gps_button_label']          = $settings['gps_button_label'];
-  $getlocations_defaults['gps_marker']                = $settings['gps_marker'];
-  $getlocations_defaults['gps_marker_title']          = $settings['gps_marker_title'];
-  $getlocations_defaults['gps_bubble']                = $settings['gps_bubble'];
-  $getlocations_defaults['gps_geocode']               = $settings['gps_geocode'];
-  $getlocations_defaults['gps_center']                = $settings['gps_center'];
-  $getlocations_defaults['gps_type']                  = $settings['gps_type'];
-  $getlocations_defaults['gps_zoom']                  = $settings['gps_zoom'];
+  $getlocations_defaults['views_search_group']          = $settings['views_search_group'];
+  #$getlocations_defaults['gps_group']                = $settings['gps_group'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2112,9 +2104,9 @@ function getlocations_fields_save_locations($locations, $criteria, $settings, $m
           $data['data']['map_maptype'] = check_plain($locations[$key]['map_maptype']);
         }
       }
-
+// TODO
       // what3words
-      $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
+      $what3words_lic = getlocations_w3w_get_lic();
       if ($what3words_lic['key'] && $settings['what3words_collect']) {
         $ll = $locations[$key]['latitude'] . ',' . $locations[$key]['longitude'];
         $ll = getlocations_latlon_check($ll);
@@ -2170,6 +2162,7 @@ function getlocations_fields_save_locations($locations, $criteria, $settings, $m
         unset($locations[$key]);
       }
     }
+
     return $locations;
   }
 }
@@ -2399,10 +2392,8 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
   if ($id) {
     module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
-    $fields = array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker');
-    if (getlocations_fields_column_check('data')) {
-      $fields[] = 'data';
-    }
+    $getlocations_defaults = getlocations_defaults();
+    $fields = array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker', 'data');
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', $fields);
     $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid', 'field_name'));
@@ -2428,10 +2419,10 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       }
     }
 
-    if ($field_name) {
-      $query->join('field_config', 'c', 'e.field_name = c.field_name');
-      $query->condition('e.field_name', $field_name);
-    }
+#    if ($field_name) {
+#      $query->join('field_config', 'c', 'e.field_name = c.field_name');
+#      $query->condition('e.field_name', $field_name);
+#    }
     $query->condition('e.' . $key, $id);
     $rows = $query->execute();
     $ct = 0;
@@ -2445,7 +2436,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       $locations[$ct]['province'] = $row->province;
       $locations[$ct]['province_name'] = $row->province;
       $locations[$ct]['postal_code'] = $row->postal_code;
-      if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
+      if ($getlocations_fields_defaults['country_full'] && backdrop_strlen($row->country) == 2) {
         $locations[$ct]['country_name'] = getlocations_get_country_name($row->country);
       }
       else {
@@ -2481,7 +2472,7 @@ function getlocations_fields_load_locations($id, $key = 'vid', $field_name = '')
       }
 
       // what3words
-      $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
+      $what3words_lic = $getlocations_defaults['what3words_lic'];
       if ($what3words_lic['key'] && is_array($data) && isset($data['data']['what3words'])) {
         $locations[$ct]['what3words'] = $data['data']['what3words'];
       }
@@ -2522,33 +2513,31 @@ function getlocations_fields_load_location($glid) {
   if ($glid) {
     module_load_include('inc', 'getlocations_fields', 'getlocations_fields.functions');
     $getlocations_fields_defaults = getlocations_fields_defaults();
-    $fields = array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker');
-    if (getlocations_fields_column_check('data')) {
-      $fields[] = 'data';
-    }
+    $getlocations_defaults = getlocations_defaults();
+    $fields = array('glid', 'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'address', 'latitude', 'longitude', 'marker', 'data');
     $query = db_select('getlocations_fields', 'f');
     $query->fields('f', $fields);
     $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
 
-#    if (! in_array('administrator', $roles)) {
-#      if ($key == 'nid') {
-#        $query->join('node', 'n', 'n.nid = e.nid');
-#        $query->condition('e.nid', $id)->condition('n.status', 0, '>');
-#      }
-#      elseif ($key == 'vid') {
-#        $query->join('node_revision', 'n', 'n.vid = e.vid');
-#        $query->condition('e.vid', $id)->condition('n.status', 0, '>');
-#      }
-#      elseif ($key == 'uid') {
-#        $query->join('users', 'n', 'n.uid = e.uid');
-#        $query->condition('e.uid', $id)->condition('n.status', 0, '>');
-#      }
-#      elseif (module_exists('comment') && $key == 'cid') {
-#        $query->join('comment', 'n', 'n.cid = e.cid');
-#        $query->condition('e.cid', $id)->condition('n.status', 0, '>');
-#      }
-#    }
+    if (! in_array('administrator', $roles)) {
+      if ($key == 'nid') {
+        $query->join('node', 'n', 'n.nid = e.nid');
+        $query->condition('e.nid', $id)->condition('n.status', 0, '>');
+      }
+      elseif ($key == 'vid') {
+        $query->join('node_revision', 'n', 'n.vid = e.vid');
+        $query->condition('e.vid', $id)->condition('n.status', 0, '>');
+      }
+      elseif ($key == 'uid') {
+        $query->join('users', 'n', 'n.uid = e.uid');
+        $query->condition('e.uid', $id)->condition('n.status', 0, '>');
+      }
+      elseif (module_exists('comment') && $key == 'cid') {
+        $query->join('comment', 'n', 'n.cid = e.cid');
+        $query->condition('e.cid', $id)->condition('n.status', 0, '>');
+      }
+    }
 
     $query->condition('f.glid', $glid);
     $row = $query->execute()->fetchObject();
@@ -2562,7 +2551,7 @@ function getlocations_fields_load_location($glid) {
       $location['province'] = $row->province;
       $location['province_name'] = $row->province;
       $location['postal_code'] = $row->postal_code;
-      if ($getlocations_fields_defaults['country_full'] && drupal_strlen($row->country) == 2) {
+      if ($getlocations_fields_defaults['country_full'] && backdrop_strlen($row->country) == 2) {
         $location['country_name'] = getlocations_get_country_name($row->country);
       }
       else {
@@ -2593,7 +2582,7 @@ function getlocations_fields_load_location($glid) {
       }
 
       // what3words
-      $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
+      $what3words_lic = $getlocations_defaults['what3words_lic'];
       if ($what3words_lic['key'] && is_array($data) && isset($data['data']['what3words'])) {
         $location['what3words'] = $data['data']['what3words'];
       }
@@ -2617,6 +2606,7 @@ function getlocations_fields_load_location($glid) {
       }
     }
   }
+
   return $location;
 }
 
@@ -2651,7 +2641,7 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
     ),
   );
 
-  drupal_add_js(array('getlocations_fields' => $settings), 'setting');
+  backdrop_add_js(array('getlocations_fields' => $settings), 'setting');
 
 }
 
@@ -2660,229 +2650,21 @@ function getlocations_fields_js_settings_do($defaults, $mapid) {
  *  Settings
  */
 function getlocations_fields_defaults() {
-  $getlocations_defaults = getlocations_defaults();
-  $dvals = getlocations_fields_data_keys('d');
-  $defaults = array(
-    'country'                         => variable_get('site_default_country', ''),
-    'display_mapwidth'                => $getlocations_defaults['width'],
-    'display_mapheight'               => $getlocations_defaults['height'],
-    'nodezoom'                        => $getlocations_defaults['nodezoom'],
-    'minzoom_map'                     => $getlocations_defaults['minzoom_map'],
-    'maxzoom_map'                     => $getlocations_defaults['maxzoom_map'],
-    'map_backgroundcolor'             => $getlocations_defaults['map_backgroundcolor'],
-    'show_maplinks'                   => $getlocations_defaults['show_maplinks'],
-    'fullscreen'                      => $getlocations_defaults['fullscreen'],
-    'fullscreen_controlposition'      => $getlocations_defaults['fullscreen_controlposition'],
-    'show_bubble_on_one_marker'       => $getlocations_defaults['show_bubble_on_one_marker'],
-    'display_showmap'                 => 1,
-    'display_maplink'                 => 1,
-    'display_latlong'                 => 1,
-    'display_dms'                     => 0,
-    'display_geo_microformat'         => 0,
-    'display_onemap'                  => 0,
-    'display_name'                    => 1,
-    'display_street'                  => 1,
-    'display_additional'              => 1,
-    'display_city'                    => 1,
-    'display_province'                => 1,
-    'display_postal_code'             => 1,
-    'display_country'                 => 1,
-    'display_phone'                   => 1,
-    'display_mobile'                  => 1,
-    'display_fax'                     => 1,
-    'country_full'                    => 1,
-    'use_address'                     => 1,
-    'input_address_width'             => 40,
-    'input_name_width'                => 40,
-    'input_street_width'              => 40,
-    'input_additional_width'          => 40,
-    'input_city_width'                => 40,
-    'input_province_width'            => 40,
-    'input_postal_code_width'         => 40,
-    'input_country_width'             => 40,
-    'input_phone_width'               => 20,
-    'input_mobile_width'              => 20,
-    'input_fax_width'                 => 20,
-    'input_latitude_width'            => 20,
-    'input_longitude_width'           => 20,
-    'input_name_required'             => 0,
-    'input_street_required'           => 0,
-    'input_additional_required'       => 0,
-    'input_city_required'             => 0,
-    'input_province_required'         => 0,
-    'input_postal_code_required'      => 0,
-    'input_country_required'          => 0,
-    'input_phone_required'            => 0,
-    'input_mobile_required'           => 0,
-    'input_fax_required'              => 0,
-    'input_name_weight'               => 0,
-    'input_street_weight'             => 0,
-    'input_additional_weight'         => 0,
-    'input_city_weight'               => 0,
-    'input_province_weight'           => 0,
-    'input_postal_code_weight'        => 0,
-    'input_country_weight'            => 0,
-    'input_phone_weight'              => 0,
-    'input_mobile_weight'             => 0,
-    'input_fax_weight'                => 0,
-    'input_latitude_weight'           => 0,
-    'input_longitude_weight'          => 0,
-    'input_map_weight'                => 0,
-    'input_marker_weight'             => 0,
-    'input_geobutton_weight'          => 0,
-    'input_smart_ip_button_weight'    => 0,
-    'input_geolocation_button_weight' => 0,
-    'input_clear_button_weight'       => 0,
-    'use_clear_button'                => 1,
-    'use_smart_ip_button'             => 0,
-    'use_geolocation_button'          => 0,
-    'use_country_dropdown'            => 1,
-    'only_continents'                 => '',
-    'only_countries'                  => '',
-    'province_autocomplete'           => 0,
-    'city_autocomplete'               => 0,
-    'per_item_marker'                 => 0,
-    'street_num_pos'                  => 1,
-    'latlon_warning'                  => 0,
-    'map_settings_allow'              => 0,
-    'streetview_settings_allow'       => 0,
-    'sv_heading'                      => $dvals['sv_heading'],
-    'sv_zoom'                         => $dvals['sv_zoom'],
-    'sv_pitch'                        => $dvals['sv_pitch'],
-    'sv_enable'                       => $dvals['sv_enable'],
-    'sv_showfirst'                    => $getlocations_defaults['sv_showfirst'],
-    'autocomplete_bias'               => 0,
-    'restrict_by_country'             => 0,
-    'search_country'                  => variable_get('site_default_country', ''),
-    'use_smart_ip_latlon'             => 0,
-    'columns'                         => array(
-      'glid'        => t('Glid'),
-      'name'        => t('Name'),
-      'street'      => t('Street'),
-      'additional'  => t('Additional'),
-      'city'        => t('City'),
-      'province'    => t('Province'),
-      'postal_code' => t('Post code'),
-      'country'     => t('Country'),
-      'latitude'    => t('Latitude'),
-      'longitude'   => t('Longitude'),
-      'marker'      => t('Marker'),
-      'data'        => t('Data'),
-    ),
-    'polygons_enable'           => $getlocations_defaults['polygons_enable'],
-    'polygons_strokecolor'      => $getlocations_defaults['polygons_strokecolor'],
-    'polygons_strokeopacity'    => $getlocations_defaults['polygons_strokeopacity'],
-    'polygons_strokeweight'     => $getlocations_defaults['polygons_strokeweight'],
-    'polygons_fillcolor'        => $getlocations_defaults['polygons_fillcolor'],
-    'polygons_fillopacity'      => $getlocations_defaults['polygons_fillopacity'],
-    'polygons_coords'           => $getlocations_defaults['polygons_coords'],
-    'polygons_clickable'        => $getlocations_defaults['polygons_clickable'],
-    'polygons_message'          => $getlocations_defaults['polygons_message'],
-    'rectangles_enable'         => $getlocations_defaults['rectangles_enable'],
-    'rectangles_strokecolor'    => $getlocations_defaults['rectangles_strokecolor'],
-    'rectangles_strokeopacity'  => $getlocations_defaults['rectangles_strokeopacity'],
-    'rectangles_strokeweight'   => $getlocations_defaults['rectangles_strokeweight'],
-    'rectangles_fillcolor'      => $getlocations_defaults['rectangles_fillcolor'],
-    'rectangles_fillopacity'    => $getlocations_defaults['rectangles_fillopacity'],
-    'rectangles_coords'         => $getlocations_defaults['rectangles_coords'],
-    'rectangles_clickable'      => $getlocations_defaults['rectangles_clickable'],
-    'rectangles_message'        => $getlocations_defaults['rectangles_message'],
-    'rectangles_apply'          => $getlocations_defaults['rectangles_apply'],
-    'rectangles_dist'           => $getlocations_defaults['rectangles_dist'],
-    'circles_enable'            => $getlocations_defaults['circles_enable'],
-    'circles_strokecolor'       => $getlocations_defaults['circles_strokecolor'],
-    'circles_strokeopacity'     => $getlocations_defaults['circles_strokeopacity'],
-    'circles_strokeweight'      => $getlocations_defaults['circles_strokeweight'],
-    'circles_fillcolor'         => $getlocations_defaults['circles_fillcolor'],
-    'circles_fillopacity'       => $getlocations_defaults['circles_fillopacity'],
-    'circles_coords'            => $getlocations_defaults['circles_coords'],
-    'circles_clickable'         => $getlocations_defaults['circles_clickable'],
-    'circles_message'           => $getlocations_defaults['circles_message'],
-    'circles_radius'            => $getlocations_defaults['circles_radius'],
-    'circles_apply'             => $getlocations_defaults['circles_apply'],
-    'polylines_enable'          => $getlocations_defaults['polylines_enable'],
-    'polylines_strokecolor'     => $getlocations_defaults['polylines_strokecolor'],
-    'polylines_strokeopacity'   => $getlocations_defaults['polylines_strokeopacity'],
-    'polylines_strokeweight'    => $getlocations_defaults['polylines_strokeweight'],
-    'polylines_coords'          => $getlocations_defaults['polylines_coords'],
-    'polylines_clickable'       => $getlocations_defaults['polylines_clickable'],
-    'polylines_message'         => $getlocations_defaults['polylines_message'],
-    'search_places'             => $getlocations_defaults['search_places'],
-    'search_places_size'        => $getlocations_defaults['search_places_size'],
-    'search_places_position'    => $getlocations_defaults['search_places_position'],
-    'search_places_label'       => $getlocations_defaults['search_places_label'],
-    'search_places_placeholder' => $getlocations_defaults['search_places_placeholder'],
-    'search_places_dd'          => $getlocations_defaults['search_places_dd'],
-    'search_places_list'        => $getlocations_defaults['search_places_list'],
-    'jquery_colorpicker_enabled' => $getlocations_defaults['jquery_colorpicker_enabled'],
-    'geojson_enable'            => $getlocations_defaults['geojson_enable'],
-    'geojson_data'              => $getlocations_defaults['geojson_data'],
-    'geojson_options'           => $getlocations_defaults['geojson_options'],
-    'nokeyboard'                => $getlocations_defaults['nokeyboard'],
-    'nodoubleclickzoom'         => $getlocations_defaults['nodoubleclickzoom'],
-    'zoomcontrolposition'       => $getlocations_defaults['zoomcontrolposition'],
-    'mapcontrolposition'        => $getlocations_defaults['mapcontrolposition'],
-    'pancontrolposition'        => $getlocations_defaults['pancontrolposition'],
-    'scalecontrolposition'      => $getlocations_defaults['scalecontrolposition'],
-    'svcontrolposition'         => $getlocations_defaults['svcontrolposition'],
-    'sv_addresscontrol'         => $getlocations_defaults['sv_addresscontrol'], // sv overlay controls
-    'sv_addresscontrolposition' => $getlocations_defaults['sv_addresscontrolposition'],
-    'sv_pancontrol'             => $getlocations_defaults['sv_pancontrol'],
-    'sv_pancontrolposition'     => $getlocations_defaults['sv_pancontrolposition'],
-    'sv_zoomcontrol'            => $getlocations_defaults['sv_zoomcontrol'],
-    'sv_zoomcontrolposition'    => $getlocations_defaults['sv_zoomcontrolposition'],
-    'sv_linkscontrol'           => $getlocations_defaults['sv_linkscontrol'],
-    'sv_imagedatecontrol'       => $getlocations_defaults['sv_imagedatecontrol'],
-    'sv_scrollwheel'            => $getlocations_defaults['sv_scrollwheel'],
-    'sv_clicktogo'              => $getlocations_defaults['sv_clicktogo'],
-    'input_map_show'            => 1,
-    'highlight_enable'          => $getlocations_defaults['highlight_enable'],
-    'highlight_strokecolor'     => $getlocations_defaults['highlight_strokecolor'],
-    'highlight_strokeopacity'   => $getlocations_defaults['highlight_strokeopacity'],
-    'highlight_strokeweight'    => $getlocations_defaults['highlight_strokeweight'],
-    'highlight_fillcolor'       => $getlocations_defaults['highlight_fillcolor'],
-    'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
-    'highlight_radius'          => $getlocations_defaults['highlight_radius'],
-    'getdirections_link'        => $getlocations_defaults['getdirections_link'],
-    'show_search_distance'      => $getlocations_defaults['show_search_distance'],
-    'views_search_marker_enable'           => $getlocations_defaults['views_search_marker_enable'],
-    'views_search_marker'                  => $getlocations_defaults['views_search_marker'],
-    'views_search_marker_toggle'           => $getlocations_defaults['views_search_marker_toggle'],
-    'views_search_marker_toggle_active'    => $getlocations_defaults['views_search_marker_toggle_active'],
-    'views_search_radshape_enable'         => $getlocations_defaults['views_search_radshape_enable'],
-    'views_search_radshape_strokecolor'    => $getlocations_defaults['views_search_radshape_strokecolor'],
-    'views_search_radshape_strokeopacity'  => $getlocations_defaults['views_search_radshape_strokeopacity'],
-    'views_search_radshape_strokeweight'   => $getlocations_defaults['views_search_radshape_strokeweight'],
-    'views_search_radshape_fillcolor'      => $getlocations_defaults['views_search_radshape_fillcolor'],
-    'views_search_radshape_fillopacity'    => $getlocations_defaults['views_search_radshape_fillopacity'],
-    'views_search_radshape_toggle'         => $getlocations_defaults['views_search_radshape_toggle'],
-    'views_search_radshape_toggle_active'  => $getlocations_defaults['views_search_radshape_toggle_active'],
-    'views_search_center'                  => $getlocations_defaults['views_search_center'],
-    'gps_button'                => 0,
-    'gps_button_label'          => $getlocations_defaults['gps_button_label'],
-    'gps_marker'                => $getlocations_defaults['gps_marker'],
-    'gps_marker_title'          => $getlocations_defaults['gps_marker_title'],
-    'gps_bubble'                => $getlocations_defaults['gps_bubble'],
-    'gps_geocode'               => $getlocations_defaults['gps_geocode'],
-    'gps_center'                => $getlocations_defaults['gps_center'],
-    'gps_type'                  => $getlocations_defaults['gps_type'],
-    'gps_zoom'                  => $getlocations_defaults['gps_zoom'],
-    'geocoder_enable' => $getlocations_defaults['geocoder_enable'],
-  );
-  foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
-    $defaults['baselayers'][$key] = $layer;
-  }
-  foreach ($getlocations_defaults['kml_group'] AS $key => $layer) {
-    $defaults['kml_group'][$key] = $layer;
+
+  $defaults = config_get('getlocations_fields.settings', 'settings');
+  $saved = $defaults['saved'];
+  if (! $saved) {
+    $getlocations_defaults = getlocations_defaults();
+    $keys = array_keys($defaults);
+    foreach ($keys AS $key) {
+      if (isset($getlocations_defaults[$key])) {
+        $defaults[$key] = $getlocations_defaults[$key];
+      }
+    }
   }
 
-  // what3words
-  $defaults['what3words_display'] = 0;
-  $defaults['what3words_collect'] = 0;
+  return $defaults;
 
-  $getlocations_fields_defaults = variable_get('getlocations_fields_defaults', $defaults);
-  $newdefaults = getlocations_adjust_vars($defaults, $getlocations_fields_defaults);
-  return $newdefaults;
 }
 
 /**
@@ -2892,6 +2674,12 @@ function getlocations_fields_defaults() {
 function getlocations_fields_field_info_defaults() {
   $getlocations_defaults = getlocations_defaults();
   $getlocations_fields_defaults = getlocations_fields_defaults();
+
+  $sv = config_get('getlocations_fields.sv', 'settings');
+  $sv_group = $sv['sv_group'];
+
+  $shapes = config_get('getlocations_fields.shapes', 'shapes');
+
   $defaults = array(
     'getlocations_fields' => array(
       'label' => t('Getlocations Fields'),
@@ -2906,12 +2694,9 @@ function getlocations_fields_field_info_defaults() {
         'minzoom_map'                     => $getlocations_defaults['minzoom_map'],
         'maxzoom_map'                     => $getlocations_defaults['maxzoom_map'],
         'controltype'                     => $getlocations_defaults['controltype'],
-        'pancontrol'                      => $getlocations_defaults['pancontrol'],
         'mtc'                             => $getlocations_defaults['mtc'],
         'maptype'                         => $getlocations_defaults['maptype'],
         'scale'                           => $getlocations_defaults['scale'],
-        'overview'                        => $getlocations_defaults['overview'],
-        'overview_opened'                 => $getlocations_defaults['overview_opened'],
         'scrollwheel'                     => $getlocations_defaults['scrollwheel'],
         'draggable'                       => $getlocations_defaults['draggable'],
         'map_marker'                      => $getlocations_defaults['node_map_marker'],
@@ -2975,6 +2760,8 @@ function getlocations_fields_field_info_defaults() {
         'latlon_warning'                  => $getlocations_fields_defaults['latlon_warning'],
         'map_settings_allow'              => $getlocations_fields_defaults['map_settings_allow'],
         'streetview_settings_allow'       => $getlocations_fields_defaults['streetview_settings_allow'],
+        'sv_show'                       => $getlocations_fields_defaults['sv_show'],
+        'svcontrolposition'             => $getlocations_fields_defaults['svcontrolposition'],
         'sv_heading'                      => $getlocations_fields_defaults['sv_heading'],
         'sv_zoom'                         => $getlocations_fields_defaults['sv_zoom'],
         'sv_pitch'                        => $getlocations_fields_defaults['sv_pitch'],
@@ -2990,53 +2777,12 @@ function getlocations_fields_field_info_defaults() {
         'fullscreen'                      => $getlocations_defaults['fullscreen'],
         'fullscreen_controlposition'      => $getlocations_defaults['fullscreen_controlposition'],
         'show_bubble_on_one_marker'       => $getlocations_defaults['show_bubble_on_one_marker'],
-        'polygons_enable'                 => $getlocations_fields_defaults['polygons_enable'],
-        'polygons_strokecolor'            => $getlocations_fields_defaults['polygons_strokecolor'],
-        'polygons_strokeopacity'          => $getlocations_fields_defaults['polygons_strokeopacity'],
-        'polygons_strokeweight'           => $getlocations_fields_defaults['polygons_strokeweight'],
-        'polygons_fillcolor'              => $getlocations_fields_defaults['polygons_fillcolor'],
-        'polygons_fillopacity'            => $getlocations_fields_defaults['polygons_fillopacity'],
-        'polygons_coords'                 => $getlocations_fields_defaults['polygons_coords'],
-        'polygons_clickable'              => $getlocations_fields_defaults['polygons_clickable'],
-        'polygons_message'                => $getlocations_fields_defaults['polygons_message'],
-        'rectangles_enable'               => $getlocations_fields_defaults['rectangles_enable'],
-        'rectangles_strokecolor'          => $getlocations_fields_defaults['rectangles_strokecolor'],
-        'rectangles_strokeopacity'        => $getlocations_fields_defaults['rectangles_strokeopacity'],
-        'rectangles_strokeweight'         => $getlocations_fields_defaults['rectangles_strokeweight'],
-        'rectangles_fillcolor'            => $getlocations_fields_defaults['rectangles_fillcolor'],
-        'rectangles_fillopacity'          => $getlocations_fields_defaults['rectangles_fillopacity'],
-        'rectangles_coords'               => $getlocations_fields_defaults['rectangles_coords'],
-        'rectangles_clickable'            => $getlocations_fields_defaults['rectangles_clickable'],
-        'rectangles_message'              => $getlocations_fields_defaults['rectangles_message'],
-        'rectangles_apply'                => $getlocations_fields_defaults['rectangles_apply'],
-        'rectangles_dist'                 => $getlocations_fields_defaults['rectangles_dist'],
-        'circles_enable'                  => $getlocations_fields_defaults['circles_enable'],
-        'circles_strokecolor'             => $getlocations_fields_defaults['circles_strokecolor'],
-        'circles_strokeopacity'           => $getlocations_fields_defaults['circles_strokeopacity'],
-        'circles_strokeweight'            => $getlocations_fields_defaults['circles_strokeweight'],
-        'circles_fillcolor'               => $getlocations_fields_defaults['circles_fillcolor'],
-        'circles_fillopacity'             => $getlocations_fields_defaults['circles_fillopacity'],
-        'circles_coords'                  => $getlocations_fields_defaults['circles_coords'],
-        'circles_clickable'               => $getlocations_fields_defaults['circles_clickable'],
-        'circles_message'                 => $getlocations_fields_defaults['circles_message'],
-        'circles_radius'                  => $getlocations_fields_defaults['circles_radius'],
-        'circles_apply'                   => $getlocations_fields_defaults['circles_apply'],
-        'polylines_enable'                => $getlocations_fields_defaults['polylines_enable'],
-        'polylines_strokecolor'           => $getlocations_fields_defaults['polylines_strokecolor'],
-        'polylines_strokeopacity'         => $getlocations_fields_defaults['polylines_strokeopacity'],
-        'polylines_strokeweight'          => $getlocations_fields_defaults['polylines_strokeweight'],
-        'polylines_coords'                => $getlocations_fields_defaults['polylines_coords'],
-        'polylines_clickable'             => $getlocations_fields_defaults['polylines_clickable'],
-        'polylines_message'               => $getlocations_fields_defaults['polylines_message'],
-        'search_places'                   => $getlocations_fields_defaults['search_places'],
-        'search_places_size'              => $getlocations_fields_defaults['search_places_size'],
-        'search_places_position'          => $getlocations_fields_defaults['search_places_position'],
-        'search_places_label'             => $getlocations_fields_defaults['search_places_label'],
-        'search_places_placeholder'       => $getlocations_fields_defaults['search_places_placeholder'],
-        'search_places_dd'                => $getlocations_fields_defaults['search_places_dd'],
-        'search_places_list'              => $getlocations_fields_defaults['search_places_list'],
+        'polygons_group'                  => $shapes['polygons_group'],
+        'rectangles_group'                => $shapes['rectangles_group'],
+        'circles_group'                   => $shapes['circles_group'],
+        'polylines_group'                 => $shapes['polylines_group'],
+        'search_places_group'             => $getlocations_fields_defaults['search_places_group'],
         'kml_group'                       => $getlocations_fields_defaults['kml_group'],
-        'jquery_colorpicker_enabled'      => $getlocations_fields_defaults['jquery_colorpicker_enabled'],
         'geojson_enable'                  => $getlocations_fields_defaults['geojson_enable'],
         'geojson_data'                    => $getlocations_fields_defaults['geojson_data'],
         'geojson_options'                 => $getlocations_fields_defaults['geojson_options'],
@@ -3044,53 +2790,19 @@ function getlocations_fields_field_info_defaults() {
         'nodoubleclickzoom'               => $getlocations_fields_defaults['nodoubleclickzoom'],
         'zoomcontrolposition'             => $getlocations_fields_defaults['zoomcontrolposition'],
         'mapcontrolposition'              => $getlocations_fields_defaults['mapcontrolposition'],
-        'pancontrolposition'              => $getlocations_fields_defaults['pancontrolposition'],
         'scalecontrolposition'            => $getlocations_fields_defaults['scalecontrolposition'],
-        'svcontrolposition'               => $getlocations_fields_defaults['svcontrolposition'],
-        'sv_addresscontrol'               => $getlocations_fields_defaults['sv_addresscontrol'], // sv overlay controls
-        'sv_addresscontrolposition'       => $getlocations_fields_defaults['sv_addresscontrolposition'],
-        'sv_pancontrol'                   => $getlocations_fields_defaults['sv_pancontrol'],
-        'sv_pancontrolposition'           => $getlocations_fields_defaults['sv_pancontrolposition'],
-        'sv_zoomcontrol'                  => $getlocations_fields_defaults['sv_zoomcontrol'],
-        'sv_zoomcontrolposition'          => $getlocations_fields_defaults['sv_zoomcontrolposition'],
-        'sv_linkscontrol'                 => $getlocations_fields_defaults['sv_linkscontrol'],
-        'sv_imagedatecontrol'             => $getlocations_fields_defaults['sv_imagedatecontrol'],
-        'sv_scrollwheel'                  => $getlocations_fields_defaults['sv_scrollwheel'],
-        'sv_clicktogo'                    => $getlocations_fields_defaults['sv_clicktogo'],
+        #'svcontrolposition'               => $getlocations_fields_defaults['sv_group']['svcontrolposition'],
+        'sv_group'                        => $sv_group,
         'input_map_show'                  => $getlocations_fields_defaults['input_map_show'],
-        'highlight_enable'                => $getlocations_fields_defaults['highlight_enable'],
-        'highlight_strokecolor'           => $getlocations_fields_defaults['highlight_strokecolor'],
-        'highlight_strokeopacity'         => $getlocations_fields_defaults['highlight_strokeopacity'],
-        'highlight_strokeweight'          => $getlocations_fields_defaults['highlight_strokeweight'],
-        'highlight_fillcolor'             => $getlocations_fields_defaults['highlight_fillcolor'],
-        'highlight_fillopacity'           => $getlocations_fields_defaults['highlight_fillopacity'],
-        'highlight_radius'                => $getlocations_fields_defaults['highlight_radius'],
+        'highlight_group'                 => $getlocations_fields_defaults['highlight_group'],
         'getdirections_link'              => $getlocations_fields_defaults['getdirections_link'],
         'show_search_distance'            => $getlocations_fields_defaults['show_search_distance'],
-        'views_search_marker_enable'           => $getlocations_fields_defaults['views_search_marker_enable'],
-        'views_search_marker'                  => $getlocations_fields_defaults['views_search_marker'],
-        'views_search_marker_toggle'           => $getlocations_fields_defaults['views_search_marker_toggle'],
-        'views_search_marker_toggle_active'    => $getlocations_fields_defaults['views_search_marker_toggle_active'],
-        'views_search_radshape_enable'         => $getlocations_fields_defaults['views_search_radshape_enable'],
-        'views_search_radshape_strokecolor'    => $getlocations_fields_defaults['views_search_radshape_strokecolor'],
-        'views_search_radshape_strokeopacity'  => $getlocations_fields_defaults['views_search_radshape_strokeopacity'],
-        'views_search_radshape_strokeweight'   => $getlocations_fields_defaults['views_search_radshape_strokeweight'],
-        'views_search_radshape_fillcolor'      => $getlocations_fields_defaults['views_search_radshape_fillcolor'],
-        'views_search_radshape_fillopacity'    => $getlocations_fields_defaults['views_search_radshape_fillopacity'],
-        'views_search_radshape_toggle'         => $getlocations_fields_defaults['views_search_radshape_toggle'],
-        'views_search_radshape_toggle_active'  => $getlocations_fields_defaults['views_search_radshape_toggle_active'],
-        'views_search_center'                  => $getlocations_fields_defaults['views_search_center'],
-        'gps_button'                      => $getlocations_fields_defaults['gps_button'],
-        'gps_button_label'                => $getlocations_fields_defaults['gps_button_label'],
-        'gps_marker'                      => $getlocations_fields_defaults['gps_marker'],
-        'gps_marker_title'                => $getlocations_fields_defaults['gps_marker_title'],
-        'gps_bubble'                      => $getlocations_fields_defaults['gps_bubble'],
-        'gps_geocode'                     => $getlocations_fields_defaults['gps_geocode'],
-        'gps_center'                      => $getlocations_fields_defaults['gps_center'],
-        'gps_type'                        => $getlocations_fields_defaults['gps_type'],
-        'gps_zoom'                        => $getlocations_fields_defaults['gps_zoom'],
+        'views_search_group'              => $getlocations_fields_defaults['views_search_group'],
+#        'gps_group'                       => $getlocations_fields_defaults['gps_group'],
         'geocoder_enable'                 => $getlocations_fields_defaults['geocoder_enable'],
+        'what3words_lic'                  => $getlocations_defaults['what3words_lic'],
         'what3words_collect'              => $getlocations_fields_defaults['what3words_collect'],
+        'show_maplinks_viewport'          => $getlocations_defaults['show_maplinks_viewport'],
       ),
     ),
   );
@@ -3108,6 +2820,10 @@ function getlocations_fields_field_info_defaults() {
 function getlocations_fields_field_formatter_info_defaults() {
   $getlocations_defaults = getlocations_defaults();
   $getlocations_fields_defaults = getlocations_fields_defaults();
+  $sv = config_get('getlocations_fields.sv', 'settings');
+  $sv_group = $sv['sv_group'];
+
+  $shapes = config_get('getlocations_fields.shapes', 'shapes');
 
   $defaults = array(
     'display_mapwidth'          => $getlocations_defaults['width'],
@@ -3119,20 +2835,18 @@ function getlocations_fields_field_formatter_info_defaults() {
     'display_geo_microformat'   => $getlocations_fields_defaults['display_geo_microformat'],
     'display_onemap'            => $getlocations_fields_defaults['display_onemap'],
     'what3words_display'        => $getlocations_fields_defaults['what3words_display'],
+    'what3words_lic'            => $getlocations_defaults['what3words_lic'],
     'controltype'               => $getlocations_defaults['controltype'],
-    'pancontrol'                => $getlocations_defaults['pancontrol'],
     'mtc'                       => $getlocations_defaults['mtc'],
     'maptype'                   => $getlocations_defaults['maptype'],
     'scale'                     => $getlocations_defaults['scale'],
-    'overview'                  => $getlocations_defaults['overview'],
-    'overview_opened'           => $getlocations_defaults['overview_opened'],
     'scrollwheel'               => $getlocations_defaults['scrollwheel'],
     'draggable'                 => $getlocations_defaults['draggable'],
-    'sv_show'                   => $getlocations_defaults['sv_show'],
+    'sv_show'                   => $getlocations_fields_defaults['sv_show'],
     'sv_showfirst'              => $getlocations_fields_defaults['sv_showfirst'],
-    'sv_heading'                => $getlocations_defaults['sv_heading'],
-    'sv_zoom'                   => $getlocations_defaults['sv_zoom'],
-    'sv_pitch'                  => $getlocations_defaults['sv_pitch'],
+    'sv_heading'                => $getlocations_fields_defaults['sv_heading'],
+    'sv_zoom'                   => $getlocations_fields_defaults['sv_zoom'],
+    'sv_pitch'                  => $getlocations_fields_defaults['sv_pitch'],
     'trafficinfo'               => $getlocations_defaults['trafficinfo'],
     'trafficinfo_state'         => $getlocations_defaults['trafficinfo_state'],
     'bicycleinfo'               => $getlocations_defaults['bicycleinfo'],
@@ -3152,6 +2866,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'markeraction_click_center' => $getlocations_defaults['markeraction_click_center'],
     'map_backgroundcolor'       => $getlocations_defaults['map_backgroundcolor'],
     'show_maplinks'             => $getlocations_defaults['show_maplinks'],
+    'show_maplinks_viewport'    => $getlocations_defaults['show_maplinks_viewport'],
     'display_name'              => $getlocations_fields_defaults['display_name'],
     'display_street'            => $getlocations_fields_defaults['display_street'],
     'display_additional'        => $getlocations_fields_defaults['display_additional'],
@@ -3170,53 +2885,12 @@ function getlocations_fields_field_formatter_info_defaults() {
     'fullscreen'                => $getlocations_defaults['fullscreen'],
     'fullscreen_controlposition' => $getlocations_defaults['fullscreen_controlposition'],
     'show_bubble_on_one_marker' => $getlocations_defaults['show_bubble_on_one_marker'],
-    'polygons_enable'           => $getlocations_defaults['polygons_enable'],
-    'polygons_strokecolor'      => $getlocations_defaults['polygons_strokecolor'],
-    'polygons_strokeopacity'    => $getlocations_defaults['polygons_strokeopacity'],
-    'polygons_strokeweight'     => $getlocations_defaults['polygons_strokeweight'],
-    'polygons_fillcolor'        => $getlocations_defaults['polygons_fillcolor'],
-    'polygons_fillopacity'      => $getlocations_defaults['polygons_fillopacity'],
-    'polygons_coords'           => $getlocations_defaults['polygons_coords'],
-    'polygons_clickable'        => $getlocations_defaults['polygons_clickable'],
-    'polygons_message'          => $getlocations_defaults['polygons_message'],
-    'rectangles_enable'         => $getlocations_defaults['rectangles_enable'],
-    'rectangles_strokecolor'    => $getlocations_defaults['rectangles_strokecolor'],
-    'rectangles_strokeopacity'  => $getlocations_defaults['rectangles_strokeopacity'],
-    'rectangles_strokeweight'   => $getlocations_defaults['rectangles_strokeweight'],
-    'rectangles_fillcolor'      => $getlocations_defaults['rectangles_fillcolor'],
-    'rectangles_fillopacity'    => $getlocations_defaults['rectangles_fillopacity'],
-    'rectangles_coords'         => $getlocations_defaults['rectangles_coords'],
-    'rectangles_clickable'      => $getlocations_defaults['rectangles_clickable'],
-    'rectangles_message'        => $getlocations_defaults['rectangles_message'],
-    'rectangles_apply'          => $getlocations_defaults['rectangles_apply'],
-    'rectangles_dist'           => $getlocations_defaults['rectangles_dist'],
-    'circles_enable'            => $getlocations_defaults['circles_enable'],
-    'circles_strokecolor'       => $getlocations_defaults['circles_strokecolor'],
-    'circles_strokeopacity'     => $getlocations_defaults['circles_strokeopacity'],
-    'circles_strokeweight'      => $getlocations_defaults['circles_strokeweight'],
-    'circles_fillcolor'         => $getlocations_defaults['circles_fillcolor'],
-    'circles_fillopacity'       => $getlocations_defaults['circles_fillopacity'],
-    'circles_coords'            => $getlocations_defaults['circles_coords'],
-    'circles_clickable'         => $getlocations_defaults['circles_clickable'],
-    'circles_message'           => $getlocations_defaults['circles_message'],
-    'circles_radius'            => $getlocations_defaults['circles_radius'],
-    'circles_apply'             => $getlocations_defaults['circles_apply'],
-    'polylines_enable'          => $getlocations_defaults['polylines_enable'],
-    'polylines_strokecolor'     => $getlocations_defaults['polylines_strokecolor'],
-    'polylines_strokeopacity'   => $getlocations_defaults['polylines_strokeopacity'],
-    'polylines_strokeweight'    => $getlocations_defaults['polylines_strokeweight'],
-    'polylines_coords'          => $getlocations_defaults['polylines_coords'],
-    'polylines_clickable'       => $getlocations_defaults['polylines_clickable'],
-    'polylines_message'         => $getlocations_defaults['polylines_message'],
-    'search_places'             => $getlocations_defaults['search_places'],
-    'search_places_size'        => $getlocations_defaults['search_places_size'],
-    'search_places_position'    => $getlocations_defaults['search_places_position'],
-    'search_places_label'       => $getlocations_defaults['search_places_label'],
-    'search_places_placeholder' => $getlocations_defaults['search_places_placeholder'],
-    'search_places_dd'          => $getlocations_defaults['search_places_dd'],
-    'search_places_list'        => $getlocations_defaults['search_places_list'],
+    'polygons_group'            => $shapes['polygons_group'],
+    'rectangles_group'          => $shapes['rectangles_group'],
+    'circles_group'             => $shapes['circles_group'],
+    'polylines_group'           => $shapes['polylines_group'],
+    'search_places_group'       => $getlocations_defaults['search_places_group'],
     'kml_group'                 => $getlocations_defaults['kml_group'],
-    'jquery_colorpicker_enabled' => $getlocations_defaults['jquery_colorpicker_enabled'],
     'geojson_enable'            => $getlocations_defaults['geojson_enable'],
     'geojson_data'              => $getlocations_defaults['geojson_data'],
     'geojson_options'           => $getlocations_defaults['geojson_options'],
@@ -3224,51 +2898,19 @@ function getlocations_fields_field_formatter_info_defaults() {
     'nodoubleclickzoom'         => $getlocations_defaults['nodoubleclickzoom'],
     'zoomcontrolposition'       => $getlocations_defaults['zoomcontrolposition'],
     'mapcontrolposition'        => $getlocations_defaults['mapcontrolposition'],
-    'pancontrolposition'        => $getlocations_defaults['pancontrolposition'],
+
     'scalecontrolposition'      => $getlocations_defaults['scalecontrolposition'],
-    'svcontrolposition'         => $getlocations_defaults['svcontrolposition'],
-    'sv_addresscontrol'         => $getlocations_fields_defaults['sv_addresscontrol'], // sv overlay controls
-    'sv_addresscontrolposition' => $getlocations_fields_defaults['sv_addresscontrolposition'],
-    'sv_pancontrol'             => $getlocations_fields_defaults['sv_pancontrol'],
-    'sv_pancontrolposition'     => $getlocations_fields_defaults['sv_pancontrolposition'],
-    'sv_zoomcontrol'            => $getlocations_fields_defaults['sv_zoomcontrol'],
-    'sv_zoomcontrolposition'    => $getlocations_fields_defaults['sv_zoomcontrolposition'],
-    'sv_linkscontrol'           => $getlocations_fields_defaults['sv_linkscontrol'],
-    'sv_imagedatecontrol'       => $getlocations_fields_defaults['sv_imagedatecontrol'],
-    'sv_scrollwheel'            => $getlocations_fields_defaults['sv_scrollwheel'],
-    'sv_clicktogo'              => $getlocations_fields_defaults['sv_clicktogo'],
-    'highlight_enable'          => $getlocations_defaults['highlight_enable'],
-    'highlight_strokecolor'     => $getlocations_defaults['highlight_strokecolor'],
-    'highlight_strokeopacity'   => $getlocations_defaults['highlight_strokeopacity'],
-    'highlight_strokeweight'    => $getlocations_defaults['highlight_strokeweight'],
-    'highlight_fillcolor'       => $getlocations_defaults['highlight_fillcolor'],
-    'highlight_fillopacity'     => $getlocations_defaults['highlight_fillopacity'],
-    'highlight_radius'          => $getlocations_defaults['highlight_radius'],
+    'svcontrolposition'      => $getlocations_defaults['svcontrolposition'],
+#    'svcontrolposition'         => $sv_group['svcontrolposition'],
+    'sv_group'                  => $sv_group,
+    'highlight_group'           => $getlocations_defaults['highlight_group'],
     'getdirections_link'        => $getlocations_defaults['getdirections_link'],
     'show_search_distance'      => $getlocations_defaults['show_search_distance'],
-    'views_search_marker_enable'           => $getlocations_defaults['views_search_marker_enable'],
-    'views_search_marker'                  => $getlocations_defaults['views_search_marker'],
-    'views_search_marker_toggle'           => $getlocations_defaults['views_search_marker_toggle'],
-    'views_search_marker_toggle_active'    => $getlocations_defaults['views_search_marker_toggle_active'],
-    'views_search_radshape_enable'         => $getlocations_defaults['views_search_radshape_enable'],
-    'views_search_radshape_strokecolor'    => $getlocations_defaults['views_search_radshape_strokecolor'],
-    'views_search_radshape_strokeopacity'  => $getlocations_defaults['views_search_radshape_strokeopacity'],
-    'views_search_radshape_strokeweight'   => $getlocations_defaults['views_search_radshape_strokeweight'],
-    'views_search_radshape_fillcolor'      => $getlocations_defaults['views_search_radshape_fillcolor'],
-    'views_search_radshape_fillopacity'    => $getlocations_defaults['views_search_radshape_fillopacity'],
-    'views_search_radshape_toggle'         => $getlocations_defaults['views_search_radshape_toggle'],
-    'views_search_radshape_toggle_active'  => $getlocations_defaults['views_search_radshape_toggle_active'],
-    'views_search_center'                  => $getlocations_defaults['views_search_center'],
-    'gps_button'                => 0,
-    'gps_button_label'          => $getlocations_defaults['gps_button_label'],
-    'gps_marker'                => $getlocations_defaults['gps_marker'],
-    'gps_marker_title'          => $getlocations_defaults['gps_marker_title'],
-    'gps_bubble'                => $getlocations_defaults['gps_bubble'],
-    'gps_geocode'               => $getlocations_defaults['gps_geocode'],
-    'gps_center'                => $getlocations_defaults['gps_center'],
-    'gps_type'                  => $getlocations_defaults['gps_type'],
-    'gps_zoom'                  => $getlocations_defaults['gps_zoom'],
-    'geocoder_enable' => $getlocations_defaults['geocoder_enable'],
+    'views_search_group'        => $getlocations_defaults['views_search_group'],
+#    'gps_group'                 => $getlocations_fields_defaults['gps_group'],
+    'markerclusterer_group'     => $getlocations_fields_defaults['markerclusterer_group'],
+    'geocoder_enable'           => $getlocations_defaults['geocoder_enable'],
+    'geolocation_mobile_check'  => $getlocations_defaults['geolocation_mobile_check'],
   );
   foreach ($getlocations_defaults['baselayers'] AS $key => $layer) {
     $defaults['baselayers'][$key] = $layer;
@@ -3288,8 +2930,8 @@ function getlocations_fields_field_formatter_info_defaults() {
  */
 function getlocations_fields_input_settings_form($defaults) {
   $getlocations_fields_paths = getlocations_fields_paths_get();
-  drupal_add_js($getlocations_fields_paths['getlocations_fields_admin_path']);
-  drupal_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
+  backdrop_add_js($getlocations_fields_paths['getlocations_fields_admin_path']);
+  backdrop_add_css(GETLOCATIONS_FIELDS_PATH . '/getlocations_fields.css');
 
   $form = array();
   // input form defaults
@@ -3632,24 +3274,24 @@ function getlocations_fields_input_settings_form($defaults) {
     t('Use Dropdown if you need Locale support.')
   );
 
-  if (module_exists('countries')) {
-    $continents = variable_get('countries_continents', countries_get_default_continents());
-    unset($continents['UN']);
-    $form['only_continents'] = getlocations_element_dd(
-      t('Limit to Continents'),
-      $defaults['only_continents'],
-      $continents,
-      t('Limit to Continents only applies to Country dropdown.'),
-      TRUE
-    );
-    $form['only_countries'] = getlocations_element_map_tf(
-      t('Limit to Countries'),
-      $defaults['only_countries'],
-      t('Limit to Countries only applies to Country dropdown. This should be a comma delimited list of two letter ISO codes, no spaces.'),
-      30,
-      255
-    );
-  }
+#  if (module_exists('countries')) {
+#    $continents = variable_get('countries_continents', countries_get_default_continents());
+#    unset($continents['UN']);
+#    $form['only_continents'] = getlocations_element_dd(
+#      t('Limit to Continents'),
+#      $defaults['only_continents'],
+#      $continents,
+#      t('Limit to Continents only applies to Country dropdown.'),
+#      TRUE
+#    );
+#    $form['only_countries'] = getlocations_element_map_tf(
+#      t('Limit to Countries'),
+#      $defaults['only_countries'],
+#      t('Limit to Countries only applies to Country dropdown. This should be a comma delimited list of two letter ISO codes, no spaces.'),
+#      30,
+#      255
+#    );
+#  }
 
   // per_item_marker
   $form['per_item_marker'] = getlocations_element_map_checkbox(
@@ -3816,7 +3458,9 @@ function getlocations_fields_display_settings_form($defaults) {
   );
 
   // what3words
-  $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
+  $getlocations_defaults = getlocations_defaults();
+
+  $what3words_lic = $getlocations_defaults['what3words_lic'];
   if ($what3words_lic['key']) {
     $form['what3words_display'] = getlocations_element_map_checkbox(
       t('Show what3words in display'),
@@ -3923,38 +3567,9 @@ function getlocations_fields_get_countries_list($upper = TRUE) {
 }
 
 function getlocations_fields_paths_get($reset = FALSE, $min = FALSE) {
-  $jq_upd = getlocations_check_jquery_version(TRUE);
-  if ($min) {
-    $defaults = array(
-      'getlocations_fields_path'            => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.min.js',
-      'getlocations_fields_preview_path'    => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_preview.min.js',
-      'getlocations_fields_streetview_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_streetview.min.js',
-      'getlocations_fields_admin_path'      => GETLOCATIONS_FIELDS_PATH . ($jq_upd ? '/js/getlocations_fields_admin_1.min.js' : '/js/getlocations_fields_admin.min.js'),
-      'getlocations_fields_formatter_path'  => GETLOCATIONS_FIELDS_PATH . ($jq_upd ? '/js/getlocations_fields_formatter_1.min.js' : '/js/getlocations_fields_formatter.min.js'),
-      'getlocations_fields_views_path'      => GETLOCATIONS_FIELDS_PATH . ($jq_upd ? '/js/getlocations_fields_views_1.min.js' : '/js/getlocations_fields_views.min.js'),
-      'getlocations_fields_search_views_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_search_views.min.js',
-    );
-  }
-  else {
-    $defaults = array(
-      'getlocations_fields_path'            => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields.js',
-      'getlocations_fields_preview_path'    => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_preview.js',
-      'getlocations_fields_streetview_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_streetview.js',
-      'getlocations_fields_admin_path'      => GETLOCATIONS_FIELDS_PATH . ($jq_upd ? '/js/getlocations_fields_admin_1.js' : '/js/getlocations_fields_admin.js'),
-      'getlocations_fields_formatter_path'  => GETLOCATIONS_FIELDS_PATH . ($jq_upd ? '/js/getlocations_fields_formatter_1.js' : '/js/getlocations_fields_formatter.js'),
-      'getlocations_fields_views_path'      => GETLOCATIONS_FIELDS_PATH . ($jq_upd ? '/js/getlocations_fields_views_1.js' : '/js/getlocations_fields_views.js'),
-      'getlocations_fields_search_views_path' => GETLOCATIONS_FIELDS_PATH . '/js/getlocations_fields_search_views.js',
-    );
-  }
 
-  if ($reset || $min) {
-    $getlocations_fields_paths = $defaults;
-  }
-  else {
-    $settings = variable_get('getlocations_fields_paths', $defaults);
-    $getlocations_fields_paths = getlocations_adjust_vars($defaults, $settings);
-  }
-  return $getlocations_fields_paths;
+  $paths = config_get('getlocations_fields.paths', 'paths');
+  return $paths;
 
 }
 
@@ -3968,8 +3583,10 @@ function getlocations_fields_column_check($field) {
 function getlocations_fields_data_keys($type = 'dd') {
 
   // check what3words
-  $getlocations_defaults = getlocations_defaults();
-  $what3words_enable = $getlocations_defaults['what3words_enable'];
+  $w3w_s = getlocations_w3w_settings();
+
+  $what3words_lic = $w3w_s['what3words_lic'];
+  $what3words_enable = $w3w_s['what3words_group']['what3words_enable'];
 
   if ($type == 'dd') {
     // for dropdowns
@@ -3985,7 +3602,7 @@ function getlocations_fields_data_keys($type = 'dd') {
       'sv_enable'           => t('Streetview Enable'),
       'sv_showfirst'        => t('Showfirst Enable'),
     );
-    if ($what3words_enable) {
+    if ($what3words_enable && $what3words_lic['key'] ) {
       $keys['what3words'] = t('what3words');
     }
   }
@@ -4012,24 +3629,27 @@ function getlocations_fields_data_keys($type = 'dd') {
   return $keys;
 }
 
+// TODO FIX THIS
 function getlocations_fields_svinfo($location) {
 
+  $sv_settings = config_get('getlocations_fields.sv', 'settings');
   $sv_defaults = getlocations_fields_data_keys('d');
   $sv_info = array(
     'sv_heading'                => (isset($location['sv_heading']) ? $location['sv_heading'] : $sv_defaults['sv_heading']),
     'sv_zoom'                   => (isset($location['sv_zoom']) ? $location['sv_zoom'] : $sv_defaults['sv_zoom']),
     'sv_pitch'                  => (isset($location['sv_pitch']) ? $location['sv_pitch'] : $sv_defaults['sv_pitch']),
     'sv_showfirst'              => (isset($location['sv_showfirst']) ? $location['sv_showfirst'] : $sv_defaults['sv_showfirst']),
-    'sv_addresscontrol'         => (isset($location['sv_addresscontrol']) ? $location['sv_addresscontrol'] : $sv_defaults['sv_addresscontrol']),
-    'sv_addresscontrolposition' => (isset($location['sv_addresscontrolposition']) ? $location['sv_addresscontrolposition'] : $sv_defaults['sv_addresscontrolposition']),
-    'sv_pancontrol'             => (isset($location['sv_pancontrol']) ? $location['sv_pancontrol'] : $sv_defaults['sv_pancontrol']),
-    'sv_pancontrolposition'     => (isset($location['sv_pancontrolposition']) ? $location['sv_pancontrolposition'] : $sv_defaults['sv_pancontrolposition']),
-    'sv_zoomcontrol'            => (isset($location['sv_zoomcontrol']) ? $location['sv_zoomcontrol'] : $sv_defaults['sv_zoomcontrol']),
-    'sv_zoomcontrolposition'    => (isset($location['sv_zoomcontrolposition']) ? $location['sv_zoomcontrolposition'] : $sv_defaults['sv_zoomcontrolposition']),
-    'sv_linkscontrol'           => (isset($location['sv_linkscontrol']) ? $location['sv_linkscontrol'] : $sv_defaults['sv_linkscontrol']),
-    'sv_imagedatecontrol'       => (isset($location['sv_imagedatecontrol']) ? $location['sv_imagedatecontrol'] : $sv_defaults['sv_imagedatecontrol']),
-    'sv_scrollwheel'            => (isset($location['sv_scrollwheel']) ? $location['sv_scrollwheel'] : $sv_defaults['sv_scrollwheel']),
-    'sv_clicktogo'              => (isset($location['sv_clicktogo']) ? $location['sv_clicktogo'] : $sv_defaults['sv_clicktogo']),
+    'sv_enable'                 => (isset($location['sv_enable']) ? $location['sv_enable'] : $sv_defaults['sv_enable']),
+    'sv_addresscontrol'         => (isset($location['sv_addresscontrol']) ? $location['sv_addresscontrol'] : $sv_settings['sv_addresscontrol']),
+    'sv_addresscontrolposition' => (isset($location['sv_addresscontrolposition']) ? $location['sv_addresscontrolposition'] : $sv_settings['sv_addresscontrolposition']),
+    'sv_pancontrol'             => (isset($location['sv_pancontrol']) ? $location['sv_pancontrol'] : $sv_settings['sv_pancontrol']),
+    'sv_pancontrolposition'     => (isset($location['sv_pancontrolposition']) ? $location['sv_pancontrolposition'] : $sv_settings['sv_pancontrolposition']),
+    'sv_zoomcontrol'            => (isset($location['sv_zoomcontrol']) ? $location['sv_zoomcontrol'] : $sv_settings['sv_zoomcontrol']),
+    'sv_zoomcontrolposition'    => (isset($location['sv_zoomcontrolposition']) ? $location['sv_zoomcontrolposition'] : $sv_settings['sv_zoomcontrolposition']),
+    'sv_linkscontrol'           => (isset($location['sv_linkscontrol']) ? $location['sv_linkscontrol'] : $sv_settings['sv_linkscontrol']),
+    'sv_imagedatecontrol'       => (isset($location['sv_imagedatecontrol']) ? $location['sv_imagedatecontrol'] : $sv_settings['sv_imagedatecontrol']),
+    'sv_scrollwheel'            => (isset($location['sv_scrollwheel']) ? $location['sv_scrollwheel'] : $sv_settings['sv_scrollwheel']),
+    'sv_clicktogo'              => (isset($location['sv_clicktogo']) ? $location['sv_clicktogo'] : $sv_settings['sv_clicktogo']),
   );
   return $sv_info;
 }
@@ -4061,59 +3681,60 @@ function getlocations_fields_streetview_settings_allow() {
   return FALSE;
 }
 
+// TODO
 function getlocations_fields_sv_control_form($settings) {
   $controlpositions = getlocations_controlpositions();
 
   $form = array();
   $form['sv_addresscontrol'] = getlocations_element_map_checkbox(
     t('Show Streetview address'),
-    $settings['sv_addresscontrol']
+    $settings['sv_group']['sv_addresscontrol']
   );
   $form['sv_addresscontrol']['#suffix'] = '<div id="wrap-getlocations-sv-addresscontrol">';
   $form['sv_addresscontrolposition'] = getlocations_element_dd(
     t('Position of Streetview address display'),
-    $settings['sv_addresscontrolposition'],
+    $settings['sv_group']['sv_addresscontrolposition'],
     $controlpositions
   );
   $form['sv_addresscontrolposition']['#suffix'] = '</div>';
 
   $form['sv_pancontrol'] = getlocations_element_map_checkbox(
     t('Show Streetview Pan Control'),
-    $settings['sv_pancontrol']
+    $settings['sv_group']['sv_pancontrol']
   );
   $form['sv_pancontrol']['#suffix'] = '<div id="wrap-getlocations-sv-pancontrol">';
   $form['sv_pancontrolposition'] = getlocations_element_dd(
     t('Position of Streetview Pan Control'),
-    $settings['sv_pancontrolposition'],
+    $settings['sv_group']['sv_pancontrolposition'],
     $controlpositions
   );
   $form['sv_pancontrolposition']['#suffix'] = '</div>';
 
-  $form['sv_zoomcontrol'] = getlocations_element_map_zoom_controltype($settings['sv_zoomcontrol'], t('Streetview Zoom Control type'));
+  $form['sv_zoomcontrol'] = getlocations_element_map_zoom_controltype($settings['sv_group']['sv_zoomcontrol'], t('Streetview Zoom Control type'));
   $form['sv_zoomcontrol']['#suffix'] = '<div id="wrap-getlocations-sv-zoomcontrol">';
 
   $form['sv_zoomcontrolposition'] = getlocations_element_dd(
     t('Position of Streetview Zoom Control'),
-    $settings['sv_zoomcontrolposition'],
+    $settings['sv_group']['sv_zoomcontrolposition'],
     $controlpositions
   );
   $form['sv_zoomcontrolposition']['#suffix'] = '</div>';
 
   $form['sv_linkscontrol'] = getlocations_element_map_checkbox(
     t('Enable Streetview links'),
-    $settings['sv_linkscontrol']
+    $settings['sv_group']['sv_linkscontrol']
   );
   $form['sv_imagedatecontrol'] = getlocations_element_map_checkbox(
     t('Show Streetview image date'),
-    $settings['sv_imagedatecontrol']
+    $settings['sv_group']['sv_imagedatecontrol']
   );
   $form['sv_scrollwheel'] = getlocations_element_map_checkbox(
     t('Enable Streetview scrollwheel'),
-    $settings['sv_scrollwheel']
+    $settings['sv_group']['sv_scrollwheel']
   );
   $form['sv_clicktogo'] = getlocations_element_map_checkbox(
     t('Enable Streetview clickToGo'),
-    $settings['sv_clicktogo'],
+    $settings['sv_group']['sv_clicktogo'],
     t('Enable navigating Streetview by clicking on it.')
   );
   return $form;
@@ -4130,20 +3751,26 @@ function getlocations_fields_get_display_settings($settings) {
 
 }
 
+// TODO
 function getlocations_fields_get_display_settings_defaults() {
-  $settings = array(
-    'sv_addresscontrol'         => 1,
-    'sv_addresscontrolposition' => '',
-    'sv_pancontrol'             => 1,
-    'sv_pancontrolposition'     => '',
-    'sv_zoomcontrol'            => 'default',
-    'sv_zoomcontrolposition'    => '',
-    'sv_linkscontrol'           => 1,
-    'sv_imagedatecontrol'       => 0,
-    'sv_scrollwheel'            => 1,
-    'sv_clicktogo'              => 1,
-  );
-  return $settings;
+
+   $sv = config_get('getlocations_fields.sv', 'settings');
+  return $sv['sv_group'];
+
+#  $settings = array(
+#    'sv_addresscontrol'         => 1,
+#    'sv_addresscontrolposition' => '',
+#    'sv_pancontrol'             => 1,
+#    'sv_pancontrolposition'     => '',
+#    'sv_zoomcontrol'            => 'default',
+#    'sv_zoomcontrolposition'    => '',
+#    'sv_linkscontrol'           => 1,
+#    'sv_imagedatecontrol'       => 0,
+#    'sv_scrollwheel'            => 1,
+#    'sv_clicktogo'              => 1,
+#  );
+#  return $settings;
+
 }
 
 // Theming functions
@@ -4151,9 +3778,12 @@ function getlocations_fields_get_display_settings_defaults() {
 /**
  * Implements hook_theme().
  *
- * This lets us tell Drupal about our theme functions and their arguments.
+ * This lets us tell Backdrop about our theme functions and their arguments.
  */
 function getlocations_fields_theme() {
+  $file = array(
+    'file' => 'getlocations_fields.theme.inc',
+  );
 
   return array(
     'getlocations_fields_show' => array(
@@ -4161,824 +3791,25 @@ function getlocations_fields_theme() {
         'locations' => '',
         'settings' => '',
       ),
-    ),
+    ) + $file,
     'getlocations_fields_field_settings_form' => array(
       'render element' => 'form',
-    ),
+    ) + $file,
     'getlocations_fields_field_formatter_settings_form' => array(
       'render element' => 'form',
-    ),
+    ) + $file,
     'getlocations_fields_field_widget_form' => array(
       'render element' => 'form',
-    ),
+    ) + $file,
     'getlocations_fields_settings_form' => array(
       'render element' => 'form',
-    ),
+    ) + $file,
     'getlocations_fields_distance' => array(
       'variables' => array(
         'distance' => '',
         'units' => 'km',
       ),
-    ),
+    ) + $file,
   );
 
-}
-
-/**
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_show($variables) {
-  $locations = $variables['locations'];
-  $settings = $variables['settings'];
-
-  if ($settings['display_onemap']) {
-    $minmaxes = array('minlat' => 0, 'minlon' => 0, 'maxlat' => 0, 'maxlon' => 0);
-  }
-  else {
-    $minmaxes = '';
-  }
-
-  $output = '';
-  $location_ct = 0;
-  foreach ($locations AS $location) {
-    $output .= '<div class="location vcard">';
-    if (! empty($location['name']) && $settings['display_name']) {
-      $output .= '<h4>' . $location['name'] . '</h4>';
-    }
-    $output .= '<div class="adr">';
-    if (! empty($location['street']) && $settings['display_street'] ) {
-      $output .= '<div class="street-address">' . $location['street'];
-      if (! empty($location['additional']) && $settings['display_additional']) {
-        $output .= ' ' . '<span class="extended-address">' . $location['additional'] . '</span>';
-      }
-      $output .= '</div>';
-    }
-    if (! empty($location['city']) && $settings['display_city']) {
-      $output .= '<span class="locality">' . $location['city'] . '</span>';
-      if (! empty($location['province']) && $settings['display_province']) {
-        $output .= ",&nbsp;";
-      }
-      else {
-        $output .= "&nbsp;";
-      }
-    }
-    if (! empty($location['province']) && $settings['display_province']) {
-      $output .= '<span class="region">' . $location['province'] . '</span>';
-      if (! empty($location['postal_code']) && $settings['display_postal_code']) {
-        $output .= "&nbsp;";
-      }
-    }
-    if (! empty($location['postal_code']) && $settings['display_postal_code']) {
-      $output .= '<span class="postal-code">' . drupal_strtoupper($location['postal_code']) . '</span>';
-    }
-    if (! empty($location['country']) && $settings['display_country']) {
-      if ($settings['country_full'] && drupal_strlen($location['country']) == 2 ) {
-        // this is a 2 letter code, we want the full name
-        $countries = getlocations_get_countries_list();
-        $country = $countries[$location['country']];
-        if (empty($country)) {
-          $country = $location['country'];
-        }
-      }
-      else {
-        $country = $location['country'];
-      }
-      $output .= '<div class="country-name">' . $country . '</div>';
-    }
-    $output .= '</div>';
-
-    if (($location['phone'] && $settings['display_phone']) || ($location['mobile'] && $settings['display_mobile']) || ($location['fax'] && $settings['display_fax'])) {
-      $output .= '<div class="phones">';
-      if ($location['phone'] && $settings['display_phone']) {
-        $output .= '<div class="phone"><span class="phone_label">' . t('Phone') . '</span>' . $location['phone'] . '</div>';
-      }
-      if ($location['mobile'] && $settings['display_mobile']) {
-        $output .= '<div class="mobile"><span class="mobile_label">' . t('Mobile') . '</span>' . $location['mobile'] . '</div>';
-      }
-      if ($location['fax'] && $settings['display_fax']) {
-        $output .= '<div class="fax"><span class="fax_label">' . t('Fax') . '</span>' . $location['fax'] . '</div>';
-      }
-      $output .= '</div>';
-    }
-
-
-    $output .= '</div>';
-
-    // what3words
-    $what3words_lic = variable_get('getlocations_what3words_lic', array('key' => '', 'url' => GETLOCATIONS_W3W_URL));
-    if ($what3words_lic['key'] && isset($location['what3words']) && $location['what3words'] && $settings['what3words_display'] ) {
-      $output .= '<div class="w3w"><span class="w3w_label">' . t('what3words') . '</span>' . $location['what3words'] . '</div>';
-    }
-
-    if ($settings['display_latlong']) {
-      $lat = $location['latitude'];
-      $lng = $location['longitude'];
-      if ($settings['display_geo_microformat'] > 0) {
-        $lat_dms = theme('getlocations_latitude_dms', array('latitude' => $lat));
-        $lng_dms = theme('getlocations_longitude_dms', array('longitude' => $lng));
-        if ($settings['display_geo_microformat'] == 1) {
-          $output .= '<div class="geo">';
-          $output .= '<abbr class="latitude" title="' . $lat . '">' . $lat_dms . '</abbr> ';
-          $output .= '<abbr class="longitude" title="' . $lng . '">' . $lng_dms . '</abbr>';
-          $output .= '</div>';
-        }
-        else {
-          $output .= '<div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">';
-          $output .= t('Latitude') . '&nbsp;' . $lat_dms . '<br />';
-          $output .= t('Longitude') . '&nbsp;' . $lng_dms;
-          $output .= '<meta itemprop="latitude" content="' . $lat . '" />';
-          $output .= '<meta itemprop="longitude" content="' . $lng . '" />';
-          $output .= '</div>';
-        }
-        $output .= '<br />';
-      }
-      else {
-        if ($settings['display_dms']) {
-          $lat = theme('getlocations_latitude_dms', array('latitude' => $lat));
-          $lng = theme('getlocations_longitude_dms', array('longitude' => $lng));
-        }
-        $nomap = '';
-        if (! $settings['display_showmap']) {
-          $nomap = '_nomap';
-        }
-        $output .= '<div class="getlocations_fields_latlon_wrapper_themed' . $nomap . '">';
-        $output .= '<div class="getlocations_fields_lat_wrapper_themed' . $nomap . '">';
-        $output .= t('Latitude') . ":&nbsp;" . $lat . '</div>';
-        $output .= '<div class="getlocations_fields_lon_wrapper_themed' . $nomap . '">';
-        $output .= t('Longitude') . ":&nbsp;" . $lng . '</div>';
-        $output .= '</div>';
-        $output .= '<br />';
-
-      }
-    }
-
-    // smuggle these in from location data
-    // map_settings_allow
-    if (isset($location['map_settings_allow'])) {
-      $map_settings_allow = $location['map_settings_allow'];
-    }
-    else {
-      $map_settings_allow = getlocations_fields_map_settings_allow();
-    }
-    if ($map_settings_allow) {
-      if (isset($location['mapzoom']) && is_numeric($location['mapzoom'])) {
-        $settings['nodezoom'] = $location['mapzoom'];
-      }
-      if (isset($location['map_maptype']) && $location['map_maptype']) {
-        $settings['maptype'] = $location['map_maptype'];
-      }
-    }
-
-    // streetview
-    if (isset($location['streetview_settings_allow'])) {
-      $streetview_settings_allow = $location['streetview_settings_allow'];
-    }
-    else {
-      $streetview_settings_allow = getlocations_fields_streetview_settings_allow();
-    }
-    if ($streetview_settings_allow) {
-      if (isset($location['sv_enable'])) {
-        $settings['sv_enable'] = ($location['sv_enable'] == 1 ? 1 : 0);
-      }
-      if (isset($location['sv_showfirst'])) {
-        $settings['sv_showfirst'] = ($location['sv_showfirst'] == 1 ? 1 : 0);
-      }
-      if (isset($location['sv_heading']) && is_numeric($location['sv_heading'])) {
-        $settings['sv_heading'] = $location['sv_heading'];
-      }
-      if (isset($location['sv_zoom']) && is_numeric($location['sv_zoom'])) {
-        $settings['sv_zoom'] = $location['sv_zoom'];
-      }
-      if (isset($location['sv_pitch']) && is_numeric($location['sv_pitch'])) {
-        $settings['sv_pitch'] = $location['sv_pitch'];
-      }
-      $settings += getlocations_fields_get_display_settings($location);
-
-    }
-    else {
-      $settings['sv_enable'] = 0;
-      $settings['sv_showfirst'] = 0;
-    }
-
-    if ($location['longitude'] && $location['latitude']) {
-      if ($settings['display_showmap']) {
-        $name = htmlspecialchars_decode(isset($location['name']) && $location['name'] ? strip_tags($location['name']) : (isset($location['title']) && $location['title'] ? strip_tags($location['title']) : ''), ENT_QUOTES);
-        $base = '';
-        if ($location['nid']) {
-          $base = 'nid';
-        }
-        elseif ($location['uid']) {
-          $base = 'uid';
-        }
-        elseif ($location['tid']) {
-          $base = 'tid';
-        }
-        elseif ($location['cid']) {
-          $base = 'cid';
-        }
-
-        $marker = $settings['map_marker'];
-        if ($base == 'nid') {
-          // term markers, nodes only
-          $marker = getlocations_get_term_marker($location['nid'], $marker);
-        }
-
-        // per location marker
-        if (isset($location['marker']) && ! empty($location['marker'])) {
-          $marker = $location['marker'];
-        }
-        // onemap
-        if ($settings['display_onemap']) {
-          $latlons[] = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base, '', '');
-          $minmaxes = getlocations_do_minmaxes($location_ct, $location, $minmaxes);
-        }
-        else {
-          $latlons = array($location['latitude'], $location['longitude'], $location['glid'], $name, $marker, $base, '', '');
-          $map = getlocations_fields_getmap_show($settings, $latlons);
-          $output .= $map;
-        }
-      }
-      else {
-        if ($settings['display_maplink']) {
-          if (count($locations) > 1 ) {
-            $output .= '<p>' . l(t('Show on a map'), 'getlocations/lids/' . $location['glid']) . '</p>';
-          }
-          else {
-            if ($location['nid']) {
-              $output .= '<p>' . l(t('Show on a map'), 'getlocations/node/' . $location['nid']) . '</p>';
-            }
-            elseif ($location['uid']) {
-              $output .= '<p>' . l(t('Show on a map'), 'getlocations/user/' . $location['uid']) . '</p>';
-            }
-            elseif ($location['tid']) {
-              $output .= '<p>' . l(t('Show on a map'), 'getlocations/term/' . $location['tid']) . '</p>';
-            }
-            elseif ($location['cid']) {
-              $output .= '<p>' . l(t('Show on a map'), 'getlocations/comment/' . $location['cid']) . '</p>';
-            }
-          }
-        }
-      }
-      $location_ct++;
-    }
-  }
-  // onemap
-  if ($settings['display_showmap'] && $settings['display_onemap'] && isset($latlons)) {
-    if ($location_ct < 2 ) {
-      unset($minmaxes);
-      $minmaxes = '';
-    }
-    $map = getlocations_fields_getmap_show($settings, $latlons, $minmaxes);
-    $output .= $map;
-  }
-
-  return $output;
-
-}
-
-
-/**
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_field_settings_form($variables) {
-  $form = $variables['form'];
-
-  $output = '';
-
-  // try table
-  $header = array();
-  $no_striping = TRUE;
-  $rows = array(
-    array('data' =>
-      array(
-        array('data' => $form['input_name_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_name_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_name_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_street_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_street_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_street_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-
-    array('data' =>
-      array(
-        array('data' => $form['input_additional_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_additional_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_additional_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-
-    array('data' =>
-      array(
-        array('data' => $form['input_city_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_city_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_city_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_province_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_province_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_province_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_postal_code_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_postal_code_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_postal_code_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_country_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_country_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_country_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-
-    array('data' =>
-      array(
-        array('data' => $form['input_phone_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_phone_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_phone_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_mobile_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_mobile_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_mobile_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_fax_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_fax_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['input_fax_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_latitude_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_latitude_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => '', 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['input_longitude_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['input_longitude_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => '', 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-
-  );
-  $attributes = array('class' => array('getlocations_fields_input_table'));
-  $table = theme('table', array(
-      'header' => $header,
-      'rows' => $rows,
-      'attributes' => $attributes,
-    )
-  );
-  $form['input_name_width'] = array('#markup' => $table);
-  unset($form['input_name_required']);
-  unset($form['input_name_weight']);
-  unset($form['input_street_width']);
-  unset($form['input_street_required']);
-  unset($form['input_street_weight']);
-  unset($form['input_additional_width']);
-  unset($form['input_additional_required']);
-  unset($form['input_additional_weight']);
-  unset($form['input_city_width']);
-  unset($form['input_city_required']);
-  unset($form['input_city_weight']);
-  unset($form['input_province_width']);
-  unset($form['input_province_required']);
-  unset($form['input_province_weight']);
-  unset($form['input_postal_code_width']);
-  unset($form['input_postal_code_required']);
-  unset($form['input_postal_code_weight']);
-  unset($form['input_country_width']);
-  unset($form['input_country_required']);
-  unset($form['input_country_weight']);
-  unset($form['input_latitude_width']);
-  unset($form['input_latitude_weight']);
-  unset($form['input_longitude_width']);
-  unset($form['input_longitude_weight']);
-  unset($form['input_phone_width']);
-  unset($form['input_phone_required']);
-  unset($form['input_phone_weight']);
-  unset($form['input_mobile_width']);
-  unset($form['input_mobile_required']);
-  unset($form['input_mobile_weight']);
-  unset($form['input_fax_width']);
-  unset($form['input_fax_required']);
-  unset($form['input_fax_weight']);
-
-  $prefix = '<fieldset class="form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Input form settings') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t('Configure the input form.') . '</div>';
-  $form['use_address']['#prefix'] = $prefix;
-  if (module_exists('countries')) {
-    $form['only_countries']['#suffix'] = '</div></fieldset>';
-  }
-  else {
-    $form['use_country_dropdown']['#suffix'] = '</div></fieldset>';
-  }
-
-  $prefix = '<fieldset class="form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Input map settings') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t('Configure the input map.') . '</div>';
-  $form['input_map_show']['#prefix'] = $prefix;
-  $form['draggable']['#suffix'] = '</div></fieldset>';
-
-  if (isset($form['input_map_marker'])) {
-    $link = getlocations_markerpicker_link($form['input_map_marker']['#id'], 'i');
-    $form['input_map_marker']['#field_suffix'] = '&nbsp;' . $link;
-  }
-
-  $output .= drupal_render_children($form);
-  return $output;
-
-}
-
-/**
- * The display settings form
- *
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_field_formatter_settings_form($variables) {
-  $form = $variables['form'];
-  $output = '';
-  $form['display_showmap']['#prefix'] = '<fieldset class="getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Address display settings') . '</span></legend><div class="fieldset-wrapper">';
-  $form['display_fax']['#suffix'] = '</div></fieldset>';
-
-  $form['sv_addresscontrol']['#prefix'] = '<fieldset class="getlocations_fieldset collapsible ' . (getlocations_fields_streetview_settings_allow() ? '' : 'collapsed') . ' form-wrapper"><legend><span class="fieldset-legend">' . t('Streetview overlay settings') . '</span></legend><div class="fieldset-wrapper">';
-  $form['sv_clicktogo']['#suffix'] = '</div></fieldset>';
-
-  $output .= drupal_render_children($form);
-  return $output;
-}
-
-/**
- * The input form
- *
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_field_widget_form($variables) {
-
-  $form = $variables['form'];
-  $output = '';
-
-  $settings = $form['settings']['#value'];
-  unset($form['settings']);
-  $active = $form['active']['#value'];
-
-  list($map, $mapid) = getlocations_fields_getmap($settings, $active);
-
-  // attributes
-  $fieldlist = array(
-    'name', 'street', 'additional', 'city', 'province', 'postal_code', 'country', 'latitude', 'longitude',
-    'mapzoom', 'sv_heading', 'sv_zoom', 'sv_pitch', 'map_maptype', 'sv_enable', 'sv_showfirst'
-  );
-  foreach ($fieldlist AS $field) {
-    if (isset($form[$field])) {
-      $form[$field]['#attributes'] = array('class' => array('getlocations_' . $field . '_' . $mapid));
-    }
-  }
-  if (isset($form['address'])) {
-    $form['address']['#attributes'] = array('id' => ($active ? 'getlocations_address_' . $mapid : 'getlocations_default_address'), 'placeholder' => t('Enter an address'));
-  }
-
-  if ($mapid !== NULL && isset($form['geobutton']) ) {
-    $geobutton = '<p><input type="button" value="' . t('Geocode this address') . '" title="' . t('Get the latitude and longitude for this address') . '" id="getlocations_geocodebutton_' . $mapid . '" class="form-submit" /></p>';
-    $form['geobutton']['#markup'] = $geobutton;
-  }
-
-  if ($mapid !== NULL && isset($form['smart_ip_button']) && module_exists('smart_ip')) {
-    $smart_ip_button = '<p><input type="button" value="' . t('Use current user position') . '" title="' . t('Get the latitude and longitude for this address from the user IP') . '" id="getlocations_smart_ip_button_' . $mapid . '" class="form-submit" /></p>';
-    $form['smart_ip_button']['#markup'] = $smart_ip_button;
-  }
-  // html5 and google
-  if (getlocations_is_mobile() && $mapid !== NULL && isset($form['geolocation_button'])) {
-    $geolocation_button = '<p><input type="button" value="' . t('Find Location') . '" title="' . t('Get the latitude and longitude for this address from the browser') . '" id="getlocations_geolocation_button_' . $mapid . '" class="form-submit" />&nbsp;<span id="getlocations_geolocation_status_' . $mapid . '" ></span></p>';
-    $geolocation_button .= '<p>Use the browser to find your current location</p>';
-    $form['geolocation_button']['#markup'] = $geolocation_button;
-  }
-
-  // Clear button
-  if (isset($form['clear_button'])) {
-    $clear_button = '<p><input type="button" value="' . t('Clear') . '" title="' . t('Clear the address on the form') . '" id="getlocations_clear_button_' . $mapid . '" class="form-submit" /></p>';
-    $form['clear_button']['#markup'] = $clear_button;
-  }
-
-  $form['latitude']['#prefix'] = '<div class="getlocations_fields_latlon_wrapper clearfix"><div class="getlocations_fields_lat_wrapper">';
-  $form['latitude']['#suffix'] = '</div>';
-  $form['longitude']['#prefix'] = '<div class="getlocations_fields_lon_wrapper">';
-  $form['longitude']['#suffix'] = '</div></div>';
-
-  if (isset($form['marker']) && $form['marker']['#type'] != 'value') {
-    // colorbox marker
-    $link = getlocations_markerpicker_link($form['marker']['#id'], 'i');
-    $form['marker']['#field_suffix'] = '&nbsp;' . $link;
-    $form['marker']['#prefix'] = '<div class="getlocations_fields_marker_wrapper">';
-    $form['marker']['#suffix'] = '</div>';
-  }
-
-  $form['city']['#prefix'] = '<div class="getlocations_fields_city_wrapper">';
-  $form['city']['#suffix'] = '</div>';
-  $form['province']['#prefix'] = '<div class="getlocations_fields_province_wrapper">';
-  $form['province']['#suffix'] = '</div>';
-  $form['country']['#prefix'] = '<div class="getlocations_fields_country_wrapper">';
-  if (isset($form['country_display'])) {
-    $form['country_display']['#suffix'] = '</div>';
-  }
-  else {
-    $form['country']['#suffix'] = '</div>';
-  }
-
-
-  $msg = t('To use the map to find a location, drag the marker or click on the map.');
-  if (isset($settings['map_settings_allow'])) {
-    $map_settings_allow = $settings['map_settings_allow'];
-  }
-  else {
-    $map_settings_allow = getlocations_fields_map_settings_allow();
-  }
-  if ($map_settings_allow) {
-    $msg .= '<br />' . t('You can also set the map type and zoom');
-  }
-  if (! $active) {
-    $msg =  t('A preview of the current map settings.') . '<br />' . t('You can adjust the Map center, Zoom and map type by changing the map.') . '<br />' . t('For all other changes use the form. Remember to Save when you are done.');
-  }
-  $form['map']['#prefix'] = '<div class="getlocations_fields_map_wrapper">';
-  $form['map']['#suffix'] = '</div>';
-  if ($settings['use_address'] < 1) {
-    $form['map']['#markup'] = '<p>' . t('If you leave the address empty you can Geocode by moving the marker on the map') . '</p>';
-  }
-  else {
-    $form['map']['#markup'] = '';
-  }
-  $form['map']['#markup'] .= '<p>' . $msg . '</p><div class="getlocations_fields_map">' . $map . '</div>';
-
-  if (isset($settings['streetview_settings_allow'])) {
-    $streetview_settings_allow = $settings['streetview_settings_allow'];
-  }
-  else {
-    $streetview_settings_allow = getlocations_fields_streetview_settings_allow();
-  }
-
-  if ($active && $streetview_settings_allow) {
-    $form['map']['#markup'] .= '<div id="getlocations_streetview_setup_' . $mapid . '">';
-    $form['map']['#markup'] .= '<input type="button" value="' . t('Streetview Setup') . '" title="' . t('Configure streetview heading, zoom and pitch for this map.') . '" id="getlocations_streetview_setupbutton_' . $mapid . '" class="form-submit" />';
-    $form['map']['#markup'] .= '</div>';
-  }
-
-  // wrap 'fake' required in a div
-  if ($mapid !== NULL && isset($form['getlocations_required'])) {
-    $requireds = explode(',', $form['getlocations_required']['#value']);
-    foreach ($requireds AS $id) {
-      $form[$id]['#prefix'] = '<div class="getlocations_required_' . $id . '_' . $mapid . '">';
-      $form[$id]['#suffix'] = '</div>';
-    }
-    unset($form['getlocations_required']);
-  }
-
-  $output .= drupal_render_children($form);
-  return $output;
-
-}
-
-/**
- * The settings form
- *
- * @param array $variables
- *
- * @return
- *   Returns $output
- *
- */
-function theme_getlocations_fields_settings_form($variables) {
-  $form = $variables['form'];
-
-  $output = '';
-
-  // try table
-  $header = array();
-  $no_striping = TRUE;
-  $rows = array(
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_name_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_name_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_name_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_street_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_street_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_street_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_additional_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_additional_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_additional_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_city_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_city_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_city_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_province_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_province_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_province_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_postal_code_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_postal_code_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_postal_code_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_country_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_country_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_country_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_phone_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_phone_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_phone_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_mobile_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_mobile_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_mobile_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_fax_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_fax_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => $form['getlocations_fields_defaults']['input_fax_required'], 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_latitude_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_latitude_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => '', 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-    array('data' =>
-      array(
-        array('data' => $form['getlocations_fields_defaults']['input_longitude_width'], 'class' => array('getlocations_fields_input_cell1')),
-        array('data' => $form['getlocations_fields_defaults']['input_longitude_weight'], 'class' => array('getlocations_fields_input_cell2')),
-        array('data' => '', 'class' => array('getlocations_fields_input_cell3')),
-      ),
-      'no_striping' => $no_striping,
-    ),
-
-  );
-  $attributes = array('class' => array('getlocations_fields_input_table'));
-  $table = theme('table', array(
-      'header' => $header,
-      'rows' => $rows,
-      'attributes' => $attributes,
-    )
-  );
-  $form['getlocations_fields_defaults']['input_name_width'] = array('#markup' => $table);
-  unset($form['getlocations_fields_defaults']['input_name_required']);
-  unset($form['getlocations_fields_defaults']['input_name_weight']);
-  unset($form['getlocations_fields_defaults']['input_street_width']);
-  unset($form['getlocations_fields_defaults']['input_street_required']);
-  unset($form['getlocations_fields_defaults']['input_street_weight']);
-  unset($form['getlocations_fields_defaults']['input_additional_width']);
-  unset($form['getlocations_fields_defaults']['input_additional_required']);
-  unset($form['getlocations_fields_defaults']['input_additional_weight']);
-  unset($form['getlocations_fields_defaults']['input_city_width']);
-  unset($form['getlocations_fields_defaults']['input_city_required']);
-  unset($form['getlocations_fields_defaults']['input_city_weight']);
-  unset($form['getlocations_fields_defaults']['input_province_width']);
-  unset($form['getlocations_fields_defaults']['input_province_required']);
-  unset($form['getlocations_fields_defaults']['input_province_weight']);
-  unset($form['getlocations_fields_defaults']['input_postal_code_width']);
-  unset($form['getlocations_fields_defaults']['input_postal_code_required']);
-  unset($form['getlocations_fields_defaults']['input_postal_code_weight']);
-  unset($form['getlocations_fields_defaults']['input_country_width']);
-  unset($form['getlocations_fields_defaults']['input_country_required']);
-  unset($form['getlocations_fields_defaults']['input_country_weight']);
-  unset($form['getlocations_fields_defaults']['input_latitude_width']);
-  unset($form['getlocations_fields_defaults']['input_latitude_weight']);
-  unset($form['getlocations_fields_defaults']['input_longitude_width']);
-  unset($form['getlocations_fields_defaults']['input_longitude_weight']);
-  unset($form['getlocations_fields_defaults']['input_phone_width']);
-  unset($form['getlocations_fields_defaults']['input_phone_required']);
-  unset($form['getlocations_fields_defaults']['input_phone_weight']);
-  unset($form['getlocations_fields_defaults']['input_mobile_width']);
-  unset($form['getlocations_fields_defaults']['input_mobile_required']);
-  unset($form['getlocations_fields_defaults']['input_mobile_weight']);
-  unset($form['getlocations_fields_defaults']['input_fax_width']);
-  unset($form['getlocations_fields_defaults']['input_fax_required']);
-  unset($form['getlocations_fields_defaults']['input_fax_weight']);
-
-  $prefix = '<fieldset class="collapsible form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Default Input form settings') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t('Configure the default input form.') . '</div>';
-  $form['getlocations_fields_defaults']['use_address']['#prefix'] = $prefix;
-  $form['getlocations_fields_defaults']['use_country_dropdown']['#suffix'] = '</div></fieldset>';
-
-  $prefix = '<fieldset class="collapsible form-wrapper">';
-  $prefix .= '<legend><span class="fieldset-legend">' . t('Default Address display settings') . '</span></legend>';
-  $prefix .= '<div class="fieldset-wrapper">';
-  $prefix .= '<div class="fieldset-description">' . t('Configure the default address display.') . '</div>';
-  $form['getlocations_fields_defaults']['display_showmap']['#prefix'] = $prefix;
-  $form['getlocations_fields_defaults']['display_fax']['#suffix'] = '</div></fieldset>';
-
-  $output .= drupal_render_children($form);
-  return $output;
-
-}
-
-function theme_getlocations_fields_distance($variables) {
-  $distance = $variables['distance'];
-  $shortunit = $variables['shortunit'];
-  // also available
-  // $longunit = $variables['longunit'];
-  $output = '';
-  $output .= number_format($distance, 2) . ' ' . $shortunit;
-  return $output;
-}
-
-/**
- * Theme preprocess function for getlocations_fields_distance.
- */
-function template_preprocess_getlocations_fields_distance(&$variables) {
-  $units = $variables['units'];
-  unset($variables['units']);
-  $variables['shortunit'] = $units;
-  $variables['longunit'] = getlocations_get_unit_names($units, 'plurals');
-  $variables['distance'] = (float)$variables['distance'];
 }

@@ -1,5 +1,5 @@
 (function ($) {
-  Drupal.behaviors.magnifyingglass = {
+  Backdrop.behaviors.magnifyingglass = {
     attach: function() {
 
       L.Control.MagnifyingGlass = L.Control.extend({

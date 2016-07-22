@@ -2,18 +2,18 @@
 /**
  * @file
  * getlocations_circles.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations circles support
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations_circles = {
+  Backdrop.behaviors.getlocations_circles = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_circles === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_circles === 'undefined') {
         return;
       }
 
@@ -24,13 +24,13 @@
         fillColor: '#FF0000',
         fillOpacity: 0.35
       };
-      var ver = Drupal.getlocations.msiedetect();
+      var ver = Backdrop.getlocations.msiedetect();
       var pushit = false;
       if ( (ver == '') || (ver && ver > 8)) {
         pushit = true;
       }
 
-      $.each(Drupal.settings.getlocations_circles, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_circles, function (key, settings) {
 
         var strokeColor = (settings.strokeColor ? settings.strokeColor : default_circle_settings.strokeColor);
         if (! strokeColor.match(/^#/)) {
@@ -107,18 +107,18 @@
             circOpts.clickable = p_clickable;
             circOpts.radius = p_radius;
             circOpts.center = mcoords;
-            circOpts.map = Drupal.getlocations_map[key];
+            circOpts.map = Backdrop.getlocations_map[key];
             circ[i] = new google.maps.Circle(circOpts);
 
             if (p_clickable && p_message) {
               google.maps.event.addListener(circ[i], 'click', function(event) {
                 // close any previous instances
                 if (pushit) {
-                  for (var i in Drupal.getlocations_settings[key].infoBubbles) {
-                    Drupal.getlocations_settings[key].infoBubbles[i].close();
+                  for (var i in Backdrop.getlocations_settings[key].infoBubbles) {
+                    Backdrop.getlocations_settings[key].infoBubbles[i].close();
                   }
                 }
-                if (Drupal.getlocations_settings[key].markeraction == 2) {
+                if (Backdrop.getlocations_settings[key].markeraction == 2) {
                   // infobubble
                   if (typeof(infoBubbleOptions) == 'object') {
                     var infoBubbleOpts = infoBubbleOptions;
@@ -142,9 +142,9 @@
                   infoWindowOpts.position = event.latLng;
                   var iw = new google.maps.InfoWindow(infoWindowOpts);
                 }
-                iw.open(Drupal.getlocations_map[key]);
+                iw.open(Backdrop.getlocations_map[key]);
                 if (pushit) {
-                  Drupal.getlocations_settings[key].infoBubbles.push(iw);
+                  Backdrop.getlocations_settings[key].infoBubbles.push(iw);
                 }
               });
             }

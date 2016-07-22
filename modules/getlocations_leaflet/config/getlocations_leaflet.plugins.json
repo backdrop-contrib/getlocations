@@ -1,0 +1,24 @@
+{
+  "_config": "getlocations_leaflet.plugins",
+  "settings": {
+    "markercluster_enable":0,
+    "fullscreen_enable":0,
+    "graticule_enable":0,
+    "pancontrol_enable":0,
+    "zoomslider_enable":0,
+    "awesome_enable":0,
+    "mouseposition_enable":0,
+    "minimap_enable":0,
+    "geocoder_enable":0,
+    "usermarker_enable":0,
+    "bouncemarker_enable":0,
+    "magnifyingglass_enable":0,
+    "terminator_enable":0,
+    "mapquest_traffic_enable":0,
+    "mapquest_routing_enable":0,
+    "mapquest_geocoder_enable":0,
+    "mapquest_maps_enable":0,
+    "hash_enable":0
+  }
+}
+

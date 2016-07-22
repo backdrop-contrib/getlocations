@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_leaflet_plugin_style.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Extension of the Views Plugin Style for Leaflet Map
@@ -51,13 +51,13 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $options['jquery_colorpicker_enabled'] = array('default' => 0);
 
     // node markers
-    $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+    $getlocations_node_marker = array('enable' => 0);
     if ($getlocations_node_marker['enable']) {
       if ($types = getlocations_get_types()) {
         foreach ($types AS $type => $name) {
           $field_names = getlocations_get_fieldname2($type, 'node');
           foreach ($field_names AS $field_name) {
-            $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
+            $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
             $mmarker = (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ? $getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker'] : $getlocations_defaults['node_map_marker']);
             $options[$mkey] = array('default' => $mmarker);
           }
@@ -67,7 +67,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     if (module_exists('taxonomy')) {
       // vocabulary markers
       if ($types = getlocations_get_vocabularies()) {
-        $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+        $getlocations_vocabulary_marker = array('enable' => 0);
         if ($getlocations_vocabulary_marker['enable']) {
           foreach ($types AS $type => $name) {
             $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
@@ -79,7 +79,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       }
 
       // term markers
-      $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+      $getlocations_term_marker = array('enable' => 0, 'vids' => 0, 'max_depth' => '');
       if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
         $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
         $vids = $getlocations_term_marker['vids'];
@@ -113,8 +113,8 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 
     $form['#theme'] = 'getlocations_leaflet_plugin_style_options_form';
 
-    $getlocations_leaflet_paths = getlocations_leaflet_paths_get();
-    $getlocations_paths = getlocations_paths_get();
+    $getlocations_leaflet_paths = getlocations_leaflet_paths_get_all();
+    $getlocations_paths = getlocations_paths_get_all();
 
     $form['#attached']['js'] = array(
       $getlocations_leaflet_paths['getlocations_leaflet_formatter_path'],
@@ -175,14 +175,14 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
 
       // node type markers
       if ($types = getlocations_get_types()) {
-        $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+        $getlocations_node_marker = array('enable' => 0);
         if ($getlocations_node_marker['enable']) {
           $typect = 0;
           foreach ($types AS $type => $name) {
             $field_names = getlocations_get_fieldname2($type, 'node');
             foreach ($field_names AS $field_name) {
               $label = t('%name Map marker, field %field' , array('%name' => $name, '%field' => $field_name));
-              $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
+              $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
               $labels = array(
                 'awesome_icon'         => t($label . ' Awesome icon'),
                 'awesome_icon_color'   => t($label . ' Awesome icon color'),
@@ -276,14 +276,14 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       // do getlocations markers
       $markers = getlocations_get_marker_titles();
       // node markers
-      $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
+      $getlocations_node_marker = array('enable' => 0);
       if ($getlocations_node_marker['enable']) {
         if ($types = getlocations_get_types()) {
           foreach ($types AS $type => $name) {
             $field_names = getlocations_get_fieldname2($type, 'node');
             foreach ($field_names AS $field_name) {
               if (isset($getlocations_node_marker['content_type'][$type]['field_name'][$field_name]['map_marker']) ) {
-                $mkey = 'node_marker__' . drupal_strtolower($type) . '__' . $field_name;
+                $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
                 $form[$mkey] = getlocations_element_map_marker(
                   t('%name Content Map Marker, field %field', array('%name' => $name, '%field' => $field_name)),
                   $markers,
@@ -313,7 +313,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       if (module_exists('taxonomy')) {
         if ($types = getlocations_get_machine_vocabularies()) {
           $types2 = getlocations_get_vocabularies();
-          $getlocations_vocabulary_marker = variable_get('getlocations_vocabulary_marker', array('enable' => 0));
+          $getlocations_vocabulary_marker = array('enable' => 0);
           if ($getlocations_vocabulary_marker['enable']) {
             foreach ($types AS $type => $name) {
               $field_name = getlocations_get_fieldname($name, 'taxonomy_term');
@@ -335,7 +335,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         }
 
         // term markers
-        $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+        $getlocations_term_marker = array('enable' => 0, 'vids' => 0, 'max_depth' => '');
         if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
           $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
           $vids = $getlocations_term_marker['vids'];

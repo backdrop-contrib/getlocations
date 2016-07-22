@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields_handler_field_country.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Country field handler.
@@ -29,7 +29,7 @@ class getlocations_fields_handler_field_country extends views_handler_field {
 
   function render($values) {
     if ($this->options['style'] == 'name') {
-      if (drupal_strlen($values->{$this->field_alias}) == 2) {
+      if (backdrop_strlen($values->{$this->field_alias}) == 2) {
         return check_plain(getlocations_get_country_name($values->{$this->field_alias}));
       }
       else {
@@ -37,11 +37,11 @@ class getlocations_fields_handler_field_country extends views_handler_field {
       }
     }
     else {
-      if (drupal_strlen($values->{$this->field_alias}) == 2) {
-        return check_plain(drupal_strtoupper($values->{$this->field_alias}));
+      if (backdrop_strlen($values->{$this->field_alias}) == 2) {
+        return check_plain(backdrop_strtoupper($values->{$this->field_alias}));
       }
       else {
-        return check_plain(drupal_strtoupper(getlocations_get_country_id($values->{$this->field_alias})));
+        return check_plain(backdrop_strtoupper(getlocations_get_country_id($values->{$this->field_alias})));
       }
     }
   }

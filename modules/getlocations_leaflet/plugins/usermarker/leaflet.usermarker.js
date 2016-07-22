@@ -2,7 +2,7 @@
  * Leaflet.UserMarker v1.0
  *
  * Author: Jonatan Heyman <http://heyman.info>
- * modified for getlocations_leaflet by Bob Hutchinson http://drupal.org/user/52366
+ * modified for getlocations_leaflet by Bob Hutchinson https://backdropcms.org/account/hutch
  */
 
 (function(window) {

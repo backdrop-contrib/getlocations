@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields_handler_filter_country.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Filter on country.
@@ -38,7 +38,7 @@ class getlocations_fields_handler_filter_country extends views_handler_filter_in
         $which = in_array($this->operator, $this->operator_values(1)) ? 'value' : 'none';
       }
       else {
-        $source = 'edit-' . drupal_html_id($this->options['expose']['operator_id']);
+        $source = 'edit-' . backdrop_html_id($this->options['expose']['operator_id']);
       }
 
       if (!empty($this->options['expose']['reduce'])) {

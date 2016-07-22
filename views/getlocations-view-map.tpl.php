@@ -2,7 +2,7 @@
 /**
  * @file
  * getlocations-view-map.tpl.php
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Default simple view template to display a list of rows.

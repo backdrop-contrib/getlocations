@@ -2,17 +2,17 @@
 /**
  * @file
  * getlocations_smartip.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations_smartip module for Drupal 7
+ * Javascript functions for getlocations_smartip module for Backdrop 1.x
  */
 
 (function ($) {
-  Drupal.getlocations_smartip = {};
+  Backdrop.getlocations_smartip = {};
 
 
-  Drupal.getlocations_smartip.dolocation = function(key, settings) {
+  Backdrop.getlocations_smartip.dolocation = function(key, settings) {
 
     active_throbber(key);
     // remove any old markers
@@ -23,15 +23,15 @@
       $("#edit-distance-latitude").val('');
       $("#edit-distance-longitude").val('');
     }
-    var smartip_marker = Drupal.getlocations.getIcon(settings.smartip_marker);
+    var smartip_marker = Backdrop.getlocations.getIcon(settings.smartip_marker);
     var smartip_marker_title = settings.smartip_marker_title;
     var smartip_bubble = settings.smartip_bubble;
     var smartip_center = settings.smartip_center;
     var smartip_zoom = settings.smartip_zoom;
     var smartip_callback = settings.smartip_callback;
-    var gs = Drupal.getlocations_settings[key];
+    var gs = Backdrop.getlocations_settings[key];
     gs.show_maplinks = false;
-    Drupal.getlocations_smartip.marker = Drupal.getlocations_smartip.marker || [];
+    Backdrop.getlocations_smartip.marker = Backdrop.getlocations_smartip.marker || [];
     smartip_marker_kill();
     gs.markdone = smartip_marker;
     var result = [];
@@ -77,20 +77,20 @@
             customContent += '<div class="adr">' + result['formatted_address'].replace(/[,]/g, ',<br />');
             customContent += '</div></div>';
             gs.useCustomContent = true;
-            gs.useInfoBubble = (Drupal.settings.getlocations[key].markeraction == 2 ? true : false);
-            gs.markeraction = (Drupal.settings.getlocations[key].markeraction == 2 ? 2 : 1);
+            gs.useInfoBubble = (Backdrop.settings.getlocations[key].markeraction == 2 ? true : false);
+            gs.markeraction = (Backdrop.settings.getlocations[key].markeraction == 2 ? 2 : 1);
           }
           else {
             gs.useCustomContent = false;
           }
 
-          var m = Drupal.getlocations.makeMarker(Drupal.getlocations_map[key], gs, result['lat'], result['lon'], 0, smartip_marker_title, '', customContent, '', key);
-          Drupal.getlocations_smartip.marker[key].push(m);
+          var m = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], gs, result['lat'], result['lon'], 0, smartip_marker_title, '', customContent, '', key);
+          Backdrop.getlocations_smartip.marker[key].push(m);
           if (smartip_center) {
-            Drupal.getlocations_map[key].setCenter(ll);
+            Backdrop.getlocations_map[key].setCenter(ll);
           }
           if (smartip_zoom > -1) {
-            Drupal.getlocations_map[key].setZoom(parseInt(smartip_zoom));
+            Backdrop.getlocations_map[key].setZoom(parseInt(smartip_zoom));
           }
           deactive_throbber(key);
         }
@@ -132,19 +132,19 @@
 
     function smartip_marker_kill() {
       // remove any old markers
-      if (Drupal.getlocations_smartip.marker[key] !== undefined ) {
-        for (var mct = 0; mct < Drupal.getlocations_smartip.marker[key].length; mct++) {
-          Drupal.getlocations_smartip.marker[key][mct].setMap();
+      if (Backdrop.getlocations_smartip.marker[key] !== undefined ) {
+        for (var mct = 0; mct < Backdrop.getlocations_smartip.marker[key].length; mct++) {
+          Backdrop.getlocations_smartip.marker[key][mct].setMap();
         }
       }
       else {
-        Drupal.getlocations_smartip.marker = [];
-        Drupal.getlocations_smartip.marker[key] = [];
+        Backdrop.getlocations_smartip.marker = [];
+        Backdrop.getlocations_smartip.marker[key] = [];
       }
     }
   };
 
-  Drupal.behaviors.getlocations_smartip = {
+  Backdrop.behaviors.getlocations_smartip = {
     attach: function (context, settings) {
 
       // doh
@@ -161,7 +161,7 @@
           $("#getlocations_map_wrapper_" + key).append(lladd);
           // smartip button
           $("#getlocations_smartip_show_" + key).click( function() {
-            Drupal.getlocations_smartip.dolocation(key, settings.getlocations_smartip[key]);
+            Backdrop.getlocations_smartip.dolocation(key, settings.getlocations_smartip[key]);
           }); // end button click
         } //  end is there really a map?
       }); // end once

@@ -3,11 +3,9 @@
 /**
  * @file
  * getlocations_fields.devel_generate.inc
- * @author Bob Hutchinson https://www.drupal.org/u/hutch
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
- * Provides Getlocations field Devel Generate code, see issue #2603376.
- * Contributed by https://www.drupal.org/u/drikc
  */
 
 /**
@@ -37,10 +35,10 @@ function _get_locations_get_random_places($quantity = 1) {
       'username' => variable_get('geonames_webservice_username_parameter', 'demo'),
     );
     $url = 'http://ws.geonames.org/findNearbyPlaceNameJSON?' . http_build_query($qs);
-    $result = drupal_http_request($url);
+    $result = backdrop_http_request($url);
     $data = json_decode($result->data);
     if (!empty($data->status)) {
-      drupal_set_message(t('Warning: getlocations random places generator function (%f) failed to use geonames web service; status: "%message" with url @url.', array(
+      backdrop_set_message(t('Warning: getlocations random places generator function (%f) failed to use geonames web service; status: "%message" with url @url.', array(
         '%f' => __FUNCTION__,
         '%message' => $data->status->message,
         '@url' => $url,

@@ -2,7 +2,7 @@
 /**
  * @file
  * getlocations_geojson.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations GeoJSON support
@@ -11,15 +11,15 @@
 */
 
 // this gets called from getlocations.js
-Drupal.getlocations_geojson = function(key) {
+Backdrop.getlocations_geojson = function(key) {
 
   // collect data and options
-  var geojson_data = Drupal.settings.getlocations[key].geojson_data;
+  var geojson_data = Backdrop.settings.getlocations[key].geojson_data;
   if (! geojson_data) {
     return;
   }
   var geojson_data_parsed = JSON.parse(geojson_data);
-  var geojson_options = Drupal.settings.getlocations[key].geojson_options;
+  var geojson_options = Backdrop.settings.getlocations[key].geojson_options;
   var geojson_options_parsed = null;
   if (geojson_options) {
     geojson_options_parsed = JSON.parse(geojson_options);
@@ -35,14 +35,14 @@ Drupal.getlocations_geojson = function(key) {
     for (var i = 0; i < geojson_object.length; i++) {
       if (geojson_object[i].length) {
         for (var j = 0; j < geojson_object[i].length; j++) {
-          geojson_object[i][j].setMap(Drupal.getlocations_map[key]);
+          geojson_object[i][j].setMap(Backdrop.getlocations_map[key]);
           if (geojson_object[i][j].geojsonProperties) {
             getlocations_do_geojson_bubble(geojson_object[i][j], key);
           }
         }
       }
       else {
-        geojson_object[i].setMap(Drupal.getlocations_map[key]);
+        geojson_object[i].setMap(Backdrop.getlocations_map[key]);
       }
       if (geojson_object[i].geojsonProperties) {
         getlocations_do_geojson_bubble(geojson_object[i], key);
@@ -50,7 +50,7 @@ Drupal.getlocations_geojson = function(key) {
     }
   }
   else {
-    geojson_object.setMap(Drupal.getlocations_map[key]);
+    geojson_object.setMap(Backdrop.getlocations_map[key]);
     if (geojson_object.geojsonProperties) {
       getlocations_do_geojson_bubble(geojson_object, key);
     }
@@ -60,7 +60,7 @@ Drupal.getlocations_geojson = function(key) {
 
 function getlocations_do_geojson_bubble(data_item, key) {
   // munge for bonehead browsers
-  var ver = Drupal.getlocations.msiedetect();
+  var ver = Backdrop.getlocations.msiedetect();
   var pushit = false;
   if ((ver == '') || (ver && ver > 8)) {
     pushit = true;
@@ -82,11 +82,11 @@ function getlocations_do_geojson_bubble(data_item, key) {
 
   google.maps.event.addListener(data_item, "click", function(event) {
     if (pushit) {
-      for (var i in Drupal.getlocations_settings[key].infoBubbles) {
-        Drupal.getlocations_settings[key].infoBubbles[i].close();
+      for (var i in Backdrop.getlocations_settings[key].infoBubbles) {
+        Backdrop.getlocations_settings[key].infoBubbles[i].close();
       }
     }
-    if (Drupal.getlocations_settings[key].markeraction == 2) {
+    if (Backdrop.getlocations_settings[key].markeraction == 2) {
       if (typeof(infoBubbleOptions) == 'object') {
         var infoBubbleOpts = infoBubbleOptions;
       }
@@ -106,9 +106,9 @@ function getlocations_do_geojson_bubble(data_item, key) {
       infoWindowOpts.content = geojson_content;
       var geojson_iw = new google.maps.InfoWindow(infoWindowOpts);
     }
-    geojson_iw.open(Drupal.getlocations_map[key], data_item);
+    geojson_iw.open(Backdrop.getlocations_map[key], data_item);
     if (pushit) {
-      Drupal.getlocations_settings[key].infoBubbles.push(geojson_iw);
+      Backdrop.getlocations_settings[key].infoBubbles.push(geojson_iw);
     }
   });
 

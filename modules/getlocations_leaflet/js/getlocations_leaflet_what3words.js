@@ -2,23 +2,23 @@
 /**
  * @file
  * getlocations_what3words.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations_leaflet module
 */
 (function ($) {
 
-  Drupal.behaviors.getlocations_leaflet_what3words = {
+  Backdrop.behaviors.getlocations_leaflet_what3words = {
     attach: function(context) {
 
       // work over all class 'getlocations_leaflet_canvas'
       $(".getlocations_leaflet_canvas", context).once('getlocations-leaflet-what3words-processed', function(index, element) {
-        var elemID = $(element).attr('id');
+        var elemID = $(element).prop('id');
         var key = elemID.replace(/^getlocations_leaflet_canvas_/, '');
         // is there really a map?
         if ( $("#getlocations_leaflet_canvas_" + key).is('div') ) {
-          settings = Drupal.settings.getlocations_leaflet[key].map_settings;
+          settings = Backdrop.settings.getlocations_leaflet[key].map_settings;
           var w3w = '';
           var lat = false;
           var lon = false;
@@ -44,23 +44,23 @@
                       var lon = response.geometry.lng;
                       if (settings.what3words_marker_show && lat && lon ) {
                         if (marker) {
-                          Drupal.getlocations_leaflet_map[key].removeLayer(marker);
+                          Backdrop.getlocations_leaflet_map[key].removeLayer(marker);
                         }
-                        marker = Drupal.getlocations_leaflet.makeMarker(settings, lat, lon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
-                        Drupal.getlocations_leaflet_map[key].addLayer(marker);
+                        marker = Backdrop.getlocations_leaflet.makeMarker(settings, lat, lon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
+                        Backdrop.getlocations_leaflet_map[key].addLayer(marker);
                       }
                       if (settings.what3words_zoom == -1) {
-                        Drupal.getlocations_leaflet_map[key].setZoom(parseInt(settings.nodezoom));
+                        Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.nodezoom));
                       }
                       else if (settings.what3words_zoom > -1) {
-                        Drupal.getlocations_leaflet_map[key].setZoom(parseInt(settings.what3words_zoom));
+                        Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.what3words_zoom));
                       }
                       if (settings.what3words_show && $("#edit-getlocations-leaflet-what3words-show").is('div') && w3w) {
                         $("#edit-getlocations-leaflet-what3words-show").html(w3w);
                       }
                       if (settings.what3words_center) {
                         var lla = {lat: parseFloat(lat), lng: parseFloat(lon)};
-                        Drupal.getlocations_leaflet_map[key].panTo(lla);
+                        Backdrop.getlocations_leaflet_map[key].panTo(lla);
                       }
                     }
                     $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_active').addClass('getlocations_w3w_throbber_inactive');
@@ -73,7 +73,7 @@
             }
 
             if (settings.what3words_click) {
-              Drupal.getlocations_leaflet_map[key].on('click', function(e) {
+              Backdrop.getlocations_leaflet_map[key].on('click', function(e) {
                 $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_inactive').addClass('getlocations_w3w_throbber_active');
                 var ll = e.latlng;
                 var wlat = ll.lat;
@@ -88,17 +88,17 @@
                     if (settings.what3words_marker_show && wlat && wlon ) {
                       if (marker) {
                         // kill marker
-                         Drupal.getlocations_leaflet_map[key].removeLayer(marker);
+                         Backdrop.getlocations_leaflet_map[key].removeLayer(marker);
                       }
-                      marker = Drupal.getlocations_leaflet.makeMarker(settings, wlat, wlon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
-                      Drupal.getlocations_leaflet_map[key].addLayer(marker);
+                      marker = Backdrop.getlocations_leaflet.makeMarker(settings, wlat, wlon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
+                      Backdrop.getlocations_leaflet_map[key].addLayer(marker);
                     }
 
                     if (settings.what3words_zoom == -1) {
-                      Drupal.getlocations_leaflet_map[key].setZoom(parseInt(settings.nodezoom));
+                      Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.nodezoom));
                     }
                     else if (settings.what3words_zoom > -1) {
-                      Drupal.getlocations_leaflet_map[key].setZoom(parseInt(settings.what3words_zoom));
+                      Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.what3words_zoom));
                     }
 
                     if (settings.what3words_show && $("#edit-getlocations-leaflet-what3words-show").is('div') && w3w) {
@@ -106,7 +106,7 @@
                     }
                     if (settings.what3words_center) {
                       var wlla = {lat: parseFloat(wlat), lng: parseFloat(wlon)};
-                      Drupal.getlocations_leaflet_map[key].panTo(wlla);
+                      Backdrop.getlocations_leaflet_map[key].panTo(wlla);
                     }
                   }
                   $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_active').addClass('getlocations_w3w_throbber_inactive');

@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations.markerinfo.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Getlocations marker information routines.
@@ -13,7 +13,7 @@
  * This file is pulled in whenever we need to refresh the marker information
  * and marker name caches.
  *
- * hook_getlocations_markerdir() code from jhm http://drupal.org/user/15946
+ * hook_getlocations_markerdir() code from jhm http://backdrop.org/user/15946
  */
 
 /**
@@ -38,7 +38,7 @@ function _getlocations_get_icondata() {
     $inifiles = file_scan_directory($markerdir, '/.*\.ini$/');
     // Parse the ini files and store by path
     foreach ($inifiles as $file) {
-      $path = drupal_substr($file->uri, drupal_strlen($markerdir), -drupal_strlen($file->filename));
+      $path = backdrop_substr($file->uri, backdrop_strlen($markerdir), -backdrop_strlen($file->filename));
       if (!isset($inis[$markerdir . $path])) {
         $inis[$path] = array();
       }

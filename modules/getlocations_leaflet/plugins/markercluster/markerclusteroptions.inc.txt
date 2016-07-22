@@ -2,7 +2,7 @@
 
 /**
  * @file
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * See the examples in the download from https://github.com/Leaflet/Leaflet.markercluster
@@ -25,4 +25,3 @@ function getlocations_leaflet_get_markerclusteroptions() {
   );
   return $markerclusteroptions;
 }
-

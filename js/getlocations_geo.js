@@ -2,24 +2,24 @@
 /**
  * @file
  * getlocations_geo.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
- * Javascript geo functions for getlocations module for Drupal 7
+ * Javascript geo functions for getlocations module for Backdrop 7
  * this is for googlemaps API version 3
  */
 
 (function ($) {
 
-  if ( typeof(Drupal.getlocations) == 'undefined') {
-    Drupal.getlocations = {};
+  if ( typeof(Backdrop.getlocations) == 'undefined') {
+    Backdrop.getlocations = {};
   }
 
-  Drupal.getlocations.geo = {};
-  Drupal.getlocations.geo.EARTH_RADIUS_SEMIMAJOR = 6378137.0;
-  Drupal.getlocations.geo.EARTH_FLATTENING = (1/298.257223563);
-  Drupal.getlocations.geo.EARTH_RADIUS_SEMIMINOR = (Drupal.getlocations.geo.EARTH_RADIUS_SEMIMAJOR * (1 - Drupal.getlocations.geo.EARTH_FLATTENING));
-  //Drupal.getlocations.geo.EARTH_ECCENTRICITY_SQ = (2*(1/298.257223563)-Math.pow((1/298.257223563), 2));
+  Backdrop.getlocations.geo = {};
+  Backdrop.getlocations.geo.EARTH_RADIUS_SEMIMAJOR = 6378137.0;
+  Backdrop.getlocations.geo.EARTH_FLATTENING = (1/298.257223563);
+  Backdrop.getlocations.geo.EARTH_RADIUS_SEMIMINOR = (Backdrop.getlocations.geo.EARTH_RADIUS_SEMIMAJOR * (1 - Backdrop.getlocations.geo.EARTH_FLATTENING));
+  //Backdrop.getlocations.geo.EARTH_ECCENTRICITY_SQ = (2*(1/298.257223563)-Math.pow((1/298.257223563), 2));
 
   /**
    * Normalizes a latitude to the [-90,90] range. Latitudes above 90 or
@@ -28,7 +28,7 @@
    * @type Number
    * @return Returns the latitude, fit within the [-90,90] range.
    */
-  Drupal.getlocations.geo.normalizeLat = function(lat) {
+  Backdrop.getlocations.geo.normalizeLat = function(lat) {
     return Math.max(-90, Math.min(90, lat));
   };
 
@@ -39,7 +39,7 @@
    * @type Number
    * @return Returns the longitude, fit within the [-180,180] range.
    */
-  Drupal.getlocations.geo.normalizeLng = function(lng) {
+  Backdrop.getlocations.geo.normalizeLng = function(lng) {
     if (lng % 360 == 180) {
       return 180;
     }
@@ -53,7 +53,7 @@
    * @returns {Number} Radians
    *
    */
-  Drupal.getlocations.geo.toRad = function(deg) {
+  Backdrop.getlocations.geo.toRad = function(deg) {
     return deg * Math.PI / 180;
   };
 
@@ -63,7 +63,7 @@
    * @returns {Number} Decimal Degrees
    *
    */
-  Drupal.getlocations.geo.toDeg = function(rad) {
+  Backdrop.getlocations.geo.toDeg = function(rad) {
     return rad * 180 / Math.PI;
   };
 
@@ -73,10 +73,10 @@
    * @returns {Number} radius
    *
    */
-  Drupal.getlocations.geo.earth_radius = function(latitude) {
-    var lat = Drupal.getlocations.geo.toRad(latitude);
-    var x = (Math.cos(lat) / Drupal.getlocations.geo.EARTH_RADIUS_SEMIMAJOR);
-    var y = (Math.sin(lat) / Drupal.getlocations.geo.EARTH_RADIUS_SEMIMINOR);
+  Backdrop.getlocations.geo.earth_radius = function(latitude) {
+    var lat = Backdrop.getlocations.geo.toRad(latitude);
+    var x = (Math.cos(lat) / Backdrop.getlocations.geo.EARTH_RADIUS_SEMIMAJOR);
+    var y = (Math.sin(lat) / Backdrop.getlocations.geo.EARTH_RADIUS_SEMIMINOR);
     var r = (1 / (Math.sqrt(x * x + y * y)));
     return r;
   };
@@ -89,7 +89,7 @@
    * @returns {Array}
    *
    */
-  Drupal.getlocations.geo.earth_longitude_range = function(latitude, longitude, distance) {
+  Backdrop.getlocations.geo.earth_longitude_range = function(latitude, longitude, distance) {
 
     if (! distance > 0) {
       distance = 1;
@@ -97,9 +97,9 @@
     latitude = parseFloat(latitude);
     longitude = parseFloat(longitude);
     distance = parseInt(distance);
-    var lng = Drupal.getlocations.geo.toRad(longitude);
-    var lat =  Drupal.getlocations.geo.toRad(latitude);
-    var radius = Drupal.getlocations.geo.earth_radius(latitude) * Math.cos(lat);
+    var lng = Backdrop.getlocations.geo.toRad(longitude);
+    var lat =  Backdrop.getlocations.geo.toRad(latitude);
+    var radius = Backdrop.getlocations.geo.earth_radius(latitude) * Math.cos(lat);
     var angle = 0;
     if (radius > 0) {
       angle = Math.abs(distance / radius);
@@ -116,10 +116,10 @@
     if (maxlong > Math.PI) {
       maxlong = maxlong - Math.PI * 2;
     }
-    var minlongDeg = Drupal.getlocations.geo.toDeg(minlong);
-    minlongDeg = Drupal.getlocations.geo.normalizeLng(minlongDeg);
-    var maxlongDeg = Drupal.getlocations.geo.toDeg(maxlong);
-    maxlongDeg = Drupal.getlocations.geo.normalizeLng(maxlongDeg);
+    var minlongDeg = Backdrop.getlocations.geo.toDeg(minlong);
+    minlongDeg = Backdrop.getlocations.geo.normalizeLng(minlongDeg);
+    var maxlongDeg = Backdrop.getlocations.geo.toDeg(maxlong);
+    maxlongDeg = Backdrop.getlocations.geo.normalizeLng(maxlongDeg);
     var r = [minlongDeg.toFixed(6), maxlongDeg.toFixed(6)];
     return r;
   };
@@ -132,7 +132,7 @@
    * @returns {Array}
    *
    */
-  Drupal.getlocations.geo.earth_latitude_range = function(latitude, longitude, distance) {
+  Backdrop.getlocations.geo.earth_latitude_range = function(latitude, longitude, distance) {
 
     if (! distance > 0) {
       distance = 1;
@@ -140,9 +140,9 @@
     latitude = parseFloat(latitude);
     longitude = parseFloat(longitude);
     distance = parseInt(distance);
-    var lng = Drupal.getlocations.geo.toRad(longitude);
-    var lat =  Drupal.getlocations.geo.toRad(latitude);
-    var radius = Drupal.getlocations.geo.earth_radius(latitude);
+    var lng = Backdrop.getlocations.geo.toRad(longitude);
+    var lat =  Backdrop.getlocations.geo.toRad(latitude);
+    var radius = Backdrop.getlocations.geo.earth_radius(latitude);
     var angle = distance / radius;
     var minlat = lat - angle;
     var maxlat = lat + angle;
@@ -164,10 +164,10 @@
       }
       maxlat = rightangle;
     }
-    var minlatDeg = Drupal.getlocations.geo.toDeg(minlat);
-    minlatDeg = Drupal.getlocations.geo.normalizeLat(minlatDeg);
-    var maxlatDeg = Drupal.getlocations.geo.toDeg(maxlat);
-    maxlatDeg = Drupal.getlocations.geo.normalizeLat(maxlatDeg);
+    var minlatDeg = Backdrop.getlocations.geo.toDeg(minlat);
+    minlatDeg = Backdrop.getlocations.geo.normalizeLat(minlatDeg);
+    var maxlatDeg = Backdrop.getlocations.geo.toDeg(maxlat);
+    maxlatDeg = Backdrop.getlocations.geo.normalizeLat(maxlatDeg);
     var r = [minlatDeg.toFixed(6), maxlatDeg.toFixed(6)];
     return r;
   };
@@ -181,12 +181,12 @@
    * @param {Number} longitude2
    * @returns {Number} distance in meters
    */
-  Drupal.getlocations.geo.earth_distance = function(latitude1, longitude1, latitude2, longitude2) {
-    var lat1 = Drupal.getlocations.geo.toRad(parseFloat(latitude1));
-    var lng1 = Drupal.getlocations.geo.toRad(parseFloat(longitude1));
-    var lat2 = Drupal.getlocations.geo.toRad(parseFloat(latitude2));
-    var lng2 = Drupal.getlocations.geo.toRad(parseFloat(longitude2));
-    var radius = Drupal.getlocations.geo.earth_radius((parseFloat(latitude1) + parseFloat(latitude2)) / 2);
+  Backdrop.getlocations.geo.earth_distance = function(latitude1, longitude1, latitude2, longitude2) {
+    var lat1 = Backdrop.getlocations.geo.toRad(parseFloat(latitude1));
+    var lng1 = Backdrop.getlocations.geo.toRad(parseFloat(longitude1));
+    var lat2 = Backdrop.getlocations.geo.toRad(parseFloat(latitude2));
+    var lng2 = Backdrop.getlocations.geo.toRad(parseFloat(longitude2));
+    var radius = Backdrop.getlocations.geo.earth_radius((parseFloat(latitude1) + parseFloat(latitude2)) / 2);
     var cosangle = Math.cos(lat1) * Math.cos(lat2) * (Math.cos(lng1) * Math.cos(lng2) + Math.sin(lng1) * Math.sin(lng2)) + Math.sin(lat1) * Math.sin(lat2);
     return Math.acos(cosangle) * radius;
   };
@@ -200,12 +200,12 @@
    * @param {Number} longitude2
    * @returns {Number} distance in meters
    */
-  Drupal.getlocations.geo.earth_distance2 = function(latitude1, longitude1, latitude2, longitude2) {
-    var lat1 = Drupal.getlocations.geo.toRad(parseFloat(latitude1));
-    var lng1 = Drupal.getlocations.geo.toRad(parseFloat(longitude1));
-    var lat2 = Drupal.getlocations.geo.toRad(parseFloat(latitude2));
-    var lng2 = Drupal.getlocations.geo.toRad(parseFloat(longitude2));
-    var radius = Drupal.getlocations.geo.earth_radius((parseFloat(latitude1) + parseFloat(latitude2)) / 2);
+  Backdrop.getlocations.geo.earth_distance2 = function(latitude1, longitude1, latitude2, longitude2) {
+    var lat1 = Backdrop.getlocations.geo.toRad(parseFloat(latitude1));
+    var lng1 = Backdrop.getlocations.geo.toRad(parseFloat(longitude1));
+    var lat2 = Backdrop.getlocations.geo.toRad(parseFloat(latitude2));
+    var lng2 = Backdrop.getlocations.geo.toRad(parseFloat(longitude2));
+    var radius = Backdrop.getlocations.geo.earth_radius((parseFloat(latitude1) + parseFloat(latitude2)) / 2);
     var latm = lat2 - lat1;
     var lngm = lng2 - lng1;
     var a = Math.sin(latm / 2) * Math.sin(latm / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lngm / 2) * Math.sin(lngm / 2);
@@ -218,7 +218,7 @@
    * @param {String} the distance unit
    * @returns {Number} the distance in meters
    */
-  Drupal.getlocations.geo.convert_distance_to_meters = function(distance, distance_unit) {
+  Backdrop.getlocations.geo.convert_distance_to_meters = function(distance, distance_unit) {
     if (typeof(distance) !== 'number' || !distance > 0) {
       return null;
     }
@@ -244,7 +244,7 @@
    * @param {String} the distance unit
    * @returns {Number} the distance in the distance unit
    */
-  Drupal.getlocations.geo.convert_meters_to_distance = function(meters, distance_unit) {
+  Backdrop.getlocations.geo.convert_meters_to_distance = function(meters, distance_unit) {
     if (typeof(meters) !== 'number' || !meters > 0) {
       return null;
     }
@@ -270,14 +270,14 @@
    * @param {String} 'lat' for latitude or anything else for longitude
    * @return {String} Degrees, minutes, seconds formatted for webpage
    */
-  Drupal.getlocations.geo.dd_to_dms_do = function(coord, latlon, web) {
+  Backdrop.getlocations.geo.dd_to_dms_do = function(coord, latlon, web) {
     if (typeof web == 'undefined') web = true;
     if (latlon == 'lat') {
-      coord = Drupal.getlocations.geo.normalizeLat(coord);
+      coord = Backdrop.getlocations.geo.normalizeLat(coord);
       direction = (coord < 0) ? 'S' : 'N';
     }
     else {
-      coord = Drupal.getlocations.geo.normalizeLng(coord);
+      coord = Backdrop.getlocations.geo.normalizeLng(coord);
       direction = (coord < 0) ? 'W' : 'E';
     }
     coord = Math.abs(coord);
@@ -301,8 +301,8 @@
    * @param {Number} coordinate in Decimal Degrees
    * @return {String} Degrees, minutes, seconds formatted for webpage
    */
-  Drupal.getlocations.geo.dd_to_dms_lat = function(coord) {
-    return Drupal.getlocations.geo.dd_to_dms_do(coord, 'lat');
+  Backdrop.getlocations.geo.dd_to_dms_lat = function(coord) {
+    return Backdrop.getlocations.geo.dd_to_dms_do(coord, 'lat');
   };
 
   /**
@@ -310,8 +310,8 @@
    * @param {Number} coordinate in Decimal Degrees
    * @return {String} Degrees, minutes, seconds formatted for webpage
    */
-  Drupal.getlocations.geo.dd_to_dms_lng = function(coord) {
-    return Drupal.getlocations.geo.dd_to_dms_do(coord, 'lng');
+  Backdrop.getlocations.geo.dd_to_dms_lng = function(coord) {
+    return Backdrop.getlocations.geo.dd_to_dms_do(coord, 'lng');
   };
 
   /**
@@ -321,9 +321,9 @@
    * @return {Number} formatted to standard length
    *
    */
-  Drupal.getlocations.geo.dd_lat = function(coord, len) {
+  Backdrop.getlocations.geo.dd_lat = function(coord, len) {
     if (typeof len == 'undefined') len = 6;
-    coord = Drupal.getlocations.geo.normalizeLat(coord);
+    coord = Backdrop.getlocations.geo.normalizeLat(coord);
     return coord.toFixed(len);
   };
 
@@ -334,9 +334,9 @@
   * @return {Number} formatted to standard length
   *
   */
-  Drupal.getlocations.geo.dd_lng = function(coord, len) {
+  Backdrop.getlocations.geo.dd_lng = function(coord, len) {
     if (typeof len == 'undefined') len = 6;
-    coord = Drupal.getlocations.geo.normalizeLng(coord);
+    coord = Backdrop.getlocations.geo.normalizeLng(coord);
     return coord.toFixed(len);
   };
 
@@ -344,13 +344,13 @@
    * Convert Degrees, minutes, seconds to Decimal Degrees
    * from www.movable-type.co.uk/scripts/latlong.html
    * Sample usage:
-   *   var lat = Drupal.getlocations.geo.parseDMS('51° 28′ 40.12″ N');
-   *   var lon = Drupal.getlocations.geo.parseDMS('000° 00′ 05.31″ W');
+   *   var lat = Backdrop.getlocations.geo.parseDMS('51° 28′ 40.12″ N');
+   *   var lon = Backdrop.getlocations.geo.parseDMS('000° 00′ 05.31″ W');
    *
    * @param {String} Degrees, minutes, seconds
    * @return {Number} Decimal Degrees
    */
-  Drupal.getlocations.geo.parseDMS = function(dmsStr) {
+  Backdrop.getlocations.geo.parseDMS = function(dmsStr) {
     // check for signed decimal degrees without NSEW, if so return it directly
     if (typeof dmsStr == 'number' && isFinite(dmsStr)) return Number(dmsStr);
 
@@ -393,7 +393,7 @@
    * @param   {number} [dp=0|2|4] - Number of decimal places to use – default 0 for dms, 2 for dm, 4 for d.
    * @returns {string} Degrees formatted as deg/min/secs according to specified format.
    */
-  Drupal.getlocations.geo.toDMS = function(deg, format, dp) {
+  Backdrop.getlocations.geo.toDMS = function(deg, format, dp) {
     if (isNaN(deg)) return null;  // give up here if we can't make a number from deg
 
     // default values
@@ -451,8 +451,8 @@
    * @param   {number} [dp=0|2|4] - Number of decimal places to use – default 0 for dms, 2 for dm, 4 for d.
    * @returns {string} Degrees formatted as deg/min/secs according to specified format.
    */
-  Drupal.getlocations.geo.toLat = function(deg, format, dp) {
-    var lat = Drupal.getlocations.geo.toDMS(deg, format, dp);
+  Backdrop.getlocations.geo.toLat = function(deg, format, dp) {
+    var lat = Backdrop.getlocations.geo.toDMS(deg, format, dp);
     return lat===null ? '–' : lat.slice(1) + (deg<0 ? 'S' : 'N');  // knock off initial '0' for lat!
   };
 
@@ -464,8 +464,8 @@
    * @param   {number} [dp=0|2|4] - Number of decimal places to use – default 0 for dms, 2 for dm, 4 for d.
    * @returns {string} Degrees formatted as deg/min/secs according to specified format.
    */
-  Drupal.getlocations.geo.toLon = function(deg, format, dp) {
-    var lon = Drupal.getlocations.geo.toDMS(deg, format, dp);
+  Backdrop.getlocations.geo.toLon = function(deg, format, dp) {
+    var lon = Backdrop.getlocations.geo.toDMS(deg, format, dp);
     return lon===null ? '–' : lon + (deg<0 ? 'W' : 'E');
   };
 
@@ -477,9 +477,9 @@
    * @param   {number} [dp=0|2|4] - Number of decimal places to use – default 0 for dms, 2 for dm, 4 for d.
    * @returns {string} Degrees formatted as deg/min/secs according to specified format.
    */
-  Drupal.getlocations.geo.toBrng = function(deg, format, dp) {
+  Backdrop.getlocations.geo.toBrng = function(deg, format, dp) {
     deg = (Number(deg)+360) % 360;  // normalise -ve values to 180°..360°
-    var brng =  Drupal.getlocations.geo.toDMS(deg, format, dp);
+    var brng =  Backdrop.getlocations.geo.toDMS(deg, format, dp);
     return (brng === null ? '–' : brng.replace('360', '0'));  // just in case rounding took us up to 360°!
   };
 
@@ -494,7 +494,7 @@
   *   var point = Dms.compassPoint(24);    // point = 'NNE'
   *   var point = Dms.compassPoint(24, 1); // point = 'N'
   */
-  Drupal.getlocations.geo.compassPoint = function (bearing, precision) {
+  Backdrop.getlocations.geo.compassPoint = function (bearing, precision) {
     if (precision === undefined) precision = 3;
     // note precision = max length of compass point; it could be extended to 4 for quarter-winds
     // (eg NEbN), but I think they are little used

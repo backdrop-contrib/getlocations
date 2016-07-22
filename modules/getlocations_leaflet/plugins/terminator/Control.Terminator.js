@@ -1,5 +1,5 @@
 (function ($) {
-  Drupal.behaviors.terminator = {
+  Backdrop.behaviors.terminator = {
     attach: function() {
 
       L.Control.Terminator = L.Control.extend({

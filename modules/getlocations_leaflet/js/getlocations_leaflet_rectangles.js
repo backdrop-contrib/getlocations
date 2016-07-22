@@ -2,18 +2,18 @@
 /**
  * @file
  * getlocations_leaflet_rectangles.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations rectangles support
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations_leaflet_rectangles = {
+  Backdrop.behaviors.getlocations_leaflet_rectangles = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_leaflet_rectangles === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_leaflet_rectangles === 'undefined') {
         return;
       }
 
@@ -25,7 +25,7 @@
         fillOpacity: 0.35
       };
 
-      $.each(Drupal.settings.getlocations_leaflet_rectangles, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_leaflet_rectangles, function (key, settings) {
 
         var strokeColor = (settings.strokeColor ? settings.strokeColor : default_rectangle_settings.strokeColor);
         if (! strokeColor.match(/^#/)) {
@@ -110,9 +110,9 @@
         }
 
         if (rectangles.length) {
-          Rect.addTo(Drupal.getlocations_leaflet_map[key]);
-          if (Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov) {
-            Drupal.getlocations_leaflet_layerscontrol[key].addOverlay(Rect, Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov_label);
+          Rect.addTo(Backdrop.getlocations_leaflet_map[key]);
+          if (Backdrop.getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov) {
+            Backdrop.getlocations_leaflet_layerscontrol[key].addOverlay(Rect, Backdrop.getlocations_leaflet_settings[key].map_settings.layercontrol_rect_ov_label);
           }
         }
 

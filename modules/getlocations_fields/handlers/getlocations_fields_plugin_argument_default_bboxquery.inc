@@ -3,11 +3,10 @@
 /**
  * @file
  * getlocations_fields_plugin_argument_default_bboxquery.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Location bboxquery argument handler.
- * code derived from https://www.drupal.org/project/views_geofield_bbox.
  *
  */
 
@@ -28,7 +27,7 @@ class getlocations_fields_plugin_argument_default_bboxquery extends views_plugin
 
     $form['info'] = array(
       '#markup' => '<p class="description">Attempt to pull bounding box info
-      directly from the query string, bypassing Drupal\'s normal argument
+      directly from the query string, bypassing Backdrop\'s normal argument
       handling. If the argument does not exist, all values will be shown.</p>',
     );
     $form['arg_id'] = array(

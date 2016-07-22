@@ -1,0 +1,29 @@
+{
+  "_config_name": "getlocations.paths",
+  "paths": {
+    "infobubble_path": "modules/getlocations/js/infobubble.js",
+    "infobubble_options_path": "modules/getlocations/js/infobubble_options.js",
+    "infobubble_extended_path": "modules/getlocations/js/infobubble_extended.js",
+    "markermanager_path": "modules/getlocations/js/markermanager.js",
+    "markerclusterer_path": "modules/getlocations/js/markerclusterer.js",
+    "infowindow_options_path": "modules/getlocations/js/infowindow_options.js",
+    "getlocations_path": "modules/getlocations/js/getlocations.js",
+    "getlocations_polygons_path": "modules/getlocations/js/getlocations_polygons.js",
+    "getlocations_rectangles_path": "modules/getlocations/js/getlocations_rectangles.js",
+    "getlocations_circles_path": "modules/getlocations/js/getlocations_circles.js",
+    "getlocations_polylines_path": "modules/getlocations/js/getlocations_polylines.js",
+    "getlocations_categories_path": "modules/getlocations/js/getlocations_categories.js",
+    "getlocations_search_places_path": "modules/getlocations/js/getlocations_search_places.js",
+    "getlocations_geo_path": "modules/getlocations/js/getlocations_geo.js",
+    "getlocations_preview_path": "modules/getlocations/js/getlocations_preview.js",
+    "getlocations_geojson_path": "modules/getlocations/js/getlocations_geojson.js",
+    "getlocations_admin_path": "modules/getlocations/js/getlocations_admin.js",
+    "getlocations_box_path": "modules/getlocations/js/getlocations_box.js",
+    "getlocations_colorbox_path": "modules/getlocations/js/getlocations_colorbox.js",
+    "getlocations_marker_box_path": "modules/getlocations/js/getlocations_marker_box.js",
+    "getlocations_views_path": "modules/getlocations/js/getlocations_views.js",
+    "getlocations_icons_path": "modules/getlocations/js/icons.js",
+    "getlocations_field_group_path": "modules/getlocations/js/getlocations_field_group.js",
+    "getlocations_what3words_path": "modules/getlocations/js/getlocations_what3words.js"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "_config_name": "getlocations_leaflet.paths",
+  "paths": {
+    "getlocations_leaflet_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet.js",
+    "getlocations_leaflet_circles_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_circles.js",
+    "getlocations_leaflet_formatter_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_formatter.js",
+    "getlocations_leaflet_polygons_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_polygons.js",
+    "getlocations_leaflet_polylines_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_polylines.js",
+    "getlocations_leaflet_rectangles_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_rectangles.js",
+    "getlocations_leaflet_geojson_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_geojson.js",
+    "getlocations_leaflet_providers_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_providers.js",
+    "getlocations_leaflet_preview_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_preview.js",
+    "getlocations_leaflet_field_group_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_field_group.js",
+    "getlocations_leaflet_what3words_path": "modules\/getlocations\/modules\/getlocations_leaflet\/js\/getlocations_leaflet_what3words.js"
+  }
+}

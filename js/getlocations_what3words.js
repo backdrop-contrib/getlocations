@@ -2,14 +2,14 @@
 /**
  * @file
  * getlocations_what3words.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations module
 */
 (function ($) {
 
-  Drupal.behaviors.getlocations_what3words = {
+  Backdrop.behaviors.getlocations_what3words = {
     attach: function() {
 
       // work over all class 'getlocations_map_canvas'
@@ -18,7 +18,7 @@
         var key = elemID.replace(/^getlocations_map_canvas_/, '');
         // is there really a map?
         if ($("#getlocations_map_canvas_" + key).is('div')) {
-          settings = Drupal.settings.getlocations[key];
+          settings = Backdrop.settings.getlocations[key];
           var w3w = '';
           var lat = false;
           var lon = false;
@@ -46,14 +46,14 @@
                         if (marker) {
                           marker.setMap();
                         }
-                        settings.markdone = Drupal.getlocations.getIcon(settings.what3words_map_marker);
-                        marker = Drupal.getlocations.makeMarker(Drupal.getlocations_map[key], settings, lat, lon, 0, w3w, '', '', '', key);
+                        settings.markdone = Backdrop.getlocations.getIcon(settings.what3words_map_marker);
+                        marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, lat, lon, 0, w3w, '', '', '', key);
                       }
                       if (settings.what3words_zoom == -1) {
-                        Drupal.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
+                        Backdrop.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
                       }
                       else if (settings.what3words_zoom > -1) {
-                        Drupal.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
+                        Backdrop.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
                       }
                       //edit-getlocations-what3words-show
                       if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
@@ -61,7 +61,7 @@
                       }
                       if (settings.what3words_center) {
                         var c = new google.maps.LatLng(parseFloat(lat), parseFloat(lon));
-                        Drupal.getlocations_map[key].setCenter(c);
+                        Backdrop.getlocations_map[key].setCenter(c);
                       }
 
                     }
@@ -76,7 +76,7 @@
             }
 
             if (settings.what3words_click) {
-              Drupal.getlocations_map[key].addListener('click', function(e) {
+              Backdrop.getlocations_map[key].addListener('click', function(e) {
                 $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_inactive').addClass('getlocations_w3w_throbber_active');
                 var ll = e.latLng;
                 var wlat = ll.lat();
@@ -92,20 +92,20 @@
                         // kill marker
                         marker.setMap();
                       }
-                      settings.markdone = Drupal.getlocations.getIcon(settings.what3words_map_marker);
-                      marker = Drupal.getlocations.makeMarker(Drupal.getlocations_map[key], settings, wlat, wlon, 0, w3w, '', '', '', key);
+                      settings.markdone = Backdrop.getlocations.getIcon(settings.what3words_map_marker);
+                      marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, wlat, wlon, 0, w3w, '', '', '', key);
                     }
                     if (settings.what3words_zoom == -1) {
-                      Drupal.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
+                      Backdrop.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
                     }
                     else if (settings.what3words_zoom > -1) {
-                      Drupal.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
+                      Backdrop.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
                     }
                     if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
                       $("#edit-getlocations-what3words-show").html(w3w);
                     }
                     if (settings.what3words_center) {
-                      Drupal.getlocations_map[key].setCenter(ll);
+                      Backdrop.getlocations_map[key].setCenter(ll);
                     }
                   }
                   $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_active').addClass('getlocations_w3w_throbber_inactive');

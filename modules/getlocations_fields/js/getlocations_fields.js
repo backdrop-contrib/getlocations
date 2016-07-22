@@ -1,22 +1,22 @@
 /**
  * @file
  * getlocations_fields.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations_fields module for Drupal 7
+ * Javascript functions for getlocations_fields module for Backdrop 1
  * this is for googlemaps API version 3
  */
 
 (function ($) {
-  Drupal.behaviors.getlocations_fields = {
+  Backdrop.behaviors.getlocations_fields = {
     attach: function (context, settings) {
 
-      var gsettings = Drupal.settings.getlocations;
+      var gsettings = Backdrop.settings.getlocations;
       var nodezoom = '';
       var mark = [];
       var movelistener = false;
-      var map_marker = 'drupal';
+      var map_marker = 'backdrop';
       var adrsfield = 'getlocations_address_';
       var namefield = 'getlocations_name_';
       var streetfield = 'getlocations_street_';
@@ -35,7 +35,7 @@
 
       // work over all class 'getlocations_map_canvas'
       $(".getlocations_map_canvas", context).once('getlocations-fields-map-processed', function(index, element) {
-        var elemID = $(element).attr('id');
+        var elemID = $(element).prop('id');
         var key = elemID.replace(/^getlocations_map_canvas_/, '');
         // is there really a map?
         if ( $("#getlocations_map_canvas_" + key).is('div') && settings.getlocations_fields[key] !== undefined) {
@@ -76,7 +76,7 @@
           lng = $("." + lonfield + key).val();
           if (lat && lng) {
             point[key] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-            updateMap(Drupal.getlocations_inputmap[key], point[key], key);
+            updateMap(Backdrop.getlocations_inputmap[key], point[key], key);
             streetviewSetupButtonDo(key);
           }
 
@@ -84,26 +84,26 @@
             // make an icon
             if (! point[key]) {
               point[key] = new google.maps.LatLng(parseFloat(gset.lat), parseFloat(gset.lng));
-              Drupal.getlocations_inputmap[key].setCenter(point[key]);
+              Backdrop.getlocations_inputmap[key].setCenter(point[key]);
             }
-            makeMoveMarker(Drupal.getlocations_inputmap[key], point[key], key);
+            makeMoveMarker(Backdrop.getlocations_inputmap[key], point[key], key);
           }
 
           // search type in tooltip
           if (gsettings[key].geocoder_enable == 2) {
-            msg = Drupal.t('Search by OpenStreetMap');
+            msg = Backdrop.t('Search by OpenStreetMap');
           }
           else if (gsettings[key].geocoder_enable == 1 || use_address == 0) {
-            msg = Drupal.t('Search by Google');
+            msg = Backdrop.t('Search by Google');
           }
           else {
-            msg = Drupal.t('Search by Google Maps Places');
+            msg = Backdrop.t('Search by Google Maps Places');
           }
-          $("#" + adrsfield + key).attr({title: msg});
+          $("#" + adrsfield + key).prop({title: msg});
 
           if (use_address > 0) {
             if (use_address == 1) {
-              $("#" + 'getlocations_geocodebutton_' + key).attr('disabled', 'disabled');
+              $("#" + 'getlocations_geocodebutton_' + key).prop('disabled', 'disabled');
             }
             var input_adrs = document.getElementById(adrsfield + key);
             var fm_adrs = '';
@@ -114,7 +114,7 @@
             }
             var ac_adrs = new google.maps.places.Autocomplete(input_adrs, opts);
             if (autocomplete_bias) {
-              ac_adrs.bindTo('bounds', Drupal.getlocations_inputmap[key]);
+              ac_adrs.bindTo('bounds', Backdrop.getlocations_inputmap[key]);
             }
             google.maps.event.addListener(ac_adrs, 'place_changed', function () {
               var place_adrs = ac_adrs.getPlace();
@@ -166,7 +166,7 @@
           var requireds = ['name', 'street', 'additional', 'city', 'province', 'postal_code', 'country'];
           $.each(requireds, function(k, v) {
             if ($(".getlocations_required_" + v + '_' + key).is("div")) {
-              $("div.getlocations_required_" + v + "_" + key + " label").append(' <span class="form-required" title="' + Drupal.t("This field is required.") + '">*</span>');
+              $("div.getlocations_required_" + v + "_" + key + " label").append(' <span class="form-required" title="' + Backdrop.t("This field is required.") + '">*</span>');
             }
           });
 
@@ -175,10 +175,10 @@
             $("input.form-submit#edit-submit").click( function () {
               if ($("." + latfield + key).val() == '' && $("." + lonfield + key).val() == '') {
                 if (use_address > 0) {
-                  msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
+                  msg = Backdrop.t('You must fill in the Latitude/Longitude fields. Use the Search or move the marker.');
                 }
                 else {
-                   msg = Drupal.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
+                   msg = Backdrop.t('You must fill in the Latitude/Longitude fields. Use Geocoding or move the marker.');
                 }
                 alert(msg);
                 return false;
@@ -191,27 +191,27 @@
             // monitor zoom
             if ($(".getlocations_mapzoom_" + key).is('input')) {
               if ($(".getlocations_mapzoom_" + key).val() == '') {
-                $(".getlocations_mapzoom_" + key).val(Drupal.getlocations_map[key].getZoom());
+                $(".getlocations_mapzoom_" + key).val(Backdrop.getlocations_map[key].getZoom());
               }
-              Drupal.getlocations_map[key].setZoom(parseInt($(".getlocations_mapzoom_" + key).val()));
-              google.maps.event.addListener(Drupal.getlocations_map[key], 'zoom_changed', function() {
-                $(".getlocations_mapzoom_" + key).val(Drupal.getlocations_map[key].getZoom());
+              Backdrop.getlocations_map[key].setZoom(parseInt($(".getlocations_mapzoom_" + key).val()));
+              google.maps.event.addListener(Backdrop.getlocations_map[key], 'zoom_changed', function() {
+                $(".getlocations_mapzoom_" + key).val(Backdrop.getlocations_map[key].getZoom());
               });
             }
             // monitor maptype
             if ($(".getlocations_map_maptype_" + key).is('input')) {
               if ($(".getlocations_map_maptype_" + key).val() == '') {
-                var m = Drupal.getlocations_map[key].getMapTypeId();
+                var m = Backdrop.getlocations_map[key].getMapTypeId();
                 var maptype = getmaptype(m);
                 $(".getlocations_map_maptype_" + key).val(maptype);
               }
               else {
                 var maptype = $(".getlocations_map_maptype_" + key).val();
                 var m = gettypemap(maptype);
-                Drupal.getlocations_map[key].setMapTypeId(m);
+                Backdrop.getlocations_map[key].setMapTypeId(m);
               }
-              google.maps.event.addListener(Drupal.getlocations_map[key], 'maptypeid_changed', function() {
-                var m = Drupal.getlocations_map[key].getMapTypeId();
+              google.maps.event.addListener(Backdrop.getlocations_map[key], 'maptypeid_changed', function() {
+                var m = Backdrop.getlocations_map[key].getMapTypeId();
                 var maptype = getmaptype(m);
                 $(".getlocations_map_maptype_" + key).val(maptype);
               });
@@ -223,22 +223,22 @@
             // field group multipage support
             if ($(".multipage-link-next,.multipage-link-previous").is('input')) {
               $(".multipage-link-next,.multipage-link-previous").one('click', function(event) {
-                Drupal.getlocations.redoMap(key);
-                Drupal.getlocations_map[key].setCenter(point[key]);
+                Backdrop.getlocations.redoMap(key);
+                Backdrop.getlocations_map[key].setCenter(point[key]);
               });
             }
             // field group vert and horiz tabs
             if ($(".vertical-tabs-list,.horizontal-tabs-list").is('ul')) {
               $("li.vertical-tab-button a, li.horizontal-tab-button a").bind('click', function(event) {
-                Drupal.getlocations.redoMap(key);
-                Drupal.getlocations_map[key].setCenter(point[key]);
+                Backdrop.getlocations.redoMap(key);
+                Backdrop.getlocations_map[key].setCenter(point[key]);
               });
             }
             // field group accordion
             if ($(".field-group-accordion,.field-group-accordion-wrapper").is('div')) {
               $(".accordion-item").bind('click', function(event) {
-                Drupal.getlocations.redoMap(key);
-                Drupal.getlocations_map[key].setCenter(point[key]);
+                Backdrop.getlocations.redoMap(key);
+                Backdrop.getlocations_map[key].setCenter(point[key]);
               });
             }
           }
@@ -247,7 +247,7 @@
 
         // functions
         function manageGeobutton(k, use_adrs, adrs) {
-          var mmap = Drupal.getlocations_inputmap[k];
+          var mmap = Backdrop.getlocations_inputmap[k];
           var kk = k;
           if (adrs == '') {
             var input_adrstmp = get_input_address(k);
@@ -281,7 +281,7 @@
                 }
                 else {
                   var prm = {'!a': input_adrstmp};
-                  var msg = Drupal.t('Geocode for (!a) was not successful', prm);
+                  var msg = Backdrop.t('Geocode for (!a) was not successful', prm);
                   alert(msg);
                 }
               });
@@ -308,8 +308,8 @@
                   }
                 }
                 else {
-                  var prm = {'!a': input_adrstmp, '!b': Drupal.getlocations.getGeoErrCode(status) };
-                  var msg = Drupal.t('Geocode for (!a) was not successful for the following reason: !b', prm);
+                  var prm = {'!a': input_adrstmp, '!b': Backdrop.getlocations.getGeoErrCode(status) };
+                  var msg = Backdrop.t('Geocode for (!a) was not successful for the following reason: !b', prm);
                   alert(msg);
                 }
               });
@@ -348,7 +348,7 @@
             streetviewSetupButtonDo(k);
           }
           else {
-            var msg = Drupal.t('You have not entered an address.');
+            var msg = Backdrop.t('You have not entered an address.');
             alert(msg);
           }
         }
@@ -454,16 +454,16 @@
           else if ($("." + countryfield + k).is("select")) {
             // give two letter code precedence
             if (countryfield_value_s) {
-              $("." + countryfield + k).val(countryfield_value_s).attr('selected', 'selected');
+              $("." + countryfield + k).val(countryfield_value_s).prop('selected', 'selected');
             }
             else {
               $("." + countryfield + k + " option").each( function(index) {
                 if (countryfield_value == $(this).text()) {
-                  $("." + countryfield + k).val($(this).val()).attr('selected', 'selected');
+                  $("." + countryfield + k).val($(this).val()).prop('selected', 'selected');
                 }
                 // fix 'The Netherlands' which is what google returns
                 if (countryfield_value == 'The Netherlands') {
-                  $("." + countryfield + k).val('NL').attr('selected', 'selected');
+                  $("." + countryfield + k).val('NL').prop('selected', 'selected');
                 }
               });
             }
@@ -505,7 +505,7 @@
             google.maps.event.removeListener(movelistener);
             movelistener = false;
           }
-          marker = Drupal.getlocations.getIcon(map_marker);
+          marker = Backdrop.getlocations.getIcon(map_marker);
           mark[mkey] = new google.maps.Marker({
             icon: marker.image,
             shadow: marker.shadow,
@@ -513,7 +513,7 @@
             map: mmap,
             position: ppoint,
             draggable: true,
-            title: Drupal.t('Drag me to change position')
+            title: Backdrop.t('Drag me to change position')
           });
           var mmmap = mmap;
           var mmkey = mkey;
@@ -567,19 +567,19 @@
                 enableCloseButton: true,
                 zoom: parseInt(z)
               };
-              Drupal.getlocations_pano[k] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_map_canvas_" + k), popt);
-              Drupal.getlocations_pano[k].setVisible(true);
+              Backdrop.getlocations_pano[k] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_map_canvas_" + k), popt);
+              Backdrop.getlocations_pano[k].setVisible(true);
               $("#getlocations_streetview_setup_" + k).hide();
 
               // handler for closebutton
-              google.maps.event.addListener(Drupal.getlocations_pano[k], "closeclick", function() {
-                Drupal.getlocations_pano[k] = null;
+              google.maps.event.addListener(Backdrop.getlocations_pano[k], "closeclick", function() {
+                Backdrop.getlocations_pano[k] = null;
                 $("#getlocations_streetview_setup_" + k).show();
               });
 
               // handler for heading
-              google.maps.event.addListener(Drupal.getlocations_pano[k], "pov_changed", function() {
-                var ph = Drupal.getlocations_pano[k].getPov().heading;
+              google.maps.event.addListener(Backdrop.getlocations_pano[k], "pov_changed", function() {
+                var ph = Backdrop.getlocations_pano[k].getPov().heading;
                 while (ph < 0) {
                   ph = ph + 360;
                 }
@@ -587,7 +587,7 @@
                   ph = ph - 360;
                 }
                 $(".getlocations_sv_heading_" + k).val(parseInt(ph));
-                var pp = Drupal.getlocations_pano[k].getPov().pitch;
+                var pp = Backdrop.getlocations_pano[k].getPov().pitch;
                 if (pp < -90) {
                   pp = -90;
                 }
@@ -598,8 +598,8 @@
               });
 
               // handler for zoom
-              google.maps.event.addListener(Drupal.getlocations_pano[k], "zoom_changed", function() {
-                var pz = Drupal.getlocations_pano[k].getZoom();
+              google.maps.event.addListener(Backdrop.getlocations_pano[k], "zoom_changed", function() {
+                var pz = Backdrop.getlocations_pano[k].getZoom();
                 $(".getlocations_sv_zoom_" + k).val(parseInt(pz));
               });
             });
@@ -642,22 +642,22 @@
                     }
                   }
                   if (cc) {
-                    $("." + countryfield + kk).val(cc).attr('selected', 'selected');
+                    $("." + countryfield + kk).val(cc).prop('selected', 'selected');
                   }
                   else if (loc.country) {
                     $("." + countryfield + kk + " option").each( function(index) {
                       if (loc.country == $(this).text()) {
-                        $("." + countryfield + kk).val($(this).val()).attr('selected', 'selected');
+                        $("." + countryfield + kk).val($(this).val()).prop('selected', 'selected');
                       }
                       // fix 'The Netherlands' which is what google returns
                       if (loc.country == 'The Netherlands') {
-                        $("." + countryfield + kk).val('NL').attr('selected', 'selected');
+                        $("." + countryfield + kk).val('NL').prop('selected', 'selected');
                       }
                     });
                   }
                 }
                 point[kk] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-                updateMap(Drupal.getlocations_inputmap[kk], point[kk], kk);
+                updateMap(Backdrop.getlocations_inputmap[kk], point[kk], kk);
                 streetviewSetupButtonDo(kk);
               }
 
@@ -678,14 +678,14 @@
               $("." + latfield + k).val(lat);
               $("." + lonfield + k).val(lng);
               point[k] = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
-              updateMap(Drupal.getlocations_inputmap[k], point[k], k);
+              updateMap(Backdrop.getlocations_inputmap[k], point[k], k);
               streetviewSetupButtonDo(k);
               doReverseGeocode(point[k], k);
-              //statusmsg = Drupal.t('Browser OK');
+              //statusmsg = Backdrop.t('Browser OK');
               //$(statusdiv).html(statusmsg);
             },
             function(error) {
-              statusmsg = Drupal.t("Sorry, I couldn't find your location using the browser") + ' ' + Drupal.getlocations.geolocationErrorMessages(error) + ".";
+              statusmsg = Backdrop.t("Sorry, I couldn't find your location using the browser") + ' ' + Backdrop.getlocations.geolocationErrorMessages(error) + ".";
               $(statusdiv).html(statusmsg);
             }, {maximumAge:10000}
           );
@@ -707,8 +707,8 @@
               }
             }
             else {
-              var prm = {'!b': Drupal.getlocations.getGeoErrCode(status) };
-              var msg = Drupal.t('Geocode was not successful for the following reason: !b', prm);
+              var prm = {'!b': Backdrop.getlocations.getGeoErrCode(status) };
+              var msg = Backdrop.t('Geocode was not successful for the following reason: !b', prm);
               alert(msg);
             }
           });

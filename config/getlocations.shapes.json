@@ -1,0 +1,51 @@
+{
+  "_config_name": "getlocations.shapes",
+  "shapes": {
+    "polygons_group":{
+      "polygons_enable":0,
+      "polygons_strokecolor":"#FF0000",
+      "polygons_strokeopacity":"0.8",
+      "polygons_strokeweight":"3",
+      "polygons_fillcolor":"#FF0000",
+      "polygons_fillopacity":"0.35",
+      "polygons_coords":"",
+      "polygons_clickable":0,
+      "polygons_message":""
+    },
+    "rectangles_group":{
+      "rectangles_enable":0,
+      "rectangles_strokecolor":"#FF0000",
+      "rectangles_strokeopacity":"0.8",
+      "rectangles_strokeweight":"3",
+      "rectangles_fillcolor":"#FF0000",
+      "rectangles_fillopacity":"0.35",
+      "rectangles_coords":"",
+      "rectangles_clickable":0,
+      "rectangles_message":"",
+      "rectangles_apply":0,
+      "rectangles_dist":0
+    },
+    "circles_group":{
+      "circles_enable":0,
+      "circles_strokecolor":"#FF0000",
+      "circles_strokeopacity":"0.8",
+      "circles_strokeweight":"3",
+      "circles_fillcolor":"#FF0000",
+      "circles_fillopacity":"0.35",
+      "circles_coords":"",
+      "circles_clickable":0,
+      "circles_message":"",
+      "circles_radius":0,
+      "circles_apply":0
+    },
+    "polylines_group":{
+      "polylines_enable":0,
+      "polylines_strokecolor":"#FF0000",
+      "polylines_strokeopacity":"0.8",
+      "polylines_strokeweight":"3",
+      "polylines_coords":"",
+      "polylines_clickable":0,
+      "polylines_message":""
+    }
+  }
+}

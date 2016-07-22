@@ -1,10 +1,10 @@
 /**
  * @file
- * @author https://drupal.org/user/2210776
+ * @author https://backdrop.org/user/2210776
  * @copyright GNU GPL
  * Adds new methods to the Infobubble.prototype class.
  * Adapted from the gmap_style_bubbles module.
- * See https://drupal.org/node/2035847
+ * See https://backdrop.org/node/2035847
  */
 
 if (typeof InfoBubble === 'function') {

@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields.views.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Views 3 support for getlocations_fields.
@@ -810,7 +810,7 @@ function getlocations_fields_streetview_js_settings_do($defaults, $mapid) {
     ),
   );
 
-  drupal_add_js(array('getlocations_fields_streetview' => $settings), 'setting');
+  backdrop_add_js(array('getlocations_fields_streetview' => $settings), 'setting');
 
 }
 

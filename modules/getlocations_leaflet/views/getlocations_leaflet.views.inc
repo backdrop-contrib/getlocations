@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_leaflet.views.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Getlocations Leaflet maps views integration.
@@ -121,14 +121,14 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
         if ($options['awesome'] && $options['marker_type'] == 'fa') {
           if ($entity_type == 'node') {
             $per_field_markers = FALSE;
-            $getlocations_node_marker = variable_get('getlocations_node_marker', array('enable' => 0));
-            if ($getlocations_node_marker['enable']) {
-              if (isset($location['type']) && isset($location['field_name'])) {
-                $mkey = 'node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name'];
-                $vicon = getlocations_leaflet_awesome_marker_get($options, $mkey);
-                $per_field_markers = TRUE;
-              }
-            }
+            $getlocations_node_marker = $options['node_map_marker'];
+            #if ($getlocations_node_marker['enable']) {
+            #  if (isset($location['type']) && isset($location['field_name'])) {
+            #    $mkey = 'node_marker__' . backdrop_strtolower($location['type']) . '__' . $location['field_name'];
+            #    $vicon = getlocations_leaflet_awesome_marker_get($options, $mkey);
+            #    $per_field_markers = TRUE;
+            #  }
+            #}
             if (! $per_field_markers) {
               $vicon = getlocations_leaflet_awesome_marker_get($options, 'node');
             }
@@ -152,12 +152,14 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
           if ($entity_type == 'node') {
             $marker = $options['node_map_marker'];
             if (isset($location['type']) && isset($location['field_name']) ) {
-              if (isset($options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']])) {
-                $marker = $options['node_marker__' . drupal_strtolower($location['type']) . '__' . $location['field_name']];
+              if (isset($options['node_marker__' . backdrop_strtolower($location['type']) . '__' . $location['field_name']])) {
+                $marker = $options['node_marker__' . backdrop_strtolower($location['type']) . '__' . $location['field_name']];
               }
             }
             // term marker
-            $getlocations_term_marker = variable_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+            // TODO disable for now
+            $getlocations_term_marker = array('enable' => 0, 'vids' => 0, 'max_depth' => '');
+
             if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
               $vids = $getlocations_term_marker['vids'];
               foreach ($vids AS $vid) {
@@ -231,7 +233,7 @@ function template_preprocess_getlocations_leaflet_view_map(&$variables) {
                 $label = $location[$options['category_term_reference_field']];
                 $cat = preg_replace("/\s+/", "_", $label);
                 $cat = preg_replace("/'/", "", $cat);
-                $cat = drupal_strtolower($cat);
+                $cat = backdrop_strtolower($cat);
                 $cats[$cat] = $label;
               }
             }

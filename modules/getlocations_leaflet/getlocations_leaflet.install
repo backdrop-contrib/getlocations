@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_leaflet.install
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * getlocations_leaflet module installation.
@@ -64,7 +64,7 @@ function getlocations_leaflet_uninstall() {
  */
 function getlocations_leaflet_enable() {
 
-  drupal_set_message(st('Thank you for installing Getlocations Leaflet. To set it up please visit the <a href="@url">configuration page</a>.', array('@url' => url('admin/config/services/getlocations/leaflet'))), 'status');
+  backdrop_set_message(st('Thank you for installing Getlocations Leaflet. To set it up please visit the <a href="@url">configuration page</a>.', array('@url' => url('admin/config/services/getlocations/leaflet'))), 'status');
 
 }
 
@@ -77,8 +77,6 @@ function getlocations_leaflet_enable() {
  * All implementations of hook_field_schema() must be in the module's
  * .install file.
  *
- * @see http://drupal.org/node/146939
- * @see http://drupal.org/developing/api/schema
  */
 function getlocations_leaflet_field_schema($field) {
 

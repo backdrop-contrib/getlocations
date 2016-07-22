@@ -1,7 +1,7 @@
 /**
  * @file
  * getlocations_fields_views.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations_fields module in Views
@@ -9,19 +9,19 @@
 */
 (function ($) {
 
-  Drupal.behaviors.getlocations_fields_views = {
+  Backdrop.behaviors.getlocations_fields_views = {
     attach: function() {
 
       // streetview plugin
       if ($("#edit-style-options-sv-addresscontrol").is('input')) {
-        if ($("#edit-style-options-sv-addresscontrol").attr('checked')) {
+        if ($("#edit-style-options-sv-addresscontrol").prop('checked')) {
           $("#wrap-getlocations-sv-addresscontrol").show();
         }
         else {
           $("#wrap-getlocations-sv-addresscontrol").hide();
         }
         $("#edit-style-options-sv-addresscontrol").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-sv-addresscontrol").show();
           }
           else {
@@ -30,14 +30,14 @@
         });
       }
       if ($("#edit-style-options-sv-pancontrol").is('input')) {
-        if ($("#edit-style-options-sv-pancontrol").attr('checked')) {
+        if ($("#edit-style-options-sv-pancontrol").prop('checked')) {
           $("#wrap-getlocations-sv-pancontrol").show();
         }
         else {
           $("#wrap-getlocations-sv-pancontrol").hide();
         }
         $("#edit-style-options-sv-pancontrol").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-sv-pancontrol").show();
           }
           else {

@@ -2,18 +2,18 @@
 /**
  * @file
  * getlocations_polygons.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations polygons support
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations_polygons = {
+  Backdrop.behaviors.getlocations_polygons = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_polygons === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_polygons === 'undefined') {
         return;
       }
 
@@ -25,7 +25,7 @@
         fillOpacity: 0.35
       };
 
-      $.each(Drupal.settings.getlocations_polygons, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_polygons, function (key, settings) {
 
         var strokeColor = (settings.strokeColor ? settings.strokeColor : default_polygon_settings.strokeColor);
         if (! strokeColor.match(/^#/)) {
@@ -99,17 +99,17 @@
               polyOpts.fillOpacity = p_fillOpacity;
               polyOpts.clickable = p_clickable;
               poly[i] = new google.maps.Polygon(polyOpts);
-              poly[i].setMap(Drupal.getlocations_map[key]);
+              poly[i].setMap(Backdrop.getlocations_map[key]);
 
               if (p_clickable && p_message) {
                 google.maps.event.addListener(poly[i], 'click', function(event) {
                   // close any previous instances
                   if (pushit) {
-                    for (var i in Drupal.getlocations_settings[key].infoBubbles) {
-                      Drupal.getlocations_settings[key].infoBubbles[i].close();
+                    for (var i in Backdrop.getlocations_settings[key].infoBubbles) {
+                      Backdrop.getlocations_settings[key].infoBubbles[i].close();
                     }
                   }
-                  if (Drupal.getlocations_settings[key].markeraction == 2) {
+                  if (Backdrop.getlocations_settings[key].markeraction == 2) {
                     // infobubble
                     if (typeof(infoBubbleOptions) == 'object') {
                       var infoBubbleOpts = infoBubbleOptions;
@@ -133,9 +133,9 @@
                     infoWindowOpts.position = event.latLng;
                     var iw = new google.maps.InfoWindow(infoWindowOpts);
                   }
-                  iw.open(Drupal.getlocations_map[key]);
+                  iw.open(Backdrop.getlocations_map[key]);
                   if (pushit) {
-                    Drupal.getlocations_settings[key].infoBubbles.push(iw);
+                    Backdrop.getlocations_settings[key].infoBubbles.push(iw);
                   }
                 });
               }

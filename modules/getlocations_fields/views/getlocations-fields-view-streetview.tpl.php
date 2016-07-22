@@ -2,7 +2,7 @@
 /**
  * @file
  * getlocations-view-streetview.tpl.php
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Default simple view template to display a list of rows.

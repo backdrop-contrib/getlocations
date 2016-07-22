@@ -1,9 +1,10 @@
-; getlocations-7.x-1.x
-name = Get Locations
+; getlocations-1.x-1.x
+name = Getlocations
 description = "Show locations on a Google map."
 package = "Location"
-core = 7.x
-php = 5
+;version = BACKDROP_VERSION
+backdrop = 1.x
+type = module
+
 dependencies[] = libraries
-files[] = "views/getlocations_plugin_style_map.inc"
 configure = admin/config/services/getlocations

@@ -1,0 +1,12 @@
+{
+  "_config_name": "getlocations_fields.paths",
+  "paths": {
+    "getlocations_fields_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields.js",
+    "getlocations_fields_preview_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields_preview.js",
+    "getlocations_fields_streetview_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields_streetview.js",
+    "getlocations_fields_admin_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields_admin.js",
+    "getlocations_fields_formatter_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields_formatter.js",
+    "getlocations_fields_views_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields_views.js",
+    "getlocations_fields_search_views_path": "/modules/getlocations/modules/getlocations_fields/js/getlocations_fields_search_views.js"
+  }
+}

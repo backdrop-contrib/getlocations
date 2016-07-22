@@ -1,0 +1,17 @@
+{
+  "_config_name":"getlocations_fields.sv",
+  "settings":{
+    "sv_group":{
+      "sv_addresscontrol":1,
+      "sv_addresscontrolposition":"",
+      "sv_pancontrol":1,
+      "sv_pancontrolposition":"",
+      "sv_zoomcontrol":"default",
+      "sv_zoomcontrolposition":"",
+      "sv_linkscontrol":1,
+      "sv_imagedatecontrol":0,
+      "sv_scrollwheel":1,
+      "sv_clicktogo":1
+    }
+  }
+}

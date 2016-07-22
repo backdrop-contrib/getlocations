@@ -1,0 +1,17 @@
+{
+  "_config_name": "getlocations_search.what3words",
+  "settings": {
+    "what3words_group": {
+      "what3words_enable":0,
+      "what3words_search":1,
+      "what3words_size":"40",
+      "what3words_map_marker":"",
+      "what3words_marker_show":0,
+      "what3words_center":1,
+      "what3words_zoom":12,
+      "what3words_show":1,
+      "what3words_click":1,
+      "what3words_path":"getlocations\/cb_w3w"
+    }
+  }
+}

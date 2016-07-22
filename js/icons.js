@@ -2,7 +2,7 @@
 /**
  * @file
  * icons.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Icon manager for getlocations.
@@ -20,9 +20,9 @@
 
 (function ($) {
 
-  Drupal.getlocations = {};
+  Backdrop.getlocations = {};
 
-  Drupal.getlocations.getIcon = function (setname, sequence) {
+  Backdrop.getlocations.getIcon = function (setname, sequence) {
 
     if (!setname) {
       return;
@@ -46,16 +46,16 @@
     }
 
     if (!this.gicons[setname]) {
-      if (!Drupal.getlocations.icons[setname]) {
+      if (!Backdrop.getlocations.icons[setname]) {
         var aa = {'!b': setname};
-        alert(Drupal.t('Request for invalid marker set !b', aa));
+        alert(Backdrop.t('Request for invalid marker set !b', aa));
       }
       this.gicons[setname] = [];
-      var q = Drupal.getlocations.icons[setname];
+      var q = Backdrop.getlocations.icons[setname];
       var p;
       var t = [];
       for (var i = 0; i < q.sequence.length; i++) {
-        p = Drupal.getlocations.iconpath + q.path;
+        p = Backdrop.getlocations.iconpath + q.path;
 
         t.image =  new google.maps.MarkerImage(
           p + q.sequence[i].f,
@@ -79,7 +79,7 @@
         // @@@ imageMap?
         this.gicons[setname][i] = t;
       }
-      delete Drupal.getlocations.icons[setname];
+      delete Backdrop.getlocations.icons[setname];
     }
     // TODO: Random, other cycle methods.
     return this.gicons[setname][sequence % this.gicons[setname].length];
@@ -91,16 +91,16 @@
    * When doing the JSON call, the data comes back in a packed format.
    * We need to expand it and file it away in a more useful format.
    */
-  Drupal.getlocations.iconSetup = function () {
-    Drupal.getlocations.icons = {};
-    var m = Drupal.getlocations.icondata;
+  Backdrop.getlocations.iconSetup = function () {
+    Backdrop.getlocations.icons = {};
+    var m = Backdrop.getlocations.icondata;
     var filef, filew, fileh, files;
     for (var path in m) {
       if (m.hasOwnProperty(path)) {
         // Reconstitute files array
         filef = m[path].f;
-        filew = Drupal.getlocations.expandArray(m[path].w, filef.length);
-        fileh = Drupal.getlocations.expandArray(m[path].h, filef.length);
+        filew = Backdrop.getlocations.expandArray(m[path].w, filef.length);
+        fileh = Backdrop.getlocations.expandArray(m[path].h, filef.length);
         files = [];
         for (var i = 0; i < filef.length; i++) {
           files[i] = {f : filef[i], w : filew[i], h : fileh[i]};
@@ -108,7 +108,7 @@
 
         for (var ini in m[path].i) {
           if (m[path].i.hasOwnProperty(ini)) {
-            $.extend(Drupal.getlocations.icons, Drupal.getlocations.expandIconDef(m[path].i[ini], path, files));
+            $.extend(Backdrop.getlocations.icons, Backdrop.getlocations.expandIconDef(m[path].i[ini], path, files));
           }
         }
       }
@@ -119,7 +119,7 @@
    * Expand a compressed array.
    * This will pad arr up to len using the last value of the old array.
    */
-  Drupal.getlocations.expandArray = function (arr, len) {
+  Backdrop.getlocations.expandArray = function (arr, len) {
     var d = arr[0];
     for (var i = 0; i < len; i++) {
       if (!arr[i]) {
@@ -137,7 +137,7 @@
    * This helper function is the reverse of the packer function found in
    * getlocations_markerinfo.inc.
    */
-  Drupal.getlocations.expandIconDef = function (c, path, files) {
+  Backdrop.getlocations.expandIconDef = function (c, path, files) {
 
     var decomp = ['key', 'name', 'sequence',
       'imagepoint1X', 'imagepoint1Y', 'imagepoint2X', 'imagepoint2Y',
@@ -157,7 +157,7 @@
       if (!c[0][i]) {
         c[0][i] = [ fallback[i] ];
       }
-      c[0][i] = Drupal.getlocations.expandArray(c[0][i], c[0][0].length);
+      c[0][i] = Backdrop.getlocations.expandArray(c[0][i], c[0][0].length);
     }
     for (i = 0; i < c[0][0].length; i++) {
       for (j = 0; j < decomp.length; j++) {

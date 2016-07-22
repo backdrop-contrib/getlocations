@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields_handler_field_latitude.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Latitude field handler.

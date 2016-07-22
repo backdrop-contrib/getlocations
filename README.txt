@@ -1,4 +1,4 @@
-for Drupal 7
+for Backdrop 7
 
 Getlocations 1.x
 
@@ -10,26 +10,26 @@ Before installing getlocations please ensure that you have the libraries module 
 
 You can fetch markers from dropbox:
 As tarballs:
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers.tar.gz (required)
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various-small.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-restaurants-bars.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-hairlines.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-circular.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-micons.tar.gz
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-paddle.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers.tar.gz (required)
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-extra.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-various.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-various-small.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-restaurants-bars.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-hairlines.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-circular.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-micons.tar.gz
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-paddle.tar.gz
 
 As zipfiles:
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers.zip (required)
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-extra.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-various-small.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-restaurants-bars.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-hairlines.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-circular.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-micons.zip
-https://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers-paddle.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers.zip (required)
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-extra.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-various.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-various-small.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-restaurants-bars.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-hairlines.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-circular.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-micons.zip
+https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers-paddle.zip
 
 Download the file(s) and place them into your libraries folder so you have
 a path something like this:
@@ -131,12 +131,12 @@ The InfoBubble javascript library is included and can be configured by copying
 js/infobubble_options.txt to js/infobubble_options.js and editing that.
 
 Getlocations now has hook_getlocations_markerdir()
-from jhm http://drupal.org/user/15946
+from jhm http://backdrop.org/user/15946
 This hook allows other modules to add their own marker collections.
 example:
 
 function mymodule_getlocations_markerdir() {
-  $markers = drupal_get_path('module', 'mymodule') . '/mymarkers';
+  $markers = backdrop_get_path('module', 'mymodule') . '/mymarkers';
   return $markers;
 }
 
@@ -278,7 +278,7 @@ edit 'location' to the machine name of your content type
 This will give you a button that can switch markers on/off
 
 
-More information on theming can be found on http://drupal.org/documentation/theme
+More information on theming can be found on http://backdrop.org/documentation/theme
 
 Polygons
 To use polygons on your map you will need to enable the feature either globally

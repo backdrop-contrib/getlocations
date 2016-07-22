@@ -1,19 +1,17 @@
-getlocations_leaflet module for Drupal 7.x
+getlocations_leaflet module for Backdrop 1.x
 
 If you have any questions or suggestions please contact me at
-http://drupal.org/user/52366 or use the Getlocations issue queue.
+https://backdropcms.org/account/hutch or use the Getlocations issue queue.
 
 Leaflet Library from
 http://leaflet-cdn.s3.amazonaws.com/build/leaflet-0.7.3.zip
-Extract it to your drupal root /sites/all/libraries/leaflet.
-The file 'leaflet.js' must be found at /sites/all/libraries/leaflet/leaflet.js.
+Extract it to your backdropcms root /libraries/leaflet.
+The file 'leaflet.js' must be found at /libraries/leaflet/leaflet.js.
 All other files and folder(s) that come with the library are also needed there.
-You can install it using drush:
-drush getlocations-leaflet
+If the folder /libraries does not exist then create it.
 
 Alternately you can use CDN, see http://leafletjs.com/ or https://cdnjs.com/libraries/leaflet for details.
 You can add the css and js URLs on the Leaflet configuration page.
-
 
 markercluster comes from
 https://github.com/Leaflet/Leaflet.markercluster
@@ -122,4 +120,3 @@ Select awesome markers as the marker type
 Select "Icon only" and add your html and/or class to the provided textfields
 an example html:<div class="divicon-test1">&nbsp;</div>
 ensure that your bespoke css class is in your theme's css and it should work.
-

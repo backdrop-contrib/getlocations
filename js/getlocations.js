@@ -2,31 +2,31 @@
 /**
  * @file
  * getlocations.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations module for Drupal 7
+ * Javascript functions for getlocations module for Backdrop
  * this is for googlemaps API version 3
 */
 
 (function ($) {
 
-  Drupal.getlocations_inputmap = [];
-  Drupal.getlocations_pano = [];
-  Drupal.getlocations_data = [];
-  Drupal.getlocations_markers = [];
-  Drupal.getlocations_settings = [];
-  Drupal.getlocations_map = [];
+  Backdrop.getlocations_inputmap = [];
+  Backdrop.getlocations_pano = [];
+  Backdrop.getlocations_data = [];
+  Backdrop.getlocations_markers = [];
+  Backdrop.getlocations_settings = [];
+  Backdrop.getlocations_map = [];
 
   // in icons.js
-  Drupal.getlocations.iconSetup();
+  Backdrop.getlocations.iconSetup();
 
-  Drupal.behaviors.getlocations = {
+  Backdrop.behaviors.getlocations = {
     attach: function(context, settings) {
 
       // work over all class 'getlocations_map_canvas'
       $(".getlocations_map_canvas", context).once('getlocations-map-processed', function(index, element) {
-        var elemID = $(element).attr('id');
+        var elemID = $(element).prop('id');
         var key = elemID.replace(/^getlocations_map_canvas_/, '');
         // is there really a map?
         if ( $("#getlocations_map_canvas_" + key).is('div') ) {
@@ -98,14 +98,14 @@
           global_settings.lidinfo_path = setting.lidinfo_path;
           global_settings.preload_data = setting.preload_data;
           if (setting.preload_data) {
-            global_settings.getlocations_info = Drupal.settings.getlocations_info[key];
+            global_settings.getlocations_info = Backdrop.settings.getlocations_info[key];
           }
           global_settings.getdirections_link = setting.getdirections_link;
 
-          Drupal.getlocations_markers[key] = {};
-          Drupal.getlocations_markers[key].coords = {};
-          Drupal.getlocations_markers[key].lids = {};
-          Drupal.getlocations_markers[key].cat = {};
+          Backdrop.getlocations_markers[key] = {};
+          Backdrop.getlocations_markers[key].coords = {};
+          Backdrop.getlocations_markers[key].lids = {};
+          Backdrop.getlocations_markers[key].cat = {};
 
           global_settings.locale_prefix = (setting.locale_prefix ? setting.locale_prefix + "/" : "");
           global_settings.show_bubble_on_one_marker = (setting.show_bubble_on_one_marker ? true : false);
@@ -137,7 +137,7 @@
             global_settings.maxzoom_map = parseInt(setting.maxzoom_map);
           }
 
-          global_settings.datanum = Drupal.getlocations_data[key].datanum;
+          global_settings.datanum = Backdrop.getlocations_data[key].datanum;
 
           global_settings.markermanagertype = setting.markermanagertype;
           global_settings.pansetting = setting.pansetting;
@@ -164,7 +164,7 @@
           global_settings.sv_clicktogo              = (setting.sv_clicktogo ? true : false);
 
           // prevent old msie from running markermanager
-          var ver = Drupal.getlocations.msiedetect();
+          var ver = Backdrop.getlocations.msiedetect();
           var pushit = false;
           if ( (ver == '') || (ver && ver > 8)) {
             pushit = true;
@@ -175,7 +175,7 @@
             global_settings.useclustermanager = false;
           }
           else if (pushit && setting.markermanagertype == 2 && setting.useclustermanager == 1) {
-            global_settings.cmgr_styles = Drupal.settings.getlocations_markerclusterer;
+            global_settings.cmgr_styles = Backdrop.settings.getlocations_markerclusterer;
             global_settings.cmgr_style = (setting.markerclusterer_style == -1 ? null : setting.markerclusterer_style);
             global_settings.cmgr_gridSize = (setting.markerclusterer_size == -1 ? null : parseInt(setting.markerclusterer_size));
             global_settings.cmgr_maxZoom = (setting.markerclusterer_zoom == -1 ? null : parseInt(setting.markerclusterer_zoom));
@@ -212,10 +212,10 @@
           if((global_settings.useInfoWindow || global_settings.useInfoBubble) && setting.custom_content_enable == 1) {
             global_settings.useCustomContent = true;
           }
-          global_settings.defaultIcon = Drupal.getlocations.getIcon(map_marker);
+          global_settings.defaultIcon = Backdrop.getlocations.getIcon(map_marker);
 
           // each map has its own data so when a map is replaced by ajax the new data is too.
-          global_settings.latlons = (Drupal.getlocations_data[key].latlons ? Drupal.getlocations_data[key].latlons : '');
+          global_settings.latlons = (Backdrop.getlocations_data[key].latlons ? Backdrop.getlocations_data[key].latlons : '');
 
           // map type
           var maptypes = [];
@@ -294,8 +294,6 @@
           controlpositions['lt'] = google.maps.ControlPosition.LEFT_TOP;
           global_settings.controlpositions = controlpositions;
 
-            //overviewMapControl: (overview ? true : false),
-            //overviewMapControlOptions: {opened: (overview_opened ? true : false)},
           var mapOpts = {
             zoom: selzoom,
             minZoom: global_settings.minzoom_map,
@@ -375,9 +373,9 @@
           }
 
           // make the map
-          Drupal.getlocations_map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
+          Backdrop.getlocations_map[key] = new google.maps.Map(document.getElementById("getlocations_map_canvas_" + key), mapOpts);
           // another way
-          // Drupal.getlocations_map[key] = new google.maps.Map($(element).get(0), mapOpts);
+          // Backdrop.getlocations_map[key] = new google.maps.Map($(element).get(0), mapOpts);
 
           // other maps
           // OpenStreetMap
@@ -390,18 +388,18 @@
                 }
               }
             }
-            google.maps.event.addListener(Drupal.getlocations_map[key], 'maptypeid_changed', updateAttribs);
-            Drupal.getlocations_map[key].controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(copyrightNode);
+            google.maps.event.addListener(Backdrop.getlocations_map[key], 'maptypeid_changed', updateAttribs);
+            Backdrop.getlocations_map[key].controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(copyrightNode);
           }
 
           // input map
           if (setting.inputmap) {
-            Drupal.getlocations_inputmap[key] = Drupal.getlocations_map[key];
+            Backdrop.getlocations_inputmap[key] = Backdrop.getlocations_map[key];
           }
 
           // set up markermanager
           if (global_settings.usemarkermanager) {
-            global_settings.mgr = new MarkerManager(Drupal.getlocations_map[key], {
+            global_settings.mgr = new MarkerManager(Backdrop.getlocations_map[key], {
               borderPadding: 50,
               maxZoom: global_settings.maxzoom,
               trackMarkers: false
@@ -419,7 +417,7 @@
               cmgr_settings.imagePath = global_settings.cmgr_imgpath + '/m';
             }
             global_settings.cmgr = new MarkerClusterer(
-              Drupal.getlocations_map[key],
+              Backdrop.getlocations_map[key],
               [],
               cmgr_settings
             );
@@ -436,7 +434,7 @@
               suppressInfoWindows: (setting.kml_url_infowindow ? true : false)
             });
             if (setting.kml_url_button_state > 0) {
-              kmlLayer[key].setMap(Drupal.getlocations_map[key]);
+              kmlLayer[key].setMap(Backdrop.getlocations_map[key]);
               kmlLayertoggleState[key] = true;
             }
             else {
@@ -445,16 +443,16 @@
             }
             $("#getlocations_toggleKmlLayer_" + key).click( function() {
               var label = '';
-              l = (setting.kml_url_button_label ? setting.kml_url_button_label : Drupal.t('Kml Layer'));
+              l = (setting.kml_url_button_label ? setting.kml_url_button_label : Backdrop.t('Kml Layer'));
               if (kmlLayertoggleState[key]) {
                 kmlLayer[key].setMap(null);
                 kmlLayertoggleState[key] = false;
-                label = l + ' ' + Drupal.t('On');
+                label = l + ' ' + Backdrop.t('On');
               }
               else {
-                kmlLayer[key].setMap(Drupal.getlocations_map[key]);
+                kmlLayer[key].setMap(Backdrop.getlocations_map[key]);
                 kmlLayertoggleState[key] = true;
-                label = l + ' ' + Drupal.t('Off');
+                label = l + ' ' + Backdrop.t('Off');
               }
               $(this).val(label);
             });
@@ -466,7 +464,7 @@
             var traffictoggleState = [];
             trafficInfo[key] = new google.maps.TrafficLayer();
             if (setting.trafficinfo_state > 0) {
-              trafficInfo[key].setMap(Drupal.getlocations_map[key]);
+              trafficInfo[key].setMap(Backdrop.getlocations_map[key]);
               traffictoggleState[key] = true;
             }
             else {
@@ -478,12 +476,12 @@
               if (traffictoggleState[key]) {
                 trafficInfo[key].setMap(null);
                 traffictoggleState[key] = false;
-                label = Drupal.t('Traffic Info On');
+                label = Backdrop.t('Traffic Info On');
               }
               else {
-                trafficInfo[key].setMap(Drupal.getlocations_map[key]);
+                trafficInfo[key].setMap(Backdrop.getlocations_map[key]);
                 traffictoggleState[key] = true;
-                label = Drupal.t('Traffic Info Off');
+                label = Backdrop.t('Traffic Info Off');
               }
               $(this).val(label);
             });
@@ -495,7 +493,7 @@
             var bicycletoggleState =  [];
             bicycleInfo[key] = new google.maps.BicyclingLayer();
             if (setting.bicycleinfo_state > 0) {
-              bicycleInfo[key].setMap(Drupal.getlocations_map[key]);
+              bicycleInfo[key].setMap(Backdrop.getlocations_map[key]);
               bicycletoggleState[key] = true;
             }
             else {
@@ -507,12 +505,12 @@
               if (bicycletoggleState[key]) {
                 bicycleInfo[key].setMap(null);
                 bicycletoggleState[key] = false;
-                label = Drupal.t('Bicycle Info On');
+                label = Backdrop.t('Bicycle Info On');
               }
               else {
-                bicycleInfo[key].setMap(Drupal.getlocations_map[key]);
+                bicycleInfo[key].setMap(Backdrop.getlocations_map[key]);
                 bicycletoggleState[key] = true;
-                label = Drupal.t('Bicycle Info Off');
+                label = Backdrop.t('Bicycle Info Off');
               }
               $(this).val(label);
             });
@@ -524,7 +522,7 @@
             var transittoggleState = [];
             transitInfo[key] = new google.maps.TransitLayer();
             if (setting.transitinfo_state > 0) {
-              transitInfo[key].setMap(Drupal.getlocations_map[key]);
+              transitInfo[key].setMap(Backdrop.getlocations_map[key]);
               transittoggleState[key] = true;
             }
             else {
@@ -536,30 +534,30 @@
               if (transittoggleState[key]) {
                 transitInfo[key].setMap(null);
                 transittoggleState[key] = false;
-                label = Drupal.t('Transit Info On');
+                label = Backdrop.t('Transit Info On');
               }
               else {
-                transitInfo[key].setMap(Drupal.getlocations_map[key]);
+                transitInfo[key].setMap(Backdrop.getlocations_map[key]);
                 transittoggleState[key] = true;
-                label = Drupal.t('Transit Info Off');
+                label = Backdrop.t('Transit Info Off');
               }
               $(this).val(label);
             });
           }
 
-          // exporting global_settings to Drupal.getlocations_settings
-          Drupal.getlocations_settings[key] = global_settings;
+          // exporting global_settings to Backdrop.getlocations_settings
+          Backdrop.getlocations_settings[key] = global_settings;
 
           // markers and bounding
           if (! setting.inputmap && ! setting.extcontrol) {
 
-            doAllMarkers(Drupal.getlocations_map[key], global_settings, key);
+            doAllMarkers(Backdrop.getlocations_map[key], global_settings, key);
 
             if (global_settings.show_maplinks && global_settings.show_maplinks_viewport && (global_settings.useInfoWindow || global_settings.useInfoBubble || global_settings.useLink)) {
-              google.maps.event.addListener(Drupal.getlocations_map[key], 'bounds_changed', function() {
-                var b = Drupal.getlocations_map[key].getBounds();
-                for (var i = 0; i < Drupal.getlocations_data[key].latlons.length; i++) {
-                  var a = Drupal.getlocations_data[key].latlons[i];
+              google.maps.event.addListener(Backdrop.getlocations_map[key], 'bounds_changed', function() {
+                var b = Backdrop.getlocations_map[key].getBounds();
+                for (var i = 0; i < Backdrop.getlocations_data[key].latlons.length; i++) {
+                  var a = Backdrop.getlocations_data[key].latlons[i];
                   var lat = a[0];
                   var lon = a[1];
                   var lid = a[2];
@@ -577,7 +575,7 @@
             }
 
             // Bounding
-            Drupal.getlocations.redoMap(key);
+            Backdrop.getlocations.redoMap(key);
 
           }
 
@@ -599,17 +597,17 @@
             if (fullscreen_controlposition) {
               var fs_p = controlpositions[fullscreen_controlposition];
             }
-            Drupal.getlocations_map[key].controls[fs_p].setAt(0, fsdoc);
+            Backdrop.getlocations_map[key].controls[fs_p].setAt(0, fsdoc);
           }
 
           // search_places in getlocations_search_places.js
-          if (setting.search_places && $.isFunction(Drupal.getlocations_search_places)) {
-            Drupal.getlocations_search_places(key);
+          if (setting.search_places && $.isFunction(Backdrop.getlocations_search_places)) {
+            Backdrop.getlocations_search_places(key);
           }
 
           //geojson in getlocations_geojson.js
-          if (setting.geojson_enable && setting.geojson_data && $.isFunction(Drupal.getlocations_geojson)) {
-            Drupal.getlocations_geojson(key);
+          if (setting.geojson_enable && setting.geojson_data && $.isFunction(Backdrop.getlocations_geojson)) {
+            Backdrop.getlocations_geojson(key);
           }
 
         } // end is there really a map?
@@ -626,7 +624,7 @@
           fsdiv.style.borderWidth = "1px";
           fsdiv.style.cursor = "pointer";
           fsdiv.style.textAlign = "center";
-          fsdiv.title = Drupal.t('Full screen');
+          fsdiv.title = Backdrop.t('Full screen');
           fsdiv.innerHTML = '<img id="btnFullScreen" src="' + js_path + 'images/fs-map-full.png"/>';
           fsd.appendChild(fsdiv);
           google.maps.event.addDomListener(fsdiv, "click", function() {
@@ -635,20 +633,20 @@
         }
 
         function toggleFullScreen() {
-          var cnt = Drupal.getlocations_map[key].getCenter();
+          var cnt = Backdrop.getlocations_map[key].getCenter();
           $("#getlocations_map_wrapper_" + key).toggleClass("fullscreen");
           $("html,body").toggleClass("fullscreen-body-" + key);
           $(document).scrollTop(0);
-          google.maps.event.trigger(Drupal.getlocations_map[key], "resize");
-          Drupal.getlocations_map[key].setCenter(cnt);
+          google.maps.event.trigger(Backdrop.getlocations_map[key], "resize");
+          Backdrop.getlocations_map[key].setCenter(cnt);
           setTimeout( function() {
             if($("#getlocations_map_wrapper_" + key).hasClass("fullscreen")) {
-              $("#btnFullScreen").attr("src", js_path + 'images/fs-map-normal.png');
-              fsdiv.title = Drupal.t('Normal screen');
+              $("#btnFullScreen").prop("src", js_path + 'images/fs-map-normal.png');
+              fsdiv.title = Backdrop.t('Normal screen');
             }
             else {
-              $("#btnFullScreen").attr("src", js_path + 'images/fs-map-full.png');
-              fsdiv.title = Drupal.t('Full screen');
+              $("#btnFullScreen").prop("src", js_path + 'images/fs-map-full.png');
+              fsdiv.title = Backdrop.t('Full screen');
             }
           },200);
         }
@@ -674,11 +672,11 @@
               gs.markdone = gs.defaultIcon;
             }
             else {
-              gs.markdone = Drupal.getlocations.getIcon(mark);
+              gs.markdone = Backdrop.getlocations.getIcon(mark);
             }
-            var m = Drupal.getlocations.makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent, cat, mkey);
+            var m = Backdrop.getlocations.makeMarker(map, gs, lat, lon, lid, name, lidkey, customContent, cat, mkey);
             // still experimental
-            Drupal.getlocations_markers[mkey].lids[lid] = m;
+            Backdrop.getlocations_markers[mkey].lids[lid] = m;
             if (gs.usemarkermanager || gs.useclustermanager) {
               gs.batchr.push(m);
             }
@@ -697,25 +695,25 @@
           if (attrib) {
             copyrightNode.innerHTML = attrib;
             if (setting.trafficinfo) {
-              $("#getlocations_toggleTraffic_" + key).attr('disabled', true);
+              $("#getlocations_toggleTraffic_" + key).prop('disabled', true);
             }
             if (setting.bicycleinfo) {
-              $("#getlocations_toggleBicycle_" + key).attr('disabled', true);
+              $("#getlocations_toggleBicycle_" + key).prop('disabled', true);
             }
             if (setting.transitinfo) {
-              $("#getlocations_toggleTransit_" + key).attr('disabled', true);
+              $("#getlocations_toggleTransit_" + key).prop('disabled', true);
             }
           }
           else {
             copyrightNode.innerHTML = "";
             if (setting.trafficinfo) {
-              $("#getlocations_toggleTraffic_" + key).attr('disabled', false);
+              $("#getlocations_toggleTraffic_" + key).prop('disabled', false);
             }
             if (setting.bicycleinfo) {
-              $("#getlocations_toggleBicycle_" + key).attr('disabled', false);
+              $("#getlocations_toggleBicycle_" + key).prop('disabled', false);
             }
             if (setting.transitinfo) {
-              $("#getlocations_toggleTransit_" + key).attr('disabled', false);
+              $("#getlocations_toggleTransit_" + key).prop('disabled', false);
             }
           }
         }
@@ -729,7 +727,7 @@
               }
               var tilesize = parseInt(setting.baselayer_settings[blk].tilesize);
               var url_template = setting.baselayer_settings[blk].url;
-              Drupal.getlocations_map[k].mapTypes.set(blk, new google.maps.ImageMapType({
+              Backdrop.getlocations_map[k].mapTypes.set(blk, new google.maps.ImageMapType({
                 getTileUrl: function(coord, zoom) {
                   var url = '';
                   if (url_template) {
@@ -747,7 +745,7 @@
         }
 
         function updateAttribs() {
-          var blk = Drupal.getlocations_map[key].getMapTypeId();
+          var blk = Backdrop.getlocations_map[key].getMapTypeId();
           for (var c = 0; c < baselayer_keys.length; c++) {
             var bl_key = baselayer_keys[c];
             if ( bl_key != 'Map' && bl_key != 'Satellite' && bl_key != 'Hybrid' && bl_key != 'Physical') {
@@ -771,7 +769,7 @@
   }; // end behaviors
 
   // external functions
-  Drupal.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, cat, mkey) {
+  Backdrop.getlocations.makeMarker = function(map, gs, lat, lon, lid, title, lidkey, customContent, cat, mkey) {
 
     //if (! gs.markdone) {
     //  return;
@@ -779,13 +777,13 @@
 
     // categories
     if (cat) {
-      Drupal.getlocations_markers[mkey].cat[lid] = cat;
+      Backdrop.getlocations_markers[mkey].cat[lid] = cat;
     }
 
     // check for duplicates
     var hash = new String(lat + lon);
-    if (Drupal.getlocations_markers[mkey].coords[hash] == null) {
-      Drupal.getlocations_markers[mkey].coords[hash] = 1;
+    if (Backdrop.getlocations_markers[mkey].coords[hash] == null) {
+      Backdrop.getlocations_markers[mkey].coords[hash] = 1;
     }
     else {
       // we have a duplicate
@@ -855,7 +853,7 @@
             if(gs.useCustomContent) {
               var cc = [];
               cc.content = customContent;
-              Drupal.getlocations.showPopup(map, m, gs, cc, mkey);
+              Backdrop.getlocations.showPopup(map, m, gs, cc, mkey);
             }
             else {
               // fetch bubble content
@@ -864,7 +862,7 @@
                 for (var i = 0; i < arr.length; i++) {
                   data = arr[i];
                   if (lid == data.lid && lidkey == data.lidkey && data.content) {
-                    Drupal.getlocations.showPopup(map, m, gs, data, mkey);
+                    Backdrop.getlocations.showPopup(map, m, gs, data, mkey);
                   }
                 }
               }
@@ -897,7 +895,7 @@
                 }
 
                 $.get(gs.info_path, qs, function(data) {
-                  Drupal.getlocations.showPopup(map, m, gs, data, mkey);
+                  Backdrop.getlocations.showPopup(map, m, gs, data, mkey);
                 });
               }
             }
@@ -1032,8 +1030,8 @@
           popt.clickToGo = false;
         }
 
-        Drupal.getlocations_pano[mkey] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_map_canvas_" + mkey), popt);
-        Drupal.getlocations_pano[mkey].setVisible(true);
+        Backdrop.getlocations_pano[mkey] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_map_canvas_" + mkey), popt);
+        Backdrop.getlocations_pano[mkey].setVisible(true);
       }
     }
 
@@ -1059,8 +1057,8 @@
 
   };
 
-  Drupal.getlocations.showPopup = function(map, m, gs, data, key) {
-    var ver = Drupal.getlocations.msiedetect();
+  Backdrop.getlocations.showPopup = function(map, m, gs, data, key) {
+    var ver = Backdrop.getlocations.msiedetect();
     var pushit = false;
     if ( (ver == '') || (ver && ver > 8)) {
       pushit = true;
@@ -1068,8 +1066,8 @@
 
     if (pushit) {
       // close any previous instances
-      for (var i in Drupal.getlocations_settings[key].infoBubbles) {
-        Drupal.getlocations_settings[key].infoBubbles[i].close();
+      for (var i in Backdrop.getlocations_settings[key].infoBubbles) {
+        Backdrop.getlocations_settings[key].infoBubbles[i].close();
       }
     }
 
@@ -1085,7 +1083,7 @@
       infoBubble.open(map, m);
       if (pushit) {
         // add to the array
-        Drupal.getlocations_settings[key].infoBubbles.push(infoBubble);
+        Backdrop.getlocations_settings[key].infoBubbles.push(infoBubble);
       }
     }
     else {
@@ -1100,12 +1098,12 @@
       infowindow.open(map, m);
       if (pushit) {
         // add to the array
-        Drupal.getlocations_settings[key].infoBubbles.push(infowindow);
+        Backdrop.getlocations_settings[key].infoBubbles.push(infowindow);
       }
     }
   };
 
-  Drupal.getlocations.doBounds = function(map, minlat, minlon, maxlat, maxlon, dopan) {
+  Backdrop.getlocations.doBounds = function(map, minlat, minlon, maxlat, maxlon, dopan) {
     if (minlat !== '' && minlon !== '' && maxlat !== '' && maxlon !== '') {
       // Bounding
       var minpoint = new google.maps.LatLng(parseFloat(minlat), parseFloat(minlon));
@@ -1120,9 +1118,9 @@
     }
   };
 
-  Drupal.getlocations.redoMap = function(key) {
-    var settings = Drupal.settings.getlocations[key];
-    var minmaxes = (Drupal.getlocations_data[key].minmaxes ? Drupal.getlocations_data[key].minmaxes : '');
+  Backdrop.getlocations.redoMap = function(key) {
+    var settings = Backdrop.settings.getlocations[key];
+    var minmaxes = (Backdrop.getlocations_data[key].minmaxes ? Backdrop.getlocations_data[key].minmaxes : '');
     var minlat = '';
     var minlon = '';
     var maxlat = '';
@@ -1137,26 +1135,26 @@
       cenlat = ((minlat + maxlat) / 2);
       cenlon = ((minlon + maxlon) / 2);
     }
-    google.maps.event.trigger(Drupal.getlocations_map[key], "resize");
+    google.maps.event.trigger(Backdrop.getlocations_map[key], "resize");
     if (! settings.inputmap && ! settings.extcontrol) {
       if (settings.pansetting == 1) {
-        Drupal.getlocations.doBounds(Drupal.getlocations_map[key], minlat, minlon, maxlat, maxlon, true);
+        Backdrop.getlocations.doBounds(Backdrop.getlocations_map[key], minlat, minlon, maxlat, maxlon, true);
       }
       else if (settings.pansetting == 2) {
-        Drupal.getlocations.doBounds(Drupal.getlocations_map[key], minlat, minlon, maxlat, maxlon, false);
+        Backdrop.getlocations.doBounds(Backdrop.getlocations_map[key], minlat, minlon, maxlat, maxlon, false);
       }
       else if (settings.pansetting == 3 && cenlat && cenlon) {
         var c = new google.maps.LatLng(parseFloat(cenlat), parseFloat(cenlon));
-        Drupal.getlocations_map[key].setCenter(c);
+        Backdrop.getlocations_map[key].setCenter(c);
       }
     }
   };
 
-  Drupal.getlocations.get_marker_from_latlon = function(k, lat, lon) {
+  Backdrop.getlocations.get_marker_from_latlon = function(k, lat, lon) {
     var lid;
     var gmark = false;
-    for (lid in Drupal.getlocations_markers[k].lids) {
-      mark = Drupal.getlocations_markers[k].lids[lid];
+    for (lid in Backdrop.getlocations_markers[k].lids) {
+      mark = Backdrop.getlocations_markers[k].lids[lid];
       pos = mark.getPosition();
       xlat = parseFloat(pos.lat());
       xlon = parseFloat(pos.lng());
@@ -1168,13 +1166,13 @@
     return gmark;
   };
 
-  Drupal.getlocations.divScrollIntoView = function (node) {
+  Backdrop.getlocations.divScrollIntoView = function (node) {
     var fudge = 28; // allow for admin bar
     var posY = $(node).offset().top;
     window.scrollTo(0, posY-fudge);
   };
 
-  Drupal.getlocations.msiedetect = function() {
+  Backdrop.getlocations.msiedetect = function() {
     var ieversion = '';
     if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){ //test for MSIE x.x;
      ieversion = new Number(RegExp.$1) // capture x.x portion and store as a number
@@ -1182,43 +1180,43 @@
     return ieversion;
   };
 
-  Drupal.getlocations.getGeoErrCode = function(errcode) {
+  Backdrop.getlocations.getGeoErrCode = function(errcode) {
     var errstr;
     if (errcode == google.maps.GeocoderStatus.ERROR) {
-      errstr = Drupal.t("There was a problem contacting the Google servers.");
+      errstr = Backdrop.t("There was a problem contacting the Google servers.");
     }
     else if (errcode == google.maps.GeocoderStatus.INVALID_REQUEST) {
-      errstr = Drupal.t("This GeocoderRequest was invalid.");
+      errstr = Backdrop.t("This GeocoderRequest was invalid.");
     }
     else if (errcode == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-      errstr = Drupal.t("The webpage has gone over the requests limit in too short a period of time.");
+      errstr = Backdrop.t("The webpage has gone over the requests limit in too short a period of time.");
     }
     else if (errcode == google.maps.GeocoderStatus.REQUEST_DENIED) {
-      errstr = Drupal.t("The webpage is not allowed to use the geocoder.");
+      errstr = Backdrop.t("The webpage is not allowed to use the geocoder.");
     }
     else if (errcode == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
-      errstr = Drupal.t("A geocoding request could not be processed due to a server error. The request may succeed if you try again.");
+      errstr = Backdrop.t("A geocoding request could not be processed due to a server error. The request may succeed if you try again.");
     }
     else if (errcode == google.maps.GeocoderStatus.ZERO_RESULTS) {
-      errstr = Drupal.t("No result was found for this GeocoderRequest.");
+      errstr = Backdrop.t("No result was found for this GeocoderRequest.");
     }
     return errstr;
   };
 
-  Drupal.getlocations.geolocationErrorMessages = function(error) {
+  Backdrop.getlocations.geolocationErrorMessages = function(error) {
     var ret = '';
     switch(error.code) {
       case error.PERMISSION_DENIED:
-        ret = Drupal.t("because you didn't give me permission");
+        ret = Backdrop.t("because you didn't give me permission");
         break;
       case error.POSITION_UNAVAILABLE:
-        ret = Drupal.t("because your browser couldn't determine your location");
+        ret = Backdrop.t("because your browser couldn't determine your location");
         break;
       case error.TIMEOUT:
-        ret = Drupal.t("because it was taking too long to determine your location");
+        ret = Backdrop.t("because it was taking too long to determine your location");
         break;
       case error.UNKNOWN_ERROR:
-        ret = Drupal.t("due to an unknown error");
+        ret = Backdrop.t("due to an unknown error");
         break;
     }
     return ret;

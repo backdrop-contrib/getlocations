@@ -1,0 +1,7 @@
+{
+  "_config_name": "getlocations_gps.paths",
+  "paths": {
+    "getlocations_gps_path": "modules/getlocations/modules/getlocations_gps/js/getlocations_gps.min.js",
+    "getlocations_gps_admin_path": "modules/getlocations/modules/getlocations_gps/js/getlocations_gps_admin.min.js"
+  }
+}

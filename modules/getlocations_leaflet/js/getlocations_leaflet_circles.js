@@ -2,18 +2,18 @@
 /**
  * @file
  * getlocations_leaflet_circles.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations circles support
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations_leaflet_circles = {
+  Backdrop.behaviors.getlocations_leaflet_circles = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_leaflet_circles === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_leaflet_circles === 'undefined') {
         return;
       }
 
@@ -25,7 +25,7 @@
         fillOpacity: 0.35
       };
 
-      $.each(Drupal.settings.getlocations_leaflet_circles, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_leaflet_circles, function (key, settings) {
 
         var strokeColor = (settings.strokeColor ? settings.strokeColor : default_circle_settings.strokeColor);
         if (! strokeColor.match(/^#/)) {
@@ -111,9 +111,9 @@
         }
 
         if (circles.length) {
-          Circles.addTo(Drupal.getlocations_leaflet_map[key]);
-          if (Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov) {
-            Drupal.getlocations_leaflet_layerscontrol[key].addOverlay(Circles, Drupal.getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov_label);
+          Circles.addTo(Backdrop.getlocations_leaflet_map[key]);
+          if (Backdrop.getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov) {
+            Backdrop.getlocations_leaflet_layerscontrol[key].addOverlay(Circles, Backdrop.getlocations_leaflet_settings[key].map_settings.layercontrol_circ_ov_label);
           }
         }
 

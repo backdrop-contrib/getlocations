@@ -2,10 +2,10 @@
 /**
  * @file
  * getlocations_leaflet_providers.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations_leaflet module for Drupal 7
+ * Javascript functions for getlocations_leaflet module for Backdrop 7
  * this is for leaflet maps http://leafletjs.com/
  * code derived from leaflet-providers.js https://github.com/leaflet-extras/leaflet-providers
  *

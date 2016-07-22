@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations.drush.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * drush integration for getlocations.
@@ -14,7 +14,7 @@
  * 'drush getlocations-leaflet-hash' will install the Leaflet-hash library
  */
 
-define('GETLOCATIONS_MARKERS_DOWNLOAD_URI', 'http://dl.dropboxusercontent.com/u/41489105/Drupal/getlocations/getlocations-markers.zip');
+define('GETLOCATIONS_MARKERS_DOWNLOAD_URI', 'http://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-markers.zip');
 define('GETLOCATIONS_GEOJSON_DOWNLOAD_URI', 'https://github.com/JasonSanford/GeoJSON-to-Google-Maps/archive/master.zip');
 define('GETLOCATIONS_GEOCODER_DOWNLOAD_URI', 'https://github.com/geocoder-php/geocoder-js/archive/master.zip');
 define('GETLOCATIONS_LEAFLET_DOWNLOAD_URI', 'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.zip');

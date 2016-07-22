@@ -4,6 +4,8 @@
  * @file
  * getlocations_fields_handler_field_data.inc
  * Definition of views_handler_field_serialized.
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
+ * @copyright GNU GPL
  */
 
 /**

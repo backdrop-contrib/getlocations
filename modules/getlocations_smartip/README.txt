@@ -1,2 +1,2 @@
-getlocations_smartip module for Drupal 7.x
-Privides support for smart_ip module.
+Getlocations submodule module for Backdrop 1.x
+Provides support for smart_ip module.

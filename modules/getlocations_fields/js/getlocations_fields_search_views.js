@@ -1,7 +1,7 @@
 /**
  * @file
  * getlocations_fields_search_views.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations_fields module in Views
@@ -9,13 +9,13 @@
 */
 (function ($) {
 
-  Drupal.behaviors.getlocations_fields_search_views = {
+  Backdrop.behaviors.getlocations_fields_search_views = {
     attach: function(context) {
 
       // Manage Google Autocomplete
       if ($("#edit-distance-search-field").is('input') && $("#edit-distance-latitude").is('input') && $("#edit-distance-longitude").is('input')) {
         // settings
-        var settings = Drupal.settings.getlocations_fields_search_views;
+        var settings = Backdrop.settings.getlocations_fields_search_views;
         // attach a geocoder
         var input_adrs = document.getElementById("edit-distance-search-field");
         var fm_adrs = '';
@@ -39,7 +39,7 @@
               }
               else {
                 var prm = {'!a': fm_adrs};
-                var msg = Drupal.t('Geocode for (!a) was not successful', prm);
+                var msg = Backdrop.t('Geocode for (!a) was not successful', prm);
                 alert(msg);
               }
             });
@@ -55,8 +55,8 @@
                 $("#edit-distance-search-field").val(results[0].formatted_address);
               }
               else {
-                var prm = {'!a': fm_adrs, '!b': Drupal.getlocations.getGeoErrCode(status) };
-                var msg = Drupal.t('Geocode for (!a) was not successful for the following reason: !b', prm);
+                var prm = {'!a': fm_adrs, '!b': Backdrop.getlocations.getGeoErrCode(status) };
+                var msg = Backdrop.t('Geocode for (!a) was not successful for the following reason: !b', prm);
                 alert(msg);
               }
             });
@@ -71,27 +71,27 @@
 
         // search type in tooltip
         if (settings.geocoder_enable == 2) {
-          msg = Drupal.t('Search by OpenStreetMap');
+          msg = Backdrop.t('Search by OpenStreetMap');
         }
         else if (settings.geocoder_enable == 1) {
-          msg = Drupal.t('Search by Google');
+          msg = Backdrop.t('Search by Google');
         }
         else {
-          msg = Drupal.t('Search by Google Maps Places');
+          msg = Backdrop.t('Search by Google Maps Places');
         }
-        $("#edit-distance-search-field").attr({title: msg});
+        $("#edit-distance-search-field").prop({title: msg});
       }
 
       //#edit-options-settings-restrict-by-country
       if ($("#edit-options-settings-restrict-by-country").is('input')) {
-        if ($("#edit-options-settings-restrict-by-country").attr('checked')) {
+        if ($("#edit-options-settings-restrict-by-country").prop('checked')) {
           $("#getlocations_search_country").show();
         }
         else {
           $("#getlocations_search_country").hide();
         }
         $("#edit-options-settings-restrict-by-country").change( function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#getlocations_search_country").show();
           }
           else {
@@ -100,11 +100,11 @@
         });
       }
 
-      if (typeof(Drupal.settings.getlocations) !== 'undefined') {
+      if (typeof(Backdrop.settings.getlocations) !== 'undefined') {
         // work over all class 'getlocations_map_canvas'
-        var gsettings = Drupal.settings.getlocations;
+        var gsettings = Backdrop.settings.getlocations;
         $(".getlocations_map_canvas", context).once('getlocations-fields-views-search-marker-map-processed', function(index, element) {
-          var elemID = $(element).attr('id');
+          var elemID = $(element).prop('id');
           var key = elemID.replace(/^getlocations_map_canvas_/, '');
           // is there really a map?
           if ($("#getlocations_map_canvas_" + key).is('div')) {
@@ -116,7 +116,7 @@
               if (! gset.views_search_marker_toggle_active) {
                 viewssearchmarkertoggleState[key] = false;
               }
-              $("#getlocations_toggleSearchMarker_" + key).attr('disabled', true);
+              $("#getlocations_toggleSearchMarker_" + key).prop('disabled', true);
             }
 
             if (gset.views_search_radshape_enable) {
@@ -125,7 +125,7 @@
               if (! gset.views_search_radshape_toggle_active) {
                 viewssearchshapetoggleState[key] = false;
               }
-              $("#getlocations_toggleSearchArea_" + key).attr('disabled', true);
+              $("#getlocations_toggleSearchArea_" + key).prop('disabled', true);
             }
             // views_search_marker and views_search_radshape_enable
             var slat = false;
@@ -139,15 +139,15 @@
             }
             if (slat && slon && distance_meters) {
               var point = new google.maps.LatLng(parseFloat(slat), parseFloat(slon));
-              var lats = Drupal.getlocations.geo.earth_latitude_range(slat, slon, distance_meters);
-              var lngs = Drupal.getlocations.geo.earth_longitude_range(slat, slon, distance_meters);
+              var lats = Backdrop.getlocations.geo.earth_latitude_range(slat, slon, distance_meters);
+              var lngs = Backdrop.getlocations.geo.earth_longitude_range(slat, slon, distance_meters);
               // views_search_marker
               if (gset.views_search_marker_enable) {
                 var gst = gset;
-                gst.markdone = Drupal.getlocations.getIcon(gset.views_search_marker);
+                gst.markdone = Backdrop.getlocations.getIcon(gset.views_search_marker);
                 gst.markeraction = 0;
                 var vs_marker = {};
-                vs_marker[key] = Drupal.getlocations.makeMarker(Drupal.getlocations_map[key], gst, slat, slon, 0, '', '', '', '', key);
+                vs_marker[key] = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], gst, slat, slon, 0, '', '', '', '', key);
                 // initial setting
                 if (gset.views_search_marker_toggle) {
                   if (gset.views_search_marker_toggle_active) {
@@ -158,19 +158,19 @@
                     vs_marker[key].setVisible(false);
                     viewssearchmarkertoggleState[key] = false;
                   }
-                  $("#getlocations_toggleSearchMarker_" + key).attr('disabled', false);
+                  $("#getlocations_toggleSearchMarker_" + key).prop('disabled', false);
                   // click on this
                   $("#getlocations_toggleSearchMarker_" + key).click( function() {
                     var label = '';
                     if (viewssearchmarkertoggleState[key]) {
                       vs_marker[key].setVisible(false);
                       viewssearchmarkertoggleState[key] = false;
-                      label = Drupal.t('Search marker On');
+                      label = Backdrop.t('Search marker On');
                     }
                     else {
                       vs_marker[key].setVisible(true);
                       viewssearchmarkertoggleState[key] = true;
-                      label = Drupal.t('Search marker Off');
+                      label = Backdrop.t('Search marker Off');
                     }
                     $(this).val(label);
                   });
@@ -195,7 +195,7 @@
                   if (op == 'dist') {
                     // radius circle
                     rShape[key] = new google.maps.Circle({
-                      map: Drupal.getlocations_map[key],
+                      map: Backdrop.getlocations_map[key],
                       strokeColor: gset.views_search_radshape_strokecolor,
                       strokeOpacity: gset.views_search_radshape_strokeopacity,
                       strokeWeight: gset.views_search_radshape_strokeweight,
@@ -208,14 +208,14 @@
                     rShape[key].setRadius(parseInt(distance_meters));
                     rShape[key].setCenter(point);
                     if (gset.pansetting == 1) {
-                      Drupal.getlocations.doBounds(Drupal.getlocations_map[key], lats[0], lngs[0], lats[1], lngs[1], true);
+                      Backdrop.getlocations.doBounds(Backdrop.getlocations_map[key], lats[0], lngs[0], lats[1], lngs[1], true);
                     }
                     else if (gset.pansetting == 2) {
-                      Drupal.getlocations.doBounds(Drupal.getlocations_map[key], lats[0], lngs[0], lats[1], lngs[1], false);
+                      Backdrop.getlocations.doBounds(Backdrop.getlocations_map[key], lats[0], lngs[0], lats[1], lngs[1], false);
                     }
                     else if (gset.pansetting == 3) {
                       if (slat && slon) {
-                        Drupal.getlocations_map[key].setCenter(point);
+                        Backdrop.getlocations_map[key].setCenter(point);
                       }
                     }
                     done = true;
@@ -223,7 +223,7 @@
                   else if (op == 'mbr') {
                     // rectangle
                     rShape[key] = new google.maps.Rectangle({
-                      map: Drupal.getlocations_map[key],
+                      map: Backdrop.getlocations_map[key],
                       strokeColor: gset.views_search_radshape_strokecolor,
                       strokeOpacity: gset.views_search_radshape_strokeopacity,
                       strokeWeight: gset.views_search_radshape_strokeweight,
@@ -249,19 +249,19 @@
                       rShape[key].setVisible(false);
                       viewssearchshapetoggleState[key] = false;
                     }
-                    $("#getlocations_toggleSearchArea_" + key).attr('disabled', false);
+                    $("#getlocations_toggleSearchArea_" + key).prop('disabled', false);
                     // click on this
                     $("#getlocations_toggleSearchArea_" + key).click( function() {
                       var label = '';
                       if (viewssearchshapetoggleState[key]) {
                         rShape[key].setVisible(false);
                         viewssearchshapetoggleState[key] = false;
-                        label = Drupal.t('Search area On');
+                        label = Backdrop.t('Search area On');
                       }
                       else {
                         rShape[key].setVisible(true);
                         viewssearchshapetoggleState[key] = true;
-                        label = Drupal.t('Search area Off');
+                        label = Backdrop.t('Search area Off');
                       }
                       $(this).val(label);
                     });
@@ -281,7 +281,7 @@
               }
               // views_search_center
               if (gset.views_search_center) {
-                Drupal.getlocations.doBounds(Drupal.getlocations_map[key], parseFloat(lats[0]), parseFloat(lngs[0]), parseFloat(lats[1]), parseFloat(lngs[1]), false);
+                Backdrop.getlocations.doBounds(Backdrop.getlocations_map[key], parseFloat(lats[0]), parseFloat(lngs[0]), parseFloat(lats[1]), parseFloat(lngs[1]), false);
               }
             } // end if slat && slon
           } // end is there really a map
@@ -291,10 +291,10 @@
       }
 
       // leaflet
-      if (typeof(Drupal.settings.getlocations_leaflet) !== 'undefined') {
-        var gsettings = Drupal.settings.getlocations_leaflet;
+      if (typeof(Backdrop.settings.getlocations_leaflet) !== 'undefined') {
+        var gsettings = Backdrop.settings.getlocations_leaflet;
         $(".getlocations_leaflet_canvas", context).once('getlocations-fields-views-search-marker-leaflet-processed', function(index, element) {
-          var elemID = $(element).attr('id');
+          var elemID = $(element).prop('id');
           var key = elemID.replace(/^getlocations_leaflet_canvas_/, '');
           // is there really a map?
           if ( $("#getlocations_leaflet_canvas_" + key).is('div') ) {
@@ -306,7 +306,7 @@
               if (! gset.map_settings.views_search_marker_toggle_active) {
                 leafletviewssearchmarkertoggleState[key] = false;
               }
-              $("#getlocations_leaflet_toggleSearchMarker_" + key).attr('disabled', true);
+              $("#getlocations_leaflet_toggleSearchMarker_" + key).prop('disabled', true);
             }
             // do some setup
             if (gset.map_settings.views_search_radshape_enable) {
@@ -315,7 +315,7 @@
               if (! gset.map_settings.views_search_radshape_toggle_active) {
                 leafletviewssearchshapetoggleState[key] = false;
               }
-              $("#getlocations_leaflet_toggleSearchArea_" + key).attr('disabled', true);
+              $("#getlocations_leaflet_toggleSearchArea_" + key).prop('disabled', true);
             }
             // views_search_marker and views_search_radshape_enable
             var slat = false;
@@ -329,17 +329,17 @@
             }
             if (slat && slon && distance_meters) {
               var latLng = L.latLng(parseFloat(slat), parseFloat(slon));
-              var lats = Drupal.getlocations.geo.earth_latitude_range(slat, slon, distance_meters);
-              var lngs = Drupal.getlocations.geo.earth_longitude_range(slat, slon, distance_meters);
+              var lats = Backdrop.getlocations.geo.earth_latitude_range(slat, slon, distance_meters);
+              var lngs = Backdrop.getlocations.geo.earth_longitude_range(slat, slon, distance_meters);
               var sw = L.latLng(parseFloat(lats[0]), parseFloat(lngs[0])), ne = L.latLng(parseFloat(lats[1]), parseFloat(lngs[1]));
               var searchLayer = L.layerGroup();
               // views_search_marker
               if (gset.map_settings.views_search_marker_enable) {
                 var icon = (gset.map_settings.views_search_marker_info ? gset.map_settings.views_search_marker_info : false);
-                var title = Drupal.t('Search Center');
+                var title = Backdrop.t('Search Center');
                 // make a leaflet marker gset.views_search_marker
                 var searchMarker = {};
-                searchMarker[key] = Drupal.getlocations_leaflet.makeMarker(gset.map_settings, slat, slon, '', '', 0, title , icon, false, 0, '', key);
+                searchMarker[key] = Backdrop.getlocations_leaflet.makeMarker(gset.map_settings, slat, slon, '', '', 0, title , icon, false, 0, '', key);
                 searchLayer.addLayer(searchMarker[key]);
                 // initial setting
                 if (gset.map_settings.views_search_marker_toggle) {
@@ -351,19 +351,19 @@
                     searchLayer.removeLayer(searchMarker[key]);
                     leafletviewssearchmarkertoggleState[key] = false;
                   }
-                  $("#getlocations_leaflet_toggleSearchMarker_" + key).attr('disabled', false);
+                  $("#getlocations_leaflet_toggleSearchMarker_" + key).prop('disabled', false);
                   // click on this
                   $("#getlocations_leaflet_toggleSearchMarker_" + key).click( function() {
                     var label = '';
                     if (leafletviewssearchmarkertoggleState[key]) {
                       searchLayer.removeLayer(searchMarker[key]);
                       leafletviewssearchmarkertoggleState[key] = false;
-                      label = Drupal.t('Search marker On');
+                      label = Backdrop.t('Search marker On');
                     }
                     else {
                       searchLayer.addLayer(searchMarker[key]);
                       leafletviewssearchmarkertoggleState[key] = true;
-                      label = Drupal.t('Search marker Off');
+                      label = Backdrop.t('Search marker Off');
                     }
                     $(this).val(label);
                   });
@@ -417,19 +417,19 @@
                       searchLayer.removeLayer(rShape[key]);
                       leafletviewssearchshapetoggleState[key] = false;
                     }
-                    $("#getlocations_leaflet_toggleSearchArea_" + key).attr('disabled', false);
+                    $("#getlocations_leaflet_toggleSearchArea_" + key).prop('disabled', false);
                     // click on this
                     $("#getlocations_leaflet_toggleSearchArea_" + key).click( function() {
                       var label = '';
                       if (leafletviewssearchshapetoggleState[key]) {
                         searchLayer.removeLayer(rShape[key]);
                         leafletviewssearchshapetoggleState[key] = false;
-                        label = Drupal.t('Search area On');
+                        label = Backdrop.t('Search area On');
                       }
                       else {
                         searchLayer.addLayer(rShape[key]);
                         leafletviewssearchshapetoggleState[key] = true;
-                        label = Drupal.t('Search area Off');
+                        label = Backdrop.t('Search area Off');
                       }
                       $(this).val(label);
                     });
@@ -449,12 +449,12 @@
               }
               // add to the map
               if (gset.map_settings.views_search_marker_enable || gset.map_settings.views_search_radshape_enable) {
-                Drupal.getlocations_leaflet_map[key].addLayer(searchLayer);
+                Backdrop.getlocations_leaflet_map[key].addLayer(searchLayer);
               }
               // views_search_center
               if (gset.map_settings.views_search_center) {
                 var bounds = L.latLngBounds(sw, ne).pad(0.1);
-                Drupal.getlocations_leaflet_map[key].fitBounds(bounds, {reset: true});
+                Backdrop.getlocations_leaflet_map[key].fitBounds(bounds, {reset: true});
               }
             } // end if slat && slon
           } // end is there really a map
@@ -463,13 +463,13 @@
       }
 
       // mapquest
-      if (typeof(Drupal.settings.getlocations_mapquest) !== 'undefined') {
+      if (typeof(Backdrop.settings.getlocations_mapquest) !== 'undefined') {
 
         MQA.withModule('shapes', function() {
 
-          var gsettings = Drupal.settings.getlocations_mapquest;
+          var gsettings = Backdrop.settings.getlocations_mapquest;
           $(".getlocations_mapquest_canvas", context).once('getlocations-fields-views-search-marker-mapquest-processed', function(index, element) {
-            var elemID = $(element).attr('id');
+            var elemID = $(element).prop('id');
             var key = elemID.replace(/^getlocations_mapquest_canvas_/, '');
             // is there really a map?
             if ( $("#getlocations_mapquest_canvas_" + key).is('div') ) {
@@ -481,7 +481,7 @@
                 if (! gset.map_settings.views_search_marker_toggle_active) {
                   mapquestviewssearchmarkertoggleState[key] = false;
                 }
-                $("#getlocations_mapquest_toggleSearchMarker_" + key).attr('disabled', true);
+                $("#getlocations_mapquest_toggleSearchMarker_" + key).prop('disabled', true);
               }
               // do some setup
               if (gset.map_settings.views_search_radshape_enable) {
@@ -490,7 +490,7 @@
                 if (! gset.map_settings.views_search_radshape_toggle_active) {
                   mapquestviewssearchshapetoggleState[key] = false;
                 }
-                $("#getlocations_mapquest_toggleSearchArea_" + key).attr('disabled', true);
+                $("#getlocations_mapquest_toggleSearchArea_" + key).prop('disabled', true);
               }
               // views_search_marker and views_search_radshape_enable
               var slat = false;
@@ -504,8 +504,8 @@
               }
               if (slat && slon && distance_meters) {
                 var latLng = new MQA.LatLng(parseFloat(slat), parseFloat(slon));
-                var lats = Drupal.getlocations.geo.earth_latitude_range(slat, slon, distance_meters);
-                var lngs = Drupal.getlocations.geo.earth_longitude_range(slat, slon, distance_meters);
+                var lats = Backdrop.getlocations.geo.earth_latitude_range(slat, slon, distance_meters);
+                var lngs = Backdrop.getlocations.geo.earth_longitude_range(slat, slon, distance_meters);
                 var sw = new MQA.LatLng(parseFloat(lats[0]), parseFloat(lngs[0])), ne = new MQA.LatLng(parseFloat(lats[1]), parseFloat(lngs[1]));
                 //var searchLayer = L.layerGroup();
 
@@ -513,13 +513,13 @@
                 if (gset.map_settings.views_search_marker_enable) {
                   var searchMarkerLayer = new MQA.ShapeCollection();
                   var icon = (gset.map_settings.views_search_marker_info ? gset.map_settings.views_search_marker_info : false);
-                  var title = Drupal.t('Search Center');
+                  var title = Backdrop.t('Search Center');
                   // make a leaflet marker gset.views_search_marker
                   var searchMarker = {};
-                  //searchMarker[key] = Drupal.getlocations_mapquest.makeMarker(gset.map_settings, slat, slon, '', '', 0, title , icon, false, 0, '', key);
-                  searchMarker[key] = Drupal.getlocations_mapquest.makeMarker(gset.map_settings, slat, slon, '', '', 0, title , icon, 0, '', key);
+                  //searchMarker[key] = Backdrop.getlocations_mapquest.makeMarker(gset.map_settings, slat, slon, '', '', 0, title , icon, false, 0, '', key);
+                  searchMarker[key] = Backdrop.getlocations_mapquest.makeMarker(gset.map_settings, slat, slon, '', '', 0, title , icon, 0, '', key);
                   searchMarkerLayer.add(searchMarker[key]);
-                  Drupal.getlocations_mapquest.map[key].addShapeCollection(searchMarkerLayer);
+                  Backdrop.getlocations_mapquest.map[key].addShapeCollection(searchMarkerLayer);
                   // initial setting
                   if (gset.map_settings.views_search_marker_toggle) {
                     if (gset.map_settings.views_search_marker_toggle_active) {
@@ -530,19 +530,19 @@
                       searchMarkerLayer.remove(searchMarker[key]);
                       mapquestviewssearchmarkertoggleState[key] = false;
                     }
-                    $("#getlocations_mapquest_toggleSearchMarker_" + key).attr('disabled', false);
+                    $("#getlocations_mapquest_toggleSearchMarker_" + key).prop('disabled', false);
                     // click on this
                     $("#getlocations_mapquest_toggleSearchMarker_" + key).click( function() {
                       var label = '';
                       if (mapquestviewssearchmarkertoggleState[key]) {
                         searchMarkerLayer.remove(searchMarker[key]);
                         mapquestviewssearchmarkertoggleState[key] = false;
-                        label = Drupal.t('Search marker On');
+                        label = Backdrop.t('Search marker On');
                       }
                       else {
                         searchMarkerLayer.add(searchMarker[key]);
                         mapquestviewssearchmarkertoggleState[key] = true;
-                        label = Drupal.t('Search marker Off');
+                        label = Backdrop.t('Search marker Off');
                       }
                       $(this).val(label);
                     });
@@ -578,7 +578,7 @@
                       rShape[key].className = 'mapquest_circle';
 
                       searchShapeLayer.add(rShape[key]);
-                      Drupal.getlocations_mapquest.map[key].addShapeCollection(searchShapeLayer);
+                      Backdrop.getlocations_mapquest.map[key].addShapeCollection(searchShapeLayer);
                       done = true;
                     }
                     else if (op == 'mbr') {
@@ -595,7 +595,7 @@
 
                       //rShape[key] = new MQA.RectLL(sw, ne);
                       searchShapeLayer.add(rShape[key]);
-                      Drupal.getlocations_mapquest.map[key].addShapeCollection(searchShapeLayer);
+                      Backdrop.getlocations_mapquest.map[key].addShapeCollection(searchShapeLayer);
                       done = true;
                     }
 
@@ -608,19 +608,19 @@
                         searchShapeLayer.remove(rShape[key]);
                         mapquestviewssearchshapetoggleState[key] = false;
                       }
-                      $("#getlocations_mapquest_toggleSearchArea_" + key).attr('disabled', false);
+                      $("#getlocations_mapquest_toggleSearchArea_" + key).prop('disabled', false);
                       // click on this
                       $("#getlocations_mapquest_toggleSearchArea_" + key).click( function() {
                         var label = '';
                         if (mapquestviewssearchshapetoggleState[key]) {
                           searchShapeLayer.remove(rShape[key]);
                           mapquestviewssearchshapetoggleState[key] = false;
-                          label = Drupal.t('Search area On');
+                          label = Backdrop.t('Search area On');
                         }
                         else {
                           searchShapeLayer.add(rShape[key]);
                           mapquestviewssearchshapetoggleState[key] = true;
-                          label = Drupal.t('Search area Off');
+                          label = Backdrop.t('Search area Off');
                         }
                         $(this).val(label);
                       });
@@ -640,17 +640,17 @@
                 }
                 // add to the map
                 //if (gset.map_settings.views_search_marker_enable || gset.map_settings.views_search_radshape_enable) {
-                //  Drupal.getlocations_mapquest.map[key].addShape(searchLayer);
+                //  Backdrop.getlocations_mapquest.map[key].addShape(searchLayer);
                 //}
                 // views_search_center
                 if (gset.map_settings.views_search_center) {
                   //var bounds = L.latLngBounds(sw, ne).pad(0.1);
-                  //Drupal.getlocations_mapquest.map[key].fitBounds(bounds, {reset: true});
+                  //Backdrop.getlocations_mapquest.map[key].fitBounds(bounds, {reset: true});
                   var rect = new MQA.RectLL(ne, sw);
-                  Drupal.getlocations_mapquest.map[key].zoomToRect(rect, false, 1, 20);
+                  Backdrop.getlocations_mapquest.map[key].zoomToRect(rect, false, 1, 20);
                 }
 
-                //Drupal.getlocations_mapquest.map[key].addShapeCollection(searchLayer);
+                //Backdrop.getlocations_mapquest.map[key].addShapeCollection(searchLayer);
 
               } // end if slat && slon
             } // end is there really a map

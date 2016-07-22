@@ -2,7 +2,7 @@
 /**
  * @file
  * getlocations_search_places.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations search_places support
@@ -13,17 +13,17 @@
   var getlocations_sp_markers = [];
   var getlocations_places_service;
 
-  Drupal.getlocations_search_places = function(key) {
-    getlocations_places_service = new google.maps.places.PlacesService(Drupal.getlocations_map[key]);
-    var sp_switch = Drupal.settings.getlocations[key].search_places_dd;
+  Backdrop.getlocations_search_places = function(key) {
+    getlocations_places_service = new google.maps.places.PlacesService(Backdrop.getlocations_map[key]);
+    var sp_switch = Backdrop.settings.getlocations[key].search_places_dd;
     if (sp_switch) {
       // dropdown
       $("#search_places_go_btn_" + key).click( function() {
         var t = $("#search_places_select_" + key).val();
-        var b = Drupal.getlocations_map[key].getBounds();
+        var b = Backdrop.getlocations_map[key].getBounds();
         var s = {bounds:b, types:[t]};
         // clear out existing markers
-        Drupal.getlocations_search_places_clearmarkers(key, false);
+        Backdrop.getlocations_search_places_clearmarkers(key, false);
         getlocations_places_service.search(s, function(places, status) {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
             getlocations_sp_do_places(places, key);
@@ -35,10 +35,10 @@
     else {
       // textbox
       var getlocations_search_places_Box = new google.maps.places.SearchBox(document.getElementById('search_places_input_' + key));
-      getlocations_search_places_Box.bindTo('bounds', Drupal.getlocations_map[key]);
+      getlocations_search_places_Box.bindTo('bounds', Backdrop.getlocations_map[key]);
       google.maps.event.addListener(getlocations_search_places_Box, 'places_changed', function() {
         // clear out existing markers
-        Drupal.getlocations_search_places_clearmarkers(key, false);
+        Backdrop.getlocations_search_places_clearmarkers(key, false);
         var places = getlocations_search_places_Box.getPlaces();
         getlocations_sp_do_places(places, key);
       });
@@ -46,7 +46,7 @@
   };
 
   function getlocations_do_sp_bubble(marker, p, key) {
-    var ver = Drupal.getlocations.msiedetect();
+    var ver = Backdrop.getlocations.msiedetect();
     var pushit = false;
     if ( (ver == '') || (ver && ver > 8)) {
       pushit = true;
@@ -56,28 +56,28 @@
       main += '<span class="sp_address">' + p.formatted_address + '</span><br />';
     }
     if (p.formatted_phone_number !== undefined) {
-      main += '<span class="sp_phone">' + Drupal.t('Phone') + ': '  + p.formatted_phone_number + '</span><br />';
+      main += '<span class="sp_phone">' + Backdrop.t('Phone') + ': '  + p.formatted_phone_number + '</span><br />';
     }
     else if (p.international_phone_number !== undefined) {
-      main += '<span class="sp_phone">' + Drupal.t('Int. Phone') + ': ' + p.international_phone_number + '</span><br />';
+      main += '<span class="sp_phone">' + Backdrop.t('Int. Phone') + ': ' + p.international_phone_number + '</span><br />';
     }
     if (p.website !== undefined) {
-      main += '<span class="sp_web">' + Drupal.t('Web') + ': ' + '<a href="' + p.website + '" target="_blank" >' + p.name + '</a></span><br />';
+      main += '<span class="sp_web">' + Backdrop.t('Web') + ': ' + '<a href="' + p.website + '" target="_blank" >' + p.name + '</a></span><br />';
     }
     if (p.url !== undefined) {
-      main += '<span class="sp_web">' + Drupal.t('Google') + ': ' + '<a href="' + p.url + '" target="_blank" >' + p.name + '</a></span><br />';
+      main += '<span class="sp_web">' + Backdrop.t('Google') + ': ' + '<a href="' + p.url + '" target="_blank" >' + p.name + '</a></span><br />';
     }
     // link to Getdirections or google
     if (p.geometry !== undefined) {
       var scheme = 'http';
-      if (Drupal.settings.getlocations[key].is_https) {
+      if (Backdrop.settings.getlocations[key].is_https) {
         scheme = 'https';
       }
-      if (Drupal.settings.getlocations[key].getdirections_enabled) {
-        main += '<span class="sp_web"><a href="' + Drupal.settings.basePath + 'getdirections/latlon/to/' + p.geometry.location.lat() + ',' + p.geometry.location.lng() + '/' + p.name + '" target="_blank">' + Drupal.t('Directions') + '</a></span><br />';
+      if (Backdrop.settings.getlocations[key].getdirections_enabled) {
+        main += '<span class="sp_web"><a href="' + Backdrop.settings.basePath + 'getdirections/latlon/to/' + p.geometry.location.lat() + ',' + p.geometry.location.lng() + '/' + p.name + '" target="_blank">' + Backdrop.t('Directions') + '</a></span><br />';
       }
       else {
-        main += '<span class="sp_web"><a href="' + scheme + '://maps.google.com/maps?f=d&ie=UTF8&daddr=' + p.name + '@' + p.geometry.location.lat() + ',' + p.geometry.location.lng() + '"  target="_blank">' + Drupal.t('Google Getdirections')  + '</a></span><br />';
+        main += '<span class="sp_web"><a href="' + scheme + '://maps.google.com/maps?f=d&ie=UTF8&daddr=' + p.name + '@' + p.geometry.location.lat() + ',' + p.geometry.location.lng() + '"  target="_blank">' + Backdrop.t('Google Getdirections')  + '</a></span><br />';
       }
     }
     main += '</p>';
@@ -125,11 +125,11 @@
     google.maps.event.addListener(marker, 'click', function() {
       // close any previous instances
       if (pushit) {
-        for (var i in Drupal.getlocations_settings[key].infoBubbles) {
-          Drupal.getlocations_settings[key].infoBubbles[i].close();
+        for (var i in Backdrop.getlocations_settings[key].infoBubbles) {
+          Backdrop.getlocations_settings[key].infoBubbles[i].close();
         }
       }
-      if (Drupal.getlocations_settings[key].markeraction == 2) {
+      if (Backdrop.getlocations_settings[key].markeraction == 2) {
         if (typeof(infoBubbleOptions) == 'object') {
           var infoBubbleOpts = infoBubbleOptions;
         }
@@ -149,9 +149,9 @@
         infoWindowOpts.content = sp_content;
         var sp_iw = new google.maps.InfoWindow(infoWindowOpts);
       }
-      sp_iw.open(Drupal.getlocations_map[key], marker);
+      sp_iw.open(Backdrop.getlocations_map[key], marker);
       if (pushit) {
-        Drupal.getlocations_settings[key].infoBubbles.push(sp_iw);
+        Backdrop.getlocations_settings[key].infoBubbles.push(sp_iw);
       }
     });
   }
@@ -180,7 +180,7 @@
         scaledSize: new google.maps.Size(25, 25)
       };
       var sp_marker = new google.maps.Marker({
-        map: Drupal.getlocations_map[key],
+        map: Backdrop.getlocations_map[key],
         icon: image,
         title: place.name,
         position: place.geometry.location
@@ -201,7 +201,7 @@
     }
   }
 
-  Drupal.getlocations_search_places_clearmarkers = function(key, state) {
+  Backdrop.getlocations_search_places_clearmarkers = function(key, state) {
     // clear out existing markers
     for (var i = 0; i < getlocations_sp_markers.length; i++) {
       sp_marker = getlocations_sp_markers[i];
@@ -209,10 +209,10 @@
     }
     getlocations_sp_markers = [];
 
-    var ver = Drupal.getlocations.msiedetect();
+    var ver = Backdrop.getlocations.msiedetect();
     if ( (ver == '') || (ver && ver > 8)) {
-      for (var i in Drupal.getlocations_settings[key].infoBubbles) {
-        Drupal.getlocations_settings[key].infoBubbles[i].close();
+      for (var i in Backdrop.getlocations_settings[key].infoBubbles) {
+        Backdrop.getlocations_settings[key].infoBubbles[i].close();
       }
     }
 

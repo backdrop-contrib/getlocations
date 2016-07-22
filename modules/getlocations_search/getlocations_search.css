@@ -1,7 +1,7 @@
 /**
  * @file
  * getlocations_search.css
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * css for getlocations_search.
@@ -57,4 +57,8 @@
 
 .results-value {
 
+}
+
+#getlocations_search_wrapper {
+  margin-bottom: 8px;
 }

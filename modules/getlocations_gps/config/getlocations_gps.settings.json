@@ -1,0 +1,15 @@
+{
+  "_config_name":"getlocations_gps.settings",
+  "settings" : {
+    "gps_button":0,
+    "gps_button_label":"Show current position",
+    "gps_marker_title":"Your current position",
+    "gps_marker":"",
+    "gps_bubble":0,
+    "gps_geocode":0,
+    "gps_center":0,
+    "gps_type":0,
+    "gps_zoom":-1,
+    "gps_latlon_path": "getlocations_gps\/latlon"
+  }
+}

@@ -1,35 +1,35 @@
 /**
  * @file
  * getlocations_fields_preview.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
- * Javascript functions for getlocations module for Drupal 7
+ * Javascript functions for getlocations module for Backdrop 7
  * Manages the preview map in admin/config/getlocations
  * this is for googlemaps API version 3
 */
 
 (function ($) {
-  Drupal.behaviors.getlocations_fields_preview = {
+  Backdrop.behaviors.getlocations_fields_preview = {
     attach: function () {
 
       // first find the right map
-      $.each(Drupal.settings.getlocations, function (key, settings) {
+      $.each(Backdrop.settings.getlocations, function (key, settings) {
 
         // an event handler on map zoom
-        google.maps.event.addListener(Drupal.getlocations_map[key], 'zoom_changed', function() {
-          $("#edit-field-settings-zoom").val(Drupal.getlocations_map[key].getZoom());
+        google.maps.event.addListener(Backdrop.getlocations_map[key], 'zoom_changed', function() {
+          $("#edit-field-settings-zoom").val(Backdrop.getlocations_map[key].getZoom());
         });
 
         // an event handler on center changed
-        google.maps.event.addListener(Drupal.getlocations_map[key], 'center_changed', function() {
-          var ll = Drupal.getlocations_map[key].getCenter();
+        google.maps.event.addListener(Backdrop.getlocations_map[key], 'center_changed', function() {
+          var ll = Backdrop.getlocations_map[key].getCenter();
           $("#edit-field-settings-latlong").val(ll.lat() + ',' + ll.lng());
         });
 
         // an event handler on maptypeid_changed
-        google.maps.event.addListener(Drupal.getlocations_map[key], 'maptypeid_changed', function() {
-          var maptype = Drupal.getlocations_map[key].getMapTypeId();
+        google.maps.event.addListener(Backdrop.getlocations_map[key], 'maptypeid_changed', function() {
+          var maptype = Backdrop.getlocations_map[key].getMapTypeId();
           if (maptype == google.maps.MapTypeId.ROADMAP)        { maptype = 'Map'; }
           else if (maptype == google.maps.MapTypeId.SATELLITE) { maptype = 'Satellite'; }
           else if (maptype == google.maps.MapTypeId.HYBRID)    { maptype = 'Hybrid'; }

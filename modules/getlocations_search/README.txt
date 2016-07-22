@@ -1,9 +1,7 @@
 Getlocations Search provides a search facility that will show nearby
 locations from Getlocation Fields enabled nodes, users, terms or comments.
 
-It also has support for Geofield and Geolocation
-
-It can however be used without any of the above modules enabled, in which case
+It can however be used without Getlocation Fields enabled, in which case
 it will just do searches and show a map of the area found.
 
 Enable Getlocations Search under Modules, then go to

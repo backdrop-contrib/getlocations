@@ -1,0 +1,229 @@
+{
+  "_config_name": "getlocations_leaflet.map_providers",
+  "Getlocations OSM": {
+    "label": "Getlocations OSM",
+    "description": "Getlocations Leaflet maps.",
+    "map_opts": {
+      "dragging": 1,
+      "touchZoom": 1,
+      "scrollWheelZoom": 1,
+      "doubleClickZoom": 1,
+      "boxZoom": 1,
+      "tap": 1,
+      "tapTolerance": 15,
+      "zoomControl": 1,
+      "attributionControl": 1,
+      "trackResize": 1,
+      "fadeAnimation": 1,
+      "zoomAnimation": 1,
+      "closePopupOnClick": 1,
+      "bounceAtZoomLimits": 1,
+      "layerControl": 1,
+      "minZoom": 0,
+      "maxZoom": 18
+    },
+    "map_settings": {
+      "zoomcontrolposition": "",
+      "attributioncontrolposition": "",
+      "layercontrolposition": "",
+      "scaleControl": 0,
+      "scalecontrolposition": "",
+      "scalecontrolunits": "",
+      "markeraction": ""
+    },
+    "map_layers": {
+      "OpenStreetMap.Mapnik": {
+        "label": "OpenStreetMap Default",
+        "type": "base"
+      },
+      "OpenStreetMap.BlackAndWhite": {
+        "label": "OpenStreetMap Black and White",
+        "type": "base"
+      },
+      "OpenStreetMap.DE": {
+        "label": "OpenStreetMap German Style",
+        "type": "base"
+      },
+      "OpenStreetMap.HOT": {
+        "label": "OpenStreetMap H.O.T",
+        "type": "base"
+      },
+      "Thunderforest.OpenCycleMap": {
+        "label": "Thunderforest OpenCycleMap",
+        "type": "base"
+      },
+      "Thunderforest.Transport": {
+        "label": "Thunderforest Transport",
+        "type": "base"
+      },
+      "Thunderforest.Landscape": {
+        "label": "Thunderforest Landscape",
+        "type": "base"
+      },
+      "Thunderforest.Outdoors": {
+        "label": "Thunderforest Outdoors",
+        "type": "base"
+      },
+      "MapQuestOpen.OSM": {
+        "label": "MapQuestOpen OSM",
+        "type": "base"
+      },
+      "MapQuestOpen.Aerial": {
+        "label": "MapQuestOpen Aerial",
+        "type": "base"
+      },
+      "Stamen.Toner": {
+        "label": "Stamen Toner",
+        "type": "base"
+      },
+      "Stamen.TonerBackground": {
+        "label": "Stamen Toner Background",
+        "type": "base"
+      },
+      "Stamen.TonerHybrid": {
+        "label": "Stamen Toner Hybrid",
+        "type": "base"
+      },
+      "Stamen.TonerLines": {
+        "label": "Stamen Toner Lines",
+        "type": "base"
+      },
+      "Stamen.TonerLabels": {
+        "label": "Stamen Toner Labels",
+        "type": "base"
+      },
+      "Stamen.TonerLite": {
+        "label": "Stamen Toner Lite",
+        "type": "base"
+      },
+      "Stamen.Terrain": {
+        "label": "Stamen Terrain",
+        "type": "base"
+      },
+      "Stamen.TerrainBackground": {
+        "label": "Stamen Terrain Background",
+        "type": "base"
+      },
+      "Stamen.Watercolor": {
+        "label": "Stamen Watercolor",
+        "type": "base"
+      },
+      "Esri.WorldStreetMap": {
+        "label": "Esri WorldStreetMap",
+        "type": "base"
+      },
+      "Esri.DeLorme": {
+        "label": "Esri DeLorme",
+        "type": "base"
+      },
+      "Esri.WorldTopoMap": {
+        "label": "Esri WorldTopoMap",
+        "type": "base"
+      },
+      "Esri.WorldImagery": {
+        "label": "Esri WorldImagery",
+        "type": "base"
+      },
+      "Esri.WorldTerrain": {
+        "label": "Esri WorldTerrain",
+        "type": "base"
+      },
+      "Esri.WorldShadedRelief": {
+        "label": "Esri WorldShadedRelief",
+        "type": "base"
+      },
+      "Esri.WorldPhysical": {
+        "label": "Esri WorldPhysical",
+        "type": "base"
+      },
+      "Esri.OceanBasemap": {
+        "label": "Esri OceanBasemap",
+        "type": "base"
+      },
+      "Esri.NatGeoWorldMap": {
+        "label": "Esri NatGeoWorldMap",
+        "type": "base"
+      },
+      "Esri.WorldGrayCanvas": {
+        "label": "Esri WorldGrayCanvas",
+        "type": "base"
+      },
+      "Acetate.all": {
+        "label": "Acetate all",
+        "type": "base"
+      },
+      "Acetate.basemap": {
+        "label": "Acetate basemap",
+        "type": "base"
+      },
+      "Acetate.terrain": {
+        "label": "Acetate terrain",
+        "type": "base"
+      },
+      "Acetate.foreground": {
+        "label": "Acetate foreground",
+        "type": "base"
+      },
+      "Acetate.roads": {
+        "label": "Acetate roads",
+        "type": "base"
+      },
+      "Acetate.labels": {
+        "label": "Acetate labels",
+        "type": "base"
+      },
+      "Acetate.hillshading": {
+        "label": "Acetate hillshading",
+        "type": "base"
+      },
+      "OpenSeaMap": {
+        "label": "OpenSeaMap Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Clouds": {
+        "label": "OpenWeatherMap Clouds Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.CloudsClassic": {
+        "label": "OpenWeatherMap Clouds Classic Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Precipitation": {
+        "label": "OpenWeatherMap Precipitation Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.PrecipitationClassic": {
+        "label": "OpenWeatherMap Precipitation Classic Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Rain": {
+        "label": "OpenWeatherMap Rain Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.RainClassic": {
+        "label": "OpenWeatherMap Rain Classic Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Pressure": {
+        "label": "OpenWeatherMap Pressure Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.PressureContour": {
+        "label": "OpenWeatherMap PressureContour Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Wind": {
+        "label": "OpenWeatherMap Wind Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Temperature": {
+        "label": "OpenWeatherMap Temperature Overlay",
+        "type": "overlay"
+      },
+      "OpenWeatherMap.Snow": {
+        "label": "OpenWeatherMap Snow Overlay",
+        "type": "overlay"
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 /**
  * @file
  * getlocations_views.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations module in views using custom-content in infobubble/infowindow
@@ -10,13 +10,13 @@
 */
 (function ($) {
 
-  Drupal.behaviors.getlocations_views = {
+  Backdrop.behaviors.getlocations_views = {
     attach: function() {
 
       if($('#edit-style-options-markeraction').val() == 1 || $('#edit-style-options-markeraction').val() == 2) {
         $('#wrap-custom-content-enable').show();
 
-          if($('#edit-style-options-custom-content-enable').attr('checked')) {
+          if($('#edit-style-options-custom-content-enable').prop('checked')) {
             $('#wrap-custom-content-source').show();
           }
           else {
@@ -32,7 +32,7 @@
         if($(this).val() == 1 || $(this).val() == 2) {
           $('#wrap-custom-content-enable').show();
 
-          if($('#edit-style-options-custom-content-enable').attr('checked')) {
+          if($('#edit-style-options-custom-content-enable').prop('checked')) {
             $('#wrap-custom-content-source').show();
           }
           else {
@@ -47,7 +47,7 @@
 
       $("#edit-style-options-custom-content-enable").change(function() {
         if($('#edit-style-options-markeraction').val() == 1 || $('#edit-style-options-markeraction').val() == 2) {
-            if($(this).attr('checked')) {
+            if($(this).prop('checked')) {
               $('#wrap-custom-content-source').show();
             }
             else {
@@ -57,14 +57,14 @@
       });
 
       if ($("#edit-style-options-trafficinfo").is('input')) {
-        if ($("#edit-style-options-trafficinfo").attr('checked')) {
+        if ($("#edit-style-options-trafficinfo").prop('checked')) {
           $("#wrap-getlocations-trafficinfo").show();
         }
         else {
           $("#wrap-getlocations-trafficinfo").hide();
         }
         $("#edit-style-options-trafficinfo").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-trafficinfo").show();
           }
           else {
@@ -74,14 +74,14 @@
       }
 
       if ($("#edit-style-options-bicycleinfo").is('input')) {
-        if ($("#edit-style-options-bicycleinfo").attr('checked')) {
+        if ($("#edit-style-options-bicycleinfo").prop('checked')) {
           $("#wrap-getlocations-bicycleinfo").show();
         }
         else {
           $("#wrap-getlocations-bicycleinfo").hide();
         }
         $("#edit-style-options-bicycleinfo").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-bicycleinfo").show();
           }
           else {
@@ -91,14 +91,14 @@
       }
 
       if ($("#edit-style-options-transitinfo").is('input')) {
-        if ($("#edit-style-options-transitinfo").attr('checked')) {
+        if ($("#edit-style-options-transitinfo").prop('checked')) {
           $("#wrap-getlocations-transitinfo").show();
         }
         else {
           $("#wrap-getlocations-transitinfo").hide();
         }
         $("#edit-style-options-transitinfo").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-transitinfo").show();
           }
           else {
@@ -107,14 +107,14 @@
         });
       }
 
-      if ($("#edit-style-options-polygons-enable").attr('checked')) {
+      if ($("#edit-style-options-polygons-enable").prop('checked')) {
         $("#wrap-getlocations-polygons").show();
       }
       else {
         $("#wrap-getlocations-polygons").hide();
       }
       $("#edit-style-options-polygons-enable").change(function() {
-        if ($(this).attr('checked')) {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-polygons").show();
         }
         else {
@@ -122,14 +122,14 @@
         }
       });
 
-      if ($("#edit-style-options-rectangles-enable").attr('checked')) {
+      if ($("#edit-style-options-rectangles-enable").prop('checked')) {
         $("#wrap-getlocations-rectangles").show();
       }
       else {
         $("#wrap-getlocations-rectangles").hide();
       }
       $("#edit-style-options-rectangles-enable").change(function() {
-        if ($(this).attr('checked')) {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-rectangles").show();
         }
         else {
@@ -137,14 +137,14 @@
         }
       });
 
-      if ($("#edit-style-options-circles-enable").attr('checked')) {
+      if ($("#edit-style-options-circles-enable").prop('checked')) {
         $("#wrap-getlocations-circles").show();
       }
       else {
         $("#wrap-getlocations-circles").hide();
       }
       $("#edit-style-options-circles-enable").change(function() {
-        if ($(this).attr('checked')) {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-circles").show();
         }
         else {
@@ -152,14 +152,14 @@
         }
       });
 
-      if ($("#edit-style-options-polylines-enable").attr('checked')) {
+      if ($("#edit-style-options-polylines-enable").prop('checked')) {
         $("#wrap-getlocations-polylines").show();
       }
       else {
         $("#wrap-getlocations-polylines").hide();
       }
       $("#edit-style-options-polylines-enable").change(function() {
-        if ($(this).attr('checked')) {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-polylines").show();
         }
         else {
@@ -168,14 +168,14 @@
       });
 
       // search_places
-      if ($("#edit-style-options-search-places").attr('checked')) {
+      if ($("#edit-style-options-search-places").prop('checked')) {
         $("#wrap-getlocations-search-places").show();
       }
       else {
         $("#wrap-getlocations-search-places").hide();
       }
       $("#edit-style-options-search-places").change(function() {
-        if ($(this).attr('checked')) {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-search-places").show();
         }
         else {
@@ -212,14 +212,14 @@
       });
 
       // geojson
-      if ($("#edit-style-options-geojson-enable").attr('checked')) {
+      if ($("#edit-style-options-geojson-enable").prop('checked')) {
         $("#wrap-getlocations-geojson-enable").show();
       }
       else {
         $("#wrap-getlocations-geojson-enable").hide();
       }
       $("#edit-style-options-geojson-enable").change(function() {
-        if ($(this).attr('checked')) {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-geojson-enable").show();
         }
         else {
@@ -229,14 +229,14 @@
 
       // markermangers
       if ( $("#edit-style-options-usemarkermanager").is('input')) {
-        if ($("#edit-style-options-usemarkermanager").attr('checked')) {
+        if ($("#edit-style-options-usemarkermanager").prop('checked')) {
           $("#wrap-usemarkermanager").show();
         }
         else {
           $("#wrap-usemarkermanager").hide();
         }
         $("#edit-style-options-usemarkermanager").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-usemarkermanager").show();
           }
           else {
@@ -246,14 +246,14 @@
       }
 
       if ( $("#edit-style-options-useclustermanager").is('input')) {
-        if ($("#edit-style-options-useclustermanager").attr('checked')) {
+        if ($("#edit-style-options-useclustermanager").prop('checked')) {
           $("#wrap-useclustermanager").show();
         }
         else {
           $("#wrap-useclustermanager").hide();
         }
         $("#edit-style-options-useclustermanager").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-useclustermanager").show();
           }
           else {
@@ -280,14 +280,14 @@
       }
 
       if ($("#edit-style-options-pancontrol").is('input')) {
-        if ($("#edit-style-options-pancontrol").attr('checked')) {
+        if ($("#edit-style-options-pancontrol").prop('checked')) {
           $("#wrap-getlocations-pancontrol").show();
         }
         else {
           $("#wrap-getlocations-pancontrol").hide();
         }
         $("#edit-style-options-pancontrol").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-pancontrol").show();
           }
           else {
@@ -314,14 +314,14 @@
       }
 
       if ($("#edit-style-options-scale").is('input')) {
-        if ($("#edit-style-options-scale").attr('checked')) {
+        if ($("#edit-style-options-scale").prop('checked')) {
           $("#wrap-getlocations-scale").show();
         }
         else {
           $("#wrap-getlocations-scale").hide();
         }
         $("#edit-style-options-scale").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-scale").show();
           }
           else {
@@ -331,14 +331,14 @@
       }
 
       if ($("#edit-style-options-overview").is('input')) {
-        if ($("#edit-style-options-overview").attr('checked')) {
+        if ($("#edit-style-options-overview").prop('checked')) {
           $("#wrap-getlocations-overview").show();
         }
         else {
           $("#wrap-getlocations-overview").hide();
         }
         $("#edit-style-options-overview").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-overview").show();
           }
           else {
@@ -348,14 +348,14 @@
       }
 
       if ($("#edit-style-options-sv-show").is('input')) {
-        if ($("#edit-style-options-sv-show").attr('checked')) {
+        if ($("#edit-style-options-sv-show").prop('checked')) {
           $("#wrap-getlocations-sv-show").show();
         }
         else {
           $("#wrap-getlocations-sv-show").hide();
         }
         $("#edit-style-options-sv-show").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-sv-show").show();
           }
           else {
@@ -365,14 +365,14 @@
       }
 
       if ($("#edit-style-options-fullscreen").is('input')) {
-        if ($("#edit-style-options-fullscreen").attr('checked')) {
+        if ($("#edit-style-options-fullscreen").prop('checked')) {
           $("#wrap-getlocations-fs-show").show();
         }
         else {
           $("#wrap-getlocations-fs-show").hide();
         }
         $("#edit-style-options-fullscreen").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-fs-show").show();
           }
           else {
@@ -382,14 +382,14 @@
       }
 
       if ($("#edit-style-options-highlight-enable").is('input')) {
-        if ($("#edit-style-options-highlight-enable").attr('checked')) {
+        if ($("#edit-style-options-highlight-enable").prop('checked')) {
           $("#wrap-getlocations-highlight").show();
         }
         else {
           $("#wrap-getlocations-highlight").hide();
         }
         $("#edit-style-options-highlight-enable").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-highlight").show();
           }
           else {
@@ -400,14 +400,14 @@
 
       // search marker
       if ($("#edit-style-options-views-search-marker-enable").is('input')) {
-        if ($("#edit-style-options-views-search-marker-enable").attr('checked')) {
+        if ($("#edit-style-options-views-search-marker-enable").prop('checked')) {
           $("#wrap-getlocations-views-search-marker").show();
         }
         else {
           $("#wrap-getlocations-views-search-marker").hide();
         }
         $("#edit-style-options-views-search-marker-enable").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-views-search-marker").show();
           }
           else {
@@ -418,14 +418,14 @@
 
       // search area shape
       if ($("#edit-style-options-views-search-radshape-enable").is('input')) {
-        if ($("#edit-style-options-views-search-radshape-enable").attr('checked')) {
+        if ($("#edit-style-options-views-search-radshape-enable").prop('checked')) {
           $("#wrap-getlocations-views-search-radshape").show();
         }
         else {
           $("#wrap-getlocations-views-search-radshape").hide();
         }
         $("#edit-style-options-views-search-radshape-enable").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-views-search-radshape").show();
           }
           else {
@@ -436,14 +436,14 @@
 
       //edit-style-options-show-maplinks-viewport
       if ($("#edit-style-options-show-maplinks").is('input')) {
-        if ($("#edit-style-options-show-maplinks").attr('checked')) {
+        if ($("#edit-style-options-show-maplinks").prop('checked')) {
           $("#wrap-getlocations-maplinks").show();
         }
         else {
           $("#wrap-getlocations-maplinks").hide();
         }
         $("#edit-style-options-show-maplinks").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-maplinks").show();
           }
           else {
@@ -454,14 +454,14 @@
 
       // #edit-style-options-what3words-enable
       if ($("#edit-style-options-what3words-enable").is('input')) {
-        if ($("#edit-style-options-what3words-enable").attr('checked')) {
+        if ($("#edit-style-options-what3words-enable").prop('checked')) {
           $("#wrap-getlocations-what3words").show();
         }
         else {
           $("#wrap-getlocations-what3words").hide();
         }
         $("#edit-style-options-what3words-enable").change(function() {
-          if ($(this).attr('checked')) {
+          if ($(this).prop('checked')) {
             $("#wrap-getlocations-what3words").show();
           }
           else {

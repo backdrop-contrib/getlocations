@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_leaflet.markerinfo.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Provides Leaflet Maps integration for Getlocations.
@@ -23,7 +23,7 @@ function _getlocations_leaflet_get_icondata() {
   foreach ($markerdirs AS $markerdir) {
     $inifiles = file_scan_directory($markerdir, '/.*\.ini$/');
     foreach ($inifiles as $file) {
-      $path = drupal_substr($file->uri, 0, -drupal_strlen($file->filename));
+      $path = backdrop_substr($file->uri, 0, -backdrop_strlen($file->filename));
       if (!isset($inis[$path])) {
         $inis[$path] = array();
       }

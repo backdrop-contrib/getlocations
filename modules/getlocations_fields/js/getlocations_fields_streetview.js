@@ -1,22 +1,22 @@
 /**
  * @file
  * getlocations_fields_streetview.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson http://backdrop.org/user/52366
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations_fields module
  * jquery stuff
 */
 (function ($) {
-  Drupal.behaviors.getlocations_fields_streetview = {
+  Backdrop.behaviors.getlocations_fields_streetview = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_fields_streetview === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_fields_streetview === 'undefined') {
         return;
       }
 
-      $.each(Drupal.settings.getlocations_fields_streetview, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_fields_streetview, function (key, settings) {
 
         // functions
         function FullScreenControl(fsd) {
@@ -30,7 +30,7 @@
           fsdiv.style.borderWidth = "1px";
           fsdiv.style.cursor = "pointer";
           fsdiv.style.textAlign = "center";
-          fsdiv.title = Drupal.t('Full screen');
+          fsdiv.title = Backdrop.t('Full screen');
           fsdiv.innerHTML = '<img id="svbtnFullScreen" src="' + js_path + 'images/fs-map-full.png"/>';
           fsd.appendChild(fsdiv);
           google.maps.event.addDomListener(fsdiv, "click", function() {
@@ -42,15 +42,15 @@
           $("#getlocations_streetview_wrapper_" + key).toggleClass("fullscreen");
           $("html,body").toggleClass("svfullscreen-body-" + key);
           $(document).scrollTop(0);
-          google.maps.event.trigger(Drupal.getlocations_pano[key], "resize");
+          google.maps.event.trigger(Backdrop.getlocations_pano[key], "resize");
           setTimeout( function() {
             if($("#getlocations_streetview_wrapper_" + key).hasClass("fullscreen")) {
               $("#svbtnFullScreen").attr("src", js_path + 'images/fs-map-normal.png');
-              fsdiv.title = Drupal.t('Normal screen');
+              fsdiv.title = Backdrop.t('Normal screen');
             }
             else {
               $("#svbtnFullScreen").attr("src", js_path + 'images/fs-map-full.png');
-              fsdiv.title = Drupal.t('Full screen');
+              fsdiv.title = Backdrop.t('Full screen');
             }
           },200);
         }
@@ -170,7 +170,7 @@
             popt.clickToGo = false;
           }
 
-          Drupal.getlocations_pano[key] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_streetview_canvas_" + key), popt);
+          Backdrop.getlocations_pano[key] = new google.maps.StreetViewPanorama(document.getElementById("getlocations_streetview_canvas_" + key), popt);
 
           // fullscreen
           if (fullscreen) {
@@ -187,7 +187,7 @@
             var fsdoc = document.createElement("DIV");
             var fs = new FullScreenControl(fsdoc);
             fsdoc.index = 0;
-            Drupal.getlocations_pano[key].controls[google.maps.ControlPosition.TOP_RIGHT].setAt(0, fsdoc);
+            Backdrop.getlocations_pano[key].controls[google.maps.ControlPosition.TOP_RIGHT].setAt(0, fsdoc);
           }
 
         } // end is div

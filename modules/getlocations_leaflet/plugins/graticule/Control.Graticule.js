@@ -1,5 +1,5 @@
 (function ($) {
-  Drupal.behaviors.graticule = {
+  Backdrop.behaviors.graticule = {
     attach: function() {
 
       L.Control.Graticule = L.Control.extend({

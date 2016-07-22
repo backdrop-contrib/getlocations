@@ -1,8 +1,0 @@
-name = GetLocations Mapbox
-description = "Provides Mapbox Maps integration for Getlocations."
-core = 7.x
-php = 5
-package = "Location"
-dependencies[] = getlocations_leaflet
-
-

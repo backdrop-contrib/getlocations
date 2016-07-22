@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields.functions.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Supplies getlocations fields functions.
@@ -366,7 +366,7 @@ function getlocations_fields_element_cid_loc_field($default, $options, $ctools=T
  */
 function getlocations_fields_element_weight($title, $default, $description='') {
   $options = array('' => '');
-  $options += drupal_map_assoc(range(-50, 50));
+  $options += backdrop_map_assoc(range(-50, 50));
   $element = array(
     '#type' => 'select',
     '#title' => $title,
@@ -420,8 +420,8 @@ function getlocations_fields_element_opts($title, $default, $description='') {
 #function getlocations_fields_countryinfo() {
 #  $country = $_GET['country'];
 #  $content = FALSE;
-#  if (drupal_strlen($country) == 2 ) {
-#    $content = drupal_strtoupper($country);
+#  if (backdrop_strlen($country) == 2 ) {
+#    $content = backdrop_strtoupper($country);
 #  }
 #  else {
 #    $content = getlocations_get_country_id($country);
@@ -430,7 +430,7 @@ function getlocations_fields_element_opts($title, $default, $description='') {
 #  if ($country == 'The Netherlands' || $country == 'Pays-Bas') {
 #    $content = 'NL';
 #  }
-#  drupal_json_output(array('content' => $content));
+#  backdrop_json_output(array('content' => $content));
 #}
 
 /**
@@ -447,15 +447,15 @@ function getlocations_fields_country_autocomplete($string = '') {
   if ($string) {
     $countries = getlocations_get_countries_list();
     foreach ($countries AS $country) {
-      $s = drupal_strtolower($string);
-      $c = drupal_strtolower($country);
+      $s = backdrop_strtolower($string);
+      $c = backdrop_strtolower($country);
       preg_match_all("/^$s/", $c, $m);
       if (count( $m[0])) {
         $matches[$country] = $country;
       }
     }
   }
-  drupal_json_output($matches);
+  backdrop_json_output($matches);
 }
 
 /**
@@ -480,7 +480,7 @@ function getlocations_fields_province_autocomplete($string = '') {
       $matches[$row->province] = check_plain($row->province);
     }
   }
-  drupal_json_output($matches);
+  backdrop_json_output($matches);
 }
 
 /**
@@ -505,7 +505,7 @@ function getlocations_fields_city_autocomplete($string = '') {
       $matches[$row->city] = check_plain($row->city);
     }
   }
-  drupal_json_output($matches);
+  backdrop_json_output($matches);
 }
 
 /**
@@ -515,7 +515,7 @@ function getlocations_fields_city_autocomplete($string = '') {
  */
 function getlocations_fields_smart_ip() {
   $location = getlocations_fields_smart_ip_get();
-  drupal_json_output($location);
+  backdrop_json_output($location);
 }
 
 /**
@@ -556,14 +556,14 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
     );
     $form['views_search_center'] = getlocations_element_map_checkbox(
       t('Center map on search'),
-      $defaults['views_search_center'],
+      $defaults['views_search_group']['views_search_center'],
       t('Place the search result location in the middle of the map. Applies to Views using a distance filter.')
     );
 
     // views_search_marker
     $form['views_search_marker_enable'] = getlocations_element_map_checkbox(
       t('Mark the search center on the map'),
-      $defaults['views_search_marker_enable'],
+      $defaults['views_search_group']['views_search_marker_enable'],
       t('Show search marker on origin where relevant. Applies to Views using a distance filter.')
     );
     $form['views_search_marker_enable']['#suffix'] = '<div id="wrap-getlocations-views-search-marker">';
@@ -592,7 +592,7 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
         $form['views_search_marker'] = getlocations_element_map_marker(
           t('Search Map marker'),
           $markers,
-          $defaults['views_search_marker'],
+          $defaults['views_search_group']['views_search_marker'],
           ''
         );
       }
@@ -602,19 +602,19 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
       $form['views_search_marker'] = getlocations_element_map_marker(
         t('Search Map marker'),
         $markers,
-        $defaults['views_search_marker'],
+        $defaults['views_search_group']['views_search_marker'],
         ''
       );
     }
 
     $form['views_search_marker_toggle'] = getlocations_element_map_checkbox(
       t('Enable Search Marker toggle button'),
-      $defaults['views_search_marker_toggle'],
+      $defaults['views_search_group']['views_search_marker_toggle'],
       t('Show a button to switch visibility on or off.')
     );
     $form['views_search_marker_toggle_active'] = getlocations_element_map_checkbox(
       t('Initial state of Search Marker'),
-      $defaults['views_search_marker_toggle_active'],
+      $defaults['views_search_group']['views_search_marker_toggle_active'],
       t('Set initial visibility on.')
     );
     $form['views_search_marker_toggle_active']['#suffix'] = '</div>';
@@ -623,34 +623,23 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
       // search area shape
       $form['views_search_radshape_enable'] = getlocations_element_map_checkbox(
         t('Enable Show search area'),
-        $defaults['views_search_radshape_enable'],
+        $defaults['views_search_group']['views_search_radshape_enable'],
         t('Show Search area as a rectangle or circle. Applies to Views using a distance filter.')
       );
       $form['views_search_radshape_enable']['#suffix'] = '<div id="wrap-getlocations-views-search-radshape">';
 
-      // jquery_colorpicker
-      if (module_exists('jquery_colorpicker') && $defaults['jquery_colorpicker_enabled']) {
-        $form['views_search_radshape_strokecolor'] = array(
-          '#type' => 'jquery_colorpicker',
-          '#title' => t('Search area line color'),
-          '#default_value' => preg_replace("/^#/", '', $defaults['views_search_radshape_strokecolor']),
-          '#description' => t('Click on the Colorpicker icon to select a color'),
-        );
-      }
-      else {
-        $form['views_search_radshape_strokecolor'] = getlocations_element_map_tf(
-          t('Search area line color'),
-          $defaults['views_search_radshape_strokecolor'],
-          t('HTML hex, eg #FF0000.'),
-          10,
-          10,
-          TRUE
-        );
-      }
+      $form['views_search_radshape_strokecolor'] = getlocations_element_map_tf(
+        t('Search area line color'),
+        $defaults['views_search_group']['views_search_radshape_strokecolor'],
+        t('HTML hex, eg #FF0000.'),
+        10,
+        10,
+        TRUE
+      );
 
       $form['views_search_radshape_strokeopacity'] = getlocations_element_map_tf(
         t('Search area line opacity'),
-        $defaults['views_search_radshape_strokeopacity'],
+        $defaults['views_search_group']['views_search_radshape_strokeopacity'],
         t('Must be between 0 and 1.'),
         10,
         10,
@@ -658,36 +647,25 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
       );
       $form['views_search_radshape_strokeweight'] = getlocations_element_map_tf(
         t('Search area line thickness'),
-        $defaults['views_search_radshape_strokeweight'],
+        $defaults['views_search_group']['views_search_radshape_strokeweight'],
         t('Must be an integer.'),
         10,
         10,
         TRUE
       );
 
-      // jquery_colorpicker
-      if (module_exists('jquery_colorpicker') && $defaults['jquery_colorpicker_enabled']) {
-        $form['views_search_radshape_fillcolor'] = array(
-          '#type' => 'jquery_colorpicker',
-          '#title' => t('Search area fill color'),
-          '#default_value' => preg_replace("/^#/", '', $defaults['views_search_radshape_fillcolor']),
-          '#description' => t('Click on the Colorpicker icon to select a color'),
-        );
-      }
-      else {
-        $form['views_search_radshape_fillcolor'] = getlocations_element_map_tf(
-          t('Search area fill color'),
-          $defaults['views_search_radshape_fillcolor'],
-          t('HTML hex, eg #FF0000.'),
-          10,
-          10,
-          TRUE
-        );
-      }
+      $form['views_search_radshape_fillcolor'] = getlocations_element_map_tf(
+        t('Search area fill color'),
+        $defaults['views_search_group']['views_search_radshape_fillcolor'],
+        t('HTML hex, eg #FF0000.'),
+        10,
+        10,
+        TRUE
+      );
 
       $form['views_search_radshape_fillopacity'] = getlocations_element_map_tf(
         t('Search area fill opacity'),
-        $defaults['views_search_radshape_fillopacity'],
+        $defaults['views_search_group']['views_search_radshape_fillopacity'],
         t('Must be between 0 and 1.'),
         10,
         10,
@@ -695,12 +673,12 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
       );
       $form['views_search_radshape_toggle'] = getlocations_element_map_checkbox(
         t('Enable Search area toggle button'),
-        $defaults['views_search_radshape_toggle'],
+        $defaults['views_search_group']['views_search_radshape_toggle'],
         t('Show a button to switch visibility on or off.')
       );
       $form['views_search_radshape_toggle_active'] = getlocations_element_map_checkbox(
         t('Initial state of Search area'),
-        $defaults['views_search_radshape_toggle_active'],
+        $defaults['views_search_group']['views_search_radshape_toggle_active'],
         t('Set initial visibility on.')
       );
       $form['views_search_radshape_toggle_active']['#suffix'] = '</div>';
@@ -715,6 +693,7 @@ function getlocations_fields_views_search_form($defaults, $map_type = '') {
  * Implements hook_token_info().
  * derived from location_cck module
  */
+/*
 function getlocations_fields_token_info() {
   $module = 'getlocations_fields';
   $supported_entities = getlocations_get_supported_entities($module);
@@ -747,10 +726,12 @@ function getlocations_fields_token_info() {
   }
   return $info;
 }
+*/
 
 /**
  * Implements hook_tokens().
  */
+/*
 function getlocations_fields_tokens($type, $tokens, array $data = array(), array $options = array()) {
 
   // Setup our replacements array.
@@ -816,6 +797,7 @@ function getlocations_fields_tokens($type, $tokens, array $data = array(), array
   return $replacements;
 
 }
+*/
 
 function getlocations_fields_columns($keyonly = FALSE) {
   $columns = array(

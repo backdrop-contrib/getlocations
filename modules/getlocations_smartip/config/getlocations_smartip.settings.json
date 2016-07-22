@@ -1,0 +1,13 @@
+{
+  "_config_name": "getlocations_smartip.settings",
+  "settings": {
+    "smartip_button": 0,
+    "smartip_button_label": "Show current IP position",
+    "smartip_marker": "",
+    "smartip_marker_title": "Your current IP position",
+    "smartip_bubble": 0,
+    "smartip_center": 0,
+    "smartip_zoom": -1,
+    "smartip_callback": "getlocations_smartip\/callback"
+  }
+}

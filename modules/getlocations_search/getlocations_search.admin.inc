@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_search.admin.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * getlocations_search module administration functions.
@@ -48,28 +48,31 @@ function getlocations_search_settings_form() {
     t('Where the getlocations_search admin javascript file is located.')
   );
 
-  $form['getlocations_search_paths']['reset'] = getlocations_element_dd(
-    t('Reset'),
-    0,
-    array(0 => t('No'), 1 => t('Reset'), 2 => t('Reset to minified')),
-    t('Reset the paths to the defaults.')
+  // Add a submit button
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
   );
 
-  $form = system_settings_form($form);
-  unset($form['#theme']);
-  $form['#theme'] = 'getlocations_search_settings_form';
-  $form['#validate'][] = 'getlocations_search_settings_validate';
   return $form;
+
+
+
+#  $form = system_settings_form($form);
+#  unset($form['#theme']);
+#  $form['#theme'] = 'getlocations_search_settings_form';
+#  #$form['#validate'][] = 'getlocations_search_settings_validate';
+#  return $form;
 
 }
 
 // form shared between admin config and block config
 function _getlocations_search_settings_form($defaults, $which = 'admin') {
   $getlocations_search_paths = getlocations_search_paths_get();
-  drupal_add_js($getlocations_search_paths['getlocations_search_admin_path']);
+  backdrop_add_js($getlocations_search_paths['getlocations_search_admin_path']);
 
   $getlocations_defaults = getlocations_defaults();
-  $defaults['jquery_colorpicker_enabled'] = $getlocations_defaults['jquery_colorpicker_enabled'];
 
   $form = array();
   $varname = 'getlocations_search_defaults';
@@ -186,25 +189,14 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
   );
   $form[$varname]['search_radshape_enable']['#suffix'] = '<div id="wrap-getlocations-search-radshape">';
 
-  // jquery_colorpicker
-  if (module_exists('jquery_colorpicker') && $getlocations_defaults['jquery_colorpicker_enabled']) {
-    $form[$varname]['search_radshape_strokecolor'] = array(
-      '#type' => 'jquery_colorpicker',
-      '#title' => t('Search area line color'),
-      '#default_value' => preg_replace("/^#/", '', $defaults['search_radshape_strokecolor']),
-      '#description' => t('Click on the Colorpicker icon to select a color'),
-    );
-  }
-  else {
-    $form[$varname]['search_radshape_strokecolor'] = getlocations_element_map_tf(
-      t('Search area line color'),
-      $defaults['search_radshape_strokecolor'],
-      t('HTML hex, eg #FF0000.'),
-      10,
-      10,
-      TRUE
-    );
-  }
+  $form[$varname]['search_radshape_strokecolor'] = getlocations_element_map_tf(
+    t('Search area line color'),
+    $defaults['search_radshape_strokecolor'],
+    t('HTML hex, eg #FF0000.'),
+    10,
+    10,
+    TRUE
+  );
 
   $form[$varname]['search_radshape_strokeopacity'] = getlocations_element_map_tf(
     t('Search area line opacity'),
@@ -223,25 +215,14 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
     TRUE
   );
 
-  // jquery_colorpicker
-  if (module_exists('jquery_colorpicker') && $getlocations_defaults['jquery_colorpicker_enabled']) {
-    $form[$varname]['search_radshape_fillcolor'] = array(
-      '#type' => 'jquery_colorpicker',
-      '#title' => t('Search area fill color'),
-      '#default_value' => preg_replace("/^#/", '', $defaults['search_radshape_fillcolor']),
-      '#description' => t('Click on the Colorpicker icon to select a color'),
-    );
-  }
-  else {
-    $form[$varname]['search_radshape_fillcolor'] = getlocations_element_map_tf(
-      t('Search area fill color'),
-      $defaults['search_radshape_fillcolor'],
-      t('HTML hex, eg #FF0000.'),
-      10,
-      10,
-      TRUE
-    );
-  }
+  $form[$varname]['search_radshape_fillcolor'] = getlocations_element_map_tf(
+    t('Search area fill color'),
+    $defaults['search_radshape_fillcolor'],
+    t('HTML hex, eg #FF0000.'),
+    10,
+    10,
+    TRUE
+  );
 
   $form[$varname]['search_radshape_fillopacity'] = getlocations_element_map_tf(
     t('Search area fill opacity'),
@@ -400,7 +381,13 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
 
   $form[$varname] += getlocations_map_display_basics_form($defaults);
 
-  $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE, 'getlocations_search');
+  $w3w_settings = getlocations_search_w3w_settings();
+  $shapes = getlocations_search_shapes_settings();
+
+  $defaults2 = $defaults + $w3w_settings;
+  $defaults2 = $defaults2 + $shapes;
+
+  $form[$varname] += getlocations_map_display_options_form($defaults2, FALSE, TRUE, 'getlocations_search');
 
   $form[$varname] += getlocations_markeraction_form($defaults);
 
@@ -438,8 +425,8 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
 
 }
 
-function getlocations_search_settings_validate($form, &$form_state) {
-  // jquery_colorpicker munge
+function getlocations_search_settings_form_validate($form, &$form_state) {
+
   if (isset($form_state['values']['getlocations_search_defaults'])) {
     if (! preg_match("/^#/", $form_state['values']['getlocations_search_defaults']['search_radshape_strokecolor'])) {
       $form_state['values']['getlocations_search_defaults']['search_radshape_strokecolor'] = '#' . $form_state['values']['getlocations_search_defaults']['search_radshape_strokecolor'];
@@ -506,13 +493,87 @@ function getlocations_search_settings_validate($form, &$form_state) {
     }
   }
 
-  $reset = $form_state['values']['getlocations_search_paths']['reset'];
-  unset($form_state['values']['getlocations_search_paths']['reset']);
-  if ($reset == 1) {
-    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(TRUE);
-  }
-  elseif ($reset == 2) {
-    $form_state['values']['getlocations_search_paths'] = getlocations_search_paths_get(FALSE, TRUE);
-  }
+}
 
+
+function getlocations_search_settings_form_submit($form, &$form_state) {
+
+  $getlocations_search_paths = $form_state['values']['getlocations_search_paths'];
+  $getlocations_search_paths_settings = config('getlocations_search.paths');
+  $keys = array("getlocations_search_path", "getlocations_search_admin_path");
+  foreach ($keys AS $key) {
+    $getlocations_search_paths_settings->set('paths.' . $key, $getlocations_search_paths[$key]);
+  }
+  $getlocations_search_paths_settings->save();
+
+
+
+
+  if (isset($form_state['values']['getlocations_search_defaults'])) {
+
+    $values = $form_state['values']['getlocations_search_defaults'];
+
+    // what3words only if there is a license
+    $lic = getlocations_w3w_get_lic();
+    if ( ! empty($lic) ) {
+      $what3words = config('getlocations_search.what3words');
+      $what3words->set('settings.what3words_group', $values['what3words_group']);
+      $what3words->save();
+      unset($values['what3words_group']);
+    }
+
+
+
+    // shapes
+    $shapes_values = array();
+
+    // polygons_group
+    $polygons_group = array("polygons_enable","polygons_strokecolor","polygons_strokeopacity","polygons_strokeweight","polygons_fillcolor","polygons_fillopacity","polygons_coords","polygons_clickable","polygons_message");
+    foreach ($polygons_group AS $item) {
+      $shapes_values['polygons_group'][$item] = $values[$item];
+      unset($values[$item]);
+    }
+
+    $rectangles_group = array("rectangles_enable","rectangles_strokecolor","rectangles_strokeopacity","rectangles_strokeweight","rectangles_fillcolor","rectangles_fillopacity","rectangles_coords","rectangles_clickable","rectangles_message","rectangles_apply","rectangles_dist");
+    foreach ($rectangles_group AS $item) {
+      $shapes_values['rectangles_group'][$item] = $values[$item];
+      unset($values[$item]);
+    }
+
+    $circles_group = array("circles_enable","circles_strokecolor","circles_strokeopacity","circles_strokeweight","circles_fillcolor","circles_fillopacity","circles_coords","circles_clickable","circles_message","circles_radius","circles_apply");
+    foreach ($circles_group AS $item) {
+      $shapes_values['circles_group'][$item] = $values[$item];
+      unset($values[$item]);
+    }
+
+    $polylines_group = array("polylines_enable","polylines_strokecolor","polylines_strokeopacity","polylines_strokeweight","polylines_coords","polylines_clickable","polylines_message");
+    foreach ($polylines_group AS $item) {
+      $shapes_values['polylines_group'][$item] = $values[$item];
+      unset($values[$item]);
+    }
+
+    $shapes = config('getlocations_search.shapes');
+    foreach($shapes_values AS $k => $v) {
+      $shapes->set('shapes.' . $k, $v);
+    }
+    $shapes->save();
+
+    $settings = config('getlocations_search.settings');
+  }
+  elseif (isset($form_state['values']['getlocations_search_block_defaults'])) {
+    $values = $form_state['values']['getlocations_search_block_defaults'];
+    $settings = config('getlocations_search_block.settings');
+  }
+  if (isset($values)) {
+    $keys = getlocations_search_get_keys();
+    foreach ($keys AS $key) {
+      if (isset($values[$key])) {
+        $settings->set('settings.' . $key, $values[$key]);
+      }
+    }
+    // just to be sure
+    $settings->set("settings.saved", 1);
+    $settings-> save();
+    backdrop_set_message(t('Getlocations Search configuration options have been saved.'));
+  }
 }

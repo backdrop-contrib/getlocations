@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields.views_default.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Provides Views 3 integration for getlocations_fields.

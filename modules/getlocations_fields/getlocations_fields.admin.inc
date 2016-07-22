@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_fields.admin.inc
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * getlocations_fields module administration functions.
@@ -34,6 +34,8 @@ function getlocations_fields_settings_form() {
   $form['getlocations_fields_defaults'] += getlocations_fields_input_settings_form($getlocations_fields_defaults);
 
   $form['getlocations_fields_defaults'] += getlocations_fields_display_settings_form($getlocations_fields_defaults);
+
+  $form['getlocations_fields_defaults']['saved'] = array('#type' => 'value', '#value' => 1);
 
   $form['getlocations_fields_paths'] = array(
     '#type' => 'fieldset',
@@ -101,18 +103,21 @@ function getlocations_fields_settings_form() {
     t('Where the getlocations fields search views javascript file is located.')
   );
 
-  $form['getlocations_fields_paths']['reset'] = getlocations_element_dd(
-    t('Reset'),
-    0,
-    array(0 => t('No'), 1 => t('Reset'), 2 => t('Reset to minified')),
-    t('Reset the paths to the defaults.')
+  #$form['getlocations_fields_paths']['reset'] = getlocations_element_dd(
+  #  t('Reset'),
+  #  0,
+  #  array(0 => t('No'), 1 => t('Reset'), 2 => t('Reset to minified')),
+  #  t('Reset the paths to the defaults.')
+  #);
+
+  // Add a submit button
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
   );
 
-  unset($form['#theme']);
-  $form['#theme'] = 'getlocations_fields_settings_form';
-  $form['#validate'][] = 'getlocations_fields_settings_validate';
-
-  return system_settings_form($form);
+  return $form;
 
 }
 
@@ -120,7 +125,7 @@ function getlocations_fields_settings_form() {
  * Validation function
  *
  */
-function getlocations_fields_settings_validate($form, &$form_state) {
+function getlocations_fields_settings_form_validate($form, &$form_state) {
 
   if (empty($form_state['values']['getlocations_fields_defaults']['input_address_width']) || ! is_numeric($form_state['values']['getlocations_fields_defaults']['input_address_width']) || $form_state['values']['getlocations_fields_defaults']['input_address_width'] < 1 ) {
     form_set_error('getlocations_fields_defaults][input_address_width', t('Search textbox must be a positive number'));
@@ -188,13 +193,103 @@ function getlocations_fields_settings_validate($form, &$form_state) {
     }
   }
 
-  $reset = $form_state['values']['getlocations_fields_paths']['reset'];
-  unset($form_state['values']['getlocations_fields_paths']['reset']);
-  if ($reset == 1) {
-    $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(TRUE);
+#  $reset = $form_state['values']['getlocations_fields_paths']['reset'];
+#  unset($form_state['values']['getlocations_fields_paths']['reset']);
+#  if ($reset == 1) {
+#    $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(TRUE);
+#  }
+#  elseif ($reset == 2) {
+#    $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(FALSE, TRUE);
+#  }
+
+}
+
+function getlocations_fields_settings_form_submit($form, &$form_state) {
+
+  $getlocations_fields_paths = config('getlocations_fields.paths');
+  $paths_keys = array("getlocations_fields_path","getlocations_fields_preview_path","getlocations_fields_streetview_path","getlocations_fields_admin_path","getlocations_fields_formatter_path","getlocations_fields_views_path","getlocations_fields_search_views_path");
+  foreach ($paths_keys AS $k) {
+    if (isset($form_state['values']['getlocations_fields_paths'][$k])) {
+      $getlocations_fields_paths->set('paths.' . $k, $form_state['values']['getlocations_fields_paths'][$k]);
+    }
   }
-  elseif ($reset == 2) {
-    $form_state['values']['getlocations_fields_paths'] = getlocations_fields_paths_get(FALSE, TRUE);
+  $getlocations_fields_paths->save();
+
+  $config = config('getlocations_fields.settings');
+  $config_settings = $config->get('settings');
+  $config_keys = array_keys($config_settings);
+
+  $values = $form_state['values']['getlocations_fields_defaults'];
+
+  // now in its own file getlocations.shapes
+  $shapes_values = array();
+
+  // polygons_group
+  $polygons_group = array("polygons_enable","polygons_strokecolor","polygons_strokeopacity","polygons_strokeweight","polygons_fillcolor","polygons_fillopacity","polygons_coords","polygons_clickable","polygons_message");
+  foreach ($polygons_group AS $item) {
+    $shapes_values['polygons_group'][$item] = $values[$item];
+    unset($values[$item]);
   }
+
+  $rectangles_group = array("rectangles_enable","rectangles_strokecolor","rectangles_strokeopacity","rectangles_strokeweight","rectangles_fillcolor","rectangles_fillopacity","rectangles_coords","rectangles_clickable","rectangles_message","rectangles_apply","rectangles_dist");
+  foreach ($rectangles_group AS $item) {
+    $shapes_values['rectangles_group'][$item] = $values[$item];
+    unset($values[$item]);
+  }
+
+  $circles_group = array("circles_enable","circles_strokecolor","circles_strokeopacity","circles_strokeweight","circles_fillcolor","circles_fillopacity","circles_coords","circles_clickable","circles_message","circles_radius","circles_apply");
+  foreach ($circles_group AS $item) {
+    $shapes_values['circles_group'][$item] = $values[$item];
+    unset($values[$item]);
+  }
+
+  $polylines_group = array("polylines_enable","polylines_strokecolor","polylines_strokeopacity","polylines_strokeweight","polylines_coords","polylines_clickable","polylines_message");
+  foreach ($polylines_group AS $item) {
+    $shapes_values['polylines_group'][$item] = $values[$item];
+    unset($values[$item]);
+  }
+
+  $shapes = config('getlocations_fields.shapes');
+  foreach($shapes_values AS $k => $v) {
+    $shapes->set('shapes.' . $k, $v);
+  }
+  $shapes->save();
+
+  $highlight_group = array("highlight_enable","highlight_strokecolor","highlight_strokeopacity","highlight_strokeweight","highlight_fillcolor","highlight_fillopacity","highlight_radius");
+  foreach ($highlight_group AS $item) {
+    $values['highlight_group'][$item] = $values[$item];
+    unset($values[$item]);
+  }
+
+  $search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
+  foreach ($search_places_group AS $item) {
+    $values['search_places_group'][$item] = $values[$item];
+    unset($values[$item]);
+  }
+
+  #$markerclusterer_group = array("markerclusterer_style","markerclusterer_zoom","markerclusterer_size","markerclusterer_minsize","markerclusterer_title","markerclusterer_imgpath");
+  #foreach ($markerclusterer_group AS $item) {
+  #  $values['markerclusterer_group'][$item] = $values[$item];
+  #  unset($values[$item]);
+  #}
+
+  #$returnlink_group = array("returnlink_page_enable","returnlink_page_link","returnlink_user_enable","returnlink_user_link","returnlink_term_enable","returnlink_term_link","returnlink_comment_enable","returnlink_comment_link");
+  #foreach ($returnlink_group AS $item) {
+  #  if (isset($values[$item])) {
+  #    $values['returnlink_group'][$item] = $values[$item];
+  #    unset($values[$item]);
+  #  }
+  #}
+
+  foreach ($config_keys AS $item) {
+    if (isset($values[$item])) {
+
+
+    $config->set('settings.' . $item, $values[$item]);
+
+    }
+  }
+#  $config->set('settings.saved', 1);
+  $config->save();
 
 }

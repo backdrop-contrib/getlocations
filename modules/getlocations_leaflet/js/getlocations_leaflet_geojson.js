@@ -2,7 +2,7 @@
 /**
  * @file
  * getlocations_leaflet_geojson.js
- * @author Bob Hutchinson http://drupal.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Javascript functions for getlocations_leaflet GeoJSON support
@@ -10,15 +10,15 @@
  * and http://www.geojson.org
 */
 (function ($) {
-  Drupal.behaviors.getlocations_leaflet_geojson = {
+  Backdrop.behaviors.getlocations_leaflet_geojson = {
     attach: function() {
 
       // bail out
-      if (typeof Drupal.settings.getlocations_leaflet_geojson === 'undefined') {
+      if (typeof Backdrop.settings.getlocations_leaflet_geojson === 'undefined') {
         return;
       }
 
-      $.each(Drupal.settings.getlocations_leaflet_geojson, function (key, settings) {
+      $.each(Backdrop.settings.getlocations_leaflet_geojson, function (key, settings) {
 
         // functions
         function onEachFeature(feature, layer) {

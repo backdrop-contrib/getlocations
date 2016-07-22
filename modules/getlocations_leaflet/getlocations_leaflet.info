@@ -1,10 +1,7 @@
 name = GetLocations Leaflet
 description = "Provides Leaflet Maps integration for Getlocations."
-core = 7.x
-php = 5
+backdrop = 1.x
+type = module
 package = Fields
 dependencies[] = getlocations
-
-files[] = views/getlocations_leaflet_plugin_style.inc
-
 configure = admin/config/services/getlocations/leaflet

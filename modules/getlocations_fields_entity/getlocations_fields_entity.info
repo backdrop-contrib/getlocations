@@ -1,0 +1,8 @@
+name = Getlocations Fields Entity
+description = "Provide information about Getlocations Fields to Entity module."
+backdrop = 1.x
+type = module
+package = Fields
+;version = BACKDROP_VERSION
+dependencies[] = entity
+dependencies[] = getlocations_fields

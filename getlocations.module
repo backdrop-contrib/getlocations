@@ -2459,6 +2459,15 @@ function getlocations_check_vocabulary($machine_name) {
 function getlocations_get_term_reference_fields() {
   $module = 'taxonomy';
   $type = 'taxonomy_term_reference';
+  $fif = field_info_fields();
+  $data = array();
+
+  foreach ($fif AS $k => $v) {
+    if ( $v['module'] == $module && $v['type'] == $type && $v['active'] == 1) {
+      $data[$v['field_name']] = $v['field_name'];
+    }
+  }
+
   #$query = db_select('field_config', 'f');
   #$query->fields('f', array('field_name'));
   #$query->condition('f.module', $module)
@@ -2469,7 +2478,8 @@ function getlocations_get_term_reference_fields() {
   #foreach ($rows AS $row) {
   #  $data[$row->field_name] = $row->field_name;
   #}
-  #return $data;
+
+  return $data;
 
 }
 

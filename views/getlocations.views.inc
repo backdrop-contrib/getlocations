@@ -138,11 +138,8 @@ function template_preprocess_getlocations_view_map(&$variables) {
               if (isset($location['type'])) {
                 $cat = $location['type'];
                 // lookup label
-                $query = db_select('node_type', 't');
-                $query->fields('t', array('name'));
-                $query->condition('t.type', $cat);
-                $label = $query->execute()->fetchField();
-                $cats[$cat] = $label;
+                $config_type = config("config_type." . $cat);
+                $cats[$cat] = $config_type->get('name');
               }
             }
             elseif ($options['category_method'] == 2) {

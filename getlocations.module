@@ -150,7 +150,6 @@ function getlocations_menu() {
     'file' => 'getlocations.admin.inc',
     'weight' => 1,
   );
-/*
   // getlocations/node/$nid    # show all location on one node
   $items['getlocations/node/%getlocations_id'] = array(
     'title' => 'Get locations',
@@ -159,6 +158,7 @@ function getlocations_menu() {
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
   );
+/*
 
   if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
     // getlocations/user/$uid    # show all locations for a user
@@ -1029,8 +1029,10 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
   }
 
   // TODO what3words
-  $what3words_group = getlocations_w3w_get_group();
-  $getlocations_defaults['what3words_group'] += $what3words_group;
+#  $what3words_group = getlocations_w3w_get_group();
+#  $getlocations_defaults['what3words_group'] = $what3words_group;
+  $w3w = getlocations_w3w_settings();
+  $getlocations_defaults['what3words_group'] = $w3w['what3words_group'];
 
   // TODO shapes
   $shapes = getlocations_shapes_settings();
@@ -1038,8 +1040,8 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
   // add these to defaults
 
   // TODO sv
-  $sv_group = config_get('getlocations.sv', 'settings');
-  $getlocations_defaults += $sv_group;
+#  $sv_group = config_get('getlocations.sv', 'settings');
+#  $getlocations_defaults['sv_group'] = $sv_group['sv_group'];
 
   $mapid = getlocations_setup_map($getlocations_defaults);
   getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid);
@@ -1050,6 +1052,8 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
   if (empty($height)) {
     $height = $getlocations_defaults['height'];
   }
+
+dd($getlocations_defaults, '$getlocations_defaults in getlocations_setlocations');
 
   return theme('getlocations_show', array('width' => $width, 'height' => $height, 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'latlons' => $latlons, 'minmaxes' => $minmaxes, 'type' => $type, 'node' => $node));
 
@@ -2660,16 +2664,16 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'mapcontrolposition'        => $defaults['mapcontrolposition'],
       'scalecontrolposition'      => $defaults['scalecontrolposition'],
 
-      'sv_addresscontrol'         => $defaults['sv_group']['sv_addresscontrol'], // sv overlay controls
-      'sv_addresscontrolposition' => $defaults['sv_group']['sv_addresscontrolposition'],
-      'sv_pancontrol'             => $defaults['sv_group']['sv_pancontrol'],
-      'sv_pancontrolposition'     => $defaults['sv_group']['sv_pancontrolposition'],
-      'sv_zoomcontrol'            => $defaults['sv_group']['sv_zoomcontrol'],
-      'sv_zoomcontrolposition'    => $defaults['sv_group']['sv_zoomcontrolposition'],
-      'sv_linkscontrol'           => $defaults['sv_group']['sv_linkscontrol'],
-      'sv_imagedatecontrol'       => $defaults['sv_group']['sv_imagedatecontrol'],
-      'sv_scrollwheel'            => $defaults['sv_group']['sv_scrollwheel'],
-      'sv_clicktogo'              => $defaults['sv_group']['sv_clicktogo'],
+#      'sv_addresscontrol'         => $defaults['sv_group']['sv_addresscontrol'], // sv overlay controls
+#      'sv_addresscontrolposition' => $defaults['sv_group']['sv_addresscontrolposition'],
+#      'sv_pancontrol'             => $defaults['sv_group']['sv_pancontrol'],
+#      'sv_pancontrolposition'     => $defaults['sv_group']['sv_pancontrolposition'],
+#      'sv_zoomcontrol'            => $defaults['sv_group']['sv_zoomcontrol'],
+#      'sv_zoomcontrolposition'    => $defaults['sv_group']['sv_zoomcontrolposition'],
+#      'sv_linkscontrol'           => $defaults['sv_group']['sv_linkscontrol'],
+#      'sv_imagedatecontrol'       => $defaults['sv_group']['sv_imagedatecontrol'],
+#      'sv_scrollwheel'            => $defaults['sv_group']['sv_scrollwheel'],
+#      'sv_clicktogo'              => $defaults['sv_group']['sv_clicktogo'],
 
       'input_map_show'            => $defaults['input_map_show'],
       'inputmap'                  => ($inputmap ? 1 : 0),
@@ -2681,6 +2685,32 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'lidinfo_path'              => url("getlocations_cb/lidinfo"),
      ),
   );
+
+  if (isset($defaults['sv_group'])) {
+    $settings[$mapid]['sv_addresscontrol']         = $defaults['sv_group']['sv_addresscontrol']; // sv overlay controls
+    $settings[$mapid]['sv_addresscontrolposition'] = $defaults['sv_group']['sv_addresscontrolposition'];
+    $settings[$mapid]['sv_pancontrol']             = $defaults['sv_group']['sv_pancontrol'];
+    $settings[$mapid]['sv_pancontrolposition']     = $defaults['sv_group']['sv_pancontrolposition'];
+    $settings[$mapid]['sv_zoomcontrol']            = $defaults['sv_group']['sv_zoomcontrol'];
+    $settings[$mapid]['sv_zoomcontrolposition']    = $defaults['sv_group']['sv_zoomcontrolposition'];
+    $settings[$mapid]['sv_linkscontrol']           = $defaults['sv_group']['sv_linkscontrol'];
+    $settings[$mapid]['sv_imagedatecontrol']       = $defaults['sv_group']['sv_imagedatecontrol'];
+    $settings[$mapid]['sv_scrollwheel']            = $defaults['sv_group']['sv_scrollwheel'];
+    $settings[$mapid]['sv_clicktogo']              = $defaults['sv_group']['sv_clicktogo'];
+  }
+  else {
+    $settings[$mapid]['sv_addresscontrol']         = $defaults['sv_addresscontrol']; // sv overlay controls
+    $settings[$mapid]['sv_addresscontrolposition'] = $defaults['sv_addresscontrolposition'];
+    $settings[$mapid]['sv_pancontrol']             = $defaults['sv_pancontrol'];
+    $settings[$mapid]['sv_pancontrolposition']     = $defaults['sv_pancontrolposition'];
+    $settings[$mapid]['sv_zoomcontrol']            = $defaults['sv_zoomcontrol'];
+    $settings[$mapid]['sv_zoomcontrolposition']    = $defaults['sv_zoomcontrolposition'];
+    $settings[$mapid]['sv_linkscontrol']           = $defaults['sv_linkscontrol'];
+    $settings[$mapid]['sv_imagedatecontrol']       = $defaults['sv_imagedatecontrol'];
+    $settings[$mapid]['sv_scrollwheel']            = $defaults['sv_scrollwheel'];
+    $settings[$mapid]['sv_clicktogo']              = $defaults['sv_clicktogo'];
+  }
+
   // only set these if wanted
   $kml_group = $defaults['kml_group'];
   if ($kml_group['kml_url']) {

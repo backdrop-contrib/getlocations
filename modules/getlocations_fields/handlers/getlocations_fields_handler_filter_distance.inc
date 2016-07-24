@@ -141,7 +141,7 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
       $form['settings']['country']['#suffix'] = '</div>';
 
       $getlocations_fields_paths = getlocations_fields_paths_get();
-      $getlocations_paths = getlocations_paths_get();
+      $getlocations_paths = getlocations_paths_get_all();
 
       $form['#attached']['js'] = array(
         $getlocations_fields_paths['getlocations_fields_search_views_path'] => array('type' => 'file', 'weight' => 20),
@@ -161,6 +161,25 @@ class getlocations_fields_handler_filter_distance extends views_handler_filter {
         }
         $getlocations_defaults = getlocations_defaults();
         $getlocations_defaults['geocoder_enable'] = $geocoder_default['geocoder_enable'];
+        if (! isset($getlocations_defaults['polygons_group']) ) {
+          $shapes = config_get("getlocations_fields.shapes", "shapes");
+          $getlocations_defaults += $shapes;
+        }
+
+        if (! isset($getlocations_defaults['sv_showfirst'])) {
+
+          $getlocations_fields_defaults = getlocations_fields_defaults();
+          $getlocations_defaults['sv_showfirst'] = $getlocations_fields_defaults['sv_showfirst'];
+          $getlocations_defaults['sv_heading'] = $getlocations_fields_defaults['sv_heading'];
+          $getlocations_defaults['sv_zoom'] = $getlocations_fields_defaults['sv_zoom'];
+          $getlocations_defaults['sv_pitch'] = $getlocations_fields_defaults['sv_pitch'];
+        }
+
+        if (! isset($getlocations_defaults['sv_group'])) {
+          $sv = config_get("getlocations_fields.sv", "settings");
+          $getlocations_defaults += $sv;
+        }
+
         getlocations_setup_js($getlocations_defaults, TRUE);
       }
 

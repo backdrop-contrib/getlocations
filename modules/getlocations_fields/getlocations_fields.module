@@ -889,6 +889,14 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   $element['display_mapwidth']['#element_validate'] = array('getlocations_element_validate_dim');
   $element['display_mapheight']['#element_validate'] = array('getlocations_element_validate_dim');
 
+  if (! isset($settings['polygons_group']) ) {
+    $shapes = config_get("getlocations_fields.shapes", "shapes");
+    $settings['polygons_group'] = $shapes['polygons_group'];
+    $settings['polylines_group'] = $shapes['polylines_group'];
+    $settings['circles_group'] = $shapes['circles_group'];
+    $settings['rectangles_group'] = $shapes['rectangles_group'];
+  }
+
   // map display options
   $element += getlocations_map_display_options_form($settings, FALSE);
 

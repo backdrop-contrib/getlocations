@@ -177,6 +177,25 @@ function template_preprocess_getlocations_view_map(&$variables) {
   $getlocations_defaults = getlocations_defaults();
   $newdefaults = getlocations_adjust_vars($getlocations_defaults, $options);
 
+  if (! isset($newdefaults['polygons_group']) ) {
+    $shapes = config_get("getlocations_fields.shapes", "shapes");
+    $newdefaults += $shapes;
+  }
+
+  if (! isset($newdefaults['sv_showfirst'])) {
+
+    $getlocations_fields_defaults = getlocations_fields_defaults();
+    $newdefaults['sv_showfirst'] = $getlocations_fields_defaults['sv_showfirst'];
+    $newdefaults['sv_heading'] = $getlocations_fields_defaults['sv_heading'];
+    $newdefaults['sv_zoom'] = $getlocations_fields_defaults['sv_zoom'];
+    $newdefaults['sv_pitch'] = $getlocations_fields_defaults['sv_pitch'];
+  }
+
+  if (! isset($newdefaults['sv_group'])) {
+    $sv = config_get("getlocations_fields.sv", "settings");
+    $newdefaults += $sv;
+  }
+
   $mapid = getlocations_setup_map($newdefaults);
   if ($thiskey) {
     $mapid = $thiskey;

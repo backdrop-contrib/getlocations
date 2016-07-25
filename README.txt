@@ -1,6 +1,6 @@
-for Backdrop 7
+for Backdrop
 
-Getlocations 1.x
+Getlocations 1.x-1.x
 
 Getlocations will provide a Google maps API version 3 enabled map on which to
 display markers of locations found in location-enabled content-types.

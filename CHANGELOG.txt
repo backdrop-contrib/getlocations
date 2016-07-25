@@ -1,9 +1,19 @@
-commit eaa5be5
+commit a5021c2
+Author: Bob Hutchinson <hutch@arwystli.net>
+Date:   Mon Jul 25 11:48:22 2016 +0100
+
+    updated LICENSE.txt, edited README.txt
+
+LICENSE.txt
+README.txt
+
+commit 1e62a5d
 Author: hutch <hutch@arwystli.net>
 Date:   Sun Jul 24 21:48:05 2016 +0100
 
     fixes to sv, w3w and shapes, enabled getlocations/node/n path
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_fields/getlocations_fields.module
 modules/getlocations_fields/handlers/getlocations_fields_handler_filter_distance.inc

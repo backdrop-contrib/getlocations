@@ -33,7 +33,9 @@ https://dl.dropboxusercontent.com/u/41489105/Backdrop/getlocations/getlocations-
 
 Download the file(s) and place them into your libraries folder so you have
 a path something like this:
-sites/all/libraries/getlocations/markers
+libraries/getlocations/markers
+
+If the libraries folder not not yet exist create it in the Backdrop root.
 
 The 'extra' files contain numbered and letter markers.
 You can optionally add these if you need them.
@@ -277,9 +279,6 @@ edit 'key_1' to whichever key your map is using
 edit 'location' to the machine name of your content type
 This will give you a button that can switch markers on/off
 
-
-More information on theming can be found on http://backdrop.org/documentation/theme
-
 Polygons
 To use polygons on your map you will need to enable the feature either globally
 under admin/config/services/getlocations or per content type under Manage Display or
@@ -310,23 +309,16 @@ GeoJSON
 Getlocations can support GeoJSON objects, see http://www.geojson.org/ for information about this format.
 You can download the library from https://github.com/JasonSanford/GeoJSON-to-Google-Maps.
 It should be installed in your libraries folder so you have a path something like this:
-sites/all/libraries/GeoJSON/GeoJSON.js
+libraries/GeoJSON/GeoJSON.js
 
 Once the library is installed you can enable it globally, per view or per content type
 
 Geocoder-js
 The geocoder-js library provides support for the search facilities from Openstreetmap
 You can download the library from https://github.com/geocoder-php/geocoder-js.
-You should copy the file from dist/geocoder.min.js to sites/all/libraries/geocoder-js/geocoder.min.js
+You should copy the file from dist/geocoder.min.js to libraries/geocoder-js/geocoder.min.js
 
 Once the library is installed you can enable it globally, per content type or in getlocations_search.
-
-Drush integration for getlocations.
-'drush getlocations-markers' will install the basic getlocations marker set
-'drush getlocations-geojson' will install the GeoJSON javascript library
-'drush getlocations-geocoder' will install the Geocoder-js javascript library
-'drush getlocations-leaflet'  will install the Leaflet javascript library
-If you want the library installed somewhere other than sites/all/libraries then provide the path after the command.
 
 Other map tiles.
 Getlocations supports the use of other sources of maps besides Google, you can show maps from OpenStreetMap, OpenCycleMap, Stamen and Esri.

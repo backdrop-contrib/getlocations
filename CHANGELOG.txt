@@ -1,9 +1,42 @@
-commit a5021c2
+commit 52aeb30
+Author: hutch <hutch@arwystli.net>
+Date:   Mon Jul 25 18:15:00 2016 +0100
+
+    removed drush
+
+drush/getlocations.drush.inc
+
+commit 0b0e231
+Author: hutch <hutch@arwystli.net>
+Date:   Mon Jul 25 18:14:03 2016 +0100
+
+    removed old paths and drush references
+
+README2.txt
+
+commit 287e79e
+Author: hutch <hutch@arwystli.net>
+Date:   Mon Jul 25 17:34:18 2016 +0100
+
+    removed old README
+
+README.txt
+
+commit fc536d3
+Author: Bob Hutchinson <hutch@arwystli.net>
+Date:   Mon Jul 25 12:03:10 2016 +0100
+
+    added README2.txt
+
+README2.txt
+
+commit 737bd84
 Author: Bob Hutchinson <hutch@arwystli.net>
 Date:   Mon Jul 25 11:48:22 2016 +0100
 
     updated LICENSE.txt, edited README.txt
 
+CHANGELOG.txt
 LICENSE.txt
 README.txt
 

@@ -40,14 +40,14 @@ function getlocations_leaflet_config_info() {
     'label' => t('Getlocations Leaflet paths'),
     'group' => t('Configuration'),
   );
-  $info['getlocations_leaflet.shapes'] = array(
-    'label' => t('Getlocations Leaflet shapes'),
-    'group' => t('Configuration'),
-  );
-  $info['getlocations_leaflet.what3words'] = array(
-    'label' => t('Getlocations Leaflet what3words'),
-    'group' => t('Configuration'),
-  );
+#  $info['getlocations_leaflet.shapes'] = array(
+#    'label' => t('Getlocations Leaflet shapes'),
+#    'group' => t('Configuration'),
+#  );
+#  $info['getlocations_leaflet.what3words'] = array(
+#    'label' => t('Getlocations Leaflet what3words'),
+#    'group' => t('Configuration'),
+#  );
   $info['getlocations_leaflet.cdn'] = array(
     'label' => t('Getlocations Leaflet CDN'),
     'group' => t('Configuration'),
@@ -1562,18 +1562,19 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
     $map_settings['map_settings']['views_search_marker_info'] = getlocations_leaflet_get_marker($defaults['views_search_marker']);
   }
 
-  $map_settings['map_settings']['views_search_marker_toggle'] = $defaults['views_search_marker_toggle'];
-  $map_settings['map_settings']['views_search_marker_toggle_active'] = $defaults['views_search_marker_toggle_active'];
-  $map_settings['map_settings']['views_search_radshape_enable'] = $defaults['views_search_radshape_enable'];
-  $map_settings['map_settings']['views_search_radshape_strokecolor'] = $defaults['views_search_radshape_strokecolor'];
-  $map_settings['map_settings']['views_search_radshape_strokeopacity'] = $defaults['views_search_radshape_strokeopacity'];
-  $map_settings['map_settings']['views_search_radshape_strokeweight'] = $defaults['views_search_radshape_strokeweight'];
-  $map_settings['map_settings']['views_search_radshape_fillcolor'] = $defaults['views_search_radshape_fillcolor'];
-  $map_settings['map_settings']['views_search_radshape_fillopacity'] = $defaults['views_search_radshape_fillopacity'];
-  $map_settings['map_settings']['views_search_radshape_toggle'] = $defaults['views_search_radshape_toggle'];
-  $map_settings['map_settings']['views_search_radshape_toggle_active'] = $defaults['views_search_radshape_toggle_active'];
-  $map_settings['map_settings']['views_search_center'] = $defaults['views_search_center'];
-  $map_settings['map_settings']['geolocation_mobile_check'] = $defaults['geolocation_mobile_check'];
+  $map_settings['map_settings']['views_search_marker_toggle']          = $defaults['views_search_group']['views_search_marker_toggle'];
+  $map_settings['map_settings']['views_search_marker_toggle_active']   = $defaults['views_search_group']['views_search_marker_toggle_active'];
+  $map_settings['map_settings']['views_search_radshape_enable']        = $defaults['views_search_group']['views_search_radshape_enable'];
+  $map_settings['map_settings']['views_search_radshape_strokecolor']   = $defaults['views_search_group']['views_search_radshape_strokecolor'];
+  $map_settings['map_settings']['views_search_radshape_strokeopacity'] = $defaults['views_search_group']['views_search_radshape_strokeopacity'];
+  $map_settings['map_settings']['views_search_radshape_strokeweight']  = $defaults['views_search_group']['views_search_radshape_strokeweight'];
+  $map_settings['map_settings']['views_search_radshape_fillcolor']     = $defaults['views_search_group']['views_search_radshape_fillcolor'];
+  $map_settings['map_settings']['views_search_radshape_fillopacity']   = $defaults['views_search_group']['views_search_radshape_fillopacity'];
+  $map_settings['map_settings']['views_search_radshape_toggle']        = $defaults['views_search_group']['views_search_radshape_toggle'];
+  $map_settings['map_settings']['views_search_radshape_toggle_active'] = $defaults['views_search_group']['views_search_radshape_toggle_active'];
+  $map_settings['map_settings']['views_search_center']                 = $defaults['views_search_group']['views_search_center'];
+
+  $map_settings['map_settings']['geolocation_mobile_check']            = $defaults['geolocation_mobile_check'];
 
   // field group support;
   $map_settings['map_settings']['field_group_enable'] = (module_exists('field_group') ? 1 : 0);
@@ -1585,22 +1586,18 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
 
   // what3words
   $what3words_lic = getlocations_w3w_get_lic();
-
-  if ($what3words_lic['key'] && $defaults['what3words_enable']) {
-    $icon = getlocations_leaflet_get_marker($defaults['what3words_map_marker']);
-
+  if ($what3words_lic['key'] && $defaults['what3words_group']['what3words_enable']) {
     #$map_settings['map_settings']['what3words_key'] = $what3words_lic['key'];
-    $map_settings['map_settings']['what3words_enable']      = $defaults['what3words_enable'];
-    $map_settings['map_settings']['what3words_search']      = $defaults['what3words_search'];
-    #$map_settings['map_settings']['what3words_map_marker']  = $defaults['what3words_map_marker'];
-    $map_settings['map_settings']['what3words_map_marker']  = $icon;
-    $map_settings['map_settings']['what3words_center']      = $defaults['what3words_center'];
-    $map_settings['map_settings']['what3words_zoom']        = $defaults['what3words_zoom'];
-    $map_settings['map_settings']['what3words_show']        = $defaults['what3words_show'];
-    $map_settings['map_settings']['what3words_marker_show'] = $defaults['what3words_marker_show'];
-    $map_settings['map_settings']['what3words_click']       = $defaults['what3words_click'];
-    $map_settings['map_settings']['what3words_size']        = $defaults['what3words_size'];
-    $map_settings['map_settings']['what3words_path']        = url($defaults['what3words_path']);
+    $map_settings['map_settings']['what3words_enable']      = $defaults['what3words_group']['what3words_enable'];
+    $map_settings['map_settings']['what3words_search']      = $defaults['what3words_group']['what3words_search'];
+    $map_settings['map_settings']['what3words_map_marker']  = getlocations_leaflet_get_marker($defaults['what3words_group']['what3words_map_marker']);
+    $map_settings['map_settings']['what3words_center']      = $defaults['what3words_group']['what3words_center'];
+    $map_settings['map_settings']['what3words_zoom']        = $defaults['what3words_group']['what3words_zoom'];
+    $map_settings['map_settings']['what3words_show']        = $defaults['what3words_group']['what3words_show'];
+    $map_settings['map_settings']['what3words_marker_show'] = $defaults['what3words_group']['what3words_marker_show'];
+    $map_settings['map_settings']['what3words_click']       = $defaults['what3words_group']['what3words_click'];
+    $map_settings['map_settings']['what3words_size']        = $defaults['what3words_group']['what3words_size'];
+    $map_settings['map_settings']['what3words_path']        = url($defaults['what3words_group']['what3words_path']);
     backdrop_add_js($getlocations_leaflet_paths['getlocations_leaflet_what3words_path']);
   }
   else {
@@ -1609,7 +1606,7 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
 
   // shapes
   // polygons
-  if ($defaults['polygons_enable'] && ! empty($defaults['polygons_coords'])) {
+  if ($defaults['polygons_group']['polygons_enable'] && ! empty($defaults['polygons_group']['polygons_coords'])) {
     $polygons = getlocations_get_polygon_settings($defaults);
     if ($polygons) {
       $polygon_settings = array(
@@ -1621,17 +1618,17 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
   }
 
   // rectangles
-  if ($defaults['rectangles_enable'] && (! empty($defaults['rectangles_coords']) || ($defaults['rectangles_apply'] && $defaults['rectangles_dist']))) {
-    if ($defaults['rectangles_apply'] && $defaults['rectangles_dist']) {
+  if ($defaults['rectangles_group']['rectangles_enable'] && (! empty($defaults['rectangles_group']['rectangles_coords']) || ($defaults['rectangles_apply'] && $defaults['rectangles_group']['rectangles_dist']))) {
+    if ($defaults['rectangles_group']['rectangles_apply'] && $defaults['rectangles_group']['rectangles_dist']) {
       // get latlons and set coords
       $tmp = '';
       foreach ($latlons AS $ll) {
-        $lats = getlocations_earth_latitude_range($ll[0], $ll[1], $defaults['rectangles_dist']);
-        $lngs = getlocations_earth_longitude_range($ll[0], $ll[1], $defaults['rectangles_dist']);
+        $lats = getlocations_earth_latitude_range($ll[0], $ll[1], $defaults['rectangles_group']['rectangles_dist']);
+        $lngs = getlocations_earth_longitude_range($ll[0], $ll[1], $defaults['rectangles_group']['rectangles_dist']);
         $tmp .= $lats[0] . ',' . $lngs[0] . '|' . $lats[1] . ',' . $lngs[1] . "\n";
       }
       if ($tmp) {
-        $defaults['rectangles_coords'] = $tmp;
+        $defaults['rectangles_group']['rectangles_coords'] = $tmp;
       }
     }
     $rectangles = getlocations_get_rectangle_settings($defaults);
@@ -1645,15 +1642,15 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
   }
 
   // circles
-  if ($defaults['circles_enable'] && $defaults['circles_radius'] > 0 && (! empty($defaults['circles_coords']) || $defaults['circles_apply'])) {
-    if ($defaults['circles_apply'] && count($latlons)) {
+  if ($defaults['circles_group']['circles_enable'] && $defaults['circles_group']['circles_radius'] > 0 && (! empty($defaults['circles_group']['circles_coords']) || $defaults['circles_group']['circles_apply'])) {
+    if ($defaults['circles_group']['circles_apply'] && count($latlons)) {
       // get latlons and set coords
       $tmp = '';
       foreach ($latlons AS $ll) {
         $tmp .= $ll[0] . ',' . $ll[1] . "\n";
       }
       if ($tmp) {
-        $defaults['circles_coords'] = $tmp;
+        $defaults['circles_group']['circles_coords'] = $tmp;
       }
     }
     $circles = getlocations_get_circle_settings($defaults);
@@ -1667,7 +1664,7 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
   }
 
   // polylines
-  if ($defaults['polylines_enable'] && ! empty($defaults['polylines_coords'])) {
+  if ($defaults['polylines_group']['polylines_enable'] && ! empty($defaults['polylines_group']['polylines_coords'])) {
     $polylines = getlocations_get_polyline_settings($defaults);
     if ($polylines) {
       $polyline_settings = array(
@@ -3116,8 +3113,8 @@ function getlocations_leaflet_display_options_form($defaults, $admin = FALSE) {
   }
 
   // shapes
-  $shapes = config_get("getlocations_leaflet.shapes", "shapes");
-  $defaults += $shapes;
+  #$shapes = config_get("getlocations_leaflet.shapes", "shapes");
+  #$defaults += $shapes;
   $form += getlocations_shapes_form($defaults, '');
 
   // geojson

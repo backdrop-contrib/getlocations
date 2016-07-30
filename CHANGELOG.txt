@@ -1,9 +1,52 @@
-commit 52aeb30
+commit b69376e
+Author: hutch <hutch@arwystli.net>
+Date:   Sat Jul 30 18:09:25 2016 +0100
+
+    reorganised json, and more debugging.
+
+config/getlocations.settings.json
+config/getlocations.shapes.json
+config/getlocations.what3words.json
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_views.js
+modules/getlocations_fields/config/getlocations_fields.settings.json
+modules/getlocations_fields/config/getlocations_fields.shapes.json
+modules/getlocations_fields/config/getlocations_fields.sv.json
+modules/getlocations_fields/config/getlocations_fields.what3words.json
+modules/getlocations_fields/getlocations_fields.admin.inc
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_fields/js/getlocations_fields.js
+modules/getlocations_fields/js/getlocations_fields_formatter_1.js
+modules/getlocations_gps/js/getlocations_gps.min.js
+modules/getlocations_gps/js/getlocations_gps_admin.js
+modules/getlocations_gps/js/getlocations_gps_admin.min.js
+modules/getlocations_leaflet/config/getlocations_leaflet.settings.json
+modules/getlocations_leaflet/config/getlocations_leaflet.shapes.json
+modules/getlocations_leaflet/config/getlocations_leaflet.what3words.json
+modules/getlocations_leaflet/getlocations_leaflet.admin.inc
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+modules/getlocations_search/config/getlocations_search.settings.json
+modules/getlocations_search/config/getlocations_search.shapes.json
+modules/getlocations_search/config/getlocations_search.what3words.json
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/getlocations_search.theme.inc
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit d1e26c4
 Author: hutch <hutch@arwystli.net>
 Date:   Mon Jul 25 18:15:00 2016 +0100
 
     removed drush
 
+CHANGELOG.txt
 drush/getlocations.drush.inc
 
 commit 0b0e231

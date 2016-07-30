@@ -202,7 +202,7 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       }
 
       // users
-      if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+      if (getlocations_check_entity_type('user')) {
         $labels = array(
           'awesome_icon' => t('User Awesome icon'),
           'awesome_icon_color' => t('User Awesome icon color'),

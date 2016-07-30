@@ -381,13 +381,13 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
 
   $form[$varname] += getlocations_map_display_basics_form($defaults);
 
-  $w3w_settings = getlocations_search_w3w_settings();
-  $shapes = getlocations_search_shapes_settings();
+  #$w3w_settings = getlocations_search_w3w_settings();
+  #$shapes = getlocations_search_shapes_settings();
 
-  $defaults2 = $defaults + $w3w_settings;
-  $defaults2 = $defaults2 + $shapes;
+#  $defaults2 = $defaults + $w3w_settings;
+#  $defaults2 = $defaults2 + $shapes;
 
-  $form[$varname] += getlocations_map_display_options_form($defaults2, FALSE, TRUE, 'getlocations_search');
+  $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE, 'getlocations_search');
 
   $form[$varname] += getlocations_markeraction_form($defaults);
 
@@ -512,7 +512,7 @@ function getlocations_search_settings_form_submit($form, &$form_state) {
   if (isset($form_state['values']['getlocations_search_defaults'])) {
 
     $values = $form_state['values']['getlocations_search_defaults'];
-
+/*
     // what3words only if there is a license
     $lic = getlocations_w3w_get_lic();
     if ( ! empty($lic) ) {
@@ -521,9 +521,9 @@ function getlocations_search_settings_form_submit($form, &$form_state) {
       $what3words->save();
       unset($values['what3words_group']);
     }
+*/
 
-
-
+/*
     // shapes
     $shapes_values = array();
 
@@ -557,6 +557,7 @@ function getlocations_search_settings_form_submit($form, &$form_state) {
       $shapes->set('shapes.' . $k, $v);
     }
     $shapes->save();
+*/
 
     $settings = config('getlocations_search.settings');
   }

@@ -20,7 +20,16 @@
         }
         $("input[id$=gps-button]").change(function() {
           if ($(this).prop('checked')) {
-            $("#wrap-getlocations-gps-button").show();
+            //$("#wrap-getlocations-gps-button").show();
+            var cg = $(this);
+            $("#wrap-getlocations-gps-button").slideDown({
+              duration: 'fast',
+              easing: 'linear',
+              complete: function () {
+                Backdrop.getlocations.divScrollIntoView(cg);
+                cg.animating = false;
+              }
+            });
           }
           else {
             $("#wrap-getlocations-gps-button").hide();

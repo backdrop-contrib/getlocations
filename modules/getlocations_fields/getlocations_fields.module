@@ -136,19 +136,18 @@ function getlocations_fields_config_info() {
     'label' => t('Getlocations fields paths'),
     'group' => t('Configuration'),
   );
-  $info['getlocations_fields.shapes'] = array(
-    'label' => t('Getlocations fields shapes'),
-    'group' => t('Configuration'),
-  );
-  $info['getlocations_fields.what3words'] = array(
-    'label' => t('Getlocations fields what3words'),
-    'group' => t('Configuration'),
-  );
-  $info['getlocations_fields.sv'] = array(
-    'label' => t('Getlocations fields sv'),
-    'group' => t('Configuration'),
-  );
-
+#  $info['getlocations_fields.shapes'] = array(
+#    'label' => t('Getlocations fields shapes'),
+#    'group' => t('Configuration'),
+#  );
+#  $info['getlocations_fields.what3words'] = array(
+#    'label' => t('Getlocations fields what3words'),
+#    'group' => t('Configuration'),
+#  );
+#  $info['getlocations_fields.sv'] = array(
+#    'label' => t('Getlocations fields sv'),
+#    'group' => t('Configuration'),
+#  );
   return $info;
 }
 
@@ -737,7 +736,7 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
   }
 
   $locations = array();
-  $supported_entity_types = array('node', 'user', 'taxonomy_term', 'comment', 'profile2');
+  $supported_entity_types = array('node', 'user', 'taxonomy_term', 'comment');
 
   $element = array();
   if (! in_array($entity_type, $supported_entity_types)) {
@@ -814,21 +813,21 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     }
   }
 
-  // TODO add shapes and what3words and sv using config()
-  $w3w_lic = getlocations_w3w_get_lic();
-  if ($w3w_lic['key']) {
-    $w3w_search = config_get('getlocations_search.what3words', 'settings');
-    $w3w_search['what3words_lic'] = $w3w_lic;
-    $settings += $w3w_search;
-  }
-
-  // shapes
-  $shapes = config_get('getlocations_fields.shapes', 'shapes');
-  $settings += $shapes;
-
-  // sv
-  $sv = config_get('getlocations_fields.sv', 'settings');
-  $settings += $sv;
+#  // TODO add shapes and what3words and sv using config()
+#  $w3w_lic = getlocations_w3w_get_lic();
+#  if ($w3w_lic['key']) {
+#    $w3w_search = config_get('getlocations_search.what3words', 'settings');
+#    $w3w_search['what3words_lic'] = $w3w_lic;
+#    $settings += $w3w_search;
+#  }
+#
+#  // shapes
+#  $shapes = config_get('getlocations_fields.shapes', 'shapes');
+#  $settings += $shapes;
+#
+#  // sv
+#  $sv = config_get('getlocations_fields.sv', 'settings');
+#  $settings += $sv;
 
   switch ($display['type']) {
     case 'getlocations_fields_default':
@@ -891,10 +890,11 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
 
   if (! isset($settings['polygons_group']) ) {
     $shapes = config_get("getlocations_fields.shapes", "shapes");
-    $settings['polygons_group'] = $shapes['polygons_group'];
-    $settings['polylines_group'] = $shapes['polylines_group'];
-    $settings['circles_group'] = $shapes['circles_group'];
-    $settings['rectangles_group'] = $shapes['rectangles_group'];
+    #$settings['polygons_group'] = $shapes['polygons_group'];
+    #$settings['polylines_group'] = $shapes['polylines_group'];
+    #$settings['circles_group'] = $shapes['circles_group'];
+    #$settings['rectangles_group'] = $shapes['rectangles_group'];
+    $settings += $shapes;
   }
 
   // map display options
@@ -917,9 +917,9 @@ function getlocations_fields_field_formatter_settings_form($field, $instance, $v
   }
 
   // streetview overlay settings
-  $sv = config_get('getlocations_fields.sv', 'settings');
-  $settings += $sv;
-  $element += getlocations_fields_sv_control_form($settings);
+#  $sv = config_get('getlocations_fields.sv', 'settings');
+#  $settings += $sv;
+#  $element += getlocations_fields_sv_control_form($settings);
 
   unset($element['#theme']);
   $element['#theme'] = 'getlocations_fields_field_formatter_settings_form';
@@ -1123,7 +1123,7 @@ function getlocations_fields_field_formatter_settings_summary($field, $instance,
       }
     }
     // search_places
-    if ($settings['search_places']) {
+    if ($settings['search_places_group']['search_places']) {
       $summary[] = t('Enable Search Places: Yes');
     }
 
@@ -1844,6 +1844,7 @@ function getlocations_fields_getmap($settings, $active) {
   $getlocations_defaults['map_backgroundcolor'] = $settings['map_backgroundcolor'];
   $getlocations_defaults['input_map_show']      = $settings['input_map_show'];
   #$getlocations_defaults['use_jsapi']       = $settings['use_geolocation_button'];
+  $getlocations_defaults['sv_group']            = $settings['sv_group'];
 
   $getlocations_defaults['geocoder_enable']      = $settings['geocoder_enable'];
 
@@ -2683,10 +2684,9 @@ function getlocations_fields_field_info_defaults() {
   $getlocations_defaults = getlocations_defaults();
   $getlocations_fields_defaults = getlocations_fields_defaults();
 
-  $sv = config_get('getlocations_fields.sv', 'settings');
-  $sv_group = $sv['sv_group'];
-
-  $shapes = config_get('getlocations_fields.shapes', 'shapes');
+#  $sv = config_get('getlocations_fields.sv', 'settings');
+#  $sv_group = $sv['sv_group'];
+#  $shapes = config_get('getlocations_fields.shapes', 'shapes');
 
   $defaults = array(
     'getlocations_fields' => array(
@@ -2768,8 +2768,8 @@ function getlocations_fields_field_info_defaults() {
         'latlon_warning'                  => $getlocations_fields_defaults['latlon_warning'],
         'map_settings_allow'              => $getlocations_fields_defaults['map_settings_allow'],
         'streetview_settings_allow'       => $getlocations_fields_defaults['streetview_settings_allow'],
-        'sv_show'                       => $getlocations_fields_defaults['sv_show'],
-        'svcontrolposition'             => $getlocations_fields_defaults['svcontrolposition'],
+        'sv_show'                         => $getlocations_fields_defaults['sv_show'],
+        'svcontrolposition'               => $getlocations_fields_defaults['svcontrolposition'],
         'sv_heading'                      => $getlocations_fields_defaults['sv_heading'],
         'sv_zoom'                         => $getlocations_fields_defaults['sv_zoom'],
         'sv_pitch'                        => $getlocations_fields_defaults['sv_pitch'],
@@ -2785,10 +2785,10 @@ function getlocations_fields_field_info_defaults() {
         'fullscreen'                      => $getlocations_defaults['fullscreen'],
         'fullscreen_controlposition'      => $getlocations_defaults['fullscreen_controlposition'],
         'show_bubble_on_one_marker'       => $getlocations_defaults['show_bubble_on_one_marker'],
-        'polygons_group'                  => $shapes['polygons_group'],
-        'rectangles_group'                => $shapes['rectangles_group'],
-        'circles_group'                   => $shapes['circles_group'],
-        'polylines_group'                 => $shapes['polylines_group'],
+        'polygons_group'                  => $getlocations_fields_defaults['polygons_group'],
+        'rectangles_group'                => $getlocations_fields_defaults['rectangles_group'],
+        'circles_group'                   => $getlocations_fields_defaults['circles_group'],
+        'polylines_group'                 => $getlocations_fields_defaults['polylines_group'],
         'search_places_group'             => $getlocations_fields_defaults['search_places_group'],
         'kml_group'                       => $getlocations_fields_defaults['kml_group'],
         'geojson_enable'                  => $getlocations_fields_defaults['geojson_enable'],
@@ -2799,8 +2799,7 @@ function getlocations_fields_field_info_defaults() {
         'zoomcontrolposition'             => $getlocations_fields_defaults['zoomcontrolposition'],
         'mapcontrolposition'              => $getlocations_fields_defaults['mapcontrolposition'],
         'scalecontrolposition'            => $getlocations_fields_defaults['scalecontrolposition'],
-        #'svcontrolposition'               => $getlocations_fields_defaults['sv_group']['svcontrolposition'],
-        'sv_group'                        => $sv_group,
+        'sv_group'                        => $getlocations_fields_defaults['sv_group'],
         'input_map_show'                  => $getlocations_fields_defaults['input_map_show'],
         'highlight_group'                 => $getlocations_fields_defaults['highlight_group'],
         'getdirections_link'              => $getlocations_fields_defaults['getdirections_link'],
@@ -2809,6 +2808,7 @@ function getlocations_fields_field_info_defaults() {
 #        'gps_group'                       => $getlocations_fields_defaults['gps_group'],
         'geocoder_enable'                 => $getlocations_fields_defaults['geocoder_enable'],
         'what3words_lic'                  => $getlocations_defaults['what3words_lic'],
+        'what3words_group'                => $getlocations_fields_defaults['what3words_group'],
         'what3words_collect'              => $getlocations_fields_defaults['what3words_collect'],
         'show_maplinks_viewport'          => $getlocations_defaults['show_maplinks_viewport'],
       ),
@@ -2828,10 +2828,9 @@ function getlocations_fields_field_info_defaults() {
 function getlocations_fields_field_formatter_info_defaults() {
   $getlocations_defaults = getlocations_defaults();
   $getlocations_fields_defaults = getlocations_fields_defaults();
-  $sv = config_get('getlocations_fields.sv', 'settings');
-  $sv_group = $sv['sv_group'];
-
-  $shapes = config_get('getlocations_fields.shapes', 'shapes');
+  #$sv = config_get('getlocations_fields.sv', 'settings');
+  #$sv_group = $sv['sv_group'];
+  #$shapes = config_get('getlocations_fields.shapes', 'shapes');
 
   $defaults = array(
     'display_mapwidth'          => $getlocations_defaults['width'],
@@ -2844,6 +2843,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'display_onemap'            => $getlocations_fields_defaults['display_onemap'],
     'what3words_display'        => $getlocations_fields_defaults['what3words_display'],
     'what3words_lic'            => $getlocations_defaults['what3words_lic'],
+    'what3words_group'          => $getlocations_defaults['what3words_group'],
     'controltype'               => $getlocations_defaults['controltype'],
     'mtc'                       => $getlocations_defaults['mtc'],
     'maptype'                   => $getlocations_defaults['maptype'],
@@ -2893,10 +2893,10 @@ function getlocations_fields_field_formatter_info_defaults() {
     'fullscreen'                => $getlocations_defaults['fullscreen'],
     'fullscreen_controlposition' => $getlocations_defaults['fullscreen_controlposition'],
     'show_bubble_on_one_marker' => $getlocations_defaults['show_bubble_on_one_marker'],
-    'polygons_group'            => $shapes['polygons_group'],
-    'rectangles_group'          => $shapes['rectangles_group'],
-    'circles_group'             => $shapes['circles_group'],
-    'polylines_group'           => $shapes['polylines_group'],
+    'polygons_group'            => $getlocations_fields_defaults['polygons_group'],
+    'rectangles_group'          => $getlocations_fields_defaults['rectangles_group'],
+    'circles_group'             => $getlocations_fields_defaults['circles_group'],
+    'polylines_group'           => $getlocations_fields_defaults['polylines_group'],
     'search_places_group'       => $getlocations_defaults['search_places_group'],
     'kml_group'                 => $getlocations_defaults['kml_group'],
     'geojson_enable'            => $getlocations_defaults['geojson_enable'],
@@ -2906,11 +2906,9 @@ function getlocations_fields_field_formatter_info_defaults() {
     'nodoubleclickzoom'         => $getlocations_defaults['nodoubleclickzoom'],
     'zoomcontrolposition'       => $getlocations_defaults['zoomcontrolposition'],
     'mapcontrolposition'        => $getlocations_defaults['mapcontrolposition'],
-
     'scalecontrolposition'      => $getlocations_defaults['scalecontrolposition'],
-    'svcontrolposition'      => $getlocations_defaults['svcontrolposition'],
-#    'svcontrolposition'         => $sv_group['svcontrolposition'],
-    'sv_group'                  => $sv_group,
+    'svcontrolposition'         => $getlocations_defaults['svcontrolposition'],
+    'sv_group'                  => $getlocations_fields_defaults['sv_group'],
     'highlight_group'           => $getlocations_defaults['highlight_group'],
     'getdirections_link'        => $getlocations_defaults['getdirections_link'],
     'show_search_distance'      => $getlocations_defaults['show_search_distance'],
@@ -3506,67 +3504,67 @@ function getlocations_fields_display_settings_form($defaults) {
  * Cleans up entries related to taxonomy or comment modules
  */
 
-function getlocations_fields_modules_uninstalled($modules) {
-
-  $identifier = '';
-  foreach ($modules as $module) {
-    if ($module == 'taxonomy') {
-      $identifier = 'tid';
-    }
-    elseif ($module == 'comment') {
-      $identifier = 'cid';
-    }
-    elseif ($module == 'profile2') {
-      $identifier = 'uid';
-    }
-
-    if ($identifier) {
-      $instances = array();
-      // field_info_instances() is unuseable so roll our own
-      $query = db_select('field_config', 'f');
-      $query->fields('i', array('field_name', 'entity_type', 'bundle'));
-      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
-      $query->condition('f.module', 'getlocations_fields')
-        ->condition('f.type', 'getlocations_fields')
-        ->condition('i.entity_type', $module);
-      $result = $query->execute();
-      if ($result) {
-        $ct = 0;
-        foreach ($result AS $row) {
-          $instances[$ct]['field_name'] = $row->field_name;
-          $instances[$ct]['entity_type'] = $row->entity_type;
-          $instances[$ct]['bundle'] = $row->bundle;
-          $ct++;
-        }
-      }
-      if (count($instances)) {
-        $glids = array();
-        foreach ($instances AS $k => $instance) {
-          $query = db_select('getlocations_fields_entities', 'e');
-          $query->fields('e', array('glid'));
-          $query->condition('e.' . $identifier, 0, '>')
-            ->condition('e.field_name', $instance['field_name']);
-          $result2 = $query->execute();
-          if ($result2) {
-            foreach ($result2 AS $row) {
-              $glids[] = $row->glid;
-            }
-          }
-          field_delete_instance($instance);
-        }
-        if (count($glids)) {
-          foreach ($glids AS $glid) {
-            getlocations_fields_delete_record(array('glid' => $glid), '');
-          }
-        }
-        field_purge_batch(1000);
-        // for some reason the record in field_config_instance does not get deleted
-        // even though it is set to be deleted, so do it now.
-        db_delete('field_config_instance')->condition('entity_type', $module)->execute();
-      }
-    }
-  }
-}
+#function getlocations_fields_modules_uninstalled($modules) {
+#
+#  $identifier = '';
+#  foreach ($modules as $module) {
+#    if ($module == 'taxonomy') {
+#      $identifier = 'tid';
+#    }
+#    elseif ($module == 'comment') {
+#      $identifier = 'cid';
+#    }
+#    elseif ($module == 'profile2') {
+#      $identifier = 'uid';
+#    }
+#
+#    if ($identifier) {
+#      $instances = array();
+#      // field_info_instances() is unuseable so roll our own
+#      $query = db_select('field_config', 'f');
+#      $query->fields('i', array('field_name', 'entity_type', 'bundle'));
+#      $query->join('field_config_instance', 'i', 'f.id=i.field_id');
+#      $query->condition('f.module', 'getlocations_fields')
+#        ->condition('f.type', 'getlocations_fields')
+#        ->condition('i.entity_type', $module);
+#      $result = $query->execute();
+#      if ($result) {
+#        $ct = 0;
+#        foreach ($result AS $row) {
+#          $instances[$ct]['field_name'] = $row->field_name;
+#          $instances[$ct]['entity_type'] = $row->entity_type;
+#          $instances[$ct]['bundle'] = $row->bundle;
+#          $ct++;
+#        }
+#      }
+#      if (count($instances)) {
+#        $glids = array();
+#        foreach ($instances AS $k => $instance) {
+#          $query = db_select('getlocations_fields_entities', 'e');
+#          $query->fields('e', array('glid'));
+#          $query->condition('e.' . $identifier, 0, '>')
+#            ->condition('e.field_name', $instance['field_name']);
+#          $result2 = $query->execute();
+#          if ($result2) {
+#            foreach ($result2 AS $row) {
+#              $glids[] = $row->glid;
+#            }
+#          }
+#          field_delete_instance($instance);
+#        }
+#        if (count($glids)) {
+#          foreach ($glids AS $glid) {
+#            getlocations_fields_delete_record(array('glid' => $glid), '');
+#          }
+#        }
+#        field_purge_batch(1000);
+#        // for some reason the record in field_config_instance does not get deleted
+#        // even though it is set to be deleted, so do it now.
+#        db_delete('field_config_instance')->condition('entity_type', $module)->execute();
+#      }
+#    }
+#  }
+#}
 
 // backward compat
 function getlocations_fields_get_countries_list($upper = TRUE) {
@@ -3640,7 +3638,9 @@ function getlocations_fields_data_keys($type = 'dd') {
 // TODO FIX THIS
 function getlocations_fields_svinfo($location) {
 
-  $sv_settings = config_get('getlocations_fields.sv', 'settings');
+  #$sv_settings = config_get('getlocations_fields.sv', 'settings');
+  $getlocations_fields_defaults = getlocations_fields_defaults();
+  $sv_settings = $getlocations_fields_defaults['sv_group'];
   $sv_defaults = getlocations_fields_data_keys('d');
   $sv_info = array(
     'sv_heading'                => (isset($location['sv_heading']) ? $location['sv_heading'] : $sv_defaults['sv_heading']),
@@ -3694,53 +3694,54 @@ function getlocations_fields_sv_control_form($settings) {
   $controlpositions = getlocations_controlpositions();
 
   $form = array();
-  $form['sv_addresscontrol'] = getlocations_element_map_checkbox(
+  $form['sv_group'] = array('#type' => 'container');
+  $form['sv_group']['sv_addresscontrol'] = getlocations_element_map_checkbox(
     t('Show Streetview address'),
     $settings['sv_group']['sv_addresscontrol']
   );
-  $form['sv_addresscontrol']['#suffix'] = '<div id="wrap-getlocations-sv-addresscontrol">';
-  $form['sv_addresscontrolposition'] = getlocations_element_dd(
+  $form['sv_group']['sv_addresscontrol']['#suffix'] = '<div id="wrap-getlocations-sv-addresscontrol">';
+  $form['sv_group']['sv_addresscontrolposition'] = getlocations_element_dd(
     t('Position of Streetview address display'),
     $settings['sv_group']['sv_addresscontrolposition'],
     $controlpositions
   );
-  $form['sv_addresscontrolposition']['#suffix'] = '</div>';
+  $form['sv_group']['sv_addresscontrolposition']['#suffix'] = '</div>';
 
-  $form['sv_pancontrol'] = getlocations_element_map_checkbox(
+  $form['sv_group']['sv_pancontrol'] = getlocations_element_map_checkbox(
     t('Show Streetview Pan Control'),
     $settings['sv_group']['sv_pancontrol']
   );
-  $form['sv_pancontrol']['#suffix'] = '<div id="wrap-getlocations-sv-pancontrol">';
-  $form['sv_pancontrolposition'] = getlocations_element_dd(
+  $form['sv_group']['sv_pancontrol']['#suffix'] = '<div id="wrap-getlocations-sv-pancontrol">';
+  $form['sv_group']['sv_pancontrolposition'] = getlocations_element_dd(
     t('Position of Streetview Pan Control'),
     $settings['sv_group']['sv_pancontrolposition'],
     $controlpositions
   );
-  $form['sv_pancontrolposition']['#suffix'] = '</div>';
+  $form['sv_group']['sv_pancontrolposition']['#suffix'] = '</div>';
 
-  $form['sv_zoomcontrol'] = getlocations_element_map_zoom_controltype($settings['sv_group']['sv_zoomcontrol'], t('Streetview Zoom Control type'));
-  $form['sv_zoomcontrol']['#suffix'] = '<div id="wrap-getlocations-sv-zoomcontrol">';
+  $form['sv_group']['sv_zoomcontrol'] = getlocations_element_map_zoom_controltype($settings['sv_group']['sv_zoomcontrol'], t('Streetview Zoom Control type'));
+  $form['sv_group']['sv_zoomcontrol']['#suffix'] = '<div id="wrap-getlocations-sv-zoomcontrol">';
 
-  $form['sv_zoomcontrolposition'] = getlocations_element_dd(
+  $form['sv_group']['sv_zoomcontrolposition'] = getlocations_element_dd(
     t('Position of Streetview Zoom Control'),
     $settings['sv_group']['sv_zoomcontrolposition'],
     $controlpositions
   );
-  $form['sv_zoomcontrolposition']['#suffix'] = '</div>';
+  $form['sv_group']['sv_zoomcontrolposition']['#suffix'] = '</div>';
 
-  $form['sv_linkscontrol'] = getlocations_element_map_checkbox(
+  $form['sv_group']['sv_linkscontrol'] = getlocations_element_map_checkbox(
     t('Enable Streetview links'),
     $settings['sv_group']['sv_linkscontrol']
   );
-  $form['sv_imagedatecontrol'] = getlocations_element_map_checkbox(
+  $form['sv_group']['sv_imagedatecontrol'] = getlocations_element_map_checkbox(
     t('Show Streetview image date'),
     $settings['sv_group']['sv_imagedatecontrol']
   );
-  $form['sv_scrollwheel'] = getlocations_element_map_checkbox(
+  $form['sv_group']['sv_scrollwheel'] = getlocations_element_map_checkbox(
     t('Enable Streetview scrollwheel'),
     $settings['sv_group']['sv_scrollwheel']
   );
-  $form['sv_clicktogo'] = getlocations_element_map_checkbox(
+  $form['sv_group']['sv_clicktogo'] = getlocations_element_map_checkbox(
     t('Enable Streetview clickToGo'),
     $settings['sv_group']['sv_clicktogo'],
     t('Enable navigating Streetview by clicking on it.')
@@ -3762,8 +3763,9 @@ function getlocations_fields_get_display_settings($settings) {
 // TODO
 function getlocations_fields_get_display_settings_defaults() {
 
-   $sv = config_get('getlocations_fields.sv', 'settings');
-  return $sv['sv_group'];
+  $getlocations_fields_defaults = getlocations_fields_defaults();
+
+  return $getlocations_fields_defaults['sv_group'];
 
 #  $settings = array(
 #    'sv_addresscontrol'         => 1,

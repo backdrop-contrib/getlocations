@@ -33,6 +33,12 @@ function getlocations_settings_form() {
   );
 
   $c = count(getlocations_get_marker_titles());
+  if (! $c) {
+    if (getlocations_regenerate_markers()) {
+      $c = count(getlocations_get_marker_titles());
+    }
+  }
+
   if ($c) {
     $rebuildmsg = '<p>' . format_plural($c, 'You have 1 marker installed.', 'You have @count markers installed.') . '</p>';
   }
@@ -72,7 +78,7 @@ function getlocations_settings_form() {
   $form['api3_group'] = array(
     '#type' => 'fieldset',
     '#title' => t('Google API key'),
-    '#description' => t('This key is currently not required by Google.'),
+    '#description' => t('This key may be required by Google for full functionality.'),
     '#collapsible' => TRUE,
     #'#collapsed' => ($apikey ? TRUE : FALSE),
     '#collapsed' => TRUE,
@@ -191,18 +197,18 @@ function getlocations_settings_form() {
     '#tree' => FALSE,
   );
 
-  if ($what3words_lic['key']) {
-    $getlocations_defaults += getlocations_w3w_get_group();
-  }
+#  if ($what3words_lic['key']) {
+#    $getlocations_defaults += getlocations_w3w_get_group();
+#  }
 
-  $shapes = getlocations_shapes_settings();
-  $getlocations_defaults += $shapes;
+#  $shapes = getlocations_shapes_settings();
+#  $getlocations_defaults += $shapes;
 
 #  $sv_group = config_get('getlocations.sv', 'settings');
 #  $getlocations_defaults += $sv_group;
-
-  $what3words = getlocations_w3w_settings();
-  $getlocations_defaults += $what3words;
+#
+#  $what3words = getlocations_w3w_settings();
+#  $getlocations_defaults += $what3words;
 
 #  $form['getlocations_preview']['preview_map'] = array('#markup' => '');
   // add the preview map here
@@ -249,7 +255,7 @@ function getlocations_settings_form() {
 
   // default user marker
   $desc = '';
-  if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+  if (getlocations_check_entity_type('user')) {
     $desc = t('In use');
   }
   $form['getlocations_default']['user_map_marker'] = getlocations_element_map_marker(
@@ -317,9 +323,19 @@ function getlocations_settings_form() {
   }
   else {
     $form['getlocations_default']['show_search_distance'] = array('#type' => 'value', '#value' => 0);
-    $form['getlocations_default']['views_search_marker_enable'] = array('#type' => 'value', '#value' => 0);
-    $form['getlocations_default']['views_search_radshape_enable'] = array('#type' => 'value', '#value' => 0);
-    $form['getlocations_default']['views_search_center'] = array('#type' => 'value', '#value' => 0);
+    $form['getlocations_default']['views_search_group']['views_search_marker_enable'] = array('#type' => 'value', '#value' => 0);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_enable'] = array('#type' => 'value', '#value' => 0);
+    $form['getlocations_default']['views_search_group']['views_search_center'] = array('#type' => 'value', '#value' => 0);
+    $form['getlocations_default']['views_search_group']['views_search_marker'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_marker']);
+    $form['getlocations_default']['views_search_group']['views_search_marker_toggle'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_marker_toggle']);
+    $form['getlocations_default']['views_search_group']['views_search_marker_toggle_active'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_marker_toggle_active']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_strokecolor'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_strokecolor']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_strokeopacity'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeopacity']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_strokeweight'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeweight']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_fillcolor'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_fillcolor']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_fillopacity'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_fillopacity']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_toggle'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle']);
+    $form['getlocations_default']['views_search_group']['views_search_radshape_toggle_active'] = array('#type' => 'value', '#value' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle_active']);
   }
 
   $form['getlocations_default']['preload_data'] = getlocations_element_map_checkbox(
@@ -341,6 +357,7 @@ function getlocations_settings_form() {
   $form['getlocations_default'] += getlocations_markermanager_form($getlocations_defaults);
 
   // markerclusterer
+#dd($getlocations_defaults,'$getlocations_defaults in getlocations_settings_form');
   $form['getlocations_default'] += getlocations_markercluster_form($getlocations_defaults);
 
   $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
@@ -362,7 +379,7 @@ function getlocations_settings_form() {
   $form['getlocations_default']['returnlink_page_link']['#suffix'] = '</div>';
 
   if (module_exists('getlocations_fields')) {
-    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+    if (getlocations_check_entity_type('user')) {
       $form['getlocations_default']['returnlink_user_enable'] = getlocations_element_map_checkbox(
         t('Show link back to user'),
         $returnlink_group['returnlink_user_enable']
@@ -988,80 +1005,27 @@ function getlocations_settings_form_submit($form, &$form_state) {
   $getlocations_paths_config->set('paths', $getlocations_paths);
   $getlocations_paths_config->save();
 
-  // what3words_lic
-  $what3words = config('getlocations.what3words');
-  // lic is in getlocations.settings
-  $config->set('settings.what3words_lic', $values['what3words_lic']);
-  $w3w_key = $values['what3words_lic']['key'];
-  unset($values['what3words_lic']);
-  // only save these settings if there is a key
-  if ($w3w_key) {
-    $what3words_values = array();
-    $what3words_group = array("what3words_enable","what3words_search","what3words_size","what3words_map_marker","what3words_marker_show","what3words_center","what3words_zoom","what3words_show","what3words_click","what3words_path");
-    foreach ($what3words_group AS $item) {
-      $what3words_values[$item] = $values['getlocations_default'][$item];
-      unset($values['getlocations_default'][$item]);
-    }
-    $what3words->set('settings.what3words_group', $what3words_values);
-    $what3words->save();
-  }
-
   $getlocations_default = $values['getlocations_default'];
   $values += $getlocations_default;
   unset($values['getlocations_default']);
 
-  // now in its own file getlocations.shapes
-  $shapes_values = array();
-
-  // polygons_group
-  $polygons_group = array("polygons_enable","polygons_strokecolor","polygons_strokeopacity","polygons_strokeweight","polygons_fillcolor","polygons_fillopacity","polygons_coords","polygons_clickable","polygons_message");
-  foreach ($polygons_group AS $item) {
-    $shapes_values['polygons_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
-
-  $rectangles_group = array("rectangles_enable","rectangles_strokecolor","rectangles_strokeopacity","rectangles_strokeweight","rectangles_fillcolor","rectangles_fillopacity","rectangles_coords","rectangles_clickable","rectangles_message","rectangles_apply","rectangles_dist");
-  foreach ($rectangles_group AS $item) {
-    $shapes_values['rectangles_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
-
-  $circles_group = array("circles_enable","circles_strokecolor","circles_strokeopacity","circles_strokeweight","circles_fillcolor","circles_fillopacity","circles_coords","circles_clickable","circles_message","circles_radius","circles_apply");
-  foreach ($circles_group AS $item) {
-    $shapes_values['circles_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
-
-  $polylines_group = array("polylines_enable","polylines_strokecolor","polylines_strokeopacity","polylines_strokeweight","polylines_coords","polylines_clickable","polylines_message");
-  foreach ($polylines_group AS $item) {
-    $shapes_values['polylines_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
+  // trim up some entries
+  $api3_key = $values['api3_group']['api3_key'];
+  $values['api3_group']['api3_key'] = trim($api3_key);
+  $api3_clientID = $values['api3_group']['api3_clientID'];
+  $values['api3_group']['api3_clientID'] = trim($api3_clientID);
+  $api3_signature = $values['api3_group']['api3_signature'];
+  $values['api3_group']['api3_signature'] = trim($api3_signature);
+  $api3_channel = $values['api3_group']['api3_channel'];
+  $values['api3_group']['api3_channel'] = trim($api3_channel);
 
 
-  $shapes = config('getlocations.shapes');
-  foreach($shapes_values AS $k => $v) {
-    $shapes->set('shapes.' . $k, $v);
-  }
-  $shapes->save();
+#  $markerclusterer_group = array("markerclusterer_style","markerclusterer_zoom","markerclusterer_size","markerclusterer_minsize","markerclusterer_title","markerclusterer_imgpath");
+#  foreach ($markerclusterer_group AS $item) {
+#    $values['markerclusterer_group'][$item] = $values[$item];
+#    unset($values[$item]);
+#  }
 
-  $highlight_group = array("highlight_enable","highlight_strokecolor","highlight_strokeopacity","highlight_strokeweight","highlight_fillcolor","highlight_fillopacity","highlight_radius");
-  foreach ($highlight_group AS $item) {
-    $values['highlight_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
-
-  $search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
-  foreach ($search_places_group AS $item) {
-    $values['search_places_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
-
-  $markerclusterer_group = array("markerclusterer_style","markerclusterer_zoom","markerclusterer_size","markerclusterer_minsize","markerclusterer_title","markerclusterer_imgpath");
-  foreach ($markerclusterer_group AS $item) {
-    $values['markerclusterer_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
 
   $returnlink_group = array("returnlink_page_enable","returnlink_page_link","returnlink_user_enable","returnlink_user_link","returnlink_term_enable","returnlink_term_link","returnlink_comment_enable","returnlink_comment_link");
   foreach ($returnlink_group AS $item) {
@@ -1090,13 +1054,15 @@ function getlocations_settings_form_submit($form, &$form_state) {
     }
   }
 
-  $views_search_keys = array("views_search_center","views_search_marker_enable","views_search_marker","views_search_marker","views_search_marker_toggle","views_search_marker_toggle_active","views_search_radshape_enable","views_search_radshape_strokecolor","views_search_radshape_strokeopacity","views_search_radshape_strokeweight","views_search_radshape_fillcolor","views_search_radshape_fillopacity","views_search_radshape_toggle","views_search_radshape_toggle_active");
-  foreach ($views_search_keys AS $k) {
-    if (isset($values[$k])) {
-      $values['views_search_group'][$k] = $values[$k];
-      unset($values[$k]);
-    }
-  }
+#  $views_search_keys = array("views_search_center","views_search_marker_enable","views_search_marker","views_search_marker","views_search_marker_toggle","views_search_marker_toggle_active","views_search_radshape_enable","views_search_radshape_strokecolor","views_search_radshape_strokeopacity","views_search_radshape_strokeweight","views_search_radshape_fillcolor","views_search_radshape_fillopacity","views_search_radshape_toggle","views_search_radshape_toggle_active");
+#  foreach ($views_search_keys AS $k) {
+#    if (isset($values[$k])) {
+#      $values['views_search_group'][$k] = $values[$k];
+#      unset($values[$k]);
+#    }
+#  }
+
+#dd($values, '$values in getlocations_settings_form_submit');
 
 
   foreach ($keys AS $key) {

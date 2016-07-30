@@ -107,13 +107,13 @@
         });
       }
 
-      if ($("#edit-style-options-polygons-enable").prop('checked')) {
+      if ($("#edit-style-options-polygons-group-polygons-enable").prop('checked')) {
         $("#wrap-getlocations-polygons").show();
       }
       else {
         $("#wrap-getlocations-polygons").hide();
       }
-      $("#edit-style-options-polygons-enable").change(function() {
+      $("#edit-style-options-polygons-group-polygons-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-polygons").show();
         }
@@ -122,13 +122,13 @@
         }
       });
 
-      if ($("#edit-style-options-rectangles-enable").prop('checked')) {
+      if ($("#edit-style-options-rectangles-group-rectangles-enable").prop('checked')) {
         $("#wrap-getlocations-rectangles").show();
       }
       else {
         $("#wrap-getlocations-rectangles").hide();
       }
-      $("#edit-style-options-rectangles-enable").change(function() {
+      $("#edit-style-options-rectangles-group-rectangles-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-rectangles").show();
         }
@@ -137,13 +137,13 @@
         }
       });
 
-      if ($("#edit-style-options-circles-enable").prop('checked')) {
+      if ($("#edit-style-options-circles-group-circles-enable").prop('checked')) {
         $("#wrap-getlocations-circles").show();
       }
       else {
         $("#wrap-getlocations-circles").hide();
       }
-      $("#edit-style-options-circles-enable").change(function() {
+      $("#edit-style-options-circles-group-circles-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-circles").show();
         }
@@ -152,13 +152,13 @@
         }
       });
 
-      if ($("#edit-style-options-polylines-enable").prop('checked')) {
+      if ($("#edit-style-options-polylines-group-polylines-enable").prop('checked')) {
         $("#wrap-getlocations-polylines").show();
       }
       else {
         $("#wrap-getlocations-polylines").hide();
       }
-      $("#edit-style-options-polylines-enable").change(function() {
+      $("#edit-style-options-polylines-group-polylines-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-polylines").show();
         }
@@ -168,13 +168,13 @@
       });
 
       // search_places
-      if ($("#edit-style-options-search-places").prop('checked')) {
+      if ($("#edit-style-options-search-places-group-search-places").prop('checked')) {
         $("#wrap-getlocations-search-places").show();
       }
       else {
         $("#wrap-getlocations-search-places").hide();
       }
-      $("#edit-style-options-search-places").change(function() {
+      $("#edit-style-options-search-places-group-search-places").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-search-places").show();
         }
@@ -245,19 +245,19 @@
         });
       }
 
-      if ( $("#edit-style-options-useclustermanager").is('input')) {
-        if ($("#edit-style-options-useclustermanager").prop('checked')) {
-          $("#wrap-useclustermanager").show();
+      if ( $("#edit-style-options-markerclusterer-group-useclustermanager").is('input')) {
+        if ($("#edit-style-options-markerclusterer-group-useclustermanager").prop('checked')) {
+          $("#wrap-getlocations-clusteropts").show();
         }
         else {
-          $("#wrap-useclustermanager").hide();
+          $("#wrap-getlocations-clusteropts").hide();
         }
-        $("#edit-style-options-useclustermanager").change(function() {
+        $("#edit-style-options-markerclusterer-group-useclustermanager").change(function() {
           if ($(this).prop('checked')) {
-            $("#wrap-useclustermanager").show();
+            $("#wrap-getlocations-clusteropts").show();
           }
           else {
-            $("#wrap-useclustermanager").hide();
+            $("#wrap-getlocations-clusteropts").hide();
           }
         });
       }
@@ -275,23 +275,6 @@
           }
           else {
             $("#wrap-getlocations-zoomcontrol").show();
-          }
-        });
-      }
-
-      if ($("#edit-style-options-pancontrol").is('input')) {
-        if ($("#edit-style-options-pancontrol").prop('checked')) {
-          $("#wrap-getlocations-pancontrol").show();
-        }
-        else {
-          $("#wrap-getlocations-pancontrol").hide();
-        }
-        $("#edit-style-options-pancontrol").change(function() {
-          if ($(this).prop('checked')) {
-            $("#wrap-getlocations-pancontrol").show();
-          }
-          else {
-            $("#wrap-getlocations-pancontrol").hide();
           }
         });
       }
@@ -330,23 +313,6 @@
         });
       }
 
-      if ($("#edit-style-options-overview").is('input')) {
-        if ($("#edit-style-options-overview").prop('checked')) {
-          $("#wrap-getlocations-overview").show();
-        }
-        else {
-          $("#wrap-getlocations-overview").hide();
-        }
-        $("#edit-style-options-overview").change(function() {
-          if ($(this).prop('checked')) {
-            $("#wrap-getlocations-overview").show();
-          }
-          else {
-            $("#wrap-getlocations-overview").hide();
-          }
-        });
-      }
-
       if ($("#edit-style-options-sv-show").is('input')) {
         if ($("#edit-style-options-sv-show").prop('checked')) {
           $("#wrap-getlocations-sv-show").show();
@@ -381,14 +347,14 @@
         });
       }
 
-      if ($("#edit-style-options-highlight-enable").is('input')) {
-        if ($("#edit-style-options-highlight-enable").prop('checked')) {
+      if ($("#edit-style-options-highlight-group-highlight-enable").is('input')) {
+        if ($("#edit-style-options-highlight-group-highlight-enable").prop('checked')) {
           $("#wrap-getlocations-highlight").show();
         }
         else {
           $("#wrap-getlocations-highlight").hide();
         }
-        $("#edit-style-options-highlight-enable").change(function() {
+        $("#edit-style-options-highlight-group-highlight-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-highlight").show();
           }

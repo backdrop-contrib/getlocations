@@ -220,7 +220,7 @@ function getlocations_fields_settings_form_submit($form, &$form_state) {
   $config_keys = array_keys($config_settings);
 
   $values = $form_state['values']['getlocations_fields_defaults'];
-
+/*
   // now in its own file getlocations.shapes
   $shapes_values = array();
 
@@ -254,18 +254,20 @@ function getlocations_fields_settings_form_submit($form, &$form_state) {
     $shapes->set('shapes.' . $k, $v);
   }
   $shapes->save();
+*/
 
-  $highlight_group = array("highlight_enable","highlight_strokecolor","highlight_strokeopacity","highlight_strokeweight","highlight_fillcolor","highlight_fillopacity","highlight_radius");
-  foreach ($highlight_group AS $item) {
-    $values['highlight_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
+#  $highlight_group = array("highlight_enable","highlight_strokecolor","highlight_strokeopacity","highlight_strokeweight","highlight_fillcolor","highlight_fillopacity","highlight_radius");
+#  foreach ($highlight_group AS $item) {
+#    $values['highlight_group'][$item] = $values[$item];
+#    unset($values[$item]);
+#  }
 
-  $search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
-  foreach ($search_places_group AS $item) {
-    $values['search_places_group'][$item] = $values[$item];
-    unset($values[$item]);
-  }
+// TODO
+#  $search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
+#  foreach ($search_places_group AS $item) {
+#    $values['search_places_group'][$item] = $values[$item];
+#    unset($values[$item]);
+#  }
 
   #$markerclusterer_group = array("markerclusterer_style","markerclusterer_zoom","markerclusterer_size","markerclusterer_minsize","markerclusterer_title","markerclusterer_imgpath");
   #foreach ($markerclusterer_group AS $item) {

@@ -256,13 +256,13 @@
         });
       }
 
-      if ($("#edit-getlocations-default-polygons-enable").prop('checked')) {
+      if ($("#edit-getlocations-default-polygons-group-polygons-enable").prop('checked')) {
         $("#wrap-getlocations-polygons").show();
       }
       else {
         $("#wrap-getlocations-polygons").hide();
       }
-      $("#edit-getlocations-default-polygons-enable").change(function() {
+      $("#edit-getlocations-default-polygons-group-polygons-enable").change(function() {
         if ($(this).prop('checked')) {
           //$("#wrap-getlocations-polygons").show();
           var cg = $(this);
@@ -279,13 +279,13 @@
           $("#wrap-getlocations-polygons").hide();
         }
       });
-      if ($("#edit-getlocations-default-rectangles-enable").prop('checked')) {
+      if ($("#edit-getlocations-default-rectangles-group-rectangles-enable").prop('checked')) {
         $("#wrap-getlocations-rectangles").show();
       }
       else {
         $("#wrap-getlocations-rectangles").hide();
       }
-      $("#edit-getlocations-default-rectangles-enable").change(function() {
+      $("#edit-getlocations-default-rectangles-group-rectangles-enable").change(function() {
         if ($(this).prop('checked')) {
           //$("#wrap-getlocations-rectangles").show();
           var cg = $(this);
@@ -304,13 +304,13 @@
         }
       });
 
-      if ($("#edit-getlocations-default-circles-enable").prop('checked')) {
+      if ($("#edit-getlocations-default-circles-group-circles-enable").prop('checked')) {
         $("#wrap-getlocations-circles").show();
       }
       else {
         $("#wrap-getlocations-circles").hide();
       }
-      $("#edit-getlocations-default-circles-enable").change(function() {
+      $("#edit-getlocations-default-circles-group-circles-enable").change(function() {
         if ($(this).prop('checked')) {
           //$("#wrap-getlocations-circles").show();
           var cg = $(this);
@@ -328,13 +328,13 @@
         }
       });
 
-      if ($("#edit-getlocations-default-polylines-enable").prop('checked')) {
+      if ($("#edit-getlocations-default-polylines-group-polylines-enable").prop('checked')) {
         $("#wrap-getlocations-polylines").show();
       }
       else {
         $("#wrap-getlocations-polylines").hide();
       }
-      $("#edit-getlocations-default-polylines-enable").change(function() {
+      $("#edit-getlocations-default-polylines-group-polylines-enable").change(function() {
         if ($(this).prop('checked')) {
           //$("#wrap-getlocations-polylines").show();
           var cg = $(this);
@@ -353,13 +353,13 @@
         }
       });
       // search_places
-      if ($("#edit-getlocations-default-search-places").prop('checked')) {
+      if ($("#edit-getlocations-default-search-places-group-search-places").prop('checked')) {
         $("#wrap-getlocations-search-places").show();
       }
       else {
         $("#wrap-getlocations-search-places").hide();
       }
-      $("#edit-getlocations-default-search-places").change(function() {
+      $("#edit-getlocations-default-search-places-group-search-places").change(function() {
         if ($(this).prop('checked')) {
           //$("#wrap-getlocations-search-places").show();
           var cg = $(this);
@@ -532,14 +532,15 @@
         });
       }
 
-      if ($("#edit-getlocations-default-highlight-enable").is('input')) {
-        if ($("#edit-getlocations-default-highlight-enable").prop('checked')) {
+      //edit-getlocations-default-highlight-group-highlight-enable
+      if ($("#edit-getlocations-default-highlight-group-highlight-enable").is('input')) {
+        if ($("#edit-getlocations-default-highlight-group-highlight-enable").prop('checked')) {
           $("#wrap-getlocations-highlight").show();
         }
         else {
           $("#wrap-getlocations-highlight").hide();
         }
-        $("#edit-getlocations-default-highlight-enable").change(function() {
+        $("#edit-getlocations-default-highlight-group-highlight-enable").change(function() {
           if ($(this).prop('checked')) {
             //$("#wrap-getlocations-highlight").show();
             var cg = $(this);
@@ -559,14 +560,14 @@
       }
 
       // search marker
-      if ($("#edit-getlocations-default-views-search-marker-enable").is('input')) {
-        if ($("#edit-getlocations-default-views-search-marker-enable").prop('checked')) {
+      if ($("#edit-getlocations-default-views-search-group-views-search-marker-enable").is('input')) {
+        if ($("#edit-getlocations-default-views-search-group-views-search-marker-enable").prop('checked')) {
           $("#wrap-getlocations-views-search-marker").show();
         }
         else {
           $("#wrap-getlocations-views-search-marker").hide();
         }
-        $("#edit-getlocations-default-views-search-marker-enable").change(function() {
+        $("#edit-getlocations-default-views-search-group-views-search-marker-enable").change(function() {
           if ($(this).prop('checked')) {
             //$("#wrap-getlocations-views-search-marker").show();
             var cg = $(this);
@@ -587,14 +588,14 @@
       }
 
       // search area shape
-      if ($("#edit-getlocations-default-views-search-radshape-enable").is('input')) {
-        if ($("#edit-getlocations-default-views-search-radshape-enable").prop('checked')) {
+      if ($("#edit-getlocations-default-views-search-group-views-search-radshape-enable").is('input')) {
+        if ($("#edit-getlocations-default-views-search-group-views-search-radshape-enable").prop('checked')) {
           $("#wrap-getlocations-views-search-radshape").show();
         }
         else {
           $("#wrap-getlocations-views-search-radshape").hide();
         }
-        $("#edit-getlocations-default-views-search-radshape-enable").change(function() {
+        $("#edit-getlocations-default-views-search-group-views-search-radshape-enable").change(function() {
           if ($(this).prop('checked')) {
             //$("#wrap-getlocations-views-search-radshape").show();
             var cg = $(this);
@@ -648,25 +649,34 @@
           }
         });
       }
-/*
+
       // #edit-getlocations-default-useclustermanager
-      if ($("#edit-getlocations-default-useclustermanager").is('input')) {
-        if ($("#edit-getlocations-default-useclustermanager").prop('checked')) {
+      if ($("#edit-getlocations-default-markerclusterer-group-useclustermanager").is('input')) {
+        if ($("#edit-getlocations-default-markerclusterer-group-useclustermanager").prop('checked')) {
           $("#wrap-getlocations-clusteropts").show();
         }
         else {
           $("#wrap-getlocations-clusteropts").hide();
         }
-        $("#edit-getlocations-default-useclustermanager").change(function() {
+        $("#edit-getlocations-default-markerclusterer-group-useclustermanager").change(function() {
           if ($(this).prop('checked')) {
-            $("#wrap-getlocations-clusteropts").show();
+            //$("#wrap-getlocations-clusteropts").show();
+            var cg = $(this);
+            $("#wrap-getlocations-clusteropts").slideDown({
+              duration: 'fast',
+              easing: 'linear',
+              complete: function () {
+                Backdrop.getlocations.divScrollIntoView(cg);
+                cg.animating = false;
+              }
+            });
           }
           else {
             $("#wrap-getlocations-clusteropts").hide();
           }
         });
       }
-*/
+
 
     }
   };

@@ -81,7 +81,35 @@
           $("#wrap-getlocations-markeropts").hide();
         }
       });
+/////////////
+      // #edit-getlocations-default-useclustermanager
+      if ($("#edit-getlocations-search-defaults-markerclusterer-group-useclustermanager").is('input')) {
+        if ($("#edit-getlocations-search-defaults-markerclusterer-group-useclustermanager").prop('checked')) {
+          $("#wrap-getlocations-clusteropts").show();
+        }
+        else {
+          $("#wrap-getlocations-clusteropts").hide();
+        }
+        $("#edit-getlocations-search-defaults-markerclusterer-group-useclustermanager").change(function() {
+          if ($(this).prop('checked')) {
+            //$("#wrap-getlocations-clusteropts").show();
+            var cg = $(this);
+            $("#wrap-getlocations-clusteropts").slideDown({
+              duration: 'fast',
+              easing: 'linear',
+              complete: function () {
+                Backdrop.getlocations.divScrollIntoView(cg);
+                cg.animating = false;
+              }
+            });
+          }
+          else {
+            $("#wrap-getlocations-clusteropts").hide();
+          }
+        });
+      }
 
+/////////////
       if ($("#edit-getlocations-search-defaults-trafficinfo, #edit-getlocations-search-block-defaults-trafficinfo").is('input')) {
         if ($("#edit-getlocations-search-defaults-trafficinfo, #edit-getlocations-search-block-defaults-trafficinfo").prop('checked')) {
           $("#wrap-getlocations-trafficinfo").show();
@@ -133,13 +161,13 @@
         });
       }
 
-      if ($("#edit-getlocations-search-defaults-polygons-enable, #edit-getlocations-search-block-defaults-polygons-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-polygons-group-polygons-enable, #edit-getlocations-search-block-defaults-polygons-group-polygons-enable").prop('checked')) {
         $("#wrap-getlocations-polygons").show();
       }
       else {
         $("#wrap-getlocations-polygons").hide();
       }
-      $("#edit-getlocations-search-defaults-polygons-enable, #edit-getlocations-search-block-defaults-polygons-enable").change(function() {
+      $("#edit-getlocations-search-defaults-polygons-group-polygons-enable, #edit-getlocations-search-block-defaults-polygons-group-polygons-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-polygons").show();
         }
@@ -148,13 +176,13 @@
         }
       });
 
-      if ($("#edit-getlocations-search-defaults-rectangles-enable, #edit-getlocations-search-block-defaults-rectangles-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-rectangles-group-rectangles-enable, #edit-getlocations-search-block-defaults-rectangles-group-rectangles-enable").prop('checked')) {
         $("#wrap-getlocations-rectangles").show();
       }
       else {
         $("#wrap-getlocations-rectangles").hide();
       }
-      $("#edit-getlocations-search-defaults-rectangles-enable, #edit-getlocations-search-block-defaults-rectangles-enable").change(function() {
+      $("#edit-getlocations-search-defaults-rectangles-group-rectangles-enable, #edit-getlocations-search-block-defaults-rectangles-group-rectangles-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-rectangles").show();
         }
@@ -163,13 +191,13 @@
         }
       });
 
-      if ($("#edit-getlocations-search-defaults-circles-enable, #edit-getlocations-search-block-defaults-circles-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-circles-group-circles-enable, #edit-getlocations-search-block-defaults-circles-group-circles-enable").prop('checked')) {
         $("#wrap-getlocations-circles").show();
       }
       else {
         $("#wrap-getlocations-circles").hide();
       }
-      $("#edit-getlocations-search-defaults-circles-enable, #edit-getlocations-search-block-defaults-circles-enable").change(function() {
+      $("#edit-getlocations-search-defaults-circles-group-circles-enable, #edit-getlocations-search-block-defaults-circles-group-circles-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-circles").show();
         }
@@ -178,13 +206,13 @@
         }
       });
 
-      if ($("#edit-getlocations-search-defaults-polylines-enable, #edit-getlocations-search-block-defaults-polylines-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-polylines-group-polylines-enable, #edit-getlocations-search-block-defaults-polylines-group-polylines-enable").prop('checked')) {
         $("#wrap-getlocations-polylines").show();
       }
       else {
         $("#wrap-getlocations-polylines").hide();
       }
-      $("#edit-getlocations-search-defaults-polylines-enable, #edit-getlocations-search-block-defaults-polylines-enable").change(function() {
+      $("#edit-getlocations-search-defaults-polylines-group-polylines-enable, #edit-getlocations-search-block-defaults-polylines-group-polylines-enable").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-polylines").show();
         }
@@ -194,13 +222,13 @@
       });
 
       // search_places
-      if ($("#edit-getlocations-search-defaults-search-places, #edit-getlocations-search-block-defaults-search-places").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-search-places-group-search-places, #edit-getlocations-search-block-defaults-search-places-group-search-places").prop('checked')) {
         $("#wrap-getlocations-search-places").show();
       }
       else {
         $("#wrap-getlocations-search-places").hide();
       }
-      $("#edit-getlocations-search-defaults-search-places, #edit-getlocations-search-block-defaults-search-places").change(function() {
+      $("#edit-getlocations-search-defaults-search-places-group-search-places, #edit-getlocations-search-block-defaults-search-places-group-search-places").change(function() {
         if ($(this).prop('checked')) {
           $("#wrap-getlocations-search-places").show();
         }
@@ -400,14 +428,14 @@
         });
       }
 
-      if ($("#edit-getlocations-search-defaults-highlight-enable, #edit-getlocations-search-block-defaults-highlight-enable").is('input')) {
-        if ($("#edit-getlocations-search-defaults-highlight-enable, #edit-getlocations-search-block-defaults-highlight-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-highlight-group-highlight-enable, #edit-getlocations-search-block-defaults-highlight-group-highlight-enable").is('input')) {
+        if ($("#edit-getlocations-search-defaults-highlight-group-highlight-enable, #edit-getlocations-search-block-defaults-highlight-group-highlight-enable").prop('checked')) {
           $("#wrap-getlocations-highlight").show();
         }
         else {
           $("#wrap-getlocations-highlight").hide();
         }
-        $("#edit-getlocations-search-defaults-highlight-enable, #edit-getlocations-search-block-defaults-highlight-enable").change(function() {
+        $("#edit-getlocations-search-defaults-highlight-group-highlight-enable, #edit-getlocations-search-block-defaults-highlight-group-highlight-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-highlight").show();
           }
@@ -434,14 +462,14 @@
         });
       }
 
-      if ($("#edit-getlocations-search-defaults-what3words-enable").is('input')) {
-        if ($("#edit-getlocations-search-defaults-what3words-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-what3words-group-what3words-enable").is('input')) {
+        if ($("#edit-getlocations-search-defaults-what3words-group-what3words-enable").prop('checked')) {
           $("#wrap-getlocations-what3words").show();
         }
         else {
           $("#wrap-getlocations-what3words").hide();
         }
-        $("#edit-getlocations-search-defaults-what3words-enable").change(function() {
+        $("#edit-getlocations-search-defaults-what3words-group-what3words-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-what3words").show();
           }

@@ -16,7 +16,7 @@
       var nodezoom = '';
       var mark = [];
       var movelistener = false;
-      var map_marker = 'backdrop';
+      var map_marker = '';
       var adrsfield = 'getlocations_address_';
       var namefield = 'getlocations_name_';
       var streetfield = 'getlocations_street_';

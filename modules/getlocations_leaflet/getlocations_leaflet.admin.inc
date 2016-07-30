@@ -327,7 +327,7 @@ function getlocations_leaflet_settings_form() {
     }
 
     // users
-    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+    if (getlocations_check_entity_type('user')) {
       $labels = array(
         'awesome_icon' => t('User Awesome icon'),
         'awesome_icon_color' => t('User Awesome icon color'),
@@ -413,7 +413,7 @@ function getlocations_leaflet_settings_form() {
   );
 
   if (module_exists('getlocations_fields')) {
-    if (getlocations_check_entity_type('user') || getlocations_check_entity_type('profile2')) {
+    if (getlocations_check_entity_type('user')) {
       $form['getlocations_leaflet_defaults']['returnlink_user_enable'] = getlocations_element_map_checkbox(
         t('Show link back to user'),
         $returnlink_group['returnlink_user_enable']
@@ -678,14 +678,14 @@ dd($form_state['values'], '$form_state[values] in getlocations_leaflet_settings_
     //getlocations_leaflet_defaults
     $values = $form_state['values']['getlocations_leaflet_defaults'];
 
-    // what3words only if there is a license
-    $lic = getlocations_w3w_get_lic();
-    if ( ! empty($lic)) {
-      $what3words = config('getlocations_leaflet.what3words');
-      $what3words->set('settings.what3words_group', $values['what3words_group']);
-      $what3words->save();
-      unset($values['what3words_group']);
-    }
+#    // what3words only if there is a license
+#    $lic = getlocations_w3w_get_lic();
+#    if ( ! empty($lic)) {
+#      $what3words = config('getlocations_leaflet.what3words');
+#      $what3words->set('settings.what3words_group', $values['what3words_group']);
+#      $what3words->save();
+#      unset($values['what3words_group']);
+#    }
 
     // cache flush $form['rebuild']['getlocations_leaflet_flush']
     $values['flush_marker_cache'] = $form_state['values']['rebuild']['getlocations_leaflet_flush'];
@@ -707,7 +707,7 @@ dd($form_state['values'], '$form_state[values] in getlocations_leaflet_settings_
     #    }
     #  }
     #}
-
+/*
     // now in its own file getlocations.shapes
     $shapes_values = array();
 
@@ -742,8 +742,17 @@ dd($form_state['values'], '$form_state[values] in getlocations_leaflet_settings_
       $shapes->set('shapes.' . $k, $v);
     }
     $shapes->save();
+  // now in its own file getlocations.shapes
+  $shapes_groups = array("polygons_group","rectangles_group","circles_group","polylines_group");
+  $shapes = config('getlocations_leaflet.shapes');
+  foreach ($shapes_groups AS $group) {
+    $shapes->set('shapes.' . $group, $values[$group]);
+    unset($values[$group]);
+  }
+  $shapes->save();
+*/
 
-dd($keys, '$keys in getlocations_leaflet_settings_form_submit');
+#dd($keys, '$keys in getlocations_leaflet_settings_form_submit');
 
     foreach ($keys AS $key) {
       if ( isset($values[$key])) {

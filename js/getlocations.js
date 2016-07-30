@@ -1167,7 +1167,7 @@
   };
 
   Backdrop.getlocations.divScrollIntoView = function (node) {
-    var fudge = 28; // allow for admin bar
+    var fudge = 36; // allow for admin bar
     var posY = $(node).offset().top;
     window.scrollTo(0, posY-fudge);
   };

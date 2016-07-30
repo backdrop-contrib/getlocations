@@ -636,7 +636,7 @@ function getlocations_leaflet_settings_form_validate($form, &$form_state) {
 
 function getlocations_leaflet_settings_form_submit($form, &$form_state) {
 
-dd($form_state['values'], '$form_state[values] in getlocations_leaflet_settings_form_submit');
+#dd($form_state['values'], '$form_state[values] in getlocations_leaflet_settings_form_submit');
 
   $config = config('getlocations_leaflet.settings');
   $settings = $config->get('settings');

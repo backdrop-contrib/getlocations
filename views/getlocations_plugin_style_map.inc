@@ -121,11 +121,16 @@ class getlocations_plugin_style_map extends views_plugin_style {
     $options['custom_content_enable']    = array('default' => $getlocations_defaults['custom_content_enable']);
     $options['custom_content_source']    = array('default' => $getlocations_defaults['custom_content_source']);
 
-    $shapes = config_get('getlocations.shapes', 'shapes');
-    $options['polygons_group']   = array('default' => $shapes['polygons_group']);
-    $options['rectangles_group'] = array('default' => $shapes['rectangles_group']);
-    $options['circles_group']    = array('default' => $shapes['circles_group']);
-    $options['polylines_group']  = array('default' => $shapes['polylines_group']);
+    #$shapes = config_get('getlocations.shapes', 'shapes');
+    #$options['polygons_group']   = array('default' => $shapes['polygons_group']);
+    #$options['rectangles_group'] = array('default' => $shapes['rectangles_group']);
+    #$options['circles_group']    = array('default' => $shapes['circles_group']);
+    #$options['polylines_group']  = array('default' => $shapes['polylines_group']);
+
+    $options['polygons_group']   = array('default' => $getlocations_defaults['polygons_group']);
+    $options['rectangles_group'] = array('default' => $getlocations_defaults['rectangles_group']);
+    $options['circles_group']    = array('default' => $getlocations_defaults['circles_group']);
+    $options['polylines_group']  = array('default' => $getlocations_defaults['polylines_group']);
 
     $options['kml_group']                = array('default' => $getlocations_defaults['kml_group']);
     $options['region_bias']              = array('default' => $getlocations_defaults['region_bias']);
@@ -548,45 +553,45 @@ class getlocations_plugin_style_map extends views_plugin_style {
       }
     }
 ################################
-    //highlight
-    $highlight_keys = array('highlight_enable','highlight_strokecolor','highlight_strokeopacity','highlight_strokeweight','highlight_fillcolor','highlight_fillopacity','highlight_radius');
-    foreach ($highlight_keys AS $k) {
-      if (isset($form_state['values']['style_options'][$k])) {
-        $form_state['values']['style_options']['highlight_group'][$k] = $form_state['values']['style_options'][$k];
-        unset($form_state['values']['style_options'][$k]);
-      }
-    }
+    #//highlight
+    #$highlight_keys = array('highlight_enable','highlight_strokecolor','highlight_strokeopacity','highlight_strokeweight','highlight_fillcolor','highlight_fillopacity','highlight_radius');
+    #foreach ($highlight_keys AS $k) {
+    #  if (isset($form_state['values']['style_options'][$k])) {
+    #    $form_state['values']['style_options']['highlight_group'][$k] = $form_state['values']['style_options'][$k];
+    #    unset($form_state['values']['style_options'][$k]);
+    #  }
+    #}
 
-    // polygons_group
-    $polygons_group = array("polygons_enable","polygons_strokecolor","polygons_strokeopacity","polygons_strokeweight","polygons_fillcolor","polygons_fillopacity","polygons_coords","polygons_clickable","polygons_message");
-    foreach ($polygons_group AS $item) {
-      $form_state['values']['style_options']['polygons_group'][$item] = $form_state['values']['style_options'][$item];
-      unset($form_state['values']['style_options'][$item]);
-    }
+    #// polygons_group
+    #$polygons_group = array("polygons_enable","polygons_strokecolor","polygons_strokeopacity","polygons_strokeweight","polygons_fillcolor","polygons_fillopacity","polygons_coords","polygons_clickable","polygons_message");
+    #foreach ($polygons_group AS $item) {
+    #  $form_state['values']['style_options']['polygons_group'][$item] = $form_state['values']['style_options'][$item];
+    #  unset($form_state['values']['style_options'][$item]);
+    #}
 
-    $rectangles_group = array("rectangles_enable","rectangles_strokecolor","rectangles_strokeopacity","rectangles_strokeweight","rectangles_fillcolor","rectangles_fillopacity","rectangles_coords","rectangles_clickable","rectangles_message","rectangles_apply","rectangles_dist");
-    foreach ($rectangles_group AS $item) {
-      $form_state['values']['style_options']['rectangles_group'][$item] = $form_state['values']['style_options'][$item];
-      unset($form_state['values']['style_options'][$item]);
-    }
+    #$rectangles_group = array("rectangles_enable","rectangles_strokecolor","rectangles_strokeopacity","rectangles_strokeweight","rectangles_fillcolor","rectangles_fillopacity","rectangles_coords","rectangles_clickable","rectangles_message","rectangles_apply","rectangles_dist");
+    #foreach ($rectangles_group AS $item) {
+    #  $form_state['values']['style_options']['rectangles_group'][$item] = $form_state['values']['style_options'][$item];
+    #  unset($form_state['values']['style_options'][$item]);
+    #}
 
-    $circles_group = array("circles_enable","circles_strokecolor","circles_strokeopacity","circles_strokeweight","circles_fillcolor","circles_fillopacity","circles_coords","circles_clickable","circles_message","circles_radius","circles_apply");
-    foreach ($circles_group AS $item) {
-      $form_state['values']['style_options']['circles_group'][$item] = $form_state['values']['style_options'][$item];
-      unset($form_state['values']['style_options'][$item]);
-    }
+    #$circles_group = array("circles_enable","circles_strokecolor","circles_strokeopacity","circles_strokeweight","circles_fillcolor","circles_fillopacity","circles_coords","circles_clickable","circles_message","circles_radius","circles_apply");
+    #foreach ($circles_group AS $item) {
+    #  $form_state['values']['style_options']['circles_group'][$item] = $form_state['values']['style_options'][$item];
+    #  unset($form_state['values']['style_options'][$item]);
+    #}
 
-    $polylines_group = array("polylines_enable","polylines_strokecolor","polylines_strokeopacity","polylines_strokeweight","polylines_coords","polylines_clickable","polylines_message");
-    foreach ($polylines_group AS $item) {
-      $form_state['values']['style_options']['polylines_group'][$item] = $form_state['values']['style_options'][$item];
-      unset($form_state['values']['style_options'][$item]);
-    }
+    #$polylines_group = array("polylines_enable","polylines_strokecolor","polylines_strokeopacity","polylines_strokeweight","polylines_coords","polylines_clickable","polylines_message");
+    #foreach ($polylines_group AS $item) {
+    #  $form_state['values']['style_options']['polylines_group'][$item] = $form_state['values']['style_options'][$item];
+    #  unset($form_state['values']['style_options'][$item]);
+    #}
 
-    $search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
-    foreach ($search_places_group AS $item) {
-      $form_state['values']['style_options']['search_places_group'][$item] = $form_state['values']['style_options'][$item];
-      unset($form_state['values']['style_options'][$item]);
-    }
+    #$search_places_group = array("search_places","search_places_size","search_places_position","search_places_label","search_places_placeholder","search_places_dd","search_places_list");
+    #foreach ($search_places_group AS $item) {
+    #  $form_state['values']['style_options']['search_places_group'][$item] = $form_state['values']['style_options'][$item];
+    #  unset($form_state['values']['style_options'][$item]);
+    #}
 
 
 ################################

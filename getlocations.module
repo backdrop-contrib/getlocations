@@ -2609,7 +2609,7 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
       'nodezoom'                  => $defaults['nodezoom'],
       'markermanagertype'         => $defaults['markermanagertype'],
       'usemarkermanager'          => $defaults['usemarkermanager'],
-      'useclustermanager'         => $defaults['useclustermanager'],
+      'useclustermanager'         => $defaults['markerclusterer_group']['useclustermanager'],
       'markerclusterer_style'     => $defaults['markerclusterer_group']['markerclusterer_style'],
       'markerclusterer_zoom'      => $defaults['markerclusterer_group']['markerclusterer_zoom'],
       'markerclusterer_size'      => $defaults['markerclusterer_group']['markerclusterer_size'],

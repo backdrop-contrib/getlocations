@@ -1,9 +1,35 @@
-commit b69376e
+commit 7eb3c8c
+Author: hutch <hutch@arwystli.net>
+Date:   Thu Aug 4 17:46:50 2016 +0100
+
+    more views debugging
+
+getlocations.module
+views/getlocations_plugin_style_map.inc
+
+commit ee253ca
+Author: hutch <hutch@arwystli.net>
+Date:   Thu Aug 4 14:36:07 2016 +0100
+
+    Debugging views support
+
+views/getlocations.views.inc
+
+commit cbc0dea
+Author: hutch <hutch@arwystli.net>
+Date:   Sat Jul 30 20:37:59 2016 +0100
+
+    removed dd()
+
+modules/getlocations_leaflet/getlocations_leaflet.admin.inc
+
+commit bba0e12
 Author: hutch <hutch@arwystli.net>
 Date:   Sat Jul 30 18:09:25 2016 +0100
 
     reorganised json, and more debugging.
 
+CHANGELOG.txt
 config/getlocations.settings.json
 config/getlocations.shapes.json
 config/getlocations.what3words.json

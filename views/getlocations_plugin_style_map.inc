@@ -183,19 +183,19 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     $options['show_search_distance']                = array('default' => $getlocations_defaults['show_search_distance']);
 
-    $options['views_search_marker_enable']          = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_enable']);
-    $options['views_search_marker']                 = array('default' => $getlocations_defaults['views_search_group']['views_search_marker']);
-    $options['views_search_marker_toggle']          = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_toggle']);
-    $options['views_search_marker_toggle_active']   = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_toggle_active']);
-    $options['views_search_radshape_enable']        = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_enable']);
-    $options['views_search_radshape_strokecolor']   = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokecolor']);
-    $options['views_search_radshape_strokeopacity'] = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeopacity']);
-    $options['views_search_radshape_strokeweight']  = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeweight']);
-    $options['views_search_radshape_fillcolor']     = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_fillcolor']);
-    $options['views_search_radshape_fillopacity']   = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_fillopacity']);
-    $options['views_search_radshape_toggle']        = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle']);
-    $options['views_search_radshape_toggle_active'] = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle_active']);
-    $options['views_search_center']                 = array('default' => $getlocations_defaults['views_search_group']['views_search_center']);
+    #$options['views_search_marker_enable']          = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_enable']);
+    #$options['views_search_marker']                 = array('default' => $getlocations_defaults['views_search_group']['views_search_marker']);
+    #$options['views_search_marker_toggle']          = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_toggle']);
+    #$options['views_search_marker_toggle_active']   = array('default' => $getlocations_defaults['views_search_group']['views_search_marker_toggle_active']);
+    #$options['views_search_radshape_enable']        = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_enable']);
+    #$options['views_search_radshape_strokecolor']   = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokecolor']);
+    #$options['views_search_radshape_strokeopacity'] = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeopacity']);
+    #$options['views_search_radshape_strokeweight']  = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_strokeweight']);
+    #$options['views_search_radshape_fillcolor']     = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_fillcolor']);
+    #$options['views_search_radshape_fillopacity']   = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_fillopacity']);
+    #$options['views_search_radshape_toggle']        = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle']);
+    #$options['views_search_radshape_toggle_active'] = array('default' => $getlocations_defaults['views_search_group']['views_search_radshape_toggle_active']);
+    #$options['views_search_center']                 = array('default' => $getlocations_defaults['views_search_group']['views_search_center']);
 
     // views_search_group
     $options['views_search_group']       = array('default' => $getlocations_defaults['views_search_group']);

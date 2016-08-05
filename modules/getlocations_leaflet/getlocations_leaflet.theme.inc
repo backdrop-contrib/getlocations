@@ -193,6 +193,41 @@ function theme_getlocations_leaflet_settings_form($variables) {
     $form['getlocations_leaflet_defaults']['returnlink_comment_link']['#suffix'] = '</div>';
   }
 
+  // polygons
+  if (isset($form['getlocations_leaflet_defaults']['polygons_group']['polygons_enable']) && $form['getlocations_leaflet_defaults']['polygons_group']['polygons_enable']['#type'] !== 'value' ) {
+    $form['getlocations_leaflet_defaults']['polygons_group']['polygons_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_leaflet_defaults']['polygons_group']['polygons_coords']['#suffix'];
+    $form['getlocations_leaflet_defaults']['polygons_group']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+
+  // rectangles
+  if (isset($form['getlocations_leaflet_defaults']['rectangles_group']['rectangles_enable']) && $form['getlocations_leaflet_defaults']['rectangles_group']['rectangles_enable']['#type'] !== 'value' ) {
+    $form['getlocations_leaflet_defaults']['rectangles_group']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_leaflet_defaults']['rectangles_group']['rectangles_coords']['#suffix'];
+    $form['getlocations_leaflet_defaults']['rectangles_group']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // circles
+  if (isset($form['getlocations_leaflet_defaults']['circles_group']['circles_enable']) && $form['getlocations_leaflet_defaults']['circles_group']['circles_enable']['#type'] !== 'value' ) {
+    $form['getlocations_leaflet_defaults']['circles_group']['circles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_leaflet_defaults']['circles_group']['circles_coords']['#suffix'];
+    $form['getlocations_leaflet_defaults']['circles_group']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  // polylines
+  if (isset($form['getlocations_leaflet_defaults']['polylines_group']['polylines_enable']) && $form['getlocations_leaflet_defaults']['polylines_group']['polylines_enable']['#type'] !== 'value' ) {
+    $form['getlocations_leaflet_defaults']['polylines_group']['polylines_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_leaflet_defaults']['polylines_group']['polylines_coords']['#suffix'];
+    $form['getlocations_leaflet_defaults']['polylines_group']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
+  if (isset($form['getlocations_leaflet_defaults']['views_search_group']['views_search_marker_enable']) && $form['getlocations_leaflet_defaults']['views_search_group']['views_search_marker_enable']['#type'] !== 'value' ) {
+    $form['getlocations_leaflet_defaults']['views_search_group']['views_search_marker_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Views Search') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form['getlocations_leaflet_defaults']['views_search_group']['views_search_radshape_toggle_active']['#suffix'];
+    $form['getlocations_leaflet_defaults']['views_search_group']['views_search_radshape_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
+  }
+
   // mapbox
   if (module_exists('getlocations_mapbox')) {
     $mapnum = $form['getlocations_leaflet_mapbox']['mapnum']['#value'];

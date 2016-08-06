@@ -431,40 +431,37 @@
       });
 
       // search marker
-      if ($("#edit-getlocations-leaflet-defaults-views-search-group-views-search-marker-enable").is('input')) {
-        if ($("#edit-getlocations-leaflet-defaults-views-search-group-views-search-marker-enable").prop('checked')) {
+      if ($("input[id$=views-search-group-views-search-marker-enable]").prop('checked')) {
+        $("#wrap-getlocations-views-search-marker").show();
+      }
+      else {
+        $("#wrap-getlocations-views-search-marker").hide();
+      }
+      $("input[id$=views-search-group-views-search-marker-enable]").change(function() {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-views-search-marker").show();
         }
         else {
           $("#wrap-getlocations-views-search-marker").hide();
         }
-        $("#edit-getlocations-leaflet-defaults-views-search-group-views-search-marker-enable").change(function() {
-          if ($(this).prop('checked')) {
-            $("#wrap-getlocations-views-search-marker").show();
-          }
-          else {
-            $("#wrap-getlocations-views-search-marker").hide();
-          }
-        });
-      }
+      });
 
       // search area shape
-      if ($("#edit-getlocations-leaflet-defaults-views-search-group-views-search-radshape-enable").is('input')) {
-        if ($("#edit-getlocations-leaflet-defaults-views-search-group-views-search-radshape-enable").prop('checked')) {
+      if ($("input[id$=views-search-group-views-search-radshape-enable]").prop('checked')) {
+        $("#wrap-getlocations-views-search-radshape").show();
+      }
+      else {
+        $("#wrap-getlocations-views-search-radshape").hide();
+      }
+      $("input[id$=views-search-group-views-search-radshape-enable]").change(function() {
+        if ($(this).prop('checked')) {
           $("#wrap-getlocations-views-search-radshape").show();
         }
         else {
           $("#wrap-getlocations-views-search-radshape").hide();
         }
-        $("#edit-getlocations-leaflet-defaults-views-search-group-views-search-radshape-enable").change(function() {
-          if ($(this).prop('checked')) {
-            $("#wrap-getlocations-views-search-radshape").show();
-          }
-          else {
-            $("#wrap-getlocations-views-search-radshape").hide();
-          }
-        });
-      }
+      });
+
       //edit-getlocations-default-show-maplinks-viewport
       if ($("#edit-getlocations-leaflet-defaults-show-maplinks").is('input')) {
         if ($("#edit-getlocations-leaflet-defaults-show-maplinks").prop('checked')) {

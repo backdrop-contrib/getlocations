@@ -605,6 +605,11 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
     $form['markerclusterer_group']['markerclusterer_minsize']['#suffix'] = $tsuf . '</div></fieldset>';
   }
 
+    if (isset($form['views_search_group']['views_search_marker_enable']) && $form['views_search_group']['views_search_marker_enable']['#type'] !== 'value' ) {
+      $form['views_search_group']['views_search_marker_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Views Search') . '</span></legend><div class="fieldset-wrapper">';
+      $tsuf = $form['views_search_group']['views_search_radshape_toggle_active']['#suffix'];
+      $form['views_search_group']['views_search_radshape_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
+    }
 
   $output = backdrop_render_children($form);
   return $output;

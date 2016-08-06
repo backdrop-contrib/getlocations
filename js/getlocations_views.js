@@ -365,14 +365,14 @@
       }
 
       // search marker
-      if ($("#edit-style-options-views-search-marker-enable").is('input')) {
-        if ($("#edit-style-options-views-search-marker-enable").prop('checked')) {
+      if ($("#edit-style-options-views-search-group-views-search-marker-enable").is('input')) {
+        if ($("#edit-style-options-views-search-group-views-search-marker-enable").prop('checked')) {
           $("#wrap-getlocations-views-search-marker").show();
         }
         else {
           $("#wrap-getlocations-views-search-marker").hide();
         }
-        $("#edit-style-options-views-search-marker-enable").change(function() {
+        $("#edit-style-options-views-search-group-views-search-marker-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-views-search-marker").show();
           }
@@ -383,14 +383,14 @@
       }
 
       // search area shape
-      if ($("#edit-style-options-views-search-radshape-enable").is('input')) {
-        if ($("#edit-style-options-views-search-radshape-enable").prop('checked')) {
+      if ($("#edit-style-options-views-search-group-views-search-radshape-enable").is('input')) {
+        if ($("#edit-style-options-views-search-group-views-search-radshape-enable").prop('checked')) {
           $("#wrap-getlocations-views-search-radshape").show();
         }
         else {
           $("#wrap-getlocations-views-search-radshape").hide();
         }
-        $("#edit-style-options-views-search-radshape-enable").change(function() {
+        $("#edit-style-options-views-search-group-views-search-radshape-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-views-search-radshape").show();
           }

@@ -389,33 +389,42 @@ function getlocations_leaflet_display_options_fieldsets($form) {
     $tsuf = $form['mapquest_traffic_incident_on']['#suffix'];
     $form['mapquest_traffic_incident_on']['#suffix'] = $tsuf . '</div></fieldset>';
   }
-########
-  // polygons
-  if (isset($form['polygons_enable']) && $form['polygons_enable']['#type'] !== 'value' ) {
-    $form['polygons_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['polygons_coords']['#suffix'];
-    $form['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
 
-  // rectangles
-  if (isset($form['rectangles_enable']) && $form['rectangles_enable']['#type'] !== 'value' ) {
-    $form['rectangles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['rectangles_coords']['#suffix'];
-    $form['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
+  if (isset($form['#id']) && $form['#id'] == 'edit-style-options' ) {
+    // polygons
+    if (isset($form['polygons_group']['polygons_enable']) && $form['polygons_group']['polygons_enable']['#type'] !== 'value' ) {
+      $form['polygons_group']['polygons_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
+      $tsuf = $form['polygons_group']['polygons_coords']['#suffix'];
+      $form['polygons_group']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+    }
 
-  // circles
-  if (isset($form['circles_enable']) && $form['circles_enable']['#type'] !== 'value' ) {
-    $form['circles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['circles_coords']['#suffix'];
-    $form['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
+    // rectangles
+    if (isset($form['rectangles_group']['rectangles_enable']) && $form['rectangles_group']['rectangles_enable']['#type'] !== 'value' ) {
+      $form['rectangles_group']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
+      $tsuf = $form['rectangles_group']['rectangles_coords']['#suffix'];
+      $form['rectangles_group']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+    }
 
-  // polylines
-  if (isset($form['polylines_enable']) && $form['polylines_enable']['#type'] !== 'value' ) {
-    $form['polylines_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['polylines_coords']['#suffix'];
-    $form['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+    // circles
+    if (isset($form['circles_group']['circles_enable']) && $form['circles_group']['circles_enable']['#type'] !== 'value' ) {
+      $form['circles_group']['circles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
+      $tsuf = $form['circles_group']['circles_coords']['#suffix'];
+      $form['circles_group']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+    }
+
+    // polylines
+    if (isset($form['polylines_group']['polylines_enable']) && $form['polylines_group']['polylines_enable']['#type'] !== 'value' ) {
+      $form['polylines_group']['polylines_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
+      $tsuf = $form['polylines_group']['polylines_coords']['#suffix'];
+      $form['polylines_group']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
+    }
+
+    if (isset($form['views_search_group']['views_search_marker_enable']) && $form['views_search_group']['views_search_marker_enable']['#type'] !== 'value' ) {
+      $form['views_search_group']['views_search_marker_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Views Search') . '</span></legend><div class="fieldset-wrapper">';
+      $tsuf = $form['views_search_group']['views_search_radshape_toggle_active']['#suffix'];
+      $form['views_search_group']['views_search_radshape_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
+    }
+
   }
 
   // what3words
@@ -424,8 +433,6 @@ function getlocations_leaflet_display_options_fieldsets($form) {
     $tsuf = $form['what3words_show']['#suffix'];
     $form['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
   }
-
-########
 
   return $form;
 }

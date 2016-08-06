@@ -25,7 +25,6 @@
 
         // this is the one we want
         if (settings.extcontrol == 'preview_map') {
-console.log('got preview_map');
           // an event handler on zoomend and getZoom()
           Backdrop.getlocations_leaflet_map[key].on('zoomend', function() {
             $("#edit-getlocations-leaflet-defaults-zoom").val(Backdrop.getlocations_leaflet_map[key].getZoom());

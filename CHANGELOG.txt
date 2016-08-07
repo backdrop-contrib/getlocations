@@ -1,9 +1,68 @@
-commit 7eb3c8c
+commit 3aa8725
+Author: hutch <hutch@arwystli.net>
+Date:   Sun Aug 7 09:23:36 2016 +0100
+
+    removed leaflet map example
+
+modules/getlocations_fields/config/views.view.getlocations_all.json
+
+commit 259d529
+Author: hutch <hutch@arwystli.net>
+Date:   Sun Aug 7 09:05:08 2016 +0100
+
+    removed old views defs
+
+modules/getlocations_fields/views/getlocations_fields.views_default.inc
+modules/getlocations_leaflet/views/getlocations_leaflet.views_default.inc
+views/getlocations.views_default.inc
+
+commit 6855133
+Author: hutch <hutch@arwystli.net>
+Date:   Sat Aug 6 19:03:42 2016 +0100
+
+    debugging form displays
+
+getlocations.theme.inc
+js/getlocations_views.js
+modules/getlocations_leaflet/getlocations_leaflet.theme.inc
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+modules/getlocations_leaflet/js/getlocations_leaflet_preview.js
+
+commit c66ab16
+Author: hutch <hutch@arwystli.net>
+Date:   Sat Aug 6 19:02:52 2016 +0100
+
+    added default views
+
+modules/getlocations_fields/config/views.view.getlocations_all.json
+modules/getlocations_fields/config/views.view.getlocations_nearby.json
+
+commit 9fd6d7b
+Author: hutch <hutch@arwystli.net>
+Date:   Fri Aug 5 19:26:03 2016 +0100
+
+    fixed views_search group and fieldset
+
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.functions.inc
+modules/getlocations_leaflet/getlocations_leaflet.theme.inc
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+
+commit a291763
+Author: hutch <hutch@arwystli.net>
+Date:   Thu Aug 4 20:29:04 2016 +0100
+
+    more cleanup
+
+views/getlocations_plugin_style_map.inc
+
+commit 1f88cb9
 Author: hutch <hutch@arwystli.net>
 Date:   Thu Aug 4 17:46:50 2016 +0100
 
     more views debugging
 
+CHANGELOG.txt
 getlocations.module
 views/getlocations_plugin_style_map.inc
 

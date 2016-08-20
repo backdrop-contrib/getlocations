@@ -1,0 +1,9 @@
+name = Getlocations Blocks
+description = Provides some blocks to help with getlocations_fields Views.
+package = "Location"
+;version = BACKDROP_VERSION
+backdrop = 1.x
+type = module
+dependencies[] = getlocations_fields
+dependencies[] = views
+dependencies[] = block

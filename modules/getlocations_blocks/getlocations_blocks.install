@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * getlocations_blocks.install
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
+ * @copyright GNU GPL
+ *
+ * getlocations_blocks module installation.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+#function getlocations_blocks_uninstall() {
+#  variable_del('getlocations_blocks');
+#}

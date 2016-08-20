@@ -1,0 +1,26 @@
+{
+  "_config_name":"getlocations_blocks.settings",
+  "settings": {
+    "city_path":"getlocations_by_city",
+    "city_element":"dropdown",
+    "city_filter":"",
+    "city_filter_fieldname":"",
+    "city_filter_bundle":"",
+    "province_path":"getlocations_by_province",
+    "province_element":"dropdown",
+    "province_filter":"",
+    "province_filter_fieldname":"",
+    "province_filter_bundle":"",
+    "postalcode_path":"getlocations_by_postcode",
+    "postalcode_element":"dropdown",
+    "postalcode_filter":"",
+    "postalcode_filter_fieldname":"",
+    "postalcode_filter_bundle":"",
+    "country_path":"getlocations_by_country",
+    "country_element":"dropdown",
+    "country_full":0,
+    "country_filter":"",
+    "country_filter_fieldname":"",
+    "country_filter_bundle":""
+  }
+}

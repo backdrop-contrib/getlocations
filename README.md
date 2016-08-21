@@ -7,8 +7,8 @@ locative data in pages or blocks. Getlocations supports Google maps a well as
 Leaflet maps.
 
 This project can currently be obtained on
-https://github.com/bobhutch/getlocations
-set branch to bd-1.x-1.x to get the Backdrop version
+https://github.com/arwystli/getlocations
+set branch to 1.x-1.x to get the Backdrop version
 
 Installation
 ------------

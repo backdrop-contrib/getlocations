@@ -33,196 +33,272 @@
     },
     "map_layers": {
       "OpenStreetMap.Mapnik": {
-        "label": "OpenStreetMap Default",
-        "type": "base"
+          "label": "OpenStreetMap Default",
+          "type": "base"
       },
       "OpenStreetMap.BlackAndWhite": {
-        "label": "OpenStreetMap Black and White",
-        "type": "base"
+          "label": "OpenStreetMap Black and White",
+          "type": "base"
       },
       "OpenStreetMap.DE": {
-        "label": "OpenStreetMap German Style",
-        "type": "base"
+          "label": "OpenStreetMap German Style",
+          "type": "base"
+      },
+      "OpenStreetMap.France": {
+          "label": "OpenStreetMap French Style",
+          "type": "base"
       },
       "OpenStreetMap.HOT": {
-        "label": "OpenStreetMap H.O.T",
-        "type": "base"
+          "label": "OpenStreetMap H.O.T",
+          "type": "base"
       },
       "Thunderforest.OpenCycleMap": {
-        "label": "Thunderforest OpenCycleMap",
-        "type": "base"
+          "label": "Thunderforest OpenCycleMap",
+          "type": "base"
       },
       "Thunderforest.Transport": {
-        "label": "Thunderforest Transport",
-        "type": "base"
+          "label": "Thunderforest Transport",
+          "type": "base"
+      },
+      "Thunderforest.TransportDark": {
+          "label": "Thunderforest TransportDark",
+          "type": "base"
+      },
+      "Thunderforest.SpinalMap": {
+          "label": "Thunderforest SpinalMap",
+          "type": "base"
       },
       "Thunderforest.Landscape": {
-        "label": "Thunderforest Landscape",
-        "type": "base"
+          "label": "Thunderforest Landscape",
+          "type": "base"
       },
       "Thunderforest.Outdoors": {
-        "label": "Thunderforest Outdoors",
-        "type": "base"
+          "label": "Thunderforest Outdoors",
+          "type": "base"
       },
-      "MapQuestOpen.OSM": {
-        "label": "MapQuestOpen OSM",
-        "type": "base"
+      "Thunderforest.Pioneer": {
+          "label": "Thunderforest Pioneer",
+          "type": "base"
       },
-      "MapQuestOpen.Aerial": {
-        "label": "MapQuestOpen Aerial",
-        "type": "base"
+      "Hydda.Full": {
+          "label": "Hydda Full",
+          "type": "base"
+      },
+      "Hydda.Base": {
+          "label": "Hydda Base",
+          "type": "base"
+      },
+      "Hydda.RoadsAndLabels": {
+          "label": "Hydda RoadsAndLabels",
+          "type": "base"
       },
       "Stamen.Toner": {
-        "label": "Stamen Toner",
-        "type": "base"
+          "label": "Stamen Toner",
+          "type": "base"
       },
       "Stamen.TonerBackground": {
-        "label": "Stamen Toner Background",
-        "type": "base"
+          "label": "Stamen Toner Background",
+          "type": "base"
       },
       "Stamen.TonerHybrid": {
-        "label": "Stamen Toner Hybrid",
-        "type": "base"
+          "label": "Stamen Toner Hybrid",
+          "type": "base"
       },
       "Stamen.TonerLines": {
-        "label": "Stamen Toner Lines",
-        "type": "base"
+          "label": "Stamen Toner Lines",
+          "type": "base"
       },
       "Stamen.TonerLabels": {
-        "label": "Stamen Toner Labels",
-        "type": "base"
+          "label": "Stamen Toner Labels",
+          "type": "base"
       },
       "Stamen.TonerLite": {
-        "label": "Stamen Toner Lite",
-        "type": "base"
-      },
-      "Stamen.Terrain": {
-        "label": "Stamen Terrain",
-        "type": "base"
-      },
-      "Stamen.TerrainBackground": {
-        "label": "Stamen Terrain Background",
-        "type": "base"
+          "label": "Stamen Toner Lite",
+          "type": "base"
       },
       "Stamen.Watercolor": {
-        "label": "Stamen Watercolor",
-        "type": "base"
+          "label": "Stamen Watercolor",
+          "type": "base"
+      },
+      "Stamen.Terrain": {
+          "label": "Stamen Terrain",
+          "type": "base"
+      },
+      "Stamen.TerrainBackground": {
+          "label": "Stamen Terrain Background",
+          "type": "base"
       },
       "Esri.WorldStreetMap": {
-        "label": "Esri WorldStreetMap",
-        "type": "base"
+          "label": "Esri WorldStreetMap",
+          "type": "base"
       },
       "Esri.DeLorme": {
-        "label": "Esri DeLorme",
-        "type": "base"
+          "label": "Esri DeLorme",
+          "type": "base"
       },
       "Esri.WorldTopoMap": {
-        "label": "Esri WorldTopoMap",
-        "type": "base"
+          "label": "Esri WorldTopoMap",
+          "type": "base"
       },
       "Esri.WorldImagery": {
-        "label": "Esri WorldImagery",
-        "type": "base"
+          "label": "Esri WorldImagery",
+          "type": "base"
       },
       "Esri.WorldTerrain": {
-        "label": "Esri WorldTerrain",
-        "type": "base"
+          "label": "Esri WorldTerrain",
+          "type": "base"
       },
       "Esri.WorldShadedRelief": {
-        "label": "Esri WorldShadedRelief",
-        "type": "base"
+          "label": "Esri WorldShadedRelief",
+          "type": "base"
       },
       "Esri.WorldPhysical": {
-        "label": "Esri WorldPhysical",
-        "type": "base"
+          "label": "Esri WorldPhysical",
+          "type": "base"
       },
       "Esri.OceanBasemap": {
-        "label": "Esri OceanBasemap",
-        "type": "base"
+          "label": "Esri OceanBasemap",
+          "type": "base"
       },
       "Esri.NatGeoWorldMap": {
-        "label": "Esri NatGeoWorldMap",
-        "type": "base"
+          "label": "Esri NatGeoWorldMap",
+          "type": "base"
       },
       "Esri.WorldGrayCanvas": {
-        "label": "Esri WorldGrayCanvas",
-        "type": "base"
+          "label": "Esri WorldGrayCanvas",
+          "type": "base"
       },
-      "Acetate.all": {
-        "label": "Acetate all",
-        "type": "base"
+      "MtbMap": {
+          "label": "MtbMap",
+          "type": "base"
       },
-      "Acetate.basemap": {
-        "label": "Acetate basemap",
-        "type": "base"
+      "CartoDB.Positron": {
+          "label": "CartoDB Positron",
+          "type": "base"
       },
-      "Acetate.terrain": {
-        "label": "Acetate terrain",
-        "type": "base"
+      "CartoDB.PositronNoLabels": {
+          "label": "CartoDB PositronNoLabels",
+          "type": "base"
       },
-      "Acetate.foreground": {
-        "label": "Acetate foreground",
-        "type": "base"
+      "CartoDB.PositronOnlyLabels": {
+          "label": "CartoDB PositronOnlyLabels",
+          "type": "base"
       },
-      "Acetate.roads": {
-        "label": "Acetate roads",
-        "type": "base"
+      "CartoDB.DarkMatter": {
+          "label": "CartoDB DarkMatter",
+          "type": "base"
       },
-      "Acetate.labels": {
-        "label": "Acetate labels",
-        "type": "base"
+      "CartoDB.DarkMatterNoLabels": {
+          "label": "CartoDB DarkMatterNoLabels",
+          "type": "base"
       },
-      "Acetate.hillshading": {
-        "label": "Acetate hillshading",
-        "type": "base"
+      "CartoDB.DarkMatterOnlyLabels": {
+          "label": "CartoDB DarkMatterOnlyLabels",
+          "type": "base"
+      },
+      "HikeBike.HikeBike": {
+          "label": "HikeBike",
+          "type": "base"
+      },
+      "HikeBike.HillShading": {
+          "label": "HikeBike HillShading",
+          "type": "base"
+      },
+      "BasemapAT.basemap": {
+          "label": "BasemapAT basemap",
+          "type": "base"
+      },
+      "BasemapAT.grau": {
+          "label": "BasemapAT grau",
+          "type": "base"
+      },
+      "BasemapAT.overlay": {
+          "label": "BasemapAT overlay",
+          "type": "base"
+      },
+      "BasemapAT.highdpi": {
+          "label": "BasemapAT highdpi",
+          "type": "base"
+      },
+      "BasemapAT.orthofoto": {
+          "label": "BasemapAT orthofoto",
+          "type": "base"
+      },
+      "NASAGIBS.ModisTerraTrueColorCR": {
+          "label": "NASAGIBS TrueColorCR Overlay",
+          "type": "overlay"
+      },
+      "NASAGIBS.ModisTerraBands367CR": {
+          "label": "NASAGIBS Bands367CR Overlay",
+          "type": "overlay"
+      },
+      "NASAGIBS.ViirsEarthAtNight2012": {
+          "label": "NASAGIBS ViirsEarthAtNight2012 Overlay",
+          "type": "overlay"
+      },
+      "NASAGIBS.ModisTerraLSTDay": {
+          "label": "NASAGIBS LSTDay Overlay",
+          "type": "overlay"
+      },
+      "NASAGIBS.ModisTerraSnowCover": {
+          "label": "NASAGIBS SnowCover Overlay",
+          "type": "overlay"
+      },
+      "NASAGIBS.ModisTerraAOD": {
+          "label": "NASAGIBS AOD Overlay",
+          "type": "overlay"
+      },
+      "NASAGIBS.ModisTerraChlorophyll": {
+          "label": "NASAGIBS Chlorophyll Overlay",
+          "type": "overlay"
       },
       "OpenSeaMap": {
-        "label": "OpenSeaMap Overlay",
-        "type": "overlay"
+          "label": "OpenSeaMap Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Clouds": {
-        "label": "OpenWeatherMap Clouds Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Clouds Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.CloudsClassic": {
-        "label": "OpenWeatherMap Clouds Classic Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Clouds Classic Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Precipitation": {
-        "label": "OpenWeatherMap Precipitation Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Precipitation Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.PrecipitationClassic": {
-        "label": "OpenWeatherMap Precipitation Classic Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Precipitation Classic Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Rain": {
-        "label": "OpenWeatherMap Rain Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Rain Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.RainClassic": {
-        "label": "OpenWeatherMap Rain Classic Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Rain Classic Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Pressure": {
-        "label": "OpenWeatherMap Pressure Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Pressure Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.PressureContour": {
-        "label": "OpenWeatherMap PressureContour Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap PressureContour Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Wind": {
-        "label": "OpenWeatherMap Wind Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Wind Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Temperature": {
-        "label": "OpenWeatherMap Temperature Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Temperature Overlay",
+          "type": "overlay"
       },
       "OpenWeatherMap.Snow": {
-        "label": "OpenWeatherMap Snow Overlay",
-        "type": "overlay"
+          "label": "OpenWeatherMap Snow Overlay",
+          "type": "overlay"
       }
     }
   }

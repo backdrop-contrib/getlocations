@@ -1,9 +1,70 @@
-commit 3aa8725
+commit f14f29c
+Author: hutch <hutch@arwystli.net>
+Date:   Mon Aug 22 18:27:13 2016 +0100
+
+    updated map providers list
+
+modules/getlocations_leaflet/config/getlocations_leaflet.map_providers.json
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.js
+
+commit 9a2744c
+Author: hutch <hutch@arwystli.net>
+Date:   Sun Aug 21 17:52:38 2016 +0100
+
+    edited README.md
+
+README.md
+
+commit 2ef0206
+Author: hutch <hutch@arwystli.net>
+Date:   Sun Aug 21 09:37:33 2016 +0100
+
+    add latlon view
+
+modules/getlocations_fields/config/views.view.getlocations_by_latlon.json
+
+commit 8fca6a3
+Author: hutch <hutch@arwystli.net>
+Date:   Sun Aug 21 09:37:11 2016 +0100
+
+    avoid notify
+
+modules/getlocations_fields/views/getlocations_fields.views.inc
+
+commit 66a9863
+Author: hutch <hutch@arwystli.net>
+Date:   Sat Aug 20 22:18:15 2016 +0100
+
+    added getlocations_blocks module
+
+modules/getlocations_blocks/README.txt
+modules/getlocations_blocks/config/getlocations_blocks.settings.json
+modules/getlocations_blocks/getlocations_blocks.css
+modules/getlocations_blocks/getlocations_blocks.info
+modules/getlocations_blocks/getlocations_blocks.install
+modules/getlocations_blocks/getlocations_blocks.module
+modules/getlocations_blocks/js/getlocations_blocks.js
+modules/getlocations_blocks/js/getlocations_blocks_admin.js
+
+commit 24662d8
+Author: hutch <hutch@arwystli.net>
+Date:   Sat Aug 20 22:17:08 2016 +0100
+
+    added views defaults
+
+modules/getlocations_fields/config/views.view.getlocations_by_city.json
+modules/getlocations_fields/config/views.view.getlocations_by_country.json
+modules/getlocations_fields/config/views.view.getlocations_by_postcode.json
+modules/getlocations_fields/config/views.view.getlocations_by_province.json
+
+commit f3ff5db
 Author: hutch <hutch@arwystli.net>
 Date:   Sun Aug 7 09:23:36 2016 +0100
 
     removed leaflet map example
 
+CHANGELOG.txt
 modules/getlocations_fields/config/views.view.getlocations_all.json
 
 commit 259d529

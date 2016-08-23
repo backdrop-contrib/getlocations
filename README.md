@@ -7,7 +7,7 @@ locative data in pages or blocks. Getlocations supports Google maps a well as
 Leaflet maps.
 
 This project can currently be obtained on
-https://github.com/arwystli/getlocations
+https://github.com/backdrop-contrib/getlocations
 set branch to 1.x-1.x to get the Backdrop version
 
 Installation
@@ -26,24 +26,24 @@ Documentation
 
 Coming soon:
 Additional documentation is located in the Wiki:
-https://github.com/backdrop-contrib/foo-project/wiki/Documentation
+https://github.com/backdrop-contrib/getlocations/wiki/Documentation
 
 Issues
 ------
 
 Coming soon:
 Bugs and Feature requests should be reported in the Issue Queue:
-https://github.com/backdrop-contrib/foo-project/issues
+https://github.com/backdrop-contrib/getlocations/issues
 
 Current Maintainers
 -------------------
 
-- Bob Hutchinson (https://github.com/bobhutch/)
+- Bob Hutchinson (https://github.com/arwystli/)
 
 Credits
 -------
 
-- Ported to Backdrop CMS by Bob Hutchinson (https://github.com/bobhutch).
+- Ported to Backdrop CMS by Bob Hutchinson (https://github.com/arwystli).
 - Originally written for Drupal by Bob Hutchinson (https://github.com/bobhutch).
 
 License

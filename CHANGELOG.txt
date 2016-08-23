@@ -1,9 +1,18 @@
-commit f14f29c
+commit 3df216d
+Author: hutch <hutch@arwystli.net>
+Date:   Tue Aug 23 21:24:48 2016 +0100
+
+    updated README.md with new paths
+
+README.md
+
+commit feb9766
 Author: hutch <hutch@arwystli.net>
 Date:   Mon Aug 22 18:27:13 2016 +0100
 
     updated map providers list
 
+CHANGELOG.txt
 modules/getlocations_leaflet/config/getlocations_leaflet.map_providers.json
 modules/getlocations_leaflet/getlocations_leaflet.module
 modules/getlocations_leaflet/js/getlocations_leaflet_providers.js

@@ -5050,6 +5050,15 @@ function getlocations_adjust_vars($defaults, $settings) {
 function getlocations_get_fieldnames($module = 'getlocations_fields', $type = 'getlocations_fields') {
 
   $field_names = array();
+
+  $f_info = _field_info_collate_fields();
+  $fields = $f_info['fields'];
+  foreach ($fields AS $k => $v) {
+    if ($v['type'] == $type && $v['module'] == $module && $v['active'] == 1) {
+      $fieldnames[$v['field_name']] = $v['field_name'];
+    }
+  }
+
 #  $query = db_select('field_config', 'f');
 #  $query->fields('f', array('field_name'));
 #  $query->join('field_config_instance', 'i', 'f.id=i.field_id');
@@ -5074,7 +5083,18 @@ function getlocations_get_fieldnames($module = 'getlocations_fields', $type = 'g
 // TODO
 function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getlocations_fields') {
 
-  $bundles = array();
+  $allbundles = array();
+  $f_info = _field_info_collate_fields();
+  $fields = $f_info['fields'];
+  foreach ($fields AS $k => $v) {
+    if ($v['type'] == $type && $v['module'] == $module && $v['active'] == 1) {
+      if (isset($v['bundles'][$entity_type] )) {
+        $bundles = $v['bundles'][$entity_type];
+        $allbundles = array_merge($bundles, $allbundles);
+      }
+    }
+  }
+
 #  $query = db_select('field_config', 'f');
 #  $query->fields('i', array('bundle'));
 #  $query->join('field_config_instance', 'i', 'f.id=i.field_id');
@@ -5085,7 +5105,7 @@ function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getl
 #  foreach ($rows AS $row) {
 #    $bundles[$row->bundle] = $row->bundle;
 #  }
-  return $bundles;
+  return $allbundles;
 }
 
 /**
@@ -5097,11 +5117,34 @@ function getlocations_get_bundles($module = 'getlocations_fields', $type = 'getl
  * @return array The countries array
  */
 function getlocations_get_countries_list($upper = TRUE, $only_continents = '', $only_countries = '') {
-  include_once BACKDROP_ROOT . '/core/includes/locale.inc';
-  // Statically cache a version of the core Backdrop list of countries
-  $countries = &backdrop_static(__FUNCTION__);
-  if (! isset($countries) || empty($countries)) {
-    $countries = country_get_list();
+
+  if (module_exists('countries')) {
+    $filter = array('enabled' => COUNTRIES_ENABLED);
+    if ($only_countries) {
+      $only_countries = backdrop_strtoupper($only_countries);
+      $oc = explode(',', $only_countries);
+      if (! empty($oc)) {
+        $filter['countries'] = $oc;
+      }
+    }
+    elseif (is_array($only_continents)) {
+      $oc = array();
+      foreach ($only_continents AS $v) {
+        $oc[] = $v;
+      }
+      if (! empty($oc)) {
+        $filter['continents'] = $oc;
+      }
+    }
+    $countries = countries_get_countries('name', $filter);
+  }
+  else {
+    include_once BACKDROP_ROOT . '/core/includes/locale.inc';
+    // Statically cache a version of the core Backdrop list of countries
+    $countries = &backdrop_static(__FUNCTION__);
+    if (! isset($countries) || empty($countries)) {
+      $countries = country_get_list();
+    }
   }
   if (! $upper) {
     $countries = array_change_key_case($countries, CASE_LOWER);

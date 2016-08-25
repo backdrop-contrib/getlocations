@@ -1,9 +1,19 @@
-commit 3df216d
+commit 78fad7e
+Author: hutch <hutch@arwystli.net>
+Date:   Thu Aug 25 15:50:24 2016 +0100
+
+    fixed field_names and bundle get functions, fixed markers
+
+getlocations.module
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit b474a33
 Author: hutch <hutch@arwystli.net>
 Date:   Tue Aug 23 21:24:48 2016 +0100
 
     updated README.md with new paths
 
+CHANGELOG.txt
 README.md
 
 commit feb9766

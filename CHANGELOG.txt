@@ -1,9 +1,21 @@
-commit 78fad7e
+commit 83128b6
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Mon Aug 29 18:12:03 2016 +0100
+
+    added mapbox support
+
+modules/getlocations_mapbox/config/getlocations_leaflet_mapbox.settings.json
+modules/getlocations_mapbox/getlocations_mapbox.info
+modules/getlocations_mapbox/getlocations_mapbox.install
+modules/getlocations_mapbox/getlocations_mapbox.module
+
+commit 884d404
 Author: hutch <hutch@arwystli.net>
 Date:   Thu Aug 25 15:50:24 2016 +0100
 
     fixed field_names and bundle get functions, fixed markers
 
+CHANGELOG.txt
 getlocations.module
 modules/getlocations_leaflet/getlocations_leaflet.module
 

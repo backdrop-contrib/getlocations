@@ -1,0 +1,11 @@
+{
+  "_config_name": "getlocations_leaflet_mapbox.mapbox_info",
+  "settings": {
+    "mapbox_info": {
+      "label": "",
+      "key": "",
+      "token": "",
+      "type": "base"
+    }
+  }
+}

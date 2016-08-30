@@ -397,6 +397,65 @@ function getlocations_leaflet_settings_form() {
     }
 
   }
+  elseif ($settings['marker_type'] == 'gg') {
+    // getlocations markers
+    // default node marker
+    $markers = getlocations_get_marker_titles();
+    $desc = '';
+    if (getlocations_check_entity_type('node')) {
+      $desc = t('In use');
+    }
+    $form['getlocations_leaflet_defaults']['node_map_marker'] = getlocations_element_map_marker(
+      t('Default Content Map marker'),
+      $markers,
+      $getlocations_leaflet_defaults['node_map_marker'],
+      $desc
+    );
+
+    // default user marker
+    $desc = '';
+    if (getlocations_check_entity_type('user')) {
+      $desc = t('In use');
+    }
+    $form['getlocations_leaflet_defaults']['user_map_marker'] = getlocations_element_map_marker(
+      t('Default User Map marker'),
+      $markers,
+      $getlocations_leaflet_defaults['user_map_marker'],
+      $desc
+    );
+    if (module_exists('taxonomy')) {
+      // default vocabulary marker
+      $desc = '';
+      if (getlocations_get_vocabularies()) {
+        $desc = t('In use');
+      }
+      $form['getlocations_leaflet_defaults']['vocabulary_map_marker'] = getlocations_element_map_marker(
+        t('Default Vocabulary Map marker'),
+        $markers,
+        $getlocations_leaflet_defaults['vocabulary_map_marker'],
+        $desc
+      );
+      $form['getlocations_leaflet_defaults']['term_map_marker'] = getlocations_element_map_marker(
+        t('Default Term Map marker'),
+        $markers,
+        $getlocations_leaflet_defaults['term_map_marker'],
+        ''
+      );
+    }
+    if (module_exists('comment')) {
+      // default comment marker
+      $desc = '';
+      if (getlocations_check_entity_type('comment')) {
+        $desc = t('In use');
+      }
+      $form['getlocations_leaflet_defaults']['comment_map_marker'] = getlocations_element_map_marker(
+        t('Default Comment Map marker'),
+        $markers,
+        $getlocations_leaflet_defaults['comment_map_marker'],
+        $desc
+      );
+    }
+  }
 
   // returnlink_group
   $returnlink_group = $settings['returnlink_group'];
@@ -604,16 +663,6 @@ function getlocations_leaflet_settings_form_validate($form, &$form_state) {
     }
   }
 
-  // cloudmade
-  if (module_exists('getlocations_cloudmade')) {
-    $form_state = getlocations_cloudmade_settings_validate($form_state);
-  }
-
-  // mapbox
-  if (module_exists('getlocations_mapbox')) {
-    $form_state = getlocations_mapbox_settings_validate($form_state);
-  }
-
   // css check
   if (isset($form_state['values']['getlocations_leaflet_defaults']['width'])) {
     if ($check = getlocations_dim_check($form_state['values']['getlocations_leaflet_defaults']['width'])) {
@@ -636,8 +685,6 @@ function getlocations_leaflet_settings_form_validate($form, &$form_state) {
 
 function getlocations_leaflet_settings_form_submit($form, &$form_state) {
 
-#dd($form_state['values'], '$form_state[values] in getlocations_leaflet_settings_form_submit');
-
   $config = config('getlocations_leaflet.settings');
   $settings = $config->get('settings');
   $keys = array_keys($settings);
@@ -659,19 +706,15 @@ function getlocations_leaflet_settings_form_submit($form, &$form_state) {
   $config_plugins->set('settings', $form_state['values']['getlocations_leaflet_plugins']);
   $config_plugins->save();
 
-
-
   // mapbox
   if (module_exists('getlocations_mapbox')) {
-    #$form += getlocations_mapbox_settings_form();
-
+    getlocations_mapbox_settings_save($form_state['values']);
   }
 
   // cloudmade
   if (module_exists('getlocations_cloudmade')) {
-    #$form += getlocations_cloudmade_settings_form();
+    getlocations_cloudmade_settings_save($form_state['values']);
   }
-
 
   if (isset($form_state['values']['getlocations_leaflet_defaults'])) {
 

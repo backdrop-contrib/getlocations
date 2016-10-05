@@ -1,9 +1,26 @@
-commit 83128b6
+commit abb22bf
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Oct 5 17:41:40 2016 +0100
+
+    fixed notice avoidance
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 93d5ff3
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Tue Aug 30 09:51:34 2016 +0100
+
+    fixed gg marker type, fixed mapbox validation and submission
+
+modules/getlocations_leaflet/getlocations_leaflet.admin.inc
+
+commit 9dbf826
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Mon Aug 29 18:12:03 2016 +0100
 
     added mapbox support
 
+CHANGELOG.txt
 modules/getlocations_mapbox/config/getlocations_leaflet_mapbox.settings.json
 modules/getlocations_mapbox/getlocations_mapbox.info
 modules/getlocations_mapbox/getlocations_mapbox.install

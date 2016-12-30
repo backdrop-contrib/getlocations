@@ -42,32 +42,40 @@
                     if (response) {
                       var lat = response.geometry.lat;
                       var lon = response.geometry.lng;
-                      if (settings.what3words_marker_show && lat && lon ) {
-                        if (marker) {
-                          marker.setMap();
+                      if (lat && lon) {
+                        if (settings.what3words_marker_show) {
+                          if (marker) {
+                            marker.setMap();
+                          }
+                          settings.markdone = Backdrop.getlocations.getIcon(settings.what3words_map_marker);
+                          marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, lat, lon, 0, w3w, '', '', '', key);
                         }
-                        settings.markdone = Backdrop.getlocations.getIcon(settings.what3words_map_marker);
-                        marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, lat, lon, 0, w3w, '', '', '', key);
+                        // bounds
+                        if (settings.what3words_zoom == -3) {
+                          var sw_ll = new google.maps.LatLng(parseFloat(response.bounds.southwest.lat), parseFloat(response.bounds.southwest.lng));
+                          var ne_ll = new google.maps.LatLng(parseFloat(response.bounds.northeast.lat), parseFloat(response.bounds.northeast.lng));
+                          var llb = new google.maps.LatLngBounds(sw_ll, ne_ll);
+                          Backdrop.getlocations_map[key].fitBounds(llb);
+                        }
+                        // map settings
+                        else if (settings.what3words_zoom == -1) {
+                          Backdrop.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
+                        }
+                        else if (settings.what3words_zoom > -1) {
+                          Backdrop.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
+                        }
+                        //edit-getlocations-what3words-show
+                        if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
+                          $("#edit-getlocations-what3words-show").html(w3w);
+                        }
+                        if (settings.what3words_center) {
+                          var c = new google.maps.LatLng(parseFloat(lat), parseFloat(lon));
+                          Backdrop.getlocations_map[key].setCenter(c);
+                        }
                       }
-                      if (settings.what3words_zoom == -1) {
-                        Backdrop.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
-                      }
-                      else if (settings.what3words_zoom > -1) {
-                        Backdrop.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
-                      }
-                      //edit-getlocations-what3words-show
-                      if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
-                        $("#edit-getlocations-what3words-show").html(w3w);
-                      }
-                      if (settings.what3words_center) {
-                        var c = new google.maps.LatLng(parseFloat(lat), parseFloat(lon));
-                        Backdrop.getlocations_map[key].setCenter(c);
-                      }
-
                     }
                     $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_active').addClass('getlocations_w3w_throbber_inactive');
                   });
-                  //$("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_active').addClass('getlocations_w3w_throbber_inactive');
                 }
                 else {
                   $("#getlocations_w3w_throbber_" + key).removeClass('getlocations_w3w_throbber_active').addClass('getlocations_w3w_throbber_inactive');
@@ -95,7 +103,15 @@
                       settings.markdone = Backdrop.getlocations.getIcon(settings.what3words_map_marker);
                       marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, wlat, wlon, 0, w3w, '', '', '', key);
                     }
-                    if (settings.what3words_zoom == -1) {
+                    // bounds
+                    if (settings.what3words_zoom == -3) {
+                      var sw_ll = new google.maps.LatLng(parseFloat(response.bounds.southwest.lat), parseFloat(response.bounds.southwest.lng));
+                      var ne_ll = new google.maps.LatLng(parseFloat(response.bounds.northeast.lat), parseFloat(response.bounds.northeast.lng));
+                      var llb = new google.maps.LatLngBounds(sw_ll, ne_ll);
+                      Backdrop.getlocations_map[key].fitBounds(llb);
+                    }
+                    // map settings
+                    else if (settings.what3words_zoom == -1) {
                       Backdrop.getlocations_map[key].setZoom(parseInt(settings.nodezoom));
                     }
                     else if (settings.what3words_zoom > -1) {

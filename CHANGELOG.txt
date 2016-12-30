@@ -1,9 +1,22 @@
-commit abb22bf
+commit 2979484
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Fri Dec 30 16:55:55 2016 +0000
+
+    fixed what3words
+
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations_what3words.js
+views/getlocations_plugin_style_map.inc
+
+commit 6a08b9d
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Wed Oct 5 17:41:40 2016 +0100
 
     fixed notice avoidance
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 93d5ff3

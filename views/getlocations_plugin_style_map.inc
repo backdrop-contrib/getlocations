@@ -3,7 +3,7 @@
 /**
  * @file
  * getlocations_plugin_style_map.inc
- * @author Bob Hutchinson http://backdrop.org/user/52366
+ * @author Bob Hutchinson https://backdropcms.org/account/hutch
  * @copyright GNU GPL
  *
  * Contains the getlocations style plugin.
@@ -202,26 +202,16 @@ class getlocations_plugin_style_map extends views_plugin_style {
 
     // what3words
     $what3words_lic = getlocations_w3w_get_lic();
-    $options['what3words_lic'] = $what3words_lic;
     $what3words_group = getlocations_w3w_get_group();
     if ($what3words_lic['key'] ) {
-      $options['what3words_key']         = array('default' =>  $what3words_lic['key']);
-      $options['what3words_enable']      = array('default' =>  $what3words_group['what3words_enable']);
-      $options['what3words_search']      = array('default' =>  $what3words_group['what3words_search']);
-      $options['what3words_map_marker']  = array('default' =>  $what3words_group['what3words_map_marker']);
-      $options['what3words_center']      = array('default' =>  $what3words_group['what3words_center']);
-      $options['what3words_zoom']        = array('default' =>  $what3words_group['what3words_zoom']);
-      $options['what3words_show']        = array('default' =>  $what3words_group['what3words_show']);
-      $options['what3words_marker_show'] = array('default' =>  $what3words_group['what3words_marker_show']);
-      $options['what3words_click']       = array('default' =>  $what3words_group['what3words_click']);
-      $options['what3words_size']        = array('default' =>  $what3words_group['what3words_size']);
+      $options['what3words_lic']   = array('default' =>  $what3words_lic);
+      $options['what3words_group'] = array('default' => $what3words_group);
     }
 
-
-    $options['map_resize']       = array('default' => $getlocations_defaults['map_resize']);
-    $options['nokeyboard']       = array('default' => $getlocations_defaults['nokeyboard']);
-    $options['nodoubleclickzoom']       = array('default' => $getlocations_defaults['nodoubleclickzoom']);
-    $options['fullscreen_controlposition']       = array('default' => $getlocations_defaults['fullscreen_controlposition']);
+    $options['map_resize']        = array('default' => $getlocations_defaults['map_resize']);
+    $options['nokeyboard']        = array('default' => $getlocations_defaults['nokeyboard']);
+    $options['nodoubleclickzoom'] = array('default' => $getlocations_defaults['nodoubleclickzoom']);
+    $options['fullscreen_controlposition'] = array('default' => $getlocations_defaults['fullscreen_controlposition']);
 
         #$options['']       = array('default' => $getlocations_defaults['']);
 
@@ -593,6 +583,11 @@ class getlocations_plugin_style_map extends views_plugin_style {
     #  unset($form_state['values']['style_options'][$item]);
     #}
 
+    $what3words_group = array('what3words_enable', 'what3words_search', 'what3words_map_marker', 'what3words_center', 'what3words_zoom', 'what3words_show', 'what3words_marker_show', 'what3words_click', 'what3words_size');
+    foreach ($what3words_group AS $item) {
+      $form_state['values']['style_options']['what3words_group'][$item] = $form_state['values']['style_options'][$item];
+      unset($form_state['values']['style_options'][$item]);
+    }
 
 ################################
   }

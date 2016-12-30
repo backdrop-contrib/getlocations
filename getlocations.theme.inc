@@ -197,7 +197,7 @@ function theme_getlocations_show($variables) {
     $buttons[] = '<input type="button" value="' . t('Transit Info !t', array('!t' => ($defaults['transitinfo_state'] ? t('Off') : t('On')))) . '" title="' . t('Limited Availability') . '" id="getlocations_toggleTransit_' . $mapid . '" class="form-submit" />';
   }
 
-#  // views_search_marker
+  // views_search_marker
   if (module_exists('getlocations_fields') ) {
     $views_search_group = $defaults['views_search_group'];
     if ($views_search_group['views_search_marker_enable'] && $views_search_group['views_search_marker_toggle']) {
@@ -268,18 +268,17 @@ function theme_getlocations_show($variables) {
   }
 
   // what3words
-  $what3words_lic = $defaults['what3words_lic'];
-  $what3words_group = getlocations_w3w_get_group();
-  if ($what3words_lic['key'] && $what3words_group['what3words_enable']) {
+  $what3words_lic = getlocations_w3w_get_lic();
+  if ($what3words_lic['key'] && $defaults['what3words_group']['what3words_enable']) {
     $output .= '<div class="getlocations_what3words container-inline">';
-    if ($what3words_group['what3words_search']) {
+    if ($defaults['what3words_group']['what3words_search']) {
       // textbox
-      $output .= t('what3words') . '&nbsp;&nbsp;<input type="text" id="edit-getlocations-what3words-search" name="edit-getlocations-what3words-search" value="" size="' . $defaults['what3words_size'] . '" class="form-text" />';
+      $output .= t('what3words') . '&nbsp;&nbsp;<input type="text" id="edit-getlocations-what3words-search" name="edit-getlocations-what3words-search" value="" size="' . $defaults['what3words_group']['what3words_size'] . '" class="form-text" />';
       $output .= '&nbsp;&nbsp;<input type="button" value="' . t('Search') . '" id="edit-getlocations-what3words-search-submit" class="form-submit" />';
       $output .= '<div class="getlocations_w3w_throbber getlocations_w3w_throbber_inactive" id="getlocations_w3w_throbber_' . $mapid . '">&nbsp;&nbsp;&nbsp;&nbsp;</div>';
       $output .= '<br />';
     }
-    if ($what3words_group['what3words_show']) {
+    if ($defaults['what3words_group']['what3words_show']) {
       $output .= '<div id="edit-getlocations-what3words-show"></div>';
     }
     $output .= '</div>';
@@ -917,12 +916,12 @@ function template_preprocess_getlocations_box(&$variables) {
 
   // Construct page title
   if (backdrop_get_title()) {
-    $head_title = array(strip_tags(backdrop_get_title()), config_get('site_name', 'Backdrop'));
+    $head_title = array(strip_tags(backdrop_get_title()), config_get('system.core', 'site_name'));
   }
   else {
-    $head_title = array(config_get('site_name', 'Backdrop'));
-    if (config_get('site_slogan', '')) {
-      $head_title[] = config_get('site_slogan', '');
+    $head_title = array(config_get('system.core', 'site_name'));
+    if (config_get('system.core', 'site_slogan')) {
+      $head_title[] = config_get('system.core', 'site_slogan', '');
     }
   }
   $variables['head_title'] = implode(' | ', $head_title);

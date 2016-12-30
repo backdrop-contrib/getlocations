@@ -1029,8 +1029,6 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
     $height = $getlocations_defaults['height'];
   }
 
-#dd($getlocations_defaults, '$getlocations_defaults in getlocations_setlocations');
-
   return theme('getlocations_show', array('width' => $width, 'height' => $height, 'defaults' => $getlocations_defaults, 'mapid' => $mapid, 'latlons' => $latlons, 'minmaxes' => $minmaxes, 'type' => $type, 'node' => $node));
 
 }
@@ -2762,7 +2760,9 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
   // w3w
   $what3words = getlocations_w3w_settings();
   $what3words_lic = $what3words['what3words_lic'];
-  $what3words_group = $what3words['what3words_group'];
+#  $what3words_group = $what3words['what3words_group'];
+  $what3words_group = $defaults['what3words_group'];
+
   if ($what3words_lic['key'] && $what3words_group['what3words_enable']) {
     #$settings[$mapid]['what3words_key'] = $what3words_lic['key'];
     $settings[$mapid]['what3words_enable']      = $what3words_group['what3words_enable'];
@@ -2774,7 +2774,8 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     $settings[$mapid]['what3words_show']        = $what3words_group['what3words_show'];
     $settings[$mapid]['what3words_marker_show'] = $what3words_group['what3words_marker_show'];
     $settings[$mapid]['what3words_click']       = $what3words_group['what3words_click'];
-    $settings[$mapid]['what3words_path']        = url($what3words_group['what3words_path']);
+    #$settings[$mapid]['what3words_path']        = url($what3words_group['what3words_path']);
+    $settings[$mapid]['what3words_path']        = url($what3words['what3words_group']['what3words_path']);
   }
 
   // baselayer settings
@@ -4516,7 +4517,7 @@ function getlocations_what3words_form($defaults) {
         t('Center the map on Search success')
       );
       // what3words_zoom
-      $opts = array('-2' => t('Keep current zoom'), '-1' => t('Use map type settings')) + backdrop_map_assoc(range(0, 21));
+      $opts = array('-3' => t('Use what3words Bounds'), '-2' => t('Keep current zoom'), '-1' => t('Use map type settings')) + drupal_map_assoc(range(0, 21));
       $form['what3words_zoom'] = array(
         '#type' => 'select',
         '#title' => t('Zoom for what3words location'),

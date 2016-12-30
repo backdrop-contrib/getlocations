@@ -145,9 +145,6 @@ function getlocations_settings_form() {
   );
 
   // $what3words
-#  #$what3words_lic = $getlocations_defaults['what3words_lic'];
-#  $what3words = getlocations_w3w_settings();
-#  $what3words_lic = $what3words['what3words_lic'];
   $what3words_lic = getlocations_w3w_get_lic();
   $form['what3words_lic'] = array(
     '#type' => 'fieldset',
@@ -197,18 +194,12 @@ function getlocations_settings_form() {
     '#tree' => FALSE,
   );
 
-#  if ($what3words_lic['key']) {
-#    $getlocations_defaults += getlocations_w3w_get_group();
-#  }
 
 #  $shapes = getlocations_shapes_settings();
 #  $getlocations_defaults += $shapes;
 
 #  $sv_group = config_get('getlocations.sv', 'settings');
 #  $getlocations_defaults += $sv_group;
-#
-#  $what3words = getlocations_w3w_settings();
-#  $getlocations_defaults += $what3words;
 
 #  $form['getlocations_preview']['preview_map'] = array('#markup' => '');
   // add the preview map here
@@ -233,11 +224,6 @@ function getlocations_settings_form() {
   );
 
   $form['getlocations_default'] += getlocations_map_display_basics_form($getlocations_defaults);
-
-  #$shapes = config('getlocations.shapes')->get('shapes');
-  #$what3words = getlocations_w3w_settings();
-  #$tmpdef = $getlocations_defaults + $shapes + $what3words;
-  #$form['getlocations_default'] += getlocations_map_display_options_form($tmpdef);
   $form['getlocations_default'] += getlocations_map_display_options_form($getlocations_defaults);
 
   // default node marker

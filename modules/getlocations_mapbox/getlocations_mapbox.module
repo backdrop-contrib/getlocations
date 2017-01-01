@@ -98,6 +98,7 @@ function getlocations_mapbox_settings_form() {
 }
 
 function getlocations_mapbox_settings_form_validate($form, &$form_state) {
+
   // dump empty mapbox
   $mapnum = count($form_state['values']['getlocations_leaflet_mapbox']['mapbox_info']);
   $emptyfound = FALSE;
@@ -126,8 +127,7 @@ function getlocations_mapbox_settings_form_validate($form, &$form_state) {
 }
 
 function getlocations_mapbox_settings_save($values) {
-  $config_mapbox = config('getlocations_leaflet_mapbox.settings');
-  $config_mapbox->set('settings.mapbox_info', $values['getlocations_leaflet_mapbox']['mapbox_info']);
-  $config_mapbox->save();
+  $config = config('getlocations_leaflet_mapbox.settings');
+  $config->set('settings.mapbox_info', $values['getlocations_leaflet_mapbox']['mapbox_info']);
+  $config->save();
 }
-

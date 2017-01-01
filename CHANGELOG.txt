@@ -1,9 +1,36 @@
-commit 2979484
+commit 37e78dc
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sun Jan 1 18:24:40 2017 +0000
+
+    more what3words
+
+getlocations.admin.inc
+getlocations.module
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_leaflet/getlocations_leaflet.admin.inc
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/images/error.png
+modules/getlocations_leaflet/images/help.png
+modules/getlocations_leaflet/images/info.png
+modules/getlocations_leaflet/images/loading_small.gif
+modules/getlocations_leaflet/images/ok.png
+modules/getlocations_leaflet/images/throbber.gif
+modules/getlocations_leaflet/js/getlocations_leaflet_what3words.js
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+modules/getlocations_mapbox/getlocations_mapbox.module
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/getlocations_search.module
+modules/getlocations_search/getlocations_search.theme.inc
+modules/getlocations_search/js/getlocations_search_admin.js
+
+commit ee7d6eb
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Fri Dec 30 16:55:55 2016 +0000
 
     fixed what3words
 
+CHANGELOG.txt
 getlocations.admin.inc
 getlocations.module
 getlocations.theme.inc

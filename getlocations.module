@@ -4535,6 +4535,7 @@ function getlocations_what3words_form($defaults) {
         $what3words_group['what3words_show']
       );
       $form['what3words_show']['#suffix'] = '</div>';
+      $form['what3words_path'] = array('#type' => 'value', '#value' => $what3words_group['what3words_path']);
     }
     else {
       $form['what3words_enable'] = array('#type' => 'value', '#value' => 0);

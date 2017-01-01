@@ -211,7 +211,7 @@ function getlocations_fields_field_validate($entity_type, $entity, $field, $inst
     );
     $item_count = 0;
     foreach ($items AS $delta => $item) {
-      if (isset($item['active']) && $item['active']) {
+      if ($item['active']) {
         if (isset($item['delete_location']) && $item['delete_location']) {
           return;
         }
@@ -813,14 +813,14 @@ function getlocations_fields_field_formatter_view($entity_type, $entity, $field,
     }
   }
 
-#  // TODO add shapes and what3words and sv using config()
-#  $w3w_lic = getlocations_w3w_get_lic();
-#  if ($w3w_lic['key']) {
-#    $w3w_search = config_get('getlocations_search.what3words', 'settings');
-#    $w3w_search['what3words_lic'] = $w3w_lic;
-#    $settings += $w3w_search;
-#  }
-#
+  // TODO add shapes and what3words and sv using config()
+  $w3w_lic = getlocations_w3w_get_lic();
+  if ($w3w_lic['key']) {
+    $w3w_search = config_get('getlocations_search.what3words', 'settings');
+    $w3w_search['what3words_lic'] = $w3w_lic;
+    $settings += $w3w_search;
+  }
+
 #  // shapes
 #  $shapes = config_get('getlocations_fields.shapes', 'shapes');
 #  $settings += $shapes;

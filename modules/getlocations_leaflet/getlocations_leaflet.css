@@ -51,7 +51,7 @@
 .getlocations_leaflet_map_buttons {
 }
 .getlocations_w3w_throbber {
-  background-image: url('/misc/throbber.gif');
+  background-image: url('images/throbber.gif');
   background-position: 100% 2px;
   background-repeat: repeat-y;
 }

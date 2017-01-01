@@ -381,11 +381,8 @@ function _getlocations_search_settings_form($defaults, $which = 'admin') {
 
   $form[$varname] += getlocations_map_display_basics_form($defaults);
 
-  #$w3w_settings = getlocations_search_w3w_settings();
+  $defaults += getlocations_search_w3w_settings();
   #$shapes = getlocations_search_shapes_settings();
-
-#  $defaults2 = $defaults + $w3w_settings;
-#  $defaults2 = $defaults2 + $shapes;
 
   $form[$varname] += getlocations_map_display_options_form($defaults, FALSE, TRUE, 'getlocations_search');
 
@@ -511,17 +508,11 @@ function getlocations_search_settings_form_submit($form, &$form_state) {
 
   if (isset($form_state['values']['getlocations_search_defaults'])) {
 
-    $values = $form_state['values']['getlocations_search_defaults'];
-/*
-    // what3words only if there is a license
-    $lic = getlocations_w3w_get_lic();
-    if ( ! empty($lic) ) {
-      $what3words = config('getlocations_search.what3words');
-      $what3words->set('settings.what3words_group', $values['what3words_group']);
-      $what3words->save();
-      unset($values['what3words_group']);
+    $what3words_group = array('what3words_enable', 'what3words_search', 'what3words_map_marker', 'what3words_center', 'what3words_zoom', 'what3words_show', 'what3words_marker_show', 'what3words_click', 'what3words_size');
+    foreach ($what3words_group AS $item) {
+      $form_state['values']['getlocations_search_defaults']['what3words_group'][$item] = $form_state['values']['getlocations_search_defaults'][$item];
+      unset($form_state['values']['getlocations_search_defaults'][$item]);
     }
-*/
 
 /*
     // shapes
@@ -559,12 +550,14 @@ function getlocations_search_settings_form_submit($form, &$form_state) {
     $shapes->save();
 */
 
+    $values = $form_state['values']['getlocations_search_defaults'];
     $settings = config('getlocations_search.settings');
   }
   elseif (isset($form_state['values']['getlocations_search_block_defaults'])) {
     $values = $form_state['values']['getlocations_search_block_defaults'];
     $settings = config('getlocations_search_block.settings');
   }
+
   if (isset($values)) {
     $keys = getlocations_search_get_keys();
     foreach ($keys AS $key) {

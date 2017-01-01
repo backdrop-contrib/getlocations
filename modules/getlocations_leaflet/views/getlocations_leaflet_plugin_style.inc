@@ -50,6 +50,10 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     $options['styles']                = array('default' => '');
     $options['jquery_colorpicker_enabled'] = array('default' => 0);
 
+    // w3w
+    $what3words_lic = getlocations_w3w_get_lic();
+    $options['what3words_lic'] = array('default' => $what3words_lic);
+
     // node markers
     $getlocations_node_marker = array('enable' => 0);
     if ($getlocations_node_marker['enable']) {
@@ -148,6 +152,9 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
     unset($form['maxzoom_map']['#options']['21']);
     unset($form['maxzoom_map']['#options']['20']);
     unset($form['maxzoom_map']['#options']['19']);
+
+    #$what3words_lic = getlocations_w3w_get_lic();
+    #$this->options['what3words_lic'] = $what3words_lic;
 
     $form += getlocations_leaflet_display_options_form($this->options);
 
@@ -483,6 +490,16 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
       }
       else {
         form_set_error('style_options][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
+      }
+    }
+
+    // what3words only if there is a license
+    $lic = getlocations_w3w_get_lic();
+    if ( ! empty($lic['key'])) {
+      $w3warr = array('what3words_enable','what3words_search','what3words_size','what3words_marker_show','what3words_map_marker','what3words_center','what3words_zoom','what3words_click','what3words_show','what3words_path');
+      foreach ($w3warr AS $a) {
+        $form_state['values']['style_options']['what3words_group'][$a] = $form_state['values']['style_options'][$a];
+        unset($form_state['values']['style_options'][$a]);
       }
     }
 

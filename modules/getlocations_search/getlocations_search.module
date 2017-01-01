@@ -274,9 +274,9 @@ function getlocations_search_getmap($which = 'page') {
   $getlocations_search_defaults['pansetting'] = $getlocations_defaults['pansetting'];
 
   // w3w
-  #$w3w = getlocations_search_w3w_settings();
+  $w3w = getlocations_search_w3w_settings();
   #$shapes = getlocations_search_shapes_settings();
-  #$getlocations_search_defaults += $w3w;
+  $getlocations_search_defaults += $w3w;
   #$getlocations_search_defaults += $shapes;
 
   // we need to update $getlocations_defaults with data from $getlocations_search_defaults
@@ -460,35 +460,6 @@ function getlocations_search_type_options() {
     }
   }
 
-  #$query = db_select('field_config', 'f');
-  #$query->fields('i', array('entity_type'));
-  #$query->join('field_config_instance', 'i', 'f.id=i.field_id');
-  #$query->condition('f.module', $module)->condition('f.active', 1);
-  #$rows = $query->execute();
-  #$opts = array();
-  #foreach ($rows AS $row) {
-  #  $found = FALSE;
-  #  $entity_type = $row->entity_type;
-  #  if ($entity_type == 'user' && getlocations_access_user_location()) {
-  #    $found = TRUE;
-  #  }
-  #  elseif ($entity_type == 'comment' && user_access('access comments') ) {
-  #    $found = TRUE;
-  #  }
-  #  elseif (getlocations_access_location()) {
-  #    $found = TRUE;
-  #  }
-#
-#    if ($found) {
-#      $entity_get_info = entity_get_info($entity_type);
-#      $label = (isset($entity_get_info['plural label']) ? $entity_get_info['plural label'] : $entity_get_info['label'] );
-#      $opts[$entity_type] = $label;
-#    }
-#  }
-#  if (count($opts) > 1) {
-#    $opts = array('all' => t('Show All')) + $opts;
-#    return $opts;
-#  }
   return array();
 }
 

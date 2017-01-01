@@ -49,6 +49,14 @@
                         marker = Backdrop.getlocations_leaflet.makeMarker(settings, lat, lon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
                         Backdrop.getlocations_leaflet_map[key].addLayer(marker);
                       }
+                      // bounds
+                      if (settings.what3words_zoom == -3) {
+                        var sw_ll = L.latLng(parseFloat(response.bounds.southwest.lat), parseFloat(response.bounds.southwest.lng));
+                        var ne_ll = L.latLng(parseFloat(response.bounds.northeast.lat), parseFloat(response.bounds.northeast.lng));
+                        var llb = L.latLngBounds(sw_ll, ne_ll);
+                        Backdrop.getlocations_leaflet_map[key].fitBounds(llb);
+                      }
+                      // map settings
                       if (settings.what3words_zoom == -1) {
                         Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.nodezoom));
                       }
@@ -93,7 +101,14 @@
                       marker = Backdrop.getlocations_leaflet.makeMarker(settings, wlat, wlon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
                       Backdrop.getlocations_leaflet_map[key].addLayer(marker);
                     }
-
+                    // bounds
+                    if (settings.what3words_zoom == -3) {
+                      var sw_ll = L.latLng(parseFloat(response.bounds.southwest.lat), parseFloat(response.bounds.southwest.lng));
+                      var ne_ll = L.latLng(parseFloat(response.bounds.northeast.lat), parseFloat(response.bounds.northeast.lng));
+                      var llb = L.latLngBounds(sw_ll, ne_ll);
+                      Backdrop.getlocations_leaflet_map[key].fitBounds(llb);
+                    }
+                    // map settings
                     if (settings.what3words_zoom == -1) {
                       Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.nodezoom));
                     }

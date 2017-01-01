@@ -34,6 +34,8 @@ function getlocations_leaflet_settings_form() {
     '#description' => t('If you are having problems with markers, or have changed anything in the markers library, click on the Regenerate button.'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
+    // This will store all the defaults in one variable.
+    '#tree' => TRUE,
   );
   $c = count(getlocations_get_marker_titles());
   if ($c) {
@@ -271,6 +273,8 @@ function getlocations_leaflet_settings_form() {
   unset($form['getlocations_leaflet_defaults']['maxzoom_map']['#options']['20']);
   unset($form['getlocations_leaflet_defaults']['maxzoom_map']['#options']['19']);
 
+  $what3words_lic = getlocations_w3w_get_lic();
+  $settings['what3words_lic'] = $what3words_lic;
   $form['getlocations_leaflet_defaults'] += getlocations_leaflet_display_options_form($settings, TRUE);
   unset($form['getlocations_leaflet_defaults']['nodezoom']['#options']['21']);
   unset($form['getlocations_leaflet_defaults']['nodezoom']['#options']['20']);
@@ -663,6 +667,16 @@ function getlocations_leaflet_settings_form_validate($form, &$form_state) {
     }
   }
 
+  // cloudmade
+#  if (module_exists('getlocations_cloudmade')) {
+#    $form_state = getlocations_cloudmade_settings_validate($form_state);
+#  }
+
+  // mapbox
+#  if (module_exists('getlocations_mapbox')) {
+#    $form_state = getlocations_mapbox_settings_form_validate($form_state);
+#  }
+
   // css check
   if (isset($form_state['values']['getlocations_leaflet_defaults']['width'])) {
     if ($check = getlocations_dim_check($form_state['values']['getlocations_leaflet_defaults']['width'])) {
@@ -688,9 +702,6 @@ function getlocations_leaflet_settings_form_submit($form, &$form_state) {
   $config = config('getlocations_leaflet.settings');
   $settings = $config->get('settings');
   $keys = array_keys($settings);
-  #$values = $form_state['values'];
-
-
   // extract the paths as they are in a different storage
   $getlocations_leaflet_paths_config = config("getlocations_leaflet.paths");
   $getlocations_leaflet_paths_config->set('paths', $form_state['values']['getlocations_leaflet_paths']);
@@ -721,14 +732,14 @@ function getlocations_leaflet_settings_form_submit($form, &$form_state) {
     //getlocations_leaflet_defaults
     $values = $form_state['values']['getlocations_leaflet_defaults'];
 
-#    // what3words only if there is a license
-#    $lic = getlocations_w3w_get_lic();
-#    if ( ! empty($lic)) {
-#      $what3words = config('getlocations_leaflet.what3words');
-#      $what3words->set('settings.what3words_group', $values['what3words_group']);
-#      $what3words->save();
-#      unset($values['what3words_group']);
-#    }
+    // what3words only if there is a license
+    $lic = getlocations_w3w_get_lic();
+    if ( ! empty($lic['key'])) {
+      $w3warr = array('what3words_enable','what3words_search','what3words_size','what3words_marker_show','what3words_map_marker','what3words_center','what3words_zoom','what3words_click','what3words_show', 'what3words_path');
+      foreach ($w3warr AS $a) {
+        $values['what3words_group'][$a] = $form_state['values']['getlocations_leaflet_defaults'][$a];
+      }
+    }
 
     // cache flush $form['rebuild']['getlocations_leaflet_flush']
     $values['flush_marker_cache'] = $form_state['values']['rebuild']['getlocations_leaflet_flush'];
@@ -794,8 +805,6 @@ function getlocations_leaflet_settings_form_submit($form, &$form_state) {
   }
   $shapes->save();
 */
-
-#dd($keys, '$keys in getlocations_leaflet_settings_form_submit');
 
     foreach ($keys AS $key) {
       if ( isset($values[$key])) {

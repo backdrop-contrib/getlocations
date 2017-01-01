@@ -286,12 +286,11 @@ $output .= "\n<!-- theme_getlocations_search_settings_form -->\n";
   }
 
   // what3words
-  if (isset($form[$varname]['what3words_group']['what3words_enable']) && $form[$varname]['what3words_group']['what3words_enable']['#type'] !== 'value' ) {
-    $form[$varname]['what3words_group']['what3words_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('What3words') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['what3words_group']['what3words_show']['#suffix'];
-    $form[$varname]['what3words_group']['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
+  if (isset($form[$varname]['what3words_enable']) && $form[$varname]['what3words_enable']['#type'] !== 'value' ) {
+    $form[$varname]['what3words_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('What3words') . '</span></legend><div class="fieldset-wrapper">';
+    $tsuf = $form[$varname]['what3words_show']['#suffix'];
+    $form[$varname]['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
   }
-
 
   $output .= backdrop_render_children($form);
 

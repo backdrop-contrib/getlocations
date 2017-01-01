@@ -462,14 +462,14 @@
         });
       }
 
-      if ($("#edit-getlocations-search-defaults-what3words-group-what3words-enable").is('input')) {
-        if ($("#edit-getlocations-search-defaults-what3words-group-what3words-enable").prop('checked')) {
+      if ($("#edit-getlocations-search-defaults-what3words-enable").is('input')) {
+        if ($("#edit-getlocations-search-defaults-what3words-enable").prop('checked')) {
           $("#wrap-getlocations-what3words").show();
         }
         else {
           $("#wrap-getlocations-what3words").hide();
         }
-        $("#edit-getlocations-search-defaults-what3words-group-what3words-enable").change(function() {
+        $("#edit-getlocations-search-defaults-what3words-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-what3words").show();
           }

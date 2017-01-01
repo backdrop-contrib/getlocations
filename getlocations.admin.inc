@@ -343,7 +343,6 @@ function getlocations_settings_form() {
   $form['getlocations_default'] += getlocations_markermanager_form($getlocations_defaults);
 
   // markerclusterer
-#dd($getlocations_defaults,'$getlocations_defaults in getlocations_settings_form');
   $form['getlocations_default'] += getlocations_markercluster_form($getlocations_defaults);
 
   $form['getlocations_default']['pansetting'] = getlocations_element_map_pansetting($getlocations_defaults['pansetting']);
@@ -1047,9 +1046,6 @@ function getlocations_settings_form_submit($form, &$form_state) {
 #      unset($values[$k]);
 #    }
 #  }
-
-#dd($values, '$values in getlocations_settings_form_submit');
-
 
   foreach ($keys AS $key) {
     if ( isset($values[$key])) {

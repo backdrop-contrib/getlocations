@@ -10,13 +10,15 @@ This project can currently be obtained on
 https://github.com/backdrop-contrib/getlocations
 set branch to 1.x-1.x to get the Backdrop version
 
+A demo site can be viewed at http://bd.arwystli.net/
+
 Installation
 ------------
 
 - Install this module using the official Backdrop CMS instructions at
   https://backdropcms.org/guide/modules
 
-- Visit the configuration page under Administration > Configuration > 
+- Visit the configuration page under Administration > Configuration >
   Web Services > Getlocations (admin/config/services/getlocations) and enter the required information.
 
 - Once the base is configured you can add any desired submodules.

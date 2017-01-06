@@ -1,9 +1,20 @@
-commit 074f2fa
+commit d0aed53
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Fri Jan 6 14:39:12 2017 +0000
+
+    added light and dark layers to mapquest
+
+modules/getlocations_leaflet/config/getlocations_leaflet.settings.json
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+
+commit c4362b0
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sun Jan 1 19:20:06 2017 +0000
 
     updated README
 
+CHANGELOG.txt
 README.md
 
 commit af8c45e

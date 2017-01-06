@@ -197,6 +197,8 @@
     "mapquest_maps_maplayer":1,
     "mapquest_maps_satellitelayer":1,
     "mapquest_maps_hybridlayer":1,
+    "mapquest_maps_lightlayer":1,
+    "mapquest_maps_darklayer":1,
     "mapquest_maps_use":1,
     "hashurl":0,
     "flush_marker_cache":1,

@@ -130,6 +130,14 @@
               if (map_settings.mapquest_maps_default != 'h' && map_settings.mapquest_maps_hybridlayer) {
                 layers[Backdrop.t('Hybrid layer')] = MQ.hybridLayer();
               }
+
+              if (map_settings.mapquest_maps_default != 'l' && map_settings.mapquest_maps_lightlayer) {
+                layers[Backdrop.t('Light layer')] = MQ.lightLayer();
+              }
+              if (map_settings.mapquest_maps_default != 'd' && map_settings.mapquest_maps_darklayer) {
+                layers[Backdrop.t('Dark layer')] = MQ.darkLayer();
+              }
+
               gotmap = true;
             }
 

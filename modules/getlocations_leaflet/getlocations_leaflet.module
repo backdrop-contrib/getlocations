@@ -2379,6 +2379,14 @@ function getlocations_leaflet_field_settings_form($field, $instance, $has_data) 
 function getlocations_leaflet_defaults() {
 
   $defaults = config_get('getlocations_leaflet.settings', 'settings');
+
+  // add google key
+  $getlocations_defaults = getlocations_defaults();
+  $api3_group = ( isset($getlocations_defaults['api3_group']) ? $getlocations_defaults['api3_group'] : FALSE);
+  if ($api3_group && isset($api3_group['api3_key'])) {
+    $defaults['geocoder_google_key'] = $api3_group['api3_key'];
+  }
+
   return $defaults;
 
 }

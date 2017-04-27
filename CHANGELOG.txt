@@ -1,9 +1,18 @@
-commit d0aed53
+commit 6ddb6c3
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Thu Apr 27 16:16:25 2017 +0100
+
+    added google key
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+
+commit aa755e8
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Fri Jan 6 14:39:12 2017 +0000
 
     added light and dark layers to mapquest
 
+CHANGELOG.txt
 modules/getlocations_leaflet/config/getlocations_leaflet.settings.json
 modules/getlocations_leaflet/getlocations_leaflet.module
 modules/getlocations_leaflet/js/getlocations_leaflet.js

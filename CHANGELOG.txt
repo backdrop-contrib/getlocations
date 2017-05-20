@@ -1,9 +1,18 @@
-commit 6ddb6c3
+commit 825b977
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sat May 20 18:43:49 2017 +0100
+
+    fixed what3words
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 31a32b2
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Thu Apr 27 16:16:25 2017 +0100
 
     added google key
 
+CHANGELOG.txt
 modules/getlocations_leaflet/getlocations_leaflet.module
 
 commit aa755e8

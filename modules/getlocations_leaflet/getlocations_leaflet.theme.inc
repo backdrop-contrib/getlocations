@@ -145,6 +145,19 @@ function theme_getlocations_leaflet_map($variables) {
     $output .= '</div>';
   }
 
+  // mapquest_geocoder_enable
+  if ($map_settings['map_settings']['mapquest_geocoder_enable']) {
+    $output .= '<div class="getlocations_leaflet_mapquest_geocoder container-inline">';
+    if ($map_settings['map_settings']['mapquest_geocoder_search']) {
+      // textbox
+      $output .= t('Mapquest search') . '&nbsp;&nbsp;<input type="text" id="edit-getlocations-leaflet-mapquest-geocoder-search" name="edit-getlocations-leaflet-mapquest-geocoder-search" value="" size="' . $map_settings['map_settings']['mapquest_geocoder_search_size'] . '" class="form-text" />';
+      $output .= '&nbsp;&nbsp;<input type="button" value="' . t('Search') . '" id="edit-getlocations-leaflet-mapquest-geocoder-search-submit" class="form-submit" />';
+      $output .= '<div class="getlocations_mapquest_search_throbber getlocations_mapquest_search_throbber_inactive" id="getlocations_mapquest_search_throbber_' . $mapid . '">&nbsp;&nbsp;&nbsp;&nbsp;</div>';
+      $output .= '<br />';
+    }
+    $output .= '</div>';
+  }
+
   return $output;
 
 }

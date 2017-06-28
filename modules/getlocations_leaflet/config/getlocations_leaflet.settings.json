@@ -200,6 +200,12 @@
     "mapquest_maps_lightlayer":1,
     "mapquest_maps_darklayer":1,
     "mapquest_maps_use":1,
+    "mapquest_geocoder_search":0,
+    "mapquest_geocoder_search_size":"40",
+    "mapquest_geocoder_map_marker":"",
+    "mapquest_geocoder_marker_show":0,
+    "mapquest_geocoder_center":1,
+    "mapquest_geocoder_zoom":12,
     "hashurl":0,
     "flush_marker_cache":1,
     "what3words_group": {

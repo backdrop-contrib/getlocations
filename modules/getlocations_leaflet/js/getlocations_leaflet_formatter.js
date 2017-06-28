@@ -481,14 +481,14 @@
       }
 
       // #edit-getlocations-leaflet-defaults-what3words-enable
-      if ($("#edit-getlocations-leaflet-defaults-what3words-enable").is('input')) {
-        if ($("#edit-getlocations-leaflet-defaults-what3words-enable").prop('checked')) {
+      if ($("#edit-getlocations-leaflet-defaults-what3words-group-what3words-enable").is('input')) {
+        if ($("#edit-getlocations-leaflet-defaults-what3words-group-what3words-enable").prop('checked')) {
           $("#wrap-getlocations-what3words").show();
         }
         else {
           $("#wrap-getlocations-what3words").hide();
         }
-        $("#edit-getlocations-leaflet-defaults-what3words-enable").change(function() {
+        $("#edit-getlocations-leaflet-defaults-what3words-group-what3words-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-what3words").show();
           }

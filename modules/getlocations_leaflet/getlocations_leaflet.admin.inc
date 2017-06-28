@@ -212,11 +212,15 @@ function getlocations_leaflet_settings_form() {
     #);
     $form['getlocations_leaflet_plugins']['mapquest_routing_enable'] = array('#type' => 'value', '#value' => 0);
 
-    #$form['getlocations_leaflet_plugins']['mapquest_geocoder_enable'] = getlocations_element_map_checkbox(
-    #  t('Enable Mapquest Geocoding plugin'),
-    #  $getlocations_leaflet_plugins['mapquest_geocoder_enable']
-    #);
-    $form['getlocations_leaflet_plugins']['mapquest_geocoder_enable'] = array('#type' => 'value', '#value' => 0);
+    if ($mapquest_lic['type'] == 'l') {
+      $form['getlocations_leaflet_plugins']['mapquest_geocoder_enable'] = getlocations_element_map_checkbox(
+        t('Enable Mapquest Geocoding plugin'),
+        $getlocations_leaflet_plugins['mapquest_geocoder_enable']
+      );
+    }
+    else {
+      $form['getlocations_leaflet_plugins']['mapquest_geocoder_enable'] = array('#type' => 'value', '#value' => 0);
+    }
 
     $form['getlocations_leaflet_plugins']['mapquest_maps_enable'] = getlocations_element_map_checkbox(
       t('Enable Mapquest Maps plugin'),

@@ -61,3 +61,16 @@
 .getlocations_w3w_throbber_inactive {
   background-position: 100% 2px;
 }
+
+
+.getlocations_mapquest_search_throbber {
+  background-image: url('images/throbber.gif');
+  background-position: 100% 2px;
+  background-repeat: repeat-y;
+}
+.getlocations_mapquest_search_throbber_active {
+  background-position: 100% -18px;
+}
+.getlocations_mapquest_search_throbber_inactive {
+  background-position: 100% 2px;
+}

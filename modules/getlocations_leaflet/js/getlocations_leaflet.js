@@ -107,6 +107,30 @@
             }
 
             if (map_settings.mapquest_geocoder_enable) {
+              //if ($("#edit-getlocations-leaflet-mapquest-geocoder-search").is('input') && $("#edit-getlocations-leaflet-mapquest-geocoder-search").val() ) {
+              if ($("#edit-getlocations-leaflet-mapquest-geocoder-search").is('input')) {
+                  $("#edit-getlocations-leaflet-mapquest-geocoder-search-submit").click( function() {
+                  $("#getlocations_mapquest_search_throbber_" + key).removeClass('getlocations_mapquest_search_throbber_inactive').addClass('getlocations_mapquest_search_throbber_active');
+                  var ss = $("#edit-getlocations-leaflet-mapquest-geocoder-search").val();
+                  var gc = {map: Backdrop.getlocations_leaflet_map[key]};
+                  // mapquest_geocoder_map_marker mapquest_geocoder_marker_show
+                  //if (map_settings.mapquest_geocoder_marker && map_settings.mapquest_geocoder_marker_show) {
+                  if (map_settings.mapquest_geocoder_marker_show ) {
+                  var ic = map_settings.mapquest_geocoder_map_marker;
+                  //var ic = Backdrop.getlocations_leaflet_data[key].icons[map_settings.mapquest_geocoder_map_marker];
+//console.log(map_settings.mapquest_geocoder_map_marker);
+console.log(ic.iconUrl);
+                    var thisIcon = L.icon({
+                      iconUrl: ic.iconUrl,
+                      iconSize: ic.iconSize,
+                      iconAnchor: ic.iconAnchor
+                    });
+                    gc.icon = thisIcon;
+                  }
+                  MQ.geocode(gc).search(ss);
+                  $("#getlocations_mapquest_search_throbber_" + key).removeClass('getlocations_mapquest_search_throbber_active').addClass('getlocations_mapquest_search_throbber_inactive');
+                });
+              }
             }
 
             if (map_settings.mapquest_maps_enable && map_settings.mapquest_maps_use) {

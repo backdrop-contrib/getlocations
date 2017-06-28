@@ -241,9 +241,8 @@ function theme_getlocations_show($variables) {
 
   // getlocations_gps
   if (module_exists('getlocations_gps')) {
-    $getlocations_gps_defaults = getlocations_gps_defaults();
-    if ($getlocations_gps_defaults['gps_button']) {
-      $buttons[] = theme('getlocations_gps_button', array('defaults' => $getlocations_gps_defaults, 'mapid' => $mapid));
+    if ($defaults['gps_button']) {
+      $buttons[] = theme('getlocations_gps_button', array('defaults' => $defaults, 'mapid' => $mapid));
     }
   }
 
@@ -460,19 +459,19 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
         $link = getlocations_markerpicker_link($form['node_map_marker']['#id'], 'n');
         $form['node_map_marker']['#field_suffix'] = '&nbsp;' . $link;
       }
-      $getlocations_node_marker = config_get('getlocations_node_marker', array('enable' => 0));
-      if ($getlocations_node_marker['enable']) {
-        if ($types = getlocations_get_types()) {
-          foreach ($types AS $type => $name) {
-            $field_names = getlocations_get_fieldname2($type, 'node');
-            foreach ($field_names AS $field_name) {
-              $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
-              $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
-              $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
-            }
-          }
-        }
-      }
+      #$getlocations_node_marker = config_get('getlocations_node_marker', array('enable' => 0));
+      #if ($getlocations_node_marker['enable']) {
+      #  if ($types = getlocations_get_types()) {
+      #    foreach ($types AS $type => $name) {
+      #      $field_names = getlocations_get_fieldname2($type, 'node');
+      #      foreach ($field_names AS $field_name) {
+      #        $mkey = 'node_marker__' . backdrop_strtolower($type) . '__' . $field_name;
+      #        $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'n');
+      #        $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+      #      }
+      #    }
+      #  }
+      #}
       if (isset($form['user_map_marker'])) {
         $link = getlocations_markerpicker_link($form['user_map_marker']['#id'], 'u');
         $form['user_map_marker']['#field_suffix'] = '&nbsp;' . $link;
@@ -483,34 +482,34 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
           $link = getlocations_markerpicker_link($form['vocabulary_map_marker']['#id'], 'v');
           $form['vocabulary_map_marker']['#field_suffix'] = '&nbsp;' . $link;
         }
-        $getlocations_vocabulary_marker = config_get('getlocations_vocabulary_marker', array('enable' => 0));
-        if ($getlocations_vocabulary_marker['enable']) {
-          foreach ($types AS $type => $name) {
-            $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
-            $mkey = 'vocabulary_marker_' . $field_name;
-            $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'v');
-            $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
-          }
-        }
+        #$getlocations_vocabulary_marker = config_get('getlocations_vocabulary_marker', array('enable' => 0));
+        #if ($getlocations_vocabulary_marker['enable']) {
+        #  foreach ($types AS $type => $name) {
+        #    $field_name = getlocations_get_fieldname($type, 'taxonomy_term');
+        #    $mkey = 'vocabulary_marker_' . $field_name;
+        #    $link = getlocations_markerpicker_link($form[$mkey]['#id'], 'v');
+        #    $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+        #  }
+        #}
         if (isset($form['term_map_marker'])) {
           $link = getlocations_markerpicker_link($form['term_map_marker']['#id'], 't');
           $form['term_map_marker']['#field_suffix'] = '&nbsp;' . $link;
         }
-        $getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-        if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-          $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
-          $vids = $getlocations_term_marker['vids'];
-          foreach ($vids AS $vid) {
-            $terms = taxonomy_get_tree($vid, 0, $depth);
-            foreach ($terms AS $term) {
-              $name = $term->name;
-              $tid = $term->tid;
-              $mkey = 'term_marker_' . $tid;
-              $link = getlocations_markerpicker_link($form[$mkey]['#id'], 't');
-              $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
-            }
-          }
-        }
+        #$getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+        #if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+        #  $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
+        #  $vids = $getlocations_term_marker['vids'];
+        #  foreach ($vids AS $vid) {
+        #    $terms = taxonomy_get_tree($vid, 0, $depth);
+        #    foreach ($terms AS $term) {
+        #      $name = $term->name;
+        #      $tid = $term->tid;
+        #      $mkey = 'term_marker_' . $tid;
+        #      $link = getlocations_markerpicker_link($form[$mkey]['#id'], 't');
+        #      $form[$mkey]['#field_suffix'] = '&nbsp;' . $link;
+        #    }
+        #  }
+        #}
       }
 
       if (isset($form['comment_map_marker'])) {

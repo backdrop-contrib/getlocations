@@ -1020,6 +1020,7 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
   }
 
   $mapid = getlocations_setup_map($getlocations_defaults);
+
   getlocations_js_settings_do($getlocations_defaults, $latlons, $minmaxes, $mapid);
 
   if (empty($width)) {
@@ -1042,12 +1043,14 @@ function getlocations_setlocations($latlons, $minmaxes='', $type='node', $node =
  */
 function getlocations_setup_map($defaults, $googleonly = FALSE, $sv = FALSE, $keyonly = FALSE,  $extcontrol = '') {
   $getlocations_mapid = &backdrop_static('getlocations_mapid', 0);
+
   // Generate unique Map ID.
   $getlocations_mapid++;
   $mapid = 'key_' . $getlocations_mapid;
   if (! $keyonly) {
     getlocations_setup_js($defaults, $googleonly, $sv, $extcontrol);
   }
+
   return $mapid;
 }
 
@@ -2472,14 +2475,17 @@ function getlocations_get_term_reference_fields() {
  *   Returns list of markers
  *
  */
+// TODO
 function getlocations_get_markertypes($type) {
+
+  return FALSE;
 
   $getlocations_defaults = getlocations_defaults();
 
   $markertypes = array();
   if ($type == 'node') {
     $default_marker = $getlocations_defaults['node_map_marker'];
-    $getlocations_node_marker = config_get('getlocations_node_marker', array('enable' => 0));
+    #$getlocations_node_marker = config_get('getlocations_node_marker', array('enable' => 0));
     if ($getlocations_node_marker['enable']) {
       if ($content_types = getlocations_get_types()) {
         foreach ($content_types AS $content_type => $name ) {
@@ -2500,7 +2506,7 @@ function getlocations_get_markertypes($type) {
   elseif ($type == 'vocabulary' && module_exists('taxonomy')) {
     $default_marker = $getlocations_defaults['vocabulary_map_marker'];
     $vocabularies = getlocations_get_vocabularies();
-    $getlocations_vocabulary_marker = config_get('getlocations_vocabulary_marker', array('enable' => 0));
+    #$getlocations_vocabulary_marker = config_get('getlocations_vocabulary_marker', array('enable' => 0));
     foreach ($vocabularies AS $vid => $vocabulary) {
       if ($getlocations_vocabulary_marker['enable'] && isset($getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'])) {
         $markertypes[$vid] = $getlocations_vocabulary_marker['vocabulary'][$vid]['map_marker'];
@@ -2513,7 +2519,7 @@ function getlocations_get_markertypes($type) {
   }
   elseif ($type == 'term' && module_exists('taxonomy')) {
     $default_marker = $getlocations_defaults['term_map_marker'];
-    $getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+    #$getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
     if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids'] ) {
       $depth = is_numeric($getlocations_term_marker['max_depth']) && $getlocations_term_marker['max_depth'] > 0 ? $getlocations_term_marker['max_depth'] : NULL;
       $vids = $getlocations_term_marker['vids'];
@@ -2891,9 +2897,8 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
 
   // getlocations_gps
   if (module_exists('getlocations_gps')) {
-    $getlocations_gps_defaults = getlocations_gps_defaults();
-    if ($getlocations_gps_defaults['gps_button']) {
-      getlocations_gps_js_settings_do($getlocations_gps_defaults, $mapid);
+    if ($defaults['gps_button']) {
+      getlocations_gps_js_settings_do($defaults, $mapid);
     }
   }
 
@@ -4477,20 +4482,20 @@ function getlocations_what3words_form($defaults) {
     $what3words_lic = $defaults['what3words_lic'];
     $what3words_group = $defaults['what3words_group'];
     if ($what3words_lic['key']) {
-
-      $form['what3words_enable'] = getlocations_element_map_checkbox(
+      $form['what3words_group'] = array('#type' => 'container');
+      $form['what3words_group']['what3words_enable'] = getlocations_element_map_checkbox(
         t('Enable what3words service'),
         $what3words_group['what3words_enable'],
         t('This service requires an API key')
       );
-      $form['what3words_enable']['#suffix'] = '<div id="wrap-getlocations-what3words">';
+      $form['what3words_group']['what3words_enable']['#suffix'] = '<div id="wrap-getlocations-what3words">';
       // what3words_search
-      $form['what3words_search'] = getlocations_element_map_checkbox(
+      $form['what3words_group']['what3words_search'] = getlocations_element_map_checkbox(
         t('Show what3words search box'),
         $what3words_group['what3words_search']
       );
       // what3words_size
-      $form['what3words_size'] = getlocations_element_map_tf(
+      $form['what3words_group']['what3words_size'] = getlocations_element_map_tf(
         t('what3words search box width'),
         $what3words_group['what3words_size'],
         '',
@@ -4498,56 +4503,56 @@ function getlocations_what3words_form($defaults) {
       );
 
       // what3words_marker_show
-      $form['what3words_marker_show'] = getlocations_element_map_checkbox(
+      $form['what3words_group']['what3words_marker_show'] = getlocations_element_map_checkbox(
         t('Display what3words marker'),
         $what3words_group['what3words_marker_show']
       );
 
       // what3words_map_marker
       $markers = getlocations_get_marker_titles();
-      $form['what3words_map_marker'] = getlocations_element_map_marker(
+      $form['what3words_group']['what3words_map_marker'] = getlocations_element_map_marker(
         t('what3words Map marker'),
         $markers,
         $what3words_group['what3words_map_marker']
       );
       // what3words_center
-      $form['what3words_center'] = getlocations_element_map_checkbox(
+      $form['what3words_group']['what3words_center'] = getlocations_element_map_checkbox(
         t('Center map on what3words location'),
         $what3words_group['what3words_center'],
         t('Center the map on Search success')
       );
       // what3words_zoom
       $opts = array('-3' => t('Use what3words Bounds'), '-2' => t('Keep current zoom'), '-1' => t('Use map type settings')) + drupal_map_assoc(range(0, 21));
-      $form['what3words_zoom'] = array(
+      $form['what3words_group']['what3words_zoom'] = array(
         '#type' => 'select',
         '#title' => t('Zoom for what3words location'),
         '#default_value' => $what3words_group['what3words_zoom'],
         '#options' => $opts,
       );
       // what3words_click
-      $form['what3words_click'] = getlocations_element_map_checkbox(
+      $form['what3words_group']['what3words_click'] = getlocations_element_map_checkbox(
         t('Click on map to find what3words'),
         $what3words_group['what3words_click']
       );
       // what3words_show
-      $form['what3words_show'] = getlocations_element_map_checkbox(
+      $form['what3words_group']['what3words_show'] = getlocations_element_map_checkbox(
         t('Display what3words for current location'),
         $what3words_group['what3words_show']
       );
-      $form['what3words_show']['#suffix'] = '</div>';
-      $form['what3words_path'] = array('#type' => 'value', '#value' => $what3words_group['what3words_path']);
+      $form['what3words_group']['what3words_show']['#suffix'] = '</div>';
+      $form['what3words_group']['what3words_path'] = array('#type' => 'value', '#value' => $what3words_group['what3words_path']);
     }
     else {
-      $form['what3words_enable'] = array('#type' => 'value', '#value' => 0);
-      $form['what3words_search'] = array('#type' => 'value', '#value' => $what3words_group['what3words_search']);
-      $form['what3words_size'] = array('#type' => 'value', '#value' => $what3words_group['what3words_size']);
-      $form['what3words_marker_show'] = array('#type' => 'value', '#value' => $what3words_group['what3words_marker_show']);
-      $form['what3words_map_marker'] = array('#type' => 'value', '#value' => $what3words_group['what3words_map_marker']);
-      $form['what3words_center'] = array('#type' => 'value', '#value' => $what3words_group['what3words_center']);
-      $form['what3words_zoom'] = array('#type' => 'value', '#value' => $what3words_group['what3words_zoom']);
-      $form['what3words_click'] = array('#type' => 'value', '#value' => $what3words_group['what3words_click']);
-      $form['what3words_show'] = array('#type' => 'value', '#value' => $what3words_group['what3words_show']);
-      $form['what3words_path'] = array('#type' => 'value', '#value' => $what3words_group['what3words_path']);
+      $form['what3words_group']['what3words_enable'] = array('#type' => 'value', '#value' => 0);
+      $form['what3words_group']['what3words_search'] = array('#type' => 'value', '#value' => $what3words_group['what3words_search']);
+      $form['what3words_group']['what3words_size'] = array('#type' => 'value', '#value' => $what3words_group['what3words_size']);
+      $form['what3words_group']['what3words_marker_show'] = array('#type' => 'value', '#value' => $what3words_group['what3words_marker_show']);
+      $form['what3words_group']['what3words_map_marker'] = array('#type' => 'value', '#value' => $what3words_group['what3words_map_marker']);
+      $form['what3words_group']['what3words_center'] = array('#type' => 'value', '#value' => $what3words_group['what3words_center']);
+      $form['what3words_group']['what3words_zoom'] = array('#type' => 'value', '#value' => $what3words_group['what3words_zoom']);
+      $form['what3words_group']['what3words_click'] = array('#type' => 'value', '#value' => $what3words_group['what3words_click']);
+      $form['what3words_group']['what3words_show'] = array('#type' => 'value', '#value' => $what3words_group['what3words_show']);
+      $form['what3words_group']['what3words_path'] = array('#type' => 'value', '#value' => $what3words_group['what3words_path']);
     }
 
   }
@@ -5853,19 +5858,19 @@ function getlocations_aggr_get() {
  *
  */
 function getlocations_get_term_marker($nid, $marker) {
-  $getlocations_defaults = getlocations_defaults();
+  #$getlocations_defaults = getlocations_defaults();
   // term markers
-  $getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
-  if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
-    $vids = $getlocations_term_marker['vids'];
-    foreach ($vids AS $vid) {
-      $results = db_query('SELECT i.tid FROM {taxonomy_index} i JOIN {taxonomy_term_data} d ON i.tid=d.tid WHERE i.nid = :nid AND d.vid =:vid', array(':nid' => $nid, ':vid' => $vid));
-      $record = $results->fetchObject();
-      if ($record) {
-        $marker = (isset($getlocations_term_marker['vid'][$vid]['term'][$record->tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$record->tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
-      }
-    }
-  }
+  #$getlocations_term_marker = config_get('getlocations_term_marker', array('enable' => 0, 'vids' => 0, 'max_depth' => ''));
+  #if ($getlocations_term_marker['enable'] && $getlocations_term_marker['vids']) {
+  #  $vids = $getlocations_term_marker['vids'];
+  #  foreach ($vids AS $vid) {
+  #    $results = db_query('SELECT i.tid FROM {taxonomy_index} i JOIN {taxonomy_term_data} d ON i.tid=d.tid WHERE i.nid = :nid AND d.vid =:vid', array(':nid' => $nid, ':vid' => $vid));
+  #    $record = $results->fetchObject();
+  #    if ($record) {
+  #      $marker = (isset($getlocations_term_marker['vid'][$vid]['term'][$record->tid]['map_marker']) ? $getlocations_term_marker['vid'][$vid]['term'][$record->tid]['map_marker'] : $getlocations_defaults['term_map_marker']);
+  #    }
+  #  }
+  #}
   return $marker;
 }
 

@@ -1,9 +1,41 @@
-commit 825b977
+commit a5f4f12
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Jun 28 13:11:15 2017 +0100
+
+    fixed gps in views
+
+views/getlocations_plugin_style_map.inc
+
+commit 67c9da8
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Jun 28 12:18:47 2017 +0100
+
+    repaired leaflet features
+
+modules/getlocations_leaflet/config/getlocations_leaflet.settings.json
+modules/getlocations_leaflet/getlocations_leaflet.admin.inc
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/getlocations_leaflet.theme.inc
+modules/getlocations_leaflet/js/getlocations_leaflet.js
+modules/getlocations_leaflet/js/getlocations_leaflet_formatter.js
+
+commit edcc0b0
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Jun 28 12:17:46 2017 +0100
+
+    fixed getlocations_ps
+
+getlocations.module
+getlocations.theme.inc
+
+commit 7ae3c95
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sat May 20 18:43:49 2017 +0100
 
     fixed what3words
 
+CHANGELOG.txt
 modules/getlocations_fields/getlocations_fields.module
 
 commit 31a32b2

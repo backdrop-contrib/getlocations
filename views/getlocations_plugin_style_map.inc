@@ -583,11 +583,11 @@ class getlocations_plugin_style_map extends views_plugin_style {
     #  unset($form_state['values']['style_options'][$item]);
     #}
 
-    $what3words_group = array('what3words_enable', 'what3words_search', 'what3words_map_marker', 'what3words_center', 'what3words_zoom', 'what3words_show', 'what3words_marker_show', 'what3words_click', 'what3words_size');
-    foreach ($what3words_group AS $item) {
-      $form_state['values']['style_options']['what3words_group'][$item] = $form_state['values']['style_options'][$item];
-      unset($form_state['values']['style_options'][$item]);
-    }
+    #$what3words_group = array('what3words_enable', 'what3words_search', 'what3words_map_marker', 'what3words_center', 'what3words_zoom', 'what3words_show', 'what3words_marker_show', 'what3words_click', 'what3words_size');
+    #foreach ($what3words_group AS $item) {
+    #  $form_state['values']['style_options']['what3words_group'][$item] = $form_state['values']['style_options'][$item];
+    #  unset($form_state['values']['style_options'][$item]);
+    #}
 
 ################################
   }

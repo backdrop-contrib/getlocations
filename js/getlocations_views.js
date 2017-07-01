@@ -419,14 +419,14 @@
       }
 
       // #edit-style-options-what3words-enable
-      if ($("#edit-style-options-what3words-enable").is('input')) {
-        if ($("#edit-style-options-what3words-enable").prop('checked')) {
+      if ($("#edit-style-options-what3words-group-what3words-enable").is('input')) {
+        if ($("#edit-style-options-what3words-group-what3words-enable").prop('checked')) {
           $("#wrap-getlocations-what3words").show();
         }
         else {
           $("#wrap-getlocations-what3words").hide();
         }
-        $("#edit-style-options-what3words-enable").change(function() {
+        $("#edit-style-options-what3words-group-what3words-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-what3words").show();
           }

@@ -156,7 +156,7 @@ div.fullscreen {
 }
 
 .getlocations_w3w_throbber {
-  background-image: url('/misc/throbber.gif');
+  background-image: url('images/throbber.gif');
   background-position: 100% 2px;
   background-repeat: repeat-y;
 }
@@ -165,4 +165,13 @@ div.fullscreen {
 }
 .getlocations_w3w_throbber_inactive {
   background-position: 100% 2px;
+}
+
+.getlocations_w3w_img {
+  margin-right: 8px;
+}
+.getlocations_w3w_img img {
+  width: 22px;
+  height: 22px;
+  margin-bottom: -6px;
 }

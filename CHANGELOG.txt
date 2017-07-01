@@ -1,9 +1,20 @@
-commit a5f4f12
+commit 4225828
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sat Jul 1 09:34:19 2017 +0100
+
+    fixed w3w images
+
+getlocations.css
+getlocations.theme.inc
+images/w3w_bw22.png
+
+commit 3c33850
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Wed Jun 28 13:11:15 2017 +0100
 
     fixed gps in views
 
+CHANGELOG.txt
 views/getlocations_plugin_style_map.inc
 
 commit 67c9da8

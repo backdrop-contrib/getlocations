@@ -1,9 +1,29 @@
-commit 4225828
+commit ab5fbc3
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Fri Aug 18 17:38:48 2017 +0100
+
+    various fixes and improvements
+
+getlocations.admin.inc
+getlocations.theme.inc
+modules/getlocations_gps/getlocations_gps.admin.inc
+
+commit cedaf05
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sat Jul 1 10:01:51 2017 +0100
+
+    fixed w3w js
+
+js/getlocations_admin.js
+js/getlocations_views.js
+
+commit ad0ded5
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sat Jul 1 09:34:19 2017 +0100
 
     fixed w3w images
 
+CHANGELOG.txt
 getlocations.css
 getlocations.theme.inc
 images/w3w_bw22.png

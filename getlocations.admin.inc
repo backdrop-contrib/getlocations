@@ -950,7 +950,7 @@ function getlocations_settings_form_validate($form, &$form_state) {
   }
 */
   // search_places
-  if ($form_state['values']['getlocations_default']['search_places']) {
+  if (isset($form_state['values']['getlocations_default']['search_places']) && $form_state['values']['getlocations_default']['search_places']) {
     $form_state['values']['getlocations_default']['places'] = 1;
   }
 

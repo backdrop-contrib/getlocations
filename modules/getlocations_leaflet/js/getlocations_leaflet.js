@@ -116,10 +116,8 @@
                   // mapquest_geocoder_map_marker mapquest_geocoder_marker_show
                   //if (map_settings.mapquest_geocoder_marker && map_settings.mapquest_geocoder_marker_show) {
                   if (map_settings.mapquest_geocoder_marker_show ) {
-                  var ic = map_settings.mapquest_geocoder_map_marker;
-                  //var ic = Backdrop.getlocations_leaflet_data[key].icons[map_settings.mapquest_geocoder_map_marker];
-//console.log(map_settings.mapquest_geocoder_map_marker);
-console.log(ic.iconUrl);
+                    var ic = map_settings.mapquest_geocoder_map_marker;
+                    //var ic = Backdrop.getlocations_leaflet_data[key].icons[map_settings.mapquest_geocoder_map_marker];
                     var thisIcon = L.icon({
                       iconUrl: ic.iconUrl,
                       iconSize: ic.iconSize,
@@ -171,7 +169,23 @@ console.log(ic.iconUrl);
             // do the default layer first and separately
             var default_layer_name = map_settings.default_layer_name;
             var default_layer_label = map_settings.default_layer_label;
-            layers[default_layer_label] = L.tileLayer.provider(default_layer_name).addTo(Backdrop.getlocations_leaflet_map[key]);
+            var default_map_layer = L.tileLayer.provider(default_layer_name);
+            //var default_layer = map_layers[default_layer_name];
+
+            var thunderforest_key = map_settings.thunderforest_key;
+            var thunderforest_patt = /^Thunderforest\./;
+            if (thunderforest_key && default_map_layer.options.apikey !== 'undefined' && thunderforest_patt.test(default_layer_name)) {
+              default_map_layer.options.apikey = thunderforest_key;
+            }
+
+            var openweathermap_key = map_settings.openweathermap_key;
+            var openweathermap_patt = /^OpenWeatherMap\./;
+            if (openweathermap_key && default_map_layer.options.apiKey !== 'undefined' && openweathermap_patt.test(default_layer_name) ) {
+              default_map_layer.options.apiKey = openweathermap_key;
+            }
+
+            layers[default_layer_label] = default_map_layer.addTo(Backdrop.getlocations_leaflet_map[key]);
+
             for (var lkey in map_layers) {
               if (lkey != default_layer_name) {
                 var layer = map_layers[lkey];
@@ -182,6 +196,15 @@ console.log(ic.iconUrl);
                     map_layer.options[option] = layer.options[option];
                   }
                 }
+                // thunderforest
+                if ( thunderforest_key && map_layer.options.apikey !== 'undefined' && thunderforest_patt.test(lkey) ) {
+                  map_layer.options.apikey = thunderforest_key;
+                }
+                // openweathermap
+                if (openweathermap_key && map_layer.options.apiKey !== 'undefined' && openweathermap_patt.test(lkey) ) {
+                  map_layer.options.apiKey = openweathermap_key;
+                }
+
                 if (layer.type == 'base') {
                   layers[layer.label] = map_layer;
                 }

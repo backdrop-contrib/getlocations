@@ -144,6 +144,40 @@ function getlocations_settings_form() {
     array('o' => t('Open'), 'l' => t('Licensed'))
   );
 
+  // Thunderforest and Opencyclemaps
+  $thunderforest_lic = $getlocations_defaults['thunderforest_lic'];
+  $form['thunderforest_lic'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Thunderforest maps API key'),
+    '#description' => t('This key is required if you want to use !u maps.', array('!u' => l(t('thunderforest and opencyclemaps'), 'http://thunderforest.com/docs/apikeys/', array('attributes' => array('target' => '_blank'))))),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => TRUE,
+  );
+  $form['thunderforest_lic']['key'] = getlocations_element_map_tf(
+    t('Thunderforest key'),
+    $thunderforest_lic['key'],
+    t('After entering the key you should save the form, this will present further settings.'),
+    40
+  );
+
+  // openweathermap
+  $openweathermap_lic = $getlocations_defaults['openweathermap_lic'];
+  $form['openweathermap_lic'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Openweathermap API key'),
+    '#description' => t('This key is required if you want to use !u maps.', array('!u' => l(t('openweathermaps'), 'http://openweathermap.org/', array('attributes' => array('target' => '_blank'))))),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => TRUE,
+  );
+  $form['openweathermap_lic']['key'] = getlocations_element_map_tf(
+    t('Openweathermap key'),
+    $openweathermap_lic['key'],
+    t('After entering the key you should save the form, this will present further settings.'),
+    40
+  );
+
   // $what3words
   $what3words_lic = getlocations_w3w_get_lic();
   $form['what3words_lic'] = array(
@@ -981,7 +1015,6 @@ function getlocations_settings_form_submit($form, &$form_state) {
   $keys = getlocations_get_keys();
 
   $values = $form_state['values'];
-
   // extract the paths as they are in a different storage
   $getlocations_paths = $values['getlocations_paths'];
   unset($values['getlocations_paths']);

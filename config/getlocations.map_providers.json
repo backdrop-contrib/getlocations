@@ -84,7 +84,7 @@
         "default": 0,
         "minzoom": 1,
         "maxzoom": 18,
-        "url": "http:\/\/tile.opencyclemap.org\/cycle\/__Z__\/__X__\/__Y__.png",
+        "url": "https://tile.thunderforest.com/cycle/__Z__/__X__/__Y__.png?apikey=__THUNDERFOREST_KEY__",
         "attribution": "&copy; <a target=\"_blank\" href=\"http:\/\/www.opencyclemap.org\" >OpenCycleMap<\/a>, &copy; <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\">OpenStreetMap<\/a> contributors, <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\/copyright\">ODBL<\/a>",
         "tilesize": 256
     },
@@ -95,7 +95,7 @@
         "default": 0,
         "minzoom": 1,
         "maxzoom": 18,
-        "url": "http:\/\/tile.opencyclemap.org\/transport\/__Z__\/__X__\/__Y__.png",
+        "url": "https://tile.thunderforest.com/transport/__Z__/__X__/__Y__.png?apikey=__THUNDERFOREST_KEY__",
         "attribution": "&copy; <a target=\"_blank\" href=\"http:\/\/www.opencyclemap.org\" >OpenCycleMap<\/a>, &copy; <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\">OpenStreetMap<\/a> contributors, <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\/copyright\">ODBL<\/a>",
         "tilesize": 256
     },
@@ -106,7 +106,7 @@
         "default": 0,
         "minzoom": 1,
         "maxzoom": 18,
-        "url": "http:\/\/tile.opencyclemap.org\/landscape\/__Z__\/__X__\/__Y__.png",
+        "url": "https://tile.thunderforest.com/landscape/__Z__/__X__/__Y__.png?apikey=__THUNDERFOREST_KEY__",
         "attribution": "&copy; <a target=\"_blank\" href=\"http:\/\/www.opencyclemap.org\" >OpenCycleMap<\/a>, &copy; <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\">OpenStreetMap<\/a> contributors, <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\/copyright\">ODBL<\/a>",
         "tilesize": 256
     },
@@ -117,7 +117,7 @@
         "default": 0,
         "minzoom": 1,
         "maxzoom": 18,
-        "url": "http:\/\/tile.thunderforest.com\/outdoors\/__Z__\/__X__\/__Y__.png",
+        "url": "https://tile.thunderforest.com/outdoors/__Z__/__X__/__Y__.png?apikey=__THUNDERFOREST_KEY__",
         "attribution": "&copy; <a target=\"_blank\" href=\"http:\/\/www.opencyclemap.org\" >OpenCycleMap<\/a>, &copy; <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\">OpenStreetMap<\/a> contributors, <a target=\"_blank\" href=\"http:\/\/www.openstreetmap.org\/copyright\">ODBL<\/a>",
         "tilesize": 256
     },

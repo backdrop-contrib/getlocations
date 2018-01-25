@@ -3406,14 +3406,24 @@ function getlocations_get_map_providers() {
   return $providers;
 }
 
-## now in config/getlocations.map_providers.json
+// now in config/getlocations.map_providers.json
 function getlocations_getlocations_map_providers() {
+  $thunderforest_providers = array('OCM','OCMT','OCML','OCMO');
+  $thunderforest_key = FALSE;
   $providers_raw = config('getlocations.map_providers');
   $providers = array();
   $getlocations_defaults = getlocations_defaults();
+  if ( isset($getlocations_defaults['thunderforest_lic']['key']) && ! empty($getlocations_defaults['thunderforest_lic']['key'])) {
+    $thunderforest_key = $getlocations_defaults['thunderforest_lic']['key'];
+  }
   $baselayers = $getlocations_defaults['baselayers'];
   foreach ($baselayers AS $baselayer => $v) {
     $providers[$baselayer] = $providers_raw->get($baselayer);
+    if ( $thunderforest_key ) {
+      if (in_array($baselayer, $thunderforest_providers)) {
+        $providers[$baselayer]['url'] = preg_replace("#__THUNDERFOREST_KEY__#", $thunderforest_key, $providers[$baselayer]['url']);
+      }
+    }
   }
   return $providers;
 }
@@ -3573,7 +3583,6 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     $maptype = 'Map';
   }
 
-
   // maptype
   if (! isset($maptype)) {
     $maptype = $defaults['maptype'];
@@ -3586,10 +3595,22 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
   );
+
+  $thunderforest_providers = array('OCM','OCMT','OCML','OCMO');
+  $thunderforest = FALSE;
+  if ( isset($defaults['thunderforest_lic']['key']) && $defaults['thunderforest_lic']['key']) {
+    $thunderforest = TRUE;
+  }
+
   foreach ($baselayers AS $key => $value) {
-    $layer = getlocations_element_map_baselayers($key, $value);
-    if ($layer) {
-      $form['baselayers'][$key] = $layer;
+    if (! $thunderforest && in_array($key, $thunderforest_providers)) {
+      $form['baselayers'][$key] = array('#type' => 'value', '#value' => 0);
+    }
+    else {
+      $layer = getlocations_element_map_baselayers($key, $value);
+      if ($layer) {
+        $form['baselayers'][$key] = $layer;
+      }
     }
   }
 

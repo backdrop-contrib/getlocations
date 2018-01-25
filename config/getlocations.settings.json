@@ -256,6 +256,12 @@
       "latitude": 0,
       "longitude": 0,
       "search_distance": 0
+    },
+    "thunderforest_lic": {
+      "key": ""
+    },
+    "openweathermap_lic": {
+      "key": ""
     }
   }
 }

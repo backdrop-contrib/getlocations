@@ -1554,6 +1554,14 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
   $mapquest_lic = getlocations_mapquest_get_lic();
   $map_settings['map_settings']['mapquest_key'] = $mapquest_lic['key'];
 
+  $getlocations_defaults = getlocations_defaults();
+  // Thunderforest
+  $thunderforest_lic = $getlocations_defaults['thunderforest_lic'];
+  $map_settings['map_settings']['thunderforest_key'] = (isset($thunderforest_lic['key']) && $thunderforest_lic['key'] ? $thunderforest_lic['key']: '');
+
+  // openweathermap
+  $openweathermap_lic = $getlocations_defaults['openweathermap_lic'];
+  $map_settings['map_settings']['openweathermap_key'] = (isset($openweathermap_lic['key']) && $openweathermap_lic['key'] ? $openweathermap_lic['key']: '');
 
   if ($getlocations_leaflet_plugins['geocoder_enable']) {
     $map_settings['map_settings']['geocoder'] = ($defaults['geocoder'] ? TRUE : FALSE);

@@ -129,6 +129,13 @@
           options: {
             attribution: '{attribution.OpenStreetMap}, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
           }
+        },
+        BZH: {
+          url: 'http://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png',
+          options: {
+            attribution: '{attribution.OpenStreetMap}, Tiles courtesy of <a href="http://www.openstreetmap.bzh/" target="_blank">Breton OpenStreetMap Team</a>',
+            bounds: [[46.2, -5.5], [50, 0.7]]
+          }
         }
       }
     },
@@ -146,30 +153,29 @@
       }
     },
     Thunderforest: {
-      url: '//{s}.tile.thunderforest.com/{variant}/{z}/{x}/{y}.png',
+      url: 'https://{s}.tile.thunderforest.com/{variant}/{z}/{x}/{y}.png?apikey={apikey}',
       options: {
         attribution:
-          '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, {attribution.OpenStreetMap}',
-        variant: 'cycle'
+                '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, {attribution.OpenStreetMap}',
+        variant: 'cycle',
+        apikey: '<insert your api key here>',
+        maxZoom: 22
       },
       variants: {
         OpenCycleMap: 'cycle',
         Transport: {
           options: {
-            variant: 'transport',
-            maxZoom: 19
+            variant: 'transport'
           }
         },
         TransportDark: {
           options: {
-            variant: 'transport-dark',
-            maxZoom: 19
+            variant: 'transport-dark'
           }
         },
         SpinalMap: {
           options: {
-            variant: 'spinal-map',
-            maxZoom: 11
+            variant: 'spinal-map'
           }
         },
         Landscape: 'landscape',
@@ -200,9 +206,11 @@
         }
       }
     },
+/*
     Hydda: {
       url: '//{s}.tile.openstreetmap.se/hydda/{variant}/{z}/{x}/{y}.png',
       options: {
+        maxZoom: 18,
         variant: 'full',
         attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data {attribution.OpenStreetMap}'
       },
@@ -212,17 +220,20 @@
         RoadsAndLabels: 'roads_and_labels'
       }
     },
+*/
     MapBox: {
       url: '//api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
       options: {
         attribution:
           'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; ' +
           'Map data {attribution.OpenStreetMap}',
-        subdomains: 'abcd'
+        subdomains: 'abcd',
+        id: 'streets',
+        accessToken: '<insert your access token here>'
       }
     },
     Stamen: {
-      url: '//stamen-tiles-{s}.a.ssl.fastly.net/{variant}/{z}/{x}/{y}.{ext}',
+      url: 'https//stamen-tiles-{s}.a.ssl.fastly.net/{variant}/{z}/{x}/{y}.{ext}',
       options: {
         attribution:
           'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
@@ -279,7 +290,7 @@
       }
     },
     Esri: {
-      url: '//server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
+      url: 'https//server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
       options: {
         variant: 'World_Street_Map',
         attribution: 'Tiles &copy; Esri'
@@ -363,10 +374,11 @@
       }
     },
     OpenWeatherMap: {
-      url: 'http://{s}.tile.openweathermap.org/map/{variant}/{z}/{x}/{y}.png',
+      url: 'http://{s}.tile.openweathermap.org/map/{variant}/{z}/{x}/{y}.png?appid={apiKey}',
       options: {
         maxZoom: 19,
         attribution: 'Map data &copy; <a href="http://openweathermap.org">OpenWeatherMap</a>',
+        apiKey:'<insert your api key here>',
         opacity: 0.5
       },
       variants: {
@@ -383,7 +395,8 @@
         Snow: 'snow'
       }
     },
-    HERE: {
+
+//    HERE: {
       /*
        * HERE maps, formerly Nokia maps.
        * These basemaps are free, but you need an API key. Please sign up at
@@ -393,7 +406,7 @@
        * 'Customer Integration Testing' environment. Please remove for production
        * envirionments.
        */
-      url:
+/*      url:
         '//{s}.{base}.maps.cit.api.here.com/maptile/2.1/' +
         '{type}/{mapID}/{variant}/{z}/{x}/{y}/{size}/{format}?' +
         'app_id={app_id}&app_code={app_code}&lg={language}',
@@ -477,6 +490,7 @@
         }
       }
     },
+*/
     FreeMapSK: {
       url: 'http://t{s}.freemap.sk/T/{z}/{x}/{y}.jpeg',
       options: {
@@ -530,17 +544,22 @@
       }
     },
     BasemapAT: {
-      url: '//maps{s}.wien.gv.at/basemap/{variant}/normal/google3857/{z}/{y}/{x}.{format}',
+      url: 'https://maps{s}.wien.gv.at/basemap/{variant}/normal/google3857/{z}/{y}/{x}.{format}',
       options: {
         maxZoom: 19,
-        attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
+        attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
         subdomains: ['', '1', '2', '3', '4'],
         format: 'png',
         bounds: [[46.358770, 8.782379], [49.037872, 17.189532]],
         variant: 'geolandbasemap'
       },
       variants: {
-        basemap: 'geolandbasemap',
+        basemap: {
+          options: {
+            maxZoom: 20, // currently only in Vienna
+            variant: 'geolandbasemap'
+          }
+        },
         grau: 'bmapgrau',
         overlay: 'bmapoverlay',
         highdpi: {
@@ -551,12 +570,32 @@
         },
         orthofoto: {
           options: {
+            maxZoom: 20, // currently only in Vienna
             variant: 'bmaporthofoto30cm',
             format: 'jpeg'
           }
         }
       }
     },
+/*
+    nlmaps: {
+      url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts/{variant}/EPSG:3857/{z}/{x}/{y}.png',
+      options: {
+        minZoom: 6,
+        maxZoom: 19,
+        bounds: [[50.5, 3.25], [54, 7.6]],
+        attribution: 'Kaartgegevens &copy; <a href="kadaster.nl">Kadaster</a>'
+      },
+      variants: {
+        'standaard': 'brtachtergrondkaart',
+        'pastel': 'brtachtergrondkaartpastel',
+        'grijs': 'brtachtergrondkaartgrijs',
+        'luchtfoto': {
+          'url': 'https://geodata.nationaalgeoregister.nl/luchtfoto/rgb/wmts/1.0.0/2016_ortho25/EPSG:3857/{z}/{x}/{y}.png',
+        }
+      }
+    },
+*/
     NASAGIBS: {
       url: '//map1.vis.earthdata.nasa.gov/wmts-webmerc/{variant}/default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}',
       options: {
@@ -631,6 +670,8 @@
         subdomains: '0123',
       }
     },
+/*
+    // removed as it is no longer available for development purposes
     CloudMade: {
       url: 'http://{s}.tile.cloudmade.com/{apiKey}/{styleID}/256/{z}/{x}/{y}.png{styleToken}',
       options: {
@@ -705,6 +746,31 @@
           url: 'http://{s}.tile.cloudmade.com/{apiKey}/{styleID}@2x/64/{z}/{x}/{y}.png{styleToken}',
           maxZoom: 19
         }
+      }
+    },
+*/
+    JusticeMap: {
+      // Justice Map (http://www.justicemap.org/)
+      // Visualize race and income data for your community, county and country.
+      // Includes tools for data journalists, bloggers and community activists.
+      url: 'http://www.justicemap.org/tile/{size}/{variant}/{z}/{x}/{y}.png',
+      options: {
+        attribution: '<a href="http://www.justicemap.org/terms.php">Justice Map</a>',
+        // one of 'county', 'tract', 'block'
+        size: 'county',
+        // Bounds for USA, including Alaska and Hawaii
+        bounds: [[14, -180], [72, -56]]
+      },
+      variants: {
+        income: 'income',
+        americanIndian: 'indian',
+        asian: 'asian',
+        black: 'black',
+        hispanic: 'hispanic',
+        multi: 'multi',
+        nonWhite: 'nonwhite',
+        white: 'white',
+        plurality: 'plural'
       }
     }
   };

@@ -1,9 +1,23 @@
-commit f3b17c6
+commit 84f9faf
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Fri Feb 2 20:40:26 2018 +0000
+
+    fixed w3w in leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.admin.inc
+modules/getlocations_leaflet/getlocations_leaflet.css
+modules/getlocations_leaflet/getlocations_leaflet.theme.inc
+modules/getlocations_leaflet/views/getlocations_leaflet_plugin_style.inc
+
+commit f2e040b
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Thu Jan 25 10:11:20 2018 +0000
 
     added keys for thunderforest and openweather maps
 
+CHANGELOG.txt
+config/getlocations.map_providers.json
+config/getlocations.settings.json
 getlocations.admin.inc
 getlocations.module
 modules/getlocations_leaflet/config/getlocations_leaflet.map_providers.json

@@ -492,17 +492,6 @@ class getlocations_leaflet_plugin_style extends views_plugin_style {
         form_set_error('style_options][latlong', t('Map coordinates must be expressed as a decimal latitude and longitude, separated by a comma.'));
       }
     }
-
-    // what3words only if there is a license
-    $lic = getlocations_w3w_get_lic();
-    if ( ! empty($lic['key'])) {
-      $w3warr = array('what3words_enable','what3words_search','what3words_size','what3words_marker_show','what3words_map_marker','what3words_center','what3words_zoom','what3words_click','what3words_show','what3words_path');
-      foreach ($w3warr AS $a) {
-        $form_state['values']['style_options']['what3words_group'][$a] = $form_state['values']['style_options'][$a];
-        unset($form_state['values']['style_options'][$a]);
-      }
-    }
-
   }
 
   function even_empty() {

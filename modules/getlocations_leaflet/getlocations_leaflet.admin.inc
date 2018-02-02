@@ -736,15 +736,6 @@ function getlocations_leaflet_settings_form_submit($form, &$form_state) {
     //getlocations_leaflet_defaults
     $values = $form_state['values']['getlocations_leaflet_defaults'];
 
-    // what3words only if there is a license
-    $lic = getlocations_w3w_get_lic();
-    if ( ! empty($lic['key'])) {
-      $w3warr = array('what3words_enable','what3words_search','what3words_size','what3words_marker_show','what3words_map_marker','what3words_center','what3words_zoom','what3words_click','what3words_show', 'what3words_path');
-      foreach ($w3warr AS $a) {
-        $values['what3words_group'][$a] = $form_state['values']['getlocations_leaflet_defaults'][$a];
-      }
-    }
-
     // cache flush $form['rebuild']['getlocations_leaflet_flush']
     $values['flush_marker_cache'] = $form_state['values']['rebuild']['getlocations_leaflet_flush'];
 

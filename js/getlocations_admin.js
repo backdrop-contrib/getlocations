@@ -651,6 +651,24 @@
         });
       }
 
+      // edit-getlocations-default-graticule-group-graticule-enable
+      if ($("#edit-getlocations-default-graticule-group-graticule-enable").is('input')) {
+        if ($("#edit-getlocations-default-graticule-group-graticule-enable").prop('checked')) {
+          $("#wrap-getlocations-graticule").show();
+        }
+        else {
+          $("#wrap-getlocations-graticule").hide();
+        }
+        $("#edit-getlocations-default-graticule-group-graticule-enable").change(function() {
+          if ($(this).prop('checked')) {
+            $("#wrap-getlocations-graticule").show();
+          }
+          else {
+            $("#wrap-getlocations-graticule").hide();
+          }
+        });
+      }
+
       // #edit-getlocations-default-useclustermanager
       if ($("#edit-getlocations-default-markerclusterer-group-useclustermanager").is('input')) {
         if ($("#edit-getlocations-default-markerclusterer-group-useclustermanager").prop('checked')) {

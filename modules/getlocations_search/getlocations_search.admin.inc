@@ -503,16 +503,7 @@ function getlocations_search_settings_form_submit($form, &$form_state) {
   }
   $getlocations_search_paths_settings->save();
 
-
-
-
   if (isset($form_state['values']['getlocations_search_defaults'])) {
-
-    $what3words_group = array('what3words_enable', 'what3words_search', 'what3words_map_marker', 'what3words_center', 'what3words_zoom', 'what3words_show', 'what3words_marker_show', 'what3words_click', 'what3words_size');
-    foreach ($what3words_group AS $item) {
-      $form_state['values']['getlocations_search_defaults']['what3words_group'][$item] = $form_state['values']['getlocations_search_defaults'][$item];
-      unset($form_state['values']['getlocations_search_defaults'][$item]);
-    }
 
 /*
     // shapes

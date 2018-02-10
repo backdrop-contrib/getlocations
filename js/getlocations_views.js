@@ -437,6 +437,23 @@
 
       }
 
+      // edit-style-options-graticule-group-graticule-enable
+      if ($("#edit-style-options-graticule-group-graticule-enable").is('input')) {
+        if ($("#edit-style-options-graticule-group-graticule-enable").prop('checked')) {
+          $("#wrap-getlocations-graticule").show();
+        }
+        else {
+          $("#wrap-getlocations-graticule").hide();
+        }
+        $("#edit-style-options-graticule-group-graticule-enable").change(function() {
+          if ($(this).prop('checked')) {
+            $("#wrap-getlocations-graticule").show();
+          }
+          else {
+            $("#wrap-getlocations-graticule").hide();
+          }
+        });
+      }
 
     }
   };

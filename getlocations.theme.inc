@@ -254,6 +254,11 @@ function theme_getlocations_show($variables) {
     }
   }
 
+  // graticule
+  if ($defaults['graticule_group']['graticule_enable'] && $defaults['graticule_group']['graticule_toggle']) {
+    $buttons[] = '<input type="button" value="' . t('Graticule !t', array('!t' => ($defaults['graticule_group']['graticule_toggle_active'] ? t('Off') : t('On')))) . '" id="getlocations_graticule_toggle_' . $mapid . '" class="form-submit" />';
+  }
+
   if (count($buttons)) {
     $output .= '<div class="getlocations_map_buttons container-inline">';
     $output .= implode('&nbsp;', $buttons);

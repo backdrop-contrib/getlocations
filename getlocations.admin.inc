@@ -865,6 +865,16 @@ function getlocations_settings_form() {
     128,
     t('Where the getlocations what3words javascript file is located.')
   );
+
+  // graticule
+  $form['getlocations_paths']['getlocations_graticule_path'] = getlocations_element_path(
+    t('Path to getlocations graticule javascript file'),
+    getlocations_paths_get('getlocations_graticule_path'),
+    60,
+    128,
+    t('Where the getlocations graticule javascript file is located.')
+  );
+
   $form['getlocations_paths']['getlocations_path'] = getlocations_element_path(
     t('Path to getlocations javascript file'),
     getlocations_paths_get('getlocations_path'),

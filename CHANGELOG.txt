@@ -1,9 +1,31 @@
-commit 84f9faf
+commit ad98615
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sat Feb 10 21:18:59 2018 +0000
+
+    added graticule to google maps, various bugfixes
+
+config/getlocations.paths.json
+config/getlocations.settings.json
+getlocations.admin.inc
+getlocations.module
+getlocations.theme.inc
+js/getlocations.js
+js/getlocations_admin.js
+js/getlocations_graticule.js
+js/getlocations_views.js
+modules/getlocations_search/config/getlocations_search.settings.json
+modules/getlocations_search/config/getlocations_search_block.settings.json
+modules/getlocations_search/getlocations_search.admin.inc
+modules/getlocations_search/js/getlocations_search_admin.js
+views/getlocations_plugin_style_map.inc
+
+commit 5ac6469
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Fri Feb 2 20:40:26 2018 +0000
 
     fixed w3w in leaflet
 
+CHANGELOG.txt
 modules/getlocations_leaflet/getlocations_leaflet.admin.inc
 modules/getlocations_leaflet/getlocations_leaflet.css
 modules/getlocations_leaflet/getlocations_leaflet.theme.inc

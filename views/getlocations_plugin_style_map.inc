@@ -208,6 +208,16 @@ class getlocations_plugin_style_map extends views_plugin_style {
       $options['what3words_group'] = array('default' => $what3words_group);
     }
 
+    // graticule
+    $graticule_group = $getlocations_defaults['graticule_group'];
+    #$options['graticule_group'] = array('default' => $graticule_group);
+    $options['graticule_enable']        = array('default' => $graticule_group['graticule_enable']);
+    $options['graticule_toggle']        = array('default' => $graticule_group['graticule_toggle']);
+    $options['graticule_toggle_active'] = array('default' => $graticule_group['graticule_toggle_active']);
+    $options['graticule_lightcolor']    = array('default' => $graticule_group['graticule_lightcolor']);
+    $options['graticule_darkcolor']     = array('default' => $graticule_group['graticule_darkcolor']);
+    $options['graticule_label']         = array('default' => $graticule_group['graticule_label']);
+
     $options['map_resize']        = array('default' => $getlocations_defaults['map_resize']);
     $options['nokeyboard']        = array('default' => $getlocations_defaults['nokeyboard']);
     $options['nodoubleclickzoom'] = array('default' => $getlocations_defaults['nodoubleclickzoom']);

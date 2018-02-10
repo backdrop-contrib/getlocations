@@ -7,7 +7,6 @@
     "markermanager_path": "modules/getlocations/js/markermanager.js",
     "markerclusterer_path": "modules/getlocations/js/markerclusterer.js",
     "infowindow_options_path": "modules/getlocations/js/infowindow_options.js",
-    "getlocations_path": "modules/getlocations/js/getlocations.js",
     "getlocations_polygons_path": "modules/getlocations/js/getlocations_polygons.js",
     "getlocations_rectangles_path": "modules/getlocations/js/getlocations_rectangles.js",
     "getlocations_circles_path": "modules/getlocations/js/getlocations_circles.js",
@@ -24,6 +23,8 @@
     "getlocations_views_path": "modules/getlocations/js/getlocations_views.js",
     "getlocations_icons_path": "modules/getlocations/js/icons.js",
     "getlocations_field_group_path": "modules/getlocations/js/getlocations_field_group.js",
-    "getlocations_what3words_path": "modules/getlocations/js/getlocations_what3words.js"
+    "getlocations_what3words_path": "modules/getlocations/js/getlocations_what3words.js",
+    "getlocations_graticule_path": "modules/getlocations/js/getlocations_graticule.js",
+    "getlocations_path": "modules/getlocations/js/getlocations.js"
   }
 }

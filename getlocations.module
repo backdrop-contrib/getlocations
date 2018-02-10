@@ -1287,6 +1287,22 @@ function getlocations_setup_js($defaults, $googleonly = FALSE, $sv = FALSE, $ext
     $getlocations_js_weight++;
   }
 
+  if ( $defaults['graticule_group']['graticule_enable']) {
+    if (!stristr($current_js, $getlocations_paths['getlocations_graticule_path'])) {
+      $js_opts = array();
+      $js_opts['weight'] = $getlocations_js_weight;
+      $js_opts['type'] = 'file';
+      $js_opts['preprocess'] = $aggr;
+      drupal_add_js($getlocations_paths['getlocations_graticule_path'], $js_opts);
+      $getlocations_js_weight++;
+    }
+    // we want geo.js to make fancy labels
+    if ($defaults['graticule_group']['graticule_label'] > 0) {
+      $defaults['geo_enable'] = TRUE;
+    }
+    $defaults['geo_enable'] = TRUE;
+  }
+
   // load main getlocations.js
   if (!stristr($current_js, $getlocations_paths['getlocations_path'])) {
     $js_opts = array();
@@ -2784,6 +2800,15 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     $settings[$mapid]['what3words_path']        = url($what3words['what3words_group']['what3words_path']);
   }
 
+  // graticule
+  $graticule_group = $defaults['graticule_group'];
+  $settings[$mapid]['graticule_enable']        = $graticule_group['graticule_enable'];
+  $settings[$mapid]['graticule_toggle']        = $graticule_group['graticule_toggle'];
+  $settings[$mapid]['graticule_toggle_active'] = $graticule_group['graticule_toggle_active'];
+  $settings[$mapid]['graticule_lightcolor']    = $graticule_group['graticule_lightcolor'];
+  $settings[$mapid]['graticule_darkcolor']     = $graticule_group['graticule_darkcolor'];
+  $settings[$mapid]['graticule_label']         = $graticule_group['graticule_label'];
+
   // baselayer settings
   $providers = getlocations_get_map_providers();
   $baselayers = $defaults['baselayers'];
@@ -3798,13 +3823,57 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
       t('Show Google transit points icons.')
     );
 
+    // graticule
+    $form['graticule_group']['graticule_enable'] = getlocations_element_map_checkbox(
+      t('Enable Graticule'),
+      $defaults['graticule_group']['graticule_enable'],
+      t('Lat/Long grid on the map.')
+    );
+    $form['graticule_group']['graticule']['#suffix'] = '<div id="wrap-getlocations-graticule">';
+    $form['graticule_group']['graticule_toggle'] = getlocations_element_map_checkbox(
+      t('Show toggle button'),
+      $defaults['graticule_group']['graticule_toggle'],
+      t('Provide a button to switch the grid on and off')
+    );
+
+    $form['graticule_group']['graticule_lightcolor'] = getlocations_element_map_tf(
+      t('Graticule light line color'),
+      $defaults['graticule_group']['graticule_lightcolor'],
+      t('HTML hex, eg #FFFFFF.'),
+      10,
+      10,
+      TRUE
+    );
+
+    $form['graticule_group']['graticule_darkcolor'] = getlocations_element_map_tf(
+      t('Graticule dark line color'),
+      $defaults['graticule_group']['graticule_darkcolor'],
+      t('HTML hex, eg #000000.'),
+      10,
+      10,
+      TRUE
+    );
+
+    $form['graticule_group']['graticule_label'] = getlocations_element_dd(
+      t('Display Graticule labels'),
+      $defaults['graticule_group']['graticule_label'],
+      array(0 => t('None'), 1 => t('Decimal'), 2 => t('Degrees, Minutes, Seconds'), 3 => t('Sexagesimal'))
+    );
+
+    $form['graticule_group']['graticule_toggle_active'] = getlocations_element_map_checkbox(
+      t('Activate Graticule'),
+      $defaults['graticule_group']['graticule_toggle_active'],
+      t('Activate Graticule when map is first displayed.')
+    );
+    $form['graticule_group']['graticule_toggle_active']['#suffix'] = '</div>';
+
     $form += getlocations_shapes_form($defaults, $source);
     $form += getlocations_kml_form($defaults);
     $form += getlocations_geojson_form($defaults);
     $form += getlocations_highlight_form($defaults);
     $form += getlocations_geocoder_form($defaults);
     $form += getlocations_google_places_form($defaults, $config);
-    if ($defaults['what3words_lic']['key']) {
+    if ( isset($defaults['what3words_lic']['key']) && $defaults['what3words_lic']['key']) {
       $form += getlocations_what3words_form($defaults);
     }
 

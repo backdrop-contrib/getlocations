@@ -462,19 +462,38 @@
         });
       }
 
-      if ($("#edit-getlocations-search-defaults-what3words-enable").is('input')) {
-        if ($("#edit-getlocations-search-defaults-what3words-enable").prop('checked')) {
+      // edit-getlocations-search-defaults-what3words-group-what3words-enable
+      if ($("#edit-getlocations-search-defaults-what3words-group-what3words-enable").is('input')) {
+        if ($("#edit-getlocations-search-defaults-what3words-group-what3words-enable").prop('checked')) {
           $("#wrap-getlocations-what3words").show();
         }
         else {
           $("#wrap-getlocations-what3words").hide();
         }
-        $("#edit-getlocations-search-defaults-what3words-enable").change(function() {
+        $("#edit-getlocations-search-defaults-what3words-group-what3words-enable").change(function() {
           if ($(this).prop('checked')) {
             $("#wrap-getlocations-what3words").show();
           }
           else {
             $("#wrap-getlocations-what3words").hide();
+          }
+        });
+      }
+
+      // edit-getlocations-search-defaults-graticule-group-graticule-enable
+      if ($("#edit-getlocations-search-defaults-graticule-group-graticule-enable").is('input')) {
+        if ($("#edit-getlocations-search-defaults-graticule-group-graticule-enable").prop('checked')) {
+          $("#wrap-getlocations-graticule").show();
+        }
+        else {
+          $("#wrap-getlocations-graticule").hide();
+        }
+        $("#edit-getlocations-search-defaults-graticule-group-graticule-enable").change(function() {
+          if ($(this).prop('checked')) {
+            $("#wrap-getlocations-graticule").show();
+          }
+          else {
+            $("#wrap-getlocations-graticule").hide();
           }
         });
       }

@@ -233,7 +233,7 @@
       }
     },
     Stamen: {
-      url: 'https//stamen-tiles-{s}.a.ssl.fastly.net/{variant}/{z}/{x}/{y}.{ext}',
+      url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/{variant}/{z}/{x}/{y}.{ext}',
       options: {
         attribution:
           'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
@@ -290,7 +290,7 @@
       }
     },
     Esri: {
-      url: 'https//server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
       options: {
         variant: 'World_Street_Map',
         attribution: 'Tiles &copy; Esri'

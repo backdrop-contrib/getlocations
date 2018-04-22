@@ -1824,6 +1824,7 @@ function getlocations_leaflet_map_settings_do($map_settings, $defaults, $latlons
     $map_settings['map_settings']['what3words_show']        = $what3words_group['what3words_show'];
     $map_settings['map_settings']['what3words_marker_show'] = $what3words_group['what3words_marker_show'];
     $map_settings['map_settings']['what3words_click']       = $what3words_group['what3words_click'];
+    $map_settings['map_settings']['what3words_latlon']      = $what3words_group['what3words_latlon'];
     $map_settings['map_settings']['what3words_size']        = $what3words_group['what3words_size'];
     $map_settings['map_settings']['what3words_path']        = url($what3words_group['what3words_path']);
     backdrop_add_js($getlocations_leaflet_paths['getlocations_leaflet_what3words_path']);

@@ -1,9 +1,19 @@
-commit ebd6164
+commit 09727de
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sun Apr 22 11:38:04 2018 +0100
+
+    added what3words_latlon to leaflet
+
+modules/getlocations_leaflet/getlocations_leaflet.module
+modules/getlocations_leaflet/js/getlocations_leaflet_what3words.js
+
+commit aeeafb2
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sun Apr 22 09:55:34 2018 +0100
 
     various cleanup
 
+CHANGELOG.txt
 modules/getlocations_fields/config/getlocations_fields.settings.json
 modules/getlocations_fields/config/views.view.getlocations_all.json
 modules/getlocations_fields/config/views.view.getlocations_by_city.json

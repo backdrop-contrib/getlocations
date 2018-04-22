@@ -64,7 +64,11 @@
                         Backdrop.getlocations_leaflet_map[key].setZoom(parseInt(settings.what3words_zoom));
                       }
                       if (settings.what3words_show && $("#edit-getlocations-leaflet-what3words-show").is('div') && w3w) {
-                        $("#edit-getlocations-leaflet-what3words-show").html(w3w);
+                        var w3w_show = w3w;
+                        if (settings.what3words_latlon) {
+                          w3w_show = w3w + ' ' + lat + ' ' + lon
+                        }
+                        $("#edit-getlocations-leaflet-what3words-show").html(w3w_show);
                       }
                       if (settings.what3words_center) {
                         var lla = {lat: parseFloat(lat), lng: parseFloat(lon)};
@@ -117,7 +121,11 @@
                     }
 
                     if (settings.what3words_show && $("#edit-getlocations-leaflet-what3words-show").is('div') && w3w) {
-                      $("#edit-getlocations-leaflet-what3words-show").html(w3w);
+                      var w3w_show = w3w;
+                      if (settings.what3words_latlon && wlat && wlon) {
+                        w3w_show = w3w + ' ' + wlat + ' ' + wlon
+                      }
+                      $("#edit-getlocations-leaflet-what3words-show").html(w3w_show);
                     }
                     if (settings.what3words_center) {
                       var wlla = {lat: parseFloat(wlat), lng: parseFloat(wlon)};

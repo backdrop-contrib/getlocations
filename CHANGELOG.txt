@@ -1,9 +1,54 @@
-commit ad98615
+commit ebd6164
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sun Apr 22 09:55:34 2018 +0100
+
+    various cleanup
+
+modules/getlocations_fields/config/getlocations_fields.settings.json
+modules/getlocations_fields/config/views.view.getlocations_all.json
+modules/getlocations_fields/config/views.view.getlocations_by_city.json
+modules/getlocations_fields/config/views.view.getlocations_by_country.json
+modules/getlocations_fields/config/views.view.getlocations_by_latlon.json
+modules/getlocations_fields/config/views.view.getlocations_by_postcode.json
+modules/getlocations_fields/config/views.view.getlocations_by_province.json
+modules/getlocations_fields/config/views.view.getlocations_nearby.json
+modules/getlocations_fields/getlocations_fields.module
+modules/getlocations_fields/js/getlocations_fields_formatter.js
+
+commit ac2ad51
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sun Apr 22 09:53:44 2018 +0100
+
+    added what3words_latlon
+
+config/getlocations.settings.json
+getlocations.module
+getlocations.theme.inc
+js/getlocations_what3words.js
+
+commit 98e4a06
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Mon Feb 19 14:14:58 2018 +0000
+
+    better maxzoom for some esri maps
+
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.js
+
+commit 7b56c27
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sat Feb 17 12:49:46 2018 +0000
+
+    fixed bug in urls in providers
+
+modules/getlocations_leaflet/js/getlocations_leaflet_providers.js
+
+commit 2f39dc7
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sat Feb 10 21:18:59 2018 +0000
 
     added graticule to google maps, various bugfixes
 
+CHANGELOG.txt
 config/getlocations.paths.json
 config/getlocations.settings.json
 getlocations.admin.inc

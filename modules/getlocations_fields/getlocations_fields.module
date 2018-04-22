@@ -211,7 +211,7 @@ function getlocations_fields_field_validate($entity_type, $entity, $field, $inst
     );
     $item_count = 0;
     foreach ($items AS $delta => $item) {
-      if ($item['active']) {
+      if (isset($item['active']) && $item['active']) {
         if (isset($item['delete_location']) && $item['delete_location']) {
           return;
         }
@@ -1941,6 +1941,7 @@ function getlocations_fields_getmap_show($settings, $lls = '', $minmaxes = '') {
   $getlocations_defaults['show_search_distance']      = $settings['show_search_distance'];
   $getlocations_defaults['views_search_group']          = $settings['views_search_group'];
   #$getlocations_defaults['gps_group']                = $settings['gps_group'];
+  $getlocations_defaults['graticule_group']           = $settings['graticule_group'];
 
   // not ideal but required for preview
   $getlocations_defaults['places'] = 1;
@@ -2812,6 +2813,7 @@ function getlocations_fields_field_info_defaults() {
         'what3words_group'                => $getlocations_fields_defaults['what3words_group'],
         'what3words_collect'              => $getlocations_fields_defaults['what3words_collect'],
         'show_maplinks_viewport'          => $getlocations_defaults['show_maplinks_viewport'],
+        'graticule_group'                 => $getlocations_defaults['graticule_group'],
       ),
     ),
   );
@@ -2915,6 +2917,7 @@ function getlocations_fields_field_formatter_info_defaults() {
     'show_search_distance'      => $getlocations_defaults['show_search_distance'],
     'views_search_group'        => $getlocations_defaults['views_search_group'],
 #    'gps_group'                 => $getlocations_fields_defaults['gps_group'],
+    'graticule_group'           => $getlocations_defaults['graticule_group'],
     'markerclusterer_group'     => $getlocations_fields_defaults['markerclusterer_group'],
     'geocoder_enable'           => $getlocations_defaults['geocoder_enable'],
     'geolocation_mobile_check'  => $getlocations_defaults['geolocation_mobile_check'],

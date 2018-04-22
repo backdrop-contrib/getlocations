@@ -1,9 +1,19 @@
-commit 09727de
+commit 85616b7
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Sun Apr 22 14:45:14 2018 +0100
+
+    improved what3words display and latlon accuracy
+
+js/getlocations_what3words.js
+modules/getlocations_leaflet/js/getlocations_leaflet_what3words.js
+
+commit 53c3831
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sun Apr 22 11:38:04 2018 +0100
 
     added what3words_latlon to leaflet
 
+CHANGELOG.txt
 modules/getlocations_leaflet/getlocations_leaflet.module
 modules/getlocations_leaflet/js/getlocations_leaflet_what3words.js
 

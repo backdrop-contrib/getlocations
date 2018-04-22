@@ -67,7 +67,7 @@
                         // edit-getlocations-what3words-show
                         if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
                           var w3w_show = w3w;
-                          if (settings.what3words_latlon) {
+                          if (settings.what3words_latlon && lat && lon) {
                             w3w_show = w3w + ' ' + lat + ' ' + lon
                           }
                           $("#edit-getlocations-what3words-show").html(w3w_show);
@@ -98,14 +98,16 @@
                $.get(settings.what3words_path, data, function(r) {
                   response = JSON.parse(r);
                   if (response) {
+                    w3w_lat = response.geometry.lat;
+                    w3w_lon = response.geometry.lng;
                     w3w = response.words;
-                    if (settings.what3words_marker_show && wlat && wlon ) {
+                    if (settings.what3words_marker_show && w3w_lat && w3w_lon ) {
                       if (marker) {
                         // kill marker
                         marker.setMap();
                       }
                       settings.markdone = Backdrop.getlocations.getIcon(settings.what3words_map_marker);
-                      marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, wlat, wlon, 0, w3w, '', '', '', key);
+                      marker = Backdrop.getlocations.makeMarker(Backdrop.getlocations_map[key], settings, w3w_lat, w3w_lon, 0, w3w, '', '', '', key);
                     }
                     // bounds
                     if (settings.what3words_zoom == -3) {
@@ -123,8 +125,8 @@
                     }
                     if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
                       var w3w_show = w3w;
-                      if (settings.what3words_latlon) {
-                        w3w_show = w3w + ' ' + lat + ' ' + lon
+                      if (settings.what3words_latlon && w3w_lat && w3w_lon) {
+                        w3w_show = w3w + ' ' + w3w_lat + ' ' + w3w_lon;
                       }
                       $("#edit-getlocations-what3words-show").html(w3w_show);
                     }

@@ -95,14 +95,16 @@
                 $.get(settings.what3words_path, data, function(r) {
                   response = JSON.parse(r);
                   if (response) {
+                    w3w_lat = response.geometry.lat;
+                    w3w_lon = response.geometry.lng;
                     w3w = response.words;
 
-                    if (settings.what3words_marker_show && wlat && wlon ) {
+                    if (settings.what3words_marker_show && w3w_lat && w3w_lon ) {
                       if (marker) {
                         // kill marker
                          Backdrop.getlocations_leaflet_map[key].removeLayer(marker);
                       }
-                      marker = Backdrop.getlocations_leaflet.makeMarker(settings, wlat, wlon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
+                      marker = Backdrop.getlocations_leaflet.makeMarker(settings, w3w_lat, w3w_lon, '', 0, 0, w3w, settings.what3words_map_marker, '', '', '', key);
                       Backdrop.getlocations_leaflet_map[key].addLayer(marker);
                     }
                     // bounds
@@ -122,13 +124,13 @@
 
                     if (settings.what3words_show && $("#edit-getlocations-leaflet-what3words-show").is('div') && w3w) {
                       var w3w_show = w3w;
-                      if (settings.what3words_latlon && wlat && wlon) {
-                        w3w_show = w3w + ' ' + wlat + ' ' + wlon
+                      if (settings.what3words_latlon && w3w_lat && w3w_lon) {
+                        w3w_show = w3w + ' ' + w3w_lat + ' ' + w3w_lon;
                       }
                       $("#edit-getlocations-leaflet-what3words-show").html(w3w_show);
                     }
                     if (settings.what3words_center) {
-                      var wlla = {lat: parseFloat(wlat), lng: parseFloat(wlon)};
+                      var wlla = {lat: parseFloat(w3w_lat), lng: parseFloat(w3w_lon)};
                       Backdrop.getlocations_leaflet_map[key].panTo(wlla);
                     }
                   }

@@ -2796,8 +2796,9 @@ function getlocations_js_settings_do($defaults, $latlons, $minmaxes, $mapid, $in
     $settings[$mapid]['what3words_show']        = $what3words_group['what3words_show'];
     $settings[$mapid]['what3words_marker_show'] = $what3words_group['what3words_marker_show'];
     $settings[$mapid]['what3words_click']       = $what3words_group['what3words_click'];
-    #$settings[$mapid]['what3words_path']        = url($what3words_group['what3words_path']);
-    $settings[$mapid]['what3words_path']        = url($what3words['what3words_group']['what3words_path']);
+    $settings[$mapid]['what3words_latlon']      = $what3words_group['what3words_latlon'];
+    $settings[$mapid]['what3words_path']        = url($what3words_group['what3words_path']);
+    #$settings[$mapid]['what3words_path']        = url($what3words['what3words_group']['what3words_path']);
   }
 
   // graticule
@@ -3824,6 +3825,7 @@ function getlocations_map_display_options_form($defaults, $config = TRUE, $extra
     );
 
     // graticule
+    $form['graticule_group'] = array('#type' => 'container');
     $form['graticule_group']['graticule_enable'] = getlocations_element_map_checkbox(
       t('Enable Graticule'),
       $defaults['graticule_group']['graticule_enable'],
@@ -4624,6 +4626,12 @@ function getlocations_what3words_form($defaults) {
         t('Click on map to find what3words'),
         $what3words_group['what3words_click']
       );
+      // what3words_latlon
+      $form['what3words_group']['what3words_latlon'] = getlocations_element_map_checkbox(
+        t('Display Latitude and Longitude of current what3words'),
+        $what3words_group['what3words_latlon']
+      );
+
       // what3words_show
       $form['what3words_group']['what3words_show'] = getlocations_element_map_checkbox(
         t('Display what3words for current location'),
@@ -4641,6 +4649,7 @@ function getlocations_what3words_form($defaults) {
       $form['what3words_group']['what3words_center'] = array('#type' => 'value', '#value' => $what3words_group['what3words_center']);
       $form['what3words_group']['what3words_zoom'] = array('#type' => 'value', '#value' => $what3words_group['what3words_zoom']);
       $form['what3words_group']['what3words_click'] = array('#type' => 'value', '#value' => $what3words_group['what3words_click']);
+      $form['what3words_group']['what3words_latlon'] = array('#type' => 'value', '#value' => $what3words_group['what3words_latlon']);
       $form['what3words_group']['what3words_show'] = array('#type' => 'value', '#value' => $what3words_group['what3words_show']);
       $form['what3words_group']['what3words_path'] = array('#type' => 'value', '#value' => $what3words_group['what3words_path']);
     }

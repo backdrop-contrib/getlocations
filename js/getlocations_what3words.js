@@ -64,9 +64,13 @@
                         else if (settings.what3words_zoom > -1) {
                           Backdrop.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
                         }
-                        //edit-getlocations-what3words-show
+                        // edit-getlocations-what3words-show
                         if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
-                          $("#edit-getlocations-what3words-show").html(w3w);
+                          var w3w_show = w3w;
+                          if (settings.what3words_latlon) {
+                            w3w_show = w3w + ' ' + lat + ' ' + lon
+                          }
+                          $("#edit-getlocations-what3words-show").html(w3w_show);
                         }
                         if (settings.what3words_center) {
                           var c = new google.maps.LatLng(parseFloat(lat), parseFloat(lon));
@@ -118,7 +122,11 @@
                       Backdrop.getlocations_map[key].setZoom(parseInt(settings.what3words_zoom));
                     }
                     if (settings.what3words_show && $("#edit-getlocations-what3words-show").is('div') && w3w) {
-                      $("#edit-getlocations-what3words-show").html(w3w);
+                      var w3w_show = w3w;
+                      if (settings.what3words_latlon) {
+                        w3w_show = w3w + ' ' + lat + ' ' + lon
+                      }
+                      $("#edit-getlocations-what3words-show").html(w3w_show);
                     }
                     if (settings.what3words_center) {
                       Backdrop.getlocations_map[key].setCenter(ll);

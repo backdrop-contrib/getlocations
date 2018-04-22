@@ -173,6 +173,7 @@
       "what3words_zoom": 12,
       "what3words_show": 1,
       "what3words_click": 1,
+      "what3words_latlon": 0,
       "what3words_path": "getlocations\/cb_w3w"
     },
     "graticule_group": {

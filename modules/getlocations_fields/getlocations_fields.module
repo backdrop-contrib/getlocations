@@ -3451,6 +3451,21 @@ function getlocations_fields_display_settings_form($defaults) {
     ''
   );
 
+  // what3words
+  $getlocations_defaults = getlocations_defaults();
+
+  $what3words_lic = $getlocations_defaults['what3words_lic'];
+  if ($what3words_lic['key']) {
+    $form['what3words_display'] = getlocations_element_map_checkbox(
+      t('Show what3words in display'),
+      $defaults['what3words_display'],
+      ''
+    );
+  }
+  else {
+    $form['what3words_display'] = array('#type' => 'value', '#value' => 0);
+  }
+
   $form['display_phone'] = getlocations_element_map_checkbox(
     t('Show Phone in display'),
     $defaults['display_phone'],
@@ -3466,21 +3481,6 @@ function getlocations_fields_display_settings_form($defaults) {
     $defaults['display_fax'],
     ''
   );
-
-  // what3words
-  $getlocations_defaults = getlocations_defaults();
-
-  $what3words_lic = $getlocations_defaults['what3words_lic'];
-  if ($what3words_lic['key']) {
-    $form['what3words_display'] = getlocations_element_map_checkbox(
-      t('Show what3words in display'),
-      $defaults['what3words_display'],
-      ''
-    );
-  }
-  else {
-    $form['what3words_display'] = array('#type' => 'value', '#value' => 0);
-  }
 
   $form['nodezoom'] = getlocations_element_map_zoom(
     t('Zoom'),

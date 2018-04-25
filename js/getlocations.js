@@ -555,16 +555,18 @@
 
             Backdrop.getlocations_grat.key = key;
             Backdrop.getlocations_grat.grid[key] = new Backdrop.getlocations.Graticule(Backdrop.getlocations_map[key], setting.graticule_label);
+
+            var graticuletoggleState = [];
+            if (setting.graticule_toggle_active) {
+              Backdrop.getlocations_grat.grid[key].show();
+              graticuletoggleState[key] = true;
+            }
+            else {
+              Backdrop.getlocations_grat.grid[key].hide();
+              graticuletoggleState[key] = false;
+            }
+
             if (setting.graticule_toggle) {
-              var graticuletoggleState = [];
-              if (setting.graticule_toggle_active) {
-                Backdrop.getlocations_grat.grid[key].show();
-                graticuletoggleState[key] = true;
-              }
-              else {
-                Backdrop.getlocations_grat.grid[key].hide();
-                graticuletoggleState[key] = false;
-              }
 
               $("#getlocations_graticule_toggle_" + key).click( function() {
                 var label = '';

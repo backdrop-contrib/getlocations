@@ -1,9 +1,52 @@
-commit 85616b7
+commit e41c9f4
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Apr 25 14:27:59 2018 +0100
+
+    added support for getlocations_settings_fieldsets function
+
+getlocations.theme.inc
+modules/getlocations_fields/getlocations_fields.theme.inc
+modules/getlocations_search/getlocations_search.theme.inc
+
+commit 44deb2f
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Apr 25 14:27:17 2018 +0100
+
+    added code to iterate over map canvas for better multimap support
+
+js/getlocations_graticule.js
+
+commit 1d47503
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Apr 25 14:26:04 2018 +0100
+
+    fixed what3words display
+
+modules/getlocations_fields/getlocations_fields.module
+
+commit 34dee45
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Apr 25 14:24:36 2018 +0100
+
+    added function getlocations_settings_fieldsets
+
+getlocations.module
+
+commit 0f52bf4
+Author: arwystli <hutchgt@arwystli.net>
+Date:   Wed Apr 25 14:23:41 2018 +0100
+
+    fixed bug in graticule
+
+js/getlocations.js
+
+commit f240c34
 Author: arwystli <hutchgt@arwystli.net>
 Date:   Sun Apr 22 14:45:14 2018 +0100
 
     improved what3words display and latlon accuracy
 
+CHANGELOG.txt
 js/getlocations_what3words.js
 modules/getlocations_leaflet/js/getlocations_leaflet_what3words.js
 

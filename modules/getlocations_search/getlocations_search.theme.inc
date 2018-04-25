@@ -196,7 +196,6 @@ $output .= "\n<!-- /theme_getlocations_search_form -->\n";
 function theme_getlocations_search_settings_form($variables) {
   $form = $variables['form'];
   $output = '';
-$output .= "\n<!-- theme_getlocations_search_settings_form -->\n";
   $varname = $form['varname']['#value'];
   unset($form['varname']);
   if (isset($form[$varname]['vocab']) ) {
@@ -228,73 +227,12 @@ $output .= "\n<!-- theme_getlocations_search_settings_form -->\n";
     }
   }
 
-  if (module_exists('getlocations_gps')) {
-    if (isset($form[$varname]['gps_button']) && $form[$varname]['gps_button']['#type'] !== 'value' ) {
-      $form[$varname]['gps_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form[$varname]['gps_center']['#suffix'];
-      $form[$varname]['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-  }
+  $fieldsets = getlocations_settings_fieldsets($form[$varname]);
+  $form[$varname] = array_merge($form[$varname], $fieldsets );
 
-  if (module_exists('getlocations_smartip')) {
-    if (isset($form[$varname]['smartip_button']) && $form[$varname]['smartip_button']['#type'] !== 'value' ) {
-    $form[$varname]['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form[$varname]['smartip_center']['#suffix'];
-      $form[$varname]['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-  }
-
-  if (isset($form[$varname]['highlight_group']['highlight_enable']) && $form[$varname]['highlight_group']['highlight_enable']['#type'] !== 'value' ) {
-    $form[$varname]['highlight_group']['highlight_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Marker Highlighting') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['highlight_group']['highlight_radius']['#suffix'];
-    $form[$varname]['highlight_group']['highlight_radius']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // google search places
-  if (isset($form[$varname]['search_places_group']['search_places']) && $form[$varname]['search_places_group']['search_places']['#type'] !== 'value' ) {
-    $form[$varname]['search_places_group']['search_places']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Google Search Places') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['search_places_group']['search_places_dd']['#suffix'];
-    $form[$varname]['search_places_group']['search_places_dd']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polygons
-  if (isset($form[$varname]['polygons_group']['polygons_enable']) && $form[$varname]['polygons_group']['polygons_enable']['#type'] !== 'value' ) {
-    $form[$varname]['polygons_group']['polygons_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['polygons_group']['polygons_coords']['#suffix'];
-    $form[$varname]['polygons_group']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // rectangles
-  if (isset($form[$varname]['rectangles_group']['rectangles_enable']) && $form[$varname]['rectangles_group']['rectangles_enable']['#type'] !== 'value' ) {
-    $form[$varname]['rectangles_group']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['rectangles_group']['rectangles_coords']['#suffix'];
-    $form[$varname]['rectangles_group']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // circles
-  if (isset($form[$varname]['circles_group']['circles_enable']) && $form[$varname]['circles_group']['circles_enable']['#type'] !== 'value' ) {
-    $form[$varname]['circles_group']['circles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['circles_group']['circles_coords']['#suffix'];
-    $form[$varname]['circles_group']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polylines
-  if (isset($form[$varname]['polylines_group']['polylines_enable']) && $form[$varname]['polylines_group']['polylines_enable']['#type'] !== 'value' ) {
-    $form[$varname]['polylines_group']['polylines_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['polylines_group']['polylines_coords']['#suffix'];
-    $form[$varname]['polylines_group']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // what3words
-  if (isset($form[$varname]['what3words_enable']) && $form[$varname]['what3words_enable']['#type'] !== 'value' ) {
-    $form[$varname]['what3words_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('What3words') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form[$varname]['what3words_show']['#suffix'];
-    $form[$varname]['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
+  $output .= "\n<!-- theme_getlocations_search_settings_form -->\n";
   $output .= backdrop_render_children($form);
-
-$output .= "\n<!-- /theme_getlocations_search_settings_form -->\n";
+  $output .= "\n<!-- /theme_getlocations_search_settings_form -->\n";
 
   return $output;
 
@@ -343,23 +281,10 @@ function theme_getlocations_search_block_settings_form($variables) {
       }
     }
   }
+  $form['sv_clicktogo']['#suffix'] = '</div></fieldset>';
 
-  if (module_exists('getlocations_gps')) {
-    if (isset($form[$varname]['gps_button']) && $form[$varname]['gps_button']['#type'] !== 'value' ) {
-      $form[$varname]['gps_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form[$varname]['gps_center']['#suffix'];
-      $form[$varname]['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-  }
-
-  if (module_exists('getlocations_smartip')) {
-    if (isset($form[$varname]['smartip_button']) && $form[$varname]['smartip_button']['#type'] !== 'value' ) {
-    $form[$varname]['smartip_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form[$varname]['smartip_center']['#suffix'];
-      $form[$varname]['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-  }
-
+  $fieldsets = getlocations_settings_fieldsets($form[$varname]);
+  $form[$varname] = array_merge($form[$varname], $fieldsets );
   $output .= backdrop_render_children($form);
   return $output;
 

@@ -97,7 +97,7 @@ function theme_getlocations_fields_show($variables) {
     // what3words
     $what3words_lic = getlocations_w3w_get_lic();
     if ($what3words_lic['key'] && isset($location['what3words']) && $location['what3words'] && $settings['what3words_display'] ) {
-      $output .= '<div class="w3w"><span class="w3w_label">' . t('what3words') . '</span>' . $location['what3words'] . '</div>';
+      $output .= '<div class="w3w"><span class="w3w_label">' . t('what3words') . ':</span>' . $location['what3words'] . '</div>';
     }
 
     if ($settings['display_latlong']) {
@@ -473,61 +473,8 @@ function theme_getlocations_fields_field_formatter_settings_form($variables) {
   $form['sv_addresscontrol']['#prefix'] = '<fieldset class="getlocations_fieldset collapsible ' . (getlocations_fields_streetview_settings_allow() ? '' : 'collapsed') . ' form-wrapper"><legend><span class="fieldset-legend">' . t('Streetview overlay settings') . '</span></legend><div class="fieldset-wrapper">';
   $form['sv_clicktogo']['#suffix'] = '</div></fieldset>';
 
-  // highlight
-  if (isset($form['highlight_group']['highlight_enable']) && $form['highlight_group']['highlight_enable']['#type'] !== 'value' ) {
-    $form['highlight_group']['highlight_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Marker Highlighting') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['highlight_group']['highlight_radius']['#suffix'];
-    $form['highlight_group']['highlight_radius']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polygons
-  if (isset($form['polygons_group']['polygons_enable']) && $form['polygons_group']['polygons_enable']['#type'] !== 'value' ) {
-    $form['polygons_group']['polygons_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['polygons_group']['polygons_coords']['#suffix'];
-    $form['polygons_group']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // rectangles
-  if (isset($form['rectangles_group']['rectangles_enable']) && $form['rectangles_group']['rectangles_enable']['#type'] !== 'value' ) {
-    $form['rectangles_group']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['rectangles_group']['rectangles_coords']['#suffix'];
-    $form['rectangles_group']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // circles
-  if (isset($form['circles_group']['circles_enable']) && $form['circles_group']['circles_enable']['#type'] !== 'value' ) {
-    $form['circles_group']['circles_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['circles_group']['circles_coords']['#suffix'];
-    $form['circles_group']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polylines
-  if (isset($form['polylines_group']['polylines_enable']) && $form['polylines_group']['polylines_enable']['#type'] !== 'value' ) {
-    $form['polylines_group']['polylines_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['polylines_group']['polylines_coords']['#suffix'];
-    $form['polylines_group']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // geojson
-  if (isset($form['geojson_enable']) && $form['geojson_enable']['#type'] !== 'value' ) {
-    $form['geojson_enable']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Geojson') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['geojson_options']['#suffix'];
-    $form['geojson_options']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // google search places
-  if (isset($form['search_places_group']['search_places']) && $form['search_places_group']['search_places']['#type'] !== 'value' ) {
-    $form['search_places_group']['search_places']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Google Search Places') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['search_places_group']['search_places_dd']['#suffix'];
-    $form['search_places_group']['search_places_dd']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // gps button
-  if (isset($form['gps_button']) && $form['gps_button']['#type'] !== 'value' ) {
-    $form['gps_button']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['gps_center']['#suffix'];
-    $form['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
+  $fieldsets = getlocations_settings_fieldsets($form);
+  $form = array_merge($form, $fieldsets );
 
   $output .= backdrop_render_children($form);
   return $output;

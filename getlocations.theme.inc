@@ -278,7 +278,7 @@ function theme_getlocations_show($variables) {
     if ($defaults['what3words_group']['what3words_search']) {
       // textbox
       $output .= '<div class="getlocations_w3w_img" ><img src="' . base_path() . GETLOCATIONS_PATH . '/images/w3w_bw22.png' . '" title="' . t('what3words') . '"></div>';
-      $output .= '<input type="text" id="edit-getlocations-what3words-search" name="edit-getlocations-what3words-search" value="" size="' . $defaults['what3words_group']['what3words_size'] . '" class="form-text" />';
+      $output .= '<input type="text" title="' . t('Enter what3words search') . '" id="edit-getlocations-what3words-search" name="edit-getlocations-what3words-search" value="" size="' . $defaults['what3words_group']['what3words_size'] . '" class="form-text" />';
       $output .= '&nbsp;&nbsp;<input type="button" value="' . t('Search') . '" id="edit-getlocations-what3words-search-submit" class="form-submit" />';
       $output .= '<div class="getlocations_w3w_throbber getlocations_w3w_throbber_inactive" id="getlocations_w3w_throbber_' . $mapid . '">&nbsp;&nbsp;&nbsp;&nbsp;</div>';
       $output .= '<br />';
@@ -401,6 +401,11 @@ function theme_getlocations_adinfo($variables) {
     $output .= '<div class="country-name">' . $location['country'] . '</div>';
   }
   $output .= '</div>';
+
+  if (isset($location['what3words']) && ! empty($location['what3words'])) {
+    $output .= '<div class="w3w"><span class="w3w_label">' . t('what3words') . ':</span>' . $location['what3words'] . '</div>';
+  }
+
   if (isset($location['sdist'])) {
     if ($location['sdist'] <> 1) {
       $unit_disp = getlocations_get_unit_names($location['sunit']);
@@ -536,93 +541,9 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
     }
   }
 
-  if (isset($form['gps_button']) && $form['gps_button']['#type'] !== 'value' ) {
-    $form['gps_button']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['gps_center']['#suffix'];
-    $form['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
+  $fieldsets = getlocations_settings_fieldsets($form);
+  $form = array_merge($form, $fieldsets );
 
-  if (isset($form['smartip_button']) && $form['smartip_button']['#type'] !== 'value' ) {
-    $form['smartip_button']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['smartip_center']['#suffix'];
-    $form['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // geojson
-  if (isset($form['geojson_enable']) && $form['geojson_enable']['#type'] !== 'value' ) {
-    $form['geojson_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Geojson') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['geojson_options']['#suffix'];
-    $form['geojson_options']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  if (isset($form['highlight_group']['highlight_enable']) && $form['highlight_group']['highlight_enable']['#type'] !== 'value' ) {
-    $form['highlight_group']['highlight_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Marker Highlighting') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['highlight_group']['highlight_radius']['#suffix'];
-    $form['highlight_group']['highlight_radius']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // google search places
-  if (isset($form['search_places_group']['search_places']) && $form['search_places_group']['search_places']['#type'] !== 'value' ) {
-    $form['search_places_group']['search_places']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Google Search Places') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['search_places_group']['search_places_dd']['#suffix'];
-    $form['search_places_group']['search_places_dd']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polygons
-  if (isset($form['polygons_group']['polygons_enable']) && $form['polygons_group']['polygons_enable']['#type'] !== 'value' ) {
-    $form['polygons_group']['polygons_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['polygons_group']['polygons_coords']['#suffix'];
-    $form['polygons_group']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // rectangles
-  if (isset($form['rectangles_group']['rectangles_enable']) && $form['rectangles_group']['rectangles_enable']['#type'] !== 'value' ) {
-    $form['rectangles_group']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['rectangles_group']['rectangles_coords']['#suffix'];
-    $form['rectangles_group']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // circles
-  if (isset($form['circles_group']['circles_enable']) && $form['circles_group']['circles_enable']['#type'] !== 'value' ) {
-    $form['circles_group']['circles_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['circles_group']['circles_coords']['#suffix'];
-    $form['circles_group']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polylines
-  if (isset($form['polylines_group']['polylines_enable']) && $form['polylines_group']['polylines_enable']['#type'] !== 'value' ) {
-    $form['polylines_group']['polylines_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['polylines_group']['polylines_coords']['#suffix'];
-    $form['polylines_group']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // what3words
-  if (isset($form['what3words_group']['what3words_enable']) && $form['what3words_group']['what3words_enable']['#type'] !== 'value' ) {
-    $form['what3words_group']['what3words_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('What3words') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['what3words_group']['what3words_show']['#suffix'];
-    $form['what3words_group']['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  if (isset($form['markerclusterer_group']['useclustermanager']) && $form['markerclusterer_group']['useclustermanager']['#type'] !== 'value' ) {
-    $form['markerclusterer_group']['useclustermanager']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('MarkerClusterer') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['markerclusterer_group']['markerclusterer_minsize']['#suffix'];
-    $form['markerclusterer_group']['markerclusterer_minsize']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-    if (isset($form['views_search_group']['views_search_marker_enable']) && $form['views_search_group']['views_search_marker_enable']['#type'] !== 'value' ) {
-      $form['views_search_group']['views_search_marker_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Views Search') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form['views_search_group']['views_search_radshape_toggle_active']['#suffix'];
-      $form['views_search_group']['views_search_radshape_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-
-    # graticule
-    if (isset($form['graticule_group']['graticule_enable']) && $form['graticule_group']['graticule_enable']['#type'] !== 'value' ) {
-      $form['graticule_group']['graticule_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Graticule') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form['graticule_group']['graticule_toggle_active']['#suffix'];
-      $form['graticule_group']['graticule_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-
-///////////////////////////////////
   $output = '<!-- theme_getlocations_plugin_style_map_options_form  -->';
   $output .= backdrop_render_children($form);
   $output .= '<!-- /theme_getlocations_plugin_style_map_options_form  -->';
@@ -634,93 +555,8 @@ function theme_getlocations_plugin_style_map_options_form($variables) {
 function theme_getlocations_settings_form($variables) {
   $form = $variables['form'];
 
-  if (module_exists('getlocations_gps')) {
-    if (isset($form['getlocations_default']['gps_button']) && $form['getlocations_default']['gps_button']['#type'] !== 'value' ) {
-      $form['getlocations_default']['gps_button']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('GPS Button') . '</span></legend><div class="fieldset-wrapper">';
-      $tsuf = $form['getlocations_default']['gps_center']['#suffix'];
-      $form['getlocations_default']['gps_center']['#suffix'] = $tsuf . '</div></fieldset>';
-    }
-  }
-
-  if (isset($form['getlocations_default']['smartip_button']) && $form['getlocations_default']['smartip_button']['#type'] !== 'value' ) {
-    $form['getlocations_default']['smartip_button']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Smartip Button') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['smartip_center']['#suffix'];
-    $form['getlocations_default']['smartip_center']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // geojson
-  if (isset($form['getlocations_default']['geojson_enable']) && $form['getlocations_default']['geojson_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['geojson_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Geojson') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['geojson_options']['#suffix'];
-    $form['getlocations_default']['geojson_options']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  if (isset($form['getlocations_default']['highlight_group']['highlight_enable']) && $form['getlocations_default']['highlight_group']['highlight_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['highlight_group']['highlight_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Marker Highlighting') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['highlight_group']['highlight_radius']['#suffix'];
-    $form['getlocations_default']['highlight_group']['highlight_radius']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // google search places
-  if (isset($form['getlocations_default']['search_places_group']['search_places']) && $form['getlocations_default']['search_places_group']['search_places']['#type'] !== 'value' ) {
-    $form['getlocations_default']['search_places_group']['search_places']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Google Search Places') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['search_places_group']['search_places_dd']['#suffix'];
-    $form['getlocations_default']['search_places_group']['search_places_dd']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polygons
-  if (isset($form['getlocations_default']['polygons_group']['polygons_enable']) && $form['getlocations_default']['polygons_group']['polygons_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['polygons_group']['polygons_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polygons') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['polygons_group']['polygons_coords']['#suffix'];
-    $form['getlocations_default']['polygons_group']['polygons_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // rectangles
-  if (isset($form['getlocations_default']['rectangles_group']['rectangles_enable']) && $form['getlocations_default']['rectangles_group']['rectangles_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['rectangles_group']['rectangles_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Rectangles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['rectangles_group']['rectangles_coords']['#suffix'];
-    $form['getlocations_default']['rectangles_group']['rectangles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // circles
-  if (isset($form['getlocations_default']['circles_group']['circles_enable']) && $form['getlocations_default']['circles_group']['circles_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['circles_group']['circles_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Circles') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['circles_group']['circles_coords']['#suffix'];
-    $form['getlocations_default']['circles_group']['circles_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // polylines
-  if (isset($form['getlocations_default']['polylines_group']['polylines_enable']) && $form['getlocations_default']['polylines_group']['polylines_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['polylines_group']['polylines_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Polylines') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['polylines_group']['polylines_coords']['#suffix'];
-    $form['getlocations_default']['polylines_group']['polylines_coords']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  // what3words
-  if (isset($form['getlocations_default']['what3words_group']['what3words_enable']) && $form['getlocations_default']['what3words_group']['what3words_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['what3words_group']['what3words_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('What3words') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['what3words_group']['what3words_show']['#suffix'];
-    $form['getlocations_default']['what3words_group']['what3words_show']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  if (isset($form['getlocations_default']['markerclusterer_group']['useclustermanager']) && $form['getlocations_default']['markerclusterer_group']['useclustermanager']['#type'] !== 'value' ) {
-    $form['getlocations_default']['markerclusterer_group']['useclustermanager']['#prefix'] = '<fieldset class="collapsible getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('MarkerClusterer') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['markerclusterer_group']['markerclusterer_minsize']['#suffix'];
-    $form['getlocations_default']['markerclusterer_group']['markerclusterer_minsize']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  if (isset($form['getlocations_default']['views_search_group']['views_search_marker_enable']) && $form['getlocations_default']['views_search_group']['views_search_marker_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['views_search_group']['views_search_marker_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Views Search') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['views_search_group']['views_search_radshape_toggle_active']['#suffix'];
-    $form['getlocations_default']['views_search_group']['views_search_radshape_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
-
-  # graticule
-  if (isset($form['getlocations_default']['graticule_group']['graticule_enable']) && $form['getlocations_default']['graticule_group']['graticule_enable']['#type'] !== 'value' ) {
-    $form['getlocations_default']['graticule_group']['graticule_enable']['#prefix'] = '<fieldset class="collapsible collapsed getlocations_fieldset form-wrapper"><legend><span class="fieldset-legend">' . t('Graticule') . '</span></legend><div class="fieldset-wrapper">';
-    $tsuf = $form['getlocations_default']['graticule_group']['graticule_toggle_active']['#suffix'];
-    $form['getlocations_default']['graticule_group']['graticule_toggle_active']['#suffix'] = $tsuf . '</div></fieldset>';
-  }
+  $fieldsets = getlocations_settings_fieldsets($form['getlocations_default']);
+  $form['getlocations_default'] = array_merge($form['getlocations_default'], $fieldsets );
 
   $output = '<!-- theme_getlocations_settings_form -->';
   $output .= backdrop_render_children($form);

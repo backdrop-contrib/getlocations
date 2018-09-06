@@ -2530,7 +2530,7 @@ function getlocations_fields_load_location($glid) {
     $query->fields('f', $fields);
     $query->fields('e', array('nid', 'vid', 'uid', 'tid', 'cid'));
     $query->join('getlocations_fields_entities', 'e', 'f.glid=e.glid');
-
+/*
     if (! in_array('administrator', $roles)) {
       if ($key == 'nid') {
         $query->join('node', 'n', 'n.nid = e.nid');
@@ -2549,7 +2549,7 @@ function getlocations_fields_load_location($glid) {
         $query->condition('e.cid', $id)->condition('n.status', 0, '>');
       }
     }
-
+*/
     $query->condition('f.glid', $glid);
     $row = $query->execute()->fetchObject();
     if ($row) {
